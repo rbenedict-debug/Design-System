@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/rebeccabenedict/Developer/Design-System pull origin main --allow-unrelated-histories --no-rebase --no-edit)",
+      "Bash(git -C /Users/rebeccabenedict/Developer/Design-System push -u origin main)",
+      "Bash(git -C /Users/rebeccabenedict/Developer/Design-System checkout --ours README.md)",
+      "Bash(git -C /Users/rebeccabenedict/Developer/Design-System add README.md)",
+      "Bash(git -C:*)"
+    ]
+  }
+}
