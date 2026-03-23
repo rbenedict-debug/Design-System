@@ -1,0 +1,11 @@
+{
+  "name": "@onflo/design-system",
+  "version": "0.1.0",
+  "description": "Onflo Design System — tokens, components, and patterns for Angular + .NET Core products",
+  "scripts": {
+    "generate-tokens": "node scripts/generate-tokens.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

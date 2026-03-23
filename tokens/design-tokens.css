@@ -1,0 +1,155 @@
+/*
+ * Onflo Design System — Generated Tokens
+ * ⚠️  Do not edit manually.
+ * Regenerate: node scripts/generate-tokens.js
+ */
+
+:root {
+
+  /* ── Surface ───────────────────────────────────────── */
+  --color-surface-page: var(--ref-color-neutral-surface);
+  --color-surface-default: var(--ref-color-neutral-bg-default);
+  --color-surface-subtle: var(--ref-color-neutral-bg-soft);
+  --color-surface-disabled: var(--ref-color-neutral-bg-disabled);
+  --color-surface-nav: var(--ref-color-primary-blue-bg-soft);
+  --color-surface-nav-active: var(--ref-color-primary-blue-default);
+  --color-surface-container: var(--ref-color-primary-blue-bg-soft);
+  --color-surface-overlay: var(--ref-color-neutral-surface);
+  --color-surface-scrim: var(--ref-color-neutral-scrim);
+  --color-surface-tooltip: var(--ref-color-neutral-tooltip);
+  --color-surface-scroll: var(--ref-color-neutral-scroll);
+  --color-surface-input: var(--ref-color-neutral-surface);
+  --color-surface-input-disabled: var(--ref-color-neutral-bg-disabled);
+  --color-surface-error: var(--ref-color-accent-red-bg);
+  --color-surface-warning: var(--ref-color-accent-yellow-bg);
+  --color-surface-success: var(--ref-color-accent-green-bg);
+  --color-surface-info: var(--ref-color-accent-lightblue-bg);
+  --color-surface-brand: var(--ref-color-primary-blue-bg);
+  --color-surface-brand-bold: var(--ref-color-primary-blue-default);
+  --color-surface-accent-blue: var(--ref-color-accent-lightblue-bg);
+  --color-surface-accent-blue-bold: var(--ref-color-accent-lightblue-default);
+  --color-surface-accent-navy: var(--ref-color-accent-darkblue-bg);
+  --color-surface-accent-navy-bold: var(--ref-color-accent-darkblue-default);
+  --color-surface-accent-red: var(--ref-color-accent-red-bg);
+  --color-surface-accent-red-bold: var(--ref-color-accent-red-default);
+  --color-surface-accent-yellow: var(--ref-color-accent-yellow-bg);
+  --color-surface-accent-yellow-bold: var(--ref-color-accent-yellow-default);
+  --color-surface-accent-green: var(--ref-color-accent-green-bg);
+  --color-surface-accent-green-bold: var(--ref-color-accent-green-default);
+  --color-surface-accent-teal: var(--ref-color-accent-teal-bg);
+  --color-surface-accent-teal-bold: var(--ref-color-accent-teal-default);
+  --color-surface-accent-orange: var(--ref-color-accent-orange-bg);
+  --color-surface-accent-orange-bold: var(--ref-color-accent-orange-default);
+  --color-surface-accent-purple: var(--ref-color-accent-purple-bg);
+  --color-surface-accent-purple-bold: var(--ref-color-accent-purple-default);
+  --color-surface-accent-pink: var(--ref-color-accent-pink-bg);
+  --color-surface-accent-pink-bold: var(--ref-color-accent-pink-default);
+
+  /* ── Text ──────────────────────────────────────────── */
+  --color-text-primary: var(--ref-color-neutral-text-default);
+  --color-text-secondary: var(--ref-color-neutral-text-soft);
+  --color-text-placeholder: var(--ref-color-neutral-text-disabled);
+  --color-text-disabled: var(--ref-color-neutral-text-disabled);
+  --color-text-inverse: var(--ref-color-neutral-surface);
+  --color-text-brand: var(--ref-color-primary-blue-default);
+  --color-text-on-brand: var(--ref-color-neutral-surface);
+  --color-text-link: var(--ref-color-primary-blue-default);
+  --color-text-error: var(--ref-color-accent-red-default);
+  --color-text-warning: var(--ref-color-neutral-text-default);
+  --color-text-success: var(--ref-color-neutral-text-default);
+  --color-text-info: var(--ref-color-neutral-text-default);
+  --color-text-tooltip: var(--ref-color-neutral-surface);
+  --color-text-on-bold: var(--ref-color-neutral-surface);
+  --color-text-accent-navy: var(--ref-color-accent-darkblue-default);
+  --color-text-accent-red: var(--ref-color-accent-red-default);
+
+  /* ── Border ────────────────────────────────────────── */
+  --color-border-primary: var(--ref-color-neutral-border-primary);
+  --color-border-secondary: var(--ref-color-neutral-border-soft);
+  --color-border-subtle: var(--ref-color-neutral-border-subtle);
+  --color-border-strong: var(--ref-color-neutral-text-soft);
+  --color-border-inverse: var(--ref-color-neutral-surface);
+  --color-border-accordion: var(--ref-color-accent-accordion-border);
+  --color-border-ada-focus-ring: var(--ref-color-accent-lightblue-default);
+  --color-border-hover: var(--ref-color-accent-lightblue-default);
+  --color-border-active: var(--ref-color-primary-blue-default);
+  --color-border-input: var(--ref-color-neutral-border-primary);
+  --color-border-input-hover: var(--ref-color-accent-lightblue-default);
+  --color-border-input-active: var(--ref-color-primary-blue-default);
+  --color-border-input-error: var(--ref-color-accent-red-default);
+  --color-border-error: var(--ref-color-accent-red-default);
+  --color-border-warning: var(--ref-color-accent-yellow-default);
+  --color-border-success: var(--ref-color-accent-green-default);
+  --color-border-info: var(--ref-color-accent-lightblue-default);
+  --color-border-brand: var(--ref-color-primary-blue-default);
+  --color-border-accent-blue: var(--ref-color-accent-lightblue-default);
+  --color-border-accent-navy: var(--ref-color-accent-darkblue-default);
+  --color-border-accent-red: var(--ref-color-accent-red-default);
+  --color-border-accent-yellow: var(--ref-color-accent-yellow-default);
+  --color-border-accent-green: var(--ref-color-accent-green-default);
+  --color-border-accent-teal: var(--ref-color-accent-teal-default);
+  --color-border-accent-orange: var(--ref-color-accent-orange-default);
+  --color-border-accent-purple: var(--ref-color-accent-purple-default);
+  --color-border-accent-pink: var(--ref-color-accent-pink-default);
+
+  /* ── Spacing ───────────────────────────────────────── */
+  --spacing-none: 0px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-page: 48px;
+
+  /* ── Border Radius ─────────────────────────────────── */
+  --radius-none: 0px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Shadow ────────────────────────────────────────── */
+  --shadow-elevation-1: rgba(65, 65, 65, 0.04);
+  --shadow-elevation-2: rgba(65, 65, 65, 0.06);
+  --shadow-elevation-3: rgba(65, 65, 65, 0.08);
+  --shadow-elevation-4: rgba(65, 65, 65, 0.1);
+  --shadow-elevation-5: rgba(65, 65, 65, 0.12);
+
+  /* ── Overlay / Interaction ─────────────────────────── */
+  --overlay-hovered: rgba(67, 173, 242, 0.08);
+  --overlay-pressed: rgba(67, 173, 242, 0.12);
+  --overlay-focused: rgba(67, 173, 242, 0.12);
+  --overlay-dragged: rgba(67, 173, 242, 0.16);
+  --overlay-accent-red-hovered: rgba(215, 9, 23, 0.08);
+  --overlay-accent-red-pressed: rgba(215, 9, 23, 0.12);
+  --overlay-accent-red-focused: rgba(215, 9, 23, 0.12);
+  --overlay-accent-red-dragged: rgba(215, 9, 23, 0.16);
+  --overlay-accent-yellow-hovered: rgba(255, 191, 0, 0.08);
+  --overlay-accent-yellow-pressed: rgba(255, 191, 0, 0.12);
+  --overlay-accent-yellow-focused: rgba(255, 191, 0, 0.12);
+  --overlay-accent-yellow-dragged: rgba(255, 191, 0, 0.16);
+
+  /* ── icon ──────────────────────────────────────────── */
+  --color-icon-default: var(--ref-color-neutral-text-default);
+  --color-icon-subtle: var(--ref-color-neutral-text-soft);
+  --color-icon-disabled: var(--ref-color-neutral-text-disabled);
+  --color-icon-inverse: var(--ref-color-neutral-surface);
+  --color-icon-brand: var(--ref-color-primary-blue-default);
+  --color-icon-on-brand: var(--ref-color-neutral-surface);
+  --color-icon-nav: var(--ref-color-neutral-text-default);
+  --color-icon-nav-active: var(--ref-color-neutral-surface);
+  --color-icon-error: var(--ref-color-accent-red-default);
+  --color-icon-warning: var(--ref-color-accent-yellow-default);
+  --color-icon-success: var(--ref-color-accent-green-default);
+  --color-icon-info: var(--ref-color-accent-lightblue-default);
+  --color-icon-accent-blue: var(--ref-color-accent-lightblue-default);
+  --color-icon-accent-navy: var(--ref-color-accent-darkblue-default);
+  --color-icon-accent-red: var(--ref-color-accent-red-default);
+  --color-icon-accent-yellow: var(--ref-color-accent-yellow-default);
+  --color-icon-accent-green: var(--ref-color-accent-green-default);
+  --color-icon-accent-teal: var(--ref-color-accent-teal-default);
+  --color-icon-accent-orange: var(--ref-color-accent-orange-default);
+  --color-icon-accent-purple: var(--ref-color-accent-purple-default);
+  --color-icon-accent-pink: var(--ref-color-accent-pink-default);
+}

@@ -1,0 +1,13 @@
+# Claude Code local settings (machine-specific)
+.claude/
+
+# Node
+node_modules/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp

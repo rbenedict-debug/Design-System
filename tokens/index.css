@@ -1,0 +1,14 @@
+/*
+ * Onflo Design System — Generated Tokens
+ * ⚠️  Do not edit manually.
+ * Regenerate: node scripts/generate-tokens.js
+ */
+
+/**
+ * Import this single file in your Angular styles.scss:
+ *   @import '~@onflo/tokens/index.css';
+ * or in angular.json styles array.
+ */
+@import './ref-light.css';
+@import './ref-dark.css';
+@import './design-tokens.css';

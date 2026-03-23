@@ -1,0 +1,154 @@
+/*
+ * Onflo Design System — Generated Tokens
+ * ⚠️  Do not edit manually.
+ * Regenerate: node scripts/generate-tokens.js
+ */
+
+:root {
+
+  /* ── Colour Primitives ─────────────────────────────── */
+  --ref-color-primary-blue-default: #0B6EB4;
+  --ref-color-primary-blue-bg: #EEFAFF;
+  --ref-color-primary-blue-bg-soft: #F5F8FC;
+  --ref-color-neutral-text-default: #2D3638;
+  --ref-color-neutral-text-soft: #73737F;
+  --ref-color-neutral-border-primary: #9F9F9F;
+  --ref-color-neutral-text-disabled: #9F9F9F;
+  --ref-color-neutral-bg-default: #F6F6F6;
+  --ref-color-neutral-bg-soft: #FCFCFC;
+  --ref-color-neutral-bg-disabled: #F6F6F6;
+  --ref-color-neutral-border-soft: #CACACA;
+  --ref-color-neutral-surface: #FFFFFF;
+  --ref-color-neutral-tooltip: #000000;
+  --ref-color-neutral-scrim: rgba(0, 0, 0, 0.4);
+  --ref-color-neutral-scroll: rgba(115, 115, 127, 0.3);
+  --ref-color-neutral-border-subtle: #E9E9E9;
+  --ref-color-accent-lightblue-default: #43ADF2;
+  --ref-color-accent-lightblue-bg: #EEFAFF;
+  --ref-color-accent-darkblue-default: #0B3057;
+  --ref-color-accent-darkblue-bg: #EEF2F7;
+  --ref-color-accent-red-default: #D70917;
+  --ref-color-accent-red-bg: #FFF2F2;
+  --ref-color-accent-green-default: #45A55F;
+  --ref-color-accent-green-bg: #EEFCE4;
+  --ref-color-accent-yellow-default: #FFBF00;
+  --ref-color-accent-teal-default: #159B8E;
+  --ref-color-accent-yellow-bg: #FFF3D8;
+  --ref-color-accent-teal-bg: #EDFAF8;
+  --ref-color-accent-orange-default: #EB6E08;
+  --ref-color-accent-orange-bg: #FFF4EC;
+  --ref-color-accent-purple-default: #622682;
+  --ref-color-accent-purple-bg: #F7EFFE;
+  --ref-color-accent-pink-default: #E91E63;
+  --ref-color-accent-pink-bg: #FFF0F5;
+  --ref-color-accent-accordion-border: #E3ECF8;
+
+  /* ── Typeface ──────────────────────────────────────── */
+  --ref-typeface-brand: "Proxima Nova";
+  --ref-typeface-plain: "Proxima Nova";
+  --ref-typeface-weight-regular: 400;
+  --ref-typeface-weight-medium: 500;
+  --ref-typeface-weight-bold: 600;
+  --ref-typeface-weight-extra-bold: 700;
+
+  /* ── Type Scale ────────────────────────────────────── */
+  --ref-typescale-display-font: var(--ref-typeface-brand);
+  --ref-typescale-display-weight: var(--ref-typeface-weight-extra-bold);
+  --ref-typescale-display-size: 48px;
+  --ref-typescale-display-line-height: 56px;
+  --ref-typescale-display-tracking: -0.5px;
+  --ref-typescale-title-h1-font: var(--ref-typeface-brand);
+  --ref-typescale-title-h1-weight: var(--ref-typeface-weight-bold);
+  --ref-typescale-title-h1-size: 24px;
+  --ref-typescale-title-h1-line-height: 28px;
+  --ref-typescale-title-h1-tracking: 0px;
+  --ref-typescale-title-h2-font: var(--ref-typeface-brand);
+  --ref-typescale-title-h2-weight: var(--ref-typeface-weight-bold);
+  --ref-typescale-title-h2-size: 20px;
+  --ref-typescale-title-h2-line-height: 28px;
+  --ref-typescale-title-h2-tracking: 0px;
+  --ref-typescale-title-h3-font: var(--ref-typeface-brand);
+  --ref-typescale-title-h3-weight: var(--ref-typeface-weight-bold);
+  --ref-typescale-title-h3-size: 16px;
+  --ref-typescale-title-h3-line-height: 24px;
+  --ref-typescale-title-h3-tracking: 0.15px;
+  --ref-typescale-title-h4-font: var(--ref-typeface-brand);
+  --ref-typescale-title-h4-weight: var(--ref-typeface-weight-bold);
+  --ref-typescale-title-h4-size: 14px;
+  --ref-typescale-title-h4-line-height: 20px;
+  --ref-typescale-title-h4-tracking: 0.1px;
+  --ref-typescale-body-large-font: var(--ref-typeface-plain);
+  --ref-typescale-body-large-weight: var(--ref-typeface-weight-regular);
+  --ref-typescale-body-large-weight-prominent: var(--ref-typeface-weight-medium);
+  --ref-typescale-body-large-size: 16px;
+  --ref-typescale-body-large-line-height: 24px;
+  --ref-typescale-body-large-tracking: 0.15px;
+  --ref-typescale-body-medium-font: var(--ref-typeface-plain);
+  --ref-typescale-body-medium-weight: var(--ref-typeface-weight-regular);
+  --ref-typescale-body-medium-weight-prominent: var(--ref-typeface-weight-medium);
+  --ref-typescale-body-medium-size: 14px;
+  --ref-typescale-body-medium-line-height: 20px;
+  --ref-typescale-body-medium-tracking: 0.25px;
+  --ref-typescale-body-small-font: var(--ref-typeface-plain);
+  --ref-typescale-body-small-weight: var(--ref-typeface-weight-regular);
+  --ref-typescale-body-small-weight-prominent: var(--ref-typeface-weight-medium);
+  --ref-typescale-body-small-size: 12px;
+  --ref-typescale-body-small-line-height: 16px;
+  --ref-typescale-body-small-tracking: 0.4px;
+  --ref-typescale-label-large-font: var(--ref-typeface-plain);
+  --ref-typescale-label-large-weight: var(--ref-typeface-weight-medium);
+  --ref-typescale-label-large-weight-prominent: var(--ref-typeface-weight-bold);
+  --ref-typescale-label-large-size: 16px;
+  --ref-typescale-label-large-line-height: 16px;
+  --ref-typescale-label-large-tracking: 0.1px;
+  --ref-typescale-label-medium-font: var(--ref-typeface-plain);
+  --ref-typescale-label-medium-weight: var(--ref-typeface-weight-medium);
+  --ref-typescale-label-medium-weight-prominent: var(--ref-typeface-weight-bold);
+  --ref-typescale-label-medium-size: 14px;
+  --ref-typescale-label-medium-line-height: 14px;
+  --ref-typescale-label-medium-tracking: 0.25px;
+  --ref-typescale-label-small-font: var(--ref-typeface-plain);
+  --ref-typescale-label-small-weight: var(--ref-typeface-weight-medium);
+  --ref-typescale-label-small-weight-prominent: var(--ref-typeface-weight-bold);
+  --ref-typescale-label-small-size: 12px;
+  --ref-typescale-label-small-line-height: 12px;
+  --ref-typescale-label-small-tracking: 0.4px;
+
+  /* ── Border Radius ─────────────────────────────────── */
+  --ref-radius-none: 0px;
+  --ref-radius-sm: 6px;
+  --ref-radius-md: 8px;
+  --ref-radius-lg: 16px;
+  --ref-radius-xl: 24px;
+  --ref-radius-full: 9999px;
+
+  /* ── Spacing ───────────────────────────────────────── */
+  --ref-spacing-none: 0px;
+  --ref-spacing-xs: 4px;
+  --ref-spacing-sm: 8px;
+  --ref-spacing-md: 12px;
+  --ref-spacing-lg: 16px;
+  --ref-spacing-xl: 24px;
+  --ref-spacing-page: 48px;
+
+  /* ── Shadow ────────────────────────────────────────── */
+  --ref-shadow-elevation-1: rgba(65, 65, 65, 0.04);
+  --ref-shadow-elevation-2: rgba(65, 65, 65, 0.06);
+  --ref-shadow-elevation-3: rgba(65, 65, 65, 0.08);
+  --ref-shadow-elevation-4: rgba(65, 65, 65, 0.1);
+  --ref-shadow-elevation-5: rgba(65, 65, 65, 0.12);
+
+  /* ── Overlay / Interaction ─────────────────────────── */
+  --ref-overlay-hover: rgba(67, 173, 242, 0.08);
+  --ref-overlay-pressed: rgba(67, 173, 242, 0.12);
+  --ref-overlay-focused: rgba(67, 173, 242, 0.12);
+  --ref-overlay-dragged: rgba(67, 173, 242, 0.16);
+  --ref-overlay-red-hover: rgba(215, 9, 23, 0.08);
+  --ref-overlay-red-pressed: rgba(215, 9, 23, 0.12);
+  --ref-overlay-red-focused: rgba(215, 9, 23, 0.12);
+  --ref-overlay-red-dragged: rgba(215, 9, 23, 0.16);
+  --ref-overlay-yellow-hover: rgba(255, 191, 0, 0.08);
+  --ref-overlay-yellow-pressed: rgba(255, 191, 0, 0.12);
+  --ref-overlay-yellow-focused: rgba(255, 191, 0, 0.12);
+  --ref-overlay-yellow-dragged: rgba(255, 191, 0, 0.16);
+}
