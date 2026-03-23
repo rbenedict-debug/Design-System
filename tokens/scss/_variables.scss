@@ -1,0 +1,160 @@
+// Onflo Design System — SCSS Variables
+// Auto-generated. Do not edit manually.
+// Regenerate: npm run generate-tokens
+//
+// Usage:
+//   @use '@onflo/design-system/tokens/scss' as ds;
+//
+//   .button {
+//     background: ds.$surface-brand-bold;
+//     color:      ds.$text-on-brand;
+//     padding:    ds.$spacing-sm ds.$spacing-lg;
+//     border-radius: ds.$radius-sm;
+//   }
+
+// ── Surface colours ─────────────────────────────────────
+$surface-page: var(--color-surface-page) !default;
+$surface-default: var(--color-surface-default) !default;
+$surface-subtle: var(--color-surface-subtle) !default;
+$surface-disabled: var(--color-surface-disabled) !default;
+$surface-nav: var(--color-surface-nav) !default;
+$surface-nav-active: var(--color-surface-nav-active) !default;
+$surface-container: var(--color-surface-container) !default;
+$surface-overlay: var(--color-surface-overlay) !default;
+$surface-scrim: var(--color-surface-scrim) !default;
+$surface-tooltip: var(--color-surface-tooltip) !default;
+$surface-scroll: var(--color-surface-scroll) !default;
+$surface-input: var(--color-surface-input) !default;
+$surface-input-disabled: var(--color-surface-input-disabled) !default;
+$surface-error: var(--color-surface-error) !default;
+$surface-warning: var(--color-surface-warning) !default;
+$surface-success: var(--color-surface-success) !default;
+$surface-info: var(--color-surface-info) !default;
+$surface-brand: var(--color-surface-brand) !default;
+$surface-brand-bold: var(--color-surface-brand-bold) !default;
+$surface-accent-blue: var(--color-surface-accent-blue) !default;
+$surface-accent-blue-bold: var(--color-surface-accent-blue-bold) !default;
+$surface-accent-navy: var(--color-surface-accent-navy) !default;
+$surface-accent-navy-bold: var(--color-surface-accent-navy-bold) !default;
+$surface-accent-red: var(--color-surface-accent-red) !default;
+$surface-accent-red-bold: var(--color-surface-accent-red-bold) !default;
+$surface-accent-yellow: var(--color-surface-accent-yellow) !default;
+$surface-accent-yellow-bold: var(--color-surface-accent-yellow-bold) !default;
+$surface-accent-green: var(--color-surface-accent-green) !default;
+$surface-accent-green-bold: var(--color-surface-accent-green-bold) !default;
+$surface-accent-teal: var(--color-surface-accent-teal) !default;
+$surface-accent-teal-bold: var(--color-surface-accent-teal-bold) !default;
+$surface-accent-orange: var(--color-surface-accent-orange) !default;
+$surface-accent-orange-bold: var(--color-surface-accent-orange-bold) !default;
+$surface-accent-purple: var(--color-surface-accent-purple) !default;
+$surface-accent-purple-bold: var(--color-surface-accent-purple-bold) !default;
+$surface-accent-pink: var(--color-surface-accent-pink) !default;
+$surface-accent-pink-bold: var(--color-surface-accent-pink-bold) !default;
+
+// ── Text colours ────────────────────────────────────────
+$text-primary: var(--color-text-primary) !default;
+$text-secondary: var(--color-text-secondary) !default;
+$text-placeholder: var(--color-text-placeholder) !default;
+$text-disabled: var(--color-text-disabled) !default;
+$text-inverse: var(--color-text-inverse) !default;
+$text-brand: var(--color-text-brand) !default;
+$text-on-brand: var(--color-text-on-brand) !default;
+$text-link: var(--color-text-link) !default;
+$text-error: var(--color-text-error) !default;
+$text-warning: var(--color-text-warning) !default;
+$text-success: var(--color-text-success) !default;
+$text-info: var(--color-text-info) !default;
+$text-tooltip: var(--color-text-tooltip) !default;
+$text-on-bold: var(--color-text-on-bold) !default;
+$text-accent-navy: var(--color-text-accent-navy) !default;
+$text-accent-red: var(--color-text-accent-red) !default;
+
+// ── Border colours ──────────────────────────────────────
+$border-primary: var(--color-border-primary) !default;
+$border-secondary: var(--color-border-secondary) !default;
+$border-subtle: var(--color-border-subtle) !default;
+$border-strong: var(--color-border-strong) !default;
+$border-inverse: var(--color-border-inverse) !default;
+$border-accordion: var(--color-border-accordion) !default;
+$border-ada-focus-ring: var(--color-border-ada-focus-ring) !default;
+$border-hover: var(--color-border-hover) !default;
+$border-active: var(--color-border-active) !default;
+$border-input: var(--color-border-input) !default;
+$border-input-hover: var(--color-border-input-hover) !default;
+$border-input-active: var(--color-border-input-active) !default;
+$border-input-error: var(--color-border-input-error) !default;
+$border-error: var(--color-border-error) !default;
+$border-warning: var(--color-border-warning) !default;
+$border-success: var(--color-border-success) !default;
+$border-info: var(--color-border-info) !default;
+$border-brand: var(--color-border-brand) !default;
+$border-accent-blue: var(--color-border-accent-blue) !default;
+$border-accent-navy: var(--color-border-accent-navy) !default;
+$border-accent-red: var(--color-border-accent-red) !default;
+$border-accent-yellow: var(--color-border-accent-yellow) !default;
+$border-accent-green: var(--color-border-accent-green) !default;
+$border-accent-teal: var(--color-border-accent-teal) !default;
+$border-accent-orange: var(--color-border-accent-orange) !default;
+$border-accent-purple: var(--color-border-accent-purple) !default;
+$border-accent-pink: var(--color-border-accent-pink) !default;
+
+// ── Spacing (static px — safe to use in calc()) ─────────
+$spacing-none: 0px !default;
+$spacing-xs: 4px !default;
+$spacing-sm: 8px !default;
+$spacing-md: 12px !default;
+$spacing-lg: 16px !default;
+$spacing-xl: 24px !default;
+$spacing-page: 48px !default;
+
+// ── Border radius (static px) ───────────────────────────
+$radius-none: 0px !default;
+$radius-sm: 6px !default;
+$radius-md: 8px !default;
+$radius-lg: 16px !default;
+$radius-xl: 24px !default;
+$radius-full: 9999px !default;
+
+// ── Shadow colours ──────────────────────────────────────
+$shadow-elevation-1: var(--shadow-elevation-1) !default;
+$shadow-elevation-2: var(--shadow-elevation-2) !default;
+$shadow-elevation-3: var(--shadow-elevation-3) !default;
+$shadow-elevation-4: var(--shadow-elevation-4) !default;
+$shadow-elevation-5: var(--shadow-elevation-5) !default;
+
+// ── Overlay / interaction colours ───────────────────────
+$overlay-hovered: var(--overlay-hovered) !default;
+$overlay-pressed: var(--overlay-pressed) !default;
+$overlay-focused: var(--overlay-focused) !default;
+$overlay-dragged: var(--overlay-dragged) !default;
+$overlay-accent-red-hovered: var(--overlay-accent-red-hovered) !default;
+$overlay-accent-red-pressed: var(--overlay-accent-red-pressed) !default;
+$overlay-accent-red-focused: var(--overlay-accent-red-focused) !default;
+$overlay-accent-red-dragged: var(--overlay-accent-red-dragged) !default;
+$overlay-accent-yellow-hovered: var(--overlay-accent-yellow-hovered) !default;
+$overlay-accent-yellow-pressed: var(--overlay-accent-yellow-pressed) !default;
+$overlay-accent-yellow-focused: var(--overlay-accent-yellow-focused) !default;
+$overlay-accent-yellow-dragged: var(--overlay-accent-yellow-dragged) !default;
+
+// ── icon ────────────────────────────────────────────────
+$icon-default: var(--color-icon-default) !default;
+$icon-subtle: var(--color-icon-subtle) !default;
+$icon-disabled: var(--color-icon-disabled) !default;
+$icon-inverse: var(--color-icon-inverse) !default;
+$icon-brand: var(--color-icon-brand) !default;
+$icon-on-brand: var(--color-icon-on-brand) !default;
+$icon-nav: var(--color-icon-nav) !default;
+$icon-nav-active: var(--color-icon-nav-active) !default;
+$icon-error: var(--color-icon-error) !default;
+$icon-warning: var(--color-icon-warning) !default;
+$icon-success: var(--color-icon-success) !default;
+$icon-info: var(--color-icon-info) !default;
+$icon-accent-blue: var(--color-icon-accent-blue) !default;
+$icon-accent-navy: var(--color-icon-accent-navy) !default;
+$icon-accent-red: var(--color-icon-accent-red) !default;
+$icon-accent-yellow: var(--color-icon-accent-yellow) !default;
+$icon-accent-green: var(--color-icon-accent-green) !default;
+$icon-accent-teal: var(--color-icon-accent-teal) !default;
+$icon-accent-orange: var(--color-icon-accent-orange) !default;
+$icon-accent-purple: var(--color-icon-accent-purple) !default;
+$icon-accent-pink: var(--color-icon-accent-pink) !default;

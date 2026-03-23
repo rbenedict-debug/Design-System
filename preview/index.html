@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onflo Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens/css/index.css" />
+
+  <style>
+    /* ── Preview shell styles ───────────────────────────────────────────────── */
+    /* The preview itself uses the design tokens wherever possible,             */
+    /* demonstrating that the system works end-to-end.                         */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --preview-font: 'DM Sans', sans-serif;
+      --preview-mono: 'DM Mono', monospace;
+      --sidebar-width: 220px;
+      --header-height: 56px;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: var(--preview-font);
+      font-size: 14px;
+      line-height: 1.5;
+      background: var(--color-surface-default);
+      color: var(--color-text-primary);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    /* ── Layout ─────────────────────────────────────────────────────────────── */
+
+    .layout { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      min-height: 100vh;
+      background: var(--color-surface-nav);
+      border-right: 1px solid var(--color-border-subtle);
+      position: fixed;
+      top: 0; left: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+
+    .sidebar-brand {
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--color-border-subtle);
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .brand-mark {
+      width: 28px; height: 28px;
+      background: var(--color-surface-nav-active);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-mark svg { width: 16px; height: 16px; }
+
+    .brand-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .brand-tag {
+      font-size: 10px;
+      color: var(--color-text-secondary);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 0;
+    }
+
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      padding: 12px 20px 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 20px;
+      font-size: 13px;
+      font-weight: 450;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      border-radius: 0;
+      transition: background 0.12s, color 0.12s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-link:hover { background: var(--color-border-subtle); color: var(--color-text-primary); }
+    .nav-link.active { background: var(--color-border-accordion); color: var(--color-surface-nav-active); font-weight: 600; }
+
+    .nav-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    .nav-link.active .nav-dot { opacity: 1; }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--color-border-subtle);
+      font-size: 11px;
+      color: var(--color-text-secondary);
+    }
+
+    /* Main content */
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: var(--header-height);
+      background: var(--color-surface-page);
+      border-bottom: 1px solid var(--color-border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      letter-spacing: 0.02em;
+    }
+
+    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: var(--color-surface-brand);
+      color: var(--color-text-brand);
+      border: 1px solid var(--color-border-accordion);
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--color-border-secondary);
+      background: var(--color-surface-page);
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      font-family: var(--preview-font);
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--color-surface-default);
+      color: var(--color-text-primary);
+      border-color: var(--color-border-primary);
+    }
+
+    /* Content */
+    .content { padding: 48px 40px; max-width: 1100px; }
+
+    /* ── Sections ────────────────────────────────────────────────────────────── */
+
+    .section { margin-bottom: 80px; scroll-margin-top: 80px; }
+
+    .section-header { margin-bottom: 32px; }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .section-desc {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    .subsection { margin-bottom: 40px; }
+
+    .subsection-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    /* ── Colour swatches ─────────────────────────────────────────────────────── */
+
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .swatch-grid.compact {
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+
+    .swatch-card {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--color-border-subtle);
+      background: var(--color-surface-page);
+    }
+
+    .swatch-color {
+      height: 64px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .swatch-color::after {
+      content: 'Copy';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      opacity: 0;
+      transition: opacity 0.15s;
+      background: rgba(0,0,0,0.15);
+      color: white;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+
+    .swatch-color:hover::after { opacity: 1; }
+    .swatch-color.copied::after { content: 'Copied!'; opacity: 1; background: rgba(0,0,0,0.2); }
+
+    .swatch-info {
+      padding: 10px 12px;
+    }
+
+    .swatch-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 2px;
+      font-family: var(--preview-mono);
+    }
+
+    .swatch-value {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      font-family: var(--preview-mono);
+    }
+
+    /* ── Paired swatches (bg + bold pairs) ──────────────────────────────────── */
+
+    .pair-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .swatch-pair {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    .swatch-pair .swatch-color { height: 44px; }
+    .swatch-pair .swatch-color:last-of-type { height: 28px; }
+
+    /* ── Typography ──────────────────────────────────────────────────────────── */
+
+    .type-table { width: 100%; border-collapse: collapse; }
+
+    .type-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      padding: 8px 16px;
+      background: var(--color-surface-default);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .type-table td {
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--color-border-subtle);
+      vertical-align: middle;
+    }
+
+    .type-table tr:last-child td { border-bottom: none; }
+
+    .type-sample { color: var(--color-text-primary); }
+    .type-meta { font-family: var(--preview-mono); font-size: 11px; color: var(--color-text-secondary); line-height: 1.8; }
+    .type-token { font-family: var(--preview-mono); font-size: 11px; color: var(--color-text-brand); }
+
+    /* ── Spacing scale ───────────────────────────────────────────────────────── */
+
+    .spacing-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .spacing-row:last-child { border-bottom: none; }
+
+    .spacing-label {
+      font-family: var(--preview-mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      width: 80px;
+      flex-shrink: 0;
+    }
+
+    .spacing-bar-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+
+    .spacing-bar {
+      background: var(--color-surface-nav-active);
+      height: 20px;
+      border-radius: 3px;
+      opacity: 0.8;
+      flex-shrink: 0;
+    }
+
+    .spacing-val {
+      font-family: var(--preview-mono);
+      font-size: 11px;
+      color: var(--color-text-secondary);
+    }
+
+    /* ── Radius ──────────────────────────────────────────────────────────────── */
+
+    .radius-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: flex-end;
+    }
+
+    .radius-item { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
+    .radius-box {
+      width: 80px;
+      height: 80px;
+      background: var(--color-surface-brand);
+      border: 2px solid var(--color-border-accordion);
+    }
+
+    .radius-label {
+      text-align: center;
+      font-family: var(--preview-mono);
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    .radius-name { font-weight: 600; color: var(--color-text-primary); font-size: 12px; }
+
+    /* ── Shadow ──────────────────────────────────────────────────────────────── */
+
+    .shadow-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: flex-end;
+    }
+
+    .shadow-item { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+    .shadow-box {
+      width: 100px;
+      height: 100px;
+      background: var(--color-surface-page);
+      border-radius: 8px;
+    }
+
+    .shadow-label {
+      text-align: center;
+      font-family: var(--preview-mono);
+      font-size: 11px;
+      color: var(--color-text-secondary);
+    }
+
+    /* ── Overlay ─────────────────────────────────────────────────────────────── */
+
+    .overlay-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .overlay-item {
+      width: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    .overlay-base {
+      height: 48px;
+      background: var(--color-surface-nav-active);
+      position: relative;
+    }
+
+    .overlay-layer {
+      position: absolute;
+      inset: 0;
+    }
+
+    .overlay-info {
+      padding: 8px 10px;
+      background: var(--color-surface-page);
+    }
+
+    .overlay-name {
+      font-family: var(--preview-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    /* ── Coming Soon ─────────────────────────────────────────────────────────── */
+
+    .coming-soon {
+      border: 2px dashed var(--color-border-secondary);
+      border-radius: 12px;
+      padding: 60px 40px;
+      text-align: center;
+      color: var(--color-text-secondary);
+    }
+
+    .coming-soon-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.4;
+    }
+
+    .coming-soon h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 6px;
+    }
+
+    .coming-soon p {
+      font-size: 13px;
+      line-height: 1.6;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+
+    /* ── Utility ─────────────────────────────────────────────────────────────── */
+
+    code {
+      font-family: var(--preview-mono);
+      font-size: 12px;
+      background: var(--color-surface-default);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--color-text-brand);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--color-border-subtle);
+      margin: 60px 0;
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ── Sidebar ───────────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="5" height="5" rx="1" fill="white"/>
+          <rect x="9" y="2" width="5" height="5" rx="1" fill="white" opacity="0.6"/>
+          <rect x="2" y="9" width="5" height="5" rx="1" fill="white" opacity="0.6"/>
+          <rect x="9" y="9" width="5" height="5" rx="1" fill="white" opacity="0.3"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Onflo</div>
+        <div class="brand-tag">Design System</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Foundations</div>
+      <a class="nav-link active" href="#colours" onclick="setActive(this)"><span class="nav-dot"></span>Colours</a>
+      <a class="nav-link" href="#typography" onclick="setActive(this)"><span class="nav-dot"></span>Typography</a>
+      <a class="nav-link" href="#spacing" onclick="setActive(this)"><span class="nav-dot"></span>Spacing</a>
+      <a class="nav-link" href="#radius" onclick="setActive(this)"><span class="nav-dot"></span>Border Radius</a>
+      <a class="nav-link" href="#shadows" onclick="setActive(this)"><span class="nav-dot"></span>Shadows</a>
+      <a class="nav-link" href="#overlays" onclick="setActive(this)"><span class="nav-dot"></span>Overlays</a>
+
+      <div class="nav-section-label" style="margin-top:8px;">Components</div>
+      <a class="nav-link" href="#components" onclick="setActive(this)"><span class="nav-dot"></span>Coming Soon</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      Step 1 of 2 — Tokens<br/>
+      v0.1.0 · Angular + .NET Core
+    </div>
+  </aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────────────────── -->
+  <div class="main">
+    <header class="topbar">
+      <span class="topbar-title">Design Tokens Reference</span>
+      <div class="topbar-actions">
+        <span class="badge">Step 1 — Variables</span>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="3" fill="currentColor"/>
+            <path d="M7 1V2.5M7 11.5V13M1 7H2.5M11.5 7H13M2.9 2.9L3.96 3.96M10.04 10.04L11.1 11.1M11.1 2.9L10.04 3.96M3.96 10.04L2.9 11.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span id="themeLabel">Dark mode</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- ── Colours ─────────────────────────────────────────────────────── -->
+      <section class="section" id="colours">
+        <div class="section-header">
+          <h2 class="section-title">Colours</h2>
+          <p class="section-desc">
+            Semantic colour tokens. These reference the underlying primitive palette
+            via CSS custom properties — swapping light/dark mode updates all of them automatically.
+            Use <code>--color-*</code> tokens in your Angular components.
+          </p>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Surface</div>
+          <div class="swatch-grid compact">
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-page)" onclick="copySwatch(this,'var(--color-surface-page)')"></div><div class="swatch-info"><div class="swatch-name">surface-page</div><div class="swatch-value">--color-surface-page</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-default)" onclick="copySwatch(this,'var(--color-surface-default)')"></div><div class="swatch-info"><div class="swatch-name">surface-default</div><div class="swatch-value">--color-surface-default</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-subtle)" onclick="copySwatch(this,'var(--color-surface-subtle)')"></div><div class="swatch-info"><div class="swatch-name">surface-subtle</div><div class="swatch-value">--color-surface-subtle</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-disabled)" onclick="copySwatch(this,'var(--color-surface-disabled)')"></div><div class="swatch-info"><div class="swatch-name">surface-disabled</div><div class="swatch-value">--color-surface-disabled</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-nav)" onclick="copySwatch(this,'var(--color-surface-nav)')"></div><div class="swatch-info"><div class="swatch-name">surface-nav</div><div class="swatch-value">--color-surface-nav</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-nav-active)" onclick="copySwatch(this,'var(--color-surface-nav-active)')"></div><div class="swatch-info"><div class="swatch-name">surface-nav-active</div><div class="swatch-value">--color-surface-nav-active</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-container)" onclick="copySwatch(this,'var(--color-surface-container)')"></div><div class="swatch-info"><div class="swatch-name">surface-container</div><div class="swatch-value">--color-surface-container</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-input)" onclick="copySwatch(this,'var(--color-surface-input)')"></div><div class="swatch-info"><div class="swatch-name">surface-input</div><div class="swatch-value">--color-surface-input</div></div></div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Text</div>
+          <div class="swatch-grid compact">
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-text-primary)" onclick="copySwatch(this,'var(--color-text-primary)')"></div><div class="swatch-info"><div class="swatch-name">text-primary</div><div class="swatch-value">--color-text-primary</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-text-secondary)" onclick="copySwatch(this,'var(--color-text-secondary)')"></div><div class="swatch-info"><div class="swatch-name">text-secondary</div><div class="swatch-value">--color-text-secondary</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-text-placeholder)" onclick="copySwatch(this,'var(--color-text-placeholder)')"></div><div class="swatch-info"><div class="swatch-name">text-placeholder</div><div class="swatch-value">--color-text-placeholder</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-text-disabled)" onclick="copySwatch(this,'var(--color-text-disabled)')"></div><div class="swatch-info"><div class="swatch-name">text-disabled</div><div class="swatch-value">--color-text-disabled</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-text-brand)" onclick="copySwatch(this,'var(--color-text-brand)')"></div><div class="swatch-info"><div class="swatch-name">text-brand</div><div class="swatch-value">--color-text-brand</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-text-link)" onclick="copySwatch(this,'var(--color-text-link)')"></div><div class="swatch-info"><div class="swatch-name">text-link</div><div class="swatch-value">--color-text-link</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-text-error)" onclick="copySwatch(this,'var(--color-text-error)')"></div><div class="swatch-info"><div class="swatch-name">text-error</div><div class="swatch-value">--color-text-error</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-text-inverse);border:1px solid var(--color-border-subtle);" onclick="copySwatch(this,'var(--color-text-inverse)')"></div><div class="swatch-info"><div class="swatch-name">text-inverse</div><div class="swatch-value">--color-text-inverse</div></div></div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Semantic States</div>
+          <div class="swatch-grid">
+            <div class="swatch-card">
+              <div style="display:flex;height:64px;">
+                <div class="swatch-color" style="flex:1;background:var(--color-surface-error)" onclick="copySwatch(this,'var(--color-surface-error)')"></div>
+                <div class="swatch-color" style="width:24px;background:var(--color-text-error)" onclick="copySwatch(this,'var(--color-text-error)')"></div>
+              </div>
+              <div class="swatch-info"><div class="swatch-name">Error</div><div class="swatch-value">surface-error / text-error</div></div>
+            </div>
+            <div class="swatch-card">
+              <div style="display:flex;height:64px;">
+                <div class="swatch-color" style="flex:1;background:var(--color-surface-warning)" onclick="copySwatch(this,'var(--color-surface-warning)')"></div>
+                <div class="swatch-color" style="width:24px;background:#EB6E08" onclick="copySwatch(this,'#EB6E08')"></div>
+              </div>
+              <div class="swatch-info"><div class="swatch-name">Warning</div><div class="swatch-value">surface-warning</div></div>
+            </div>
+            <div class="swatch-card">
+              <div style="display:flex;height:64px;">
+                <div class="swatch-color" style="flex:1;background:var(--color-surface-success)" onclick="copySwatch(this,'var(--color-surface-success)')"></div>
+                <div class="swatch-color" style="width:24px;background:var(--color-surface-accent-green-bold)" onclick="copySwatch(this,'var(--color-surface-accent-green-bold)')"></div>
+              </div>
+              <div class="swatch-info"><div class="swatch-name">Success</div><div class="swatch-value">surface-success</div></div>
+            </div>
+            <div class="swatch-card">
+              <div style="display:flex;height:64px;">
+                <div class="swatch-color" style="flex:1;background:var(--color-surface-info)" onclick="copySwatch(this,'var(--color-surface-info)')"></div>
+                <div class="swatch-color" style="width:24px;background:var(--color-surface-accent-blue-bold)" onclick="copySwatch(this,'var(--color-surface-accent-blue-bold)')"></div>
+              </div>
+              <div class="swatch-info"><div class="swatch-name">Info</div><div class="swatch-value">surface-info</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Accent Palette — Background / Bold pairs</div>
+          <div class="pair-grid">
+            <div class="swatch-pair">
+              <div class="swatch-color" style="background:var(--color-surface-accent-blue)" onclick="copySwatch(this,'var(--color-surface-accent-blue)')"></div>
+              <div class="swatch-color" style="background:var(--color-surface-accent-blue-bold)" onclick="copySwatch(this,'var(--color-surface-accent-blue-bold)')"></div>
+              <div class="swatch-info"><div class="swatch-name">Blue</div><div class="swatch-value">accent-blue</div></div>
+            </div>
+            <div class="swatch-pair">
+              <div class="swatch-color" style="background:var(--color-surface-accent-navy)" onclick="copySwatch(this,'var(--color-surface-accent-navy)')"></div>
+              <div class="swatch-color" style="background:var(--color-surface-accent-navy-bold)" onclick="copySwatch(this,'var(--color-surface-accent-navy-bold)')"></div>
+              <div class="swatch-info"><div class="swatch-name">Navy</div><div class="swatch-value">accent-navy</div></div>
+            </div>
+            <div class="swatch-pair">
+              <div class="swatch-color" style="background:var(--color-surface-accent-red)" onclick="copySwatch(this,'var(--color-surface-accent-red)')"></div>
+              <div class="swatch-color" style="background:var(--color-surface-accent-red-bold)" onclick="copySwatch(this,'var(--color-surface-accent-red-bold)')"></div>
+              <div class="swatch-info"><div class="swatch-name">Red</div><div class="swatch-value">accent-red</div></div>
+            </div>
+            <div class="swatch-pair">
+              <div class="swatch-color" style="background:var(--color-surface-accent-yellow)" onclick="copySwatch(this,'var(--color-surface-accent-yellow)')"></div>
+              <div class="swatch-color" style="background:var(--color-surface-accent-yellow-bold)" onclick="copySwatch(this,'var(--color-surface-accent-yellow-bold)')"></div>
+              <div class="swatch-info"><div class="swatch-name">Yellow</div><div class="swatch-value">accent-yellow</div></div>
+            </div>
+            <div class="swatch-pair">
+              <div class="swatch-color" style="background:var(--color-surface-accent-green)" onclick="copySwatch(this,'var(--color-surface-accent-green)')"></div>
+              <div class="swatch-color" style="background:var(--color-surface-accent-green-bold)" onclick="copySwatch(this,'var(--color-surface-accent-green-bold)')"></div>
+              <div class="swatch-info"><div class="swatch-name">Green</div><div class="swatch-value">accent-green</div></div>
+            </div>
+            <div class="swatch-pair">
+              <div class="swatch-color" style="background:var(--color-surface-accent-teal)" onclick="copySwatch(this,'var(--color-surface-accent-teal)')"></div>
+              <div class="swatch-color" style="background:var(--color-surface-accent-teal-bold)" onclick="copySwatch(this,'var(--color-surface-accent-teal-bold)')"></div>
+              <div class="swatch-info"><div class="swatch-name">Teal</div><div class="swatch-value">accent-teal</div></div>
+            </div>
+            <div class="swatch-pair">
+              <div class="swatch-color" style="background:var(--color-surface-accent-orange)" onclick="copySwatch(this,'var(--color-surface-accent-orange)')"></div>
+              <div class="swatch-color" style="background:var(--color-surface-accent-orange-bold)" onclick="copySwatch(this,'var(--color-surface-accent-orange-bold)')"></div>
+              <div class="swatch-info"><div class="swatch-name">Orange</div><div class="swatch-value">accent-orange</div></div>
+            </div>
+            <div class="swatch-pair">
+              <div class="swatch-color" style="background:var(--color-surface-accent-purple)" onclick="copySwatch(this,'var(--color-surface-accent-purple)')"></div>
+              <div class="swatch-color" style="background:var(--color-surface-accent-purple-bold)" onclick="copySwatch(this,'var(--color-surface-accent-purple-bold)')"></div>
+              <div class="swatch-info"><div class="swatch-name">Purple</div><div class="swatch-value">accent-purple</div></div>
+            </div>
+            <div class="swatch-pair">
+              <div class="swatch-color" style="background:var(--color-surface-accent-pink)" onclick="copySwatch(this,'var(--color-surface-accent-pink)')"></div>
+              <div class="swatch-color" style="background:var(--color-surface-accent-pink-bold)" onclick="copySwatch(this,'var(--color-surface-accent-pink-bold)')"></div>
+              <div class="swatch-info"><div class="swatch-name">Pink</div><div class="swatch-value">accent-pink</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-title">Border</div>
+          <div class="swatch-grid compact">
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-border-subtle)" onclick="copySwatch(this,'var(--color-border-subtle)')"></div><div class="swatch-info"><div class="swatch-name">border-subtle</div><div class="swatch-value">--color-border-subtle</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-border-secondary)" onclick="copySwatch(this,'var(--color-border-secondary)')"></div><div class="swatch-info"><div class="swatch-name">border-secondary</div><div class="swatch-value">--color-border-secondary</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-border-primary)" onclick="copySwatch(this,'var(--color-border-primary)')"></div><div class="swatch-info"><div class="swatch-name">border-primary</div><div class="swatch-value">--color-border-primary</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-border-strong)" onclick="copySwatch(this,'var(--color-border-strong)')"></div><div class="swatch-info"><div class="swatch-name">border-strong</div><div class="swatch-value">--color-border-strong</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-border-active)" onclick="copySwatch(this,'var(--color-border-active)')"></div><div class="swatch-info"><div class="swatch-name">border-active</div><div class="swatch-value">--color-border-active</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-border-error)" onclick="copySwatch(this,'var(--color-border-error)')"></div><div class="swatch-info"><div class="swatch-name">border-error</div><div class="swatch-value">--color-border-error</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-border-ada-focus-ring);outline:2px solid var(--color-border-ada-focus-ring);outline-offset:-6px;" onclick="copySwatch(this,'var(--color-border-ada-focus-ring)')"></div><div class="swatch-info"><div class="swatch-name">ADA focus ring</div><div class="swatch-value">--color-border-ada-focus-ring</div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- ── Typography ───────────────────────────────────────────────────── -->
+      <section class="section" id="typography">
+        <div class="section-header">
+          <h2 class="section-title">Typography</h2>
+          <p class="section-desc">
+            Proxima Nova across all scales. Use the SCSS mixins in Angular components:
+            <code>@include ds.type-title-h1;</code> — or reference the CSS vars directly.
+          </p>
+        </div>
+
+        <table class="type-table">
+          <thead>
+            <tr>
+              <th style="width:40%">Sample</th>
+              <th style="width:20%">Properties</th>
+              <th>Token / Mixin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-display-size);font-weight:var(--ref-typescale-display-weight);line-height:1.2;letter-spacing:-0.5px">Display</div></td>
+              <td><div class="type-meta">48px / 56px<br/>Weight 700<br/>−0.5px tracking</div></td>
+              <td><div class="type-token">@include ds.type-display;<br/>--ref-typescale-display-*</div></td>
+            </tr>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-title-h1-size);font-weight:var(--ref-typescale-title-h1-weight);line-height:1.2">Title H1</div></td>
+              <td><div class="type-meta">24px / 28px<br/>Weight 600</div></td>
+              <td><div class="type-token">@include ds.type-title-h1;</div></td>
+            </tr>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-title-h2-size);font-weight:var(--ref-typescale-title-h2-weight);line-height:1.4">Title H2</div></td>
+              <td><div class="type-meta">20px / 28px<br/>Weight 600</div></td>
+              <td><div class="type-token">@include ds.type-title-h2;</div></td>
+            </tr>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-title-h3-size);font-weight:var(--ref-typescale-title-h3-weight);line-height:1.5">Title H3</div></td>
+              <td><div class="type-meta">16px / 24px<br/>Weight 600</div></td>
+              <td><div class="type-token">@include ds.type-title-h3;</div></td>
+            </tr>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-title-h4-size);font-weight:var(--ref-typescale-title-h4-weight);line-height:1.43">Title H4</div></td>
+              <td><div class="type-meta">14px / 20px<br/>Weight 600</div></td>
+              <td><div class="type-token">@include ds.type-title-h4;</div></td>
+            </tr>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-body-large-size);font-weight:var(--ref-typescale-body-large-weight);line-height:1.5">Body Large — the quick brown fox jumps over the lazy dog</div></td>
+              <td><div class="type-meta">16px / 24px<br/>Weight 400</div></td>
+              <td><div class="type-token">@include ds.type-body-large;</div></td>
+            </tr>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-body-medium-size);font-weight:var(--ref-typescale-body-medium-weight);line-height:1.43">Body Medium — the quick brown fox jumps over the lazy dog</div></td>
+              <td><div class="type-meta">14px / 20px<br/>Weight 400</div></td>
+              <td><div class="type-token">@include ds.type-body-medium;</div></td>
+            </tr>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-body-small-size);font-weight:var(--ref-typescale-body-small-weight);line-height:1.33">Body Small — the quick brown fox jumps over the lazy dog</div></td>
+              <td><div class="type-meta">12px / 16px<br/>Weight 400</div></td>
+              <td><div class="type-token">@include ds.type-body-small;</div></td>
+            </tr>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-label-large-size);font-weight:var(--ref-typescale-label-large-weight);line-height:1;letter-spacing:0.1px;text-transform:uppercase">Label Large</div></td>
+              <td><div class="type-meta">16px / 16px<br/>Weight 500</div></td>
+              <td><div class="type-token">@include ds.type-label-large;</div></td>
+            </tr>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight);line-height:1;letter-spacing:0.25px;text-transform:uppercase">Label Medium</div></td>
+              <td><div class="type-meta">14px / 14px<br/>Weight 500</div></td>
+              <td><div class="type-token">@include ds.type-label-medium;</div></td>
+            </tr>
+            <tr>
+              <td><div class="type-sample" style="font-size:var(--ref-typescale-label-small-size);font-weight:var(--ref-typescale-label-small-weight);line-height:1;letter-spacing:0.4px;text-transform:uppercase">Label Small</div></td>
+              <td><div class="type-meta">12px / 12px<br/>Weight 500</div></td>
+              <td><div class="type-token">@include ds.type-label-small;</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- ── Spacing ──────────────────────────────────────────────────────── -->
+      <section class="section" id="spacing">
+        <div class="section-header">
+          <h2 class="section-title">Spacing</h2>
+          <p class="section-desc">
+            7-step spacing scale. Use <code>--spacing-*</code> CSS vars or <code>$spacing-*</code> SCSS variables.
+            The SCSS variables use direct pixel values so they work inside <code>calc()</code>.
+          </p>
+        </div>
+
+        <div class="spacing-row">
+          <div class="spacing-label">$spacing-none<br/><span style="color:var(--color-text-secondary);font-size:11px">0px</span></div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:0px;min-width:4px;opacity:0.3"></div><span class="spacing-val">0px</span></div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">$spacing-xs<br/><span style="color:var(--color-text-secondary);font-size:11px">--spacing-xs</span></div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:4px"></div><span class="spacing-val">4px</span></div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">$spacing-sm<br/><span style="color:var(--color-text-secondary);font-size:11px">--spacing-sm</span></div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:8px"></div><span class="spacing-val">8px</span></div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">$spacing-md<br/><span style="color:var(--color-text-secondary);font-size:11px">--spacing-md</span></div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:12px"></div><span class="spacing-val">12px</span></div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">$spacing-lg<br/><span style="color:var(--color-text-secondary);font-size:11px">--spacing-lg</span></div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:16px"></div><span class="spacing-val">16px</span></div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">$spacing-xl<br/><span style="color:var(--color-text-secondary);font-size:11px">--spacing-xl</span></div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:24px"></div><span class="spacing-val">24px</span></div>
+        </div>
+        <div class="spacing-row">
+          <div class="spacing-label">$spacing-page<br/><span style="color:var(--color-text-secondary);font-size:11px">--spacing-page</span></div>
+          <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:48px"></div><span class="spacing-val">48px</span></div>
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- ── Border Radius ────────────────────────────────────────────────── -->
+      <section class="section" id="radius">
+        <div class="section-header">
+          <h2 class="section-title">Border Radius</h2>
+          <p class="section-desc">
+            Use <code>--radius-*</code> CSS vars or <code>$radius-*</code> SCSS variables.
+          </p>
+        </div>
+
+        <div class="radius-grid">
+          <div class="radius-item">
+            <div class="radius-box" style="border-radius:0"></div>
+            <div class="radius-label"><div class="radius-name">$radius-none</div>0px</div>
+          </div>
+          <div class="radius-item">
+            <div class="radius-box" style="border-radius:6px"></div>
+            <div class="radius-label"><div class="radius-name">$radius-sm</div>6px</div>
+          </div>
+          <div class="radius-item">
+            <div class="radius-box" style="border-radius:8px"></div>
+            <div class="radius-label"><div class="radius-name">$radius-md</div>8px</div>
+          </div>
+          <div class="radius-item">
+            <div class="radius-box" style="border-radius:16px"></div>
+            <div class="radius-label"><div class="radius-name">$radius-lg</div>16px</div>
+          </div>
+          <div class="radius-item">
+            <div class="radius-box" style="border-radius:24px"></div>
+            <div class="radius-label"><div class="radius-name">$radius-xl</div>24px</div>
+          </div>
+          <div class="radius-item">
+            <div class="radius-box" style="border-radius:9999px;width:120px"></div>
+            <div class="radius-label"><div class="radius-name">$radius-full</div>9999px — pill</div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- ── Shadows ──────────────────────────────────────────────────────── -->
+      <section class="section" id="shadows">
+        <div class="section-header">
+          <h2 class="section-title">Shadows</h2>
+          <p class="section-desc">
+            Five elevation levels. The shadow colour token is what changes between themes —
+            combine it with <code>box-shadow</code> offsets in your components.
+          </p>
+        </div>
+
+        <div class="shadow-grid">
+          <div class="shadow-item">
+            <div class="shadow-box" style="box-shadow: 0 1px 2px var(--shadow-elevation-1)"></div>
+            <div class="shadow-label"><strong>elevation-1</strong><br/>0 1px 2px</div>
+          </div>
+          <div class="shadow-item">
+            <div class="shadow-box" style="box-shadow: 0 2px 4px var(--shadow-elevation-2)"></div>
+            <div class="shadow-label"><strong>elevation-2</strong><br/>0 2px 4px</div>
+          </div>
+          <div class="shadow-item">
+            <div class="shadow-box" style="box-shadow: 0 4px 8px var(--shadow-elevation-3)"></div>
+            <div class="shadow-label"><strong>elevation-3</strong><br/>0 4px 8px</div>
+          </div>
+          <div class="shadow-item">
+            <div class="shadow-box" style="box-shadow: 0 8px 16px var(--shadow-elevation-4)"></div>
+            <div class="shadow-label"><strong>elevation-4</strong><br/>0 8px 16px</div>
+          </div>
+          <div class="shadow-item">
+            <div class="shadow-box" style="box-shadow: 0 16px 32px var(--shadow-elevation-5)"></div>
+            <div class="shadow-label"><strong>elevation-5</strong><br/>0 16px 32px</div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- ── Overlays ─────────────────────────────────────────────────────── -->
+      <section class="section" id="overlays">
+        <div class="section-header">
+          <h2 class="section-title">Overlays</h2>
+          <p class="section-desc">
+            Semi-transparent interaction states applied on top of surface colours.
+            Use as <code>background</code> on a pseudo-element over the base surface.
+          </p>
+        </div>
+
+        <div class="overlay-grid">
+          <div class="overlay-item">
+            <div class="overlay-base"><div class="overlay-layer" style="background:var(--overlay-hovered)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">hovered</div></div>
+          </div>
+          <div class="overlay-item">
+            <div class="overlay-base"><div class="overlay-layer" style="background:var(--overlay-pressed)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">pressed</div></div>
+          </div>
+          <div class="overlay-item">
+            <div class="overlay-base"><div class="overlay-layer" style="background:var(--overlay-focused)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">focused</div></div>
+          </div>
+          <div class="overlay-item">
+            <div class="overlay-base"><div class="overlay-layer" style="background:var(--overlay-dragged)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">dragged</div></div>
+          </div>
+          <div class="overlay-item">
+            <div class="overlay-base" style="background:var(--color-surface-accent-red-bold)"><div class="overlay-layer" style="background:var(--overlay-accent-red-hovered)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">red-hovered</div></div>
+          </div>
+          <div class="overlay-item">
+            <div class="overlay-base" style="background:var(--color-surface-accent-red-bold)"><div class="overlay-layer" style="background:var(--overlay-accent-red-pressed)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">red-pressed</div></div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- ── Components (coming soon) ────────────────────────────────────── -->
+      <section class="section" id="components">
+        <div class="section-header">
+          <h2 class="section-title">Components</h2>
+          <p class="section-desc">
+            Angular components built on these tokens. Buttons, inputs, cards, navigation, modals, and more.
+          </p>
+        </div>
+        <div class="coming-soon">
+          <div class="coming-soon-icon">⬡</div>
+          <h3>Step 2 — Coming Soon</h3>
+          <p>Components will be added to this repo and will appear here automatically. Each component will show usage, variants, and copy-paste Angular code.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  function toggleTheme() {
+    const html  = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('themeLabel').textContent = isDark ? 'Dark mode' : 'Light mode';
+  }
+
+  function setActive(el) {
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function copySwatch(el, value) {
+    navigator.clipboard?.writeText(value).catch(() => {});
+    el.classList.add('copied');
+    setTimeout(() => el.classList.remove('copied'), 1400);
+  }
+
+  // Highlight active nav item on scroll
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(l => {
+          l.classList.toggle('active', l.getAttribute('href') === `#${id}`);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

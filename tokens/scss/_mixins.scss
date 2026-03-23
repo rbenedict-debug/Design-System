@@ -1,0 +1,97 @@
+// Onflo Design System — SCSS Typography Mixins
+// Auto-generated. Do not edit manually.
+// Regenerate: npm run generate-tokens
+//
+// Usage:
+//   @use '@onflo/design-system/tokens/scss' as ds;
+//
+//   h1 { @include ds.type-title-h1; }
+//   p  { @include ds.type-body-medium; }
+
+@mixin type-display {
+  font-family: var(--ref-typescale-display-font);
+  font-weight: var(--ref-typescale-display-weight);
+  font-size: var(--ref-typescale-display-size);
+  line-height: var(--ref-typescale-display-line-height);
+  letter-spacing: var(--ref-typescale-display-tracking);
+}
+
+@mixin type-title-h1 {
+  font-family: var(--ref-typescale-title-h1-font);
+  font-weight: var(--ref-typescale-title-h1-weight);
+  font-size: var(--ref-typescale-title-h1-size);
+  line-height: var(--ref-typescale-title-h1-line-height);
+  letter-spacing: var(--ref-typescale-title-h1-tracking);
+}
+
+@mixin type-title-h2 {
+  font-family: var(--ref-typescale-title-h2-font);
+  font-weight: var(--ref-typescale-title-h2-weight);
+  font-size: var(--ref-typescale-title-h2-size);
+  line-height: var(--ref-typescale-title-h2-line-height);
+  letter-spacing: var(--ref-typescale-title-h2-tracking);
+}
+
+@mixin type-title-h3 {
+  font-family: var(--ref-typescale-title-h3-font);
+  font-weight: var(--ref-typescale-title-h3-weight);
+  font-size: var(--ref-typescale-title-h3-size);
+  line-height: var(--ref-typescale-title-h3-line-height);
+  letter-spacing: var(--ref-typescale-title-h3-tracking);
+}
+
+@mixin type-title-h4 {
+  font-family: var(--ref-typescale-title-h4-font);
+  font-weight: var(--ref-typescale-title-h4-weight);
+  font-size: var(--ref-typescale-title-h4-size);
+  line-height: var(--ref-typescale-title-h4-line-height);
+  letter-spacing: var(--ref-typescale-title-h4-tracking);
+}
+
+@mixin type-body-large {
+  font-family: var(--ref-typescale-body-large-font);
+  font-weight: var(--ref-typescale-body-large-weight);
+  font-size: var(--ref-typescale-body-large-size);
+  line-height: var(--ref-typescale-body-large-line-height);
+  letter-spacing: var(--ref-typescale-body-large-tracking);
+}
+
+@mixin type-body-medium {
+  font-family: var(--ref-typescale-body-medium-font);
+  font-weight: var(--ref-typescale-body-medium-weight);
+  font-size: var(--ref-typescale-body-medium-size);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+}
+
+@mixin type-body-small {
+  font-family: var(--ref-typescale-body-small-font);
+  font-weight: var(--ref-typescale-body-small-weight);
+  font-size: var(--ref-typescale-body-small-size);
+  line-height: var(--ref-typescale-body-small-line-height);
+  letter-spacing: var(--ref-typescale-body-small-tracking);
+}
+
+@mixin type-label-large {
+  font-family: var(--ref-typescale-label-large-font);
+  font-weight: var(--ref-typescale-label-large-weight);
+  font-size: var(--ref-typescale-label-large-size);
+  line-height: var(--ref-typescale-label-large-line-height);
+  letter-spacing: var(--ref-typescale-label-large-tracking);
+}
+
+@mixin type-label-medium {
+  font-family: var(--ref-typescale-label-medium-font);
+  font-weight: var(--ref-typescale-label-medium-weight);
+  font-size: var(--ref-typescale-label-medium-size);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+}
+
+@mixin type-label-small {
+  font-family: var(--ref-typescale-label-small-font);
+  font-weight: var(--ref-typescale-label-small-weight);
+  font-size: var(--ref-typescale-label-small-size);
+  line-height: var(--ref-typescale-label-small-line-height);
+  letter-spacing: var(--ref-typescale-label-small-tracking);
+}

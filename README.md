@@ -1,132 +1,215 @@
 # Onflo Design System
 
-The Onflo Design System is the internal source of truth for UI components, design tokens, and interaction patterns used across Onflo products. Built with Angular and .NET Core, it bridges the gap between design and engineering — ensuring a consistent, accessible, and scalable experience across every surface we ship.
+The single source of truth for UI foundations across all Onflo products — design tokens, component patterns, and interaction guidelines for Angular + .NET Core.
 
 ---
 
-## Design Principles
+## What's in this repo
 
-- **Consistency** — One visual language across all products, reducing cognitive load for users and decision fatigue for teams.
-- **Accessibility** — Components are built to meet WCAG standards by default, not as an afterthought.
-- **Scalability** — Designed to grow with the product — new components and patterns slot in without breaking what exists.
-- **Designer-Developer Alignment** — Designers and engineers share the same vocabulary, tokens, and components, so what gets designed is what gets built.
-
----
-
-## Quick Start (Engineers)
-
-Install the package:
-
-```bash
-npm install @onflo/design-system
-```
-
-Import the module in your Angular app:
-
-```typescript
-import { OnfloDesignSystemModule } from '@onflo/design-system';
-
-@NgModule({
-  imports: [OnfloDesignSystemModule],
-})
-export class AppModule {}
-```
-
-Use a component:
-
-```html
-<onflo-button variant="primary">Get Started</onflo-button>
-```
-
-> **Note:** Package not yet published. Update install instructions once available.
-
----
-
-## Tech Stack
-
-| Layer | Technology |
+| Path | What it is |
 |---|---|
-| Frontend framework | Angular |
-| Backend | .NET Core |
-| Token source | Figma Variables (exported via Tokens Studio) |
-| Token output | CSS Custom Properties |
-
----
-
-## Design Tokens
-
-Tokens follow a **two-tier architecture** that mirrors the Figma Variables setup:
-
-### Tier 1 — Ref Tokens (primitives)
-Raw values exported directly from Figma. Light and dark modes are separate files.
-
-| File | Purpose |
-|---|---|
-| `tokens/ref-light.css` | Light mode primitive palette (`:root`) |
-| `tokens/ref-dark.css` | Dark mode overrides (`[data-theme="dark"]`) |
-
-**Naming:** `--ref-color-*`, `--ref-typescale-*`, `--ref-spacing-*`, `--ref-radius-*`
-
-Includes: colours (primary, neutral, accent), typeface, type scale, spacing, border radius, shadow, overlay.
-
-### Tier 2 — Design Tokens (semantic)
-Named, purpose-driven aliases that point to ref tokens via `var()`. When you update a raw value in the ref layer, every design token that references it updates automatically.
-
-| File | Purpose |
-|---|---|
-| `tokens/design-tokens.css` | Semantic aliases (surface, text, border, spacing, radius…) |
-
-**Naming:** `--color-surface-*`, `--color-text-*`, `--color-border-*`, `--spacing-*`, `--radius-*`
-
-### Entry Point
-
-```scss
-// styles.scss
-@import 'tokens/index.css';
-```
-
-Or add to `angular.json`:
-```json
-"styles": ["tokens/index.css", "src/styles.scss"]
-```
-
-### Dark Mode
-
-Apply `data-theme="dark"` to the `<html>` element to activate dark mode:
-
-```typescript
-document.documentElement.setAttribute('data-theme', 'dark');
-```
-
-### Regenerating Tokens
-
-After re-exporting from Figma, drop the updated JSON files in the same location and run:
-
-```bash
-node scripts/generate-tokens.js
-```
-
-Source files expected:
-- `~/Downloads/ref 3/Light.tokens.json`
-- `~/Downloads/ref 3/Dark.tokens.json`
-- `~/Downloads/Mode 1.tokens 3.json`
+| `tokens/css/` | CSS custom properties — import in any Angular project |
+| `tokens/scss/` | SCSS variables + typography mixins |
+| `preview/index.html` | Live visual reference — open in a browser |
+| `scripts/generate-tokens.js` | Regenerates all token files from a Figma export |
 
 ---
 
 ## For Designers
 
-Design resources including Figma component libraries, design tokens, and usage guidelines are available internally.
+**View the token reference:** Open `preview/index.html` in any browser.
+No server needed — just open the file directly. It includes a light/dark mode toggle, all colour swatches (click any to copy the CSS var name), typography scale, spacing, radius, and shadows.
 
-- **Figma Library:** _Link coming soon_
-- **Design Tokens:** _Link coming soon_
-- **Component Specs:** _Link coming soon_
+**Updating tokens from Figma:**
+When the token values change in Figma, export the three variable files and hand them to a developer to regenerate. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full workflow.
 
-Reach out to the design team to get access to the Figma workspace.
+**Naming convention:**
+Every token you see in Figma Variables has a matching CSS custom property:
+- `surface / page` in Figma → `--color-surface-page` in code
+- `text / primary` → `--color-text-primary`
+- `spacing / lg` → `--spacing-lg`
 
 ---
 
-## Contributing & Support
+## For Developers
 
-Want to contribute a component or pattern? **Reach out to Rebecca.**
+### Quick start — new Angular project
 
-For questions or support, contact the team via your internal channels.
+**Step 1.** Copy the `tokens/` folder into your Angular project's `src/styles/` directory.
+
+```
+your-angular-project/
+  src/
+    styles/
+      tokens/          ← copy this folder from the design system repo
+        css/
+          index.css
+        scss/
+          index.scss
+          _variables.scss
+          _mixins.scss
+```
+
+**Step 2.** Import the CSS in `angular.json`:
+
+```json
+"styles": [
+  "src/styles/tokens/css/index.css",
+  "src/styles.scss"
+]
+```
+
+Or import in `src/styles.scss`:
+
+```scss
+@import 'styles/tokens/css/index.css';
+```
+
+**Step 3.** Import the SCSS in your component stylesheets:
+
+```scss
+@use 'styles/tokens/scss' as ds;
+
+.my-button {
+  background:    ds.$surface-brand-bold;
+  color:         ds.$text-on-brand;
+  padding:       ds.$spacing-sm ds.$spacing-lg;
+  border-radius: ds.$radius-sm;
+}
+```
+
+That's it. Your component now uses the design system.
+
+---
+
+### Using tokens in component styles
+
+#### CSS custom properties (works in any file)
+
+```scss
+.card {
+  background:    var(--color-surface-page);
+  border:        1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding:       var(--spacing-lg);
+  box-shadow:    0 2px 4px var(--shadow-elevation-2);
+}
+```
+
+#### SCSS variables (import the SCSS module first)
+
+```scss
+@use 'styles/tokens/scss' as ds;
+
+.card {
+  background:    ds.$surface-page;
+  border:        1px solid ds.$border-subtle;
+  border-radius: ds.$radius-md;
+  padding:       ds.$spacing-lg;
+}
+```
+
+#### Typography mixins
+
+Apply a complete type style in one line:
+
+```scss
+@use 'styles/tokens/scss' as ds;
+
+h1 { @include ds.type-title-h1; }
+h2 { @include ds.type-title-h2; }
+p  { @include ds.type-body-medium; }
+
+.label { @include ds.type-label-small; }
+```
+
+Available mixins:
+- `type-display`
+- `type-title-h1` / `type-title-h2` / `type-title-h3` / `type-title-h4`
+- `type-body-large` / `type-body-medium` / `type-body-small`
+- `type-label-large` / `type-label-medium` / `type-label-small`
+
+---
+
+### Dark mode
+
+Apply `data-theme="dark"` to the root `<html>` element. All `--color-*` tokens update automatically — no code changes needed in your components.
+
+```typescript
+// theme.service.ts
+setTheme(theme: 'light' | 'dark') {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+}
+
+// Restore on load
+const saved = localStorage.getItem('theme') ?? 'light';
+document.documentElement.setAttribute('data-theme', saved);
+```
+
+```html
+<!-- app.component.html -->
+<button (click)="themeService.setTheme('dark')">Dark</button>
+<button (click)="themeService.setTheme('light')">Light</button>
+```
+
+This works because the design tokens use a two-tier architecture:
+
+```
+[data-theme="dark"]          ← ref-dark.css overrides these
+  --ref-color-primary-blue-default: #3D9BE0
+
+:root
+  --ref-color-primary-blue-default: #0B6EB4   ← ref-light.css
+
+  --color-surface-nav-active: var(--ref-color-primary-blue-default)
+  ↑ design-tokens.css — always points to the ref, never a hard value
+```
+
+Changing `data-theme` on `<html>` updates the ref layer, which cascades to every design token instantly.
+
+---
+
+### Token reference
+
+| Token group | CSS prefix | SCSS prefix | Used for |
+|---|---|---|---|
+| Surface colours | `--color-surface-*` | `ds.$surface-*` | Backgrounds, containers |
+| Text colours | `--color-text-*` | `ds.$text-*` | All text |
+| Border colours | `--color-border-*` | `ds.$border-*` | Dividers, outlines, focus rings |
+| Spacing | `--spacing-*` | `ds.$spacing-*` | Padding, margin, gap |
+| Border radius | `--radius-*` | `ds.$radius-*` | Rounded corners |
+| Shadows | `--shadow-*` | `ds.$shadow-*` | Elevation |
+| Overlays | `--overlay-*` | `ds.$overlay-*` | Hover/pressed/focus overlays |
+
+---
+
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Angular |
+| Backend | .NET Core |
+| Token source | Figma Variables |
+| Token format | CSS custom properties + SCSS |
+| Theming | `[data-theme]` attribute on `<html>` |
+
+---
+
+## Updating tokens
+
+When the design team updates Figma and exports new variable files, run:
+
+```bash
+npm run generate-tokens
+```
+
+Then commit the updated files in `tokens/`. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full workflow.
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+For questions or to contribute a component pattern, reach out to **Rebecca**.

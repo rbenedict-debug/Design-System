@@ -2,20 +2,43 @@
 /**
  * Onflo Design System — Token Generator
  *
- * Reads Figma variable export JSON files and generates CSS custom properties:
- *   tokens/ref-light.css     — full primitive token set (light mode, :root)
- *   tokens/ref-dark.css      — full primitive token set ([data-theme="dark"])
- *   tokens/design-tokens.css — semantic tokens referencing primitives via var()
- *   tokens/index.css         — single import entry point
+ * Reads Figma variable export JSON files and generates:
  *
- * Two-tier token architecture:
- *   Tier 1  ref-light / ref-dark  → raw values keyed as --ref-*
+ *   tokens/css/
+ *     index.css          — CSS entry point (import this in Angular)
+ *     ref-light.css      — primitive palette, light mode (:root)
+ *     ref-dark.css       — primitive palette, dark mode ([data-theme="dark"])
+ *     design-tokens.css  — semantic aliases via var(--ref-*)
+ *
+ *   tokens/scss/
+ *     index.scss         — SCSS entry point (@use this in Angular)
+ *     _variables.scss    — SCSS variables wrapping all design tokens
+ *     _mixins.scss       — typography mixins for every type scale step
+ *
+ * ── Two-tier token architecture ──────────────────────────────────────────────
+ *
+ *   Tier 1  ref-light / ref-dark  → raw Figma values as --ref-* CSS vars
  *   Tier 2  design-tokens         → semantic aliases via var(--ref-*)
- *                                   Spacing, radius are static (no theme change)
- *                                   so their px values are written directly.
  *
- * Usage:
+ *   Changing a ref value propagates instantly to every design token that
+ *   references it — no manual updates required.
+ *
+ * ── Configuring Figma export paths ───────────────────────────────────────────
+ *
+ *   By default the script reads from ~/Downloads (where Figma exports land).
+ *   Override with the ONFLO_TOKEN_DIR environment variable:
+ *
+ *     ONFLO_TOKEN_DIR=/path/to/exports node scripts/generate-tokens.js
+ *
+ *   Expected files inside that directory:
+ *     ref 3/Light.tokens.json   ← light mode primitives
+ *     ref 3/Dark.tokens.json    ← dark mode primitives
+ *     Mode 1.tokens 3.json      ← semantic design tokens
+ *
+ * ── Usage ─────────────────────────────────────────────────────────────────────
+ *
  *   node scripts/generate-tokens.js
+ *   npm run generate-tokens
  */
 
 'use strict';
@@ -23,26 +46,30 @@
 const fs   = require('fs');
 const path = require('path');
 
-// ── File paths ────────────────────────────────────────────────────────────────
+// ── Input / output paths ──────────────────────────────────────────────────────
 
-const DOWNLOADS  = path.join(process.env.HOME, 'Downloads');
-const LIGHT_PATH = path.join(DOWNLOADS, 'ref 3', 'Light.tokens.json');
-const DARK_PATH  = path.join(DOWNLOADS, 'ref 3', 'Dark.tokens.json');
-const MODE_PATH  = path.join(DOWNLOADS, 'Mode 1.tokens 3.json');
-const OUT_DIR    = path.join(__dirname, '..', 'tokens');
+const INPUT_DIR  = process.env.ONFLO_TOKEN_DIR ?? path.join(process.env.HOME, 'Downloads');
+const LIGHT_PATH = path.join(INPUT_DIR, 'ref 3', 'Light.tokens.json');
+const DARK_PATH  = path.join(INPUT_DIR, 'ref 3', 'Dark.tokens.json');
+const MODE_PATH  = path.join(INPUT_DIR, 'Mode 1.tokens 3.json');
 
-// ── String utils ──────────────────────────────────────────────────────────────
+const REPO_ROOT  = path.join(__dirname, '..');
+const CSS_DIR    = path.join(REPO_ROOT, 'tokens', 'css');
+const SCSS_DIR   = path.join(REPO_ROOT, 'tokens', 'scss');
 
-/** Convert any string to kebab-case CSS identifier fragment. */
+// ── String helpers ────────────────────────────────────────────────────────────
+
 function kebab(str) {
-  return str
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, '-')   // spaces → hyphens
-    .replace(/[^a-z0-9-]/g, ''); // strip non-CSS chars
+  return str.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
-// Font weight name → CSS numeric weight
+function camel(str) {
+  return str
+    .trim()
+    .replace(/[-\s]+(.)/g, (_, c) => c.toUpperCase())
+    .replace(/^(.)/, c => c.toLowerCase());
+}
+
 const WEIGHT_MAP = {
   thin: 100, extralight: 200, light: 300, regular: 400,
   medium: 500, semibold: 600, bold: 700, extrabold: 800, black: 900,
@@ -50,261 +77,255 @@ const WEIGHT_MAP = {
 
 function fontWeightValue(str) {
   const key = str.toLowerCase().replace(/\s+/g, '');
-  return WEIGHT_MAP[key] ?? str; // return numeric or pass through
+  return WEIGHT_MAP[key] ?? str;
 }
 
-// ── Value helpers ─────────────────────────────────────────────────────────────
+// ── CSS value helpers ─────────────────────────────────────────────────────────
 
-/** Render a colour token's $value as a CSS colour string. */
 function cssColor(val) {
   if (typeof val !== 'object' || !val.hex) return String(val);
   if (typeof val.alpha === 'number' && val.alpha < 0.9999) {
     const r = Math.round(val.components[0] * 255);
     const g = Math.round(val.components[1] * 255);
     const b = Math.round(val.components[2] * 255);
-    const a = parseFloat(val.alpha.toFixed(3));
-    return `rgba(${r}, ${g}, ${b}, ${a})`;
+    return `rgba(${r}, ${g}, ${b}, ${parseFloat(val.alpha.toFixed(3))})`;
   }
   return val.hex;
 }
 
-/** Resolve a Figma alias string like "{typeface.Brand}" → CSS var name. */
 function resolveAlias(str) {
-  // e.g. "{typeface.weight.Extra Bold}" → "--ref-typeface-weight-extra-bold"
   const match = str.match(/^\{(.+)\}$/);
   if (!match) return null;
-  const parts = match[1].split('.').map(kebab);
-  return `--ref-${parts.join('-')}`;
+  return `var(--ref-${match[1].split('.').map(kebab).join('-')})`;
 }
 
-// ── Ref token key → CSS var name ──────────────────────────────────────────────
-
-/**
- * Map a ref-token key path (array of keys) to a --ref-* CSS var name.
- *
- * Key normalisation rules:
- *   "colors"         stays implicit (becomes "color" prefix)
- *   "corner radius"  → "radius"
- *   "neutrals"       → "neutral"
- *   "Extra Bold"     → "extra-bold"   (via kebab())
- */
-function refPathToVar(parts) {
-  const top  = parts[0];
-  const rest = parts.slice(1);
-
-  if (top === 'colors') {
-    const group = rest[0] === 'neutrals' ? 'neutral' : rest[0];
-    const name  = rest.slice(1).map(kebab).join('-');
-    return `--ref-color-${group}-${name}`;
-  }
-
-  if (top === 'corner radius') {
-    // Normalise size names: Small→sm, Medium→md, Large→lg, XLarge→xl, Full→full
-    const size = kebab(rest[0]);
-    const abbrev = { small: 'sm', medium: 'md', large: 'lg', xlarge: 'xl' }[size] ?? size;
-    return `--ref-radius-${abbrev}`;
-  }
-
-  if (top === 'typeface') {
-    return `--ref-typeface-${rest.map(kebab).join('-')}`;
-  }
-
-  if (top === 'typescale') {
-    return `--ref-typescale-${rest.map(kebab).join('-')}`;
-  }
-
-  // shadow, overlay, spacing — straightforward
-  return `--ref-${[top, ...rest].map(kebab).join('-')}`;
-}
-
-/**
- * Render a ref token's $value as a CSS value string.
- * Handles colour objects, plain numbers (→ px), strings (including aliases).
- */
 function refCssValue(token) {
-  const type = token.$type;
-  const val  = token.$value;
-
-  if (type === 'color')  return cssColor(val);
-
+  const { $type: type, $value: val } = token;
+  if (type === 'color') return cssColor(val);
   if (type === 'number') {
-    // "Full" radius → pill shorthand; round to 2dp to avoid float noise
     if (val >= 999) return '9999px';
-    const rounded = Math.round(val * 100) / 100;
-    return `${rounded}px`;
+    return `${Math.round(val * 100) / 100}px`;
   }
-
   if (type === 'string') {
-    // Check for Figma alias reference e.g. "{typeface.Brand}"
     if (typeof val === 'string' && val.startsWith('{')) {
-      const refVar = resolveAlias(val);
-      if (refVar) return `var(${refVar})`;
+      const ref = resolveAlias(val);
+      if (ref) return ref;
     }
-
-    // Font weight names get mapped to numeric CSS weights
     const numeric = fontWeightValue(String(val));
     if (typeof numeric === 'number') return String(numeric);
-
-    // Plain string (font family) — wrap in quotes
     return `"${val}"`;
   }
-
   return String(val);
 }
 
-// ── Walk a token file, skip $ keys ───────────────────────────────────────────
+// ── Token path → CSS var name ─────────────────────────────────────────────────
 
-/**
- * Recursively walk a Figma token object.
- * Calls onToken(pathParts, token) for each leaf token.
- * Skips keys starting with "$" (internal Figma fields like $type/$value/$extensions).
- */
-function walkTokens(obj, pathParts, onToken) {
-  for (const [key, value] of Object.entries(obj)) {
-    if (key.startsWith('$')) continue;               // skip internal fields
-    if (!value || typeof value !== 'object') continue;
-
-    const next = [...pathParts, key];
-
-    if (value.$type !== undefined) {
-      onToken(next, value);                          // leaf token
-    } else {
-      walkTokens(value, next, onToken);              // group — recurse
-    }
+function refPathToVar(parts) {
+  const top  = parts[0];
+  const rest = parts.slice(1);
+  if (top === 'colors') {
+    const group = rest[0] === 'neutrals' ? 'neutral' : rest[0];
+    return `--ref-color-${group}-${rest.slice(1).map(kebab).join('-')}`;
   }
+  if (top === 'corner radius') {
+    const size = kebab(rest[0]);
+    return `--ref-radius-${{ small: 'sm', medium: 'md', large: 'lg', xlarge: 'xl' }[size] ?? size}`;
+  }
+  if (top === 'typeface') return `--ref-typeface-${rest.map(kebab).join('-')}`;
+  if (top === 'typescale') return `--ref-typescale-${rest.map(kebab).join('-')}`;
+  return `--ref-${[top, ...rest].map(kebab).join('-')}`;
 }
 
-// ── Ref CSS ───────────────────────────────────────────────────────────────────
-
-const REF_SECTION_ORDER = [
-  'colors', 'typeface', 'typescale', 'corner radius',
-  'spacing', 'shadow', 'overlay',
-];
-
-const REF_SECTION_LABELS = {
-  'colors':        'Colour Primitives',
-  'typeface':      'Typeface',
-  'typescale':     'Type Scale',
-  'corner radius': 'Border Radius',
-  'spacing':       'Spacing',
-  'shadow':        'Shadow',
-  'overlay':       'Overlay / Interaction',
-};
-
-function buildRefCSS(selector, tokens) {
-  // Gather tokens per top-level section
-  const sections = {};
-
-  walkTokens(tokens, [], (parts, token) => {
-    const section = parts[0];
-    if (!sections[section]) sections[section] = [];
-    sections[section].push([refPathToVar(parts), refCssValue(token)]);
-  });
-
-  const lines = [`${selector} {`];
-
-  const emitted = new Set();
-  for (const key of [...REF_SECTION_ORDER, ...Object.keys(sections)]) {
-    if (emitted.has(key) || !sections[key]) continue;
-    emitted.add(key);
-    const label = REF_SECTION_LABELS[key] ?? key;
-    lines.push(`\n  /* ── ${label} ${'─'.repeat(Math.max(0, 48 - label.length))} */`);
-    for (const [name, value] of sections[key]) {
-      lines.push(`  ${name}: ${value};`);
-    }
-  }
-
-  lines.push('}');
-  return lines.join('\n');
-}
-
-// ── Design token CSS ──────────────────────────────────────────────────────────
-
-/**
- * Map a design token path to a semantic CSS var name.
- *   ["surface", "page"]       → --color-surface-page
- *   ["text",    "primary"]    → --color-text-primary
- *   ["spacing", "lg"]         → --spacing-lg
- *   ["radius",  "sm"]         → --radius-sm
- *   ["shadow",  "elevation-1"]→ --shadow-elevation-1
- *   ["overlay", "hovered"]    → --overlay-hovered
- */
 function designPathToVar(parts) {
   const top  = parts[0];
   const rest = parts.slice(1).map(kebab).join('-');
-
   if (top === 'spacing') return rest ? `--spacing-${rest}` : '--spacing';
   if (top === 'radius')  return rest ? `--radius-${rest}`  : '--radius';
   if (top === 'shadow')  return rest ? `--shadow-${rest}`  : '--shadow';
   if (top === 'overlay') return rest ? `--overlay-${rest}` : '--overlay';
-
   return rest ? `--color-${kebab(top)}-${rest}` : `--color-${kebab(top)}`;
 }
 
-/**
- * Resolve a design token's CSS value:
- *   - Colour token with colour ref alias → var(--ref-color-*)
- *   - Number token (spacing / radius)   → raw px  (theme-invariant)
- *   - Shadow / overlay colours          → resolved rgba() (no matching ref var)
- */
-function designCssValue(token) {
-  const aliasPath = token.$extensions?.['com.figma.aliasData']?.targetVariableName;
-  const type      = token.$type;
+// ── Token walker ──────────────────────────────────────────────────────────────
 
-  if (type === 'color' && aliasPath && aliasPath.startsWith('colors/')) {
-    // Map e.g. "colors/neutrals/surface" → var(--ref-color-neutral-surface)
-    const parts = aliasPath.split('/');
-    return `var(${refPathToVar(parts)})`;
+function walkTokens(obj, parts, onToken) {
+  for (const [key, value] of Object.entries(obj)) {
+    if (key.startsWith('$') || !value || typeof value !== 'object') continue;
+    const next = [...parts, key];
+    if (value.$type !== undefined) onToken(next, value);
+    else walkTokens(value, next, onToken);
   }
-
-  if (type === 'number') {
-    const v = token.$value;
-    if (v >= 999) return '9999px';
-    const rounded = Math.round(v * 100) / 100;
-    return `${rounded}px`;
-  }
-
-  // Shadows, overlays, and any unresolved colour → raw value
-  return cssColor(token.$value);
 }
 
-const DESIGN_SECTION_ORDER = [
-  'surface', 'text', 'border', 'spacing', 'radius', 'shadow', 'overlay',
-];
+// ── CSS generation ────────────────────────────────────────────────────────────
 
-const DESIGN_SECTION_LABELS = {
-  surface: 'Surface',
-  text:    'Text',
-  border:  'Border',
-  spacing: 'Spacing',
-  radius:  'Border Radius',
-  shadow:  'Shadow',
+const REF_ORDER  = ['colors', 'typeface', 'typescale', 'corner radius', 'spacing', 'shadow', 'overlay'];
+const REF_LABELS = {
+  colors: 'Colour Primitives', typeface: 'Typeface', typescale: 'Type Scale',
+  'corner radius': 'Border Radius', spacing: 'Spacing', shadow: 'Shadow',
   overlay: 'Overlay / Interaction',
 };
 
-function buildDesignTokensCSS(tokens) {
+function buildRefCSS(selector, tokens) {
   const sections = {};
-
   walkTokens(tokens, [], (parts, token) => {
-    const section = parts[0];
-    if (!sections[section]) sections[section] = [];
-    sections[section].push([designPathToVar(parts), designCssValue(token)]);
+    const s = parts[0];
+    (sections[s] = sections[s] ?? []).push([refPathToVar(parts), refCssValue(token)]);
+  });
+  const lines = [`${selector} {`];
+  for (const key of [...REF_ORDER, ...Object.keys(sections)]) {
+    if (!sections[key] || lines.some(l => l.includes(`/* ── ${REF_LABELS[key] ?? key}`))) continue;
+    const label = REF_LABELS[key] ?? key;
+    lines.push(`\n  /* ── ${label} ${'─'.repeat(Math.max(0, 48 - label.length))} */`);
+    sections[key].forEach(([n, v]) => lines.push(`  ${n}: ${v};`));
+  }
+  lines.push('}');
+  return lines.join('\n');
+}
+
+const DESIGN_ORDER  = ['surface', 'text', 'border', 'spacing', 'radius', 'shadow', 'overlay'];
+const DESIGN_LABELS = {
+  surface: 'Surface', text: 'Text', border: 'Border', spacing: 'Spacing',
+  radius: 'Border Radius', shadow: 'Shadow', overlay: 'Overlay / Interaction',
+};
+
+function designCssValue(token) {
+  const alias = token.$extensions?.['com.figma.aliasData']?.targetVariableName;
+  if (token.$type === 'color' && alias?.startsWith('colors/')) {
+    return `var(${refPathToVar(alias.split('/'))})`;
+  }
+  if (token.$type === 'number') {
+    const v = token.$value;
+    return v >= 999 ? '9999px' : `${Math.round(v * 100) / 100}px`;
+  }
+  return cssColor(token.$value);
+}
+
+function buildDesignCSS(tokens) {
+  const sections = {};
+  walkTokens(tokens, [], (parts, token) => {
+    const s = parts[0];
+    (sections[s] = sections[s] ?? []).push([designPathToVar(parts), designCssValue(token)]);
+  });
+  const lines = [':root {'];
+  for (const key of [...DESIGN_ORDER, ...Object.keys(sections)]) {
+    if (!sections[key] || lines.some(l => l.includes(`/* ── ${DESIGN_LABELS[key] ?? key}`))) continue;
+    const label = DESIGN_LABELS[key] ?? key;
+    lines.push(`\n  /* ── ${label} ${'─'.repeat(Math.max(0, 48 - label.length))} */`);
+    sections[key].forEach(([n, v]) => lines.push(`  ${n}: ${v};`));
+  }
+  lines.push('}');
+  return lines.join('\n');
+}
+
+// ── SCSS generation ───────────────────────────────────────────────────────────
+
+function buildScssVariables(designTokens) {
+  const sections = {};
+  walkTokens(designTokens, [], (parts, token) => {
+    const top    = parts[0];
+    const cssVar = designPathToVar(parts);
+
+    // SCSS variable name: $surface-page, $text-primary, $spacing-lg, etc.
+    const restParts = parts.slice(1).map(kebab);
+    const scssName  = restParts.length
+      ? `$${kebab(top)}-${restParts.join('-')}`
+      : `$${kebab(top)}`;
+
+    let scssValue;
+    if (top === 'spacing' || top === 'radius') {
+      // Static values — embed directly so SCSS can use them in calc()
+      const v = token.$value;
+      scssValue = v >= 999 ? '9999px' : `${Math.round(v * 100) / 100}px`;
+    } else {
+      // Theme-aware — wrap CSS custom property
+      scssValue = `var(${cssVar})`;
+    }
+
+    (sections[top] = sections[top] ?? []).push([scssName, scssValue]);
   });
 
-  const lines = [':root {'];
+  const label = (key) => {
+    const map = {
+      surface: 'Surface colours', text: 'Text colours', border: 'Border colours',
+      spacing: 'Spacing (static px — safe to use in calc())',
+      radius: 'Border radius (static px)',
+      shadow: 'Shadow colours', overlay: 'Overlay / interaction colours',
+    };
+    return map[key] ?? key;
+  };
 
-  const emitted = new Set();
-  for (const key of [...DESIGN_SECTION_ORDER, ...Object.keys(sections)]) {
-    if (emitted.has(key) || !sections[key]) continue;
-    emitted.add(key);
-    const label = DESIGN_SECTION_LABELS[key] ?? key;
-    lines.push(`\n  /* ── ${label} ${'─'.repeat(Math.max(0, 48 - label.length))} */`);
-    for (const [name, value] of sections[key]) {
-      lines.push(`  ${name}: ${value};`);
-    }
+  const lines = [
+    '// Onflo Design System — SCSS Variables',
+    '// Auto-generated. Do not edit manually.',
+    '// Regenerate: npm run generate-tokens',
+    '//',
+    '// Usage:',
+    '//   @use \'@onflo/design-system/tokens/scss\' as ds;',
+    '//',
+    '//   .button {',
+    '//     background: ds.$surface-brand-bold;',
+    '//     color:      ds.$text-on-brand;',
+    '//     padding:    ds.$spacing-sm ds.$spacing-lg;',
+    '//     border-radius: ds.$radius-sm;',
+    '//   }',
+    '',
+  ];
+
+  for (const key of [...DESIGN_ORDER, ...Object.keys(sections)]) {
+    if (!sections[key] || lines.some(l => l.includes(`// ── ${label(key)}`))) continue;
+    lines.push(`// ── ${label(key)} ${'─'.repeat(Math.max(0, 52 - label(key).length))}`);
+    sections[key].forEach(([n, v]) => lines.push(`${n}: ${v} !default;`));
+    lines.push('');
   }
 
-  lines.push('}');
+  return lines.join('\n');
+}
+
+function buildScssMixins(refTokens) {
+  // Collect typescale entries grouped by scale step
+  const steps = {};
+  walkTokens(refTokens, [], (parts, token) => {
+    if (parts[0] !== 'typescale') return;
+    const step = kebab(parts[1]);  // e.g. "display", "title-h1", "body-large"
+    const prop = kebab(parts[2]);  // e.g. "font", "weight", "size", "line-height", "tracking"
+    (steps[step] = steps[step] ?? {})[prop] = `var(${refPathToVar(parts)})`;
+  });
+
+  const CSS_PROP = {
+    font: 'font-family', weight: 'font-weight', size: 'font-size',
+    'line-height': 'line-height', tracking: 'letter-spacing',
+    'weight-prominent': 'font-weight',
+  };
+
+  const PROP_ORDER = ['font', 'weight', 'size', 'line-height', 'tracking'];
+
+  const lines = [
+    '// Onflo Design System — SCSS Typography Mixins',
+    '// Auto-generated. Do not edit manually.',
+    '// Regenerate: npm run generate-tokens',
+    '//',
+    '// Usage:',
+    '//   @use \'@onflo/design-system/tokens/scss\' as ds;',
+    '//',
+    '//   h1 { @include ds.type-title-h1; }',
+    '//   p  { @include ds.type-body-medium; }',
+    '',
+  ];
+
+  for (const [step, props] of Object.entries(steps)) {
+    lines.push(`@mixin type-${step} {`);
+    const emitted = new Set();
+    for (const prop of [...PROP_ORDER, ...Object.keys(props)]) {
+      const cssProp = CSS_PROP[prop];
+      if (!props[prop] || !cssProp || emitted.has(cssProp)) continue;
+      emitted.add(cssProp);
+      lines.push(`  ${cssProp}: ${props[prop]};`);
+    }
+    lines.push('}');
+    lines.push('');
+  }
+
   return lines.join('\n');
 }
 
@@ -313,34 +334,59 @@ function buildDesignTokensCSS(tokens) {
 const HEADER = `/*
  * Onflo Design System — Generated Tokens
  * ⚠️  Do not edit manually.
- * Regenerate: node scripts/generate-tokens.js
+ * Regenerate: npm run generate-tokens
  */\n\n`;
+
+// Validate input files exist
+for (const [name, p] of [['Light', LIGHT_PATH], ['Dark', DARK_PATH], ['Mode 1', MODE_PATH]]) {
+  if (!fs.existsSync(p)) {
+    console.error(`\n✗ Missing: ${p}`);
+    console.error(`  Set ONFLO_TOKEN_DIR to your Figma export directory.`);
+    console.error(`  See CONTRIBUTING.md for the full workflow.\n`);
+    process.exit(1);
+  }
+}
 
 const lightTokens  = JSON.parse(fs.readFileSync(LIGHT_PATH, 'utf8'));
 const darkTokens   = JSON.parse(fs.readFileSync(DARK_PATH,  'utf8'));
 const designTokens = JSON.parse(fs.readFileSync(MODE_PATH,  'utf8'));
 
-fs.mkdirSync(OUT_DIR, { recursive: true });
+fs.mkdirSync(CSS_DIR,  { recursive: true });
+fs.mkdirSync(SCSS_DIR, { recursive: true });
 
-const files = {
+const cssFiles = {
   'ref-light.css':     HEADER + buildRefCSS(':root',               lightTokens),
   'ref-dark.css':      HEADER + buildRefCSS('[data-theme="dark"]', darkTokens),
-  'design-tokens.css': HEADER + buildDesignTokensCSS(designTokens),
+  'design-tokens.css': HEADER + buildDesignCSS(designTokens),
   'index.css': HEADER +
-    `/**\n` +
-    ` * Import this single file in your Angular styles.scss:\n` +
-    ` *   @import '~@onflo/tokens/index.css';\n` +
-    ` * or in angular.json styles array.\n` +
-    ` */\n` +
+    `/* Import all Onflo token layers */\n` +
     `@import './ref-light.css';\n` +
     `@import './ref-dark.css';\n` +
     `@import './design-tokens.css';\n`,
 };
 
-for (const [filename, content] of Object.entries(files)) {
-  const outPath = path.join(OUT_DIR, filename);
-  fs.writeFileSync(outPath, content, 'utf8');
-  console.log(`✓ tokens/${filename}`);
+const scssFiles = {
+  '_variables.scss': buildScssVariables(designTokens),
+  '_mixins.scss':    buildScssMixins(lightTokens),
+  'index.scss': [
+    '// Onflo Design System — SCSS entry point',
+    '// Auto-generated. Do not edit manually.',
+    '',
+    "@forward 'variables';",
+    "@forward 'mixins';",
+    '',
+  ].join('\n'),
+};
+
+for (const [file, content] of Object.entries(cssFiles)) {
+  fs.writeFileSync(path.join(CSS_DIR, file), content, 'utf8');
+  console.log(`  ✓ tokens/css/${file}`);
+}
+for (const [file, content] of Object.entries(scssFiles)) {
+  fs.writeFileSync(path.join(SCSS_DIR, file), content, 'utf8');
+  console.log(`  ✓ tokens/scss/${file}`);
 }
 
-console.log('\nDone. Import tokens/index.css in your Angular styles.scss (or angular.json).');
+console.log('\n✓ Token generation complete.');
+console.log('  CSS  → tokens/css/index.css');
+console.log('  SCSS → tokens/scss/index.scss');
