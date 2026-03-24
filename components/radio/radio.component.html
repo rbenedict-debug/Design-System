@@ -9,7 +9,9 @@
     [disabled]="disabled"
     (change)="onChange()"
   />
-  <span class="ds-radio__dot"></span>
+  <span class="ds-radio__touch">
+    <span class="ds-radio__dot"></span>
+  </span>
   <span *ngIf="label" class="ds-radio__label">{{ label }}</span>
   <ng-content></ng-content>
 </label>

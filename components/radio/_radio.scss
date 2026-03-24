@@ -2,15 +2,26 @@
 // Onflo Design System — Radio Button Component
 // ============================================================
 //
+// Based on Angular Material mat-radio-button inside mat-radio-group.
+// Import MatRadioModule in your Angular module.
+//
+// Figma: primitive/radio-button — 42×42px touch target with circular
+// state layer (hover/pressed/focus overlays) + 20×20px visual circle.
+//
 // Usage (HTML class API):
 //   <label class="ds-radio">
 //     <input type="radio" class="ds-radio__control" name="group" />
-//     <span class="ds-radio__dot"></span>
+//     <span class="ds-radio__touch">
+//       <span class="ds-radio__dot"></span>
+//     </span>
 //     <span class="ds-radio__label">Option</span>
 //   </label>
 //
 // Angular component:
 //   <ds-radio label="Option A" value="a" [(ngModel)]="selected" name="group" />
+//
+// ADA: Radio group must have a group label (fieldset/legend or aria-labelledby).
+//      Focus ring appears on __touch via :focus-visible (keyboard only).
 //
 // States:    unselected, selected, .is-error, :disabled
 // ============================================================
@@ -18,12 +29,12 @@
 .ds-radio {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
   cursor: pointer;
   user-select: none;
   position: relative;
 
-  // Hide native control but keep it accessible
+  // Hide native control — 0×0, positioned so it doesn't affect layout
   &__control {
     position: absolute;
     opacity: 0;
@@ -32,51 +43,75 @@
     pointer-events: none;
   }
 
-  // Custom circle
+  // ── Touch target + state layer ──────────────────────────────────────────────
+  // 42×42px circular container — provides hover/pressed/focus overlay area
+  // Matches Figma primitive/radio-button touch target exactly
+
+  &__touch {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+  }
+
+  // Hover — light overlay on state layer
+  &:hover:not(.is-disabled) &__touch {
+    background: var(--overlay-hovered);
+  }
+
+  // Pressed — stronger overlay
+  &:active:not(.is-disabled) &__touch {
+    background: var(--overlay-pressed);
+  }
+
+  // Focus ring on touch target — keyboard navigation only (:focus-visible)
+  &__control:focus         { outline: none; }
+  &__control:focus-visible ~ &__touch {
+    background: var(--overlay-pressed);
+    box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring);
+  }
+
+
+  // ── Visual radio circle ─────────────────────────────────────────────────────
+  // 20×20px — matches Figma 24×24px icon area with 2px border
+
   &__dot {
     flex-shrink: 0;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     border-radius: var(--radius-full);
-    border: 1.5px solid var(--color-border-input);
+    border: 2px solid var(--color-border-input);
     background: var(--color-surface-input);
     display: flex;
     align-items: center;
     justify-content: center;
     transition:
       background-color 0.15s ease,
-      border-color 0.15s ease,
-      box-shadow 0.15s ease;
+      border-color 0.15s ease;
+    pointer-events: none;
 
-    // Inner filled dot
+    // Inner filled dot — visible when selected
     &::after {
       content: '';
       display: block;
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       border-radius: var(--radius-full);
       background: var(--color-surface-brand-bold);
       opacity: 0;
-      transform: scale(0.6);
+      transform: scale(0.4);
       transition: opacity 0.15s ease, transform 0.15s ease;
     }
   }
 
-  // Hover
-  &:hover:not(.is-disabled) &__dot {
-    border-color: var(--color-border-input-hover);
-  }
-
-  // Focus ring
-  &__control:focus-visible ~ &__dot {
-    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-    border-color: var(--color-border-input-active);
-  }
-
-  // Selected state
-  &__control:checked ~ &__dot {
+  // Selected state — blue border + filled inner dot
+  &__control:checked ~ &__touch &__dot {
     border-color: var(--color-surface-brand-bold);
-    border-width: 2px;
 
     &::after {
       opacity: 1;
@@ -84,7 +119,9 @@
     }
   }
 
-  // Label
+
+  // ── Label ───────────────────────────────────────────────────────────────────
+
   &__label {
     font-family: var(--ref-typeface-brand);
     font-size: var(--ref-typescale-label-medium-size);
@@ -94,7 +131,7 @@
   }
 
 
-  // ── Error state ───────────────────────────────────────────────────────────
+  // ── Error state ─────────────────────────────────────────────────────────────
 
   &.is-error {
     .ds-radio__dot {
@@ -105,7 +142,7 @@
       color: var(--color-text-error);
     }
 
-    .ds-radio__control:checked ~ .ds-radio__dot {
+    .ds-radio__control:checked ~ .ds-radio__touch .ds-radio__dot {
       border-color: var(--color-surface-accent-red-bold);
 
       &::after {
@@ -115,19 +152,23 @@
   }
 
 
-  // ── Disabled state ────────────────────────────────────────────────────────
+  // ── Disabled state ──────────────────────────────────────────────────────────
 
   &.is-disabled,
   &:has(.ds-radio__control:disabled) {
     cursor: not-allowed;
     pointer-events: none;
 
+    .ds-radio__touch {
+      background: none;
+    }
+
     .ds-radio__dot {
       background: var(--color-surface-disabled);
       border-color: var(--color-border-subtle);
     }
 
-    .ds-radio__control:checked ~ .ds-radio__dot {
+    .ds-radio__control:checked ~ .ds-radio__touch .ds-radio__dot {
       border-color: var(--color-border-subtle);
 
       &::after {
@@ -141,10 +182,11 @@
   }
 }
 
+
 // ── Radio Group ───────────────────────────────────────────────────────────────
 
 .ds-radio-group {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 0;
 }

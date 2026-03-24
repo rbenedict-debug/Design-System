@@ -1240,62 +1240,34 @@
        Source: components/radio/_radio.scss
        ════════════════════════════════════════════════════════════════════════ */
 
-    .ds-radio {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-      cursor: pointer;
-      user-select: none;
-      position: relative;
-    }
-    .ds-radio__control {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
-      pointer-events: none;
-    }
-    .ds-radio__dot {
-      flex-shrink: 0;
-      width: 18px;
-      height: 18px;
-      border-radius: var(--radius-full);
-      border: 1.5px solid var(--color-border-input);
-      background: var(--color-surface-input);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-    }
-    .ds-radio__dot::after {
-      content: '';
-      display: block;
-      width: 8px;
-      height: 8px;
-      border-radius: var(--radius-full);
-      background: var(--color-surface-brand-bold);
-      opacity: 0;
-      transform: scale(0.6);
-      transition: opacity 0.15s ease, transform 0.15s ease;
-    }
-    .ds-radio:hover:not(.is-disabled) .ds-radio__dot { border-color: var(--color-border-input-hover); }
-    .ds-radio__control:focus-visible ~ .ds-radio__dot { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); border-color: var(--color-border-input-active); }
-    .ds-radio__control:checked ~ .ds-radio__dot { border-color: var(--color-surface-brand-bold); border-width: 2px; }
-    .ds-radio__control:checked ~ .ds-radio__dot::after { opacity: 1; transform: scale(1); }
+    .ds-radio { display: inline-flex; align-items: center; gap: var(--spacing-xs); cursor: pointer; user-select: none; position: relative; }
+    .ds-radio__control { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+    /* Touch target — 42×42px circular state layer (Figma: primitive/radio-button) */
+    .ds-radio__touch { flex-shrink: 0; width: 42px; height: 42px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; transition: background 0.15s ease, box-shadow 0.15s ease; position: relative; }
+    .ds-radio:hover:not(.is-disabled) .ds-radio__touch { background: var(--overlay-hovered); }
+    .ds-radio:active:not(.is-disabled) .ds-radio__touch { background: var(--overlay-pressed); }
+    .ds-radio__control:focus { outline: none; }
+    .ds-radio__control:focus-visible ~ .ds-radio__touch { background: var(--overlay-pressed); box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+    /* Visual radio circle — 20×20px */
+    .ds-radio__dot { flex-shrink: 0; width: 20px; height: 20px; border-radius: var(--radius-full); border: 2px solid var(--color-border-input); background: var(--color-surface-input); display: flex; align-items: center; justify-content: center; transition: background-color 0.15s ease, border-color 0.15s ease; pointer-events: none; }
+    .ds-radio__dot::after { content: ''; display: block; width: 10px; height: 10px; border-radius: var(--radius-full); background: var(--color-surface-brand-bold); opacity: 0; transform: scale(0.4); transition: opacity 0.15s ease, transform 0.15s ease; }
+    .ds-radio__control:checked ~ .ds-radio__touch .ds-radio__dot { border-color: var(--color-surface-brand-bold); }
+    .ds-radio__control:checked ~ .ds-radio__touch .ds-radio__dot::after { opacity: 1; transform: scale(1); }
     .ds-radio__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-regular); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-primary); }
     /* Error */
     .ds-radio.is-error .ds-radio__dot { border-color: var(--color-border-input-error); }
     .ds-radio.is-error .ds-radio__label { color: var(--color-text-error); }
-    .ds-radio.is-error .ds-radio__control:checked ~ .ds-radio__dot { border-color: var(--color-surface-accent-red-bold); }
-    .ds-radio.is-error .ds-radio__control:checked ~ .ds-radio__dot::after { background: var(--color-surface-accent-red-bold); }
+    .ds-radio.is-error .ds-radio__control:checked ~ .ds-radio__touch .ds-radio__dot { border-color: var(--color-surface-accent-red-bold); }
+    .ds-radio.is-error .ds-radio__control:checked ~ .ds-radio__touch .ds-radio__dot::after { background: var(--color-surface-accent-red-bold); }
     /* Disabled */
     .ds-radio.is-disabled { cursor: not-allowed; pointer-events: none; }
+    .ds-radio.is-disabled .ds-radio__touch { background: none; }
     .ds-radio.is-disabled .ds-radio__dot { background: var(--color-surface-disabled); border-color: var(--color-border-subtle); }
-    .ds-radio.is-disabled .ds-radio__control:checked ~ .ds-radio__dot { border-color: var(--color-border-subtle); }
-    .ds-radio.is-disabled .ds-radio__control:checked ~ .ds-radio__dot::after { background: var(--color-icon-disabled); }
+    .ds-radio.is-disabled .ds-radio__control:checked ~ .ds-radio__touch .ds-radio__dot { border-color: var(--color-border-subtle); }
+    .ds-radio.is-disabled .ds-radio__control:checked ~ .ds-radio__touch .ds-radio__dot::after { background: var(--color-icon-disabled); }
     .ds-radio.is-disabled .ds-radio__label { color: var(--color-text-disabled); }
     /* Group */
-    .ds-radio-group { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+    .ds-radio-group { display: flex; flex-direction: column; gap: 0; }
 
 
     /* ════════════════════════════════════════════════════════════════════════
@@ -2902,20 +2874,50 @@
               <div class="ds-radio-group">
                 <label class="ds-radio">
                   <input type="radio" class="ds-radio__control" name="plan-demo" value="free" checked />
-                  <span class="ds-radio__dot"></span>
+                  <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
                   <span class="ds-radio__label">Free plan</span>
                 </label>
                 <label class="ds-radio">
                   <input type="radio" class="ds-radio__control" name="plan-demo" value="pro" />
-                  <span class="ds-radio__dot"></span>
+                  <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
                   <span class="ds-radio__label">Pro plan</span>
                 </label>
                 <label class="ds-radio">
                   <input type="radio" class="ds-radio__control" name="plan-demo" value="enterprise" />
-                  <span class="ds-radio__dot"></span>
+                  <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
                   <span class="ds-radio__label">Enterprise</span>
                 </label>
               </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">States</div>
+            <div class="demo-row-items" style="gap: 8px; align-items: center;">
+              <label class="ds-radio" title="Default unselected">
+                <input type="radio" class="ds-radio__control" name="radio-states" value="a" />
+                <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
+              </label>
+              <label class="ds-radio" title="Default selected">
+                <input type="radio" class="ds-radio__control" name="radio-states" value="b" checked />
+                <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
+              </label>
+              <label class="ds-radio" title="Hover (simulated)">
+                <input type="radio" class="ds-radio__control" name="radio-states2" value="c" />
+                <span class="ds-radio__touch" style="background: var(--overlay-hovered);"><span class="ds-radio__dot"></span></span>
+              </label>
+              <label class="ds-radio" title="Focus (simulated)">
+                <input type="radio" class="ds-radio__control" name="radio-states2" value="d" />
+                <span class="ds-radio__touch" style="background: var(--overlay-pressed); box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring);"><span class="ds-radio__dot"></span></span>
+              </label>
+              <label class="ds-radio is-disabled" title="Disabled unselected">
+                <input type="radio" class="ds-radio__control" name="radio-states3" value="e" disabled />
+                <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
+              </label>
+              <label class="ds-radio is-disabled" title="Disabled selected">
+                <input type="radio" class="ds-radio__control" name="radio-states3" value="f" disabled checked />
+                <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
+              </label>
             </div>
           </div>
 
@@ -2925,12 +2927,12 @@
               <div class="ds-radio-group">
                 <label class="ds-radio is-error">
                   <input type="radio" class="ds-radio__control" name="radio-err" value="a" />
-                  <span class="ds-radio__dot"></span>
+                  <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
                   <span class="ds-radio__label">Option A</span>
                 </label>
                 <label class="ds-radio is-error">
                   <input type="radio" class="ds-radio__control" name="radio-err" value="b" />
-                  <span class="ds-radio__dot"></span>
+                  <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
                   <span class="ds-radio__label">Option B</span>
                 </label>
               </div>
@@ -2943,12 +2945,12 @@
               <div class="ds-radio-group">
                 <label class="ds-radio is-disabled">
                   <input type="radio" class="ds-radio__control" name="radio-dis" value="a" disabled />
-                  <span class="ds-radio__dot"></span>
+                  <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
                   <span class="ds-radio__label">Unselected disabled</span>
                 </label>
                 <label class="ds-radio is-disabled">
                   <input type="radio" class="ds-radio__control" name="radio-dis" value="b" disabled checked />
-                  <span class="ds-radio__dot"></span>
+                  <span class="ds-radio__touch"><span class="ds-radio__dot"></span></span>
                   <span class="ds-radio__label">Selected disabled</span>
                 </label>
               </div>
