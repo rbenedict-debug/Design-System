@@ -1904,6 +1904,20 @@
     .ds-ag-paginator__btn:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-ag-paginator__btn:active:not(:disabled) { background: var(--overlay-pressed); }
     .ds-ag-paginator__btn:disabled { color: var(--color-icon-disabled); cursor: not-allowed; }
+
+    /* ── TABLE TOOLBAR  (ds-table-toolbar) ──────────────────────────────────────── */
+    .ds-table-toolbar { display: flex; align-items: center; gap: var(--spacing-xl); height: 74px; padding: 0 var(--spacing-lg); background: var(--color-surface-page); }
+    .ds-table-toolbar__left { display: flex; align-items: center; gap: var(--spacing-sm); flex: 1 0 0; min-width: 0; }
+    .ds-table-toolbar__right { display: flex; align-items: center; gap: var(--spacing-sm); flex: 1 0 0; min-width: 0; }
+    .ds-table-toolbar .ds-search { flex: 1 0 0; min-width: 0; }
+    .ds-table-toolbar__btn { appearance: none; -webkit-appearance: none; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 42px; height: 42px; padding: var(--spacing-xs); background: var(--color-surface-page); border: 1px solid var(--color-border-secondary); border-radius: var(--radius-sm); color: var(--color-icon-subtle); cursor: pointer; position: relative; overflow: hidden; transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease, color 0.12s ease; }
+    .ds-table-toolbar__btn:focus { outline: none; }
+    .ds-table-toolbar__btn:hover:not(:disabled) { background: var(--overlay-hovered); border-color: var(--color-border-input-hover); }
+    .ds-table-toolbar__btn:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-table-toolbar__btn:active:not(:disabled) { background: var(--overlay-pressed); }
+    .ds-table-toolbar__btn:disabled { color: var(--color-icon-disabled); border-color: var(--color-border-subtle); cursor: not-allowed; }
+    .ds-table-toolbar__btn--toggle.is-selected,
+    .ds-table-toolbar__btn--toggle[aria-pressed="true"] { background: var(--color-surface-brand); color: var(--color-icon-brand); border-color: var(--color-border-active); }
   </style>
 </head>
 <body>
@@ -1956,6 +1970,7 @@
       <a class="nav-link" href="#table-header-cell" onclick="setActive(this)"><span class="nav-dot"></span>Table Header Cell</a>
       <a class="nav-link" href="#table-row-cell" onclick="setActive(this)"><span class="nav-dot"></span>Table Row Cell</a>
       <a class="nav-link" href="#ag-paginator" onclick="setActive(this)"><span class="nav-dot"></span>AG Grid Paginator</a>
+      <a class="nav-link" href="#table-toolbar" onclick="setActive(this)"><span class="nav-dot"></span>Table Toolbar</a>
     </nav>
 
     <div class="sidebar-footer">
@@ -4661,6 +4676,117 @@
                     </button>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── TABLE TOOLBAR ─────────────────────────────────────────────────── -->
+      <section class="section" id="table-toolbar">
+        <h2 class="section-title">Table Toolbar</h2>
+        <p class="section-desc">
+          Toolbar displayed above an AG Grid table. Left panel holds action buttons (hidden when not needed);
+          right panel holds a search field, optional extra controls, and the always-present filter/settings toggles
+          plus an optional download button. Filter and settings are toggleable; download is shown by default.
+        </p>
+        <p class="section-source">components/table-toolbar/table-toolbar.component.ts</p>
+
+        <!-- Full toolbar: actions + search + icons -->
+        <div class="demo-row" style="flex-direction: column; align-items: stretch; gap: 12px;">
+          <div class="demo-label" style="width: auto;">With actions</div>
+          <div style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden;">
+            <div class="ds-table-toolbar">
+              <div class="ds-table-toolbar__left">
+                <button class="ds-button ds-button--filled" type="button">Add Row</button>
+                <button class="ds-button ds-button--outlined" type="button">
+                  Import
+                  <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon" style="font-size:18px;">arrow_drop_down</span></span>
+                </button>
+                <button class="ds-button ds-button--text" type="button">Export</button>
+              </div>
+              <div class="ds-table-toolbar__right">
+                <div class="ds-search" role="search">
+                  <div class="ds-search__field">
+                    <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                    <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
+                  </div>
+                </div>
+                <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Toggle filters" onclick="togglePressed(this)">
+                  <span class="ds-icon">filter_alt</span>
+                </button>
+                <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Column settings" onclick="togglePressed(this)">
+                  <span class="ds-icon">settings</span>
+                </button>
+                <button class="ds-table-toolbar__btn" type="button" aria-label="Download">
+                  <span class="ds-icon">download</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search-only toolbar: no left panel, right fills full width -->
+        <div class="demo-row" style="flex-direction: column; align-items: stretch; gap: 12px;">
+          <div class="demo-label" style="width: auto;">Search only (no actions)</div>
+          <div style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden;">
+            <div class="ds-table-toolbar">
+              <div class="ds-table-toolbar__right">
+                <div class="ds-search" role="search">
+                  <div class="ds-search__field">
+                    <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                    <input class="ds-search__control" type="search" placeholder="Search records…" aria-label="Search records" />
+                  </div>
+                </div>
+                <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Toggle filters" onclick="togglePressed(this)">
+                  <span class="ds-icon">filter_alt</span>
+                </button>
+                <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Column settings" onclick="togglePressed(this)">
+                  <span class="ds-icon">settings</span>
+                </button>
+                <button class="ds-table-toolbar__btn" type="button" aria-label="Download">
+                  <span class="ds-icon">download</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Toolbar with extra controls between search and icon buttons -->
+        <div class="demo-row" style="flex-direction: column; align-items: stretch; gap: 12px;">
+          <div class="demo-label" style="width: auto;">With extra controls (filter active)</div>
+          <div style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden;">
+            <div class="ds-table-toolbar">
+              <div class="ds-table-toolbar__left">
+                <button class="ds-button ds-button--filled" type="button">New Item</button>
+                <button class="ds-button ds-button--outlined" type="button">
+                  Bulk Actions
+                  <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon" style="font-size:18px;">arrow_drop_down</span></span>
+                </button>
+              </div>
+              <div class="ds-table-toolbar__right">
+                <div class="ds-search" role="search">
+                  <div class="ds-search__field">
+                    <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                    <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
+                  </div>
+                </div>
+                <!-- Extra control: a status filter label chip -->
+                <button class="ds-button ds-button--outlined" type="button" style="white-space: nowrap; font-size: 13px; height: 42px;">
+                  Status
+                  <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon" style="font-size:18px;">arrow_drop_down</span></span>
+                </button>
+                <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle is-selected" type="button" aria-pressed="true" aria-label="Toggle filters" onclick="togglePressed(this)">
+                  <span class="ds-icon">filter_alt</span>
+                </button>
+                <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Column settings" onclick="togglePressed(this)">
+                  <span class="ds-icon">settings</span>
+                </button>
+                <!-- Custom trailing button instead of download -->
+                <button class="ds-table-toolbar__btn" type="button" aria-label="Export to CSV">
+                  <span class="ds-icon">upload_file</span>
+                </button>
               </div>
             </div>
           </div>

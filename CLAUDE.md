@@ -50,6 +50,7 @@ components/
   search/                  # ds-search
   table/                   # ds-table-header-cell + ds-table-row-cell (AG Grid custom renderers)
   ag-paginator/            # ds-ag-paginator (AG Grid custom pagination panel)
+  table-toolbar/           # ds-table-toolbar (toolbar above AG Grid — search, filter, actions)
 preview/
   index.html               # Self-contained visual token + component reference
 ```
@@ -274,6 +275,22 @@ components/{name}/
 - **Nav buttons**: 4 ghost buttons — `first_page`, `keyboard_arrow_left`, `keyboard_arrow_right`, `last_page`; 42×42px; `--radius-sm` (not `--radius-full`); disabled when at first/last page
 - **Layout**: outer `gap: var(--spacing-lg)` (16px) between counter and pagination groups; inner groups `gap: var(--spacing-xs)` (4px)
 - **ADA**: All nav buttons have `aria-label`; range label is `aria-live="polite"`
+- **No Angular Material base** — custom component
+
+### Table Toolbar (`ds-table-toolbar`)
+- **Purpose**: Toolbar above an AG Grid table — holds search, filter, settings, and action controls.
+- **Height**: 74px — fixed
+- **Layout**: two `flex: 1 0 0` panels side-by-side with `gap: var(--spacing-xl)` (24px); padding `0 var(--spacing-lg)` (16px)
+- **Left panel** (`__left`): action buttons slot — `flex: 1 0 0`, `gap: var(--spacing-sm)`. Omit the `__left` div (or `[showActions]="false"`) for search-only mode; right panel fills full width.
+- **Right panel** (`__right`): `flex: 1 0 0`, `gap: var(--spacing-sm)`. Contains: search (flex-fills remaining space), optional `[toolbar-extra]` content, filter toggle, settings toggle, optional download / `[toolbar-trailing]` content.
+- **Icon buttons** (`__btn`): 42×42px, `--radius-sm` (square, not circular), outlined style using `--color-border-secondary`. Toggle modifier `__btn--toggle` adds `.is-selected` / `[aria-pressed="true"]` selected state (brand bg + brand icon + active border).
+- **Content projection slots**:
+  - `[toolbar-actions]` — left-side action buttons
+  - `[toolbar-extra]` — right-side extras between search and fixed icon buttons (filter/date chips, dropdowns)
+  - `[toolbar-trailing]` — right-side trailing buttons after settings (replaces or supplements download)
+- **Inputs**: `showActions` (bool, default true), `searchPlaceholder`, `searchAriaLabel`, `searchValue`, `filterActive`, `settingsActive`, `showDownload` (bool, default true)
+- **Outputs**: `searchValueChange`, `search`, `filterActiveChange`, `settingsActiveChange`, `downloadClick`
+- **ADA**: Filter/settings buttons expose `aria-pressed`; all icon buttons have `aria-label`
 - **No Angular Material base** — custom component
 
 ---

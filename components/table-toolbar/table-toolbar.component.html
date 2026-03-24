@@ -1,0 +1,63 @@
+<div class="ds-table-toolbar">
+
+  <!-- Left panel — action buttons (hidden when showActions is false) -->
+  <div class="ds-table-toolbar__left" *ngIf="showActions">
+    <ng-content select="[toolbar-actions]"></ng-content>
+  </div>
+
+  <!-- Right panel — search, optional extras, fixed icon buttons -->
+  <div class="ds-table-toolbar__right">
+
+    <!-- Search field — grows to fill available space -->
+    <ds-search
+      [placeholder]="searchPlaceholder"
+      [ariaLabel]="searchAriaLabel"
+      [value]="searchValue"
+      (valueChange)="onSearchValueChange($event)"
+      (search)="search.emit($event)"
+    ></ds-search>
+
+    <!-- Optional slot: extra filter chips, dropdowns, or buttons between search and icon buttons -->
+    <ng-content select="[toolbar-extra]"></ng-content>
+
+    <!-- Filter toggle button — always present -->
+    <button
+      class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle"
+      type="button"
+      [class.is-selected]="filterActive"
+      [attr.aria-pressed]="filterActive"
+      aria-label="Toggle filters"
+      (click)="onFilterToggle()"
+    >
+      <span class="ds-icon">filter_alt</span>
+    </button>
+
+    <!-- Settings / column visibility toggle — always present -->
+    <button
+      class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle"
+      type="button"
+      [class.is-selected]="settingsActive"
+      [attr.aria-pressed]="settingsActive"
+      aria-label="Column settings"
+      (click)="onSettingsToggle()"
+    >
+      <span class="ds-icon">settings</span>
+    </button>
+
+    <!-- Download button — shown by default, hide with [showDownload]="false" -->
+    <button
+      *ngIf="showDownload"
+      class="ds-table-toolbar__btn"
+      type="button"
+      aria-label="Download"
+      (click)="downloadClick.emit()"
+    >
+      <span class="ds-icon">download</span>
+    </button>
+
+    <!-- Optional slot: trailing action buttons (replaces or supplements download) -->
+    <ng-content select="[toolbar-trailing]"></ng-content>
+
+  </div>
+
+</div>

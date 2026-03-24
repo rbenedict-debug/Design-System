@@ -1,0 +1,164 @@
+// ============================================================
+// Onflo Design System — Table Toolbar Component
+// ============================================================
+//
+// The toolbar displayed above an AG Grid table — contains
+// search, filter, and action controls.
+//
+// Usage (HTML class API):
+//   <div class="ds-table-toolbar">
+//     <div class="ds-table-toolbar__left">
+//       <!-- action buttons go here -->
+//     </div>
+//     <div class="ds-table-toolbar__right">
+//       <div class="ds-search ...">...</div>
+//       <!-- optional extra controls -->
+//       <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle"
+//               type="button" aria-pressed="false" aria-label="Toggle filters">
+//         <span class="ds-icon">filter_alt</span>
+//       </button>
+//       <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle"
+//               type="button" aria-pressed="false" aria-label="Column settings">
+//         <span class="ds-icon">settings</span>
+//       </button>
+//       <button class="ds-table-toolbar__btn" type="button" aria-label="Download">
+//         <span class="ds-icon">download</span>
+//       </button>
+//     </div>
+//   </div>
+//
+//   <!-- Search-only (no action panel): omit __left entirely -->
+//   <div class="ds-table-toolbar">
+//     <div class="ds-table-toolbar__right">...</div>
+//   </div>
+//
+// Angular component:
+//   <ds-table-toolbar>
+//     <ng-container toolbar-actions>
+//       <button ds-button variant="filled">Add Row</button>
+//     </ng-container>
+//   </ds-table-toolbar>
+//
+//   <!-- Search-only -->
+//   <ds-table-toolbar [showActions]="false" />
+//
+//   <!-- Custom trailing buttons instead of download -->
+//   <ds-table-toolbar [showDownload]="false">
+//     <ng-container toolbar-trailing>
+//       <button class="ds-table-toolbar__btn" type="button" aria-label="Export">
+//         <span class="ds-icon">upload_file</span>
+//       </button>
+//     </ng-container>
+//   </ds-table-toolbar>
+// ============================================================
+
+.ds-table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);      // 24px between left and right panels
+  height: 74px;
+  padding: 0 var(--spacing-lg); // 16px
+  background: var(--color-surface-page);
+
+
+  // ── Left panel — action buttons ───────────────────────────────────────────
+  //
+  // flex: 1 0 0 gives the left panel equal space as the right panel.
+  // When absent, the right panel fills the full toolbar width.
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);   // 8px between buttons
+    flex: 1 0 0;
+    min-width: 0;
+  }
+
+
+  // ── Right panel — search + optional extras + fixed icon buttons ───────────
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);   // 8px between controls
+    flex: 1 0 0;
+    min-width: 0;
+  }
+
+  // Search expands to fill available space within the right panel.
+  // Target the Angular host element and the plain CSS class.
+  ds-search,
+  .ds-search {
+    flex: 1 0 0;
+    min-width: 0;
+  }
+
+
+  // ── Icon buttons — filter, settings, download, custom trailing ────────────
+  //
+  // Square 42×42px buttons with --radius-sm (not circular).
+  // Outlined by default; --toggle modifier adds selected state.
+
+  &__btn {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    padding: var(--spacing-xs);
+    background: var(--color-surface-page);
+    border: 1px solid var(--color-border-secondary);
+    border-radius: var(--radius-sm);
+    color: var(--color-icon-subtle);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition:
+      background  0.12s ease,
+      border-color 0.12s ease,
+      box-shadow  0.12s ease,
+      color       0.12s ease;
+
+    &:focus         { outline: none; }
+    &:hover:not(:disabled)  { background: var(--overlay-hovered); border-color: var(--color-border-input-hover); }
+    &:focus-visible          { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:active:not(:disabled) { background: var(--overlay-pressed); }
+
+    &:disabled {
+      color: var(--color-icon-disabled);
+      border-color: var(--color-border-subtle);
+      cursor: not-allowed;
+    }
+
+    // ── Toggle modifier — selected state ─────────────────────────────────────
+
+    &--toggle {
+      &.is-selected,
+      &[aria-pressed="true"] {
+        background: var(--color-surface-brand);
+        color: var(--color-icon-brand);
+        border-color: var(--color-border-active);
+
+        &:hover:not(:disabled) {
+          background: var(--color-surface-brand);
+          // overlay tint via ::after
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: transparent;
+          pointer-events: none;
+          transition: background 0.1s ease;
+        }
+
+        &:hover:not(:disabled)::after  { background: var(--overlay-hovered); }
+        &:active:not(:disabled)::after { background: var(--overlay-pressed); }
+      }
+    }
+  }
+}
