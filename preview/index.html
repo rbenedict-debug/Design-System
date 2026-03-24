@@ -7,9 +7,328 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../tokens/css/ref-light.css" />
-  <link rel="stylesheet" href="../tokens/css/ref-dark.css" />
-  <link rel="stylesheet" href="../tokens/css/design-tokens.css" />
+  <style>
+    /* ── Onflo Design Tokens — inlined for self-contained preview ── */
+    /* Regenerate: npm run generate-tokens (then re-inline here)      */
+
+    :root {
+      --ref-color-primary-blue-default: #0B6EB4;
+      --ref-color-primary-blue-bg: #EEFAFF;
+      --ref-color-primary-blue-bg-soft: #F5F8FC;
+      --ref-color-neutral-text-default: #2D3638;
+      --ref-color-neutral-text-soft: #73737F;
+      --ref-color-neutral-border-primary: #9F9F9F;
+      --ref-color-neutral-text-disabled: #9F9F9F;
+      --ref-color-neutral-bg-default: #F6F6F6;
+      --ref-color-neutral-bg-soft: #FCFCFC;
+      --ref-color-neutral-bg-disabled: #F6F6F6;
+      --ref-color-neutral-border-soft: #CACACA;
+      --ref-color-neutral-surface: #FFFFFF;
+      --ref-color-neutral-tooltip: #000000;
+      --ref-color-neutral-scrim: rgba(0, 0, 0, 0.4);
+      --ref-color-neutral-scroll: rgba(115, 115, 127, 0.3);
+      --ref-color-neutral-border-subtle: #E9E9E9;
+      --ref-color-accent-lightblue-default: #43ADF2;
+      --ref-color-accent-lightblue-bg: #EEFAFF;
+      --ref-color-accent-darkblue-default: #0B3057;
+      --ref-color-accent-darkblue-bg: #EEF2F7;
+      --ref-color-accent-red-default: #D70917;
+      --ref-color-accent-red-bg: #FFF2F2;
+      --ref-color-accent-green-default: #45A55F;
+      --ref-color-accent-green-bg: #EEFCE4;
+      --ref-color-accent-yellow-default: #FFBF00;
+      --ref-color-accent-teal-default: #159B8E;
+      --ref-color-accent-yellow-bg: #FFF3D8;
+      --ref-color-accent-teal-bg: #EDFAF8;
+      --ref-color-accent-orange-default: #EB6E08;
+      --ref-color-accent-orange-bg: #FFF4EC;
+      --ref-color-accent-purple-default: #622682;
+      --ref-color-accent-purple-bg: #F7EFFE;
+      --ref-color-accent-pink-default: #E91E63;
+      --ref-color-accent-pink-bg: #FFF0F5;
+      --ref-color-accent-accordion-border: #E3ECF8;
+
+      --ref-typeface-brand: "Proxima Nova";
+      --ref-typeface-plain: "Proxima Nova";
+      --ref-typeface-weight-regular: 400;
+      --ref-typeface-weight-medium: 500;
+      --ref-typeface-weight-bold: 600;
+      --ref-typeface-weight-extra-bold: 700;
+
+      --ref-typescale-display-font: var(--ref-typeface-brand);
+      --ref-typescale-display-weight: var(--ref-typeface-weight-extra-bold);
+      --ref-typescale-display-size: 48px;
+      --ref-typescale-display-line-height: 56px;
+      --ref-typescale-display-tracking: -0.5px;
+      --ref-typescale-title-h1-font: var(--ref-typeface-brand);
+      --ref-typescale-title-h1-weight: var(--ref-typeface-weight-bold);
+      --ref-typescale-title-h1-size: 24px;
+      --ref-typescale-title-h1-line-height: 28px;
+      --ref-typescale-title-h1-tracking: 0px;
+      --ref-typescale-title-h2-font: var(--ref-typeface-brand);
+      --ref-typescale-title-h2-weight: var(--ref-typeface-weight-bold);
+      --ref-typescale-title-h2-size: 20px;
+      --ref-typescale-title-h2-line-height: 28px;
+      --ref-typescale-title-h2-tracking: 0px;
+      --ref-typescale-title-h3-font: var(--ref-typeface-brand);
+      --ref-typescale-title-h3-weight: var(--ref-typeface-weight-bold);
+      --ref-typescale-title-h3-size: 16px;
+      --ref-typescale-title-h3-line-height: 24px;
+      --ref-typescale-title-h3-tracking: 0.15px;
+      --ref-typescale-title-h4-font: var(--ref-typeface-brand);
+      --ref-typescale-title-h4-weight: var(--ref-typeface-weight-bold);
+      --ref-typescale-title-h4-size: 14px;
+      --ref-typescale-title-h4-line-height: 20px;
+      --ref-typescale-title-h4-tracking: 0.1px;
+      --ref-typescale-body-large-font: var(--ref-typeface-plain);
+      --ref-typescale-body-large-weight: var(--ref-typeface-weight-regular);
+      --ref-typescale-body-large-size: 16px;
+      --ref-typescale-body-large-line-height: 24px;
+      --ref-typescale-body-large-tracking: 0.15px;
+      --ref-typescale-body-medium-font: var(--ref-typeface-plain);
+      --ref-typescale-body-medium-weight: var(--ref-typeface-weight-regular);
+      --ref-typescale-body-medium-size: 14px;
+      --ref-typescale-body-medium-line-height: 20px;
+      --ref-typescale-body-medium-tracking: 0.25px;
+      --ref-typescale-body-small-font: var(--ref-typeface-plain);
+      --ref-typescale-body-small-weight: var(--ref-typeface-weight-regular);
+      --ref-typescale-body-small-size: 12px;
+      --ref-typescale-body-small-line-height: 16px;
+      --ref-typescale-body-small-tracking: 0.4px;
+      --ref-typescale-label-large-font: var(--ref-typeface-plain);
+      --ref-typescale-label-large-weight: var(--ref-typeface-weight-medium);
+      --ref-typescale-label-large-size: 16px;
+      --ref-typescale-label-large-line-height: 16px;
+      --ref-typescale-label-large-tracking: 0.1px;
+      --ref-typescale-label-medium-font: var(--ref-typeface-plain);
+      --ref-typescale-label-medium-weight: var(--ref-typeface-weight-medium);
+      --ref-typescale-label-medium-size: 14px;
+      --ref-typescale-label-medium-line-height: 14px;
+      --ref-typescale-label-medium-tracking: 0.25px;
+      --ref-typescale-label-small-font: var(--ref-typeface-plain);
+      --ref-typescale-label-small-weight: var(--ref-typeface-weight-medium);
+      --ref-typescale-label-small-size: 12px;
+      --ref-typescale-label-small-line-height: 12px;
+      --ref-typescale-label-small-tracking: 0.4px;
+
+      --ref-radius-none: 0px;
+      --ref-radius-sm: 6px;
+      --ref-radius-md: 8px;
+      --ref-radius-lg: 16px;
+      --ref-radius-xl: 24px;
+      --ref-radius-full: 9999px;
+
+      --ref-spacing-none: 0px;
+      --ref-spacing-xs: 4px;
+      --ref-spacing-sm: 8px;
+      --ref-spacing-md: 12px;
+      --ref-spacing-lg: 16px;
+      --ref-spacing-xl: 24px;
+      --ref-spacing-page: 48px;
+
+      --ref-shadow-elevation-1: rgba(65, 65, 65, 0.04);
+      --ref-shadow-elevation-2: rgba(65, 65, 65, 0.06);
+      --ref-shadow-elevation-3: rgba(65, 65, 65, 0.08);
+      --ref-shadow-elevation-4: rgba(65, 65, 65, 0.1);
+      --ref-shadow-elevation-5: rgba(65, 65, 65, 0.12);
+
+      --ref-overlay-hover: rgba(67, 173, 242, 0.08);
+      --ref-overlay-pressed: rgba(67, 173, 242, 0.12);
+      --ref-overlay-focused: rgba(67, 173, 242, 0.12);
+      --ref-overlay-dragged: rgba(67, 173, 242, 0.16);
+      --ref-overlay-red-hover: rgba(215, 9, 23, 0.08);
+      --ref-overlay-red-pressed: rgba(215, 9, 23, 0.12);
+      --ref-overlay-red-focused: rgba(215, 9, 23, 0.12);
+      --ref-overlay-red-dragged: rgba(215, 9, 23, 0.16);
+      --ref-overlay-yellow-hover: rgba(255, 191, 0, 0.08);
+      --ref-overlay-yellow-pressed: rgba(255, 191, 0, 0.12);
+      --ref-overlay-yellow-focused: rgba(255, 191, 0, 0.12);
+      --ref-overlay-yellow-dragged: rgba(255, 191, 0, 0.16);
+
+      /* ── Semantic design tokens ── */
+      --color-surface-page: var(--ref-color-neutral-surface);
+      --color-surface-default: var(--ref-color-neutral-bg-default);
+      --color-surface-subtle: var(--ref-color-neutral-bg-soft);
+      --color-surface-disabled: var(--ref-color-neutral-bg-disabled);
+      --color-surface-nav: var(--ref-color-primary-blue-bg-soft);
+      --color-surface-nav-active: var(--ref-color-primary-blue-default);
+      --color-surface-container: var(--ref-color-primary-blue-bg-soft);
+      --color-surface-overlay: var(--ref-color-neutral-surface);
+      --color-surface-scrim: var(--ref-color-neutral-scrim);
+      --color-surface-tooltip: var(--ref-color-neutral-tooltip);
+      --color-surface-scroll: var(--ref-color-neutral-scroll);
+      --color-surface-input: var(--ref-color-neutral-surface);
+      --color-surface-input-disabled: var(--ref-color-neutral-bg-disabled);
+      --color-surface-error: var(--ref-color-accent-red-bg);
+      --color-surface-warning: var(--ref-color-accent-yellow-bg);
+      --color-surface-success: var(--ref-color-accent-green-bg);
+      --color-surface-info: var(--ref-color-accent-lightblue-bg);
+      --color-surface-brand: var(--ref-color-primary-blue-bg);
+      --color-surface-brand-bold: var(--ref-color-primary-blue-default);
+      --color-surface-accent-blue: var(--ref-color-accent-lightblue-bg);
+      --color-surface-accent-blue-bold: var(--ref-color-accent-lightblue-default);
+      --color-surface-accent-navy: var(--ref-color-accent-darkblue-bg);
+      --color-surface-accent-navy-bold: var(--ref-color-accent-darkblue-default);
+      --color-surface-accent-red: var(--ref-color-accent-red-bg);
+      --color-surface-accent-red-bold: var(--ref-color-accent-red-default);
+      --color-surface-accent-yellow: var(--ref-color-accent-yellow-bg);
+      --color-surface-accent-yellow-bold: var(--ref-color-accent-yellow-default);
+      --color-surface-accent-green: var(--ref-color-accent-green-bg);
+      --color-surface-accent-green-bold: var(--ref-color-accent-green-default);
+      --color-surface-accent-teal: var(--ref-color-accent-teal-bg);
+      --color-surface-accent-teal-bold: var(--ref-color-accent-teal-default);
+      --color-surface-accent-orange: var(--ref-color-accent-orange-bg);
+      --color-surface-accent-orange-bold: var(--ref-color-accent-orange-default);
+      --color-surface-accent-purple: var(--ref-color-accent-purple-bg);
+      --color-surface-accent-purple-bold: var(--ref-color-accent-purple-default);
+      --color-surface-accent-pink: var(--ref-color-accent-pink-bg);
+      --color-surface-accent-pink-bold: var(--ref-color-accent-pink-default);
+
+      --color-text-primary: var(--ref-color-neutral-text-default);
+      --color-text-secondary: var(--ref-color-neutral-text-soft);
+      --color-text-placeholder: var(--ref-color-neutral-text-disabled);
+      --color-text-disabled: var(--ref-color-neutral-text-disabled);
+      --color-text-inverse: var(--ref-color-neutral-surface);
+      --color-text-brand: var(--ref-color-primary-blue-default);
+      --color-text-on-brand: var(--ref-color-neutral-surface);
+      --color-text-link: var(--ref-color-primary-blue-default);
+      --color-text-error: var(--ref-color-accent-red-default);
+      --color-text-warning: var(--ref-color-neutral-text-default);
+      --color-text-success: var(--ref-color-neutral-text-default);
+      --color-text-info: var(--ref-color-neutral-text-default);
+      --color-text-tooltip: var(--ref-color-neutral-surface);
+      --color-text-on-bold: var(--ref-color-neutral-surface);
+      --color-text-accent-navy: var(--ref-color-accent-darkblue-default);
+      --color-text-accent-red: var(--ref-color-accent-red-default);
+
+      --color-border-primary: var(--ref-color-neutral-border-primary);
+      --color-border-secondary: var(--ref-color-neutral-border-soft);
+      --color-border-subtle: var(--ref-color-neutral-border-subtle);
+      --color-border-strong: var(--ref-color-neutral-text-soft);
+      --color-border-inverse: var(--ref-color-neutral-surface);
+      --color-border-accordion: var(--ref-color-accent-accordion-border);
+      --color-border-ada-focus-ring: var(--ref-color-accent-lightblue-default);
+      --color-border-hover: var(--ref-color-accent-lightblue-default);
+      --color-border-active: var(--ref-color-primary-blue-default);
+      --color-border-input: var(--ref-color-neutral-border-primary);
+      --color-border-input-hover: var(--ref-color-accent-lightblue-default);
+      --color-border-input-active: var(--ref-color-primary-blue-default);
+      --color-border-input-error: var(--ref-color-accent-red-default);
+      --color-border-error: var(--ref-color-accent-red-default);
+      --color-border-warning: var(--ref-color-accent-yellow-default);
+      --color-border-success: var(--ref-color-accent-green-default);
+      --color-border-info: var(--ref-color-accent-lightblue-default);
+      --color-border-brand: var(--ref-color-primary-blue-default);
+      --color-border-accent-blue: var(--ref-color-accent-lightblue-default);
+      --color-border-accent-navy: var(--ref-color-accent-darkblue-default);
+      --color-border-accent-red: var(--ref-color-accent-red-default);
+      --color-border-accent-yellow: var(--ref-color-accent-yellow-default);
+      --color-border-accent-green: var(--ref-color-accent-green-default);
+      --color-border-accent-teal: var(--ref-color-accent-teal-default);
+      --color-border-accent-orange: var(--ref-color-accent-orange-default);
+      --color-border-accent-purple: var(--ref-color-accent-purple-default);
+      --color-border-accent-pink: var(--ref-color-accent-pink-default);
+
+      --spacing-none: 0px;
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 12px;
+      --spacing-lg: 16px;
+      --spacing-xl: 24px;
+      --spacing-page: 48px;
+
+      --radius-none: 0px;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+
+      --shadow-elevation-1: rgba(65, 65, 65, 0.04);
+      --shadow-elevation-2: rgba(65, 65, 65, 0.06);
+      --shadow-elevation-3: rgba(65, 65, 65, 0.08);
+      --shadow-elevation-4: rgba(65, 65, 65, 0.1);
+      --shadow-elevation-5: rgba(65, 65, 65, 0.12);
+
+      --overlay-hovered: rgba(67, 173, 242, 0.08);
+      --overlay-pressed: rgba(67, 173, 242, 0.12);
+      --overlay-focused: rgba(67, 173, 242, 0.12);
+      --overlay-dragged: rgba(67, 173, 242, 0.16);
+      --overlay-accent-red-hovered: rgba(215, 9, 23, 0.08);
+      --overlay-accent-red-pressed: rgba(215, 9, 23, 0.12);
+      --overlay-accent-red-focused: rgba(215, 9, 23, 0.12);
+      --overlay-accent-red-dragged: rgba(215, 9, 23, 0.16);
+      --overlay-accent-yellow-hovered: rgba(255, 191, 0, 0.08);
+      --overlay-accent-yellow-pressed: rgba(255, 191, 0, 0.12);
+      --overlay-accent-yellow-focused: rgba(255, 191, 0, 0.12);
+      --overlay-accent-yellow-dragged: rgba(255, 191, 0, 0.16);
+
+      --color-icon-default: var(--ref-color-neutral-text-default);
+      --color-icon-subtle: var(--ref-color-neutral-text-soft);
+      --color-icon-disabled: var(--ref-color-neutral-text-disabled);
+      --color-icon-inverse: var(--ref-color-neutral-surface);
+      --color-icon-brand: var(--ref-color-primary-blue-default);
+      --color-icon-on-brand: var(--ref-color-neutral-surface);
+      --color-icon-nav: var(--ref-color-neutral-text-default);
+      --color-icon-nav-active: var(--ref-color-neutral-surface);
+      --color-icon-error: var(--ref-color-accent-red-default);
+      --color-icon-warning: var(--ref-color-accent-yellow-default);
+      --color-icon-success: var(--ref-color-accent-green-default);
+      --color-icon-info: var(--ref-color-accent-lightblue-default);
+    }
+
+    [data-theme="dark"] {
+      --ref-color-primary-blue-default: #3D9BE0;
+      --ref-color-primary-blue-bg: #0D2137;
+      --ref-color-primary-blue-bg-soft: #0A1929;
+      --ref-color-neutral-text-default: #F0F4F8;
+      --ref-color-neutral-text-soft: #8DA4BE;
+      --ref-color-neutral-border-primary: #4A6580;
+      --ref-color-neutral-text-disabled: #4A6580;
+      --ref-color-neutral-bg-default: #112236;
+      --ref-color-neutral-bg-soft: #0D1B2A;
+      --ref-color-neutral-bg-disabled: #112236;
+      --ref-color-neutral-border-soft: #112236;
+      --ref-color-neutral-surface: #1C3D61;
+      --ref-color-neutral-tooltip: #2D3638;
+      --ref-color-neutral-scrim: rgba(0, 0, 0, 0.6);
+      --ref-color-neutral-scroll: rgba(141, 164, 190, 0.3);
+      --ref-color-neutral-border-subtle: #112236;
+      --ref-color-accent-lightblue-default: #6DC4F5;
+      --ref-color-accent-lightblue-bg: #0A1F33;
+      --ref-color-accent-darkblue-default: #2E6EA6;
+      --ref-color-accent-darkblue-bg: #080F1A;
+      --ref-color-accent-red-default: #FF4D55;
+      --ref-color-accent-red-bg: #2A1215;
+      --ref-color-accent-green-default: #5CC87A;
+      --ref-color-accent-green-bg: #0F2518;
+      --ref-color-accent-yellow-default: #FFD04D;
+      --ref-color-accent-teal-default: #1EC4B4;
+      --ref-color-accent-yellow-bg: #261E07;
+      --ref-color-accent-teal-bg: #0A2220;
+      --ref-color-accent-orange-default: #FF8C35;
+      --ref-color-accent-orange-bg: #261508;
+      --ref-color-accent-purple-default: #9B59C4;
+      --ref-color-accent-purple-bg: #180D26;
+      --ref-color-accent-pink-default: #FF5C8A;
+      --ref-color-accent-pink-bg: #260A14;
+      --ref-color-accent-accordion-border: #212324;
+      --ref-shadow-elevation-1: rgba(0, 0, 0, 0.07);
+      --ref-shadow-elevation-2: rgba(0, 0, 0, 0.1);
+      --ref-shadow-elevation-3: rgba(0, 0, 0, 0.13);
+      --ref-shadow-elevation-4: rgba(0, 0, 0, 0.14);
+      --ref-shadow-elevation-5: rgba(0, 0, 0, 0.18);
+      --ref-overlay-hover: rgba(109, 196, 245, 0.08);
+      --ref-overlay-pressed: rgba(109, 196, 245, 0.12);
+      --ref-overlay-focused: rgba(109, 196, 245, 0.12);
+      --ref-overlay-dragged: rgba(109, 196, 245, 0.16);
+      --shadow-elevation-1: rgba(0, 0, 0, 0.07);
+      --shadow-elevation-2: rgba(0, 0, 0, 0.1);
+      --shadow-elevation-3: rgba(0, 0, 0, 0.13);
+      --shadow-elevation-4: rgba(0, 0, 0, 0.14);
+      --shadow-elevation-5: rgba(0, 0, 0, 0.18);
+    }
+  </style>
 
   <style>
     /* ── Preview shell styles ───────────────────────────────────────────────── */
