@@ -1632,10 +1632,10 @@
        Source: components/tabs/_tabs.scss
        ════════════════════════════════════════════════════════════════════════ */
     .ds-tabs { display: flex; align-items: flex-end; border-bottom: 1px solid var(--color-border-subtle); gap: 0; position: relative; }
-    .ds-tabs__tab { appearance: none; border: 2px solid transparent; background: transparent; display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-xs); min-width: 56px; height: 48px; padding: var(--spacing-md) var(--spacing-lg); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-bold); letter-spacing: 0.25px; color: var(--color-text-primary); cursor: pointer; position: relative; white-space: nowrap; border-radius: var(--radius-sm) var(--radius-sm) 0 0; overflow: hidden; transition: background 0.15s ease; text-decoration: none; }
+    .ds-tabs__tab { appearance: none; border: none; background: transparent; display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-xs); min-width: 56px; height: 48px; padding: var(--spacing-md) var(--spacing-lg); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-bold); letter-spacing: 0.25px; color: var(--color-text-primary); cursor: pointer; position: relative; white-space: nowrap; border-radius: var(--radius-sm) var(--radius-sm) 0 0; overflow: hidden; transition: background 0.15s ease; text-decoration: none; }
     .ds-tabs__tab:focus { outline: none; }
     .ds-tabs__tab:hover:not(.is-disabled) { background: var(--overlay-hovered); }
-    .ds-tabs__tab:focus-visible { border-color: var(--color-border-ada-focus-ring); z-index: 1; }
+    .ds-tabs__tab:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); z-index: 1; }
     .ds-tabs__tab:active:not(.is-disabled) { background: var(--overlay-pressed); }
     .ds-tabs__tab.is-selected::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--color-surface-nav-active); }
     .ds-tabs__tab.is-disabled { color: var(--color-text-disabled); cursor: not-allowed; pointer-events: none; }
@@ -3551,7 +3551,7 @@
               <div>
                 <div class="ds-tabs" role="tablist">
                   <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Overview</button>
-                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1" style="border-color: var(--color-border-ada-focus-ring);">Details (focused)</button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1" style="box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);">Details (focused)</button>
                   <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Settings</button>
                 </div>
               </div>

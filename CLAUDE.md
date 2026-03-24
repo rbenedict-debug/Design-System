@@ -128,7 +128,8 @@ We use **Material Symbols Rounded** with the variable font FILL axis for outline
 - BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{modifier}`
 - State classes: `.is-error`, `.is-disabled`, `.is-readonly`, `.is-selected`
 - Interactive states: `:hover`, `:focus-visible`, `:active`, `:disabled`
-- Focus ring: always `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` — never `outline`. **Exception: `ds-tabs__tab` uses `border-color: var(--color-border-ada-focus-ring)` because `overflow: hidden` clips box-shadow.**
+- Focus ring: always `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` — never `outline`
+- **Note:** `overflow: hidden` on an element does NOT clip its own `box-shadow` — only a parent's `overflow: hidden` clips a child's shadow. So `box-shadow` focus rings are safe on any element regardless of its own overflow setting.
 - Overlay tints (hover/pressed/focused on filled surfaces): use `::after` pseudo-element with `var(--overlay-hovered)` etc.
 
 ### Component file structure
@@ -175,7 +176,7 @@ components/{name}/
 - Selected indicator: 2px bar `position: absolute; bottom: 0` inside the tab (not outside at `-2px`)
 - Selected indicator colour: `--color-surface-nav-active`
 - Badge: 6px notification dot (`ds-tabs__dot`) — **never a count badge**. Use `[showBadge]="true"` on `ds-tab`.
-- Focus: `border: 2px solid var(--color-border-ada-focus-ring)` — **exception to the normal box-shadow focus ring rule** (tabs use border to avoid clipping issues with `overflow: hidden`)
+- Focus: `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` — standard ADA focus ring (same as all components)
 - Min-width: 56px; border-bottom of container: 1px (not 2px)
 - ADA: `role="tablist"` on container, `role="tab"` + `aria-selected` on buttons, arrow key / Home / End navigation via `@HostListener('keydown')`
 - Angular Material base: `MatTabsModule` (mat-tab-group + mat-tab)
@@ -192,12 +193,43 @@ components/{name}/
 
 ---
 
+## ADA / Accessibility Standards
+
+All components must meet WCAG 2.1 AA. These rules are non-negotiable.
+
+### Focus ring
+- **Always** use `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` on `:focus-visible`
+- **Never** use `outline` — it cannot be styled consistently across browsers
+- **Never** use `border-color` as a substitute — borders affect layout and are inconsistent
+- `overflow: hidden` on an element does NOT clip its own `box-shadow` (only a parent's overflow clips a child's shadow), so `box-shadow` focus rings are always safe regardless of the element's own overflow
+
+### Roles and ARIA
+- Buttons that open/close: `aria-expanded`
+- Icon-only buttons: always `aria-label` — no exceptions
+- Tabs: `role="tablist"` on container, `role="tab"` + `aria-selected` on each tab button
+- Inputs: `aria-invalid="true"` when in error state; `role="alert"` on error messages; `aria-describedby` linking input to helper/error text
+- Disabled interactive elements: `aria-disabled="true"` (keep in tab order for screen readers) OR `disabled` attribute (removes from tab order) — use `disabled` for form controls, `aria-disabled` for custom interactive elements
+- Loading/skeleton states: `aria-busy="true"` on the container being loaded
+
+### Keyboard navigation
+- All interactive elements must be reachable and operable via keyboard
+- Tabs component: arrow keys (Left/Right) move between tabs; Home/End jump to first/last; Enter/Space select
+- Dialogs: trap focus inside when open; Escape closes; return focus to trigger on close
+- Menus: arrow keys navigate items; Escape closes and returns focus to trigger
+
+### Colour contrast
+- All text must meet WCAG AA contrast ratios: 4.5:1 for body text, 3:1 for large text and UI components
+- Never convey information with colour alone — always pair with an icon, label, or pattern
+
+---
+
 ## What NOT to do
 
 - Never hardcode hex, rgba, or px values in component SCSS — always use tokens
 - Never add size variants to `ds-input` — height is fixed at 42px
 - Never skip `aria-label` on icon buttons
-- Never use `outline` for focus — always use `box-shadow` focus ring (exception: `ds-tabs__tab` uses `border-color` — see Component Rules)
+- Never use `outline` for focus — always use `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)`
+- Never use `border-color` for focus rings — box-shadow is the correct ADA pattern and is not clipped by an element's own `overflow: hidden`
 - Never put content inside the `<!-- ONFLO-TOKENS:START/END -->` block except token CSS
 - Never use `:has()` to infer icon presence in buttons — icon vs. no-icon are separate Figma variants
 - Never reference `--ref-*` tokens directly in component styles — go through semantic `--color-*` / `--spacing-*` etc.

@@ -43,7 +43,7 @@
   &__tab {
     // Reset
     appearance: none;
-    border: 2px solid transparent;
+    border: none;
     background: transparent;
 
     // Layout
@@ -82,9 +82,10 @@
       background: var(--overlay-hovered);
     }
 
-    // Focus — border style matching Figma spec
+    // Focus — ADA focus ring (box-shadow does not get clipped by own overflow:hidden)
     &:focus-visible {
-      border-color: var(--color-border-ada-focus-ring);
+      outline: none;
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
       z-index: 1;
     }
 
