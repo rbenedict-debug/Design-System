@@ -1,0 +1,18 @@
+<div [class]="avatarClasses" [attr.aria-label]="alt || initials || 'Avatar'">
+  <!-- Image -->
+  <img
+    *ngIf="showImage"
+    class="ds-avatar__img"
+    [src]="src"
+    [alt]="alt"
+    (error)="onImageError()"
+  />
+
+  <!-- Initials fallback -->
+  <span *ngIf="showInitials" class="ds-avatar__initials" aria-hidden="true">
+    {{ displayInitials }}
+  </span>
+
+  <!-- Icon fallback -->
+  <span *ngIf="showIcon" class="ds-icon ds-icon--filled" aria-hidden="true">person</span>
+</div>

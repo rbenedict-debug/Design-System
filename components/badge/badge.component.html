@@ -1,0 +1,13 @@
+<span [class]="badgeClasses">
+  <span *ngIf="icon" class="ds-icon ds-icon--xs" aria-hidden="true">{{ icon }}</span>
+  <ng-content></ng-content>
+  <button
+    *ngIf="dismissible"
+    class="ds-badge__dismiss"
+    type="button"
+    aria-label="Dismiss"
+    (click)="onDismiss($event)"
+  >
+    <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+  </button>
+</span>

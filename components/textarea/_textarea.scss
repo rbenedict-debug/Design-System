@@ -1,0 +1,125 @@
+// ============================================================
+// Onflo Design System — Textarea Component
+// ============================================================
+//
+// Usage (HTML class API):
+//   <div class="ds-textarea">
+//     <label class="ds-textarea__label" for="id">Label</label>
+//     <div class="ds-textarea__field">
+//       <textarea id="id" class="ds-textarea__control" rows="4"></textarea>
+//     </div>
+//     <span class="ds-textarea__helper">Helper text</span>
+//   </div>
+//
+// Angular component:
+//   <ds-textarea label="Description" placeholder="Describe..." [(value)]="description" />
+//
+// States:    default, hover, focus, .is-error, .is-disabled, .is-readonly
+// Height:    min-height 96px, resizable vertically — no fixed height
+// ============================================================
+
+.ds-textarea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+
+  // ── Label ────────────────────────────────────────────────────────────────
+
+  &__label {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-medium);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    color: var(--color-text-secondary);
+    user-select: none;
+  }
+
+  &__required {
+    color: var(--color-text-error);
+    margin-left: 2px;
+  }
+
+  // ── Field wrapper ────────────────────────────────────────────────────────
+
+  &__field {
+    display: flex;
+    background: var(--color-surface-input);
+    border: 1px solid var(--color-border-input);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    cursor: text;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover { border-color: var(--color-border-input-hover); }
+  }
+
+  &:focus-within &__field {
+    border-color: var(--color-border-input-active);
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+  }
+
+  // ── Control (<textarea>) ─────────────────────────────────────────────────
+
+  &__control {
+    flex: 1;
+    min-width: 0;
+    min-height: 80px;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: 1.5;
+    color: var(--color-text-primary);
+    caret-color: var(--color-border-input-active);
+    resize: vertical;
+
+    &::placeholder { color: var(--color-text-placeholder); }
+    &:disabled { cursor: not-allowed; resize: none; }
+    &[readonly] { cursor: default; resize: none; }
+  }
+
+  // ── Helper / error text ───────────────────────────────────────────────────
+
+  &__helper {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-small-size);
+    line-height: var(--ref-typescale-label-small-line-height);
+    color: var(--color-text-secondary);
+  }
+
+
+  // ── Error state ───────────────────────────────────────────────────────────
+
+  &.is-error {
+    .ds-textarea__field   { border-color: var(--color-border-input-error); }
+    .ds-textarea__label   { color: var(--color-text-error); }
+    .ds-textarea__helper  { color: var(--color-text-error); }
+
+    &:focus-within .ds-textarea__field {
+      border-color: var(--color-border-input-error);
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
+  }
+
+
+  // ── Disabled state ────────────────────────────────────────────────────────
+
+  &.is-disabled {
+    pointer-events: none;
+
+    .ds-textarea__field   { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
+    .ds-textarea__label   { color: var(--color-text-disabled); }
+    .ds-textarea__control { color: var(--color-text-disabled); }
+    .ds-textarea__helper  { color: var(--color-text-disabled); }
+  }
+
+
+  // ── Read-only state ───────────────────────────────────────────────────────
+
+  &.is-readonly {
+    .ds-textarea__field   { background: var(--color-surface-default); border-color: var(--color-border-subtle); cursor: default; }
+    .ds-textarea__control { cursor: default; color: var(--color-text-secondary); }
+  }
+}

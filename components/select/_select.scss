@@ -1,0 +1,141 @@
+// ============================================================
+// Onflo Design System — Select / Dropdown Component
+// ============================================================
+//
+// Usage (HTML class API):
+//   <div class="ds-select">
+//     <label class="ds-select__label" for="id">Label</label>
+//     <div class="ds-select__field">
+//       <select id="id" class="ds-select__control">
+//         <option value="">Choose one...</option>
+//         <option value="a">Option A</option>
+//       </select>
+//       <span class="ds-icon ds-icon--sm ds-select__arrow">expand_more</span>
+//     </div>
+//     <span class="ds-select__helper">Helper text</span>
+//   </div>
+//
+// Angular component:
+//   <ds-select label="Country" [(value)]="country" [options]="countries" />
+//
+// States:    default, hover, focus, .is-error, .is-disabled
+// Height:    fixed 42px — matches ds-input
+// ============================================================
+
+.ds-select {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+
+  // ── Label ────────────────────────────────────────────────────────────────
+
+  &__label {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-medium);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    color: var(--color-text-secondary);
+    user-select: none;
+  }
+
+  &__required {
+    color: var(--color-text-error);
+    margin-left: 2px;
+  }
+
+  // ── Field wrapper ────────────────────────────────────────────────────────
+
+  &__field {
+    display: flex;
+    align-items: center;
+    height: 42px;
+    background: var(--color-surface-input);
+    border: 1px solid var(--color-border-input);
+    border-radius: var(--radius-sm);
+    padding: 0 var(--spacing-md);
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+
+    &:hover { border-color: var(--color-border-input-hover); }
+  }
+
+  &:focus-within &__field {
+    border-color: var(--color-border-input-active);
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+  }
+
+  // ── Control (<select>) ───────────────────────────────────────────────────
+
+  &__control {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    padding-right: var(--spacing-sm);
+
+    &:disabled { cursor: not-allowed; }
+
+    // Placeholder option
+    option[value=""] { color: var(--color-text-placeholder); }
+  }
+
+  // ── Arrow icon ────────────────────────────────────────────────────────────
+
+  &__arrow {
+    color: var(--color-icon-subtle);
+    flex-shrink: 0;
+    pointer-events: none;
+    transition: transform 0.15s ease;
+  }
+
+  &:focus-within &__arrow {
+    color: var(--color-icon-brand);
+  }
+
+  // ── Helper / error text ───────────────────────────────────────────────────
+
+  &__helper {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-small-size);
+    line-height: var(--ref-typescale-label-small-line-height);
+    color: var(--color-text-secondary);
+  }
+
+
+  // ── Error state ───────────────────────────────────────────────────────────
+
+  &.is-error {
+    .ds-select__field     { border-color: var(--color-border-input-error); }
+    .ds-select__label     { color: var(--color-text-error); }
+    .ds-select__helper    { color: var(--color-text-error); }
+    .ds-select__arrow     { color: var(--color-icon-error); }
+
+    &:focus-within .ds-select__field {
+      border-color: var(--color-border-input-error);
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
+  }
+
+
+  // ── Disabled state ────────────────────────────────────────────────────────
+
+  &.is-disabled {
+    pointer-events: none;
+
+    .ds-select__field   { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
+    .ds-select__label   { color: var(--color-text-disabled); }
+    .ds-select__control { color: var(--color-text-disabled); cursor: not-allowed; }
+    .ds-select__arrow   { color: var(--color-icon-disabled); }
+    .ds-select__helper  { color: var(--color-text-disabled); }
+  }
+}

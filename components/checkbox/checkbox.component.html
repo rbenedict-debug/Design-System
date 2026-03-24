@@ -1,0 +1,14 @@
+<label [class]="wrapperClasses" [for]="inputId">
+  <input
+    [id]="inputId"
+    type="checkbox"
+    class="ds-checkbox__control"
+    [checked]="checked"
+    [indeterminate]="indeterminate"
+    [disabled]="disabled"
+    (change)="onChange($event)"
+  />
+  <span class="ds-checkbox__box"></span>
+  <span *ngIf="label" class="ds-checkbox__label">{{ label }}</span>
+  <ng-content></ng-content>
+</label>

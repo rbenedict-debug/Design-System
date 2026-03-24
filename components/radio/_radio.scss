@@ -1,0 +1,150 @@
+// ============================================================
+// Onflo Design System — Radio Button Component
+// ============================================================
+//
+// Usage (HTML class API):
+//   <label class="ds-radio">
+//     <input type="radio" class="ds-radio__control" name="group" />
+//     <span class="ds-radio__dot"></span>
+//     <span class="ds-radio__label">Option</span>
+//   </label>
+//
+// Angular component:
+//   <ds-radio label="Option A" value="a" [(ngModel)]="selected" name="group" />
+//
+// States:    unselected, selected, .is-error, :disabled
+// ============================================================
+
+.ds-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+
+  // Hide native control but keep it accessible
+  &__control {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  // Custom circle
+  &__dot {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-full);
+    border: 1.5px solid var(--color-border-input);
+    background: var(--color-surface-input);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+
+    // Inner filled dot
+    &::after {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-full);
+      background: var(--color-surface-brand-bold);
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+  }
+
+  // Hover
+  &:hover:not(.is-disabled) &__dot {
+    border-color: var(--color-border-input-hover);
+  }
+
+  // Focus ring
+  &__control:focus-visible ~ &__dot {
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    border-color: var(--color-border-input-active);
+  }
+
+  // Selected state
+  &__control:checked ~ &__dot {
+    border-color: var(--color-surface-brand-bold);
+    border-width: 2px;
+
+    &::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  // Label
+  &__label {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    color: var(--color-text-primary);
+  }
+
+
+  // ── Error state ───────────────────────────────────────────────────────────
+
+  &.is-error {
+    .ds-radio__dot {
+      border-color: var(--color-border-input-error);
+    }
+
+    .ds-radio__label {
+      color: var(--color-text-error);
+    }
+
+    .ds-radio__control:checked ~ .ds-radio__dot {
+      border-color: var(--color-surface-accent-red-bold);
+
+      &::after {
+        background: var(--color-surface-accent-red-bold);
+      }
+    }
+  }
+
+
+  // ── Disabled state ────────────────────────────────────────────────────────
+
+  &.is-disabled,
+  &:has(.ds-radio__control:disabled) {
+    cursor: not-allowed;
+    pointer-events: none;
+
+    .ds-radio__dot {
+      background: var(--color-surface-disabled);
+      border-color: var(--color-border-subtle);
+    }
+
+    .ds-radio__control:checked ~ .ds-radio__dot {
+      border-color: var(--color-border-subtle);
+
+      &::after {
+        background: var(--color-icon-disabled);
+      }
+    }
+
+    .ds-radio__label {
+      color: var(--color-text-disabled);
+    }
+  }
+}
+
+// ── Radio Group ───────────────────────────────────────────────────────────────
+
+.ds-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}

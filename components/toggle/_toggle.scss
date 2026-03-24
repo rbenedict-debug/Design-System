@@ -1,0 +1,119 @@
+// ============================================================
+// Onflo Design System — Toggle / Switch Component
+// ============================================================
+//
+// Usage (HTML class API):
+//   <label class="ds-toggle">
+//     <input type="checkbox" class="ds-toggle__control" />
+//     <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+//     <span class="ds-toggle__label">Label</span>
+//   </label>
+//
+// Angular component:
+//   <ds-toggle label="Enable notifications" [(checked)]="notificationsOn" />
+//
+// States:    off, on (checked), .is-disabled
+// ============================================================
+
+.ds-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+
+  // Hide native control
+  &__control {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  // Track
+  &__track {
+    flex-shrink: 0;
+    width: 36px;
+    height: 20px;
+    border-radius: var(--radius-full);
+    background: var(--color-border-secondary);
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    transition: background-color 0.2s ease;
+    position: relative;
+  }
+
+  // Thumb
+  &__thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-page);
+    box-shadow: 0 1px 3px var(--shadow-elevation-2);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  // Hover
+  &:hover:not(.is-disabled) &__track {
+    background: var(--color-border-primary);
+  }
+
+  // Focus ring
+  &__control:focus-visible ~ &__track {
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+  }
+
+  // On (checked) state
+  &__control:checked ~ &__track {
+    background: var(--color-surface-brand-bold);
+  }
+
+  &__control:checked ~ &__track &__thumb {
+    transform: translateX(16px);
+  }
+
+  &:hover:not(.is-disabled) &__control:checked ~ &__track {
+    background: var(--color-surface-brand-bold);
+    filter: brightness(1.1);
+  }
+
+  // Label
+  &__label {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    color: var(--color-text-primary);
+  }
+
+
+  // ── Disabled state ────────────────────────────────────────────────────────
+
+  &.is-disabled,
+  &:has(.ds-toggle__control:disabled) {
+    cursor: not-allowed;
+    pointer-events: none;
+
+    .ds-toggle__track {
+      background: var(--color-surface-disabled);
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    .ds-toggle__thumb {
+      background: var(--color-icon-disabled);
+      box-shadow: none;
+    }
+
+    .ds-toggle__control:checked ~ .ds-toggle__track {
+      background: var(--color-surface-disabled);
+    }
+
+    .ds-toggle__label {
+      color: var(--color-text-disabled);
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<label [class]="wrapperClasses" [for]="inputId">
+  <input
+    [id]="inputId"
+    type="radio"
+    class="ds-radio__control"
+    [name]="name"
+    [value]="value"
+    [checked]="isChecked"
+    [disabled]="disabled"
+    (change)="onChange()"
+  />
+  <span class="ds-radio__dot"></span>
+  <span *ngIf="label" class="ds-radio__label">{{ label }}</span>
+  <ng-content></ng-content>
+</label>

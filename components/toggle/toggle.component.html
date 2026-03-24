@@ -1,0 +1,15 @@
+<label [class]="wrapperClasses" [for]="inputId">
+  <input
+    [id]="inputId"
+    type="checkbox"
+    class="ds-toggle__control"
+    [checked]="checked"
+    [disabled]="disabled"
+    (change)="onChange($event)"
+  />
+  <span class="ds-toggle__track">
+    <span class="ds-toggle__thumb"></span>
+  </span>
+  <span *ngIf="label" class="ds-toggle__label">{{ label }}</span>
+  <ng-content></ng-content>
+</label>

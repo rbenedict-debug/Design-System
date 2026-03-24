@@ -1,0 +1,137 @@
+// ============================================================
+// Onflo Design System — Tooltip Component
+// ============================================================
+//
+// Usage (HTML class API):
+//   <div class="ds-tooltip-wrapper">
+//     <button>Trigger</button>
+//     <div class="ds-tooltip" role="tooltip">Tooltip text</div>
+//   </div>
+//
+//   Positions: default (top) | ds-tooltip--bottom | ds-tooltip--left | ds-tooltip--right
+//
+// Angular directive:
+//   <button dsTooltip="Save changes">Save</button>
+//   <button [dsTooltip]="'Delete item'" dsTooltipPosition="bottom">Delete</button>
+//
+// States:    shown on :hover / :focus-within of wrapper
+// ============================================================
+
+$tooltip-arrow-size: 5px;
+
+.ds-tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  // Show tooltip on hover or keyboard focus anywhere inside
+  &:hover .ds-tooltip,
+  &:focus-within .ds-tooltip {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+  }
+}
+
+.ds-tooltip {
+  position: absolute;
+  z-index: 1000;
+  background: var(--color-surface-tooltip);
+  color: var(--color-text-tooltip);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  line-height: 1.4;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  max-width: 220px;
+  white-space: normal;
+  text-align: center;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+
+  // Arrow pseudo-element
+  &::before {
+    content: '';
+    position: absolute;
+    border: $tooltip-arrow-size solid transparent;
+  }
+
+  // ── Top (default) ─────────────────────────────────────────────────────────
+
+  bottom: calc(100% + #{$tooltip-arrow-size} + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+
+  &::before {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: var(--color-surface-tooltip);
+    border-bottom: none;
+  }
+
+  // ── Bottom ────────────────────────────────────────────────────────────────
+
+  &--bottom {
+    bottom: auto;
+    top: calc(100% + #{$tooltip-arrow-size} + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    &::before {
+      top: auto;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-color: var(--color-surface-tooltip);
+      border-top-color: transparent;
+      border-top: none;
+      border-bottom: $tooltip-arrow-size solid var(--color-surface-tooltip);
+    }
+  }
+
+  // ── Left ──────────────────────────────────────────────────────────────────
+
+  &--left {
+    bottom: auto;
+    top: 50%;
+    left: auto;
+    right: calc(100% + #{$tooltip-arrow-size} + 4px);
+    transform: translateY(-50%);
+
+    &::before {
+      top: 50%;
+      left: 100%;
+      transform: translateY(-50%);
+      border-left-color: var(--color-surface-tooltip);
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      border-right: none;
+    }
+  }
+
+  // ── Right ─────────────────────────────────────────────────────────────────
+
+  &--right {
+    bottom: auto;
+    top: 50%;
+    left: calc(100% + #{$tooltip-arrow-size} + 4px);
+    transform: translateY(-50%);
+
+    &::before {
+      top: 50%;
+      right: 100%;
+      left: auto;
+      transform: translateY(-50%);
+      border-right-color: var(--color-surface-tooltip);
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      border-left: none;
+    }
+  }
+}

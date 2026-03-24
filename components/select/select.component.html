@@ -1,0 +1,37 @@
+<div [class]="wrapperClasses">
+
+  <!-- Label -->
+  <label *ngIf="label" class="ds-select__label" [for]="selectId">
+    {{ label }}<span *ngIf="required" class="ds-select__required" aria-hidden="true">*</span>
+  </label>
+
+  <!-- Field wrapper -->
+  <div class="ds-select__field">
+    <select
+      [id]="selectId"
+      class="ds-select__control"
+      [value]="value"
+      [disabled]="disabled"
+      [required]="required"
+      [attr.aria-invalid]="isError ? 'true' : null"
+      (change)="onChange($event)"
+    >
+      <option value="" [disabled]="required">{{ placeholder }}</option>
+      <option
+        *ngFor="let opt of options"
+        [value]="opt.value"
+        [disabled]="opt.disabled ?? false"
+        [selected]="opt.value === value"
+      >{{ opt.label }}</option>
+    </select>
+    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
+  </div>
+
+  <!-- Helper / error text -->
+  <span
+    *ngIf="displayHelper"
+    class="ds-select__helper"
+    [attr.role]="isError ? 'alert' : null"
+  >{{ displayHelper }}</span>
+
+</div>

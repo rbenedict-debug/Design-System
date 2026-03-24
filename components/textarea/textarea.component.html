@@ -1,0 +1,32 @@
+<div [class]="wrapperClasses">
+
+  <!-- Label -->
+  <label *ngIf="label" class="ds-textarea__label" [for]="textareaId">
+    {{ label }}<span *ngIf="required" class="ds-textarea__required" aria-hidden="true">*</span>
+  </label>
+
+  <!-- Field wrapper -->
+  <div class="ds-textarea__field">
+    <textarea
+      [id]="textareaId"
+      class="ds-textarea__control"
+      [placeholder]="placeholder"
+      [rows]="rows"
+      [disabled]="disabled"
+      [readOnly]="readOnly"
+      [required]="required"
+      [attr.aria-invalid]="isError ? 'true' : null"
+      [attr.aria-describedby]="displayHelper ? textareaId + '-helper' : null"
+      (input)="onInput($event)"
+    >{{ value }}</textarea>
+  </div>
+
+  <!-- Helper / error text -->
+  <span
+    *ngIf="displayHelper"
+    class="ds-textarea__helper"
+    [id]="textareaId + '-helper'"
+    [attr.role]="isError ? 'alert' : null"
+  >{{ displayHelper }}</span>
+
+</div>
