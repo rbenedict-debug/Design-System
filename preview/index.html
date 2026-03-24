@@ -1325,28 +1325,31 @@
        Source: components/alert/_alert.scss
        ════════════════════════════════════════════════════════════════════════ */
 
-    .ds-alert {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--spacing-md);
-      padding: var(--spacing-md) var(--spacing-lg);
-      border-radius: var(--radius-md);
-      border: 1px solid transparent;
-      font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif;
-      position: relative;
-    }
-    .ds-alert__icon { flex-shrink: 0; margin-top: 1px; font-size: 20px; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    .ds-alert { border-radius: var(--radius-md); border: 1px solid transparent; overflow: hidden; position: relative; }
+    /* Header row — used by both SM and LG */
+    .ds-alert__header { display: flex; align-items: flex-start; gap: var(--spacing-sm); padding: var(--spacing-md); }
+    /* Icon */
+    .ds-alert__icon { flex-shrink: 0; font-size: 24px; line-height: 24px; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    /* SM content */
     .ds-alert__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-xs); }
-    .ds-alert__title { font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-bold); line-height: var(--ref-typescale-label-medium-line-height); }
-    .ds-alert__message { font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-regular); line-height: 1.5; }
-    .ds-alert__action { appearance: none; border: none; background: transparent; padding: 0; cursor: pointer; font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-medium); text-decoration: underline; color: inherit; margin-top: var(--spacing-xs); display: inline-block; }
+    .ds-alert__title { font-family: var(--ref-typescale-title-h3-font); font-size: var(--ref-typescale-title-h3-size); font-weight: var(--ref-typescale-title-h3-weight); line-height: var(--ref-typescale-title-h3-line-height); letter-spacing: var(--ref-typescale-title-h3-tracking); color: var(--color-text-primary); }
+    .ds-alert__message { font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); font-weight: var(--ref-typescale-body-medium-weight); line-height: var(--ref-typescale-body-medium-line-height); letter-spacing: var(--ref-typescale-body-medium-tracking); color: var(--color-text-primary); margin: 0; }
+    /* LG header label */
+    .ds-alert__label { flex: 1; min-width: 0; font-family: var(--ref-typescale-label-large-font); font-size: var(--ref-typescale-label-large-size); font-weight: var(--ref-typescale-label-large-weight-prominent); line-height: var(--ref-typescale-label-large-line-height); letter-spacing: var(--ref-typescale-label-large-tracking); color: var(--color-text-primary); }
+    /* LG body section */
+    .ds-alert__body { padding: var(--spacing-lg); background: var(--color-surface-overlay); }
+    /* Action */
+    .ds-alert__action { appearance: none; border: none; background: transparent; padding: 0; cursor: pointer; font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); font-weight: var(--ref-typescale-body-medium-weight-prominent); text-decoration: underline; color: inherit; margin-top: var(--spacing-xs); display: inline-block; }
     .ds-alert__action:focus { outline: none; }
-    .ds-alert__action:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); border-radius: 2px; }
-    .ds-alert__dismiss { appearance: none; border: none; background: transparent; padding: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: inherit; opacity: 0.7; border-radius: var(--radius-sm); transition: opacity 0.1s ease; margin-top: 1px; }
+    .ds-alert__action:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); border-radius: var(--radius-sm); }
+    /* Dismiss */
+    .ds-alert__dismiss { appearance: none; border: none; background: transparent; padding: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: inherit; opacity: 0.7; border-radius: var(--radius-sm); transition: opacity 0.1s ease; margin-left: auto; }
     .ds-alert__dismiss:hover { opacity: 1; }
     .ds-alert__dismiss:focus { outline: none; }
-    .ds-alert__dismiss:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); opacity: 1; }
-    /* Variants */
+    .ds-alert__dismiss:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); opacity: 1; }
+    /* LG modifier */
+    .ds-alert--lg .ds-alert__header { align-items: center; }
+    /* Variants — SM */
     .ds-alert--info { background: var(--color-surface-info); border-color: var(--color-border-info); color: var(--color-text-primary); }
     .ds-alert--info .ds-alert__icon { color: var(--color-icon-info); }
     .ds-alert--success { background: var(--color-surface-success); border-color: var(--color-border-success); color: var(--color-text-primary); }
@@ -1355,6 +1358,15 @@
     .ds-alert--warning .ds-alert__icon { color: var(--color-icon-warning); }
     .ds-alert--error { background: var(--color-surface-error); border-color: var(--color-border-error); color: var(--color-text-primary); }
     .ds-alert--error .ds-alert__icon { color: var(--color-icon-error); }
+    /* Variants — LG overrides (white outer bg, tinted header) */
+    .ds-alert--lg.ds-alert--info { background: var(--color-surface-overlay); }
+    .ds-alert--lg.ds-alert--info .ds-alert__header { background: var(--color-surface-info); }
+    .ds-alert--lg.ds-alert--success { background: var(--color-surface-overlay); }
+    .ds-alert--lg.ds-alert--success .ds-alert__header { background: var(--color-surface-success); }
+    .ds-alert--lg.ds-alert--warning { background: var(--color-surface-overlay); }
+    .ds-alert--lg.ds-alert--warning .ds-alert__header { background: var(--color-surface-warning); }
+    .ds-alert--lg.ds-alert--error { background: var(--color-surface-overlay); }
+    .ds-alert--lg.ds-alert--error .ds-alert__header { background: var(--color-surface-error); }
 
 
     /* ════════════════════════════════════════════════════════════════════════
@@ -3113,54 +3125,135 @@
       <section class="section" id="alert">
         <div class="section-header">
           <h2 class="section-title">Alert / Banner</h2>
-          <p class="section-desc">Inline status banners. Variants: info, success, warning, error. Optional title, dismiss button, and action link. Source: <code>components/alert/_alert.scss</code></p>
+          <p class="section-desc">Inline status banners. Variants: info, success, warning, error. Sizes: sm (default) | lg. Source: <code>components/alert/_alert.scss</code></p>
         </div>
-        <div class="component-demo" style="gap: 12px; flex-direction: column;">
 
-          <div class="ds-alert ds-alert--info" role="alert">
-            <span class="ds-icon ds-alert__icon" aria-hidden="true">info</span>
-            <div class="ds-alert__content">
-              <strong class="ds-alert__title">Scheduled maintenance</strong>
-              <p class="ds-alert__message">The system will be unavailable on Sunday from 2–4 AM UTC for scheduled maintenance.</p>
+        <!-- SM alerts -->
+        <div class="demo-row">
+          <div class="demo-row-label">SM — info</div>
+          <div class="demo-row-items" style="flex: 1;">
+            <div class="ds-alert ds-alert--info" role="alert" style="width: 100%;">
+              <div class="ds-alert__header">
+                <span class="ds-icon ds-alert__icon" aria-hidden="true">info</span>
+                <div class="ds-alert__content">
+                  <strong class="ds-alert__title">Scheduled maintenance</strong>
+                  <p class="ds-alert__message">The system will be unavailable on Sunday from 2–4 AM UTC for scheduled maintenance.</p>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div class="ds-alert ds-alert--success" role="alert">
-            <span class="ds-icon ds-alert__icon" aria-hidden="true">check_circle</span>
-            <div class="ds-alert__content">
-              <strong class="ds-alert__title">Changes saved</strong>
-              <p class="ds-alert__message">Your profile has been updated successfully.</p>
-            </div>
-          </div>
-
-          <div class="ds-alert ds-alert--warning" role="alert">
-            <span class="ds-icon ds-alert__icon" aria-hidden="true">warning</span>
-            <div class="ds-alert__content">
-              <strong class="ds-alert__title">Trial ending soon</strong>
-              <p class="ds-alert__message">Your free trial expires in 3 days. Upgrade to keep your data.</p>
-              <button class="ds-alert__action" type="button">Upgrade now</button>
-            </div>
-          </div>
-
-          <div class="ds-alert ds-alert--error" role="alert" id="alert-error-demo">
-            <span class="ds-icon ds-alert__icon" aria-hidden="true">error</span>
-            <div class="ds-alert__content">
-              <strong class="ds-alert__title">Payment failed</strong>
-              <p class="ds-alert__message">We couldn't process your payment. Please update your billing information.</p>
-            </div>
-            <button class="ds-alert__dismiss" type="button" aria-label="Dismiss alert" onclick="document.getElementById('alert-error-demo').remove()">
-              <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
-            </button>
-          </div>
-
-          <div class="ds-alert ds-alert--info" role="alert">
-            <span class="ds-icon ds-alert__icon" aria-hidden="true">info</span>
-            <div class="ds-alert__content">
-              <p class="ds-alert__message">Message-only alert — no title, just body copy.</p>
-            </div>
-          </div>
-
         </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">SM — success</div>
+          <div class="demo-row-items" style="flex: 1;">
+            <div class="ds-alert ds-alert--success" role="alert" style="width: 100%;">
+              <div class="ds-alert__header">
+                <span class="ds-icon ds-alert__icon" aria-hidden="true">check_circle</span>
+                <div class="ds-alert__content">
+                  <strong class="ds-alert__title">Changes saved</strong>
+                  <p class="ds-alert__message">Your profile has been updated successfully.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">SM — warning</div>
+          <div class="demo-row-items" style="flex: 1;">
+            <div class="ds-alert ds-alert--warning" role="alert" style="width: 100%;">
+              <div class="ds-alert__header">
+                <span class="ds-icon ds-alert__icon" aria-hidden="true">warning</span>
+                <div class="ds-alert__content">
+                  <strong class="ds-alert__title">Trial ending soon</strong>
+                  <p class="ds-alert__message">Your free trial expires in 3 days. Upgrade to keep your data.</p>
+                  <button class="ds-alert__action" type="button">Upgrade now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">SM — error + dismiss</div>
+          <div class="demo-row-items" style="flex: 1;">
+            <div class="ds-alert ds-alert--error" role="alert" id="alert-error-demo" style="width: 100%;">
+              <div class="ds-alert__header">
+                <span class="ds-icon ds-alert__icon" aria-hidden="true">error</span>
+                <div class="ds-alert__content">
+                  <strong class="ds-alert__title">Payment failed</strong>
+                  <p class="ds-alert__message">We couldn't process your payment. Please update your billing information.</p>
+                </div>
+                <button class="ds-alert__dismiss" type="button" aria-label="Dismiss alert" onclick="document.getElementById('alert-error-demo').style.display='none'">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LG alerts -->
+        <div class="demo-row">
+          <div class="demo-row-label">LG — error</div>
+          <div class="demo-row-items" style="flex: 1;">
+            <div class="ds-alert ds-alert--error ds-alert--lg" role="alert" style="width: 100%;">
+              <div class="ds-alert__header">
+                <span class="ds-icon ds-alert__icon" aria-hidden="true">error</span>
+                <span class="ds-alert__label">Label</span>
+              </div>
+              <div class="ds-alert__body">
+                <p class="ds-alert__message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">LG — warning</div>
+          <div class="demo-row-items" style="flex: 1;">
+            <div class="ds-alert ds-alert--warning ds-alert--lg" role="alert" style="width: 100%;">
+              <div class="ds-alert__header">
+                <span class="ds-icon ds-alert__icon" aria-hidden="true">warning</span>
+                <span class="ds-alert__label">Label</span>
+              </div>
+              <div class="ds-alert__body">
+                <p class="ds-alert__message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">LG — info</div>
+          <div class="demo-row-items" style="flex: 1;">
+            <div class="ds-alert ds-alert--info ds-alert--lg" role="alert" style="width: 100%;">
+              <div class="ds-alert__header">
+                <span class="ds-icon ds-alert__icon" aria-hidden="true">info</span>
+                <span class="ds-alert__label">Label</span>
+              </div>
+              <div class="ds-alert__body">
+                <p class="ds-alert__message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">LG — success</div>
+          <div class="demo-row-items" style="flex: 1;">
+            <div class="ds-alert ds-alert--success ds-alert--lg" role="alert" style="width: 100%;">
+              <div class="ds-alert__header">
+                <span class="ds-icon ds-alert__icon" aria-hidden="true">check_circle</span>
+                <span class="ds-alert__label">Label</span>
+              </div>
+              <div class="ds-alert__body">
+                <p class="ds-alert__message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <!-- ── Tooltip ──────────────────────────────────────────────────────── -->

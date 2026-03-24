@@ -2,18 +2,24 @@
 // Onflo Design System — Badge / Tag / Chip Component
 // ============================================================
 //
-// Usage (HTML class API):
-//   <span class="ds-badge ds-badge--filled ds-badge--brand">Label</span>
-//   <span class="ds-badge ds-badge--subtle ds-badge--success ds-badge--sm">
-//     <span class="ds-icon ds-icon--xs">check_circle</span>Done
-//   </span>
+// TWO distinct badge primitives in this file:
 //
-// Angular component:
-//   <ds-badge variant="filled" color="brand">Label</ds-badge>
+// 1. Label badge (ds-badge) — inline status chip
+//    Usage: <span class="ds-badge ds-badge--filled ds-badge--brand">Label</span>
+//    Angular: <ds-badge variant="filled" color="brand">Label</ds-badge>
+//    Variants:  filled | subtle | outlined
+//    Colors:    default | brand | success | warning | error | info
+//    Sizes:     sm | md (default)
 //
-// Variants:  filled | subtle | outlined
-// Colors:    default | brand | success | warning | error | info
-// Sizes:     sm | md (default)
+// 2. Notification indicator (ds-badge-indicator) — count/dot overlay
+//    Usage (count): <span class="ds-badge-indicator" aria-hidden="true">3</span>
+//    Usage (dot):   <span class="ds-badge-indicator ds-badge-indicator--dot" aria-hidden="true"></span>
+//    Angular: <ds-badge type="indicator" [count]="3" />
+//             <ds-badge type="indicator" [dot]="true" />
+//    Position: absolute — parent must have position: relative
+//    Wrap host: <div class="ds-badge-indicator__host">…</div>
+//    ADA: Set aria-label on the parent element (e.g. "Notifications, 3 unread")
+//         The indicator element itself is aria-hidden="true"
 // ============================================================
 
 .ds-badge {
@@ -166,5 +172,60 @@
       color: var(--color-icon-info);
       border-color: var(--color-border-accent-blue);
     }
+  }
+}
+
+
+// ── Notification Indicator ────────────────────────────────────────────────────
+// Count/dot badge overlaid on icon buttons or placed inline in tabs.
+// Positioned absolutely — parent needs `position: relative`.
+// Use `.ds-badge-indicator__host` wrapper for convenience.
+//
+// ADA: The indicator is aria-hidden="true"; announce counts via aria-label
+// on the parent element (e.g. button[aria-label="Notifications, 3 unread"]).
+
+.ds-badge-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 34px;
+  max-height: 34px;
+  padding: 0 var(--spacing-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-accent-red-bold);
+  color: var(--color-text-on-bold);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typeface-weight-bold);
+  line-height: var(--ref-typescale-label-small-line-height);
+  letter-spacing: var(--ref-typescale-label-small-tracking);
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+
+  // Small dot — no text, 6×6px
+  &--dot {
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+    min-height: 6px;
+    max-width: 6px;
+    max-height: 6px;
+    padding: 0;
+  }
+}
+
+// Convenience host wrapper — gives the parent position: relative so the
+// indicator can be positioned absolutely at the corner.
+.ds-badge-indicator__host {
+  position: relative;
+  display: inline-flex;
+
+  .ds-badge-indicator {
+    position: absolute;
+    top: -4px;
+    right: -4px;
   }
 }

@@ -2,23 +2,21 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type DsAlertVariant = 'info' | 'success' | 'warning' | 'error';
+export type DsAlertSize = 'sm' | 'lg';
 
 /**
  * Onflo Design System — Alert / Banner
  *
- * A standalone Angular component wrapping the ds-alert CSS class API.
- * For direct class usage without Angular:
- *   <div class="ds-alert ds-alert--info" role="alert">
- *     <span class="ds-icon ds-alert__icon">info</span>
- *     <div class="ds-alert__content">
- *       <strong class="ds-alert__title">Title</strong>
- *       <p class="ds-alert__message">Message</p>
- *     </div>
- *   </div>
+ * Inline status banner for communicating success, warning, error, or info.
+ * Use role="alert" for urgent messages; aria-live="polite" for informational ones.
+ * Never rely on colour alone — icon and text both convey status.
+ *
+ * SM (default) — compact single row: tinted background, icon + title + body.
+ * LG — two-section layout: tinted header band (icon + title), white body below.
  *
  * @example
  *   <ds-alert variant="info" title="Heads up" message="Your trial ends in 3 days." />
- *   <ds-alert variant="error" title="Something went wrong" message="Please try again." [dismissible]="true" />
+ *   <ds-alert variant="error" size="lg" title="Something went wrong" message="Please try again." [dismissible]="true" />
  */
 @Component({
   selector: 'ds-alert',
@@ -31,16 +29,19 @@ export class DsAlertComponent {
   /** Alert semantic variant. Default: 'info' */
   @Input() variant: DsAlertVariant = 'info';
 
-  /** Optional bold title. */
+  /** Size variant. 'sm' = compact inline; 'lg' = two-section with header band. Default: 'sm' */
+  @Input() size: DsAlertSize = 'sm';
+
+  /** Bold title text. SM: shown above body. LG: shown in tinted header band. */
   @Input() title = '';
 
-  /** Main alert message. */
+  /** Body message text. SM: shown below title. LG: shown in white body section. */
   @Input() message = '';
 
   /** Shows a dismiss (×) button. */
   @Input() dismissible = false;
 
-  /** Optional action button label. */
+  /** Optional action button label (SM only). */
   @Input() actionLabel = '';
 
   /** Whether the alert is currently visible. */
@@ -53,7 +54,8 @@ export class DsAlertComponent {
   @Output() actionClicked = new EventEmitter<void>();
 
   get alertClasses(): string {
-    return `ds-alert ds-alert--${this.variant}`;
+    const sizeClass = this.size === 'lg' ? ' ds-alert--lg' : '';
+    return `ds-alert ds-alert--${this.variant}${sizeClass}`;
   }
 
   get iconName(): string {

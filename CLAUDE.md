@@ -196,6 +196,19 @@ components/{name}/
 - ADA: `role="tablist"` on container, `role="tab"` + `aria-selected` on buttons, arrow key / Home / End navigation via `@HostListener('keydown')`
 - Angular Material base: `MatTabsModule` (mat-tab-group + mat-tab)
 
+### Alert (`ds-alert`)
+- **Sizes**: `sm` (default) | `lg`
+- **Variants**: `info` | `success` | `warning` | `error`
+- **SM layout**: single row — tinted background + colored border, icon + `__content` (title + body) side-by-side. `align-items: flex-start`, `gap: --spacing-sm`, `padding: --spacing-md`
+- **LG layout**: two-section — `__header` (tinted bg, icon + `__label` text, `align-items: center`) + `__body` (white `--color-surface-overlay` bg, body text only). Header padding: `--spacing-md`, body padding: `--spacing-lg`
+- **Icon**: 24px Material Symbols Rounded, `FILL=1` (filled). Colors: `--color-icon-info/success/warning/error`
+- **Title typography** (SM `__title`): `--ref-typescale-title-h3-*` (16px, bold, 24px line-height)
+- **Label typography** (LG `__label`): `--ref-typescale-label-large-*` (16px, bold-prominent, 16px line-height)
+- **Body typography** (`__message`): `--ref-typescale-body-medium-*` (14px, regular, 20px line-height)
+- **Surface colors**: `--color-surface-{variant}` for SM bg and LG header bg; `--color-surface-overlay` for LG outer/body bg
+- **Border colors**: `--color-border-{variant}`, 1px solid, `--radius-md`
+- **ADA**: `role="alert"` for error/warning; `aria-live="polite"` for info/success. Never color alone — icon + text both convey status. No Angular Material base — custom component.
+
 ### Tooltip (`ds-tooltip` / `[dsTooltip]`)
 - **Typography**: Body Small — `--ref-typescale-body-small-*` (12px, 16px line-height, 0.4px tracking, regular weight, plain typeface)
 - **Background**: `--color-surface-tooltip` (black/neutral-tooltip)

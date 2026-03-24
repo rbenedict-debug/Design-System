@@ -3,43 +3,62 @@
 // ============================================================
 //
 // Usage (HTML class API):
+//
+//   SM (default) — tinted background, inline:
 //   <div class="ds-alert ds-alert--info" role="alert">
-//     <span class="ds-icon ds-alert__icon">info</span>
-//     <div class="ds-alert__content">
-//       <strong class="ds-alert__title">Title</strong>
+//     <div class="ds-alert__header">
+//       <span class="ds-icon ds-alert__icon">info</span>
+//       <div class="ds-alert__content">
+//         <strong class="ds-alert__title">Title</strong>
+//         <p class="ds-alert__message">Message text.</p>
+//       </div>
+//     </div>
+//   </div>
+//
+//   LG — two-section layout (tinted header + white body):
+//   <div class="ds-alert ds-alert--info ds-alert--lg" role="alert">
+//     <div class="ds-alert__header">
+//       <span class="ds-icon ds-alert__icon">info</span>
+//       <span class="ds-alert__label">Label</span>
+//     </div>
+//     <div class="ds-alert__body">
 //       <p class="ds-alert__message">Message text.</p>
 //     </div>
-//     <button class="ds-alert__dismiss" aria-label="Dismiss">
-//       <span class="ds-icon ds-icon--sm">close</span>
-//     </button>
 //   </div>
 //
 // Angular component:
 //   <ds-alert variant="info" title="Heads up" message="Something to know." />
+//   <ds-alert variant="error" size="lg" title="Error" message="Details here." />
 //
 // Variants:  info | success | warning | error
+// Sizes:     sm (default) | lg
 // ============================================================
 
 .ds-alert {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-md);
   border: 1px solid transparent;
-  font-family: var(--ref-typeface-brand);
+  overflow: hidden;
   position: relative;
+
+  // ── Header (icon + text row — used by both SM and LG) ─────────────────────
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+  }
 
   // ── Icon ─────────────────────────────────────────────────────────────────
 
   &__icon {
     flex-shrink: 0;
-    margin-top: 1px;
-    font-size: 20px;
-    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    font-size: 24px;
+    line-height: 24px;
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   }
 
-  // ── Content ───────────────────────────────────────────────────────────────
+  // ── Content (SM — title + body stacked) ──────────────────────────────────
 
   &__content {
     flex: 1;
@@ -49,17 +68,50 @@
     gap: var(--spacing-xs);
   }
 
+  // ── Title (SM) ────────────────────────────────────────────────────────────
+
   &__title {
-    font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typeface-weight-bold);
-    line-height: var(--ref-typescale-label-medium-line-height);
+    font-family: var(--ref-typescale-title-h3-font);
+    font-size: var(--ref-typescale-title-h3-size);
+    font-weight: var(--ref-typescale-title-h3-weight);
+    line-height: var(--ref-typescale-title-h3-line-height);
+    letter-spacing: var(--ref-typescale-title-h3-tracking);
+    color: var(--color-text-primary);
   }
 
+  // ── Message (body text — used by both SM and LG) ──────────────────────────
+
   &__message {
-    font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typeface-weight-regular);
-    line-height: 1.5;
+    font-family: var(--ref-typescale-body-medium-font);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typescale-body-medium-weight);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
+    color: var(--color-text-primary);
+    margin: 0;
   }
+
+  // ── Label (LG header text) ────────────────────────────────────────────────
+
+  &__label {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--ref-typescale-label-large-font);
+    font-size: var(--ref-typescale-label-large-size);
+    font-weight: var(--ref-typescale-label-large-weight-prominent);
+    line-height: var(--ref-typescale-label-large-line-height);
+    letter-spacing: var(--ref-typescale-label-large-tracking);
+    color: var(--color-text-primary);
+  }
+
+  // ── Body section (LG only — white bg below the header) ───────────────────
+
+  &__body {
+    padding: var(--spacing-lg);
+    background: var(--color-surface-overlay);
+  }
+
+  // ── Action ────────────────────────────────────────────────────────────────
 
   &__action {
     appearance: none;
@@ -67,16 +119,16 @@
     background: transparent;
     padding: 0;
     cursor: pointer;
-    font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typeface-weight-medium);
+    font-family: var(--ref-typeface-plain);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typescale-body-medium-weight-prominent);
     text-decoration: underline;
     color: inherit;
     margin-top: var(--spacing-xs);
     display: inline-block;
 
-    &:focus { outline: none; }
-    &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); border-radius: 2px; }
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); border-radius: var(--radius-sm); }
   }
 
   // ── Dismiss ───────────────────────────────────────────────────────────────
@@ -95,11 +147,20 @@
     opacity: 0.7;
     border-radius: var(--radius-sm);
     transition: opacity 0.1s ease;
-    margin-top: 1px;
+    margin-left: auto;
 
-    &:hover { opacity: 1; }
-    &:focus { outline: none; }
-    &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); opacity: 1; }
+    &:hover         { opacity: 1; }
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); opacity: 1; }
+  }
+
+
+  // ══ Size Modifier — LG ══════════════════════════════════════════════════════
+
+  &--lg {
+    .ds-alert__header {
+      align-items: center; // icon + label vertically centered in header band
+    }
   }
 
 
@@ -111,6 +172,11 @@
     color: var(--color-text-primary);
 
     .ds-alert__icon { color: var(--color-icon-info); }
+
+    &.ds-alert--lg {
+      background: var(--color-surface-overlay);
+      .ds-alert__header { background: var(--color-surface-info); }
+    }
   }
 
   &--success {
@@ -119,6 +185,11 @@
     color: var(--color-text-primary);
 
     .ds-alert__icon { color: var(--color-icon-success); }
+
+    &.ds-alert--lg {
+      background: var(--color-surface-overlay);
+      .ds-alert__header { background: var(--color-surface-success); }
+    }
   }
 
   &--warning {
@@ -127,6 +198,11 @@
     color: var(--color-text-primary);
 
     .ds-alert__icon { color: var(--color-icon-warning); }
+
+    &.ds-alert--lg {
+      background: var(--color-surface-overlay);
+      .ds-alert__header { background: var(--color-surface-warning); }
+    }
   }
 
   &--error {
@@ -135,5 +211,10 @@
     color: var(--color-text-primary);
 
     .ds-alert__icon { color: var(--color-icon-error); }
+
+    &.ds-alert--lg {
+      background: var(--color-surface-overlay);
+      .ds-alert__header { background: var(--color-surface-error); }
+    }
   }
 }

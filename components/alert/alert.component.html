@@ -1,25 +1,51 @@
 <div *ngIf="visible" [class]="alertClasses" role="alert">
-  <span class="ds-icon ds-alert__icon" aria-hidden="true">{{ iconName }}</span>
 
-  <div class="ds-alert__content">
-    <strong *ngIf="title" class="ds-alert__title">{{ title }}</strong>
-    <p *ngIf="message" class="ds-alert__message">{{ message }}</p>
-    <ng-content></ng-content>
-    <button
-      *ngIf="actionLabel"
-      type="button"
-      class="ds-alert__action"
-      (click)="onAction()"
-    >{{ actionLabel }}</button>
-  </div>
+  <!-- SM: single-row layout (icon + content side-by-side, tinted bg) -->
+  <ng-container *ngIf="size === 'sm'">
+    <div class="ds-alert__header">
+      <span class="ds-icon ds-alert__icon" aria-hidden="true">{{ iconName }}</span>
+      <div class="ds-alert__content">
+        <strong *ngIf="title" class="ds-alert__title">{{ title }}</strong>
+        <p *ngIf="message" class="ds-alert__message">{{ message }}</p>
+        <ng-content></ng-content>
+        <button
+          *ngIf="actionLabel"
+          type="button"
+          class="ds-alert__action"
+          (click)="onAction()"
+        >{{ actionLabel }}</button>
+      </div>
+      <button
+        *ngIf="dismissible"
+        type="button"
+        class="ds-alert__dismiss"
+        aria-label="Dismiss alert"
+        (click)="onDismiss()"
+      >
+        <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+      </button>
+    </div>
+  </ng-container>
 
-  <button
-    *ngIf="dismissible"
-    type="button"
-    class="ds-alert__dismiss"
-    aria-label="Dismiss alert"
-    (click)="onDismiss()"
-  >
-    <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
-  </button>
+  <!-- LG: two-section layout (tinted header band + white body) -->
+  <ng-container *ngIf="size === 'lg'">
+    <div class="ds-alert__header">
+      <span class="ds-icon ds-alert__icon" aria-hidden="true">{{ iconName }}</span>
+      <span class="ds-alert__label">{{ title }}</span>
+      <button
+        *ngIf="dismissible"
+        type="button"
+        class="ds-alert__dismiss"
+        aria-label="Dismiss alert"
+        (click)="onDismiss()"
+      >
+        <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+      </button>
+    </div>
+    <div class="ds-alert__body">
+      <p *ngIf="message" class="ds-alert__message">{{ message }}</p>
+      <ng-content></ng-content>
+    </div>
+  </ng-container>
+
 </div>
