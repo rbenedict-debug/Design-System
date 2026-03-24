@@ -1,11 +1,5 @@
 # Onflo Design System — Claude Working Rules
 
-This file is read automatically by Claude Code at the start of every session.
-It contains the rules, conventions, and decisions that govern this design system.
-Update it whenever a new rule is established or an existing one changes.
-
----
-
 ## Project Overview
 
 **Owner:** Rebecca Benedict (design system lead — Figma + engineering)
@@ -90,12 +84,7 @@ preview/
 
 ## Icons — Material Symbols Rounded
 
-We use **Material Symbols Rounded** with the variable font FILL axis for outlined/filled:
-
-```html
-<!-- Add to index.html in Angular projects -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet" />
-```
+We use **Material Symbols Rounded** with the variable font FILL axis for outlined/filled.
 
 ### Usage
 ```html
@@ -129,7 +118,6 @@ We use **Material Symbols Rounded** with the variable font FILL axis for outline
 - State classes: `.is-error`, `.is-disabled`, `.is-readonly`, `.is-selected`
 - Interactive states: `:hover`, `:focus-visible`, `:active`, `:disabled`
 - Focus ring: always `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` — never `outline`
-- **Note:** `overflow: hidden` on an element does NOT clip its own `box-shadow` — only a parent's `overflow: hidden` clips a child's shadow. So `box-shadow` focus rings are safe on any element regardless of its own overflow setting.
 - Overlay tints (hover/pressed/focused on filled surfaces): use `::after` pseudo-element with `var(--overlay-hovered)` etc.
 
 ### Component file structure
@@ -160,10 +148,10 @@ components/{name}/
 
 ### Input Field (`ds-input`)
 - **Height: always 42px — fixed, no size variants**
-- For multi-line / description text: use `ds-textarea` (separate component, not yet built)
 - Has: label, helper text, error text, leading icon, trailing action button, prefix text, suffix text
 - States: default, hover, focus, error (`.is-error`), disabled (`.is-disabled`), read-only (`.is-readonly`)
 - ADA: `aria-invalid="true"` on `<input>` when error; `role="alert"` on error message; `aria-describedby` links input to helper
+- Multi-line text: use `ds-textarea` (separate component — resizable, no fixed height)
 
 ### Checkbox (`ds-checkbox`)
 - **Touch target**: 42×42px circle (`__touch` wrapper) — matches ADA touch target minimum
@@ -195,10 +183,6 @@ components/{name}/
 - **Focus**: `box-shadow: 0 0 0 3px --color-border-ada-focus-ring` on track (keyboard only)
 - Angular Material base: `MatSlideToggleModule`
 
-### Textarea (`ds-textarea`)
-- Separate component from `ds-input` — used for description / long-form text
-- Resizable vertically, no fixed height
-
 ### Tabs (`ds-tabs` + `ds-tab`)
 - **Height: always 48px — fixed**
 - Text colour: always `--color-text-primary` in all states (default, hover, selected, disabled)
@@ -210,6 +194,19 @@ components/{name}/
 - Min-width: 56px; border-bottom of container: 1px (not 2px)
 - ADA: `role="tablist"` on container, `role="tab"` + `aria-selected` on buttons, arrow key / Home / End navigation via `@HostListener('keydown')`
 - Angular Material base: `MatTabsModule` (mat-tab-group + mat-tab)
+
+### Tooltip (`ds-tooltip` / `[dsTooltip]`)
+- **Typography**: Body Small — `--ref-typescale-body-small-*` (12px, 16px line-height, 0.4px tracking, regular weight, plain typeface)
+- **Background**: `--color-surface-tooltip` (black/neutral-tooltip)
+- **Text**: `--color-text-tooltip` (white/inverse)
+- **Padding**: `var(--spacing-xs) var(--spacing-sm)` = 4px 8px
+- **Border radius**: `var(--radius-sm)`
+- **Min height**: 24px
+- **Max width**: 200px (multi-line wraps at this width)
+- **Positions**: top (default) | bottom | left | right — shown on `:hover` / `:focus-within`
+- **Arrow**: `::before` pseudo-element, 5px border triangle, same colour as tooltip surface
+- **ADA**: Required on all icon-only buttons; triggers on both hover and keyboard focus; `role="tooltip"` on the tooltip element
+- **Angular**: `[dsTooltip]="'text'"` directive + `dsTooltipPosition` input; Angular Material base: `MatTooltipModule` (matTooltip)
 
 ---
 
@@ -236,7 +233,7 @@ All components must meet WCAG 2.1 AA. These rules are non-negotiable.
   ```
 - **Never** use `outline` as the focus indicator — it cannot be styled consistently across browsers
 - **Never** use `border-color` as a substitute for the focus ring — borders affect layout and are inconsistent
-- `overflow: hidden` on an element does NOT clip its own `box-shadow` (only a parent's `overflow: hidden` clips a child's shadow), so `box-shadow` focus rings are safe on any element regardless of its own overflow setting
+- `overflow: hidden` on an element does NOT clip its own `box-shadow` — only a parent's clips a child's. `box-shadow` focus rings are safe regardless of an element's own overflow.
 
 ### Roles and ARIA
 - Buttons that open/close: `aria-expanded`
@@ -272,35 +269,16 @@ All components must meet WCAG 2.1 AA. These rules are non-negotiable.
 - Never hardcode hex, rgba, or px values in component SCSS — always use tokens
 - Never add size variants to `ds-input` — height is fixed at 42px
 - Never skip `aria-label` on icon buttons
-- Never use `outline` for focus — always use `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)`
-- Never use `border-color` for focus rings — box-shadow is the correct ADA pattern and is not clipped by an element's own `overflow: hidden`
+- Never use `outline` or `border-color` for focus — always `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)`
 - Never put content inside the `<!-- ONFLO-TOKENS:START/END -->` block except token CSS
 - Never use `:has()` to infer icon presence in buttons — icon vs. no-icon are separate Figma variants
 - Never reference `--ref-*` tokens directly in component styles — go through semantic `--color-*` / `--spacing-*` etc.
 
 ---
 
-## Angular Material Design Foundation
+## Angular Material Foundation
 
-Every Onflo component is based on an Angular Material component. The Onflo design system provides the visual layer (tokens, typography, spacing, interaction states) while Angular Material provides the behavioral layer (accessibility, keyboard navigation, animations, CDK primitives).
-
-### How it works
-
-In Angular applications, developers import both the Angular Material module AND the Onflo SCSS:
-
-```scss
-// In styles.scss or component.scss
-@use '@onflo/design-system/components';
-```
-
-```typescript
-// In your Angular module or standalone component
-import { MatButtonModule } from '@angular/material/button';
-import { MatTabsModule } from '@angular/material/tabs';
-// etc.
-```
-
-The Onflo SCSS overrides/themes Material components using global class overrides and CSS custom property (CSS variable) overrides. The `::ng-deep` pattern is avoided in favour of global SCSS that targets the Material component's generated class names.
+Onflo = visual layer (tokens, spacing, interaction states). Angular Material = behavioral layer (a11y, keyboard nav, CDK). Onflo SCSS themes Material via global class overrides targeting `.mat-*` / `.mdc-*` — no `::ng-deep`.
 
 ### Component → Angular Material mapping
 
@@ -333,13 +311,6 @@ The Onflo SCSS overrides/themes Material components using global class overrides
 | `ds-snackbar` | `MatSnackBarModule` | MatSnackBar service |
 | `ds-label` | Custom | Display-only tag — no Material equivalent |
 | `ds-skeleton` | Custom | No Material equivalent — aria-busy pattern |
-
-### Theming approach
-
-1. **CSS custom properties** — All tokens are exposed as CSS variables. Material's `--mat-*` CSS variable overrides are used where possible (Angular Material M3+ API).
-2. **Global SCSS overrides** — The Onflo component SCSS targets both the Onflo CSS class API (`.ds-*`) and, in global stylesheets, the generated Material class names (`.mat-*`, `.mdc-*`).
-3. **No `::ng-deep`** in the Onflo library itself. Projects consuming the library use their own global override files if needed.
-4. **Focus rings** — Always `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)`. Never `outline`. This overrides Material's default focus indicator.
 
 ---
 
