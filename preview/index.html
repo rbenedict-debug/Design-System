@@ -782,13 +782,21 @@
       border: 1px solid var(--color-border-subtle);
     }
 
-    .overlay-base {
+    .overlay-swatch {
       height: 48px;
-      background: var(--color-surface-nav-active);
+      /* Checkerboard so transparency is visible */
+      background-image:
+        linear-gradient(45deg, #ccc 25%, transparent 25%),
+        linear-gradient(-45deg, #ccc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ccc 75%),
+        linear-gradient(-45deg, transparent 75%, #ccc 75%);
+      background-size: 10px 10px;
+      background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+      background-color: #fff;
       position: relative;
     }
 
-    .overlay-layer {
+    .overlay-swatch-color {
       position: absolute;
       inset: 0;
     }
@@ -803,6 +811,13 @@
       font-size: 11px;
       font-weight: 600;
       color: var(--color-text-primary);
+    }
+
+    .overlay-opacity {
+      font-family: var(--preview-mono);
+      font-size: 10px;
+      color: var(--color-text-secondary);
+      margin-top: 2px;
     }
 
     /* ── Coming Soon ─────────────────────────────────────────────────────────── */
@@ -968,35 +983,11 @@
 
         <div class="subsection">
           <div class="subsection-title">Semantic States</div>
-          <div class="swatch-grid">
-            <div class="swatch-card">
-              <div style="display:flex;height:64px;">
-                <div class="swatch-color" style="flex:1;background:var(--color-surface-error)" onclick="copySwatch(this,'var(--color-surface-error)')"></div>
-                <div class="swatch-color" style="width:24px;background:var(--color-text-error)" onclick="copySwatch(this,'var(--color-text-error)')"></div>
-              </div>
-              <div class="swatch-info"><div class="swatch-name">Error</div><div class="swatch-value">surface-error / text-error</div></div>
-            </div>
-            <div class="swatch-card">
-              <div style="display:flex;height:64px;">
-                <div class="swatch-color" style="flex:1;background:var(--color-surface-warning)" onclick="copySwatch(this,'var(--color-surface-warning)')"></div>
-                <div class="swatch-color" style="width:24px;background:#EB6E08" onclick="copySwatch(this,'#EB6E08')"></div>
-              </div>
-              <div class="swatch-info"><div class="swatch-name">Warning</div><div class="swatch-value">surface-warning</div></div>
-            </div>
-            <div class="swatch-card">
-              <div style="display:flex;height:64px;">
-                <div class="swatch-color" style="flex:1;background:var(--color-surface-success)" onclick="copySwatch(this,'var(--color-surface-success)')"></div>
-                <div class="swatch-color" style="width:24px;background:var(--color-surface-accent-green-bold)" onclick="copySwatch(this,'var(--color-surface-accent-green-bold)')"></div>
-              </div>
-              <div class="swatch-info"><div class="swatch-name">Success</div><div class="swatch-value">surface-success</div></div>
-            </div>
-            <div class="swatch-card">
-              <div style="display:flex;height:64px;">
-                <div class="swatch-color" style="flex:1;background:var(--color-surface-info)" onclick="copySwatch(this,'var(--color-surface-info)')"></div>
-                <div class="swatch-color" style="width:24px;background:var(--color-surface-accent-blue-bold)" onclick="copySwatch(this,'var(--color-surface-accent-blue-bold)')"></div>
-              </div>
-              <div class="swatch-info"><div class="swatch-name">Info</div><div class="swatch-value">surface-info</div></div>
-            </div>
+          <div class="swatch-grid compact">
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-error)" onclick="copySwatch(this,'var(--color-surface-error)')"></div><div class="swatch-info"><div class="swatch-name">surface-error</div><div class="swatch-value">--color-surface-error</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-warning)" onclick="copySwatch(this,'var(--color-surface-warning)')"></div><div class="swatch-info"><div class="swatch-name">surface-warning</div><div class="swatch-value">--color-surface-warning</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-success)" onclick="copySwatch(this,'var(--color-surface-success)')"></div><div class="swatch-info"><div class="swatch-name">surface-success</div><div class="swatch-value">--color-surface-success</div></div></div>
+            <div class="swatch-card"><div class="swatch-color" style="background:var(--color-surface-info)" onclick="copySwatch(this,'var(--color-surface-info)')"></div><div class="swatch-info"><div class="swatch-name">surface-info</div><div class="swatch-value">--color-surface-info</div></div></div>
           </div>
         </div>
 
@@ -1312,52 +1303,52 @@
 
         <div class="overlay-grid">
           <div class="overlay-item">
-            <div class="overlay-base"><div class="overlay-layer" style="background:var(--overlay-hovered)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">hovered</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-hovered)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">hovered</div><div class="overlay-opacity">8% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base"><div class="overlay-layer" style="background:var(--overlay-pressed)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">pressed</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-pressed)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">pressed</div><div class="overlay-opacity">12% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base"><div class="overlay-layer" style="background:var(--overlay-focused)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">focused</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-focused)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">focused</div><div class="overlay-opacity">12% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base"><div class="overlay-layer" style="background:var(--overlay-dragged)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">dragged</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-dragged)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">dragged</div><div class="overlay-opacity">16% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base" style="background:var(--color-surface-accent-red-bold)"><div class="overlay-layer" style="background:var(--overlay-accent-red-hovered)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">red-hovered</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-accent-red-hovered)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">red-hovered</div><div class="overlay-opacity">8% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base" style="background:var(--color-surface-accent-red-bold)"><div class="overlay-layer" style="background:var(--overlay-accent-red-pressed)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">red-pressed</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-accent-red-pressed)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">red-pressed</div><div class="overlay-opacity">12% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base" style="background:var(--color-surface-accent-red-bold)"><div class="overlay-layer" style="background:var(--overlay-accent-red-focused)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">red-focused</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-accent-red-focused)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">red-focused</div><div class="overlay-opacity">12% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base" style="background:var(--color-surface-accent-red-bold)"><div class="overlay-layer" style="background:var(--overlay-accent-red-dragged)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">red-dragged</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-accent-red-dragged)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">red-dragged</div><div class="overlay-opacity">16% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base" style="background:var(--color-surface-accent-yellow-bold)"><div class="overlay-layer" style="background:var(--overlay-accent-yellow-hovered)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">yellow-hovered</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-accent-yellow-hovered)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">yellow-hovered</div><div class="overlay-opacity">8% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base" style="background:var(--color-surface-accent-yellow-bold)"><div class="overlay-layer" style="background:var(--overlay-accent-yellow-pressed)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">yellow-pressed</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-accent-yellow-pressed)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">yellow-pressed</div><div class="overlay-opacity">12% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base" style="background:var(--color-surface-accent-yellow-bold)"><div class="overlay-layer" style="background:var(--overlay-accent-yellow-focused)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">yellow-focused</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-accent-yellow-focused)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">yellow-focused</div><div class="overlay-opacity">12% opacity</div></div>
           </div>
           <div class="overlay-item">
-            <div class="overlay-base" style="background:var(--color-surface-accent-yellow-bold)"><div class="overlay-layer" style="background:var(--overlay-accent-yellow-dragged)"></div></div>
-            <div class="overlay-info"><div class="overlay-name">yellow-dragged</div></div>
+            <div class="overlay-swatch"><div class="overlay-swatch-color" style="background:var(--overlay-accent-yellow-dragged)"></div></div>
+            <div class="overlay-info"><div class="overlay-name">yellow-dragged</div><div class="overlay-opacity">16% opacity</div></div>
           </div>
         </div>
       </section>
