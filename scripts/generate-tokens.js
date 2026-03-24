@@ -329,6 +329,76 @@ function buildScssMixins(refTokens) {
   return lines.join('\n');
 }
 
+// ── Preview HTML — inline token block ─────────────────────────────────────────
+
+function buildPreviewInlineCSS(lightTokens, darkTokens, designTokens) {
+  const I = '      '; // indent inside :root / [data-theme="dark"]
+
+  function refVars(tokens) {
+    const out = [];
+    walkTokens(tokens, [], (parts, token) => {
+      out.push(`${I}${refPathToVar(parts)}: ${refCssValue(token)};`);
+    });
+    return out.join('\n');
+  }
+
+  function designVars(tokens) {
+    const out = [];
+    walkTokens(tokens, [], (parts, token) => {
+      out.push(`${I}${designPathToVar(parts)}: ${designCssValue(token)};`);
+    });
+    return out.join('\n');
+  }
+
+  // Dark mode: all ref overrides + semantic shadow/overlay overrides
+  // (shadow/overlay design tokens use direct rgba values, not var(--ref-*),
+  //  so they need explicit dark-mode overrides here)
+  function darkVars(tokens) {
+    const out = [];
+    walkTokens(tokens, [], (parts, token) => {
+      out.push(`${I}${refPathToVar(parts)}: ${refCssValue(token)};`);
+      if (parts[0] === 'shadow' || parts[0] === 'overlay') {
+        out.push(`${I}${designPathToVar(parts)}: ${refCssValue(token)};`);
+      }
+    });
+    return out.join('\n');
+  }
+
+  return [
+    '  <style>',
+    '    /* ── Onflo Design Tokens — inlined for self-contained preview ──────────── */',
+    '    /* Auto-updated by: npm run generate-tokens                                  */',
+    '',
+    '    :root {',
+    refVars(lightTokens),
+    '',
+    `${I}/* ── Semantic design tokens ── */`,
+    designVars(designTokens),
+    '    }',
+    '',
+    '    [data-theme="dark"] {',
+    darkVars(darkTokens),
+    '    }',
+    '  </style>',
+  ].join('\n');
+}
+
+function updatePreviewHTML(inlineCSS) {
+  const previewPath = path.join(REPO_ROOT, 'preview', 'index.html');
+  const START = '<!-- ONFLO-TOKENS:START -->';
+  const END   = '<!-- ONFLO-TOKENS:END -->';
+  let html = fs.readFileSync(previewPath, 'utf8');
+  const si = html.indexOf(START);
+  const ei = html.indexOf(END);
+  if (si === -1 || ei === -1) {
+    console.warn('  ⚠  Token markers not found in preview/index.html — skipping preview update.');
+    return;
+  }
+  html = html.slice(0, si) + START + '\n' + inlineCSS + '\n' + END + html.slice(ei + END.length);
+  fs.writeFileSync(previewPath, html, 'utf8');
+  console.log('  ✓ preview/index.html  (inline tokens updated)');
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 const HEADER = `/*
@@ -387,6 +457,9 @@ for (const [file, content] of Object.entries(scssFiles)) {
   console.log(`  ✓ tokens/scss/${file}`);
 }
 
+updatePreviewHTML(buildPreviewInlineCSS(lightTokens, darkTokens, designTokens));
+
 console.log('\n✓ Token generation complete.');
 console.log('  CSS  → tokens/css/index.css');
 console.log('  SCSS → tokens/scss/index.scss');
+console.log('  HTML → preview/index.html');
