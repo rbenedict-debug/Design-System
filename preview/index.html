@@ -1883,6 +1883,27 @@
     .ds-table-row-cell__checkbox--checked .ds-icon { color: var(--color-surface-brand-bold); }
     .ds-table-row-cell__data { font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); font-weight: var(--ref-typescale-body-medium-weight); line-height: var(--ref-typescale-body-medium-line-height); letter-spacing: var(--ref-typescale-body-medium-tracking); color: var(--color-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1 0 0; min-width: 0; }
     .ds-table-row-cell__data--right { flex: 0 1 auto; }
+
+    /* ── AG GRID PAGINATOR  (ds-ag-paginator) ─────────────────────────────────── */
+    .ds-ag-paginator { display: flex; align-items: center; justify-content: flex-end; height: 56px; min-height: 35px; padding: 0 var(--spacing-lg); background: var(--color-surface-subtle); overflow: hidden; }
+    .ds-ag-paginator__inner { display: flex; align-items: center; gap: var(--spacing-lg); }
+    .ds-ag-paginator__counter { display: flex; align-items: center; gap: var(--spacing-xs); }
+    .ds-ag-paginator__label { font-family: var(--ref-typescale-body-small-font); font-size: var(--ref-typescale-body-small-size); font-weight: var(--ref-typescale-body-small-weight); line-height: var(--ref-typescale-body-small-line-height); letter-spacing: var(--ref-typescale-body-small-tracking); color: var(--color-text-primary); white-space: nowrap; }
+    .ds-ag-paginator__select-wrap { position: relative; width: 80px; height: 42px; flex-shrink: 0; }
+    .ds-ag-paginator__select { appearance: none; -webkit-appearance: none; width: 100%; height: 100%; padding: 0 42px 0 16px; border: 1px solid var(--color-border-input); border-radius: var(--radius-sm); background: var(--color-surface-input); color: var(--color-text-primary); font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); font-weight: var(--ref-typescale-body-medium-weight); line-height: var(--ref-typescale-body-medium-line-height); letter-spacing: var(--ref-typescale-body-medium-tracking); cursor: pointer; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+    .ds-ag-paginator__select:focus { outline: none; }
+    .ds-ag-paginator__select:focus-visible { border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-ag-paginator__select:hover:not(:disabled) { border-color: var(--color-border-input-hover); }
+    .ds-ag-paginator__select-icon { position: absolute; right: 0; top: 0; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; pointer-events: none; color: var(--color-icon-default); }
+    .ds-ag-paginator__pagination { display: flex; align-items: center; gap: var(--spacing-xs); }
+    .ds-ag-paginator__range { font-family: var(--ref-typescale-body-small-font); font-size: var(--ref-typescale-body-small-size); font-weight: var(--ref-typescale-body-small-weight); line-height: var(--ref-typescale-body-small-line-height); letter-spacing: var(--ref-typescale-body-small-tracking); color: var(--color-text-primary); white-space: nowrap; }
+    .ds-ag-paginator__nav { display: flex; align-items: center; gap: var(--spacing-xs); }
+    .ds-ag-paginator__btn { appearance: none; -webkit-appearance: none; border: none; background: transparent; width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: var(--color-icon-default); border-radius: var(--radius-sm); padding: var(--spacing-xs); flex-shrink: 0; transition: background 0.12s ease; }
+    .ds-ag-paginator__btn:focus { outline: none; }
+    .ds-ag-paginator__btn:hover:not(:disabled) { background: var(--overlay-hovered); }
+    .ds-ag-paginator__btn:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-ag-paginator__btn:active:not(:disabled) { background: var(--overlay-pressed); }
+    .ds-ag-paginator__btn:disabled { color: var(--color-icon-disabled); cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -1934,6 +1955,7 @@
       <a class="nav-link" href="#search" onclick="setActive(this)"><span class="nav-dot"></span>Search Field</a>
       <a class="nav-link" href="#table-header-cell" onclick="setActive(this)"><span class="nav-dot"></span>Table Header Cell</a>
       <a class="nav-link" href="#table-row-cell" onclick="setActive(this)"><span class="nav-dot"></span>Table Row Cell</a>
+      <a class="nav-link" href="#ag-paginator" onclick="setActive(this)"><span class="nav-dot"></span>AG Grid Paginator</a>
     </nav>
 
     <div class="sidebar-footer">
@@ -4399,6 +4421,245 @@
               <div class="ds-table-row-cell is-focused" style="flex:1;">
                 <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
                   <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── AG GRID PAGINATOR ─────────────────────────────────────────────────── -->
+      <section class="section" id="ag-paginator">
+        <h2 class="section-title">AG Grid Paginator</h2>
+        <p class="section-desc">Custom pagination panel for AG Grid — replaces the built-in AG Grid pagination bar. Use with <code>suppressPaginationPanel: true</code> in grid options. Register as a status bar component or place standalone below the grid.</p>
+        <p class="section-source">components/ag-paginator/ag-paginator.component.ts</p>
+
+        <!-- Default: mid-range page -->
+        <div class="demo-row">
+          <div class="demo-label">Default</div>
+          <div class="demo-items" style="flex:1;">
+            <div class="ds-ag-paginator" style="width:100%;">
+              <div class="ds-ag-paginator__inner">
+                <div class="ds-ag-paginator__counter">
+                  <span class="ds-ag-paginator__label">Items per page:</span>
+                  <div class="ds-ag-paginator__select-wrap">
+                    <select class="ds-ag-paginator__select" aria-label="Items per page">
+                      <option>10</option>
+                      <option>25</option>
+                      <option selected>50</option>
+                      <option>100</option>
+                    </select>
+                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  </div>
+                </div>
+                <div class="ds-ag-paginator__pagination">
+                  <span class="ds-ag-paginator__range" aria-live="polite">1 - 50 of 200</span>
+                  <div class="ds-ag-paginator__nav">
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="First page" disabled>
+                      <span class="ds-icon">first_page</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Previous page" disabled>
+                      <span class="ds-icon">keyboard_arrow_left</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Next page">
+                      <span class="ds-icon">keyboard_arrow_right</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Last page">
+                      <span class="ds-icon">last_page</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mid-page: prev + next enabled -->
+        <div class="demo-row">
+          <div class="demo-label">Mid-page</div>
+          <div class="demo-items" style="flex:1;">
+            <div class="ds-ag-paginator" style="width:100%;">
+              <div class="ds-ag-paginator__inner">
+                <div class="ds-ag-paginator__counter">
+                  <span class="ds-ag-paginator__label">Items per page:</span>
+                  <div class="ds-ag-paginator__select-wrap">
+                    <select class="ds-ag-paginator__select" aria-label="Items per page">
+                      <option>10</option>
+                      <option>25</option>
+                      <option selected>50</option>
+                      <option>100</option>
+                    </select>
+                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  </div>
+                </div>
+                <div class="ds-ag-paginator__pagination">
+                  <span class="ds-ag-paginator__range" aria-live="polite">51 - 100 of 200</span>
+                  <div class="ds-ag-paginator__nav">
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="First page">
+                      <span class="ds-icon">first_page</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Previous page">
+                      <span class="ds-icon">keyboard_arrow_left</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Next page">
+                      <span class="ds-icon">keyboard_arrow_right</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Last page">
+                      <span class="ds-icon">last_page</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Last page: next + last disabled -->
+        <div class="demo-row">
+          <div class="demo-label">Last page</div>
+          <div class="demo-items" style="flex:1;">
+            <div class="ds-ag-paginator" style="width:100%;">
+              <div class="ds-ag-paginator__inner">
+                <div class="ds-ag-paginator__counter">
+                  <span class="ds-ag-paginator__label">Items per page:</span>
+                  <div class="ds-ag-paginator__select-wrap">
+                    <select class="ds-ag-paginator__select" aria-label="Items per page">
+                      <option>10</option>
+                      <option>25</option>
+                      <option selected>50</option>
+                      <option>100</option>
+                    </select>
+                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  </div>
+                </div>
+                <div class="ds-ag-paginator__pagination">
+                  <span class="ds-ag-paginator__range" aria-live="polite">151 - 200 of 200</span>
+                  <div class="ds-ag-paginator__nav">
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="First page">
+                      <span class="ds-icon">first_page</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Previous page">
+                      <span class="ds-icon">keyboard_arrow_left</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Next page" disabled>
+                      <span class="ds-icon">keyboard_arrow_right</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Last page" disabled>
+                      <span class="ds-icon">last_page</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div class="demo-row">
+          <div class="demo-label">Empty</div>
+          <div class="demo-items" style="flex:1;">
+            <div class="ds-ag-paginator" style="width:100%;">
+              <div class="ds-ag-paginator__inner">
+                <div class="ds-ag-paginator__counter">
+                  <span class="ds-ag-paginator__label">Items per page:</span>
+                  <div class="ds-ag-paginator__select-wrap">
+                    <select class="ds-ag-paginator__select" aria-label="Items per page">
+                      <option>10</option>
+                      <option selected>25</option>
+                      <option>50</option>
+                      <option>100</option>
+                    </select>
+                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  </div>
+                </div>
+                <div class="ds-ag-paginator__pagination">
+                  <span class="ds-ag-paginator__range" aria-live="polite">0 - 0 of 0</span>
+                  <div class="ds-ag-paginator__nav">
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="First page" disabled>
+                      <span class="ds-icon">first_page</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Previous page" disabled>
+                      <span class="ds-icon">keyboard_arrow_left</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Next page" disabled>
+                      <span class="ds-icon">keyboard_arrow_right</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Last page" disabled>
+                      <span class="ds-icon">last_page</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table + paginator — full simulation -->
+        <div class="demo-row">
+          <div class="demo-label">Full sim</div>
+          <div class="demo-items" style="flex:1; flex-direction:column; gap:0;">
+            <!-- Header row -->
+            <div style="display:flex; width:100%;">
+              <div class="ds-table-header-cell" style="flex:2;">
+                <div class="ds-table-header-cell__resize-handle"><span class="ds-table-header-cell__resize-bar"></span></div>
+                <div class="ds-table-header-cell__content">
+                  <span class="ds-table-header-cell__label">Customer</span>
+                </div>
+                <div class="ds-table-header-cell__actions">
+                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"><span class="ds-table-header-cell__resize-bar"></span></div>
+                </div>
+              </div>
+              <div class="ds-table-header-cell" style="flex:1;">
+                <div class="ds-table-header-cell__resize-handle"><span class="ds-table-header-cell__resize-bar"></span></div>
+                <div class="ds-table-header-cell__content">
+                  <span class="ds-table-header-cell__label">Status</span>
+                </div>
+                <div class="ds-table-header-cell__actions">
+                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"><span class="ds-table-header-cell__resize-bar"></span></div>
+                </div>
+              </div>
+            </div>
+            <!-- Data rows -->
+            <div style="display:flex; width:100%;">
+              <div class="ds-table-row-cell" style="flex:2;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Onflo Systems Ltd</span></div></div>
+              <div class="ds-table-row-cell" style="flex:1;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+            </div>
+            <div style="display:flex; width:100%;">
+              <div class="ds-table-row-cell" style="flex:2;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Bright Futures Co</span></div></div>
+              <div class="ds-table-row-cell" style="flex:1;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
+            </div>
+            <!-- Paginator attached below -->
+            <div class="ds-ag-paginator" style="width:100%; border-top: 1px solid var(--color-border-subtle);">
+              <div class="ds-ag-paginator__inner">
+                <div class="ds-ag-paginator__counter">
+                  <span class="ds-ag-paginator__label">Items per page:</span>
+                  <div class="ds-ag-paginator__select-wrap">
+                    <select class="ds-ag-paginator__select" aria-label="Items per page">
+                      <option>10</option>
+                      <option selected>25</option>
+                      <option>50</option>
+                      <option>100</option>
+                    </select>
+                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  </div>
+                </div>
+                <div class="ds-ag-paginator__pagination">
+                  <span class="ds-ag-paginator__range" aria-live="polite">1 - 25 of 48</span>
+                  <div class="ds-ag-paginator__nav">
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="First page" disabled>
+                      <span class="ds-icon">first_page</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Previous page" disabled>
+                      <span class="ds-icon">keyboard_arrow_left</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Next page">
+                      <span class="ds-icon">keyboard_arrow_right</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Last page">
+                      <span class="ds-icon">last_page</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

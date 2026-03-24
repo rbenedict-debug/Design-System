@@ -49,6 +49,7 @@ components/
   skeleton/                # ds-skeleton
   search/                  # ds-search
   table/                   # ds-table-header-cell + ds-table-row-cell (AG Grid custom renderers)
+  ag-paginator/            # ds-ag-paginator (AG Grid custom pagination panel)
 preview/
   index.html               # Self-contained visual token + component reference
 ```
@@ -263,6 +264,18 @@ components/{name}/
 - **AG Grid**: implements `ICellRendererAngularComp` — `agInit(params)`, `refresh(params)`, syncs `checked` via `rowSelected` event
 - **No Angular Material base** — custom component
 
+### AG Grid Paginator (`ds-ag-paginator`)
+- **Purpose**: Custom pagination panel that replaces AG Grid's built-in paginator. Use with `suppressPaginationPanel: true`.
+- **Height**: 56px — fixed (matches AG Grid row / header height)
+- **Background**: `--color-surface-subtle`; padding: `0 var(--spacing-lg)`; content: right-aligned
+- **Integration**: Register as a status bar panel OR use standalone below the grid. Exposes `[api]` input (`AgPaginationApi`) and calls `agInit(params)` when used as a status panel.
+- **"Items per page" selector**: Native `<select>` styled as `ds-input` — 80px × 42px, left-padding 16px, `arrow_drop_down` icon overlay (pointer-events: none), `--radius-sm`
+- **Range text**: `"1 - 50 of 200"` format (hyphen with spaces); Body Small typography (`--ref-typescale-body-small-*`); `--color-text-primary`; `aria-live="polite"`
+- **Nav buttons**: 4 ghost buttons — `first_page`, `keyboard_arrow_left`, `keyboard_arrow_right`, `last_page`; 42×42px; `--radius-sm` (not `--radius-full`); disabled when at first/last page
+- **Layout**: outer `gap: var(--spacing-lg)` (16px) between counter and pagination groups; inner groups `gap: var(--spacing-xs)` (4px)
+- **ADA**: All nav buttons have `aria-label`; range label is `aria-live="polite"`
+- **No Angular Material base** — custom component
+
 ---
 
 ## Preview (`preview/index.html`)
@@ -366,6 +379,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-snackbar` | `MatSnackBarModule` | MatSnackBar service |
 | `ds-label` | Custom | Display-only tag — no Material equivalent |
 | `ds-skeleton` | Custom | No Material equivalent — aria-busy pattern |
+| `ds-ag-paginator` | Custom | AG Grid custom pagination panel — no Material equivalent |
 
 ---
 

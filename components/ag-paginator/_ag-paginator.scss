@@ -1,0 +1,192 @@
+// ============================================================
+// Onflo Design System — AG Grid Paginator Component
+// ============================================================
+//
+// Custom pagination panel for AG Grid — replaces the built-in
+// AG Grid pagination bar with Onflo design tokens.
+//
+// Usage as AG Grid status bar:
+//   gridOptions = {
+//     suppressPaginationPanel: true,
+//     pagination: true,
+//     statusBar: {
+//       statusPanels: [
+//         { statusPanel: DsAgPaginatorComponent, align: 'right' }
+//       ]
+//     }
+//   }
+//
+// Standalone usage (below the grid):
+//   <ds-ag-paginator [api]="gridApi" />
+//
+// HTML class API:
+//   <div class="ds-ag-paginator">
+//     <div class="ds-ag-paginator__inner">
+//       <div class="ds-ag-paginator__counter">
+//         <span class="ds-ag-paginator__label">Items per page:</span>
+//         <div class="ds-ag-paginator__select-wrap">
+//           <select class="ds-ag-paginator__select" aria-label="Items per page">…</select>
+//           <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+//         </div>
+//       </div>
+//       <div class="ds-ag-paginator__pagination">
+//         <span class="ds-ag-paginator__range" aria-live="polite">1 - 50 of 200</span>
+//         <div class="ds-ag-paginator__nav">
+//           <button class="ds-ag-paginator__btn" aria-label="First page" disabled>
+//             <span class="ds-icon">first_page</span>
+//           </button>
+//           <button class="ds-ag-paginator__btn" aria-label="Previous page" disabled>
+//             <span class="ds-icon">keyboard_arrow_left</span>
+//           </button>
+//           <button class="ds-ag-paginator__btn" aria-label="Next page">
+//             <span class="ds-icon">keyboard_arrow_right</span>
+//           </button>
+//           <button class="ds-ag-paginator__btn" aria-label="Last page">
+//             <span class="ds-icon">last_page</span>
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+// ============================================================
+
+.ds-ag-paginator {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 56px;
+  min-height: 35px;
+  padding: 0 var(--spacing-lg);
+  background: var(--color-surface-subtle);
+  overflow: hidden;
+
+
+  // ── Inner flex container ──────────────────────────────────────────────────
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+  }
+
+
+  // ── Counter: "Items per page" label + select ──────────────────────────────
+
+  &__counter {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  &__label {
+    font-family: var(--ref-typescale-body-small-font);
+    font-size: var(--ref-typescale-body-small-size);
+    font-weight: var(--ref-typescale-body-small-weight);
+    line-height: var(--ref-typescale-body-small-line-height);
+    letter-spacing: var(--ref-typescale-body-small-tracking);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+
+  // Styled native select — 80px wide, 42px tall, matches ds-input appearance
+  &__select-wrap {
+    position: relative;
+    width: 80px;
+    height: 42px;
+    flex-shrink: 0;
+  }
+
+  &__select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 100%;
+    padding: 0 42px 0 16px;
+    border: 1px solid var(--color-border-input);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-input);
+    color: var(--color-text-primary);
+    font-family: var(--ref-typescale-body-medium-font);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typescale-body-medium-weight);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:focus         { outline: none; }
+    &:focus-visible {
+      border-color: var(--color-border-input-active);
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
+    &:hover:not(:disabled) { border-color: var(--color-border-input-hover); }
+  }
+
+  // Dropdown arrow icon overlay — pointer-events: none so the select receives clicks
+  &__select-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    color: var(--color-icon-default);
+  }
+
+
+  // ── Pagination: range text + nav buttons ──────────────────────────────────
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  &__range {
+    font-family: var(--ref-typescale-body-small-font);
+    font-size: var(--ref-typescale-body-small-size);
+    font-weight: var(--ref-typescale-body-small-weight);
+    line-height: var(--ref-typescale-body-small-line-height);
+    letter-spacing: var(--ref-typescale-body-small-tracking);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  // Navigation button — 42×42px ghost style, radius-sm (aligns with input height)
+  &__btn {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: transparent;
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-icon-default);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-xs);
+    flex-shrink: 0;
+    transition: background 0.12s ease;
+
+    &:focus         { outline: none; }
+    &:hover:not(:disabled)  { background: var(--overlay-hovered); }
+    &:focus-visible          { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:active:not(:disabled) { background: var(--overlay-pressed); }
+
+    &:disabled {
+      color: var(--color-icon-disabled);
+      cursor: not-allowed;
+    }
+  }
+}

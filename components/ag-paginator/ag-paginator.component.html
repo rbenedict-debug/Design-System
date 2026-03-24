@@ -1,0 +1,70 @@
+<div class="ds-ag-paginator">
+  <div class="ds-ag-paginator__inner">
+
+    <!-- Items per page selector -->
+    <div class="ds-ag-paginator__counter">
+      <span class="ds-ag-paginator__label">Items per page:</span>
+      <div class="ds-ag-paginator__select-wrap">
+        <select
+          class="ds-ag-paginator__select"
+          [value]="pageSize"
+          (change)="onPageSizeChange($event)"
+          aria-label="Items per page"
+        >
+          <option *ngFor="let opt of pageSizeOptions" [value]="opt">{{ opt }}</option>
+        </select>
+        <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+      </div>
+    </div>
+
+    <!-- Range + navigation -->
+    <div class="ds-ag-paginator__pagination">
+      <span class="ds-ag-paginator__range" aria-live="polite">
+        {{ totalRows === 0 ? '0' : rangeStart }} - {{ rangeEnd }} of {{ totalRows }}
+      </span>
+
+      <div class="ds-ag-paginator__nav">
+        <button
+          class="ds-ag-paginator__btn"
+          type="button"
+          aria-label="First page"
+          [disabled]="isFirstPage"
+          (click)="firstPage()"
+        >
+          <span class="ds-icon">first_page</span>
+        </button>
+
+        <button
+          class="ds-ag-paginator__btn"
+          type="button"
+          aria-label="Previous page"
+          [disabled]="isFirstPage"
+          (click)="prevPage()"
+        >
+          <span class="ds-icon">keyboard_arrow_left</span>
+        </button>
+
+        <button
+          class="ds-ag-paginator__btn"
+          type="button"
+          aria-label="Next page"
+          [disabled]="isLastPage"
+          (click)="nextPage()"
+        >
+          <span class="ds-icon">keyboard_arrow_right</span>
+        </button>
+
+        <button
+          class="ds-ag-paginator__btn"
+          type="button"
+          aria-label="Last page"
+          [disabled]="isLastPage"
+          (click)="lastPage()"
+        >
+          <span class="ds-icon">last_page</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
