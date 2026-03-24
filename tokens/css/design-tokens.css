@@ -110,25 +110,23 @@
   --radius-full: 9999px;
 
   /* ── Shadow ────────────────────────────────────────── */
-  --shadow-elevation-1: rgba(65, 65, 65, 0.04);
-  --shadow-elevation-2: rgba(65, 65, 65, 0.06);
-  --shadow-elevation-3: rgba(65, 65, 65, 0.08);
-  --shadow-elevation-4: rgba(65, 65, 65, 0.1);
-  --shadow-elevation-5: rgba(65, 65, 65, 0.12);
+  --shadow-elevation-1: var(--ref-shadow-elevation-1);
+  --shadow-elevation-2: var(--ref-shadow-elevation-2);
+  --shadow-elevation-3: var(--ref-shadow-elevation-3);
 
   /* ── Overlay / Interaction ─────────────────────────── */
-  --overlay-hovered: rgba(67, 173, 242, 0.08);
-  --overlay-pressed: rgba(67, 173, 242, 0.12);
-  --overlay-focused: rgba(67, 173, 242, 0.12);
-  --overlay-dragged: rgba(67, 173, 242, 0.16);
-  --overlay-accent-red-hovered: rgba(215, 9, 23, 0.08);
-  --overlay-accent-red-pressed: rgba(215, 9, 23, 0.12);
-  --overlay-accent-red-focused: rgba(215, 9, 23, 0.12);
-  --overlay-accent-red-dragged: rgba(215, 9, 23, 0.16);
-  --overlay-accent-yellow-hovered: rgba(255, 191, 0, 0.08);
-  --overlay-accent-yellow-pressed: rgba(255, 191, 0, 0.12);
-  --overlay-accent-yellow-focused: rgba(255, 191, 0, 0.12);
-  --overlay-accent-yellow-dragged: rgba(255, 191, 0, 0.16);
+  --overlay-hovered: var(--ref-overlay-hover);
+  --overlay-pressed: var(--ref-overlay-pressed);
+  --overlay-focused: var(--ref-overlay-focused);
+  --overlay-dragged: var(--ref-overlay-dragged);
+  --overlay-accent-red-hovered: var(--ref-overlay-red-hover);
+  --overlay-accent-red-pressed: var(--ref-overlay-red-pressed);
+  --overlay-accent-red-focused: var(--ref-overlay-red-focused);
+  --overlay-accent-red-dragged: var(--ref-overlay-red-dragged);
+  --overlay-accent-yellow-hovered: var(--ref-overlay-yellow-hover);
+  --overlay-accent-yellow-pressed: var(--ref-overlay-yellow-pressed);
+  --overlay-accent-yellow-focused: var(--ref-overlay-yellow-focused);
+  --overlay-accent-yellow-dragged: var(--ref-overlay-yellow-dragged);
 
   /* ── icon ──────────────────────────────────────────── */
   --color-icon-default: var(--ref-color-neutral-text-default);

@@ -191,9 +191,12 @@ const DESIGN_LABELS = {
 
 function designCssValue(token) {
   const alias = token.$extensions?.['com.figma.aliasData']?.targetVariableName;
-  if (token.$type === 'color' && alias?.startsWith('colors/')) {
+  // Every design token that has aliasData is a pointer to a ref variable.
+  // Use var(--ref-*) so the two-tier architecture works correctly.
+  if (alias) {
     return `var(${refPathToVar(alias.split('/'))})`;
   }
+  // Fallback for any number token without an alias (shouldn't occur in normal exports)
   if (token.$type === 'number') {
     const v = token.$value;
     return v >= 999 ? '9999px' : `${Math.round(v * 100) / 100}px`;
