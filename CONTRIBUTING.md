@@ -12,9 +12,9 @@ In Figma, open the Onflo design file and export the three variable collections:
 
 | Figma collection | Save as |
 |---|---|
-| `ref` → Light mode | `ref 3/Light.tokens.json` |
-| `ref` → Dark mode | `ref 3/Dark.tokens.json` |
-| `Mode 1` (design tokens) | `Mode 1.tokens 3.json` |
+| `ref` → Light mode | `ref/Light.tokens.json` |
+| `ref` → Dark mode | `ref/Dark.tokens.json` |
+| `Mode 1` (design tokens) | `Mode 1.tokens.json` |
 
 By default the generator looks in `~/Downloads`. If your files are elsewhere, set the `ONFLO_TOKEN_DIR` environment variable:
 

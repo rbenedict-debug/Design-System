@@ -49,9 +49,9 @@ const path = require('path');
 // ── Input / output paths ──────────────────────────────────────────────────────
 
 const INPUT_DIR  = process.env.ONFLO_TOKEN_DIR ?? path.join(process.env.HOME, 'Downloads');
-const LIGHT_PATH = path.join(INPUT_DIR, 'ref 3', 'Light.tokens.json');
-const DARK_PATH  = path.join(INPUT_DIR, 'ref 3', 'Dark.tokens.json');
-const MODE_PATH  = path.join(INPUT_DIR, 'Mode 1.tokens 3.json');
+const LIGHT_PATH = path.join(INPUT_DIR, 'ref', 'Light.tokens.json');
+const DARK_PATH  = path.join(INPUT_DIR, 'ref', 'Dark.tokens.json');
+const MODE_PATH  = path.join(INPUT_DIR, 'Mode 1.tokens.json');
 
 const REPO_ROOT  = path.join(__dirname, '..');
 const CSS_DIR    = path.join(REPO_ROOT, 'tokens', 'css');

@@ -132,11 +132,9 @@
   --ref-spacing-page: 48px;
 
   /* ── Shadow ────────────────────────────────────────── */
-  --ref-shadow-elevation-1: rgba(65, 65, 65, 0.04);
-  --ref-shadow-elevation-2: rgba(65, 65, 65, 0.06);
-  --ref-shadow-elevation-3: rgba(65, 65, 65, 0.08);
-  --ref-shadow-elevation-4: rgba(65, 65, 65, 0.1);
-  --ref-shadow-elevation-5: rgba(65, 65, 65, 0.12);
+  --ref-shadow-elevation-1: rgba(65, 65, 65, 0.06);
+  --ref-shadow-elevation-2: rgba(65, 65, 65, 0.1);
+  --ref-shadow-elevation-3: rgba(65, 65, 65, 0.12);
 
   /* ── Overlay / Interaction ─────────────────────────── */
   --ref-overlay-hover: rgba(67, 173, 242, 0.08);
