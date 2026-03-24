@@ -88,10 +88,10 @@
     white-space: nowrap;
   }
 
-  // Styled native select — 80px wide, 42px tall, matches ds-input appearance
+  // Styled native select — 96px wide, 42px tall, matches ds-input appearance
   &__select-wrap {
     position: relative;
-    width: 80px;
+    width: 96px;
     height: 42px;
     flex-shrink: 0;
   }
