@@ -13,112 +13,95 @@
 // Variants (color): green | red | yellow | brand | blue | navy | teal |
 //                   orange | purple | pink | disabled
 // Sizes:   xs | sm | md (default)
-// Outline: ds-label--outline (border only, no fill)
+// Outline: ds-label--outline (adds colored border)
 // ============================================================
 
 .ds-label {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-xs);
+  height: 42px;
+  padding: 0 16px;
   border-radius: var(--radius-sm);
-  font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-small-size);
-  font-weight: var(--ref-typeface-weight-medium);
-  line-height: var(--ref-typescale-label-small-line-height);
-  white-space: nowrap;
-  padding: 2px var(--spacing-sm);
   border: 1px solid transparent;
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  color: var(--color-text-primary);
+  white-space: nowrap;
   vertical-align: middle;
 
   // ── Sizes ──────────────────────────────────────────────────────────────────
 
-  &--xs {
-    font-size: 10px;
-    padding: 1px var(--spacing-xs);
-    border-radius: 4px;
-    gap: 2px;
-  }
-
   &--sm {
-    font-size: var(--ref-typescale-label-small-size);
-    padding: 2px var(--spacing-xs);
+    height: 32px;
+    padding: 0 12px;
   }
 
-  // --md is the base
+  &--xs {
+    height: 24px;
+    padding: 0 10px;
+  }
 
-  // ── Color variants — filled ────────────────────────────────────────────────
+  // ── Color variants ─────────────────────────────────────────────────────────
 
   &--green {
     background: var(--color-surface-accent-green);
-    color: var(--color-text-success);
-    border-color: var(--color-border-accent-green);
+    &.ds-label--outline { border-color: var(--color-border-accent-green); }
   }
 
   &--red {
     background: var(--color-surface-accent-red);
-    color: var(--color-text-accent-red);
-    border-color: var(--color-border-accent-red);
+    &.ds-label--outline { border-color: var(--color-border-accent-red); }
   }
 
   &--yellow {
     background: var(--color-surface-accent-yellow);
-    color: var(--color-text-warning);
-    border-color: var(--color-border-accent-yellow);
+    &.ds-label--outline { border-color: var(--color-border-accent-yellow); }
   }
 
   &--brand {
     background: var(--color-surface-brand);
-    color: var(--color-text-brand);
-    border-color: var(--color-border-brand);
+    &.ds-label--outline { border-color: var(--color-border-brand); }
   }
 
   &--blue {
     background: var(--color-surface-accent-blue);
-    color: var(--color-text-brand);
-    border-color: var(--color-border-accent-blue);
+    &.ds-label--outline { border-color: var(--color-border-accent-blue); }
   }
 
   &--navy {
     background: var(--color-surface-accent-navy);
-    color: var(--color-text-accent-navy);
-    border-color: var(--color-border-accent-navy);
+    &.ds-label--outline { border-color: var(--color-border-accent-navy); }
   }
 
   &--teal {
     background: var(--color-surface-accent-teal);
-    color: var(--color-text-success);
-    border-color: var(--color-border-accent-teal);
+    &.ds-label--outline { border-color: var(--color-border-accent-teal); }
   }
 
   &--orange {
     background: var(--color-surface-accent-orange);
-    color: var(--color-text-warning);
-    border-color: var(--color-border-accent-orange);
+    &.ds-label--outline { border-color: var(--color-border-accent-orange); }
   }
 
   &--purple {
     background: var(--color-surface-accent-purple);
-    color: var(--color-text-primary);
-    border-color: var(--color-border-accent-purple);
+    &.ds-label--outline { border-color: var(--color-border-accent-purple); }
   }
 
   &--pink {
     background: var(--color-surface-accent-pink);
-    color: var(--color-text-primary);
-    border-color: var(--color-border-accent-pink);
+    &.ds-label--outline { border-color: var(--color-border-accent-pink); }
   }
 
   &--disabled {
     background: var(--color-surface-disabled);
     color: var(--color-text-disabled);
-    border-color: var(--color-border-subtle);
-  }
-
-  // ── Outline modifier ───────────────────────────────────────────────────────
-  // Applied alongside a color variant: ds-label--green ds-label--outline
-
-  &--outline {
-    background: transparent;
+    &.ds-label--outline { border-color: var(--color-border-subtle); }
   }
 
   // ── Optional leading icon ──────────────────────────────────────────────────

@@ -99,11 +99,13 @@
       --ref-typescale-body-small-tracking: 0.4px;
       --ref-typescale-label-large-font: var(--ref-typeface-plain);
       --ref-typescale-label-large-weight: var(--ref-typeface-weight-medium);
+      --ref-typescale-label-large-weight-prominent: var(--ref-typeface-weight-bold);
       --ref-typescale-label-large-size: 16px;
       --ref-typescale-label-large-line-height: 16px;
       --ref-typescale-label-large-tracking: 0.1px;
       --ref-typescale-label-medium-font: var(--ref-typeface-plain);
       --ref-typescale-label-medium-weight: var(--ref-typeface-weight-medium);
+      --ref-typescale-label-medium-weight-prominent: var(--ref-typeface-weight-bold);
       --ref-typescale-label-medium-size: 14px;
       --ref-typescale-label-medium-line-height: 14px;
       --ref-typescale-label-medium-tracking: 0.25px;
@@ -1764,21 +1766,32 @@
        LABEL / TAG  (ds-label)
        Source: components/label/_label.scss
        ════════════════════════════════════════════════════════════════════════ */
-    .ds-label { display: inline-flex; align-items: center; gap: var(--spacing-xs); border-radius: var(--radius-sm); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); font-weight: var(--ref-typeface-weight-medium); white-space: nowrap; padding: 2px var(--spacing-sm); border: 1px solid transparent; vertical-align: middle; }
-    .ds-label--xs { font-size: 10px; padding: 1px var(--spacing-xs); border-radius: 4px; }
-    .ds-label--sm { padding: 2px var(--spacing-xs); }
-    .ds-label--green  { background: var(--color-surface-accent-green);  color: var(--color-text-success);      border-color: var(--color-border-accent-green); }
-    .ds-label--red    { background: var(--color-surface-accent-red);    color: var(--color-text-accent-red);    border-color: var(--color-border-accent-red); }
-    .ds-label--yellow { background: var(--color-surface-accent-yellow); color: var(--color-text-warning);      border-color: var(--color-border-accent-yellow); }
-    .ds-label--brand  { background: var(--color-surface-brand);         color: var(--color-text-brand);         border-color: var(--color-border-brand); }
-    .ds-label--blue   { background: var(--color-surface-accent-blue);   color: var(--color-text-brand);         border-color: var(--color-border-accent-blue); }
-    .ds-label--navy   { background: var(--color-surface-accent-navy);   color: var(--color-text-accent-navy);   border-color: var(--color-border-accent-navy); }
-    .ds-label--teal   { background: var(--color-surface-accent-teal);   color: var(--color-text-success);       border-color: var(--color-border-accent-teal); }
-    .ds-label--orange { background: var(--color-surface-accent-orange); color: var(--color-text-warning);      border-color: var(--color-border-accent-orange); }
-    .ds-label--purple { background: var(--color-surface-accent-purple); color: var(--color-text-primary);       border-color: var(--color-border-accent-purple); }
-    .ds-label--pink   { background: var(--color-surface-accent-pink);   color: var(--color-text-primary);       border-color: var(--color-border-accent-pink); }
-    .ds-label--disabled { background: var(--color-surface-disabled); color: var(--color-text-disabled); border-color: var(--color-border-subtle); }
-    .ds-label--outline { background: transparent; }
+    .ds-label { display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-xs); height: 42px; padding: 0 16px; border-radius: var(--radius-sm); border: 1px solid transparent; font-family: var(--ref-typescale-label-medium-font); font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typescale-label-medium-weight-prominent); line-height: var(--ref-typescale-label-medium-line-height); letter-spacing: var(--ref-typescale-label-medium-tracking); color: var(--color-text-primary); white-space: nowrap; vertical-align: middle; }
+    .ds-label--sm { height: 32px; padding: 0 12px; }
+    .ds-label--xs { height: 24px; padding: 0 10px; }
+    .ds-label--green  { background: var(--color-surface-accent-green); }
+    .ds-label--red    { background: var(--color-surface-accent-red); }
+    .ds-label--yellow { background: var(--color-surface-accent-yellow); }
+    .ds-label--brand  { background: var(--color-surface-brand); }
+    .ds-label--blue   { background: var(--color-surface-accent-blue); }
+    .ds-label--navy   { background: var(--color-surface-accent-navy); }
+    .ds-label--teal   { background: var(--color-surface-accent-teal); }
+    .ds-label--orange { background: var(--color-surface-accent-orange); }
+    .ds-label--purple { background: var(--color-surface-accent-purple); }
+    .ds-label--pink   { background: var(--color-surface-accent-pink); }
+    .ds-label--disabled { background: var(--color-surface-disabled); color: var(--color-text-disabled); }
+    .ds-label--green.ds-label--outline  { border-color: var(--color-border-accent-green); }
+    .ds-label--red.ds-label--outline    { border-color: var(--color-border-accent-red); }
+    .ds-label--yellow.ds-label--outline { border-color: var(--color-border-accent-yellow); }
+    .ds-label--brand.ds-label--outline  { border-color: var(--color-border-brand); }
+    .ds-label--blue.ds-label--outline   { border-color: var(--color-border-accent-blue); }
+    .ds-label--navy.ds-label--outline   { border-color: var(--color-border-accent-navy); }
+    .ds-label--teal.ds-label--outline   { border-color: var(--color-border-accent-teal); }
+    .ds-label--orange.ds-label--outline { border-color: var(--color-border-accent-orange); }
+    .ds-label--purple.ds-label--outline { border-color: var(--color-border-accent-purple); }
+    .ds-label--pink.ds-label--outline   { border-color: var(--color-border-accent-pink); }
+    .ds-label--disabled.ds-label--outline { border-color: var(--color-border-subtle); }
+    .ds-label__icon { font-family: 'Material Symbols Rounded'; font-size: 12px; width: 12px; height: 12px; display: flex; align-items: center; justify-content: center; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
 
     /* ════════════════════════════════════════════════════════════════════════
        SKELETON  (ds-skeleton)
@@ -1863,6 +1876,7 @@
       <a class="nav-link" href="#radio" onclick="setActive(this)"><span class="nav-dot"></span>Radio Button</a>
       <a class="nav-link" href="#toggle" onclick="setActive(this)"><span class="nav-dot"></span>Toggle</a>
       <a class="nav-link" href="#badge" onclick="setActive(this)"><span class="nav-dot"></span>Badge</a>
+      <a class="nav-link" href="#label" onclick="setActive(this)"><span class="nav-dot"></span>Label</a>
       <a class="nav-link" href="#alert" onclick="setActive(this)"><span class="nav-dot"></span>Alert</a>
       <a class="nav-link" href="#tooltip" onclick="setActive(this)"><span class="nav-dot"></span>Tooltip</a>
       <a class="nav-link" href="#select" onclick="setActive(this)"><span class="nav-dot"></span>Select</a>
@@ -3114,6 +3128,100 @@
                   <span class="ds-icon ds-icon--xs">close</span>
                 </button>
               </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Label ────────────────────────────────────────────────────────── -->
+      <hr class="divider" />
+      <section class="section" id="label">
+        <div class="section-header">
+          <h2 class="section-title">Label</h2>
+          <p class="section-desc">Display-only colored label for categorizing content. Not interactive or removable. Variants: 11 colors. Sizes: xs | sm | md. Outline modifier adds colored border. Source: <code>components/label/_label.scss</code></p>
+        </div>
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">MD — filled</div>
+            <div class="demo-row-items">
+              <span class="ds-label ds-label--green">Green</span>
+              <span class="ds-label ds-label--red">Red</span>
+              <span class="ds-label ds-label--yellow">Yellow</span>
+              <span class="ds-label ds-label--brand">Brand</span>
+              <span class="ds-label ds-label--blue">Blue</span>
+              <span class="ds-label ds-label--navy">Navy</span>
+              <span class="ds-label ds-label--teal">Teal</span>
+              <span class="ds-label ds-label--orange">Orange</span>
+              <span class="ds-label ds-label--purple">Purple</span>
+              <span class="ds-label ds-label--pink">Pink</span>
+              <span class="ds-label ds-label--disabled">Disabled</span>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">MD — outline</div>
+            <div class="demo-row-items">
+              <span class="ds-label ds-label--green ds-label--outline">Green</span>
+              <span class="ds-label ds-label--red ds-label--outline">Red</span>
+              <span class="ds-label ds-label--yellow ds-label--outline">Yellow</span>
+              <span class="ds-label ds-label--brand ds-label--outline">Brand</span>
+              <span class="ds-label ds-label--blue ds-label--outline">Blue</span>
+              <span class="ds-label ds-label--navy ds-label--outline">Navy</span>
+              <span class="ds-label ds-label--teal ds-label--outline">Teal</span>
+              <span class="ds-label ds-label--orange ds-label--outline">Orange</span>
+              <span class="ds-label ds-label--purple ds-label--outline">Purple</span>
+              <span class="ds-label ds-label--pink ds-label--outline">Pink</span>
+              <span class="ds-label ds-label--disabled ds-label--outline">Disabled</span>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">SM — filled</div>
+            <div class="demo-row-items">
+              <span class="ds-label ds-label--green ds-label--sm">Green</span>
+              <span class="ds-label ds-label--red ds-label--sm">Red</span>
+              <span class="ds-label ds-label--brand ds-label--sm">Brand</span>
+              <span class="ds-label ds-label--blue ds-label--sm">Blue</span>
+              <span class="ds-label ds-label--teal ds-label--sm">Teal</span>
+              <span class="ds-label ds-label--disabled ds-label--sm">Disabled</span>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">SM — outline</div>
+            <div class="demo-row-items">
+              <span class="ds-label ds-label--green ds-label--sm ds-label--outline">Green</span>
+              <span class="ds-label ds-label--red ds-label--sm ds-label--outline">Red</span>
+              <span class="ds-label ds-label--brand ds-label--sm ds-label--outline">Brand</span>
+              <span class="ds-label ds-label--blue ds-label--sm ds-label--outline">Blue</span>
+              <span class="ds-label ds-label--teal ds-label--sm ds-label--outline">Teal</span>
+              <span class="ds-label ds-label--disabled ds-label--sm ds-label--outline">Disabled</span>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">XS — filled</div>
+            <div class="demo-row-items">
+              <span class="ds-label ds-label--green ds-label--xs">Green</span>
+              <span class="ds-label ds-label--red ds-label--xs">Red</span>
+              <span class="ds-label ds-label--brand ds-label--xs">Brand</span>
+              <span class="ds-label ds-label--blue ds-label--xs">Blue</span>
+              <span class="ds-label ds-label--teal ds-label--xs">Teal</span>
+              <span class="ds-label ds-label--disabled ds-label--xs">Disabled</span>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">XS — outline</div>
+            <div class="demo-row-items">
+              <span class="ds-label ds-label--green ds-label--xs ds-label--outline">Green</span>
+              <span class="ds-label ds-label--red ds-label--xs ds-label--outline">Red</span>
+              <span class="ds-label ds-label--brand ds-label--xs ds-label--outline">Brand</span>
+              <span class="ds-label ds-label--blue ds-label--xs ds-label--outline">Blue</span>
+              <span class="ds-label ds-label--teal ds-label--xs ds-label--outline">Teal</span>
+              <span class="ds-label ds-label--disabled ds-label--xs ds-label--outline">Disabled</span>
             </div>
           </div>
 

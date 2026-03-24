@@ -222,6 +222,17 @@ components/{name}/
 - **ADA**: Required on all icon-only buttons; triggers on both hover and keyboard focus; `role="tooltip"` on the tooltip element
 - **Angular**: `[dsTooltip]="'text'"` directive + `dsTooltipPosition` input; Angular Material base: `MatTooltipModule` (matTooltip)
 
+### Label (`ds-label`)
+- **Variants (color)**: `green` | `red` | `yellow` | `brand` | `blue` | `navy` | `teal` | `orange` | `purple` | `pink` | `disabled`
+- **Sizes**: `xs` (24px) | `sm` (32px) | `md` (42px, default)
+- **Outline**: `ds-label--outline` adds 1px colored border; default (no modifier) = fill only, no border
+- **Heights**: fixed — 42px (md), 32px (sm), 24px (xs)
+- **Padding**: horizontal only — 16px (md), 12px (sm), 10px (xs)
+- **Typography**: `--ref-typescale-label-medium-*` (14px, `weight-prominent`=bold, 14px line-height, 0.25px tracking)
+- **Text color**: always `--color-text-primary` for all color variants; `--color-text-disabled` for disabled
+- **Display-only**: not interactive, not removable — use `ds-chip` for removable items
+- **No Angular Material base** — custom component
+
 ---
 
 ## Preview (`preview/index.html`)
