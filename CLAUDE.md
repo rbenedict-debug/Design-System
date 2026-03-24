@@ -307,6 +307,15 @@ components/{name}/
 - Every component gets: a sidebar nav link, a section with description + source path, live interactive demo rows
 - Demo row pattern: label (180px wide) + items flex row with `gap: 12px`
 
+### Table components — shared full sim
+
+Table-family components (`ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-paginator`, `ds-table-toolbar`, and any future AG Grid primitives) follow a different preview rule:
+
+- **No sim demo-row inside the individual component section.** Each component section shows only its own isolated variants (states, modifiers, etc.).
+- **One shared `#table` section** sits at the top of the table group (before `#table-header-cell`) and contains a single comprehensive full simulation: toolbar → header row → data rows → paginator.
+- **Update the `#table` sim whenever a new table component is added** — add it to the sim so the composed view stays current.
+- The `#table` nav link appears first in the table group in the sidebar.
+
 ---
 
 ## ADA / Accessibility Standards
