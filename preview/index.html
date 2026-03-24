@@ -1105,10 +1105,11 @@
       display: flex;
       align-items: center;
       gap: var(--spacing-xs);
+      height: 42px;
       background: var(--color-surface-input);
       border: 1px solid var(--color-border-input);
       border-radius: var(--radius-sm);
-      padding: var(--spacing-sm) var(--spacing-md);
+      padding: 0 var(--spacing-md);
       cursor: text;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
@@ -1146,11 +1147,6 @@
     .ds-input__prefix, .ds-input__suffix { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); color: var(--color-text-secondary); white-space: nowrap; user-select: none; flex-shrink: 0; }
 
     .ds-input__helper { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); line-height: var(--ref-typescale-label-small-line-height); color: var(--color-text-secondary); }
-
-    /* Input SM */
-    .ds-input--sm .ds-input__field { padding: 4px var(--spacing-sm); }
-    .ds-input--sm .ds-input__control { font-size: var(--ref-typescale-label-small-size); }
-    .ds-input--sm .ds-input__label { font-size: var(--ref-typescale-label-small-size); }
 
     /* Input Error */
     .ds-input.is-error .ds-input__field { border-color: var(--color-border-input-error); }
@@ -1967,7 +1963,8 @@
         <div class="section-header">
           <h2 class="section-title">Input Field</h2>
           <p class="section-desc">
-            Single-line text input with label, helper text, icons, prefix/suffix, and full state coverage.
+            Single-line text input. Always 42px tall — no size variants. For multi-line text, use the Textarea component.
+            Supports label, helper/error text, leading/trailing icons, prefix/suffix, and full state coverage.
             Use <code>class="ds-input"</code> directly, or the Angular component
             <code>&lt;ds-input label="..." [(value)]="val" /&gt;</code>.
             Source: <code>components/input/_input.scss</code>
@@ -2086,27 +2083,6 @@
                   <input id="inp-ro" class="ds-input__control" type="text" value="Enterprise" readonly />
                 </div>
                 <span class="ds-input__helper">Contact sales to change your plan.</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Small -->
-          <div class="demo-row">
-            <div class="demo-row-label">Small</div>
-            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
-              <div class="ds-input ds-input--sm" style="width:200px;">
-                <label class="ds-input__label" for="inp-sm">Filter</label>
-                <div class="ds-input__field">
-                  <span class="ds-icon ds-icon--xs ds-input__icon" aria-hidden="true">search</span>
-                  <input id="inp-sm" class="ds-input__control" type="search" placeholder="Filter results..." />
-                </div>
-              </div>
-              <div class="ds-input ds-input--sm is-error" style="width:200px;">
-                <label class="ds-input__label" for="inp-sm-err">Code</label>
-                <div class="ds-input__field">
-                  <input id="inp-sm-err" class="ds-input__control" type="text" value="INVALID" aria-invalid="true" />
-                </div>
-                <span class="ds-input__helper" role="alert">Invalid promo code.</span>
               </div>
             </div>
           </div>

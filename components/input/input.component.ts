@@ -10,8 +10,6 @@ export type DsInputType =
   | 'tel'
   | 'url';
 
-export type DsInputSize = 'sm' | 'md';
-
 /**
  * Onflo Design System — Input Field
  *
@@ -69,9 +67,6 @@ export class DsInputComponent {
   /** Current value. Use [(value)] for two-way binding. */
   @Input() value = '';
 
-  /** Size scale. Default: 'md' */
-  @Input() size: DsInputSize = 'md';
-
   /** Material Symbols icon name for the leading (left) icon. */
   @Input() leadingIcon = '';
 
@@ -108,7 +103,6 @@ export class DsInputComponent {
   get wrapperClasses(): string {
     return [
       'ds-input',
-      this.size === 'sm' ? 'ds-input--sm' : '',
       this.isError ? 'is-error' : '',
       this.disabled ? 'is-disabled' : '',
       this.readOnly ? 'is-readonly' : '',
