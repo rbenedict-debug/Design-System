@@ -1,0 +1,157 @@
+// Onflo Design System — Table Header Cell
+// Figma: primitive/table-header-cell
+// AG Grid custom header renderer — used inside component/table-header-row
+// Height: 56px fixed
+
+$cell-height: 56px;
+$resize-handle-width: 16px;
+$resize-bar-width: 2px;
+$resize-bar-height: 14px;
+$icon-btn-size: 32px;
+
+.ds-table-header-cell {
+  display: flex;
+  align-items: center;
+  height: $cell-height;
+  width: 100%;
+  background: var(--color-surface-subtle);
+  border-bottom: 1px solid var(--color-border-secondary);
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+
+  // ── Resize handles ────────────────────────────────────────────
+  &__resize-handle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: $resize-handle-width;
+    height: 100%;
+    flex-shrink: 0;
+
+    &--trailing {
+      justify-content: center;
+      align-items: flex-end;
+    }
+  }
+
+  &__resize-bar {
+    width: $resize-bar-width;
+    height: $resize-bar-height;
+    background: var(--color-border-primary);
+    border-radius: 1px;
+  }
+
+  // ── Content slot (label, checkbox, icon, sort) ────────────────
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex: 1 0 0;
+    min-width: 0;
+    height: 100%;
+
+    &--right {
+      justify-content: flex-end;
+    }
+  }
+
+  // ── Label text ────────────────────────────────────────────────
+  &__label {
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+  }
+
+  // ── Checkbox slot ─────────────────────────────────────────────
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    cursor: pointer;
+
+    .ds-icon {
+      color: var(--color-border-input);
+    }
+
+    &--checked .ds-icon,
+    &--indeterminate .ds-icon {
+      color: var(--color-surface-brand-bold);
+    }
+  }
+
+  // ── Trailing actions (menu, filter, right pipe) ───────────────
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: $resize-handle-width;
+    height: 100%;
+    flex-shrink: 0;
+  }
+
+  // ── Small icon button (sort / filter / menu) ──────────────────
+  &__icon-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $icon-btn-size;
+    height: $icon-btn-size;
+    padding: var(--spacing-xs);
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    flex-shrink: 0;
+    color: var(--color-icon-subtle);
+    transition: color 120ms ease;
+
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-sm);
+      pointer-events: none;
+      opacity: 0;
+      background: var(--overlay-hovered);
+      transition: opacity 120ms ease;
+    }
+
+    &:hover::after  { opacity: 1; }
+    &:active::after { background: var(--overlay-pressed); opacity: 1; }
+
+    // Sort states
+    &--sort-asc  { color: var(--color-icon-brand); }
+    &--sort-desc { color: var(--color-icon-brand); }
+    &--sort-none { color: var(--color-icon-subtle); opacity: 0.5; }
+
+    // Descending — flip the upward arrow
+    &--sort-desc .ds-icon {
+      transform: rotate(180deg);
+      display: inline-block;
+    }
+
+    &--active { color: var(--color-icon-brand); }
+
+    .ds-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

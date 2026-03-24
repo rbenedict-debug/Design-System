@@ -48,6 +48,7 @@ components/
   label/                   # ds-label (display-only tag)
   skeleton/                # ds-skeleton
   search/                  # ds-search
+  table/                   # ds-table-header-cell (AG Grid custom header renderer)
 preview/
   index.html               # Self-contained visual token + component reference
 ```
@@ -231,6 +232,20 @@ components/{name}/
 - **Typography**: `--ref-typescale-label-medium-*` (14px, `weight-prominent`=bold, 14px line-height, 0.25px tracking)
 - **Text color**: always `--color-text-primary` for all color variants; `--color-text-disabled` for disabled
 - **Display-only**: not interactive, not removable — use `ds-chip` for removable items
+- **No Angular Material base** — custom component
+
+### Table Header Cell (`ds-table-header-cell`)
+- **Primitive** — internal component used inside `component/table-header-row`. AG Grid custom header renderer.
+- **Height: 56px — fixed**
+- **Background**: `--color-surface-subtle`; **border-bottom**: 1px `--color-border-secondary`
+- **Properties**: `align` (left/right), `sorting`, `filtering`, `menuControl`, `checkbox`, `pipeLeft`, `pipeRight`
+- **Label typography**: `--ref-typescale-label-medium-*`, weight-prominent (bold), truncated with ellipsis
+- **Resize bar**: 2px × 14px, `--color-border-primary`, inside 16px handle container on each side
+- **Icon buttons** (sort / filter / menu): 32×32px, ghost style, `--radius-sm`, hover `--overlay-hovered`
+- **Sort button**: `arrow_upward_alt` icon — `--sort-asc` = brand color, `--sort-desc` = brand color + rotate(180°), `--sort-none` = subtle + opacity 0.5
+- **Checkbox** (select-all): `check_box_outline_blank` | `check_box` (filled, brand) | `indeterminate_check_box` (filled, brand)
+- **Right align**: `ds-table-header-cell__content--right` applies `justify-content: flex-end`
+- **AG Grid**: implements `IHeaderAngularComp` — receives `agInit(params)`, `refresh(params)`, cleans up `sortChanged` listener
 - **No Angular Material base** — custom component
 
 ---
