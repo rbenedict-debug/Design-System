@@ -2,26 +2,37 @@
 // Onflo Design System — Checkbox Component
 // ============================================================
 //
+// Based on Angular Material mat-checkbox.
+// Import MatCheckboxModule in your Angular module.
+//
+// Figma: primitive/checkbox — 42×42px touch target with 24px
+// Material Symbols Rounded icon. Circular state layer for
+// hover/pressed/focus overlays.
+//
 // Usage (HTML class API):
 //   <label class="ds-checkbox">
 //     <input type="checkbox" class="ds-checkbox__control" />
-//     <span class="ds-checkbox__box"></span>
+//     <span class="ds-checkbox__touch">
+//       <span class="ds-checkbox__box"></span>
+//     </span>
 //     <span class="ds-checkbox__label">Label</span>
 //   </label>
 //
 // Angular component:
 //   <ds-checkbox label="Remember me" [(checked)]="remember" />
+//   <ds-checkbox label="Select all" [indeterminate]="someSelected" [(checked)]="allSelected" />
+//   <ds-checkbox label="Accept terms" [isError]="true" />
 //
-// States:    unchecked, checked, indeterminate, .is-error, :disabled
+// ADA: aria-checked="mixed" for indeterminate; visible label required.
+//      Focus ring on __touch (box-shadow, keyboard only via :focus-visible).
 // ============================================================
 
 .ds-checkbox {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
   cursor: pointer;
   user-select: none;
-  position: relative;
 
   // Hide native control but keep it accessible
   &__control {
@@ -32,77 +43,82 @@
     pointer-events: none;
   }
 
-  // Custom box
-  &__box {
+
+  // ── Touch target / state layer ──────────────────────────────────────────────
+  // 42×42px circle — hover/pressed/focus overlay lives here
+
+  &__touch {
     flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-    border-radius: var(--radius-sm);
-    border: 1.5px solid var(--color-border-input);
-    background: var(--color-surface-input);
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition:
-      background-color 0.15s ease,
-      border-color 0.15s ease,
-      box-shadow 0.15s ease;
-    position: relative;
-    overflow: hidden;
-
-    // Checkmark SVG (hidden by default)
-    &::after {
-      content: '';
-      display: block;
-      width: 10px;
-      height: 7px;
-      background: transparent;
-      // Checkmark via clip-path / border trick
-      border-left: 2px solid var(--color-text-on-brand);
-      border-bottom: 2px solid var(--color-text-on-brand);
-      transform: rotate(-45deg) translate(1px, -1px);
-      opacity: 0;
-      transition: opacity 0.1s ease;
-    }
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
   }
 
   // Hover
-  &:hover:not(.is-disabled) &__box {
-    border-color: var(--color-border-input-hover);
+  &:hover:not(.is-disabled) &__touch {
+    background: var(--overlay-hovered);
   }
 
-  // Focus ring when native control is focused
-  &__control:focus-visible ~ &__box {
-    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-    border-color: var(--color-border-input-active);
+  // Pressed
+  &:active:not(.is-disabled) &__touch {
+    background: var(--overlay-pressed);
   }
 
-  // Checked state
-  &__control:checked ~ &__box {
-    background: var(--color-surface-brand-bold);
-    border-color: var(--color-surface-brand-bold);
+  // Focus ring (keyboard only)
+  &__control:focus         { outline: none; }
+  &__control:focus-visible ~ &__touch {
+    background: var(--overlay-pressed);
+    box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring);
+  }
+
+
+  // ── Checkbox icon ───────────────────────────────────────────────────────────
+  // 24×24px Material Symbols Rounded character
+  // Unselected: check_box_outline_blank
+  // Checked:    check_box (filled)
+  // Indeterminate: indeterminate_check_box (filled)
+
+  &__box {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 
     &::after {
-      opacity: 1;
+      content: 'check_box_outline_blank';
+      font-family: 'Material Symbols Rounded';
+      font-size: 24px;
+      font-style: normal;
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      color: var(--color-border-input);
+      transition: color 0.15s ease;
     }
   }
 
-  // Indeterminate state
-  &__control:indeterminate ~ &__box {
-    background: var(--color-surface-brand-bold);
-    border-color: var(--color-surface-brand-bold);
-
-    &::after {
-      width: 10px;
-      height: 0;
-      border-left: none;
-      border-bottom: 2px solid var(--color-text-on-brand);
-      transform: none;
-      opacity: 1;
-    }
+  // Checked — filled blue icon
+  &__control:checked ~ &__touch &__box::after {
+    content: 'check_box';
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    color: var(--color-surface-brand-bold);
   }
 
-  // Label
+  // Indeterminate — filled dash icon
+  &__control:indeterminate ~ &__touch &__box::after {
+    content: 'indeterminate_check_box';
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    color: var(--color-surface-brand-bold);
+  }
+
+
+  // ── Label ───────────────────────────────────────────────────────────────────
+
   &__label {
     font-family: var(--ref-typeface-brand);
     font-size: var(--ref-typescale-label-medium-size);
@@ -112,45 +128,50 @@
   }
 
 
-  // ── Error state ───────────────────────────────────────────────────────────
+  // ── Error state ─────────────────────────────────────────────────────────────
 
   &.is-error {
-    .ds-checkbox__box {
-      border-color: var(--color-border-input-error);
+    .ds-checkbox__box::after {
+      color: var(--color-border-input-error);
     }
 
     .ds-checkbox__label {
       color: var(--color-text-error);
     }
 
-    .ds-checkbox__control:checked ~ .ds-checkbox__box,
-    .ds-checkbox__control:indeterminate ~ .ds-checkbox__box {
-      background: var(--color-surface-accent-red-bold);
-      border-color: var(--color-surface-accent-red-bold);
+    // Error hover — red overlay
+    &:hover:not(.is-disabled) .ds-checkbox__touch {
+      background: var(--overlay-accent-red-hovered);
+    }
+
+    // Error pressed — red overlay
+    &:active:not(.is-disabled) .ds-checkbox__touch {
+      background: var(--overlay-accent-red-pressed);
+    }
+
+    // Error focus ring
+    .ds-checkbox__control:focus-visible ~ .ds-checkbox__touch {
+      background: var(--overlay-accent-red-pressed);
+      box-shadow: 0 0 0 2px var(--color-border-input-error);
+    }
+
+    // Error checked / indeterminate — red icon
+    .ds-checkbox__control:checked ~ .ds-checkbox__touch .ds-checkbox__box::after,
+    .ds-checkbox__control:indeterminate ~ .ds-checkbox__touch .ds-checkbox__box::after {
+      color: var(--color-surface-accent-red-bold);
     }
   }
 
 
-  // ── Disabled state ────────────────────────────────────────────────────────
+  // ── Disabled state ───────────────────────────────────────────────────────────
 
   &.is-disabled,
   &:has(.ds-checkbox__control:disabled) {
     cursor: not-allowed;
     pointer-events: none;
 
-    .ds-checkbox__box {
-      background: var(--color-surface-disabled);
-      border-color: var(--color-border-subtle);
-    }
-
-    .ds-checkbox__control:checked ~ .ds-checkbox__box,
-    .ds-checkbox__control:indeterminate ~ .ds-checkbox__box {
-      background: var(--color-surface-disabled);
-      border-color: var(--color-border-subtle);
-
-      &::after {
-        border-color: var(--color-icon-disabled);
-      }
+    .ds-checkbox__box::after {
+      color: var(--color-icon-disabled);
     }
 
     .ds-checkbox__label {

@@ -1173,65 +1173,32 @@
        Source: components/checkbox/_checkbox.scss
        ════════════════════════════════════════════════════════════════════════ */
 
-    .ds-checkbox {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-      cursor: pointer;
-      user-select: none;
-      position: relative;
-    }
-    .ds-checkbox__control {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
-      pointer-events: none;
-    }
-    .ds-checkbox__box {
-      flex-shrink: 0;
-      width: 18px;
-      height: 18px;
-      border-radius: var(--radius-sm);
-      border: 1.5px solid var(--color-border-input);
-      background: var(--color-surface-input);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .ds-checkbox__box::after {
-      content: '';
-      display: block;
-      width: 10px;
-      height: 7px;
-      border-left: 2px solid var(--color-text-on-brand);
-      border-bottom: 2px solid var(--color-text-on-brand);
-      transform: rotate(-45deg) translate(1px, -1px);
-      opacity: 0;
-      transition: opacity 0.1s ease;
-    }
-    .ds-checkbox:hover:not(.is-disabled) .ds-checkbox__box { border-color: var(--color-border-input-hover); }
-    .ds-checkbox__control:focus-visible ~ .ds-checkbox__box { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); border-color: var(--color-border-input-active); }
-    .ds-checkbox__control:checked ~ .ds-checkbox__box { background: var(--color-surface-brand-bold); border-color: var(--color-surface-brand-bold); }
-    .ds-checkbox__control:checked ~ .ds-checkbox__box::after { opacity: 1; }
-    .ds-checkbox__control:indeterminate ~ .ds-checkbox__box { background: var(--color-surface-brand-bold); border-color: var(--color-surface-brand-bold); }
-    .ds-checkbox__control:indeterminate ~ .ds-checkbox__box::after { width: 10px; height: 0; border-left: none; border-bottom: 2px solid var(--color-text-on-brand); transform: none; opacity: 1; }
+    /* Figma: primitive/checkbox — 42×42px touch target, 24px Material Symbol icon */
+    .ds-checkbox { display: inline-flex; align-items: center; gap: var(--spacing-xs); cursor: pointer; user-select: none; }
+    .ds-checkbox__control { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+    /* Touch target — 42×42px circular state layer */
+    .ds-checkbox__touch { flex-shrink: 0; width: 42px; height: 42px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; transition: background-color 0.15s ease, box-shadow 0.15s ease; }
+    .ds-checkbox:hover:not(.is-disabled) .ds-checkbox__touch { background: var(--overlay-hovered); }
+    .ds-checkbox:active:not(.is-disabled) .ds-checkbox__touch { background: var(--overlay-pressed); }
+    .ds-checkbox__control:focus { outline: none; }
+    .ds-checkbox__control:focus-visible ~ .ds-checkbox__touch { background: var(--overlay-pressed); box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+    /* Checkbox icon — 24×24px Material Symbol */
+    .ds-checkbox__box { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; position: relative; }
+    .ds-checkbox__box::after { content: 'check_box_outline_blank'; font-family: 'Material Symbols Rounded'; font-size: 24px; font-style: normal; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; line-height: 1; color: var(--color-border-input); transition: color 0.15s ease; }
+    .ds-checkbox__control:checked ~ .ds-checkbox__touch .ds-checkbox__box::after { content: 'check_box'; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; color: var(--color-surface-brand-bold); }
+    .ds-checkbox__control:indeterminate ~ .ds-checkbox__touch .ds-checkbox__box::after { content: 'indeterminate_check_box'; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; color: var(--color-surface-brand-bold); }
     .ds-checkbox__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-regular); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-primary); }
     /* Error */
-    .ds-checkbox.is-error .ds-checkbox__box { border-color: var(--color-border-input-error); }
+    .ds-checkbox.is-error .ds-checkbox__box::after { color: var(--color-border-input-error); }
     .ds-checkbox.is-error .ds-checkbox__label { color: var(--color-text-error); }
-    .ds-checkbox.is-error .ds-checkbox__control:checked ~ .ds-checkbox__box,
-    .ds-checkbox.is-error .ds-checkbox__control:indeterminate ~ .ds-checkbox__box { background: var(--color-surface-accent-red-bold); border-color: var(--color-surface-accent-red-bold); }
+    .ds-checkbox.is-error:hover:not(.is-disabled) .ds-checkbox__touch { background: var(--overlay-accent-red-hovered); }
+    .ds-checkbox.is-error:active:not(.is-disabled) .ds-checkbox__touch { background: var(--overlay-accent-red-pressed); }
+    .ds-checkbox.is-error .ds-checkbox__control:focus-visible ~ .ds-checkbox__touch { background: var(--overlay-accent-red-pressed); box-shadow: 0 0 0 2px var(--color-border-input-error); }
+    .ds-checkbox.is-error .ds-checkbox__control:checked ~ .ds-checkbox__touch .ds-checkbox__box::after,
+    .ds-checkbox.is-error .ds-checkbox__control:indeterminate ~ .ds-checkbox__touch .ds-checkbox__box::after { color: var(--color-surface-accent-red-bold); }
     /* Disabled */
     .ds-checkbox.is-disabled { cursor: not-allowed; pointer-events: none; }
-    .ds-checkbox.is-disabled .ds-checkbox__box { background: var(--color-surface-disabled); border-color: var(--color-border-subtle); }
-    .ds-checkbox.is-disabled .ds-checkbox__control:checked ~ .ds-checkbox__box,
-    .ds-checkbox.is-disabled .ds-checkbox__control:indeterminate ~ .ds-checkbox__box { background: var(--color-surface-disabled); border-color: var(--color-border-subtle); }
-    .ds-checkbox.is-disabled .ds-checkbox__control:checked ~ .ds-checkbox__box::after,
-    .ds-checkbox.is-disabled .ds-checkbox__control:indeterminate ~ .ds-checkbox__box::after { border-color: var(--color-icon-disabled); }
+    .ds-checkbox.is-disabled .ds-checkbox__box::after { color: var(--color-icon-disabled); }
     .ds-checkbox.is-disabled .ds-checkbox__label { color: var(--color-text-disabled); }
 
 
@@ -2770,12 +2737,12 @@
             <div class="demo-row-items">
               <label class="ds-checkbox">
                 <input type="checkbox" class="ds-checkbox__control" />
-                <span class="ds-checkbox__box"></span>
+                <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
                 <span class="ds-checkbox__label">Default label</span>
               </label>
               <label class="ds-checkbox">
                 <input type="checkbox" class="ds-checkbox__control" />
-                <span class="ds-checkbox__box"></span>
+                <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
               </label>
             </div>
           </div>
@@ -2785,12 +2752,12 @@
             <div class="demo-row-items">
               <label class="ds-checkbox">
                 <input type="checkbox" class="ds-checkbox__control" checked />
-                <span class="ds-checkbox__box"></span>
+                <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
                 <span class="ds-checkbox__label">Selected option</span>
               </label>
               <label class="ds-checkbox">
                 <input type="checkbox" class="ds-checkbox__control" checked />
-                <span class="ds-checkbox__box"></span>
+                <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
               </label>
             </div>
           </div>
@@ -2799,8 +2766,8 @@
             <div class="demo-row-label">Indeterminate</div>
             <div class="demo-row-items">
               <label class="ds-checkbox" id="indeterminate-demo">
-                <input type="checkbox" class="ds-checkbox__control" id="chk-indet" />
-                <span class="ds-checkbox__box"></span>
+                <input type="checkbox" class="ds-checkbox__control" id="chk-indet" aria-checked="mixed" />
+                <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
                 <span class="ds-checkbox__label">Select all (partial)</span>
               </label>
             </div>
@@ -2811,12 +2778,12 @@
             <div class="demo-row-items">
               <label class="ds-checkbox is-error">
                 <input type="checkbox" class="ds-checkbox__control" />
-                <span class="ds-checkbox__box"></span>
+                <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
                 <span class="ds-checkbox__label">Accept terms (required)</span>
               </label>
               <label class="ds-checkbox is-error">
                 <input type="checkbox" class="ds-checkbox__control" checked />
-                <span class="ds-checkbox__box"></span>
+                <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
                 <span class="ds-checkbox__label">Checked + error</span>
               </label>
             </div>
@@ -2827,12 +2794,12 @@
             <div class="demo-row-items">
               <label class="ds-checkbox is-disabled">
                 <input type="checkbox" class="ds-checkbox__control" disabled />
-                <span class="ds-checkbox__box"></span>
+                <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
                 <span class="ds-checkbox__label">Disabled unchecked</span>
               </label>
               <label class="ds-checkbox is-disabled">
                 <input type="checkbox" class="ds-checkbox__control" disabled checked />
-                <span class="ds-checkbox__box"></span>
+                <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
                 <span class="ds-checkbox__label">Disabled checked</span>
               </label>
             </div>

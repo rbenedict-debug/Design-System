@@ -165,6 +165,23 @@ components/{name}/
 - States: default, hover, focus, error (`.is-error`), disabled (`.is-disabled`), read-only (`.is-readonly`)
 - ADA: `aria-invalid="true"` on `<input>` when error; `role="alert"` on error message; `aria-describedby` links input to helper
 
+### Checkbox (`ds-checkbox`)
+- **Touch target**: 42×42px circle (`__touch` wrapper) — matches ADA touch target minimum
+- **Visual icon**: 24×24px Material Symbols Rounded via `::after` on `__box`
+  - Unchecked: `check_box_outline_blank` FILL=0, colour `--color-border-input`
+  - Checked: `check_box` FILL=1, colour `--color-surface-brand-bold`
+  - Indeterminate: `indeterminate_check_box` FILL=1, colour `--color-surface-brand-bold`
+  - Error unchecked: colour `--color-border-input-error`
+  - Error checked/indeterminate: colour `--color-surface-accent-red-bold`
+  - Disabled: colour `--color-icon-disabled`
+- **State layer** (`__touch`): hover=`--overlay-hovered`, pressed=`--overlay-pressed`
+- **Error state layer**: hover=`--overlay-accent-red-hovered`, pressed=`--overlay-accent-red-pressed`
+- **Focus**: `box-shadow: 0 0 0 2px --color-border-ada-focus-ring` on `__touch` (keyboard only)
+- **Error focus**: `box-shadow: 0 0 0 2px --color-border-input-error` on `__touch`
+- **ADA**: `aria-checked="mixed"` for indeterminate state; must have a visible label
+- **Gap**: `var(--spacing-xs)` — touch target provides visual padding
+- Angular Material base: `MatCheckboxModule`
+
 ### Toggle / Switch (`ds-toggle`)
 - **Track**: 52×32px, `padding: var(--spacing-xs)` (4px), radius-full
 - **Off track**: `--color-surface-default` (light grey, no border)

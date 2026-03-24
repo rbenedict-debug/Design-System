@@ -6,9 +6,12 @@
     [checked]="checked"
     [indeterminate]="indeterminate"
     [disabled]="disabled"
+    [attr.aria-checked]="indeterminate ? 'mixed' : checked"
     (change)="onChange($event)"
   />
-  <span class="ds-checkbox__box"></span>
+  <span class="ds-checkbox__touch">
+    <span class="ds-checkbox__box"></span>
+  </span>
   <span *ngIf="label" class="ds-checkbox__label">{{ label }}</span>
   <ng-content></ng-content>
 </label>
