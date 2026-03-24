@@ -198,10 +198,15 @@ components/{name}/
 All components must meet WCAG 2.1 AA. These rules are non-negotiable.
 
 ### Focus ring
-- **Always** use `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` on `:focus-visible`
-- **Never** use `outline` — it cannot be styled consistently across browsers
-- **Never** use `border-color` as a substitute — borders affect layout and are inconsistent
-- `overflow: hidden` on an element does NOT clip its own `box-shadow` (only a parent's overflow clips a child's shadow), so `box-shadow` focus rings are always safe regardless of the element's own overflow
+- **Always** use `:focus-visible` (not `:focus`) for the visible focus ring — `:focus-visible` only activates during keyboard navigation, never on mouse clicks. This is correct ADA behaviour.
+- The two-rule pattern every interactive element must follow:
+  ```scss
+  &:focus         { outline: none; }           // suppress browser default on ALL focus
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); } // keyboard only
+  ```
+- **Never** use `outline` as the focus indicator — it cannot be styled consistently across browsers
+- **Never** use `border-color` as a substitute for the focus ring — borders affect layout and are inconsistent
+- `overflow: hidden` on an element does NOT clip its own `box-shadow` (only a parent's `overflow: hidden` clips a child's shadow), so `box-shadow` focus rings are safe on any element regardless of its own overflow setting
 
 ### Roles and ARIA
 - Buttons that open/close: `aria-expanded`

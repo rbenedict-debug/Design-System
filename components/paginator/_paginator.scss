@@ -75,7 +75,8 @@
     background-position: right 6px center;
     min-width: 64px;
 
-    &:focus { outline: none; box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     &:hover { border-color: var(--color-border-input-hover); }
   }
 
