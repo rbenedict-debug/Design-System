@@ -1,0 +1,15 @@
+<button
+  [class]="buttonClasses"
+  [disabled]="disabled"
+  [type]="type"
+  (click)="handleClick($event)"
+>
+  <!-- Leading icon slot: <svg slot="icon-leading" ...> -->
+  <ng-content select="[slot='icon-leading']"></ng-content>
+
+  <!-- Button label -->
+  <ng-content></ng-content>
+
+  <!-- Trailing icon slot: <svg slot="icon-trailing" ...> -->
+  <ng-content select="[slot='icon-trailing']"></ng-content>
+</button>

@@ -816,6 +816,144 @@
       border-top: 1px solid var(--color-border-subtle);
       margin: 60px 0;
     }
+
+    /* ── Component demo shell ────────────────────────────────────────────────── */
+
+    .component-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .demo-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .demo-row:last-child { border-bottom: none; }
+
+    .demo-row-label {
+      width: 180px;
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .demo-row-items {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .demo-divider {
+      width: 1px;
+      height: 28px;
+      background: var(--color-border-subtle);
+      margin: 0 4px;
+    }
+
+
+    /* ════════════════════════════════════════════════════════════════════════
+       BUTTON  (ds-button)
+       Source: components/button/_button.scss
+       ════════════════════════════════════════════════════════════════════════ */
+
+    .ds-button {
+      appearance: none;
+      -webkit-appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-xs);
+      white-space: nowrap;
+      flex-shrink: 0;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif;
+      font-size: var(--ref-typescale-label-medium-size);
+      font-weight: var(--ref-typeface-weight-medium);
+      line-height: var(--ref-typescale-label-medium-line-height);
+      letter-spacing: var(--ref-typescale-label-medium-tracking);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .ds-button:focus { outline: none; }
+    .ds-button::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      pointer-events: none;
+      transition: background 0.1s ease;
+    }
+    .ds-button__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+    }
+    .ds-button__icon svg { width: 100%; height: 100%; }
+
+    /* Sizes */
+    .ds-button--xs { font-size: var(--ref-typescale-label-small-size); padding: 2px var(--spacing-sm); gap: 2px; border-radius: 4px; }
+    .ds-button--xs .ds-button__icon { width: 12px; height: 12px; }
+    .ds-button--sm { padding: 6px var(--spacing-md); }
+    .ds-button--sm .ds-button__icon { width: 14px; height: 14px; }
+    .ds-button--lg { font-size: var(--ref-typescale-label-large-size); padding: var(--spacing-md) var(--spacing-xl); }
+    .ds-button--lg .ds-button__icon { width: 18px; height: 18px; }
+
+    /* Filled */
+    .ds-button--filled { background: var(--color-surface-brand-bold); color: var(--color-text-on-brand); }
+    .ds-button--filled:hover:not(:disabled)::after { background: var(--overlay-hovered); }
+    .ds-button--filled:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-button--filled:focus-visible::after { background: var(--overlay-focused); }
+    .ds-button--filled:active:not(:disabled)::after { background: var(--overlay-pressed); }
+
+    /* Outlined */
+    .ds-button--outlined { background: transparent; color: var(--color-text-brand); border-color: var(--color-border-brand); }
+    .ds-button--outlined:hover:not(:disabled) { background: var(--overlay-hovered); border-color: var(--color-border-input-hover); }
+    .ds-button--outlined:focus-visible { background: var(--overlay-focused); border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-button--outlined:active:not(:disabled) { background: var(--overlay-pressed); border-color: var(--color-border-active); }
+
+    /* Text */
+    .ds-button--text { background: transparent; color: var(--color-text-brand); border-color: transparent; padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+    .ds-button--text:hover:not(:disabled) { background: var(--overlay-hovered); }
+    .ds-button--text:focus-visible { background: var(--overlay-focused); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-button--text:active:not(:disabled) { background: var(--overlay-pressed); }
+
+    /* Destructive */
+    .ds-button--destructive { background: var(--color-surface-accent-red-bold); color: var(--color-text-on-bold); }
+    .ds-button--destructive:hover:not(:disabled)::after { background: var(--overlay-accent-red-hovered); }
+    .ds-button--destructive:focus-visible { box-shadow: 0 0 0 3px var(--color-border-accent-red); }
+    .ds-button--destructive:focus-visible::after { background: var(--overlay-accent-red-focused); }
+    .ds-button--destructive:active:not(:disabled)::after { background: var(--overlay-accent-red-pressed); }
+
+    /* Destructive Outlined */
+    .ds-button--destructive-outlined { background: transparent; color: var(--color-text-accent-red); border-color: var(--color-border-accent-red); }
+    .ds-button--destructive-outlined:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); }
+    .ds-button--destructive-outlined:focus-visible { background: var(--overlay-accent-red-focused); box-shadow: 0 0 0 3px var(--color-border-accent-red); }
+    .ds-button--destructive-outlined:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
+
+    /* Disabled */
+    .ds-button:disabled { cursor: not-allowed; }
+    .ds-button:disabled::after { background: transparent !important; }
+    .ds-button--filled:disabled,
+    .ds-button--destructive:disabled { background: var(--color-surface-disabled); color: var(--color-text-disabled); border-color: transparent; }
+    .ds-button--outlined:disabled,
+    .ds-button--destructive-outlined:disabled { background: transparent; color: var(--color-text-disabled); border-color: var(--color-border-subtle); }
+    .ds-button--text:disabled { background: transparent; color: var(--color-text-disabled); border-color: transparent; }
   </style>
 </head>
 <body>
@@ -849,12 +987,12 @@
       <a class="nav-link" href="#icons" onclick="setActive(this)"><span class="nav-dot"></span>Icons</a>
 
       <div class="nav-section-label" style="margin-top:8px;">Components</div>
-      <a class="nav-link" href="#components" onclick="setActive(this)"><span class="nav-dot"></span>Coming Soon</a>
+      <a class="nav-link" href="#button" onclick="setActive(this)"><span class="nav-dot"></span>Button</a>
     </nav>
 
     <div class="sidebar-footer">
-      Step 1 of 2 — Tokens<br/>
-      v0.1.0 · Angular + .NET Core
+      Step 2 — Components<br/>
+      v0.2.0 · Angular + .NET Core
     </div>
   </aside>
 
@@ -1320,18 +1458,102 @@
 
       <hr class="divider" />
 
-      <!-- ── Components (coming soon) ────────────────────────────────────── -->
-      <section class="section" id="components">
+      <!-- ── Button ────────────────────────────────────────────────────────── -->
+      <section class="section" id="button">
         <div class="section-header">
-          <h2 class="section-title">Components</h2>
+          <h2 class="section-title">Button</h2>
           <p class="section-desc">
-            Angular components built on these tokens. Buttons, inputs, cards, navigation, modals, and more.
+            Five variants covering every action context. All interactive states (hover, focus, pressed, disabled)
+            are token-driven. Use <code>class="ds-button ds-button--filled"</code> directly, or the
+            Angular component <code>&lt;ds-button variant="filled"&gt;</code>.
+            Source: <code>components/button/_button.scss</code>
           </p>
         </div>
-        <div class="coming-soon">
-          <div class="coming-soon-icon">⬡</div>
-          <h3>Step 2 — Coming Soon</h3>
-          <p>Components will be added to this repo and will appear here automatically. Each component will show usage, variants, and copy-paste Angular code.</p>
+
+        <div class="component-demo">
+
+          <!-- Filled -->
+          <div class="demo-row">
+            <div class="demo-row-label">Filled</div>
+            <div class="demo-row-items">
+              <button class="ds-button ds-button--filled">Button</button>
+              <button class="ds-button ds-button--filled">
+                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
+                With icon
+              </button>
+              <button class="ds-button ds-button--filled">
+                Save changes
+                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </button>
+              <div class="demo-divider"></div>
+              <button class="ds-button ds-button--filled" disabled>Disabled</button>
+            </div>
+          </div>
+
+          <!-- Outlined -->
+          <div class="demo-row">
+            <div class="demo-row-label">Outlined</div>
+            <div class="demo-row-items">
+              <button class="ds-button ds-button--outlined">Button</button>
+              <button class="ds-button ds-button--outlined">
+                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
+                With icon
+              </button>
+              <button class="ds-button ds-button--outlined">
+                Export
+                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </button>
+              <div class="demo-divider"></div>
+              <button class="ds-button ds-button--outlined" disabled>Disabled</button>
+            </div>
+          </div>
+
+          <!-- Text -->
+          <div class="demo-row">
+            <div class="demo-row-label">Text</div>
+            <div class="demo-row-items">
+              <button class="ds-button ds-button--text">Button</button>
+              <button class="ds-button ds-button--text">
+                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
+                With icon
+              </button>
+              <button class="ds-button ds-button--text">
+                Learn more
+                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </button>
+              <div class="demo-divider"></div>
+              <button class="ds-button ds-button--text" disabled>Disabled</button>
+            </div>
+          </div>
+
+          <!-- Destructive -->
+          <div class="demo-row">
+            <div class="demo-row-label">Destructive</div>
+            <div class="demo-row-items">
+              <button class="ds-button ds-button--destructive">Delete</button>
+              <button class="ds-button ds-button--destructive">
+                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 4h10M6 4V3h4v1M5 4v8a1 1 0 001 1h4a1 1 0 001-1V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                Delete item
+              </button>
+              <div class="demo-divider"></div>
+              <button class="ds-button ds-button--destructive" disabled>Disabled</button>
+            </div>
+          </div>
+
+          <!-- Destructive Outlined -->
+          <div class="demo-row">
+            <div class="demo-row-label">Destr. Outlined</div>
+            <div class="demo-row-items">
+              <button class="ds-button ds-button--destructive-outlined">Remove</button>
+              <button class="ds-button ds-button--destructive-outlined">
+                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 4h10M6 4V3h4v1M5 4v8a1 1 0 001 1h4a1 1 0 001-1V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                Remove item
+              </button>
+              <div class="demo-divider"></div>
+              <button class="ds-button ds-button--destructive-outlined" disabled>Disabled</button>
+            </div>
+          </div>
+
         </div>
       </section>
 
