@@ -1,0 +1,255 @@
+// ============================================================
+// Onflo Design System — Icon Button Component
+// ============================================================
+//
+// Usage (SCSS):
+//   @use '@onflo/design-system/components/icon-button/icon-button';
+//
+// Usage (HTML class API):
+//   <button class="ds-icon-button ds-icon-button--icon" aria-label="Search">
+//     <svg>...</svg>
+//   </button>
+//
+// Angular component:
+//   <ds-icon-button variant="icon" ariaLabel="Search">
+//     <svg>...</svg>
+//   </ds-icon-button>
+//
+// Variants:  icon (ghost) | filled | outlined | monogram
+// Sizes:     sm (32px) | md (40px, default)
+// States:    default, :hover, :focus-visible, :active, .is-error, :disabled
+//
+// ⚠️  ADA: Always include aria-label — icon buttons have no visible text.
+//
+// ── Icon Button Toggle ──────────────────────────────────────────────────────
+//
+// Add .ds-icon-button-toggle to the same element for toggle behaviour.
+// Use [aria-pressed="true"] or .is-selected to reflect selected state.
+//
+// Toggle variants:  icon | filled | outlined | outlined-letter
+//
+// Angular component:
+//   <ds-icon-button-toggle variant="outlined" [(selected)]="isSaved">
+//     <svg>...</svg>
+//   </ds-icon-button-toggle>
+//
+// ============================================================
+
+
+// ── Icon Button — Base ─────────────────────────────────────────────────────
+
+.ds-icon-button {
+  // Reset
+  appearance: none;
+  -webkit-appearance: none;
+
+  // Layout — always a fixed square, centred content
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  // Shape (MD default — circle)
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  padding: 0;
+
+  // Interaction
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:focus { outline: none; }
+
+  // Overlay layer for hover/pressed tints on filled surfaces
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    pointer-events: none;
+    transition: background 0.1s ease;
+  }
+
+  // SVG icon (direct child or wrapped)
+  > svg,
+  .ds-icon-button__icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  // Monogram / letter label
+  .ds-icon-button__label {
+    font-family: var(--ref-typeface-brand);
+    font-size: 14px;
+    font-weight: var(--ref-typeface-weight-medium);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+  }
+
+
+  // ── Sizes ──────────────────────────────────────────────────────────────────
+
+  &--sm {
+    width: 32px;
+    height: 32px;
+
+    > svg,
+    .ds-icon-button__icon { width: 16px; height: 16px; }
+    .ds-icon-button__label { font-size: 12px; }
+  }
+
+
+  // ── Variants ───────────────────────────────────────────────────────────────
+
+  // Ghost — no background, default icon colour
+  &--icon {
+    background: transparent;
+    color: var(--color-icon-default);
+
+    &:hover:not(:disabled)  { background: var(--overlay-hovered); }
+    &:focus-visible          { background: var(--overlay-focused); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:active:not(:disabled) { background: var(--overlay-pressed); }
+
+    &.is-error { color: var(--color-icon-error); }
+  }
+
+  // Filled — solid brand circle, white icon
+  &--filled {
+    background: var(--color-surface-brand-bold);
+    color: var(--color-icon-on-brand);
+
+    &:hover:not(:disabled)::after        { background: var(--overlay-hovered); }
+    &:focus-visible                       { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:focus-visible::after                { background: var(--overlay-focused); }
+    &:active:not(:disabled)::after        { background: var(--overlay-pressed); }
+
+    &.is-error {
+      background: var(--color-surface-accent-red-bold);
+      color: var(--color-icon-on-brand);
+    }
+  }
+
+  // Outlined — brand border + brand icon
+  &--outlined {
+    background: transparent;
+    color: var(--color-icon-brand);
+    border-color: var(--color-border-brand);
+
+    &:hover:not(:disabled)  { background: var(--overlay-hovered);  border-color: var(--color-border-input-hover); }
+    &:focus-visible          { background: var(--overlay-focused);  border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:active:not(:disabled) { background: var(--overlay-pressed);  border-color: var(--color-border-active); }
+
+    &.is-error {
+      color: var(--color-icon-error);
+      border-color: var(--color-border-accent-red);
+    }
+  }
+
+  // Monogram — soft brand bg for user initials / avatar-style
+  &--monogram {
+    background: var(--color-surface-brand);
+    color: var(--color-text-brand);
+
+    &:hover:not(:disabled)::after        { background: var(--overlay-hovered); }
+    &:focus-visible                       { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:focus-visible::after                { background: var(--overlay-focused); }
+    &:active:not(:disabled)::after        { background: var(--overlay-pressed); }
+
+    &.is-error {
+      background: var(--color-surface-accent-red);
+      color: var(--color-icon-error);
+    }
+  }
+
+
+  // ── Disabled (overrides all variants) ──────────────────────────────────────
+
+  &:disabled {
+    cursor: not-allowed;
+    &::after { background: transparent !important; }
+  }
+
+  &--icon:disabled     { background: transparent;                   color: var(--color-icon-disabled); }
+  &--filled:disabled   { background: var(--color-surface-disabled); color: var(--color-icon-disabled); border-color: transparent; }
+  &--outlined:disabled { background: transparent;                   color: var(--color-icon-disabled); border-color: var(--color-border-subtle); }
+  &--monogram:disabled { background: var(--color-surface-disabled); color: var(--color-icon-disabled); }
+}
+
+
+// ── Icon Button Toggle ──────────────────────────────────────────────────────
+//
+// Extends .ds-icon-button. Unselected = muted/neutral. Selected = branded.
+// Always pair with aria-pressed for accessibility.
+
+.ds-icon-button-toggle {
+
+  // Ghost toggle — transparent → soft brand on select
+  &.ds-icon-button--icon {
+    color: var(--color-icon-subtle);
+
+    &.is-selected,
+    &[aria-pressed="true"] {
+      background: var(--color-surface-brand);
+      color: var(--color-icon-brand);
+    }
+  }
+
+  // Filled toggle — soft brand → bold brand on select
+  &.ds-icon-button--filled {
+    background: var(--color-surface-brand);
+    color: var(--color-icon-brand);
+
+    &.is-selected,
+    &[aria-pressed="true"] {
+      background: var(--color-surface-brand-bold);
+      color: var(--color-icon-on-brand);
+    }
+  }
+
+  // Outlined toggle — subtle border → brand border on select
+  &.ds-icon-button--outlined {
+    color: var(--color-icon-subtle);
+    border-color: var(--color-border-secondary);
+
+    &.is-selected,
+    &[aria-pressed="true"] {
+      background: var(--color-surface-brand);
+      color: var(--color-icon-brand);
+      border-color: var(--color-border-active);
+    }
+  }
+
+  // Outlined Letter toggle — subtle → solid brand on select
+  &.ds-icon-button--outlined-letter {
+    color: var(--color-icon-subtle);
+    border-color: var(--color-border-secondary);
+
+    &.is-selected,
+    &[aria-pressed="true"] {
+      background: var(--color-surface-brand-bold);
+      color: var(--color-icon-on-brand);
+      border-color: transparent;
+    }
+  }
+
+  // Disabled selected — same as regular disabled regardless of state
+  &:disabled {
+    &.is-selected,
+    &[aria-pressed="true"] {
+      background: var(--color-surface-disabled);
+      color: var(--color-icon-disabled);
+      border-color: transparent;
+    }
+  }
+}

@@ -1,0 +1,11 @@
+<button
+  [class]="buttonClasses"
+  [disabled]="disabled"
+  [type]="type"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-pressed]="selected"
+  (click)="handleClick($event)"
+>
+  <!-- Icon slot: <svg> or <ds-icon> goes here -->
+  <ng-content></ng-content>
+</button>

@@ -1,0 +1,9 @@
+// The ds-icon-button styles are defined globally in _icon-button.scss.
+// Import that file in your project's global styles:
+//   @use '@onflo/design-system/components/icon-button/icon-button';
+//
+// This file is intentionally minimal — the component relies on
+// the global class API so the styles apply whether you use the
+// Angular component (<ds-icon-button>) or the class directly
+// (<button class="ds-icon-button ds-icon-button--filled">).
+@use 'icon-button';
