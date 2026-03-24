@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet" />
 <!-- ONFLO-TOKENS:START -->
   <style>
     /* ── Onflo Design Tokens — inlined for self-contained preview ──────────── */
@@ -1061,6 +1062,114 @@
 
     .ds-icon-button-toggle:disabled.is-selected,
     .ds-icon-button-toggle:disabled[aria-pressed="true"] { background: var(--color-surface-disabled); color: var(--color-icon-disabled); border-color: transparent; }
+
+
+    /* ════════════════════════════════════════════════════════════════════════
+       ICON  (ds-icon — Material Symbols Rounded)
+       Source: components/icon/_icon.scss
+       ════════════════════════════════════════════════════════════════════════ */
+
+    .ds-icon {
+      font-family: 'Material Symbols Rounded';
+      font-weight: normal;
+      font-style: normal;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      line-height: 1;
+      flex-shrink: 0;
+      user-select: none;
+      pointer-events: none;
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .ds-icon--filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .ds-icon--xs { font-size: 16px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    .ds-icon--xs.ds-icon--filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    .ds-icon--sm { font-size: 20px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    .ds-icon--sm.ds-icon--filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    .ds-icon--lg { font-size: 32px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48; }
+    .ds-icon--lg.ds-icon--filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48; }
+
+
+    /* ════════════════════════════════════════════════════════════════════════
+       INPUT FIELD  (ds-input)
+       Source: components/input/_input.scss
+       ════════════════════════════════════════════════════════════════════════ */
+
+    .ds-input { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+    .ds-input__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-medium); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-secondary); user-select: none; }
+    .ds-input__required { color: var(--color-text-error); margin-left: 2px; }
+
+    .ds-input__field {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      background: var(--color-surface-input);
+      border: 1px solid var(--color-border-input);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-sm) var(--spacing-md);
+      cursor: text;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .ds-input__field:hover { border-color: var(--color-border-input-hover); }
+    .ds-input:focus-within .ds-input__field { border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+    .ds-input__control {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif;
+      font-size: var(--ref-typescale-label-medium-size);
+      font-weight: var(--ref-typeface-weight-regular);
+      line-height: var(--ref-typescale-label-medium-line-height);
+      color: var(--color-text-primary);
+      caret-color: var(--color-border-input-active);
+    }
+    .ds-input__control::placeholder { color: var(--color-text-placeholder); }
+
+    .ds-input__icon { color: var(--color-icon-subtle); flex-shrink: 0; pointer-events: none; }
+
+    .ds-input__action {
+      appearance: none; border: none; background: transparent;
+      padding: 2px; margin: -2px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--color-icon-subtle); border-radius: var(--radius-sm); flex-shrink: 0;
+      transition: color 0.1s ease;
+    }
+    .ds-input__action:hover { color: var(--color-icon-default); }
+    .ds-input__action:focus { outline: none; }
+    .ds-input__action:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+
+    .ds-input__prefix, .ds-input__suffix { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); color: var(--color-text-secondary); white-space: nowrap; user-select: none; flex-shrink: 0; }
+
+    .ds-input__helper { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); line-height: var(--ref-typescale-label-small-line-height); color: var(--color-text-secondary); }
+
+    /* Input SM */
+    .ds-input--sm .ds-input__field { padding: 4px var(--spacing-sm); }
+    .ds-input--sm .ds-input__control { font-size: var(--ref-typescale-label-small-size); }
+    .ds-input--sm .ds-input__label { font-size: var(--ref-typescale-label-small-size); }
+
+    /* Input Error */
+    .ds-input.is-error .ds-input__field { border-color: var(--color-border-input-error); }
+    .ds-input.is-error .ds-input__icon { color: var(--color-icon-error); }
+    .ds-input.is-error .ds-input__label { color: var(--color-text-error); }
+    .ds-input.is-error .ds-input__helper { color: var(--color-text-error); }
+    .ds-input.is-error:focus-within .ds-input__field { border-color: var(--color-border-input-error); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+    /* Input Disabled */
+    .ds-input.is-disabled { pointer-events: none; }
+    .ds-input.is-disabled .ds-input__field { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
+    .ds-input.is-disabled .ds-input__label,
+    .ds-input.is-disabled .ds-input__control,
+    .ds-input.is-disabled .ds-input__icon,
+    .ds-input.is-disabled .ds-input__helper { color: var(--color-text-disabled); }
+
+    /* Input Read-only */
+    .ds-input.is-readonly .ds-input__field { background: var(--color-surface-default); border-color: var(--color-border-subtle); cursor: default; }
+    .ds-input.is-readonly .ds-input__control { cursor: default; color: var(--color-text-secondary); }
   </style>
 </head>
 <body>
@@ -1096,6 +1205,7 @@
       <div class="nav-section-label" style="margin-top:8px;">Components</div>
       <a class="nav-link" href="#button" onclick="setActive(this)"><span class="nav-dot"></span>Button</a>
       <a class="nav-link" href="#icon-button" onclick="setActive(this)"><span class="nav-dot"></span>Icon Button</a>
+      <a class="nav-link" href="#input" onclick="setActive(this)"><span class="nav-dot"></span>Input Field</a>
     </nav>
 
     <div class="sidebar-footer">
@@ -1686,20 +1796,20 @@
             <div class="demo-row-label">Ghost</div>
             <div class="demo-row-items">
               <button class="ds-icon-button ds-icon-button--icon" aria-label="Search">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.75"/><path d="M13 13l3 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--sm">search</span>
               </button>
               <button class="ds-icon-button ds-icon-button--icon" aria-label="Edit">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 4.5l2 2-9 9H4.5v-2l9-9z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>
+                <span class="ds-icon ds-icon--sm">edit</span>
               </button>
               <button class="ds-icon-button ds-icon-button--icon" aria-label="More options">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="5" r="1.25" fill="currentColor"/><circle cx="10" cy="10" r="1.25" fill="currentColor"/><circle cx="10" cy="15" r="1.25" fill="currentColor"/></svg>
+                <span class="ds-icon ds-icon--sm">more_vert</span>
               </button>
               <div class="demo-divider"></div>
               <button class="ds-icon-button ds-icon-button--icon is-error" aria-label="Alert">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.75"/><path d="M10 7v4M10 13.5v.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--sm">error</span>
               </button>
               <button class="ds-icon-button ds-icon-button--icon" aria-label="Disabled" disabled>
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.75"/><path d="M13 13l3 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--sm">search</span>
               </button>
             </div>
           </div>
@@ -1709,20 +1819,20 @@
             <div class="demo-row-label">Filled</div>
             <div class="demo-row-items">
               <button class="ds-icon-button ds-icon-button--filled" aria-label="Add">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--sm ds-icon--filled">add</span>
               </button>
               <button class="ds-icon-button ds-icon-button--filled" aria-label="Send">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10l12-6-6 12-2-4-4-2z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>
+                <span class="ds-icon ds-icon--sm ds-icon--filled">send</span>
               </button>
               <button class="ds-icon-button ds-icon-button--filled" aria-label="Check">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 10l4 4 6-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="ds-icon ds-icon--sm ds-icon--filled">check</span>
               </button>
               <div class="demo-divider"></div>
               <button class="ds-icon-button ds-icon-button--filled is-error" aria-label="Error alert">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.75"/><path d="M10 7v4M10 13.5v.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--sm ds-icon--filled">error</span>
               </button>
               <button class="ds-icon-button ds-icon-button--filled" aria-label="Disabled" disabled>
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--sm ds-icon--filled">add</span>
               </button>
             </div>
           </div>
@@ -1732,20 +1842,20 @@
             <div class="demo-row-label">Outlined</div>
             <div class="demo-row-items">
               <button class="ds-icon-button ds-icon-button--outlined" aria-label="Filter">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5h14M6 10h8M9 15h2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--sm">filter_list</span>
               </button>
               <button class="ds-icon-button ds-icon-button--outlined" aria-label="Download">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4v9M7 10l3 3 3-3M5 15h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="ds-icon ds-icon--sm">download</span>
               </button>
               <button class="ds-icon-button ds-icon-button--outlined" aria-label="Share">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="5" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="15" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 9l6-3M7 11l6 3" stroke="currentColor" stroke-width="1.5"/></svg>
+                <span class="ds-icon ds-icon--sm">share</span>
               </button>
               <div class="demo-divider"></div>
               <button class="ds-icon-button ds-icon-button--outlined is-error" aria-label="Error">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.75"/><path d="M10 7v4M10 13.5v.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--sm">error</span>
               </button>
               <button class="ds-icon-button ds-icon-button--outlined" aria-label="Disabled" disabled>
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5h14M6 10h8M9 15h2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--sm">filter_list</span>
               </button>
             </div>
           </div>
@@ -1775,13 +1885,13 @@
             <div class="demo-row-label">Small (32px)</div>
             <div class="demo-row-items">
               <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Search">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.75"/><path d="M13 13l3 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--xs">search</span>
               </button>
               <button class="ds-icon-button ds-icon-button--filled ds-icon-button--sm" aria-label="Add">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--xs ds-icon--filled">add</span>
               </button>
               <button class="ds-icon-button ds-icon-button--outlined ds-icon-button--sm" aria-label="Filter">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5h14M6 10h8M9 15h2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+                <span class="ds-icon ds-icon--xs">filter_list</span>
               </button>
               <button class="ds-icon-button ds-icon-button--monogram ds-icon-button--sm" aria-label="RB">
                 <span class="ds-icon-button__label">RB</span>
@@ -1794,13 +1904,13 @@
             <div class="demo-row-label">Toggle Ghost</div>
             <div class="demo-row-items">
               <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--icon" aria-label="Bookmark" aria-pressed="false" onclick="togglePressed(this)">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3h10v14l-5-3.5L5 17V3z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>
+                <span class="ds-icon ds-icon--sm">bookmark</span>
               </button>
               <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--icon is-selected" aria-label="Bookmarked" aria-pressed="true" onclick="togglePressed(this)">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 3h10v14l-5-3.5L5 17V3z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>
+                <span class="ds-icon ds-icon--sm ds-icon--filled">bookmark</span>
               </button>
-              <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--icon" aria-label="Star" aria-pressed="false" onclick="togglePressed(this)" disabled>
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 3l2 5h5l-4 3 1.5 5L10 13l-4.5 3L7 11 3 8h5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--icon" aria-label="Star" aria-pressed="false" disabled>
+                <span class="ds-icon ds-icon--sm">star</span>
               </button>
             </div>
           </div>
@@ -1810,10 +1920,10 @@
             <div class="demo-row-label">Toggle Filled</div>
             <div class="demo-row-items">
               <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--filled" aria-label="Like" aria-pressed="false" onclick="togglePressed(this)">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 16s-7-4.5-7-8.5C3 5 5 3.5 7 4c1.1.3 2.3 1 3 2 .7-1 1.9-1.7 3-2 2-.5 4 1 4 3.5 0 4-7 8.5-7 8.5z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>
+                <span class="ds-icon ds-icon--sm">favorite</span>
               </button>
               <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--filled is-selected" aria-label="Liked" aria-pressed="true" onclick="togglePressed(this)">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 16s-7-4.5-7-8.5C3 5 5 3.5 7 4c1.1.3 2.3 1 3 2 .7-1 1.9-1.7 3-2 2-.5 4 1 4 3.5 0 4-7 8.5-7 8.5z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>
+                <span class="ds-icon ds-icon--sm ds-icon--filled">favorite</span>
               </button>
             </div>
           </div>
@@ -1823,10 +1933,10 @@
             <div class="demo-row-label">Toggle Outlined</div>
             <div class="demo-row-items">
               <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" aria-label="Pin" aria-pressed="false" onclick="togglePressed(this)">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 3l1.5 6H16l-4.5 3 1.5 5L10 14l-3 3 1.5-5L4 9h4.5L10 3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                <span class="ds-icon ds-icon--sm">push_pin</span>
               </button>
               <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined is-selected" aria-label="Pinned" aria-pressed="true" onclick="togglePressed(this)">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 3l1.5 6H16l-4.5 3 1.5 5L10 14l-3 3 1.5-5L4 9h4.5L10 3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                <span class="ds-icon ds-icon--sm ds-icon--filled">push_pin</span>
               </button>
             </div>
           </div>
@@ -1844,6 +1954,160 @@
               <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined-letter" aria-label="Underline" aria-pressed="false" onclick="togglePressed(this)">
                 <span class="ds-icon-button__label">U</span>
               </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- ── Input Field ───────────────────────────────────────────────────── -->
+      <section class="section" id="input">
+        <div class="section-header">
+          <h2 class="section-title">Input Field</h2>
+          <p class="section-desc">
+            Single-line text input with label, helper text, icons, prefix/suffix, and full state coverage.
+            Use <code>class="ds-input"</code> directly, or the Angular component
+            <code>&lt;ds-input label="..." [(value)]="val" /&gt;</code>.
+            Source: <code>components/input/_input.scss</code>
+          </p>
+        </div>
+
+        <div class="component-demo">
+
+          <!-- Default -->
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-input" style="width:220px;">
+                <label class="ds-input__label" for="inp-default">Full name</label>
+                <div class="ds-input__field">
+                  <input id="inp-default" class="ds-input__control" type="text" placeholder="Jane Smith" />
+                </div>
+              </div>
+              <div class="ds-input" style="width:220px;">
+                <label class="ds-input__label" for="inp-value">Email</label>
+                <div class="ds-input__field">
+                  <input id="inp-value" class="ds-input__control" type="email" value="jane@onflo.com" />
+                </div>
+                <span class="ds-input__helper">We'll never share your email.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- With Icons -->
+          <div class="demo-row">
+            <div class="demo-row-label">With Icons</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-input" style="width:220px;">
+                <label class="ds-input__label" for="inp-search">Search</label>
+                <div class="ds-input__field">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                  <input id="inp-search" class="ds-input__control" type="search" placeholder="Search..." />
+                  <button class="ds-input__action" type="button" aria-label="Clear search">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+                  </button>
+                </div>
+              </div>
+              <div class="ds-input" style="width:220px;">
+                <label class="ds-input__label" for="inp-pass">Password</label>
+                <div class="ds-input__field">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">lock</span>
+                  <input id="inp-pass" class="ds-input__control" type="password" placeholder="••••••••" />
+                  <button class="ds-input__action" type="button" aria-label="Show password">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">visibility</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prefix / Suffix -->
+          <div class="demo-row">
+            <div class="demo-row-label">Prefix / Suffix</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-input" style="width:200px;">
+                <label class="ds-input__label" for="inp-prefix">Amount</label>
+                <div class="ds-input__field">
+                  <span class="ds-input__prefix">$</span>
+                  <input id="inp-prefix" class="ds-input__control" type="number" placeholder="0.00" />
+                  <span class="ds-input__suffix">USD</span>
+                </div>
+              </div>
+              <div class="ds-input" style="width:200px;">
+                <label class="ds-input__label" for="inp-url">Website</label>
+                <div class="ds-input__field">
+                  <span class="ds-input__prefix">https://</span>
+                  <input id="inp-url" class="ds-input__control" type="text" placeholder="example.com" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div class="demo-row">
+            <div class="demo-row-label">Error</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-input is-error" style="width:220px;">
+                <label class="ds-input__label" for="inp-err">Email</label>
+                <div class="ds-input__field">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">mail</span>
+                  <input id="inp-err" class="ds-input__control" type="email" value="not-an-email" aria-invalid="true" />
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">error</span>
+                </div>
+                <span class="ds-input__helper" role="alert">Enter a valid email address.</span>
+              </div>
+              <div class="ds-input is-error" style="width:220px;">
+                <label class="ds-input__label" for="inp-err2">Username<span class="ds-input__required" aria-hidden="true">*</span></label>
+                <div class="ds-input__field">
+                  <input id="inp-err2" class="ds-input__control" type="text" placeholder="username" aria-invalid="true" />
+                </div>
+                <span class="ds-input__helper" role="alert">Username is required.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Disabled / Read-only -->
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled / Read-only</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-input is-disabled" style="width:220px;">
+                <label class="ds-input__label" for="inp-dis">Account ID</label>
+                <div class="ds-input__field">
+                  <input id="inp-dis" class="ds-input__control" type="text" value="ACC-00821" disabled />
+                </div>
+                <span class="ds-input__helper">This field cannot be changed.</span>
+              </div>
+              <div class="ds-input is-readonly" style="width:220px;">
+                <label class="ds-input__label" for="inp-ro">Plan</label>
+                <div class="ds-input__field">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">workspace_premium</span>
+                  <input id="inp-ro" class="ds-input__control" type="text" value="Enterprise" readonly />
+                </div>
+                <span class="ds-input__helper">Contact sales to change your plan.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Small -->
+          <div class="demo-row">
+            <div class="demo-row-label">Small</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-input ds-input--sm" style="width:200px;">
+                <label class="ds-input__label" for="inp-sm">Filter</label>
+                <div class="ds-input__field">
+                  <span class="ds-icon ds-icon--xs ds-input__icon" aria-hidden="true">search</span>
+                  <input id="inp-sm" class="ds-input__control" type="search" placeholder="Filter results..." />
+                </div>
+              </div>
+              <div class="ds-input ds-input--sm is-error" style="width:200px;">
+                <label class="ds-input__label" for="inp-sm-err">Code</label>
+                <div class="ds-input__field">
+                  <input id="inp-sm-err" class="ds-input__control" type="text" value="INVALID" aria-invalid="true" />
+                </div>
+                <span class="ds-input__helper" role="alert">Invalid promo code.</span>
+              </div>
             </div>
           </div>
 
