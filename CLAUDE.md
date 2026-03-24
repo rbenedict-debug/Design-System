@@ -48,7 +48,7 @@ components/
   label/                   # ds-label (display-only tag)
   skeleton/                # ds-skeleton
   search/                  # ds-search
-  table/                   # ds-table-header-cell (AG Grid custom header renderer)
+  table/                   # ds-table-header-cell + ds-table-row-cell (AG Grid custom renderers)
 preview/
   index.html               # Self-contained visual token + component reference
 ```
@@ -246,6 +246,21 @@ components/{name}/
 - **Checkbox** (select-all): `check_box_outline_blank` | `check_box` (filled, brand) | `indeterminate_check_box` (filled, brand)
 - **Right align**: `ds-table-header-cell__content--right` applies `justify-content: flex-end`
 - **AG Grid**: implements `IHeaderAngularComp` — receives `agInit(params)`, `refresh(params)`, cleans up `sortChanged` listener
+- **No Angular Material base** — custom component
+
+### Table Row Cell (`ds-table-row-cell`)
+- **Primitive** — internal component used inside `component/table-row`. AG Grid custom cell renderer.
+- **Height: 56px — fixed**
+- **Padding**: `16px` horizontal (not resize handles — different from header cell)
+- **Border-bottom**: 1px `--color-border-subtle` (lighter than header's `--color-border-secondary`)
+- **States**: Default (transparent) | Hover (`.is-hovered` → `--overlay-hovered`) | Focus (`.is-focused` → `--overlay-focused`)
+- **Properties**: `align` (left/right), `cellData`, `gripper`, `checkbox`, `tier1Indent` (32px), `tier2Indent` (64px)
+- **Cell data typography**: `--ref-typescale-body-medium-*`, regular weight (400), 14px, 20px line-height, truncated with ellipsis
+- **Left align**: `__data` has `flex: 1 0 0` (fills space). **Right align**: `__data--right` + `__content--right` (justify-end + shrink)
+- **Gripper**: 32×32px ghost button, `drag_indicator` icon, cursor `grab` / `grabbing`
+- **Checkbox**: same icon pattern as header checkbox — `check_box_outline_blank` / `check_box` / `indeterminate_check_box`
+- **Tier indents**: `__indent--tier1` = 32px spacer, `__indent--tier2` = 64px spacer (for tree/grouped row hierarchy)
+- **AG Grid**: implements `ICellRendererAngularComp` — `agInit(params)`, `refresh(params)`, syncs `checked` via `rowSelected` event
 - **No Angular Material base** — custom component
 
 ---

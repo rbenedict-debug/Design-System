@@ -1,0 +1,156 @@
+/**
+ * Onflo Design System — Table Row Cell
+ *
+ * AG Grid custom cell renderer for the Onflo table system.
+ * Uses Onflo tokens and Material Symbols — no AG Grid default styles.
+ *
+ * AG Grid usage (in your column def):
+ *   {
+ *     field: 'name',
+ *     cellRenderer: DsTableRowCellComponent
+ *   }
+ *
+ * Standalone usage:
+ *   <ds-table-row-cell [value]="'Acme Corp'" />
+ *   <ds-table-row-cell [value]="'$4,200'" align="right" />
+ *
+ * Figma: primitive/table-row-cell
+ * Properties: align, cellData, gripper, checkbox, tier1Indent, tier2Indent, state
+ * Used inside: component/table-row
+ *
+ * ADA: role="gridcell"; aria-selected on row selection; keyboard-accessible edit cells.
+ */
+
+import {
+  Component, Input, ChangeDetectionStrategy,
+  ChangeDetectorRef, HostBinding, OnDestroy,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+export type TableCellAlign = 'left' | 'right';
+export type TableCellState = 'default' | 'hover' | 'focus';
+
+/** Minimal interface for AG Grid cell renderer params. */
+export interface AgCellRendererParams {
+  value: unknown;
+  node: {
+    isSelected(): boolean;
+    addEventListener(event: string, listener: () => void): void;
+    removeEventListener(event: string, listener: () => void): void;
+  };
+  colDef?: {
+    cellRendererParams?: Partial<DsTableRowCellComponent>;
+  };
+}
+
+@Component({
+  selector: 'ds-table-row-cell',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './table-row-cell.component.html',
+  styleUrls: ['./table-row-cell.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    'role': 'gridcell',
+  },
+})
+export class DsTableRowCellComponent implements OnDestroy {
+
+  /** Cell value text. Overridden by agInit params.value. */
+  @Input() value: string | null = null;
+
+  /** Text alignment of cell content. */
+  @Input() align: TableCellAlign = 'left';
+
+  /** Whether to render cell data text (can be false for action-only cells). */
+  @Input() cellData = true;
+
+  /** Show row drag gripper handle. */
+  @Input() gripper = false;
+
+  /** Show row selection checkbox. */
+  @Input() checkbox = false;
+
+  /** Checked state for the selection checkbox. */
+  @Input() checked = false;
+
+  /** Indeterminate state for the selection checkbox. */
+  @Input() indeterminate = false;
+
+  /** Apply 32px tier-1 indent (for tree/grouped rows, depth 1). */
+  @Input() tier1Indent = false;
+
+  /** Apply 64px tier-2 indent (for tree/grouped rows, depth 2). */
+  @Input() tier2Indent = false;
+
+  /** Visual interaction state — typically driven by AG Grid row events. */
+  @Input() state: TableCellState = 'default';
+
+  @HostBinding('class.is-hovered') get isHovered() { return this.state === 'hover'; }
+  @HostBinding('class.is-focused') get isFocused() { return this.state === 'focus'; }
+
+  private agParams?: AgCellRendererParams;
+  private rowSelectedListener?: () => void;
+
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  // ── AG Grid ICellRendererAngularComp interface ──────────────
+
+  /** Called by AG Grid when this component is the cellRenderer. */
+  agInit(params: AgCellRendererParams): void {
+    this.agParams = params;
+    this.applyParams(params);
+
+    // Sync checked state when row selection changes
+    this.rowSelectedListener = () => {
+      this.checked = params.node.isSelected();
+      this.cdr.markForCheck();
+    };
+    params.node.addEventListener('rowSelected', this.rowSelectedListener);
+  }
+
+  /** Called by AG Grid when the cell value changes. */
+  refresh(params: AgCellRendererParams): boolean {
+    this.applyParams(params);
+    this.cdr.markForCheck();
+    return true;
+  }
+
+  ngOnDestroy(): void {
+    if (this.agParams && this.rowSelectedListener) {
+      this.agParams.node.removeEventListener('rowSelected', this.rowSelectedListener);
+    }
+  }
+
+  private applyParams(params: AgCellRendererParams): void {
+    this.value = params.value != null ? String(params.value) : null;
+    this.checked = params.node.isSelected();
+    // Merge any extra params from colDef.cellRendererParams
+    const extra = params.colDef?.cellRendererParams ?? {};
+    if (extra.align)       this.align = extra.align;
+    if (extra.gripper)     this.gripper = extra.gripper;
+    if (extra.checkbox)    this.checkbox = extra.checkbox;
+    if (extra.tier1Indent) this.tier1Indent = extra.tier1Indent;
+    if (extra.tier2Indent) this.tier2Indent = extra.tier2Indent;
+  }
+
+  // ── Checkbox helpers ─────────────────────────────────────────
+
+  get checkboxIcon(): string {
+    if (this.indeterminate) return 'indeterminate_check_box';
+    if (this.checked)       return 'check_box';
+    return 'check_box_outline_blank';
+  }
+
+  get checkboxClass(): string {
+    return (this.checked || this.indeterminate)
+      ? 'ds-table-row-cell__checkbox--checked'
+      : '';
+  }
+
+  // ── Display value ────────────────────────────────────────────
+
+  get displayValue(): string {
+    return this.value ?? '';
+  }
+}

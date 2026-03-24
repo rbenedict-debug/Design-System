@@ -1,0 +1,141 @@
+// Onflo Design System — Table Row Cell
+// Figma: primitive/table-row-cell
+// AG Grid custom cell renderer — used inside component/table-row
+// Height: 56px fixed
+
+$cell-height: 56px;
+$cell-padding: 16px;   // --spacing-lg
+$gripper-size: 32px;
+$checkbox-size: 42px;
+$tier1-indent: 32px;
+$tier2-indent: 64px;
+
+.ds-table-row-cell {
+  display: flex;
+  align-items: center;
+  height: $cell-height;
+  width: 100%;
+  padding: 0 $cell-padding;
+  border-bottom: 1px solid var(--color-border-subtle);
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  background: transparent;
+  transition: background 80ms ease;
+
+  // ── Interactive states ────────────────────────────────────────
+  &.is-hovered {
+    background: var(--overlay-hovered);
+  }
+
+  &.is-focused {
+    background: var(--overlay-focused);
+  }
+
+  // ── Content slot ──────────────────────────────────────────────
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex: 1 0 0;
+    min-width: 0;
+    height: 100%;
+
+    &--right {
+      justify-content: flex-end;
+    }
+  }
+
+  // ── Indent spacers (for tree / grouped rows) ──────────────────
+  &__indent--tier1 {
+    width: $tier1-indent;
+    flex-shrink: 0;
+  }
+
+  &__indent--tier2 {
+    width: $tier2-indent;
+    flex-shrink: 0;
+  }
+
+  // ── Gripper (row drag handle) ─────────────────────────────────
+  &__gripper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $gripper-size;
+    height: $gripper-size;
+    padding: var(--spacing-xs);
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    cursor: grab;
+    flex-shrink: 0;
+    color: var(--color-icon-subtle);
+
+    &:active { cursor: grabbing; }
+
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-sm);
+      pointer-events: none;
+      opacity: 0;
+      background: var(--overlay-hovered);
+      transition: opacity 120ms ease;
+    }
+
+    &:hover::after  { opacity: 1; }
+    &:active::after { background: var(--overlay-pressed); opacity: 1; }
+
+    .ds-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  // ── Checkbox slot ─────────────────────────────────────────────
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $checkbox-size;
+    height: $checkbox-size;
+    flex-shrink: 0;
+    cursor: pointer;
+
+    .ds-icon {
+      color: var(--color-border-input);
+    }
+
+    &--checked .ds-icon,
+    &--indeterminate .ds-icon {
+      color: var(--color-surface-brand-bold);
+    }
+  }
+
+  // ── Cell data text ────────────────────────────────────────────
+  &__data {
+    font-family: var(--ref-typescale-body-medium-font);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typescale-body-medium-weight);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // Left: fills remaining space; Right: shrink-0 handled by modifier
+    flex: 1 0 0;
+    min-width: 0;
+
+    &--right {
+      flex: 0 1 auto;
+    }
+  }
+}

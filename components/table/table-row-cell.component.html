@@ -1,0 +1,44 @@
+<div
+  class="ds-table-row-cell"
+  [class.is-hovered]="state === 'hover'"
+  [class.is-focused]="state === 'focus'"
+>
+  <div
+    class="ds-table-row-cell__content"
+    [class.ds-table-row-cell__content--right]="align === 'right'"
+  >
+    <!-- Tier indent spacers (tree / grouped rows) -->
+    <span *ngIf="tier1Indent" class="ds-table-row-cell__indent--tier1" aria-hidden="true"></span>
+    <span *ngIf="tier2Indent" class="ds-table-row-cell__indent--tier2" aria-hidden="true"></span>
+
+    <!-- Row drag gripper -->
+    <button
+      *ngIf="gripper"
+      type="button"
+      class="ds-table-row-cell__gripper"
+      aria-label="Drag to reorder row"
+    >
+      <span class="ds-icon">drag_indicator</span>
+    </button>
+
+    <!-- Row selection checkbox -->
+    <div
+      *ngIf="checkbox"
+      class="ds-table-row-cell__checkbox"
+      [class]="checkboxClass"
+    >
+      <span
+        class="ds-icon"
+        [class.ds-icon--filled]="checked || indeterminate"
+      >{{ checkboxIcon }}</span>
+    </div>
+
+    <!-- Cell data text -->
+    <span
+      *ngIf="cellData"
+      class="ds-table-row-cell__data"
+      [class.ds-table-row-cell__data--right]="align === 'right'"
+    >{{ displayValue }}</span>
+
+  </div>
+</div>
