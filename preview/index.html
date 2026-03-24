@@ -1790,6 +1790,27 @@
     .ds-skeleton__rect { border-radius: var(--radius-md); width: 100%; height: 120px; }
     .ds-skeleton__rect--sm { height: 64px; }
     .ds-skeleton__rect--lg { height: 200px; }
+
+    /* ── SEARCH FIELD  (ds-search) ─────────────────────────────────────────── */
+    .ds-search { display: flex; flex-direction: column; }
+    .ds-search__field { display: flex; align-items: center; height: 42px; background: var(--color-surface-input); border: 1px solid var(--color-border-input); border-radius: var(--radius-sm); overflow: hidden; cursor: text; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+    .ds-search__field:hover { border-color: var(--color-border-input-hover); }
+    .ds-search:focus-within .ds-search__field { border-color: var(--color-border-input-active); }
+    .ds-search:has(:focus-visible) .ds-search__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-search__search-btn { appearance: none; border: none; background: transparent; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; flex-shrink: 0; color: var(--color-icon-subtle); pointer-events: none; cursor: text; }
+    .ds-search__control { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-body-medium-size); font-weight: var(--ref-typeface-weight-regular); line-height: var(--ref-typescale-body-medium-line-height); letter-spacing: var(--ref-typescale-body-medium-tracking); color: var(--color-text-primary); caret-color: var(--color-border-input-active); padding: 0; }
+    .ds-search__control::-webkit-search-decoration, .ds-search__control::-webkit-search-cancel-button { display: none; }
+    .ds-search__control::placeholder { color: var(--color-text-placeholder); }
+    .ds-search__control:focus, .ds-search__control:focus-visible { outline: none; }
+    .ds-search--no-icon .ds-search__control { padding-left: var(--spacing-lg); }
+    .ds-search__clear { appearance: none; border: none; background: transparent; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; flex-shrink: 0; color: var(--color-icon-subtle); cursor: pointer; transition: color 0.1s ease; }
+    .ds-search__clear:hover { color: var(--color-icon-default); }
+    .ds-search__clear:focus { outline: none; }
+    .ds-search__clear:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+    .ds-search.is-disabled { pointer-events: none; }
+    .ds-search.is-disabled .ds-search__field { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
+    .ds-search.is-disabled .ds-search__control { color: var(--color-text-disabled); }
+    .ds-search.is-disabled .ds-search__search-btn { color: var(--color-icon-disabled); }
   </style>
 </head>
 <body>
@@ -1837,6 +1858,7 @@
       <a class="nav-link" href="#avatar" onclick="setActive(this)"><span class="nav-dot"></span>Avatar</a>
       <a class="nav-link" href="#progress" onclick="setActive(this)"><span class="nav-dot"></span>Progress</a>
       <a class="nav-link" href="#tabs" onclick="setActive(this)"><span class="nav-dot"></span>Tabs</a>
+      <a class="nav-link" href="#search" onclick="setActive(this)"><span class="nav-dot"></span>Search Field</a>
     </nav>
 
     <div class="sidebar-footer">
@@ -3533,6 +3555,125 @@
                   <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Overview</button>
                   <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1" style="box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);">Details (focused)</button>
                   <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Settings</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Search Field ────────────────────────────────────────────────── -->
+      <section class="section" id="search">
+        <div class="section-header">
+          <h2 class="section-title">Search Field</h2>
+          <span class="section-source">components/search/_search.scss</span>
+        </div>
+        <p class="section-desc">A search input for filtering or finding content. Shows a leading search icon and a clear button when text is present. Focus ring only appears on keyboard navigation (Tab key), not on mouse click.</p>
+
+        <div class="demo-group">
+
+          <!-- Default / empty states -->
+          <div class="demo-row">
+            <span class="demo-label">Default</span>
+            <div class="demo-row-items">
+              <div class="ds-search" role="search" style="width:320px;">
+                <div class="ds-search__field">
+                  <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                  <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
+                </div>
+              </div>
+              <div class="ds-search ds-search--no-icon" role="search" style="width:320px;">
+                <div class="ds-search__field">
+                  <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulated hover -->
+          <div class="demo-row">
+            <span class="demo-label">Hover</span>
+            <div class="demo-row-items">
+              <div class="ds-search" role="search" style="width:320px;">
+                <div class="ds-search__field" style="border-color: var(--color-border-input-hover);">
+                  <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                  <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
+                </div>
+              </div>
+              <div class="ds-search ds-search--no-icon" role="search" style="width:320px;">
+                <div class="ds-search__field" style="border-color: var(--color-border-input-hover);">
+                  <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulated focus (keyboard — with ADA ring) -->
+          <div class="demo-row">
+            <span class="demo-label">Focus (keyboard)</span>
+            <div class="demo-row-items">
+              <div class="ds-search" role="search" style="width:320px;">
+                <div class="ds-search__field" style="border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);">
+                  <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                  <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
+                </div>
+              </div>
+              <div class="ds-search ds-search--no-icon" role="search" style="width:320px;">
+                <div class="ds-search__field" style="border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);">
+                  <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- With value + clear button -->
+          <div class="demo-row">
+            <span class="demo-label">With value</span>
+            <div class="demo-row-items">
+              <div class="ds-search" role="search" style="width:320px;">
+                <div class="ds-search__field">
+                  <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                  <input class="ds-search__control" type="search" value="Invoice" aria-label="Search" />
+                  <button class="ds-search__clear" type="button" aria-label="Clear search"><span class="ds-icon ds-icon--sm" aria-hidden="true">close</span></button>
+                </div>
+              </div>
+              <div class="ds-search ds-search--no-icon" role="search" style="width:320px;">
+                <div class="ds-search__field">
+                  <input class="ds-search__control" type="search" value="Invoice" aria-label="Search" />
+                  <button class="ds-search__clear" type="button" aria-label="Clear search"><span class="ds-icon ds-icon--sm" aria-hidden="true">close</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Disabled -->
+          <div class="demo-row">
+            <span class="demo-label">Disabled</span>
+            <div class="demo-row-items">
+              <div class="ds-search is-disabled" role="search" style="width:320px;">
+                <div class="ds-search__field">
+                  <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                  <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" disabled />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live demo — try typing -->
+          <div class="demo-row">
+            <span class="demo-label">Live demo</span>
+            <div class="demo-row-items">
+              <div class="ds-search" role="search" style="width:400px;" id="live-search-wrapper">
+                <div class="ds-search__field">
+                  <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                  <input class="ds-search__control" type="search" placeholder="Search items…" aria-label="Search items"
+                    oninput="document.getElementById('live-clear').style.display = this.value ? 'flex' : 'none';"
+                    id="live-search-input" />
+                  <button class="ds-search__clear" type="button" aria-label="Clear search" id="live-clear" style="display:none;"
+                    onclick="document.getElementById('live-search-input').value=''; this.style.display='none'; document.getElementById('live-search-input').focus();">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+                  </button>
                 </div>
               </div>
             </div>

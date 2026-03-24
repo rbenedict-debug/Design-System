@@ -1,0 +1,37 @@
+<div [class]="wrapperClasses" role="search">
+
+  <!-- Field wrapper -->
+  <div class="ds-search__field">
+
+    <!-- Leading search icon (non-interactive — pointer-events: none) -->
+    <span *ngIf="leadingIcon" class="ds-search__search-btn" aria-hidden="true">
+      <span class="ds-icon ds-icon--sm">search</span>
+    </span>
+
+    <!-- Input control -->
+    <input
+      class="ds-search__control"
+      type="search"
+      [placeholder]="placeholder"
+      [value]="value"
+      [disabled]="disabled"
+      [attr.aria-label]="ariaLabel"
+      autocomplete="off"
+      (input)="onInput($event)"
+      (keydown)="onKeydown($event)"
+    />
+
+    <!-- Clear button — visible only when the field has a value -->
+    <button
+      *ngIf="hasValue && !disabled"
+      class="ds-search__clear"
+      type="button"
+      aria-label="Clear search"
+      (click)="onClear()"
+    >
+      <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+    </button>
+
+  </div>
+
+</div>

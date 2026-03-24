@@ -47,6 +47,7 @@ components/
   snackbar/                # ds-snackbar
   label/                   # ds-label (display-only tag)
   skeleton/                # ds-skeleton
+  search/                  # ds-search
 preview/
   index.html               # Self-contained visual token + component reference
 ```
