@@ -1,0 +1,19 @@
+<li
+  class="ds-list-item"
+  [class.ds-list-item--interactive]="interactive"
+  [class.ds-list-item--3-lines]="variant === '3-lines'"
+  [class.is-disabled]="disabled"
+  role="listitem"
+  [attr.tabindex]="interactive ? 0 : null"
+  [attr.aria-disabled]="disabled || null"
+>
+  <span *ngIf="icon" class="ds-list-item__leading-icon">{{ icon }}</span>
+  <div class="ds-list-item__content">
+    <span *ngIf="overline" class="ds-list-item__overline">{{ overline }}</span>
+    <span class="ds-list-item__primary">{{ primary }}</span>
+    <span *ngIf="secondary" class="ds-list-item__secondary">{{ secondary }}</span>
+  </div>
+  <span *ngIf="trailingMeta" class="ds-list-item__trailing-meta">{{ trailingMeta }}</span>
+  <span *ngIf="trailingIcon" class="ds-list-item__trailing-icon">{{ trailingIcon }}</span>
+  <ng-content />
+</li>

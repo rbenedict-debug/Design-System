@@ -1626,6 +1626,246 @@
     .ds-progress__fill { height: 100%; background: var(--color-surface-brand-bold); border-radius: var(--radius-full); transition: width 0.3s ease; max-width: 100%; }
     .ds-progress--indeterminate .ds-progress__fill { width: 35%; position: absolute; top: 0; bottom: 0; left: -35%; animation: ds-progress-indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite; }
     .ds-progress--indeterminate .ds-progress__track::after { content: ''; position: absolute; top: 0; bottom: 0; left: -200%; right: 100%; background: var(--color-surface-brand-bold); border-radius: var(--radius-full); animation: ds-progress-indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) 1.15s infinite; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       TABS  (ds-tabs)
+       Source: components/tabs/_tabs.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    .ds-tabs { display: flex; align-items: flex-end; border-bottom: 1px solid var(--color-border-subtle); gap: 0; position: relative; }
+    .ds-tabs__tab { appearance: none; border: 2px solid transparent; background: transparent; display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-xs); min-width: 56px; height: 48px; padding: var(--spacing-md) var(--spacing-lg); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-bold); letter-spacing: 0.25px; color: var(--color-text-primary); cursor: pointer; position: relative; white-space: nowrap; border-radius: var(--radius-sm) var(--radius-sm) 0 0; overflow: hidden; transition: background 0.15s ease; text-decoration: none; }
+    .ds-tabs__tab:focus { outline: none; }
+    .ds-tabs__tab:hover:not(.is-disabled) { background: var(--overlay-hovered); }
+    .ds-tabs__tab:focus-visible { border-color: var(--color-border-ada-focus-ring); z-index: 1; }
+    .ds-tabs__tab:active:not(.is-disabled) { background: var(--overlay-pressed); }
+    .ds-tabs__tab.is-selected::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--color-surface-nav-active); }
+    .ds-tabs__tab.is-disabled { color: var(--color-text-disabled); cursor: not-allowed; pointer-events: none; }
+    .ds-tabs__dot { display: inline-block; width: 6px; height: 6px; border-radius: var(--radius-full); background: var(--color-surface-accent-red-bold); flex-shrink: 0; }
+    .ds-tabs__panel { padding: var(--spacing-xl) 0; color: var(--color-text-primary); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: 14px; line-height: 20px; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       CARD  (ds-card)
+       Source: components/card/_card.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    .ds-card { background: var(--color-surface-page); border-radius: var(--radius-md); overflow: hidden; position: relative; transition: box-shadow 0.15s ease, border-color 0.15s ease; }
+    .ds-card--outlined { border: 1px solid var(--color-border-subtle); box-shadow: none; }
+    .ds-card--elevated { border: 1px solid transparent; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2); }
+    .ds-card__header { display: flex; align-items: flex-start; gap: var(--spacing-md); padding: var(--spacing-lg) var(--spacing-lg) 0; }
+    .ds-card__header-icon { color: var(--color-icon-brand); font-size: 24px; width: 24px; height: 24px; flex-shrink: 0; }
+    .ds-card__header-text { flex: 1; min-width: 0; }
+    .ds-card__title { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-title-h4-size); font-weight: var(--ref-typeface-weight-bold); color: var(--color-text-primary); margin: 0; }
+    .ds-card__subtitle { font-size: var(--ref-typescale-label-small-size); color: var(--color-text-secondary); margin: 2px 0 0; }
+    .ds-card__content { padding: var(--spacing-lg); font-size: 14px; color: var(--color-text-secondary); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; }
+    .ds-card__header + .ds-card__content { padding-top: var(--spacing-sm); }
+    .ds-card__actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--spacing-sm); padding: var(--spacing-sm) var(--spacing-md); border-top: 1px solid var(--color-border-subtle); }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       DIALOG  (ds-dialog)
+       Source: components/dialog/_dialog.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    .ds-dialog-backdrop { position: fixed; inset: 0; background: var(--color-surface-scrim); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: var(--spacing-xl); }
+    .ds-dialog { background: var(--color-surface-page); border-radius: var(--radius-lg); box-shadow: 0 8px 24px var(--shadow-elevation-3), 0 2px 8px var(--shadow-elevation-2); width: 100%; max-width: 480px; max-height: calc(100vh - 96px); display: flex; flex-direction: column; overflow: hidden; }
+    .ds-dialog__header { display: flex; align-items: flex-start; gap: var(--spacing-md); padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-md); position: relative; flex-shrink: 0; }
+    .ds-dialog__icon { font-family: 'Material Symbols Rounded'; font-size: 24px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--color-icon-brand); margin-top: 2px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .ds-dialog__icon--error { color: var(--color-icon-error); }
+    .ds-dialog__icon--warning { color: var(--color-icon-warning); }
+    .ds-dialog__icon--success { color: var(--color-icon-success); }
+    .ds-dialog__title-group { flex: 1; min-width: 0; }
+    .ds-dialog__title { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-title-h3-size); font-weight: var(--ref-typeface-weight-bold); color: var(--color-text-primary); margin: 0 0 4px; }
+    .ds-dialog__subtitle { font-size: var(--ref-typescale-label-small-size); color: var(--color-text-secondary); margin: 0; }
+    .ds-dialog__close { appearance: none; border: none; background: transparent; padding: var(--spacing-xs); cursor: pointer; color: var(--color-icon-subtle); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: color 0.12s, background 0.12s; }
+    .ds-dialog__close:hover { color: var(--color-icon-default); background: var(--overlay-hovered); }
+    .ds-dialog__close:focus { outline: none; }
+    .ds-dialog__close:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-dialog__content { flex: 1; overflow-y: auto; padding: var(--spacing-md) var(--spacing-xl); font-size: 14px; color: var(--color-text-secondary); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; }
+    .ds-dialog__actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--spacing-sm); padding: var(--spacing-md) var(--spacing-xl) var(--spacing-xl); flex-shrink: 0; border-top: 1px solid var(--color-border-subtle); }
+    .ds-dialog--center .ds-dialog__header { flex-direction: column; align-items: center; text-align: center; }
+    .ds-dialog--center .ds-dialog__close { position: absolute; top: var(--spacing-md); right: var(--spacing-md); }
+    .ds-dialog--center .ds-dialog__content { text-align: center; }
+    .ds-dialog--center .ds-dialog__actions { justify-content: center; }
+    /* Inline demo (not fixed) */
+    .ds-dialog-demo { position: relative; background: var(--color-surface-default); border-radius: var(--radius-lg); padding: var(--spacing-xl); display: flex; align-items: center; justify-content: center; min-height: 200px; }
+    .ds-dialog-demo .ds-dialog { position: relative; max-width: 440px; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       MENU  (ds-menu)
+       Source: components/menu/_menu.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    .ds-menu { background: var(--color-surface-page); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); box-shadow: 0 4px 16px var(--shadow-elevation-2), 0 1px 4px var(--shadow-elevation-1); min-width: 160px; max-width: 280px; padding: var(--spacing-xs) 0; display: inline-flex; flex-direction: column; }
+    .ds-menu__section-label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); font-weight: var(--ref-typeface-weight-bold); color: var(--color-text-secondary); letter-spacing: 0.05em; text-transform: uppercase; padding: var(--spacing-sm) var(--spacing-md) var(--spacing-xs); }
+    .ds-menu__item { appearance: none; border: none; background: transparent; display: flex; align-items: center; gap: var(--spacing-sm); width: 100%; padding: var(--spacing-sm) var(--spacing-md); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); color: var(--color-text-primary); cursor: pointer; text-align: left; text-decoration: none; transition: background 0.1s ease; }
+    .ds-menu__item:focus { outline: none; }
+    .ds-menu__item:hover:not(.is-disabled) { background: var(--overlay-hovered); }
+    .ds-menu__item:focus-visible { background: var(--overlay-focused); box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
+    .ds-menu__item--destructive { color: var(--color-text-accent-red); }
+    .ds-menu__item--destructive:hover:not(.is-disabled) { background: var(--overlay-accent-red-hovered); }
+    .ds-menu__item.is-disabled { color: var(--color-text-disabled); cursor: not-allowed; pointer-events: none; }
+    .ds-menu__item-icon { color: var(--color-icon-subtle); flex-shrink: 0; }
+    .ds-menu__item--destructive .ds-menu__item-icon { color: var(--color-icon-error); }
+    .ds-menu__item.is-disabled .ds-menu__item-icon { color: var(--color-icon-disabled); }
+    .ds-menu__item-trailing { margin-left: auto; color: var(--color-text-secondary); font-size: var(--ref-typescale-label-small-size); }
+    .ds-menu__divider { height: 1px; background: var(--color-border-subtle); border: none; margin: var(--spacing-xs) 0; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       ACCORDION  (ds-accordion)
+       Source: components/accordion/_accordion.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    .ds-accordion { display: flex; flex-direction: column; gap: 0; }
+    .ds-accordion__panel { border: 1px solid var(--color-border-accordion); border-radius: var(--radius-md); overflow: hidden; background: var(--color-surface-page); }
+    .ds-accordion__panel + .ds-accordion__panel { margin-top: var(--spacing-xs); }
+    .ds-accordion__panel.is-open { box-shadow: 0 2px 8px var(--shadow-elevation-1); }
+    .ds-accordion__panel.is-open .ds-accordion__chevron { transform: rotate(180deg); }
+    .ds-accordion__trigger { appearance: none; border: none; background: transparent; width: 100%; display: flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-md) var(--spacing-lg); cursor: pointer; color: var(--color-text-primary); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-medium); text-align: left; transition: background 0.12s ease; }
+    .ds-accordion__trigger:focus { outline: none; }
+    .ds-accordion__trigger:hover:not(:disabled) { background: var(--overlay-hovered); }
+    .ds-accordion__trigger:focus-visible { box-shadow: inset 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-accordion__trigger-icon { font-family: 'Material Symbols Rounded'; font-size: 20px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--color-icon-brand); flex-shrink: 0; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    .ds-accordion__trigger-label { flex: 1; min-width: 0; }
+    .ds-accordion__chevron { font-family: 'Material Symbols Rounded'; font-size: 20px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--color-icon-subtle); flex-shrink: 0; transition: transform 0.2s ease; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    .ds-accordion__content { padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-lg); border-top: 1px solid var(--color-border-subtle); font-size: 14px; color: var(--color-text-secondary); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; }
+    .ds-accordion__content[hidden] { display: none; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       CHIP  (ds-chip)
+       Source: components/chip/_chip.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    .ds-chip { display: inline-flex; align-items: center; gap: var(--spacing-xs); height: 28px; padding: 0 var(--spacing-sm) 0 var(--spacing-md); background: var(--color-surface-default); border: 1px solid var(--color-border-secondary); border-radius: var(--radius-full); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); font-weight: var(--ref-typeface-weight-medium); color: var(--color-text-primary); cursor: default; transition: background 0.12s, border-color 0.12s; }
+    .ds-chip:hover:not(.is-disabled) { background: var(--color-surface-subtle); border-color: var(--color-border-primary); }
+    .ds-chip:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-chip.is-error { background: var(--color-surface-error); border-color: var(--color-border-input-error); color: var(--color-text-error); }
+    .ds-chip.is-disabled { background: var(--color-surface-disabled); border-color: var(--color-border-subtle); color: var(--color-text-disabled); pointer-events: none; }
+    .ds-chip__icon { color: var(--color-icon-subtle); flex-shrink: 0; }
+    .ds-chip__label { white-space: nowrap; }
+    .ds-chip__remove { appearance: none; border: none; background: transparent; padding: 0; margin-left: var(--spacing-xs); margin-right: -4px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--color-icon-subtle); border-radius: var(--radius-full); flex-shrink: 0; transition: color 0.12s, background 0.12s; }
+    .ds-chip__remove:hover { color: var(--color-icon-default); background: var(--overlay-hovered); }
+    .ds-chip__remove:focus { outline: none; }
+    .ds-chip__remove:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+    .ds-chip-list { display: flex; flex-wrap: wrap; gap: var(--spacing-xs); align-items: center; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       DIVIDER  (ds-divider)
+       Source: components/divider/_divider.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    .ds-divider { display: block; border: none; background: var(--color-border-subtle); flex-shrink: 0; height: 1px; width: 100%; }
+    .ds-divider--inset { margin-left: var(--spacing-xl); }
+    .ds-divider--middle-inset { margin-left: var(--spacing-xl); margin-right: var(--spacing-xl); }
+    .ds-divider--subhead { display: flex; align-items: center; gap: var(--spacing-md); height: auto; background: transparent; }
+    .ds-divider--subhead::before, .ds-divider--subhead::after { content: ''; flex: 1; height: 1px; background: var(--color-border-subtle); }
+    .ds-divider__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); font-weight: var(--ref-typeface-weight-bold); color: var(--color-text-secondary); white-space: nowrap; letter-spacing: 0.06em; text-transform: uppercase; }
+    .ds-divider--vertical { height: 100%; width: 1px; display: inline-block; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       LIST  (ds-list / ds-list-item)
+       Source: components/list/_list.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    .ds-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; background: var(--color-surface-page); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border-subtle); }
+    .ds-list-item { display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md) var(--spacing-lg); background: transparent; border-bottom: 1px solid var(--color-border-subtle); position: relative; min-height: 48px; cursor: default; transition: background 0.12s ease; }
+    .ds-list-item:last-child { border-bottom: none; }
+    .ds-list-item--interactive { cursor: pointer; }
+    .ds-list-item--interactive:hover:not(.is-disabled) { background: var(--overlay-hovered); }
+    .ds-list-item--interactive:focus { outline: none; }
+    .ds-list-item--interactive:focus-visible { box-shadow: inset 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-list-item.is-disabled { pointer-events: none; }
+    .ds-list-item.is-disabled .ds-list-item__primary, .ds-list-item.is-disabled .ds-list-item__secondary { color: var(--color-text-disabled); }
+    .ds-list-item__leading-icon { font-family: 'Material Symbols Rounded'; font-size: 24px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: var(--color-icon-default); flex-shrink: 0; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .ds-list-item__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+    .ds-list-item__overline { font-size: var(--ref-typescale-label-small-size); font-weight: var(--ref-typeface-weight-medium); color: var(--color-text-secondary); letter-spacing: 0.06em; text-transform: uppercase; font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; }
+    .ds-list-item__primary { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-medium); color: var(--color-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ds-list-item__secondary { font-size: var(--ref-typescale-label-small-size); color: var(--color-text-secondary); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; }
+    .ds-list-item__trailing-icon { font-family: 'Material Symbols Rounded'; font-size: 20px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--color-icon-subtle); flex-shrink: 0; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    .ds-list-item__trailing-meta { font-size: var(--ref-typescale-label-small-size); color: var(--color-text-secondary); white-space: nowrap; flex-shrink: 0; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       PAGINATOR  (ds-paginator)
+       Source: components/paginator/_paginator.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    .ds-paginator { display: flex; align-items: center; justify-content: flex-end; gap: var(--spacing-xl); padding: var(--spacing-sm) var(--spacing-lg); background: var(--color-surface-page); border-top: 1px solid var(--color-border-subtle); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); color: var(--color-text-secondary); flex-wrap: wrap; }
+    .ds-paginator__page-size { display: flex; align-items: center; gap: var(--spacing-sm); }
+    .ds-paginator__label { white-space: nowrap; color: var(--color-text-secondary); font-size: var(--ref-typescale-label-small-size); }
+    .ds-paginator__select { appearance: none; border: 1px solid var(--color-border-input); border-radius: var(--radius-sm); background: var(--color-surface-input); color: var(--color-text-primary); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); padding: 3px 24px 3px var(--spacing-sm); cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%2373737F'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; min-width: 64px; }
+    .ds-paginator__select:focus { outline: none; box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-paginator__range-label { white-space: nowrap; color: var(--color-text-secondary); font-size: var(--ref-typescale-label-small-size); min-width: 80px; text-align: center; }
+    .ds-paginator__nav { display: flex; align-items: center; gap: var(--spacing-xs); }
+    .ds-paginator__btn { appearance: none; border: none; background: transparent; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--color-icon-default); border-radius: var(--radius-sm); transition: background 0.12s, color 0.12s; }
+    .ds-paginator__btn:focus { outline: none; }
+    .ds-paginator__btn:hover:not(:disabled) { background: var(--overlay-hovered); }
+    .ds-paginator__btn:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-paginator__btn:disabled { color: var(--color-icon-disabled); cursor: not-allowed; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       SPINNER  (ds-spinner)
+       Source: components/spinner/_spinner.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    @keyframes ds-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes ds-stroke { 0% { stroke-dashoffset: 113px; } 50% { stroke-dashoffset: 28px; } 100% { stroke-dashoffset: 113px; } }
+    .ds-spinner { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0; }
+    .ds-spinner--sm { width: 24px; height: 24px; }
+    .ds-spinner--lg { width: 56px; height: 56px; }
+    .ds-spinner__svg { width: 100%; height: 100%; animation: ds-spin 1.4s linear infinite; transform-origin: center center; }
+    .ds-spinner__track { fill: none; stroke: var(--color-border-subtle); stroke-width: 3; }
+    .ds-spinner__circle { fill: none; stroke: var(--color-surface-brand-bold); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 113px; animation: ds-stroke 1.4s ease-in-out infinite; transform-origin: center center; }
+    .ds-spinner__fill { fill: none; stroke: var(--color-surface-brand-bold); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 113px; transition: stroke-dashoffset 0.3s ease; transform: rotate(-90deg); transform-origin: center center; }
+    .ds-spinner--determinate .ds-spinner__svg { animation: none; }
+    .ds-spinner--white .ds-spinner__circle, .ds-spinner--white .ds-spinner__fill { stroke: var(--color-text-inverse); }
+    .ds-spinner--subtle .ds-spinner__circle, .ds-spinner--subtle .ds-spinner__fill { stroke: var(--color-icon-subtle); }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       SNACKBAR  (ds-snackbar)
+       Source: components/snackbar/_snackbar.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    @keyframes ds-snackbar-enter { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .ds-snackbar { display: flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-md) var(--spacing-lg); background: var(--color-surface-tooltip); color: var(--color-text-tooltip); border-radius: var(--radius-md); box-shadow: 0 4px 16px var(--shadow-elevation-3), 0 1px 4px var(--shadow-elevation-2); min-width: 280px; max-width: 480px; font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); animation: ds-snackbar-enter 0.2s ease; }
+    .ds-snackbar--success { background: var(--color-surface-accent-green-bold); }
+    .ds-snackbar--error { background: var(--color-surface-accent-red-bold); }
+    .ds-snackbar--warning { background: var(--color-surface-accent-yellow-bold); color: var(--color-text-primary); }
+    .ds-snackbar__icon { font-family: 'Material Symbols Rounded'; font-size: 20px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    .ds-snackbar__message { flex: 1; min-width: 0; }
+    .ds-snackbar__action { appearance: none; border: none; background: transparent; padding: 4px var(--spacing-sm); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); font-weight: var(--ref-typeface-weight-bold); color: var(--color-border-ada-focus-ring); cursor: pointer; border-radius: var(--radius-sm); white-space: nowrap; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+    .ds-snackbar__action:hover { background: rgba(255,255,255,0.12); }
+    .ds-snackbar__close { appearance: none; border: none; background: transparent; padding: 4px; cursor: pointer; color: var(--color-text-tooltip); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0.7; }
+    .ds-snackbar__close:hover { background: rgba(255,255,255,0.12); opacity: 1; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       LABEL / TAG  (ds-label)
+       Source: components/label/_label.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    .ds-label { display: inline-flex; align-items: center; gap: var(--spacing-xs); border-radius: var(--radius-sm); font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); font-weight: var(--ref-typeface-weight-medium); white-space: nowrap; padding: 2px var(--spacing-sm); border: 1px solid transparent; vertical-align: middle; }
+    .ds-label--xs { font-size: 10px; padding: 1px var(--spacing-xs); border-radius: 4px; }
+    .ds-label--sm { padding: 2px var(--spacing-xs); }
+    .ds-label--green  { background: var(--color-surface-accent-green);  color: var(--color-text-success);      border-color: var(--color-border-accent-green); }
+    .ds-label--red    { background: var(--color-surface-accent-red);    color: var(--color-text-accent-red);    border-color: var(--color-border-accent-red); }
+    .ds-label--yellow { background: var(--color-surface-accent-yellow); color: var(--color-text-warning);      border-color: var(--color-border-accent-yellow); }
+    .ds-label--brand  { background: var(--color-surface-brand);         color: var(--color-text-brand);         border-color: var(--color-border-brand); }
+    .ds-label--blue   { background: var(--color-surface-accent-blue);   color: var(--color-text-brand);         border-color: var(--color-border-accent-blue); }
+    .ds-label--navy   { background: var(--color-surface-accent-navy);   color: var(--color-text-accent-navy);   border-color: var(--color-border-accent-navy); }
+    .ds-label--teal   { background: var(--color-surface-accent-teal);   color: var(--color-text-success);       border-color: var(--color-border-accent-teal); }
+    .ds-label--orange { background: var(--color-surface-accent-orange); color: var(--color-text-warning);      border-color: var(--color-border-accent-orange); }
+    .ds-label--purple { background: var(--color-surface-accent-purple); color: var(--color-text-primary);       border-color: var(--color-border-accent-purple); }
+    .ds-label--pink   { background: var(--color-surface-accent-pink);   color: var(--color-text-primary);       border-color: var(--color-border-accent-pink); }
+    .ds-label--disabled { background: var(--color-surface-disabled); color: var(--color-text-disabled); border-color: var(--color-border-subtle); }
+    .ds-label--outline { background: transparent; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       SKELETON  (ds-skeleton)
+       Source: components/skeleton/_skeleton.scss
+       ════════════════════════════════════════════════════════════════════════ */
+    @keyframes ds-shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+    .ds-skeleton { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+    .ds-skeleton--card { border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: var(--spacing-lg); gap: var(--spacing-md); }
+    .ds-skeleton--row { flex-direction: row; align-items: center; }
+    .ds-skeleton__line, .ds-skeleton__circle, .ds-skeleton__rect { background: linear-gradient(90deg, var(--color-surface-default) 25%, var(--color-border-subtle) 50%, var(--color-surface-default) 75%); background-size: 800px 100%; animation: ds-shimmer 1.6s ease-in-out infinite; border-radius: var(--radius-sm); }
+    .ds-skeleton__line { height: 14px; width: 100%; }
+    .ds-skeleton__line--xs  { width: 30%; }
+    .ds-skeleton__line--sm  { width: 50%; }
+    .ds-skeleton__line--md  { width: 70%; }
+    .ds-skeleton__line--lg  { width: 90%; }
+    .ds-skeleton__line--tall { height: 20px; }
+    .ds-skeleton__line--h1  { height: 28px; }
+    .ds-skeleton__circle { border-radius: var(--radius-full); width: 40px; height: 40px; flex-shrink: 0; }
+    .ds-skeleton__circle--sm { width: 28px; height: 28px; }
+    .ds-skeleton__circle--lg { width: 56px; height: 56px; }
+    .ds-skeleton__rect { border-radius: var(--radius-md); width: 100%; height: 120px; }
+    .ds-skeleton__rect--sm { height: 64px; }
+    .ds-skeleton__rect--lg { height: 200px; }
   </style>
 </head>
 <body>
@@ -1672,6 +1912,7 @@
       <a class="nav-link" href="#textarea" onclick="setActive(this)"><span class="nav-dot"></span>Textarea</a>
       <a class="nav-link" href="#avatar" onclick="setActive(this)"><span class="nav-dot"></span>Avatar</a>
       <a class="nav-link" href="#progress" onclick="setActive(this)"><span class="nav-dot"></span>Progress</a>
+      <a class="nav-link" href="#tabs" onclick="setActive(this)"><span class="nav-dot"></span>Tabs</a>
     </nav>
 
     <div class="sidebar-footer">
@@ -3227,6 +3468,92 @@
               </div>
               <div class="ds-progress ds-progress--indeterminate" role="progressbar" aria-label="Processing">
                 <div class="ds-progress__track"><div class="ds-progress__fill"></div></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section" id="tabs">
+        <div class="section-header">
+          <h2 class="section-title">Tabs</h2>
+          <p class="section-desc">Page-level navigation tabs. 48px fixed height, always bold, always primary colour. Selected state: 2px brand-blue bar at bottom. Badge is a 6px red dot (not a count). Source: <code>components/tabs/_tabs.scss</code></p>
+        </div>
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:24px;">
+              <div>
+                <div class="ds-tabs" role="tablist">
+                  <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Overview</button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Details</button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Activity</button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Settings</button>
+                </div>
+                <div class="ds-tabs__panel">Panel content for the selected tab.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">With badge dot</div>
+            <div class="demo-row-items" style="flex-direction:column; align-items:stretch;">
+              <div>
+                <div class="ds-tabs" role="tablist">
+                  <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Overview</button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">
+                    Details <span class="ds-tabs__dot" aria-label="New notification"></span>
+                  </button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Activity</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">With icon</div>
+            <div class="demo-row-items" style="flex-direction:column; align-items:stretch;">
+              <div>
+                <div class="ds-tabs" role="tablist">
+                  <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">dashboard</span>Overview
+                  </button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">info</span>Details
+                  </button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">settings</span>Settings
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled tab</div>
+            <div class="demo-row-items" style="flex-direction:column; align-items:stretch;">
+              <div>
+                <div class="ds-tabs" role="tablist">
+                  <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Overview</button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Details</button>
+                  <button class="ds-tabs__tab is-disabled" role="tab" aria-selected="false" aria-disabled="true" tabindex="-1">Billing</button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Settings</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Focus state</div>
+            <div class="demo-row-items" style="flex-direction:column; align-items:stretch;">
+              <div>
+                <div class="ds-tabs" role="tablist">
+                  <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Overview</button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1" style="border-color: var(--color-border-ada-focus-ring);">Details (focused)</button>
+                  <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Settings</button>
+                </div>
               </div>
             </div>
           </div>

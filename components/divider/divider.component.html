@@ -1,0 +1,35 @@
+<ng-container [ngSwitch]="variant">
+  <!-- Subhead variant -->
+  <div
+    *ngSwitchCase="'subhead'"
+    class="ds-divider ds-divider--subhead"
+    role="separator"
+  >
+    <span *ngIf="label" class="ds-divider__label">{{ label }}</span>
+  </div>
+
+  <!-- Vertical -->
+  <div
+    *ngSwitchCase="'vertical'"
+    class="ds-divider ds-divider--vertical"
+    role="separator"
+    aria-orientation="vertical"
+  ></div>
+
+  <!-- Vertical inset -->
+  <div
+    *ngSwitchCase="'vertical-inset'"
+    class="ds-divider ds-divider--vertical ds-divider--inset"
+    role="separator"
+    aria-orientation="vertical"
+  ></div>
+
+  <!-- Horizontal inset -->
+  <hr *ngSwitchCase="'inset'" class="ds-divider ds-divider--inset" role="separator" />
+
+  <!-- Horizontal middle-inset -->
+  <hr *ngSwitchCase="'middle-inset'" class="ds-divider ds-divider--middle-inset" role="separator" />
+
+  <!-- Default: horizontal full -->
+  <hr *ngSwitchDefault class="ds-divider" role="separator" />
+</ng-container>

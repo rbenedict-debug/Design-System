@@ -1,0 +1,141 @@
+// ============================================================
+// Onflo Design System — Tabs Component
+// ============================================================
+//
+// Based on Angular Material mat-tab-group / mat-tab.
+// Import MatTabsModule in your Angular module.
+// See: https://material.angular.io/components/tabs/overview
+//
+// Usage (HTML class API):
+//   <div class="ds-tabs" role="tablist">
+//     <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true">Overview</button>
+//     <button class="ds-tabs__tab" role="tab" aria-selected="false">Details</button>
+//     <button class="ds-tabs__tab" role="tab" aria-selected="false">
+//       Settings <span class="ds-tabs__dot"></span>
+//     </button>
+//   </div>
+//   <div class="ds-tabs__panel" role="tabpanel">Panel content</div>
+//
+// Angular component:
+//   <ds-tabs>
+//     <ds-tab label="Overview">Content</ds-tab>
+//     <ds-tab label="Details" [showBadge]="true">Content</ds-tab>
+//   </ds-tabs>
+//
+// Figma: component/page-tab — label-only variant.
+// For icon tabs use ds-tab-icon (component/page-tab-icon).
+//
+// ADA: Active tab has aria-selected="true". Arrow keys navigate tabs.
+//      Focus ring uses border/ADA focus ring token.
+// ============================================================
+
+
+.ds-tabs {
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--color-border-subtle);
+  gap: 0;
+  position: relative;
+
+
+  // ── Tab button ─────────────────────────────────────────────────────────────
+
+  &__tab {
+    // Reset
+    appearance: none;
+    border: 2px solid transparent;
+    background: transparent;
+
+    // Layout
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    min-width: 56px;
+    height: 48px;
+    padding: var(--spacing-md) var(--spacing-lg);
+
+    // Typography — always semi-bold, always primary colour
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-bold);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: 0.25px;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    text-decoration: none;
+
+    // Shape
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:focus { outline: none; }
+
+    // Hover
+    &:hover:not(.is-disabled):not(.is-selected) {
+      background: var(--overlay-hovered);
+    }
+    &:hover:not(.is-disabled).is-selected {
+      background: var(--overlay-hovered);
+    }
+
+    // Focus — border style matching Figma spec
+    &:focus-visible {
+      border-color: var(--color-border-ada-focus-ring);
+      z-index: 1;
+    }
+
+    // Pressed
+    &:active:not(.is-disabled) {
+      background: var(--overlay-pressed);
+    }
+
+    // Disabled
+    &.is-disabled {
+      color: var(--color-text-disabled);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+
+  // ── Selected indicator — absolute bar at bottom of tab ─────────────────────
+
+  &__tab.is-selected::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--color-surface-nav-active);
+    border-radius: 0;
+  }
+
+
+  // ── Notification dot (badge) — 6px red circle ─────────────────────────────
+  // Shown via .ds-tabs__dot inside the tab button OR [showBadge] on ds-tab.
+
+  &__dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-accent-red-bold);
+    flex-shrink: 0;
+  }
+}
+
+
+// ── Tab panel ─────────────────────────────────────────────────────────────────
+
+.ds-tabs__panel {
+  padding: var(--spacing-xl) 0;
+  color: var(--color-text-primary);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-body-medium-size, 14px);
+  line-height: var(--ref-typescale-body-medium-line-height, 20px);
+}

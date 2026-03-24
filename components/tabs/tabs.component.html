@@ -1,0 +1,27 @@
+<div class="ds-tabs" role="tablist">
+  <button
+    *ngFor="let tab of tabs.toArray(); let i = index"
+    class="ds-tabs__tab"
+    [class.is-selected]="activeIndex === i"
+    [class.is-disabled]="tab.disabled"
+    role="tab"
+    [attr.aria-selected]="activeIndex === i"
+    [attr.aria-disabled]="tab.disabled || null"
+    [attr.tabindex]="activeIndex === i ? 0 : -1"
+    (click)="select(i)"
+  >
+    <span *ngIf="tab.icon" class="ds-icon ds-icon--sm" aria-hidden="true">{{ tab.icon }}</span>
+    {{ tab.label }}
+    <span *ngIf="tab.showBadge" class="ds-tabs__dot" aria-label="New notification"></span>
+  </button>
+</div>
+
+<ng-container *ngFor="let tab of tabs.toArray(); let i = index">
+  <div
+    *ngIf="activeIndex === i"
+    class="ds-tabs__panel"
+    role="tabpanel"
+  >
+    <ng-content />
+  </div>
+</ng-container>

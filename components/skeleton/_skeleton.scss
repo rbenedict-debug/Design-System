@@ -1,0 +1,107 @@
+// ============================================================
+// Onflo Design System — Skeleton Loader Component
+// ============================================================
+//
+// Custom Onflo component — placeholder loading state.
+// No direct Angular Material equivalent.
+//
+// Usage (HTML class API):
+//   <div class="ds-skeleton" aria-busy="true" aria-label="Loading content">
+//     <div class="ds-skeleton__line"></div>
+//     <div class="ds-skeleton__line ds-skeleton__line--sm"></div>
+//     <div class="ds-skeleton__line ds-skeleton__line--lg"></div>
+//   </div>
+//
+//   <!-- Avatar placeholder -->
+//   <div class="ds-skeleton__circle"></div>
+//
+//   <!-- Rectangle/card placeholder -->
+//   <div class="ds-skeleton__rect"></div>
+//
+// ============================================================
+
+@keyframes ds-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+// ── Shared shimmer mixin ──────────────────────────────────────────────────────
+
+%shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-default) 25%,
+    var(--color-border-subtle) 50%,
+    var(--color-surface-default) 75%
+  );
+  background-size: 800px 100%;
+  animation: ds-shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+// ── Container ─────────────────────────────────────────────────────────────────
+
+.ds-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  // ── Text line placeholder ─────────────────────────────────────────────────
+
+  &__line {
+    @extend %shimmer;
+    height: 14px;
+    width: 100%;
+
+    &--xs  { width: 30%; }
+    &--sm  { width: 50%; }
+    &--md  { width: 70%; }
+    &--lg  { width: 90%; }
+    &--xl  { width: 100%; }
+
+    &--tall { height: 20px; }
+    &--h1   { height: 28px; }
+  }
+
+  // ── Circle placeholder (avatar) ───────────────────────────────────────────
+
+  &__circle {
+    @extend %shimmer;
+    border-radius: var(--radius-full);
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+
+    &--sm { width: 28px; height: 28px; }
+    &--lg { width: 56px; height: 56px; }
+  }
+
+  // ── Rectangle / card placeholder ─────────────────────────────────────────
+
+  &__rect {
+    @extend %shimmer;
+    border-radius: var(--radius-md);
+    width: 100%;
+    height: 120px;
+
+    &--sm   { height: 64px; }
+    &--lg   { height: 200px; }
+    &--full { height: 320px; }
+  }
+
+  // ── Inline row variant ────────────────────────────────────────────────────
+
+  &--row {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  // ── Card skeleton preset ──────────────────────────────────────────────────
+
+  &--card {
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    gap: var(--spacing-md);
+  }
+}

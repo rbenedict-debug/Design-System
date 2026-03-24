@@ -1,0 +1,121 @@
+// ============================================================
+// Onflo Design System — Chip Component
+// ============================================================
+//
+// Based on Angular Material mat-chip.
+// Import MatChipsModule in your Angular module.
+//
+// Usage (HTML class API):
+//   <div class="ds-chip" role="option">
+//     <span class="ds-icon ds-icon--sm ds-chip__icon">local_offer</span>
+//     <span class="ds-chip__label">Design</span>
+//     <button class="ds-chip__remove" aria-label="Remove Design">
+//       <span class="ds-icon ds-icon--sm">close</span>
+//     </button>
+//   </div>
+//
+// States:    default, hover, focus, error (.is-error), disabled (.is-disabled)
+// ============================================================
+
+.ds-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  height: 28px;
+  padding: 0 var(--spacing-sm) 0 var(--spacing-md);
+  background: var(--color-surface-default);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-full);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typeface-weight-medium);
+  line-height: var(--ref-typescale-label-small-line-height);
+  color: var(--color-text-primary);
+  cursor: default;
+  transition: background 0.12s, border-color 0.12s;
+  position: relative;
+
+  &:focus { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+  &:hover:not(.is-disabled) {
+    background: var(--color-surface-subtle);
+    border-color: var(--color-border-primary);
+  }
+
+  // ── No icon — no left padding increase ────────────────────────────────────
+
+  &--no-icon {
+    padding-left: var(--spacing-md);
+  }
+
+  // ── Error state ────────────────────────────────────────────────────────────
+
+  &.is-error {
+    background: var(--color-surface-error);
+    border-color: var(--color-border-input-error);
+    color: var(--color-text-error);
+
+    .ds-chip__icon { color: var(--color-icon-error); }
+    .ds-chip__remove { color: var(--color-icon-error); }
+  }
+
+  // ── Disabled state ─────────────────────────────────────────────────────────
+
+  &.is-disabled {
+    background: var(--color-surface-disabled);
+    border-color: var(--color-border-subtle);
+    color: var(--color-text-disabled);
+    pointer-events: none;
+
+    .ds-chip__icon { color: var(--color-icon-disabled); }
+    .ds-chip__remove { color: var(--color-icon-disabled); }
+  }
+
+  // ── Icon ───────────────────────────────────────────────────────────────────
+
+  &__icon {
+    color: var(--color-icon-subtle);
+    flex-shrink: 0;
+  }
+
+  // ── Label ──────────────────────────────────────────────────────────────────
+
+  &__label {
+    white-space: nowrap;
+  }
+
+  // ── Remove button ─────────────────────────────────────────────────────────
+
+  &__remove {
+    appearance: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-left: var(--spacing-xs);
+    margin-right: calc(-1 * var(--spacing-xs));
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-icon-subtle);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+    transition: color 0.12s, background 0.12s;
+
+    &:hover { color: var(--color-icon-default); background: var(--overlay-hovered); }
+    &:focus { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+  }
+}
+
+// ── Chip list container ───────────────────────────────────────────────────────
+
+.ds-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  align-items: center;
+}

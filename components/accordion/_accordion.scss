@@ -1,0 +1,148 @@
+// ============================================================
+// Onflo Design System — Accordion Component
+// ============================================================
+//
+// Based on Angular Material mat-expansion-panel inside mat-accordion.
+// Import MatExpansionModule in your Angular module.
+//
+// Usage (HTML class API):
+//   <div class="ds-accordion">
+//     <div class="ds-accordion__panel">
+//       <button class="ds-accordion__trigger" aria-expanded="false" aria-controls="panel-1">
+//         <span class="ds-accordion__trigger-icon">settings</span>
+//         <span class="ds-accordion__trigger-label">Settings</span>
+//         <span class="ds-icon ds-accordion__chevron">expand_more</span>
+//       </button>
+//       <div class="ds-accordion__content" id="panel-1" hidden>
+//         Panel content here.
+//       </div>
+//     </div>
+//   </div>
+//
+// States:    default, hover, focus, active/open (.is-open), disabled (.is-disabled)
+// ============================================================
+
+.ds-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  // ── Panel ──────────────────────────────────────────────────────────────────
+
+  &__panel {
+    border: 1px solid var(--color-border-accordion);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-surface-page);
+
+    & + & {
+      margin-top: var(--spacing-xs);
+    }
+
+    // Open state
+    &.is-open {
+      box-shadow: 0 2px 8px var(--shadow-elevation-1);
+
+      .ds-accordion__chevron {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  // ── Trigger button ─────────────────────────────────────────────────────────
+
+  &__trigger {
+    appearance: none;
+    border: none;
+    background: transparent;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    cursor: pointer;
+    color: var(--color-text-primary);
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-medium);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    text-align: left;
+    position: relative;
+    transition: background 0.12s ease;
+
+    &:focus { outline: none; }
+
+    &:hover:not(:disabled) { background: var(--overlay-hovered); }
+    &:focus-visible { box-shadow: inset 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:active:not(:disabled) { background: var(--overlay-pressed); }
+
+    &:disabled,
+    &[aria-disabled="true"] {
+      color: var(--color-text-disabled);
+      cursor: not-allowed;
+
+      .ds-accordion__trigger-icon { color: var(--color-icon-disabled); }
+      .ds-accordion__chevron { color: var(--color-icon-disabled); }
+    }
+  }
+
+  // ── Trigger icon ───────────────────────────────────────────────────────────
+
+  &__trigger-icon {
+    font-family: 'Material Symbols Rounded';
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-icon-brand);
+    flex-shrink: 0;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  }
+
+  // ── Trigger label ──────────────────────────────────────────────────────────
+
+  &__trigger-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__trigger-description {
+    font-size: var(--ref-typescale-label-small-size);
+    color: var(--color-text-secondary);
+    font-weight: var(--ref-typeface-weight-regular);
+    margin-top: 2px;
+    display: block;
+  }
+
+  // ── Chevron icon ───────────────────────────────────────────────────────────
+
+  &__chevron {
+    font-family: 'Material Symbols Rounded';
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-icon-subtle);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  }
+
+  // ── Content area ───────────────────────────────────────────────────────────
+
+  &__content {
+    padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-lg);
+    border-top: 1px solid var(--color-border-subtle);
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-body-medium-size);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    color: var(--color-text-secondary);
+    background: var(--color-surface-page);
+
+    &[hidden] { display: none; }
+  }
+}

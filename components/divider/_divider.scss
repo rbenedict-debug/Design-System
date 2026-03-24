@@ -1,0 +1,97 @@
+// ============================================================
+// Onflo Design System — Divider Component
+// ============================================================
+//
+// Based on Angular Material mat-divider.
+// Import MatDividerModule in your Angular module.
+//
+// Usage (HTML class API):
+//   <!-- Horizontal full -->
+//   <hr class="ds-divider" />
+//
+//   <!-- Horizontal inset (indented from left) -->
+//   <hr class="ds-divider ds-divider--inset" />
+//
+//   <!-- Horizontal with subhead label -->
+//   <div class="ds-divider ds-divider--subhead">
+//     <span class="ds-divider__label">Section Title</span>
+//   </div>
+//
+//   <!-- Vertical full-height -->
+//   <div class="ds-divider ds-divider--vertical" role="separator"></div>
+//
+// Variants:
+//   Horizontal: (default full) | --inset | --middle-inset | --subhead
+//   Vertical:   --vertical | --vertical-inset | --vertical-middle-inset
+// ============================================================
+
+.ds-divider {
+  display: block;
+  border: none;
+  background: var(--color-border-subtle);
+  flex-shrink: 0;
+
+  // ── Horizontal (default) ──────────────────────────────────────────────────
+
+  height: 1px;
+  width: 100%;
+
+  // Inset from left (aligns with list item content)
+  &--inset {
+    margin-left: var(--spacing-xl);
+  }
+
+  // Inset from both sides
+  &--middle-inset {
+    margin-left: var(--spacing-xl);
+    margin-right: var(--spacing-xl);
+  }
+
+  // ── Subhead divider ────────────────────────────────────────────────────────
+
+  &--subhead {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    height: auto;
+    background: transparent;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--color-border-subtle);
+    }
+  }
+
+  &__label {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-small-size);
+    font-weight: var(--ref-typeface-weight-bold);
+    line-height: var(--ref-typescale-label-small-line-height);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  // ── Vertical ──────────────────────────────────────────────────────────────
+
+  &--vertical {
+    height: 100%;
+    width: 1px;
+    display: inline-block;
+
+    &.ds-divider--inset {
+      margin: var(--spacing-md) 0;
+      height: auto;
+      flex: 1;
+    }
+
+    &.ds-divider--middle-inset {
+      margin: var(--spacing-md) 0;
+      flex: 1;
+    }
+  }
+}

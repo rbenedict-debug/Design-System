@@ -1,0 +1,148 @@
+// ============================================================
+// Onflo Design System — Menu Component
+// ============================================================
+//
+// Based on Angular Material mat-menu.
+// Import MatMenuModule in your Angular module.
+//
+// Usage (HTML class API):
+//   <div class="ds-menu" role="menu">
+//     <button class="ds-menu__item" role="menuitem">
+//       <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>
+//       Edit
+//     </button>
+//     <button class="ds-menu__item" role="menuitem">
+//       <span class="ds-icon ds-icon--sm ds-menu__item-icon">content_copy</span>
+//       Duplicate
+//     </button>
+//     <hr class="ds-menu__divider" />
+//     <button class="ds-menu__item ds-menu__item--destructive" role="menuitem">
+//       <span class="ds-icon ds-icon--sm ds-menu__item-icon">delete</span>
+//       Delete
+//     </button>
+//   </div>
+//
+// States:    hover, focus, active, disabled (.is-disabled)
+// Modifiers: ds-menu__item--destructive
+// ============================================================
+
+.ds-menu {
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 4px 16px var(--shadow-elevation-2),
+    0 1px 4px var(--shadow-elevation-1);
+  min-width: 160px;
+  max-width: 280px;
+  padding: var(--spacing-xs) 0;
+  display: flex;
+  flex-direction: column;
+
+  // ── Section label ──────────────────────────────────────────────────────────
+
+  &__section-label {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-small-size);
+    font-weight: var(--ref-typeface-weight-bold);
+    line-height: var(--ref-typescale-label-small-line-height);
+    color: var(--color-text-secondary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-xs);
+    user-select: none;
+  }
+
+  // ── Menu item ──────────────────────────────────────────────────────────────
+
+  &__item {
+    appearance: none;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    border-radius: 0;
+    transition: background 0.1s ease, color 0.1s ease;
+    position: relative;
+
+    &:focus { outline: none; }
+
+    &:hover:not(.is-disabled) { background: var(--overlay-hovered); }
+    &:focus-visible { background: var(--overlay-focused); box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
+    &:active:not(.is-disabled) { background: var(--overlay-pressed); }
+
+    // Indent variant for sub-menu items
+    &--indent { padding-left: calc(var(--spacing-md) + 24px); }
+
+    // Destructive action
+    &--destructive {
+      color: var(--color-text-accent-red);
+
+      .ds-menu__item-icon { color: var(--color-icon-error); }
+      &:hover:not(.is-disabled)  { background: var(--overlay-accent-red-hovered); }
+      &:focus-visible            { box-shadow: inset 0 0 0 2px var(--color-border-accent-red); }
+      &:active:not(.is-disabled) { background: var(--overlay-accent-red-pressed); }
+    }
+
+    // Disabled state
+    &.is-disabled {
+      color: var(--color-text-disabled);
+      cursor: not-allowed;
+      pointer-events: none;
+
+      .ds-menu__item-icon { color: var(--color-icon-disabled); }
+    }
+  }
+
+  // ── Item icon ──────────────────────────────────────────────────────────────
+
+  &__item-icon {
+    color: var(--color-icon-subtle);
+    flex-shrink: 0;
+  }
+
+  // ── Item trailing ─────────────────────────────────────────────────────────
+
+  &__item-trailing {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-text-secondary);
+    font-size: var(--ref-typescale-label-small-size);
+  }
+
+  // ── Checkbox item variant ─────────────────────────────────────────────────
+
+  &__item-check {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-icon-brand);
+
+    .ds-icon { font-size: 18px; }
+  }
+
+  // ── Divider ────────────────────────────────────────────────────────────────
+
+  &__divider {
+    height: 1px;
+    background: var(--color-border-subtle);
+    border: none;
+    margin: var(--spacing-xs) 0;
+  }
+}

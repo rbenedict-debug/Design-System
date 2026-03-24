@@ -1,0 +1,180 @@
+// ============================================================
+// Onflo Design System — Dialog Component
+// ============================================================
+//
+// Based on Angular Material mat-dialog.
+// Import MatDialogModule in your Angular module.
+//
+// Usage (HTML class API):
+//   <div class="ds-dialog-backdrop" role="presentation">
+//     <div class="ds-dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
+//       <div class="ds-dialog__header">
+//         <span class="ds-icon ds-dialog__icon">warning</span>
+//         <h2 class="ds-dialog__title" id="dlg-title">Delete item?</h2>
+//         <button class="ds-dialog__close" aria-label="Close dialog">
+//           <span class="ds-icon ds-icon--sm">close</span>
+//         </button>
+//       </div>
+//       <div class="ds-dialog__content">
+//         <p>This action cannot be undone.</p>
+//       </div>
+//       <div class="ds-dialog__actions">
+//         <button class="ds-button ds-button--outlined">Cancel</button>
+//         <button class="ds-button ds-button--destructive">Delete</button>
+//       </div>
+//     </div>
+//   </div>
+//
+// Alignment: ds-dialog--center | (default left-aligned)
+// ============================================================
+
+// ── Backdrop ─────────────────────────────────────────────────────────────────
+
+.ds-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--color-surface-scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-xl);
+}
+
+// ── Dialog container ─────────────────────────────────────────────────────────
+
+.ds-dialog {
+  background: var(--color-surface-page);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 8px 24px var(--shadow-elevation-3),
+    0 2px 8px var(--shadow-elevation-2);
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  // ── Sizes ───────────────────────────────────────────────────────────────────
+
+  &--sm  { max-width: 360px; }
+  &--lg  { max-width: 640px; }
+  &--xl  { max-width: 800px; }
+
+  // ── Center aligned ─────────────────────────────────────────────────────────
+
+  &--center {
+    .ds-dialog__header { flex-direction: column; align-items: center; text-align: center; padding-bottom: 0; }
+    .ds-dialog__close  { position: absolute; top: var(--spacing-md); right: var(--spacing-md); }
+    .ds-dialog__icon   { margin-bottom: var(--spacing-sm); }
+    .ds-dialog__content { text-align: center; }
+    .ds-dialog__actions { justify-content: center; }
+  }
+
+  // ── Header ─────────────────────────────────────────────────────────────────
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-md);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  &__icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--color-icon-brand);
+    margin-top: 2px;
+
+    &--error   { color: var(--color-icon-error); }
+    &--warning { color: var(--color-icon-warning); }
+    &--success { color: var(--color-icon-success); }
+    &--info    { color: var(--color-icon-info); }
+  }
+
+  &__title-group {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-title-h3-size);
+    font-weight: var(--ref-typeface-weight-bold);
+    line-height: var(--ref-typescale-title-h3-line-height);
+    color: var(--color-text-primary);
+    margin: 0 0 4px;
+  }
+
+  &__subtitle {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-small-size);
+    line-height: var(--ref-typescale-label-small-line-height);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  &__close {
+    appearance: none;
+    border: none;
+    background: transparent;
+    padding: var(--spacing-xs);
+    margin: -var(--spacing-xs);
+    cursor: pointer;
+    color: var(--color-icon-subtle);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: color 0.12s, background 0.12s;
+
+    &:hover { color: var(--color-icon-default); background: var(--overlay-hovered); }
+    &:focus { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+  }
+
+  // ── Divider between header and content ────────────────────────────────────
+
+  &__divider {
+    height: 1px;
+    background: var(--color-border-subtle);
+    flex-shrink: 0;
+    margin: 0 var(--spacing-xl);
+  }
+
+  // ── Content ────────────────────────────────────────────────────────────────
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-body-medium-size);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    color: var(--color-text-secondary);
+
+    // No header → full padding
+    &:first-child { padding-top: var(--spacing-xl); }
+  }
+
+  // ── Actions ────────────────────────────────────────────────────────────────
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl) var(--spacing-xl);
+    flex-shrink: 0;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+}

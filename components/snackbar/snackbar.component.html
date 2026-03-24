@@ -1,0 +1,22 @@
+<div
+  class="ds-snackbar"
+  [class.ds-snackbar--success]="variant === 'success'"
+  [class.ds-snackbar--error]="variant === 'error'"
+  [class.ds-snackbar--warning]="variant === 'warning'"
+  role="status"
+  aria-live="polite"
+>
+  <span *ngIf="icon" class="ds-snackbar__icon">{{ icon }}</span>
+  <span class="ds-snackbar__message">{{ message }}</span>
+  <button *ngIf="actionLabel" class="ds-snackbar__action" (click)="action.emit()">
+    {{ actionLabel }}
+  </button>
+  <button
+    *ngIf="dismissible"
+    class="ds-snackbar__close"
+    aria-label="Dismiss"
+    (click)="dismissed.emit()"
+  >
+    <span class="ds-icon ds-icon--sm">close</span>
+  </button>
+</div>

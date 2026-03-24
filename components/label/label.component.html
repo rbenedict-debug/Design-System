@@ -1,0 +1,10 @@
+<span
+  class="ds-label"
+  [class]="'ds-label--' + color"
+  [class.ds-label--sm]="size === 'sm'"
+  [class.ds-label--xs]="size === 'xs'"
+  [class.ds-label--outline]="outline"
+>
+  <span *ngIf="icon" class="ds-label__icon">{{ icon }}</span>
+  <ng-content />
+</span>

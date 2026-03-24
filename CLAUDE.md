@@ -30,6 +30,29 @@ components/
   button/                  # ds-button
   icon-button/             # ds-icon-button + ds-icon-button-toggle
   input/                   # ds-input
+  checkbox/                # ds-checkbox
+  radio/                   # ds-radio + ds-radio-group
+  toggle/                  # ds-toggle
+  badge/                   # ds-badge
+  alert/                   # ds-alert
+  tooltip/                 # ds-tooltip
+  select/                  # ds-select
+  textarea/                # ds-textarea (no fixed height — resizable)
+  avatar/                  # ds-avatar
+  progress/                # ds-progress
+  tabs/                    # ds-tabs + ds-tab
+  card/                    # ds-card
+  dialog/                  # ds-dialog
+  menu/                    # ds-menu
+  accordion/               # ds-accordion
+  chip/                    # ds-chip
+  divider/                 # ds-divider
+  list/                    # ds-list
+  paginator/               # ds-paginator
+  spinner/                 # ds-spinner
+  snackbar/                # ds-snackbar
+  label/                   # ds-label (display-only tag)
+  skeleton/                # ds-skeleton
 preview/
   index.html               # Self-contained visual token + component reference
 ```
@@ -105,7 +128,7 @@ We use **Material Symbols Rounded** with the variable font FILL axis for outline
 - BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{modifier}`
 - State classes: `.is-error`, `.is-disabled`, `.is-readonly`, `.is-selected`
 - Interactive states: `:hover`, `:focus-visible`, `:active`, `:disabled`
-- Focus ring: always `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` — never `outline`
+- Focus ring: always `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` — never `outline`. **Exception: `ds-tabs__tab` uses `border-color: var(--color-border-ada-focus-ring)` because `overflow: hidden` clips box-shadow.**
 - Overlay tints (hover/pressed/focused on filled surfaces): use `::after` pseudo-element with `var(--overlay-hovered)` etc.
 
 ### Component file structure
@@ -141,9 +164,21 @@ components/{name}/
 - States: default, hover, focus, error (`.is-error`), disabled (`.is-disabled`), read-only (`.is-readonly`)
 - ADA: `aria-invalid="true"` on `<input>` when error; `role="alert"` on error message; `aria-describedby` links input to helper
 
-### Textarea (`ds-textarea`) — *not yet built*
+### Textarea (`ds-textarea`)
 - Separate component from `ds-input` — used for description / long-form text
-- Will be resizable vertically, no fixed height
+- Resizable vertically, no fixed height
+
+### Tabs (`ds-tabs` + `ds-tab`)
+- **Height: always 48px — fixed**
+- Text colour: always `--color-text-primary` in all states (default, hover, selected, disabled)
+- Font weight: always bold (`--ref-typeface-weight-bold`) — never changes between states
+- Selected indicator: 2px bar `position: absolute; bottom: 0` inside the tab (not outside at `-2px`)
+- Selected indicator colour: `--color-surface-nav-active`
+- Badge: 6px notification dot (`ds-tabs__dot`) — **never a count badge**. Use `[showBadge]="true"` on `ds-tab`.
+- Focus: `border: 2px solid var(--color-border-ada-focus-ring)` — **exception to the normal box-shadow focus ring rule** (tabs use border to avoid clipping issues with `overflow: hidden`)
+- Min-width: 56px; border-bottom of container: 1px (not 2px)
+- ADA: `role="tablist"` on container, `role="tab"` + `aria-selected` on buttons, arrow key / Home / End navigation via `@HostListener('keydown')`
+- Angular Material base: `MatTabsModule` (mat-tab-group + mat-tab)
 
 ---
 
@@ -162,10 +197,73 @@ components/{name}/
 - Never hardcode hex, rgba, or px values in component SCSS — always use tokens
 - Never add size variants to `ds-input` — height is fixed at 42px
 - Never skip `aria-label` on icon buttons
-- Never use `outline` for focus — always use `box-shadow` focus ring
+- Never use `outline` for focus — always use `box-shadow` focus ring (exception: `ds-tabs__tab` uses `border-color` — see Component Rules)
 - Never put content inside the `<!-- ONFLO-TOKENS:START/END -->` block except token CSS
 - Never use `:has()` to infer icon presence in buttons — icon vs. no-icon are separate Figma variants
 - Never reference `--ref-*` tokens directly in component styles — go through semantic `--color-*` / `--spacing-*` etc.
+
+---
+
+## Angular Material Design Foundation
+
+Every Onflo component is based on an Angular Material component. The Onflo design system provides the visual layer (tokens, typography, spacing, interaction states) while Angular Material provides the behavioral layer (accessibility, keyboard navigation, animations, CDK primitives).
+
+### How it works
+
+In Angular applications, developers import both the Angular Material module AND the Onflo SCSS:
+
+```scss
+// In styles.scss or component.scss
+@use '@onflo/design-system/components';
+```
+
+```typescript
+// In your Angular module or standalone component
+import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
+// etc.
+```
+
+The Onflo SCSS overrides/themes Material components using global class overrides and CSS custom property (CSS variable) overrides. The `::ng-deep` pattern is avoided in favour of global SCSS that targets the Material component's generated class names.
+
+### Component → Angular Material mapping
+
+| Onflo Component | Angular Material Module | Notes |
+|---|---|---|
+| `ds-icon` | n/a — Material Symbols Rounded font | CSS class API only |
+| `ds-button` | `MatButtonModule` | mat-flat-button, mat-stroked-button, mat-button |
+| `ds-icon-button` | `MatIconButtonModule` | mat-icon-button |
+| `ds-input` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput |
+| `ds-textarea` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput (textarea) |
+| `ds-select` | `MatSelectModule` | mat-select inside mat-form-field |
+| `ds-checkbox` | `MatCheckboxModule` | mat-checkbox |
+| `ds-radio` + `ds-radio-group` | `MatRadioModule` | mat-radio-group + mat-radio-button |
+| `ds-toggle` | `MatSlideToggleModule` | mat-slide-toggle |
+| `ds-badge` | `MatBadgeModule` | matBadge directive |
+| `ds-alert` | Custom | No Material equivalent — role="alert" |
+| `ds-tooltip` | `MatTooltipModule` | matTooltip directive |
+| `ds-avatar` | Custom | No Material equivalent |
+| `ds-progress` | `MatProgressBarModule` | mat-progress-bar |
+| `ds-spinner` | `MatProgressSpinnerModule` | mat-progress-spinner |
+| `ds-tabs` | `MatTabsModule` | mat-tab-group + mat-tab |
+| `ds-card` | `MatCardModule` | mat-card |
+| `ds-dialog` | `MatDialogModule` | mat-dialog |
+| `ds-menu` | `MatMenuModule` | mat-menu |
+| `ds-accordion` | `MatExpansionModule` | mat-accordion + mat-expansion-panel |
+| `ds-chip` | `MatChipsModule` | mat-chip |
+| `ds-divider` | `MatDividerModule` | mat-divider |
+| `ds-list` | `MatListModule` | mat-list + mat-list-item |
+| `ds-paginator` | `MatPaginatorModule` | mat-paginator |
+| `ds-snackbar` | `MatSnackBarModule` | MatSnackBar service |
+| `ds-label` | Custom | Display-only tag — no Material equivalent |
+| `ds-skeleton` | Custom | No Material equivalent — aria-busy pattern |
+
+### Theming approach
+
+1. **CSS custom properties** — All tokens are exposed as CSS variables. Material's `--mat-*` CSS variable overrides are used where possible (Angular Material M3+ API).
+2. **Global SCSS overrides** — The Onflo component SCSS targets both the Onflo CSS class API (`.ds-*`) and, in global stylesheets, the generated Material class names (`.mat-*`, `.mdc-*`).
+3. **No `::ng-deep`** in the Onflo library itself. Projects consuming the library use their own global override files if needed.
+4. **Focus rings** — Always `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)`. Never `outline`. This overrides Material's default focus indicator.
 
 ---
 
