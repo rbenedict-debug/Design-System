@@ -2,9 +2,11 @@
   <input
     [id]="inputId"
     type="checkbox"
+    role="switch"
     class="ds-toggle__control"
     [checked]="checked"
     [disabled]="disabled"
+    [attr.aria-checked]="checked"
     (change)="onChange($event)"
   />
   <span class="ds-toggle__track">

@@ -1275,51 +1275,33 @@
        Source: components/toggle/_toggle.scss
        ════════════════════════════════════════════════════════════════════════ */
 
-    .ds-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-      cursor: pointer;
-      user-select: none;
-      position: relative;
-    }
-    .ds-toggle__control {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
-      pointer-events: none;
-    }
-    .ds-toggle__track {
-      flex-shrink: 0;
-      width: 36px;
-      height: 20px;
-      border-radius: var(--radius-full);
-      background: var(--color-border-secondary);
-      display: flex;
-      align-items: center;
-      padding: 2px;
-      transition: background-color 0.2s ease;
-      position: relative;
-    }
-    .ds-toggle__thumb {
-      width: 16px;
-      height: 16px;
-      border-radius: var(--radius-full);
-      background: var(--color-surface-page);
-      box-shadow: 0 1px 3px rgba(65,65,65,0.1);
-      transition: transform 0.2s ease;
-      flex-shrink: 0;
-    }
-    .ds-toggle:hover:not(.is-disabled) .ds-toggle__track { background: var(--color-border-primary); }
-    .ds-toggle__control:focus-visible ~ .ds-toggle__track { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-toggle { display: inline-flex; align-items: center; gap: var(--spacing-sm); cursor: pointer; user-select: none; position: relative; }
+    .ds-toggle__control { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+    /* Track — 52×32px (Figma primitive/switch) */
+    .ds-toggle__track { flex-shrink: 0; width: 52px; height: 32px; border-radius: var(--radius-full); background: var(--color-surface-default); display: flex; align-items: center; padding: var(--spacing-xs); transition: background-color 0.2s ease; position: relative; }
     .ds-toggle__control:checked ~ .ds-toggle__track { background: var(--color-surface-brand-bold); }
-    .ds-toggle__control:checked ~ .ds-toggle__track .ds-toggle__thumb { transform: translateX(16px); }
+    .ds-toggle__control:focus { outline: none; }
+    .ds-toggle__control:focus-visible ~ .ds-toggle__track { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-toggle__control:focus-visible ~ .ds-toggle__track .ds-toggle__thumb::before { background: var(--overlay-pressed); }
+    /* Thumb — 24×24px, state-layer via ::before */
+    .ds-toggle__thumb { width: 24px; height: 24px; border-radius: var(--radius-full); background: var(--color-icon-on-brand); flex-shrink: 0; position: relative; transition: transform 0.2s ease; }
+    .ds-toggle__thumb::before { content: ''; position: absolute; inset: -8px; border-radius: var(--radius-full); background: transparent; transition: background 0.15s ease; pointer-events: none; }
+    /* Slide 20px: 52 - 2×4 - 24 = 20px */
+    .ds-toggle__control:checked ~ .ds-toggle__track .ds-toggle__thumb { transform: translateX(20px); }
+    .ds-toggle:hover:not(.is-disabled) .ds-toggle__thumb::before { background: var(--overlay-hovered); }
+    .ds-toggle:active:not(.is-disabled) .ds-toggle__thumb::before { background: var(--overlay-pressed); }
+    /* Icon variant — check (on) / close (off) in thumb */
+    .ds-toggle--icon .ds-toggle__thumb::after { content: 'close'; font-family: 'Material Symbols Rounded'; font-size: 16px; font-style: normal; font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20; line-height: 1; width: 16px; height: 16px; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--color-text-secondary); }
+    .ds-toggle--icon .ds-toggle__control:checked ~ .ds-toggle__track .ds-toggle__thumb::after { content: 'check'; color: var(--color-surface-brand-bold); }
     .ds-toggle__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-regular); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-primary); }
     /* Disabled */
     .ds-toggle.is-disabled { cursor: not-allowed; pointer-events: none; }
-    .ds-toggle.is-disabled .ds-toggle__track { background: var(--color-surface-disabled); border: 1px solid var(--color-border-subtle); }
-    .ds-toggle.is-disabled .ds-toggle__thumb { background: var(--color-icon-disabled); box-shadow: none; }
+    .ds-toggle.is-disabled .ds-toggle__track { background: var(--color-surface-disabled); border: 2px solid var(--color-border-subtle); }
+    .ds-toggle.is-disabled .ds-toggle__thumb { background: var(--color-icon-disabled); }
+    .ds-toggle.is-disabled .ds-toggle__thumb::before { display: none; }
+    .ds-toggle.is-disabled .ds-toggle__control:checked ~ .ds-toggle__track { background: var(--color-surface-disabled); }
+    .ds-toggle.is-disabled .ds-toggle--icon .ds-toggle__thumb::after,
+    .ds-toggle--icon.is-disabled .ds-toggle__thumb::after { color: var(--color-icon-disabled); }
     .ds-toggle.is-disabled .ds-toggle__label { color: var(--color-text-disabled); }
 
 
@@ -2973,12 +2955,12 @@
             <div class="demo-row-label">Off / On</div>
             <div class="demo-row-items">
               <label class="ds-toggle">
-                <input type="checkbox" class="ds-toggle__control" />
+                <input type="checkbox" role="switch" class="ds-toggle__control" aria-checked="false" />
                 <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
                 <span class="ds-toggle__label">Notifications off</span>
               </label>
               <label class="ds-toggle">
-                <input type="checkbox" class="ds-toggle__control" checked />
+                <input type="checkbox" role="switch" class="ds-toggle__control" checked aria-checked="true" />
                 <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
                 <span class="ds-toggle__label">Notifications on</span>
               </label>
@@ -2986,14 +2968,30 @@
           </div>
 
           <div class="demo-row">
-            <div class="demo-row-label">Without label</div>
+            <div class="demo-row-label">With icon</div>
             <div class="demo-row-items">
-              <label class="ds-toggle">
-                <input type="checkbox" class="ds-toggle__control" />
+              <label class="ds-toggle ds-toggle--icon">
+                <input type="checkbox" role="switch" class="ds-toggle__control" aria-checked="false" />
+                <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                <span class="ds-toggle__label">Off with icon</span>
+              </label>
+              <label class="ds-toggle ds-toggle--icon">
+                <input type="checkbox" role="switch" class="ds-toggle__control" checked aria-checked="true" />
+                <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                <span class="ds-toggle__label">On with icon</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">No label</div>
+            <div class="demo-row-items">
+              <label class="ds-toggle" aria-label="Toggle off">
+                <input type="checkbox" role="switch" class="ds-toggle__control" aria-checked="false" />
                 <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
               </label>
-              <label class="ds-toggle">
-                <input type="checkbox" class="ds-toggle__control" checked />
+              <label class="ds-toggle" aria-label="Toggle on">
+                <input type="checkbox" role="switch" class="ds-toggle__control" checked aria-checked="true" />
                 <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
               </label>
             </div>
@@ -3003,14 +3001,24 @@
             <div class="demo-row-label">Disabled</div>
             <div class="demo-row-items">
               <label class="ds-toggle is-disabled">
-                <input type="checkbox" class="ds-toggle__control" disabled />
+                <input type="checkbox" role="switch" class="ds-toggle__control" disabled aria-checked="false" />
                 <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
                 <span class="ds-toggle__label">Disabled off</span>
               </label>
               <label class="ds-toggle is-disabled">
-                <input type="checkbox" class="ds-toggle__control" disabled checked />
+                <input type="checkbox" role="switch" class="ds-toggle__control" disabled checked aria-checked="true" />
                 <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
                 <span class="ds-toggle__label">Disabled on</span>
+              </label>
+              <label class="ds-toggle ds-toggle--icon is-disabled">
+                <input type="checkbox" role="switch" class="ds-toggle__control" disabled aria-checked="false" />
+                <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                <span class="ds-toggle__label">Disabled icon off</span>
+              </label>
+              <label class="ds-toggle ds-toggle--icon is-disabled">
+                <input type="checkbox" role="switch" class="ds-toggle__control" disabled checked aria-checked="true" />
+                <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                <span class="ds-toggle__label">Disabled icon on</span>
               </label>
             </div>
           </div>

@@ -33,6 +33,9 @@ export class DsToggleComponent {
   /** Disables the toggle. */
   @Input() disabled = false;
 
+  /** Show check/close icon inside the thumb (icon variant). */
+  @Input() showIcon = false;
+
   /** Emits the new checked value when toggled. */
   @Output() checkedChange = new EventEmitter<boolean>();
 
@@ -41,6 +44,7 @@ export class DsToggleComponent {
   get wrapperClasses(): string {
     return [
       'ds-toggle',
+      this.showIcon ? 'ds-toggle--icon' : '',
       this.disabled ? 'is-disabled' : '',
     ]
       .filter(Boolean)

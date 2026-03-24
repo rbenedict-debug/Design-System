@@ -165,6 +165,19 @@ components/{name}/
 - States: default, hover, focus, error (`.is-error`), disabled (`.is-disabled`), read-only (`.is-readonly`)
 - ADA: `aria-invalid="true"` on `<input>` when error; `role="alert"` on error message; `aria-describedby` links input to helper
 
+### Toggle / Switch (`ds-toggle`)
+- **Track**: 52×32px, `padding: var(--spacing-xs)` (4px), radius-full
+- **Off track**: `--color-surface-default` (light grey, no border)
+- **On track**: `--color-surface-brand-bold` (blue)
+- **Disabled track**: `--color-surface-disabled` + `border: 2px solid --color-border-subtle`
+- **Thumb**: 24×24px, `--color-icon-on-brand` (white), no shadow
+- **Thumb translate when on**: 20px (52 − 2×4 − 24 = 20)
+- **State layer**: `::before` on thumb, `inset: -8px` (creates 40px circle) — hover/pressed overlays
+- **Icon variant**: `ds-toggle--icon` modifier — `::after` shows `check` (on) or `close` (off) via Material Symbols; icon colours: on=`--color-surface-brand-bold`, off=`--color-text-secondary`
+- **ADA**: `role="switch"` + `aria-checked` on the hidden input; must have a visible label
+- **Focus**: `box-shadow: 0 0 0 3px --color-border-ada-focus-ring` on track (keyboard only)
+- Angular Material base: `MatSlideToggleModule`
+
 ### Textarea (`ds-textarea`)
 - Separate component from `ds-input` — used for description / long-form text
 - Resizable vertically, no fixed height
@@ -225,6 +238,15 @@ All components must meet WCAG 2.1 AA. These rules are non-negotiable.
 ### Colour contrast
 - All text must meet WCAG AA contrast ratios: 4.5:1 for body text, 3:1 for large text and UI components
 - Never convey information with colour alone — always pair with an icon, label, or pattern
+
+---
+
+## Git Workflow
+
+- **Commit frequently** — commit after each component change or addition
+- **Push in batches of 10** — only push to remote after 10 or more components have been changed or added since the last push
+- **Always update CLAUDE.md** during each change (before committing), regardless of whether a push is due
+- Track the count mentally: after a push, the counter resets to 0
 
 ---
 

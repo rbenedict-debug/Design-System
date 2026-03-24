@@ -2,17 +2,32 @@
 // Onflo Design System — Toggle / Switch Component
 // ============================================================
 //
+// Based on Angular Material mat-slide-toggle.
+// Import MatSlideToggleModule in your Angular module.
+//
+// Figma: primitive/switch — 52×32px track, 24px thumb with
+// 40px circular state-layer (hover/pressed/focus overlays).
+//
 // Usage (HTML class API):
 //   <label class="ds-toggle">
-//     <input type="checkbox" class="ds-toggle__control" />
-//     <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+//     <input type="checkbox" class="ds-toggle__control" role="switch" />
+//     <span class="ds-toggle__track">
+//       <span class="ds-toggle__thumb"></span>
+//     </span>
 //     <span class="ds-toggle__label">Label</span>
 //   </label>
 //
-// Angular component:
-//   <ds-toggle label="Enable notifications" [(checked)]="notificationsOn" />
+//   <!-- Icon variant (check / close inside thumb) -->
+//   <label class="ds-toggle ds-toggle--icon">
+//     ...same structure...
+//   </label>
 //
-// States:    off, on (checked), .is-disabled
+// Angular component:
+//   <ds-toggle label="Enable notifications" [(checked)]="on" />
+//   <ds-toggle label="Dark mode" [(checked)]="dark" [showIcon]="true" />
+//
+// ADA: Must have a visible label. role="switch" on the input.
+//      Focus ring on track (box-shadow, keyboard only).
 // ============================================================
 
 .ds-toggle {
@@ -32,56 +47,112 @@
     pointer-events: none;
   }
 
-  // Track
+
+  // ── Track ──────────────────────────────────────────────────────────────────
+  // 52×32px, radius-full, 4px padding
+  // Off: surface-default (light grey)
+  // On:  surface-brand-bold (blue)
+
   &__track {
     flex-shrink: 0;
-    width: 36px;
-    height: 20px;
+    width: 52px;
+    height: 32px;
     border-radius: var(--radius-full);
-    background: var(--color-border-secondary);
+    background: var(--color-surface-default);
     display: flex;
     align-items: center;
-    padding: 2px;
+    padding: var(--spacing-xs);
     transition: background-color 0.2s ease;
     position: relative;
   }
 
-  // Thumb
-  &__thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: var(--radius-full);
-    background: var(--color-surface-page);
-    box-shadow: 0 1px 3px var(--shadow-elevation-2);
-    transition: transform 0.2s ease;
-    flex-shrink: 0;
-  }
-
-  // Hover
-  &:hover:not(.is-disabled) &__track {
-    background: var(--color-border-primary);
-  }
-
-  // Focus ring
-  &__control:focus-visible ~ &__track {
-    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-  }
-
-  // On (checked) state
+  // On (checked) — blue track
   &__control:checked ~ &__track {
     background: var(--color-surface-brand-bold);
   }
 
+  // Focus ring on track (keyboard only)
+  &__control:focus         { outline: none; }
+  &__control:focus-visible ~ &__track {
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+  }
+
+  // Focus also activates thumb state-layer
+  &__control:focus-visible ~ &__track &__thumb::before {
+    background: var(--overlay-pressed);
+  }
+
+
+  // ── Thumb ──────────────────────────────────────────────────────────────────
+  // 24×24px white circle. Slides 20px when on.
+  // State-layer (::before) — 40px circle via inset: -8px — hover/pressed overlay
+
+  &__thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    background: var(--color-icon-on-brand);
+    flex-shrink: 0;
+    position: relative;
+    transition: transform 0.2s ease;
+
+    // State layer — 40px circle (8px beyond thumb on each side)
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: var(--radius-full);
+      background: transparent;
+      transition: background 0.15s ease;
+      pointer-events: none;
+    }
+  }
+
+  // Slide thumb right when on: 52 - 2×4 - 24 = 20px
   &__control:checked ~ &__track &__thumb {
-    transform: translateX(16px);
+    transform: translateX(20px);
   }
 
-  &:hover:not(.is-disabled) &__control:checked ~ &__track {
-    background: var(--color-surface-brand-bold);
-    filter: brightness(1.1);
+  // Hover — state layer overlay on thumb
+  &:hover:not(.is-disabled) &__thumb::before {
+    background: var(--overlay-hovered);
   }
 
-  // Label
+  // Pressed
+  &:active:not(.is-disabled) &__thumb::before {
+    background: var(--overlay-pressed);
+  }
+
+
+  // ── Icon variant — check (on) / close (off) inside thumb ───────────────────
+  // Modifier class: ds-toggle--icon
+  // Uses Material Symbols Rounded ::after on the thumb
+
+  &--icon &__thumb::after {
+    content: 'close';
+    font-family: 'Material Symbols Rounded';
+    font-size: 16px;
+    font-style: normal;
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+    line-height: 1;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+  }
+
+  &--icon &__control:checked ~ &__track &__thumb::after {
+    content: 'check';
+    color: var(--color-surface-brand-bold);
+  }
+
+
+  // ── Label ───────────────────────────────────────────────────────────────────
+
   &__label {
     font-family: var(--ref-typeface-brand);
     font-size: var(--ref-typescale-label-medium-size);
@@ -91,7 +162,7 @@
   }
 
 
-  // ── Disabled state ────────────────────────────────────────────────────────
+  // ── Disabled state ──────────────────────────────────────────────────────────
 
   &.is-disabled,
   &:has(.ds-toggle__control:disabled) {
@@ -100,16 +171,26 @@
 
     .ds-toggle__track {
       background: var(--color-surface-disabled);
-      border: 1px solid var(--color-border-subtle);
+      border: 2px solid var(--color-border-subtle);
     }
 
     .ds-toggle__thumb {
       background: var(--color-icon-disabled);
-      box-shadow: none;
     }
 
+    .ds-toggle__thumb::before {
+      display: none;
+    }
+
+    // Disabled on — track still disabled colour (not brand)
     .ds-toggle__control:checked ~ .ds-toggle__track {
       background: var(--color-surface-disabled);
+    }
+
+    // Disabled icon
+    &.ds-toggle--icon .ds-toggle__thumb::after,
+    .ds-toggle--icon .ds-toggle__thumb::after {
+      color: var(--color-icon-disabled);
     }
 
     .ds-toggle__label {
