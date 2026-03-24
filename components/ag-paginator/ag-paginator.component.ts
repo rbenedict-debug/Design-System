@@ -74,7 +74,7 @@ export class DsAgPaginatorComponent implements OnInit, OnDestroy {
   private _api: AgPaginationApi | null = null;
 
   /** Page size options shown in the select. */
-  @Input() pageSizeOptions: number[] = [10, 25, 50, 100];
+  @Input() pageSizeOptions: number[] = [100, 250, 500, 1000];
 
   currentPage = 0;
   pageSize    = 25;
