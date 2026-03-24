@@ -4699,12 +4699,12 @@
           <div style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden;">
             <div class="ds-table-toolbar">
               <div class="ds-table-toolbar__left">
-                <button class="ds-button ds-button--filled" type="button">Add Row</button>
+                <button class="ds-button ds-button--filled" type="button">+ New Item</button>
                 <button class="ds-button ds-button--outlined" type="button">
-                  Import
+                  Bulk Actions
                   <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon" style="font-size:18px;">arrow_drop_down</span></span>
                 </button>
-                <button class="ds-button ds-button--text" type="button">Export</button>
+                <button class="ds-button ds-button--destructive" type="button">Delete</button>
               </div>
               <div class="ds-table-toolbar__right">
                 <div class="ds-search" role="search">
@@ -4714,10 +4714,10 @@
                   </div>
                 </div>
                 <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Toggle filters" onclick="togglePressed(this)">
-                  <span class="ds-icon">filter_alt</span>
+                  <span class="ds-icon ds-icon--filled">filter_alt</span>
                 </button>
                 <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Column settings" onclick="togglePressed(this)">
-                  <span class="ds-icon">settings</span>
+                  <span class="ds-icon ds-icon--filled">settings</span>
                 </button>
                 <button class="ds-table-toolbar__btn" type="button" aria-label="Download">
                   <span class="ds-icon">download</span>
@@ -4740,10 +4740,10 @@
                   </div>
                 </div>
                 <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Toggle filters" onclick="togglePressed(this)">
-                  <span class="ds-icon">filter_alt</span>
+                  <span class="ds-icon ds-icon--filled">filter_alt</span>
                 </button>
                 <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Column settings" onclick="togglePressed(this)">
-                  <span class="ds-icon">settings</span>
+                  <span class="ds-icon ds-icon--filled">settings</span>
                 </button>
                 <button class="ds-table-toolbar__btn" type="button" aria-label="Download">
                   <span class="ds-icon">download</span>
@@ -4759,11 +4759,12 @@
           <div style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden;">
             <div class="ds-table-toolbar">
               <div class="ds-table-toolbar__left">
-                <button class="ds-button ds-button--filled" type="button">New Item</button>
+                <button class="ds-button ds-button--filled" type="button">+ New Item</button>
                 <button class="ds-button ds-button--outlined" type="button">
                   Bulk Actions
                   <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon" style="font-size:18px;">arrow_drop_down</span></span>
                 </button>
+                <button class="ds-button ds-button--destructive" type="button">Delete</button>
               </div>
               <div class="ds-table-toolbar__right">
                 <div class="ds-search" role="search">
@@ -4772,16 +4773,21 @@
                     <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
                   </div>
                 </div>
-                <!-- Extra control: a status filter label chip -->
-                <button class="ds-button ds-button--outlined" type="button" style="white-space: nowrap; font-size: 13px; height: 42px;">
-                  Status
-                  <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon" style="font-size:18px;">arrow_drop_down</span></span>
-                </button>
+                <!-- Extra control: a styled native select for filtering by status -->
+                <div class="ds-ag-paginator__select-wrap" style="width: 140px;">
+                  <select class="ds-ag-paginator__select" aria-label="Filter by status">
+                    <option value="">All Statuses</option>
+                    <option value="active">Active</option>
+                    <option value="pending">Pending</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                  <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                </div>
                 <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle is-selected" type="button" aria-pressed="true" aria-label="Toggle filters" onclick="togglePressed(this)">
-                  <span class="ds-icon">filter_alt</span>
+                  <span class="ds-icon ds-icon--filled">filter_alt</span>
                 </button>
                 <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Column settings" onclick="togglePressed(this)">
-                  <span class="ds-icon">settings</span>
+                  <span class="ds-icon ds-icon--filled">settings</span>
                 </button>
                 <!-- Custom trailing button instead of download -->
                 <button class="ds-table-toolbar__btn" type="button" aria-label="Export to CSV">
