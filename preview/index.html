@@ -1962,6 +1962,7 @@
       <a class="nav-link" href="#progress" onclick="setActive(this)"><span class="nav-dot"></span>Progress</a>
       <a class="nav-link" href="#tabs" onclick="setActive(this)"><span class="nav-dot"></span>Tabs</a>
       <a class="nav-link" href="#search" onclick="setActive(this)"><span class="nav-dot"></span>Search Field</a>
+      <a class="nav-link" href="#table" onclick="setActive(this)"><span class="nav-dot"></span>Table</a>
       <a class="nav-link" href="#table-header-cell" onclick="setActive(this)"><span class="nav-dot"></span>Table Header Cell</a>
       <a class="nav-link" href="#table-row-cell" onclick="setActive(this)"><span class="nav-dot"></span>Table Row Cell</a>
       <a class="nav-link" href="#ag-paginator" onclick="setActive(this)"><span class="nav-dot"></span>AG Grid Paginator</a>
@@ -3964,6 +3965,222 @@
         </div>
       </section>
 
+      <!-- ── TABLE — FULL SIMULATION ─────────────────────────────────────────── -->
+      <section class="section" id="table">
+        <h2 class="section-title">Table</h2>
+        <p class="section-desc">Full AG Grid table simulation — toolbar, header row, data rows, and paginator composed together.</p>
+
+        <div class="demo-row" style="flex-direction: column; align-items: stretch; gap: 0;">
+          <div style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden;">
+
+            <!-- Toolbar -->
+            <div class="ds-table-toolbar">
+              <div class="ds-table-toolbar__left">
+                <button class="ds-button ds-button--filled" type="button">+ New Item</button>
+                <button class="ds-button ds-button--outlined" type="button">
+                  Bulk Actions
+                  <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon" style="font-size:18px;">arrow_drop_down</span></span>
+                </button>
+                <button class="ds-button ds-button--destructive" type="button">Delete</button>
+              </div>
+              <div class="ds-table-toolbar__right">
+                <div class="ds-search" role="search">
+                  <div class="ds-search__field">
+                    <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                    <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
+                  </div>
+                </div>
+                <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Toggle filters" onclick="togglePressed(this)">
+                  <span class="ds-icon ds-icon--filled">filter_alt</span>
+                </button>
+                <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" type="button" aria-pressed="false" aria-label="Column settings" onclick="togglePressed(this)">
+                  <span class="ds-icon ds-icon--filled">settings</span>
+                </button>
+                <button class="ds-table-toolbar__btn" type="button" aria-label="Download">
+                  <span class="ds-icon">download</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Header row -->
+            <div style="display:flex; width:100%;">
+              <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
+                <div class="ds-table-header-cell__content">
+                  <div class="ds-table-header-cell__checkbox">
+                    <span class="ds-icon">check_box_outline_blank</span>
+                  </div>
+                </div>
+                <div class="ds-table-header-cell__actions"></div>
+              </div>
+              <div class="ds-table-header-cell" style="flex:2;">
+                <div class="ds-table-header-cell__resize-handle"><span class="ds-table-header-cell__resize-bar"></span></div>
+                <div class="ds-table-header-cell__content">
+                  <span class="ds-table-header-cell__label">Customer</span>
+                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sort: asc">
+                    <span class="ds-icon ds-table-header-cell__sort-icon--asc">arrow_upward_alt</span>
+                  </button>
+                </div>
+                <div class="ds-table-header-cell__actions">
+                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter column">
+                    <span class="ds-icon ds-icon--filled">filter_alt</span>
+                  </button>
+                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                    <span class="ds-table-header-cell__resize-bar"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="ds-table-header-cell" style="flex:1;">
+                <div class="ds-table-header-cell__resize-handle"><span class="ds-table-header-cell__resize-bar"></span></div>
+                <div class="ds-table-header-cell__content">
+                  <span class="ds-table-header-cell__label">Status</span>
+                </div>
+                <div class="ds-table-header-cell__actions">
+                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Column options">
+                    <span class="ds-icon ds-table-header-cell__menu-icon">more_vert</span>
+                  </button>
+                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                    <span class="ds-table-header-cell__resize-bar"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="ds-table-header-cell" style="flex:1;">
+                <div class="ds-table-header-cell__resize-handle"><span class="ds-table-header-cell__resize-bar"></span></div>
+                <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
+                  <span class="ds-table-header-cell__label">Amount</span>
+                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sort: none">
+                    <span class="ds-icon ds-table-header-cell__sort-icon--none">arrow_upward_alt</span>
+                  </button>
+                </div>
+                <div class="ds-table-header-cell__actions">
+                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                    <span class="ds-table-header-cell__resize-bar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 1: default -->
+            <div style="display:flex; width:100%;">
+              <div class="ds-table-row-cell ds-table-header-cell--checkbox-only" style="padding:0;">
+                <div class="ds-table-row-cell__content" style="justify-content:center;">
+                  <div class="ds-table-row-cell__checkbox"><span class="ds-icon">check_box_outline_blank</span></div>
+                </div>
+              </div>
+              <div class="ds-table-row-cell" style="flex:2;">
+                <div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Acme Corporation</span></div>
+              </div>
+              <div class="ds-table-row-cell" style="flex:1;">
+                <div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div>
+              </div>
+              <div class="ds-table-row-cell" style="flex:1;">
+                <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
+                  <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: hovered -->
+            <div style="display:flex; width:100%;">
+              <div class="ds-table-row-cell ds-table-header-cell--checkbox-only is-hovered" style="padding:0;">
+                <div class="ds-table-row-cell__content" style="justify-content:center;">
+                  <div class="ds-table-row-cell__checkbox"><span class="ds-icon">check_box_outline_blank</span></div>
+                </div>
+              </div>
+              <div class="ds-table-row-cell is-hovered" style="flex:2;">
+                <div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Bright Futures Ltd</span></div>
+              </div>
+              <div class="ds-table-row-cell is-hovered" style="flex:1;">
+                <div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div>
+              </div>
+              <div class="ds-table-row-cell is-hovered" style="flex:1;">
+                <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
+                  <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$8,450.00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 3: selected / focused -->
+            <div style="display:flex; width:100%;">
+              <div class="ds-table-row-cell ds-table-header-cell--checkbox-only is-focused" style="padding:0;">
+                <div class="ds-table-row-cell__content" style="justify-content:center;">
+                  <div class="ds-table-row-cell__checkbox ds-table-row-cell__checkbox--checked">
+                    <span class="ds-icon ds-icon--filled">check_box</span>
+                  </div>
+                </div>
+              </div>
+              <div class="ds-table-row-cell is-focused" style="flex:2;">
+                <div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Cloud Systems Inc</span></div>
+              </div>
+              <div class="ds-table-row-cell is-focused" style="flex:1;">
+                <div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div>
+              </div>
+              <div class="ds-table-row-cell is-focused" style="flex:1;">
+                <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
+                  <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 4: default -->
+            <div style="display:flex; width:100%;">
+              <div class="ds-table-row-cell ds-table-header-cell--checkbox-only" style="padding:0;">
+                <div class="ds-table-row-cell__content" style="justify-content:center;">
+                  <div class="ds-table-row-cell__checkbox"><span class="ds-icon">check_box_outline_blank</span></div>
+                </div>
+              </div>
+              <div class="ds-table-row-cell" style="flex:2;">
+                <div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Delta Dynamics LLC</span></div>
+              </div>
+              <div class="ds-table-row-cell" style="flex:1;">
+                <div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Inactive</span></div>
+              </div>
+              <div class="ds-table-row-cell" style="flex:1;">
+                <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
+                  <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$2,100.00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Paginator -->
+            <div class="ds-ag-paginator" style="width:100%; border-top: 1px solid var(--color-border-subtle);">
+              <div class="ds-ag-paginator__inner">
+                <div class="ds-ag-paginator__counter">
+                  <span class="ds-ag-paginator__label">Items per page:</span>
+                  <div class="ds-ag-paginator__select-wrap">
+                    <select class="ds-ag-paginator__select" aria-label="Items per page">
+                      <option selected>100</option>
+                      <option>250</option>
+                      <option>500</option>
+                      <option>1000</option>
+                    </select>
+                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  </div>
+                </div>
+                <div class="ds-ag-paginator__pagination">
+                  <span class="ds-ag-paginator__range" aria-live="polite">1 - 100 of 3842</span>
+                  <div class="ds-ag-paginator__nav">
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="First page" disabled>
+                      <span class="ds-icon">first_page</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Previous page" disabled>
+                      <span class="ds-icon">keyboard_arrow_left</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Next page">
+                      <span class="ds-icon">keyboard_arrow_right</span>
+                    </button>
+                    <button class="ds-ag-paginator__btn" type="button" aria-label="Last page">
+                      <span class="ds-icon">last_page</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
       <!-- ── TABLE HEADER CELL ────────────────────────────────────────────────── -->
       <section class="section" id="table-header-cell">
         <h2 class="section-title">Table Header Cell</h2>
@@ -4154,75 +4371,6 @@
           </div>
         </div>
 
-        <!-- Full-width row simulation -->
-        <div class="demo-row">
-          <div class="demo-label">Full row sim</div>
-          <div class="demo-items" style="flex: 1; flex-direction:column; gap:0;">
-            <div style="display:flex; width:100%;">
-              <!-- Checkbox-only: fixed 56px, no resize handles -->
-              <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
-                <div class="ds-table-header-cell__content">
-                  <div class="ds-table-header-cell__checkbox">
-                    <span class="ds-icon">check_box_outline_blank</span>
-                  </div>
-                </div>
-                <div class="ds-table-header-cell__actions"></div>
-              </div>
-              <div class="ds-table-header-cell" style="flex:2;">
-                <div class="ds-table-header-cell__resize-handle">
-                  <span class="ds-table-header-cell__resize-bar"></span>
-                </div>
-                <div class="ds-table-header-cell__content">
-                  <span class="ds-table-header-cell__label">Customer</span>
-                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sort: asc">
-                    <span class="ds-icon ds-table-header-cell__sort-icon--asc">arrow_upward_alt</span>
-                  </button>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter column">
-                    <span class="ds-icon ds-icon--filled">filter_alt</span>
-                  </button>
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
-                    <span class="ds-table-header-cell__resize-bar"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="ds-table-header-cell" style="flex:1;">
-                <div class="ds-table-header-cell__resize-handle">
-                  <span class="ds-table-header-cell__resize-bar"></span>
-                </div>
-                <div class="ds-table-header-cell__content">
-                  <span class="ds-table-header-cell__label">Status</span>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Column options">
-                    <span class="ds-icon ds-table-header-cell__menu-icon">more_vert</span>
-                  </button>
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
-                    <span class="ds-table-header-cell__resize-bar"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="ds-table-header-cell" style="flex:1;">
-                <div class="ds-table-header-cell__resize-handle">
-                  <span class="ds-table-header-cell__resize-bar"></span>
-                </div>
-                <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
-                  <span class="ds-table-header-cell__label">Amount</span>
-                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sort: none">
-                    <span class="ds-icon ds-table-header-cell__sort-icon--none">arrow_upward_alt</span>
-                  </button>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
-                    <span class="ds-table-header-cell__resize-bar"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </section>
 
       <!-- ── TABLE ROW CELL ────────────────────────────────────────────────────── -->
@@ -4327,130 +4475,6 @@
               <div class="ds-table-row-cell__content">
                 <span class="ds-table-row-cell__indent--tier2"></span>
                 <span class="ds-table-row-cell__data">Tier 2 — grandchild row</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Full row simulation (header + 3 data rows) -->
-        <div class="demo-row">
-          <div class="demo-label">Full row sim</div>
-          <div class="demo-items" style="flex: 1; flex-direction:column; gap:0;">
-            <!-- Header -->
-            <div style="display:flex; width:100%;">
-              <div class="ds-table-header-cell" style="width:48px; flex-shrink:0;">
-                <div class="ds-table-header-cell__resize-handle"></div>
-                <div class="ds-table-header-cell__content">
-                  <div class="ds-table-header-cell__checkbox">
-                    <span class="ds-icon">check_box_outline_blank</span>
-                  </div>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing">
-                    <span class="ds-table-header-cell__resize-bar"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="ds-table-header-cell" style="flex:2;">
-                <div class="ds-table-header-cell__resize-handle"><span class="ds-table-header-cell__resize-bar"></span></div>
-                <div class="ds-table-header-cell__content">
-                  <span class="ds-table-header-cell__label">Customer</span>
-                  <button type="button" class="ds-table-header-cell__icon-btn ds-table-header-cell__icon-btn--sort-asc" aria-label="Sort: asc">
-                    <span class="ds-icon">arrow_upward_alt</span>
-                  </button>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"><span class="ds-table-header-cell__resize-bar"></span></div>
-                </div>
-              </div>
-              <div class="ds-table-header-cell" style="flex:1;">
-                <div class="ds-table-header-cell__resize-handle"><span class="ds-table-header-cell__resize-bar"></span></div>
-                <div class="ds-table-header-cell__content">
-                  <span class="ds-table-header-cell__label">Status</span>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"><span class="ds-table-header-cell__resize-bar"></span></div>
-                </div>
-              </div>
-              <div class="ds-table-header-cell" style="flex:1;">
-                <div class="ds-table-header-cell__resize-handle"><span class="ds-table-header-cell__resize-bar"></span></div>
-                <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
-                  <span class="ds-table-header-cell__label">Amount</span>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"><span class="ds-table-header-cell__resize-bar"></span></div>
-                </div>
-              </div>
-            </div>
-            <!-- Row 1: default -->
-            <div style="display:flex; width:100%;">
-              <div class="ds-table-row-cell" style="width:48px; flex-shrink:0;">
-                <div class="ds-table-row-cell__content">
-                  <div class="ds-table-row-cell__checkbox"><span class="ds-icon">check_box_outline_blank</span></div>
-                </div>
-              </div>
-              <div class="ds-table-row-cell" style="flex:2;">
-                <div class="ds-table-row-cell__content">
-                  <span class="ds-table-row-cell__data">Acme Corporation</span>
-                </div>
-              </div>
-              <div class="ds-table-row-cell" style="flex:1;">
-                <div class="ds-table-row-cell__content">
-                  <span class="ds-table-row-cell__data">Active</span>
-                </div>
-              </div>
-              <div class="ds-table-row-cell" style="flex:1;">
-                <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
-                  <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span>
-                </div>
-              </div>
-            </div>
-            <!-- Row 2: hovered -->
-            <div style="display:flex; width:100%;">
-              <div class="ds-table-row-cell is-hovered" style="width:48px; flex-shrink:0;">
-                <div class="ds-table-row-cell__content">
-                  <div class="ds-table-row-cell__checkbox"><span class="ds-icon">check_box_outline_blank</span></div>
-                </div>
-              </div>
-              <div class="ds-table-row-cell is-hovered" style="flex:2;">
-                <div class="ds-table-row-cell__content">
-                  <span class="ds-table-row-cell__data">Bright Futures Ltd</span>
-                </div>
-              </div>
-              <div class="ds-table-row-cell is-hovered" style="flex:1;">
-                <div class="ds-table-row-cell__content">
-                  <span class="ds-table-row-cell__data">Pending</span>
-                </div>
-              </div>
-              <div class="ds-table-row-cell is-hovered" style="flex:1;">
-                <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
-                  <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$8,450.00</span>
-                </div>
-              </div>
-            </div>
-            <!-- Row 3: focused / selected -->
-            <div style="display:flex; width:100%;">
-              <div class="ds-table-row-cell is-focused" style="width:48px; flex-shrink:0;">
-                <div class="ds-table-row-cell__content">
-                  <div class="ds-table-row-cell__checkbox ds-table-row-cell__checkbox--checked">
-                    <span class="ds-icon ds-icon--filled">check_box</span>
-                  </div>
-                </div>
-              </div>
-              <div class="ds-table-row-cell is-focused" style="flex:2;">
-                <div class="ds-table-row-cell__content">
-                  <span class="ds-table-row-cell__data">Cloud Systems Inc</span>
-                </div>
-              </div>
-              <div class="ds-table-row-cell is-focused" style="flex:1;">
-                <div class="ds-table-row-cell__content">
-                  <span class="ds-table-row-cell__data">Active</span>
-                </div>
-              </div>
-              <div class="ds-table-row-cell is-focused" style="flex:1;">
-                <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
-                  <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span>
-                </div>
               </div>
             </div>
           </div>
@@ -4615,77 +4639,6 @@
                       <span class="ds-icon">keyboard_arrow_right</span>
                     </button>
                     <button class="ds-ag-paginator__btn" type="button" aria-label="Last page" disabled>
-                      <span class="ds-icon">last_page</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Table + paginator — full simulation -->
-        <div class="demo-row">
-          <div class="demo-label">Full sim</div>
-          <div class="demo-items" style="flex:1; flex-direction:column; gap:0;">
-            <!-- Header row -->
-            <div style="display:flex; width:100%;">
-              <div class="ds-table-header-cell" style="flex:2;">
-                <div class="ds-table-header-cell__resize-handle"><span class="ds-table-header-cell__resize-bar"></span></div>
-                <div class="ds-table-header-cell__content">
-                  <span class="ds-table-header-cell__label">Customer</span>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"><span class="ds-table-header-cell__resize-bar"></span></div>
-                </div>
-              </div>
-              <div class="ds-table-header-cell" style="flex:1;">
-                <div class="ds-table-header-cell__resize-handle"><span class="ds-table-header-cell__resize-bar"></span></div>
-                <div class="ds-table-header-cell__content">
-                  <span class="ds-table-header-cell__label">Status</span>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"><span class="ds-table-header-cell__resize-bar"></span></div>
-                </div>
-              </div>
-            </div>
-            <!-- Data rows -->
-            <div style="display:flex; width:100%;">
-              <div class="ds-table-row-cell" style="flex:2;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Onflo Systems Ltd</span></div></div>
-              <div class="ds-table-row-cell" style="flex:1;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-            </div>
-            <div style="display:flex; width:100%;">
-              <div class="ds-table-row-cell" style="flex:2;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Bright Futures Co</span></div></div>
-              <div class="ds-table-row-cell" style="flex:1;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
-            </div>
-            <!-- Paginator attached below -->
-            <div class="ds-ag-paginator" style="width:100%; border-top: 1px solid var(--color-border-subtle);">
-              <div class="ds-ag-paginator__inner">
-                <div class="ds-ag-paginator__counter">
-                  <span class="ds-ag-paginator__label">Items per page:</span>
-                  <div class="ds-ag-paginator__select-wrap">
-                    <select class="ds-ag-paginator__select" aria-label="Items per page">
-                      <option selected>100</option>
-                      <option>250</option>
-                      <option>500</option>
-                      <option>1000</option>
-                    </select>
-                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
-                  </div>
-                </div>
-                <div class="ds-ag-paginator__pagination">
-                  <span class="ds-ag-paginator__range" aria-live="polite">1 - 100 of 3842</span>
-                  <div class="ds-ag-paginator__nav">
-                    <button class="ds-ag-paginator__btn" type="button" aria-label="First page" disabled>
-                      <span class="ds-icon">first_page</span>
-                    </button>
-                    <button class="ds-ag-paginator__btn" type="button" aria-label="Previous page" disabled>
-                      <span class="ds-icon">keyboard_arrow_left</span>
-                    </button>
-                    <button class="ds-ag-paginator__btn" type="button" aria-label="Next page">
-                      <span class="ds-icon">keyboard_arrow_right</span>
-                    </button>
-                    <button class="ds-ag-paginator__btn" type="button" aria-label="Last page">
                       <span class="ds-icon">last_page</span>
                     </button>
                   </div>
