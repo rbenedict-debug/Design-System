@@ -21,10 +21,11 @@
  */
 
 import {
-  Component, Input, ChangeDetectionStrategy,
-  ChangeDetectorRef, OnDestroy,
+  Component, Input, Output, EventEmitter,
+  ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DsIconButtonComponent } from '../icon-button/icon-button.component';
 
 export type TableHeaderAlign = 'left' | 'right';
 export type TableSortDirection = 'asc' | 'desc' | null;
@@ -36,9 +37,13 @@ export interface AgHeaderParams {
   enableMenu: boolean;
   column: {
     getSort(): string | null | undefined;
+    getActualWidth(): number;
+    getColId(): string;
     addEventListener(event: string, listener: () => void): void;
     removeEventListener(event: string, listener: () => void): void;
-    getColId(): string;
+  };
+  api: {
+    setColumnWidth(key: string, newWidth: number): void;
   };
   progressSort(multiSort?: boolean): void;
   showColumnMenu(source: HTMLElement): void;
@@ -47,7 +52,7 @@ export interface AgHeaderParams {
 @Component({
   selector: 'ds-table-header-cell',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DsIconButtonComponent],
   templateUrl: './table-header-cell.component.html',
   styleUrls: ['./table-header-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,7 +64,7 @@ export interface AgHeaderParams {
 export class DsTableHeaderCellComponent implements OnDestroy {
 
   /** Column header label. Overridden by agInit displayName when used as AG Grid renderer. */
-  @Input() label = 'Header Label';
+  @Input() label = '';
 
   /** Text alignment of cell contents. */
   @Input() align: TableHeaderAlign = 'left';
@@ -91,10 +96,36 @@ export class DsTableHeaderCellComponent implements OnDestroy {
   /** Indeterminate state for the select-all checkbox. */
   @Input() indeterminate = false;
 
+  /** Emits the new column width in px when the user drags the resize handle. */
+  @Output() widthChange = new EventEmitter<number>();
+
   private agParams?: AgHeaderParams;
   private sortChangedListener?: () => void;
 
+  // Resize drag state
+  private resizeStartX = 0;
+  private resizeStartWidth = 0;
+  private boundMouseMove?: (e: MouseEvent) => void;
+  private boundMouseUp?: () => void;
+
   constructor(private cdr: ChangeDetectorRef) {}
+
+  // ── Checkbox-only detection ──────────────────────────────────
+
+  /** True when this column shows only a checkbox with no label text. */
+  get isCheckboxOnly(): boolean {
+    return this.checkbox && !this.label;
+  }
+
+  /** Whether the left resize pipe is shown (suppressed on checkbox-only columns). */
+  get showLeftPipe(): boolean {
+    return !this.isCheckboxOnly && this.pipeLeft;
+  }
+
+  /** Whether the right resize pipe is shown (suppressed on checkbox-only columns). */
+  get showRightPipe(): boolean {
+    return !this.isCheckboxOnly && this.pipeRight;
+  }
 
   // ── AG Grid IHeaderAngularComp interface ────────────────────
 
@@ -126,6 +157,7 @@ export class DsTableHeaderCellComponent implements OnDestroy {
     if (this.agParams && this.sortChangedListener) {
       this.agParams.column.removeEventListener('sortChanged', this.sortChangedListener);
     }
+    this._cleanupResizeListeners();
   }
 
   // ── Sort ────────────────────────────────────────────────────
@@ -140,15 +172,10 @@ export class DsTableHeaderCellComponent implements OnDestroy {
     }
   }
 
-  get sortIcon(): string {
-    // Always use arrow_upward_alt — rotate 180° for desc via CSS modifier
-    return 'arrow_upward_alt';
-  }
-
-  get sortBtnClass(): string {
-    if (this.sortDirection === 'asc')  return 'ds-table-header-cell__icon-btn--sort-asc';
-    if (this.sortDirection === 'desc') return 'ds-table-header-cell__icon-btn--sort-desc';
-    return 'ds-table-header-cell__icon-btn--sort-none';
+  get sortIconClass(): string {
+    if (this.sortDirection === 'asc')  return 'ds-table-header-cell__sort-icon--asc';
+    if (this.sortDirection === 'desc') return 'ds-table-header-cell__sort-icon--desc';
+    return 'ds-table-header-cell__sort-icon--none';
   }
 
   get ariaSortValue(): string | null {
@@ -177,5 +204,39 @@ export class DsTableHeaderCellComponent implements OnDestroy {
   get checkboxClass(): string {
     if (this.indeterminate || this.checked) return 'ds-table-header-cell__checkbox--checked';
     return '';
+  }
+
+  // ── Resize drag ─────────────────────────────────────────────
+
+  onResizeStart(event: MouseEvent): void {
+    if (this.isCheckboxOnly) return;
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.resizeStartX = event.clientX;
+    this.resizeStartWidth = this.agParams?.column.getActualWidth() ?? 200;
+
+    this.boundMouseMove = (e: MouseEvent) => {
+      const delta = e.clientX - this.resizeStartX;
+      const newWidth = Math.max(50, this.resizeStartWidth + delta);
+      this.agParams?.api?.setColumnWidth(this.agParams.column.getColId(), newWidth);
+      this.widthChange.emit(newWidth);
+    };
+
+    this.boundMouseUp = () => this._cleanupResizeListeners();
+
+    document.addEventListener('mousemove', this.boundMouseMove);
+    document.addEventListener('mouseup', this.boundMouseUp);
+  }
+
+  private _cleanupResizeListeners(): void {
+    if (this.boundMouseMove) {
+      document.removeEventListener('mousemove', this.boundMouseMove);
+      this.boundMouseMove = undefined;
+    }
+    if (this.boundMouseUp) {
+      document.removeEventListener('mouseup', this.boundMouseUp);
+      this.boundMouseUp = undefined;
+    }
   }
 }

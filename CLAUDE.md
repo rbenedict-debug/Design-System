@@ -242,12 +242,16 @@ components/{name}/
 - **Background**: `--color-surface-subtle`; **border-bottom**: 1px `--color-border-secondary`
 - **Properties**: `align` (left/right), `sorting`, `filtering`, `menuControl`, `checkbox`, `pipeLeft`, `pipeRight`
 - **Label typography**: `--ref-typescale-label-medium-*`, weight-prominent (bold), truncated with ellipsis
-- **Resize bar**: 2px × 14px, `--color-border-primary`, inside 16px handle container on each side
-- **Icon buttons** (sort / filter / menu): 32×32px, ghost style, `--radius-sm`, hover `--overlay-hovered`
-- **Sort button**: `arrow_upward_alt` icon — `--sort-asc` = brand color, `--sort-desc` = brand color + rotate(180°), `--sort-none` = subtle + opacity 0.5
+- **Resize bar**: 2px × 14px, `--color-border-primary`, inside 16px handle container; `pipeRight = true` by default, `pipeLeft = false` by default; `--active` modifier on the trailing handle enables `cursor: col-resize` and drag behavior
+- **Resize drag**: `(mousedown)` on the right handle starts a drag that calls `params.api.setColumnWidth()` and emits `(widthChange)`; `AgHeaderParams` interface includes `column.getActualWidth()` and `api.setColumnWidth(key, newWidth)`
+- **Icon buttons** (sort / filter / menu): use `<ds-icon-button size="sm" variant="icon">` — 32×32px ghost
+- **Sort button**: `arrow_upward_alt` icon — sort state class on the projected icon span: `__sort-icon--asc` (brand), `__sort-icon--desc` (brand + rotate 180°), `__sort-icon--none` (subtle + opacity 0.5)
+- **Filter button**: `<span class="ds-icon ds-icon--filled">filter_alt</span>` — always filled icon
+- **Menu button**: icon uses `__menu-icon` class for brand color; passes wrapper `div#menuBtnEl` to `onMenuClick()` as AG Grid positioning anchor
 - **Checkbox** (select-all): `check_box_outline_blank` | `check_box` (filled, brand) | `indeterminate_check_box` (filled, brand)
+- **Checkbox-only column**: auto-detected when `checkbox === true && !label` — applies `--checkbox-only` modifier (56px fixed width, both resize handles hidden); use with no `label` input
 - **Right align**: `ds-table-header-cell__content--right` applies `justify-content: flex-end`
-- **AG Grid**: implements `IHeaderAngularComp` — receives `agInit(params)`, `refresh(params)`, cleans up `sortChanged` listener
+- **AG Grid**: implements `IHeaderAngularComp` — receives `agInit(params)`, `refresh(params)`, cleans up `sortChanged` listener and resize drag listeners in `ngOnDestroy`
 - **No Angular Material base** — custom component
 
 ### Table Row Cell (`ds-table-row-cell`)

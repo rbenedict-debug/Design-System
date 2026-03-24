@@ -1,14 +1,15 @@
 <div
   class="ds-table-header-cell"
   [class.ds-table-header-cell--right]="align === 'right'"
+  [class.ds-table-header-cell--checkbox-only]="isCheckboxOnly"
 >
 
   <!-- Left resize handle -->
   <div class="ds-table-header-cell__resize-handle">
-    <span *ngIf="pipeLeft" class="ds-table-header-cell__resize-bar"></span>
+    <span *ngIf="showLeftPipe" class="ds-table-header-cell__resize-bar"></span>
   </div>
 
-  <!-- Content: checkbox · icon slot · label · sort button -->
+  <!-- Content: checkbox · label · sort button -->
   <div
     class="ds-table-header-cell__content"
     [class.ds-table-header-cell__content--right]="align === 'right'"
@@ -28,46 +29,51 @@
     <span *ngIf="label" class="ds-table-header-cell__label">{{ label }}</span>
 
     <!-- Sort button -->
-    <button
+    <ds-icon-button
       *ngIf="sorting"
-      type="button"
-      class="ds-table-header-cell__icon-btn"
-      [ngClass]="sortBtnClass"
-      (click)="onSortClick($event)"
-      [attr.aria-label]="'Sort: ' + (sortDirection ?? 'none')"
+      size="sm"
+      variant="icon"
+      [ariaLabel]="'Sort: ' + (sortDirection ?? 'none')"
+      (clicked)="onSortClick($event)"
     >
-      <span class="ds-icon">{{ sortIcon }}</span>
-    </button>
+      <span class="ds-icon" [ngClass]="sortIconClass">arrow_upward_alt</span>
+    </ds-icon-button>
   </div>
 
-  <!-- Trailing actions: menu · filter · right resize pipe -->
+  <!-- Trailing actions: menu · filter · right resize handle -->
   <div class="ds-table-header-cell__actions">
+
     <!-- Column menu button -->
-    <button
-      *ngIf="menuControl"
-      #menuBtn
-      type="button"
-      class="ds-table-header-cell__icon-btn ds-table-header-cell__icon-btn--active"
-      (click)="onMenuClick(menuBtn)"
-      aria-label="Column options"
-    >
-      <span class="ds-icon">more_vert</span>
-    </button>
-
-    <!-- Filter button -->
-    <button
-      *ngIf="filtering"
-      type="button"
-      class="ds-table-header-cell__icon-btn"
-      aria-label="Filter column"
-    >
-      <span class="ds-icon">filter_alt</span>
-    </button>
-
-    <!-- Right resize pipe -->
-    <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing">
-      <span *ngIf="pipeRight" class="ds-table-header-cell__resize-bar"></span>
+    <div #menuBtnEl *ngIf="menuControl">
+      <ds-icon-button
+        size="sm"
+        variant="icon"
+        ariaLabel="Column options"
+        (clicked)="onMenuClick(menuBtnEl)"
+      >
+        <span class="ds-icon ds-table-header-cell__menu-icon">more_vert</span>
+      </ds-icon-button>
     </div>
+
+    <!-- Filter button (filled icon) -->
+    <ds-icon-button
+      *ngIf="filtering"
+      size="sm"
+      variant="icon"
+      ariaLabel="Filter column"
+    >
+      <span class="ds-icon ds-icon--filled">filter_alt</span>
+    </ds-icon-button>
+
+    <!-- Right resize handle — draggable -->
+    <div
+      class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"
+      [class.ds-table-header-cell__resize-handle--active]="showRightPipe"
+      (mousedown)="onResizeStart($event)"
+    >
+      <span *ngIf="showRightPipe" class="ds-table-header-cell__resize-bar"></span>
+    </div>
+
   </div>
 
 </div>
