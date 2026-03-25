@@ -1473,34 +1473,26 @@
        Source: components/select/_select.scss
        ════════════════════════════════════════════════════════════════════════ */
 
+    /* ── ds-select ── */
     .ds-select { display: flex; flex-direction: column; gap: var(--spacing-xs); }
-    .ds-select__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-medium); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-secondary); user-select: none; }
+    .ds-select__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typescale-label-medium-weight-prominent); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-secondary); user-select: none; }
     .ds-select__required { color: var(--color-text-error); margin-left: 2px; }
-    .ds-select__field {
-      display: flex;
-      align-items: center;
-      height: 42px;
-      background: var(--color-surface-input);
-      border: 1px solid var(--color-border-input);
-      border-radius: var(--radius-sm);
-      padding: 0 var(--spacing-md);
-      cursor: pointer;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-      position: relative;
-    }
+    .ds-select__field { display: flex; align-items: center; height: 42px; background: var(--color-surface-input); border: 1px solid var(--color-border-input); border-radius: var(--radius-sm); padding: 0 var(--spacing-md); cursor: pointer; transition: border-color 0.15s ease, box-shadow 0.15s ease; position: relative; }
     .ds-select__field:hover { border-color: var(--color-border-input-hover); }
-    .ds-select:focus-within .ds-select__field { border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-select:focus-within .ds-select__field { border-color: var(--color-border-input-active); }
+    .ds-select:focus-within:not([data-mouse-focus]) .ds-select__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-select__control { flex: 1; min-width: 0; border: none; outline: none; background: transparent; appearance: none; -webkit-appearance: none; font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-regular); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-primary); cursor: pointer; padding-right: var(--spacing-sm); }
+    .ds-select__control:disabled { cursor: not-allowed; }
+    .ds-select__control option[value=""] { color: var(--color-text-placeholder); }
     .ds-select__arrow { color: var(--color-icon-subtle); flex-shrink: 0; pointer-events: none; transition: transform 0.15s ease; }
-    .ds-select:focus-within .ds-select__arrow { color: var(--color-icon-brand); }
-    .ds-select__helper { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); line-height: var(--ref-typescale-label-small-line-height); color: var(--color-text-secondary); }
-    /* Error */
+    .ds-select:focus-within:not(.is-error) .ds-select__arrow { color: var(--color-icon-brand); }
+    .ds-select__error-icon { color: var(--color-icon-error); flex-shrink: 0; pointer-events: none; }
+    .ds-select__helper { font-family: var(--ref-typeface-plain), 'DM Sans', sans-serif; font-size: var(--ref-typescale-body-small-size); line-height: var(--ref-typescale-body-small-line-height); color: var(--color-text-secondary); }
     .ds-select.is-error .ds-select__field { border-color: var(--color-border-input-error); }
-    .ds-select.is-error .ds-select__label { color: var(--color-text-error); }
+    .ds-select.is-error .ds-select__arrow { display: none; }
     .ds-select.is-error .ds-select__helper { color: var(--color-text-error); }
-    .ds-select.is-error .ds-select__arrow { color: var(--color-icon-error); }
-    .ds-select.is-error:focus-within .ds-select__field { border-color: var(--color-border-input-error); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
-    /* Disabled */
+    .ds-select.is-error:focus-within .ds-select__field { border-color: var(--color-border-input-error); }
+    .ds-select.is-error:focus-within:not([data-mouse-focus]) .ds-select__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-select.is-disabled { pointer-events: none; }
     .ds-select.is-disabled .ds-select__field { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
     .ds-select.is-disabled .ds-select__label { color: var(--color-text-disabled); }
@@ -1514,37 +1506,30 @@
        Source: components/textarea/_textarea.scss
        ════════════════════════════════════════════════════════════════════════ */
 
+    /* ── ds-textarea ── */
     .ds-textarea { display: flex; flex-direction: column; gap: var(--spacing-xs); }
-    .ds-textarea__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-medium); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-secondary); user-select: none; }
+    .ds-textarea__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typescale-label-medium-weight-prominent); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-secondary); user-select: none; }
     .ds-textarea__required { color: var(--color-text-error); margin-left: 2px; }
-    .ds-textarea__field {
-      display: flex;
-      background: var(--color-surface-input);
-      border: 1px solid var(--color-border-input);
-      border-radius: var(--radius-sm);
-      padding: var(--spacing-sm) var(--spacing-md);
-      cursor: text;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    }
+    .ds-textarea__field { display: flex; background: var(--color-surface-input); border: 1px solid var(--color-border-input); border-radius: var(--radius-sm); padding: var(--spacing-sm) var(--spacing-md); cursor: text; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
     .ds-textarea__field:hover { border-color: var(--color-border-input-hover); }
-    .ds-textarea:focus-within .ds-textarea__field { border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-textarea:focus-within .ds-textarea__field { border-color: var(--color-border-input-active); }
+    .ds-textarea:focus-within:not([data-mouse-focus]) .ds-textarea__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-textarea__control { flex: 1; min-width: 0; min-height: 80px; border: none; outline: none; background: transparent; font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-regular); line-height: 1.5; color: var(--color-text-primary); caret-color: var(--color-border-input-active); resize: vertical; }
     .ds-textarea__control::placeholder { color: var(--color-text-placeholder); }
-    .ds-textarea__helper { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); line-height: var(--ref-typescale-label-small-line-height); color: var(--color-text-secondary); }
-    /* Error */
+    .ds-textarea__control:disabled { cursor: not-allowed; resize: none; }
+    .ds-textarea__control[readonly] { cursor: default; resize: none; }
+    .ds-textarea__helper { font-family: var(--ref-typeface-plain), 'DM Sans', sans-serif; font-size: var(--ref-typescale-body-small-size); line-height: var(--ref-typescale-body-small-line-height); color: var(--color-text-secondary); }
     .ds-textarea.is-error .ds-textarea__field { border-color: var(--color-border-input-error); }
-    .ds-textarea.is-error .ds-textarea__label { color: var(--color-text-error); }
     .ds-textarea.is-error .ds-textarea__helper { color: var(--color-text-error); }
-    .ds-textarea.is-error:focus-within .ds-textarea__field { border-color: var(--color-border-input-error); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
-    /* Disabled */
+    .ds-textarea.is-error:focus-within .ds-textarea__field { border-color: var(--color-border-input-error); }
+    .ds-textarea.is-error:focus-within:not([data-mouse-focus]) .ds-textarea__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-textarea.is-disabled { pointer-events: none; }
     .ds-textarea.is-disabled .ds-textarea__field { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
-    .ds-textarea.is-disabled .ds-textarea__label,
-    .ds-textarea.is-disabled .ds-textarea__control,
+    .ds-textarea.is-disabled .ds-textarea__label { color: var(--color-text-disabled); }
+    .ds-textarea.is-disabled .ds-textarea__control { color: var(--color-text-disabled); }
     .ds-textarea.is-disabled .ds-textarea__helper { color: var(--color-text-disabled); }
-    /* Read-only */
     .ds-textarea.is-readonly .ds-textarea__field { background: var(--color-surface-default); border-color: var(--color-border-subtle); cursor: default; }
-    .ds-textarea.is-readonly .ds-textarea__control { cursor: default; color: var(--color-text-secondary); resize: none; }
+    .ds-textarea.is-readonly .ds-textarea__control { cursor: default; color: var(--color-text-secondary); }
 
 
     /* ════════════════════════════════════════════════════════════════════════
@@ -1988,7 +1973,10 @@
       <div class="nav-section-label" style="margin-top:8px;">Components</div>
       <a class="nav-link" href="#button" onclick="setActive(this)"><span class="nav-dot"></span>Button</a>
       <a class="nav-link" href="#icon-button" onclick="setActive(this)"><span class="nav-dot"></span>Icon Button</a>
+      <div class="nav-section-label" style="margin-top:8px; font-size:10px; opacity:0.6;">Form — Text Fields</div>
       <a class="nav-link" href="#input" onclick="setActive(this)"><span class="nav-dot"></span>Input Field</a>
+      <a class="nav-link" href="#select" onclick="setActive(this)"><span class="nav-dot"></span>Select</a>
+      <a class="nav-link" href="#textarea" onclick="setActive(this)"><span class="nav-dot"></span>Textarea</a>
       <a class="nav-link" href="#checkbox" onclick="setActive(this)"><span class="nav-dot"></span>Checkbox</a>
       <a class="nav-link" href="#radio" onclick="setActive(this)"><span class="nav-dot"></span>Radio Button</a>
       <a class="nav-link" href="#toggle" onclick="setActive(this)"><span class="nav-dot"></span>Toggle</a>
@@ -1996,8 +1984,6 @@
       <a class="nav-link" href="#label" onclick="setActive(this)"><span class="nav-dot"></span>Label</a>
       <a class="nav-link" href="#alert" onclick="setActive(this)"><span class="nav-dot"></span>Alert</a>
       <a class="nav-link" href="#tooltip" onclick="setActive(this)"><span class="nav-dot"></span>Tooltip</a>
-      <a class="nav-link" href="#select" onclick="setActive(this)"><span class="nav-dot"></span>Select</a>
-      <a class="nav-link" href="#textarea" onclick="setActive(this)"><span class="nav-dot"></span>Textarea</a>
       <a class="nav-link" href="#avatar" onclick="setActive(this)"><span class="nav-dot"></span>Avatar</a>
       <a class="nav-link" href="#progress" onclick="setActive(this)"><span class="nav-dot"></span>Progress</a>
       <a class="nav-link" href="#tabs" onclick="setActive(this)"><span class="nav-dot"></span>Tabs</a>
@@ -2793,48 +2779,19 @@
         <div class="section-header">
           <h2 class="section-title">Input Field</h2>
           <p class="section-desc">
-            Single-line text input. Always 42px tall — no size variants. For multi-line text, use the Textarea component.
-            Supports label, helper/error text, leading/trailing icons, prefix/suffix, and full state coverage.
-            Use <code>class="ds-input"</code> directly, or the Angular component
-            <code>&lt;ds-input label="..." [(value)]="val" /&gt;</code>.
-            Source: <code>components/input/_input.scss</code>
-          </p>
+  <strong>Text Fields — Input, Select, and Textarea</strong> share the same visual design in Figma: 42px field height (textarea: min-height, resizable), same label, helper, and error token usage.
+  In Angular they map to different Angular Material modules:
+  <code>MatInputModule</code> (input), <code>MatSelectModule</code> (select), and <code>MatInputModule</code> with <code>&lt;textarea&gt;</code> (textarea).
+  <br>This section shows all three together. Use <code>class="ds-input"</code>, <code>class="ds-select"</code>, or <code>class="ds-textarea"</code> directly, or the corresponding Angular component.
+  Source: <code>components/input/</code>, <code>components/select/</code>, <code>components/textarea/</code>
+</p>
         </div>
 
         <div class="component-demo">
 
-          <!-- Figma variants: trailing icon on/off × input/placeholder -->
+          <!-- Default variants -->
           <div class="demo-row">
-            <div class="demo-row-label">Trailing icon</div>
-            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
-              <!-- Trailing icon=True, Content=Input -->
-              <div class="ds-input" style="width:220px;">
-                <label class="ds-input__label" for="inp-fi-val">Label</label>
-                <div class="ds-input__field">
-                  <input id="inp-fi-val" class="ds-input__control" type="text" value="Input" />
-                  <button class="ds-input__action" type="button" aria-label="Expand">
-                    <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
-                  </button>
-                </div>
-                <span class="ds-input__helper">Supporting text</span>
-              </div>
-              <!-- Trailing icon=True, Content=Placeholder -->
-              <div class="ds-input" style="width:220px;">
-                <label class="ds-input__label" for="inp-fi-ph">Label</label>
-                <div class="ds-input__field">
-                  <input id="inp-fi-ph" class="ds-input__control" type="text" placeholder="Placeholder" />
-                  <button class="ds-input__action" type="button" aria-label="Expand">
-                    <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
-                  </button>
-                </div>
-                <span class="ds-input__helper">Supporting text</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- No trailing icon -->
-          <div class="demo-row">
-            <div class="demo-row-label">No trailing icon</div>
+            <div class="demo-row-label">Default variants</div>
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <!-- Trailing icon=False, Content=Input -->
               <div class="ds-input" style="width:220px;">
@@ -2966,6 +2923,173 @@
                   <input id="inp-ro" class="ds-input__control" type="text" value="Enterprise" readonly />
                 </div>
                 <span class="ds-input__helper">Contact sales to change your plan.</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Select ───────────────────────────────────────────────────────── -->
+      <hr class="divider" />
+      <section class="section" id="select">
+        <div class="section-header">
+          <h2 class="section-title">Select / Dropdown</h2>
+          <p class="section-desc">
+  Native <code>&lt;select&gt;</code> wrapper — same 42px height and visual treatment as Input Field.
+  Angular Material: <code>MatSelectModule</code>. Use <code>class="ds-select"</code> or <code>&lt;ds-select&gt;</code>.
+  Source: <code>components/select/_select.scss</code>
+</p>
+        </div>
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-select" style="width:220px;">
+                <label class="ds-select__label" for="sel-default">Plan</label>
+                <div class="ds-select__field">
+                  <select id="sel-default" class="ds-select__control">
+                    <option value="">Select a plan...</option>
+                    <option value="free">Free</option>
+                    <option value="pro">Pro — $12/mo</option>
+                    <option value="enterprise">Enterprise</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
+                </div>
+              </div>
+              <div class="ds-select" style="width:220px;">
+                <label class="ds-select__label" for="sel-selected">Country</label>
+                <div class="ds-select__field">
+                  <select id="sel-selected" class="ds-select__control">
+                    <option value="">Select country...</option>
+                    <option value="us" selected>United States</option>
+                    <option value="ca">Canada</option>
+                    <option value="uk">United Kingdom</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">With Helper</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-select" style="width:220px;">
+                <label class="ds-select__label" for="sel-helper">Timezone</label>
+                <div class="ds-select__field">
+                  <select id="sel-helper" class="ds-select__control">
+                    <option value="">Select timezone...</option>
+                    <option value="et">Eastern (UTC-5)</option>
+                    <option value="ct">Central (UTC-6)</option>
+                    <option value="pt">Pacific (UTC-8)</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
+                </div>
+                <span class="ds-select__helper">Affects all scheduled reports.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Error</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-select is-error" style="width:220px;">
+                <label class="ds-select__label" for="sel-error">Role<span class="ds-select__required">*</span></label>
+                <div class="ds-select__field">
+                  <select id="sel-error" class="ds-select__control" aria-invalid="true">
+                    <option value="">Select a role...</option>
+                    <option value="admin">Admin</option>
+                    <option value="member">Member</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon" aria-hidden="true">error</span>
+                </div>
+                <span class="ds-select__helper" role="alert">Please select a role.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-select is-disabled" style="width:220px;">
+                <label class="ds-select__label" for="sel-disabled">Subscription</label>
+                <div class="ds-select__field">
+                  <select id="sel-disabled" class="ds-select__control" disabled>
+                    <option value="enterprise">Enterprise</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
+                </div>
+                <span class="ds-select__helper">Contact sales to change your plan.</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Textarea ─────────────────────────────────────────────────────── -->
+      <hr class="divider" />
+      <section class="section" id="textarea">
+        <div class="section-header">
+          <h2 class="section-title">Textarea</h2>
+          <p class="section-desc">
+  Multi-line text input — resizable vertically, no fixed height. Same visual treatment as Input Field.
+  Angular Material: <code>MatInputModule</code> with <code>&lt;textarea&gt;</code>. Use <code>class="ds-textarea"</code> or <code>&lt;ds-textarea&gt;</code>.
+  Source: <code>components/textarea/_textarea.scss</code>
+</p>
+        </div>
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-textarea" style="width:280px;">
+                <label class="ds-textarea__label" for="ta-default">Description</label>
+                <div class="ds-textarea__field">
+                  <textarea id="ta-default" class="ds-textarea__control" rows="4" placeholder="Write a short description..."></textarea>
+                </div>
+              </div>
+              <div class="ds-textarea" style="width:280px;">
+                <label class="ds-textarea__label" for="ta-helper">Notes</label>
+                <div class="ds-textarea__field">
+                  <textarea id="ta-helper" class="ds-textarea__control" rows="3" placeholder="Add notes..."></textarea>
+                </div>
+                <span class="ds-textarea__helper">Visible only to team members.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Error</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-textarea is-error" style="width:280px;">
+                <label class="ds-textarea__label" for="ta-error">Summary<span class="ds-textarea__required">*</span></label>
+                <div class="ds-textarea__field">
+                  <textarea id="ta-error" class="ds-textarea__control" rows="3" aria-invalid="true"></textarea>
+                </div>
+                <span class="ds-textarea__helper" role="alert">Summary is required.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled / Read-only</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-textarea is-disabled" style="width:280px;">
+                <label class="ds-textarea__label" for="ta-disabled">Archived notes</label>
+                <div class="ds-textarea__field">
+                  <textarea id="ta-disabled" class="ds-textarea__control" rows="3" disabled>This record has been archived and cannot be edited.</textarea>
+                </div>
+              </div>
+              <div class="ds-textarea is-readonly" style="width:280px;">
+                <label class="ds-textarea__label" for="ta-readonly">System log</label>
+                <div class="ds-textarea__field">
+                  <textarea id="ta-readonly" class="ds-textarea__control" rows="3" readonly>2024-01-15 10:32 — Order created
+2024-01-15 10:45 — Payment confirmed</textarea>
+                </div>
+                <span class="ds-textarea__helper">Read-only system record.</span>
               </div>
             </div>
           </div>
@@ -3607,165 +3731,6 @@
               <div class="ds-tooltip-wrapper">
                 <button class="ds-button ds-button--outlined ds-button--sm">Right tooltip</button>
                 <div class="ds-tooltip ds-tooltip--right" role="tooltip">This appears on the right</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ── Select ───────────────────────────────────────────────────────── -->
-      <hr class="divider" />
-      <section class="section" id="select">
-        <div class="section-header">
-          <h2 class="section-title">Select / Dropdown</h2>
-          <p class="section-desc">Styled native select wrapper — same 42px height as Input. States: default, hover, focus, error, disabled. Source: <code>components/select/_select.scss</code></p>
-        </div>
-        <div class="component-demo">
-
-          <div class="demo-row">
-            <div class="demo-row-label">Default</div>
-            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
-              <div class="ds-select" style="width:220px;">
-                <label class="ds-select__label" for="sel-default">Plan</label>
-                <div class="ds-select__field">
-                  <select id="sel-default" class="ds-select__control">
-                    <option value="">Select a plan...</option>
-                    <option value="free">Free</option>
-                    <option value="pro">Pro — $12/mo</option>
-                    <option value="enterprise">Enterprise</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
-                </div>
-              </div>
-              <div class="ds-select" style="width:220px;">
-                <label class="ds-select__label" for="sel-selected">Country</label>
-                <div class="ds-select__field">
-                  <select id="sel-selected" class="ds-select__control">
-                    <option value="">Select country...</option>
-                    <option value="us" selected>United States</option>
-                    <option value="ca">Canada</option>
-                    <option value="uk">United Kingdom</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="demo-row">
-            <div class="demo-row-label">With Helper</div>
-            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
-              <div class="ds-select" style="width:220px;">
-                <label class="ds-select__label" for="sel-helper">Timezone</label>
-                <div class="ds-select__field">
-                  <select id="sel-helper" class="ds-select__control">
-                    <option value="">Select timezone...</option>
-                    <option value="et">Eastern (UTC-5)</option>
-                    <option value="ct">Central (UTC-6)</option>
-                    <option value="pt">Pacific (UTC-8)</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
-                </div>
-                <span class="ds-select__helper">Affects all scheduled reports.</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="demo-row">
-            <div class="demo-row-label">Error</div>
-            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
-              <div class="ds-select is-error" style="width:220px;">
-                <label class="ds-select__label" for="sel-error">Role<span class="ds-select__required">*</span></label>
-                <div class="ds-select__field">
-                  <select id="sel-error" class="ds-select__control" aria-invalid="true">
-                    <option value="">Select a role...</option>
-                    <option value="admin">Admin</option>
-                    <option value="member">Member</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
-                </div>
-                <span class="ds-select__helper" role="alert">Please select a role.</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="demo-row">
-            <div class="demo-row-label">Disabled</div>
-            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
-              <div class="ds-select is-disabled" style="width:220px;">
-                <label class="ds-select__label" for="sel-disabled">Subscription</label>
-                <div class="ds-select__field">
-                  <select id="sel-disabled" class="ds-select__control" disabled>
-                    <option value="enterprise">Enterprise</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
-                </div>
-                <span class="ds-select__helper">Contact sales to change your plan.</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ── Textarea ─────────────────────────────────────────────────────── -->
-      <hr class="divider" />
-      <section class="section" id="textarea">
-        <div class="section-header">
-          <h2 class="section-title">Textarea</h2>
-          <p class="section-desc">Multi-line text input. Min-height 96px, resizable vertically. States: default, focus, error, disabled, read-only. Source: <code>components/textarea/_textarea.scss</code></p>
-        </div>
-        <div class="component-demo">
-
-          <div class="demo-row">
-            <div class="demo-row-label">Default</div>
-            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
-              <div class="ds-textarea" style="width:280px;">
-                <label class="ds-textarea__label" for="ta-default">Description</label>
-                <div class="ds-textarea__field">
-                  <textarea id="ta-default" class="ds-textarea__control" rows="4" placeholder="Write a short description..."></textarea>
-                </div>
-              </div>
-              <div class="ds-textarea" style="width:280px;">
-                <label class="ds-textarea__label" for="ta-helper">Notes</label>
-                <div class="ds-textarea__field">
-                  <textarea id="ta-helper" class="ds-textarea__control" rows="3" placeholder="Add notes..."></textarea>
-                </div>
-                <span class="ds-textarea__helper">Visible only to team members.</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="demo-row">
-            <div class="demo-row-label">Error</div>
-            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
-              <div class="ds-textarea is-error" style="width:280px;">
-                <label class="ds-textarea__label" for="ta-error">Summary<span class="ds-textarea__required">*</span></label>
-                <div class="ds-textarea__field">
-                  <textarea id="ta-error" class="ds-textarea__control" rows="3" aria-invalid="true"></textarea>
-                </div>
-                <span class="ds-textarea__helper" role="alert">Summary is required.</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="demo-row">
-            <div class="demo-row-label">Disabled / Read-only</div>
-            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
-              <div class="ds-textarea is-disabled" style="width:280px;">
-                <label class="ds-textarea__label" for="ta-disabled">Archived notes</label>
-                <div class="ds-textarea__field">
-                  <textarea id="ta-disabled" class="ds-textarea__control" rows="3" disabled>This record has been archived and cannot be edited.</textarea>
-                </div>
-              </div>
-              <div class="ds-textarea is-readonly" style="width:280px;">
-                <label class="ds-textarea__label" for="ta-readonly">System log</label>
-                <div class="ds-textarea__field">
-                  <textarea id="ta-readonly" class="ds-textarea__control" rows="3" readonly>2024-01-15 10:32 — Order created
-2024-01-15 10:45 — Payment confirmed</textarea>
-                </div>
-                <span class="ds-textarea__helper">Read-only system record.</span>
               </div>
             </div>
           </div>
@@ -4936,23 +4901,28 @@
   if (indetChk) indetChk.indeterminate = true;
 </script>
 
-<!-- ds-input: keyboard-only focus ring — suppress ring when focus came from pointer -->
+<!-- Text fields: keyboard-only focus ring — suppress ring when focus came from pointer -->
 <script>
 (function () {
   var lastWasMouse = false;
   document.addEventListener('mousedown', function () { lastWasMouse = true; }, true);
   document.addEventListener('touchstart', function () { lastWasMouse = true; }, true);
+  // Reset on keydown — NOT on focusout, to correctly handle click-from-one-field-to-another
   document.addEventListener('keydown', function () { lastWasMouse = false; }, true);
   document.addEventListener('focusin', function (e) {
-    var inp = e.target && e.target.closest && e.target.closest('.ds-input');
-    if (!inp) return;
-    if (lastWasMouse) { inp.setAttribute('data-mouse-focus', ''); }
-    else              { inp.removeAttribute('data-mouse-focus'); }
+    var el = e.target && e.target.closest &&
+      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea'));
+    if (!el) return;
+    if (lastWasMouse) { el.setAttribute('data-mouse-focus', ''); }
+    else              { el.removeAttribute('data-mouse-focus'); }
   }, true);
   document.addEventListener('focusout', function (e) {
-    var inp = e.target && e.target.closest && e.target.closest('.ds-input');
-    if (inp) inp.removeAttribute('data-mouse-focus');
-    lastWasMouse = false;
+    // Only remove the attribute — do NOT reset lastWasMouse here.
+    // Resetting here would clear the flag before the next focusin fires
+    // when clicking from one field directly to another.
+    var el = e.target && e.target.closest &&
+      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea'));
+    if (el) el.removeAttribute('data-mouse-focus');
   }, true);
 })();
 </script>
