@@ -955,21 +955,20 @@
     .ds-button--text.is-error:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); }
     .ds-button--text.is-error:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
 
-    /* Destructive */
-    .ds-button--destructive { background: var(--color-surface-accent-red-bold); color: var(--color-text-on-bold); }
-    .ds-button--destructive:hover:not(:disabled)::after { background: var(--overlay-accent-red-hovered); }
-    .ds-button--destructive:focus-visible { box-shadow: 0 0 0 3px var(--color-border-accent-red); }
-    .ds-button--destructive:focus-visible::after { background: var(--overlay-accent-red-focused); }
-    .ds-button--destructive:active:not(:disabled)::after { background: var(--overlay-accent-red-pressed); }
-    .ds-button--destructive.is-error { background: var(--color-surface-error); color: var(--color-text-error); border-color: transparent; }
-    .ds-button--destructive.is-error:hover:not(:disabled)::after { background: var(--overlay-accent-red-hovered); }
-    .ds-button--destructive.is-error:active:not(:disabled)::after { background: var(--overlay-accent-red-pressed); }
+    /* Destructive — neutral by default, reveals red on hover */
+    .ds-button--destructive { background: transparent; color: var(--color-text-primary); border-color: transparent; }
+    .ds-button--destructive:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); color: var(--color-text-accent-red); }
+    .ds-button--destructive:focus-visible { background: var(--overlay-accent-red-focused); color: var(--color-text-accent-red); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-button--destructive:active:not(:disabled) { background: var(--overlay-accent-red-pressed); color: var(--color-text-accent-red); }
+    .ds-button--destructive.is-error { color: var(--color-text-error); }
+    .ds-button--destructive.is-error:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); }
+    .ds-button--destructive.is-error:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
 
-    /* Destructive Outlined */
-    .ds-button--destructive-outlined { background: transparent; color: var(--color-text-accent-red); border-color: var(--color-border-accent-red); }
-    .ds-button--destructive-outlined:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); }
-    .ds-button--destructive-outlined:focus-visible { background: var(--overlay-accent-red-focused); box-shadow: 0 0 0 3px var(--color-border-accent-red); }
-    .ds-button--destructive-outlined:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
+    /* Destructive Outlined — grey border by default, reveals red on hover */
+    .ds-button--destructive-outlined { background: transparent; color: var(--color-text-primary); border-color: var(--color-border-primary); }
+    .ds-button--destructive-outlined:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); color: var(--color-text-accent-red); border-color: var(--color-border-accent-red); }
+    .ds-button--destructive-outlined:focus-visible { background: var(--overlay-accent-red-focused); color: var(--color-text-accent-red); border-color: var(--color-border-accent-red); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-button--destructive-outlined:active:not(:disabled) { background: var(--overlay-accent-red-pressed); color: var(--color-text-accent-red); border-color: var(--color-border-accent-red); }
     .ds-button--destructive-outlined.is-error { color: var(--color-text-error); border-color: var(--color-border-error); }
     .ds-button--destructive-outlined.is-error:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); border-color: var(--color-border-error); }
     .ds-button--destructive-outlined.is-error:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
@@ -977,11 +976,11 @@
     /* Disabled */
     .ds-button:disabled { cursor: not-allowed; }
     .ds-button:disabled::after { background: transparent !important; }
-    .ds-button--filled:disabled,
-    .ds-button--destructive:disabled { background: var(--color-surface-disabled); color: var(--color-text-disabled); border-color: transparent; }
+    .ds-button--filled:disabled { background: var(--color-surface-disabled); color: var(--color-text-disabled); border-color: transparent; }
     .ds-button--outlined:disabled,
     .ds-button--destructive-outlined:disabled { background: transparent; color: var(--color-text-disabled); border-color: var(--color-border-subtle); }
-    .ds-button--text:disabled { background: transparent; color: var(--color-text-disabled); border-color: transparent; }
+    .ds-button--text:disabled,
+    .ds-button--destructive:disabled { background: transparent; color: var(--color-text-disabled); border-color: transparent; }
 
     /* Loading */
     .ds-button.is-loading { cursor: wait; pointer-events: none; }
@@ -2544,7 +2543,7 @@
             </div>
           </div>
 
-          <!-- Destructive -->
+          <!-- Destructive (text) — neutral default, red on hover -->
           <div class="demo-row">
             <div class="demo-row-label">Destructive</div>
             <div class="demo-row-items">
@@ -2558,7 +2557,7 @@
             </div>
           </div>
 
-          <!-- Destructive Outlined -->
+          <!-- Destructive Outlined — neutral default, red on hover -->
           <div class="demo-row">
             <div class="demo-row-label">Destr. Outlined</div>
             <div class="demo-row-items">

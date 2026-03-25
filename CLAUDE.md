@@ -147,8 +147,10 @@ components/{name}/
 - **Icon size**: `xs=12px`, `sm=16px`, `md=18px`, `lg=20px` — applies to both `__icon` SVG wrapper and `ds-icon` Material Symbol spans inside the button
 - Typography: label-large (`--ref-typescale-label-large-*`), weight-prominent (`--ref-typeface-weight-bold` = 600) — applies to all sizes except XS (label-small)
 - **Outlined border**: `--color-border-primary` (grey) — NOT `--color-border-brand` (blue). Text color is `--color-text-brand` (blue).
+- **Destructive (text)**: transparent bg, no border, `--color-text-primary` — looks neutral by default. On hover/active: `--overlay-accent-red-hovered/pressed` bg + `--color-text-accent-red` text (icon follows via `currentColor`).
+- **Destructive Outlined**: transparent bg, `--color-border-primary` (grey) border, `--color-text-primary` — looks like a normal outlined button by default. On hover/active: red overlay + `--color-text-accent-red` + `--color-border-accent-red`. Neither destructive variant uses red by default — red only appears on interaction.
 - States: default, hover, focus, active, disabled, `.is-error`, `.is-loading`
-- **Error state** (`.is-error`): filled/destructive → `--color-surface-error` bg + `--color-text-error`; outlined/destructive-outlined → `--color-border-error` border + `--color-text-error`; text → `--color-text-error` only. Hover uses `--overlay-accent-red-hovered`.
+- **Error state** (`.is-error`): filled → `--color-surface-error` bg + `--color-text-error`; outlined/destructive-outlined → `--color-border-error` border + `--color-text-error`; text/destructive → `--color-text-error` only. Hover uses `--overlay-accent-red-hovered`.
 - **Loading state** (`.is-loading`): `cursor: wait`, `pointer-events: none`, CSS spinner via `::before` (14px circle border, `currentColor`, `border-top-color: transparent`, 0.7s spin animation `ds-btn-spin`)
 
 ### Icon Button (`ds-icon-button`)
