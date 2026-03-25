@@ -876,14 +876,15 @@
       gap: var(--spacing-xs);
       white-space: nowrap;
       flex-shrink: 0;
+      min-height: 42px;
       border: 1px solid transparent;
       border-radius: var(--radius-sm);
-      padding: var(--spacing-sm) var(--spacing-lg);
+      padding: 0 var(--spacing-xl);
       font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif;
-      font-size: var(--ref-typescale-label-medium-size);
-      font-weight: var(--ref-typeface-weight-medium);
-      line-height: var(--ref-typescale-label-medium-line-height);
-      letter-spacing: var(--ref-typescale-label-medium-tracking);
+      font-size: var(--ref-typescale-label-large-size);
+      font-weight: var(--ref-typeface-weight-bold);
+      line-height: var(--ref-typescale-label-large-line-height);
+      letter-spacing: var(--ref-typescale-label-large-tracking);
       cursor: pointer;
       position: relative;
       overflow: hidden;
@@ -910,11 +911,11 @@
     .ds-button__icon svg { width: 100%; height: 100%; }
 
     /* Sizes */
-    .ds-button--xs { font-size: var(--ref-typescale-label-small-size); padding: 2px var(--spacing-sm); gap: 2px; border-radius: 4px; }
+    .ds-button--xs { font-size: var(--ref-typescale-label-small-size); min-height: 24px; padding: 0 var(--spacing-sm); gap: 2px; border-radius: 4px; }
     .ds-button--xs .ds-button__icon { width: 12px; height: 12px; }
-    .ds-button--sm { padding: 6px var(--spacing-md); }
+    .ds-button--sm { min-height: 32px; padding: 0 var(--spacing-lg); }
     .ds-button--sm .ds-button__icon { width: 14px; height: 14px; }
-    .ds-button--lg { font-size: var(--ref-typescale-label-large-size); padding: var(--spacing-md) var(--spacing-xl); }
+    .ds-button--lg { min-height: 56px; padding: 0 var(--spacing-xl); }
     .ds-button--lg .ds-button__icon { width: 18px; height: 18px; }
 
     /* Filled */
@@ -923,18 +924,27 @@
     .ds-button--filled:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-button--filled:focus-visible::after { background: var(--overlay-focused); }
     .ds-button--filled:active:not(:disabled)::after { background: var(--overlay-pressed); }
+    .ds-button--filled.is-error { background: var(--color-surface-error); color: var(--color-text-error); border-color: transparent; }
+    .ds-button--filled.is-error:hover:not(:disabled)::after { background: var(--overlay-accent-red-hovered); }
+    .ds-button--filled.is-error:active:not(:disabled)::after { background: var(--overlay-accent-red-pressed); }
 
     /* Outlined */
     .ds-button--outlined { background: transparent; color: var(--color-text-brand); border-color: var(--color-border-brand); }
     .ds-button--outlined:hover:not(:disabled) { background: var(--overlay-hovered); border-color: var(--color-border-input-hover); }
     .ds-button--outlined:focus-visible { background: var(--overlay-focused); border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-button--outlined:active:not(:disabled) { background: var(--overlay-pressed); border-color: var(--color-border-active); }
+    .ds-button--outlined.is-error { color: var(--color-text-error); border-color: var(--color-border-error); }
+    .ds-button--outlined.is-error:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); border-color: var(--color-border-error); }
+    .ds-button--outlined.is-error:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
 
     /* Text */
     .ds-button--text { background: transparent; color: var(--color-text-brand); border-color: transparent; padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
     .ds-button--text:hover:not(:disabled) { background: var(--overlay-hovered); }
     .ds-button--text:focus-visible { background: var(--overlay-focused); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-button--text:active:not(:disabled) { background: var(--overlay-pressed); }
+    .ds-button--text.is-error { color: var(--color-text-error); }
+    .ds-button--text.is-error:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); }
+    .ds-button--text.is-error:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
 
     /* Destructive */
     .ds-button--destructive { background: var(--color-surface-accent-red-bold); color: var(--color-text-on-bold); }
@@ -942,12 +952,18 @@
     .ds-button--destructive:focus-visible { box-shadow: 0 0 0 3px var(--color-border-accent-red); }
     .ds-button--destructive:focus-visible::after { background: var(--overlay-accent-red-focused); }
     .ds-button--destructive:active:not(:disabled)::after { background: var(--overlay-accent-red-pressed); }
+    .ds-button--destructive.is-error { background: var(--color-surface-error); color: var(--color-text-error); border-color: transparent; }
+    .ds-button--destructive.is-error:hover:not(:disabled)::after { background: var(--overlay-accent-red-hovered); }
+    .ds-button--destructive.is-error:active:not(:disabled)::after { background: var(--overlay-accent-red-pressed); }
 
     /* Destructive Outlined */
     .ds-button--destructive-outlined { background: transparent; color: var(--color-text-accent-red); border-color: var(--color-border-accent-red); }
     .ds-button--destructive-outlined:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); }
     .ds-button--destructive-outlined:focus-visible { background: var(--overlay-accent-red-focused); box-shadow: 0 0 0 3px var(--color-border-accent-red); }
     .ds-button--destructive-outlined:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
+    .ds-button--destructive-outlined.is-error { color: var(--color-text-error); border-color: var(--color-border-error); }
+    .ds-button--destructive-outlined.is-error:hover:not(:disabled) { background: var(--overlay-accent-red-hovered); border-color: var(--color-border-error); }
+    .ds-button--destructive-outlined.is-error:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
 
     /* Disabled */
     .ds-button:disabled { cursor: not-allowed; }
@@ -957,6 +973,20 @@
     .ds-button--outlined:disabled,
     .ds-button--destructive-outlined:disabled { background: transparent; color: var(--color-text-disabled); border-color: var(--color-border-subtle); }
     .ds-button--text:disabled { background: transparent; color: var(--color-text-disabled); border-color: transparent; }
+
+    /* Loading */
+    .ds-button.is-loading { cursor: wait; pointer-events: none; }
+    .ds-button.is-loading::before {
+      content: '';
+      width: 14px;
+      height: 14px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: ds-btn-spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes ds-btn-spin { to { transform: rotate(360deg); } }
 
 
     /* ════════════════════════════════════════════════════════════════════════
@@ -2530,6 +2560,31 @@
               </button>
               <div class="demo-divider"></div>
               <button class="ds-button ds-button--destructive-outlined" disabled>Disabled</button>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div class="demo-row">
+            <div class="demo-row-label">Error</div>
+            <div class="demo-row-items">
+              <button class="ds-button ds-button--filled is-error">Save failed</button>
+              <button class="ds-button ds-button--outlined is-error">Retry</button>
+              <button class="ds-button ds-button--text is-error">Dismiss</button>
+              <div class="demo-divider"></div>
+              <button class="ds-button ds-button--destructive is-error">Delete</button>
+              <button class="ds-button ds-button--destructive-outlined is-error">Remove</button>
+            </div>
+          </div>
+
+          <!-- Loading -->
+          <div class="demo-row">
+            <div class="demo-row-label">Loading</div>
+            <div class="demo-row-items">
+              <button class="ds-button ds-button--filled is-loading">Saving...</button>
+              <button class="ds-button ds-button--outlined is-loading">Loading</button>
+              <button class="ds-button ds-button--text is-loading">Processing</button>
+              <div class="demo-divider"></div>
+              <button class="ds-button ds-button--destructive is-loading">Deleting...</button>
             </div>
           </div>
 

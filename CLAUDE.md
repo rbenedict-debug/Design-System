@@ -139,9 +139,13 @@ components/{name}/
 
 ### Button (`ds-button`)
 - Variants: `filled` | `outlined` | `text` | `destructive` | `destructive-outlined`
-- Sizes: `xs` | `sm` | `md` (default) | `lg`
-- **Icon vs. no-icon are separate Figma variants** — do not use `:has()` to infer padding. Spacing rules TBD from Figma spec.
-- States: default, hover, focus, active, disabled
+- Sizes: `xs` (24px) | `sm` (32px) | `md` (42px, default) | `lg` (56px) — heights are fixed via `min-height`
+- **Icon vs. no-icon are separate Figma variants** — do not use `:has()` to infer padding.
+- Padding (horizontal only, no vertical): `xs=--spacing-sm`, `sm=--spacing-lg`, `md=--spacing-xl`, `lg=--spacing-xl`
+- Typography: label-large (`--ref-typescale-label-large-*`), weight-prominent (`--ref-typeface-weight-bold` = 600) — applies to all sizes except XS (label-small)
+- States: default, hover, focus, active, disabled, `.is-error`, `.is-loading`
+- **Error state** (`.is-error`): filled/destructive → `--color-surface-error` bg + `--color-text-error`; outlined/destructive-outlined → `--color-border-error` border + `--color-text-error`; text → `--color-text-error` only. Hover uses `--overlay-accent-red-hovered`.
+- **Loading state** (`.is-loading`): `cursor: wait`, `pointer-events: none`, CSS spinner via `::before` (14px circle border, `currentColor`, `border-top-color: transparent`, 0.7s spin animation `ds-btn-spin`)
 
 ### Icon Button (`ds-icon-button`)
 - Variants: `icon` (ghost) | `filled` | `outlined` | `monogram`

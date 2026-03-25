@@ -15,7 +15,7 @@
 //
 // Variants:  filled | outlined | text | destructive | destructive-outlined
 // Sizes:     xs | sm | md (default) | lg
-// States:    default, :hover, :focus-visible, :active, :disabled
+// States:    default, :hover, :focus-visible, :active, :disabled, .is-error, .is-loading
 // ============================================================
 
 .ds-button {
@@ -32,16 +32,17 @@
   flex-shrink: 0;
 
   // Shape (MD default)
+  min-height: 42px;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  padding: var(--spacing-sm) var(--spacing-lg);
+  padding: 0 var(--spacing-xl);
 
-  // Typography (label-medium default)
+  // Typography — label-large, weight-prominent (600)
   font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-medium-size);
-  font-weight: var(--ref-typeface-weight-medium);
-  line-height: var(--ref-typescale-label-medium-line-height);
-  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  font-size: var(--ref-typescale-label-large-size);
+  font-weight: var(--ref-typeface-weight-bold);
+  line-height: var(--ref-typescale-label-large-line-height);
+  letter-spacing: var(--ref-typescale-label-large-tracking);
 
   // Interaction
   cursor: pointer;
@@ -53,9 +54,7 @@
     border-color 0.15s ease,
     box-shadow 0.15s ease;
 
-  &:focus {
-    outline: none;
-  }
+  &:focus         { outline: none; }
 
   // Overlay pseudo-element — sits on top for hover/pressed tints on filled buttons
   &::after {
@@ -80,27 +79,28 @@
   }
 
 
-
   // ── Sizes ──────────────────────────────────────────────────────────────────
 
   &--xs {
     font-size: var(--ref-typescale-label-small-size);
-    padding: 2px var(--spacing-sm);
+    min-height: 24px;
+    padding: 0 var(--spacing-sm);
     gap: 2px;
     border-radius: 4px;
     .ds-button__icon { width: 12px; height: 12px; }
   }
 
   &--sm {
-    padding: 6px var(--spacing-md);
+    min-height: 32px;
+    padding: 0 var(--spacing-lg);
     .ds-button__icon { width: 14px; height: 14px; }
   }
 
   // --md is the base above
 
   &--lg {
-    font-size: var(--ref-typescale-label-large-size);
-    padding: var(--spacing-md) var(--spacing-xl);
+    min-height: 56px;
+    padding: 0 var(--spacing-xl);
     .ds-button__icon { width: 18px; height: 18px; }
   }
 
@@ -116,6 +116,14 @@
     &:focus-visible                       { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     &:focus-visible::after                { background: var(--overlay-focused); }
     &:active:not(:disabled)::after        { background: var(--overlay-pressed); }
+
+    &.is-error {
+      background: var(--color-surface-error);
+      color: var(--color-text-error);
+      border-color: transparent;
+      &:hover:not(:disabled)::after  { background: var(--overlay-accent-red-hovered); }
+      &:active:not(:disabled)::after { background: var(--overlay-accent-red-pressed); }
+    }
   }
 
   // Outlined — transparent bg, brand border and text
@@ -127,6 +135,13 @@
     &:hover:not(:disabled)   { background: var(--overlay-hovered);  border-color: var(--color-border-input-hover); }
     &:focus-visible           { background: var(--overlay-focused);  border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     &:active:not(:disabled)  { background: var(--overlay-pressed);  border-color: var(--color-border-active); }
+
+    &.is-error {
+      color: var(--color-text-error);
+      border-color: var(--color-border-error);
+      &:hover:not(:disabled)  { background: var(--overlay-accent-red-hovered); border-color: var(--color-border-error); }
+      &:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
+    }
   }
 
   // Text — no border or background, just label
@@ -140,6 +155,12 @@
     &:hover:not(:disabled)   { background: var(--overlay-hovered); }
     &:focus-visible           { background: var(--overlay-focused);  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     &:active:not(:disabled)  { background: var(--overlay-pressed); }
+
+    &.is-error {
+      color: var(--color-text-error);
+      &:hover:not(:disabled)  { background: var(--overlay-accent-red-hovered); }
+      &:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
+    }
   }
 
   // Destructive — solid red surface, white text
@@ -151,6 +172,14 @@
     &:focus-visible                       { box-shadow: 0 0 0 3px var(--color-border-accent-red); }
     &:focus-visible::after                { background: var(--overlay-accent-red-focused); }
     &:active:not(:disabled)::after        { background: var(--overlay-accent-red-pressed); }
+
+    &.is-error {
+      background: var(--color-surface-error);
+      color: var(--color-text-error);
+      border-color: transparent;
+      &:hover:not(:disabled)::after  { background: var(--overlay-accent-red-hovered); }
+      &:active:not(:disabled)::after { background: var(--overlay-accent-red-pressed); }
+    }
   }
 
   // Destructive Outlined — transparent bg, red border and text
@@ -162,6 +191,13 @@
     &:hover:not(:disabled)   { background: var(--overlay-accent-red-hovered); }
     &:focus-visible           { background: var(--overlay-accent-red-focused);  box-shadow: 0 0 0 3px var(--color-border-accent-red); }
     &:active:not(:disabled)  { background: var(--overlay-accent-red-pressed); }
+
+    &.is-error {
+      color: var(--color-text-error);
+      border-color: var(--color-border-error);
+      &:hover:not(:disabled)  { background: var(--overlay-accent-red-hovered); border-color: var(--color-border-error); }
+      &:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
+    }
   }
 
 
@@ -192,4 +228,28 @@
     color: var(--color-text-disabled);
     border-color: transparent;
   }
+
+
+  // ── Loading ────────────────────────────────────────────────────────────────
+
+  &.is-loading {
+    cursor: wait;
+    pointer-events: none;
+
+    // CSS spinner prepended as a flex item before the label
+    &::before {
+      content: '';
+      width: 14px;
+      height: 14px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: ds-btn-spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+  }
+}
+
+@keyframes ds-btn-spin {
+  to { transform: rotate(360deg); }
 }
