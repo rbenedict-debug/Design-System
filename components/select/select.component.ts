@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface DsSelectOption {
@@ -33,8 +33,9 @@ export interface DsSelectOption {
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
 })
-export class DsSelectComponent {
+export class DsSelectComponent implements OnInit {
   private _lastWasMouse = false;
+  private _selectId = '';
 
   constructor(private elementRef: ElementRef<HTMLElement>) {}
 
@@ -88,8 +89,12 @@ export class DsSelectComponent {
   /** Emits new value when selection changes. */
   @Output() valueChange = new EventEmitter<string>();
 
+  ngOnInit(): void {
+    this._selectId = `ds-select-${this.label.toLowerCase().replace(/\s+/g, '-') || Math.random().toString(36).slice(2)}`;
+  }
+
   get selectId(): string {
-    return `ds-select-${this.label.toLowerCase().replace(/\s+/g, '-') || Math.random().toString(36).slice(2)}`;
+    return this._selectId;
   }
 
   get selectHelperId(): string {
