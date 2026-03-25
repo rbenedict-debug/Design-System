@@ -1155,7 +1155,7 @@
     }
     .ds-input__field:hover { border-color: var(--color-border-input-hover); }
     .ds-input:focus-within .ds-input__field { border-color: var(--color-border-input-active); }
-    .ds-input:has(:focus-visible) .ds-input__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-input:focus-within:not([data-mouse-focus]) .ds-input__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
 
     .ds-input__control {
       flex: 1;
@@ -1194,7 +1194,7 @@
     .ds-input.is-error .ds-input__action { display: none; }
     .ds-input.is-error .ds-input__helper { color: var(--color-text-error); }
     .ds-input.is-error:focus-within .ds-input__field { border-color: var(--color-border-input-error); }
-    .ds-input.is-error:has(:focus-visible) .ds-input__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-input.is-error:focus-within:not([data-mouse-focus]) .ds-input__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-input__error-icon { color: var(--color-icon-error); flex-shrink: 0; pointer-events: none; }
 
     /* Input Disabled */
@@ -4934,6 +4934,27 @@
   // Set indeterminate state on the demo checkbox (cannot be set via HTML)
   const indetChk = document.getElementById('chk-indet');
   if (indetChk) indetChk.indeterminate = true;
+</script>
+
+<!-- ds-input: keyboard-only focus ring — suppress ring when focus came from pointer -->
+<script>
+(function () {
+  var lastWasMouse = false;
+  document.addEventListener('mousedown', function () { lastWasMouse = true; }, true);
+  document.addEventListener('touchstart', function () { lastWasMouse = true; }, true);
+  document.addEventListener('keydown', function () { lastWasMouse = false; }, true);
+  document.addEventListener('focusin', function (e) {
+    var inp = e.target && e.target.closest && e.target.closest('.ds-input');
+    if (!inp) return;
+    if (lastWasMouse) { inp.setAttribute('data-mouse-focus', ''); }
+    else              { inp.removeAttribute('data-mouse-focus'); }
+  }, true);
+  document.addEventListener('focusout', function (e) {
+    var inp = e.target && e.target.closest && e.target.closest('.ds-input');
+    if (inp) inp.removeAttribute('data-mouse-focus');
+    lastWasMouse = false;
+  }, true);
+})();
 </script>
 </body>
 </html>

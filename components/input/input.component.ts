@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type DsInputType =
@@ -52,6 +52,30 @@ export type DsInputType =
   styleUrls: ['./input.component.scss'],
 })
 export class DsInputComponent {
+  private _lastWasMouse = false;
+
+  constructor(private elementRef: ElementRef<HTMLElement>) {}
+
+  @HostListener('mousedown')
+  @HostListener('touchstart')
+  onPointerDown(): void { this._lastWasMouse = true; }
+
+  @HostListener('keydown')
+  onKeyDown(): void { this._lastWasMouse = false; }
+
+  @HostListener('focusin')
+  onFocusIn(): void {
+    if (this._lastWasMouse) {
+      this.elementRef.nativeElement.setAttribute('data-mouse-focus', '');
+    }
+  }
+
+  @HostListener('focusout')
+  onFocusOut(): void {
+    this.elementRef.nativeElement.removeAttribute('data-mouse-focus');
+    this._lastWasMouse = false;
+  }
+
   /** Label text shown above the field. */
   @Input() label = '';
 

@@ -71,8 +71,11 @@
     border-color: var(--color-border-input-active);
   }
 
-  // Focus ring only on keyboard navigation
-  &:has(:focus-visible) &__field {
+  // Focus ring only on keyboard navigation.
+  // data-mouse-focus is set by JS/Angular on mousedown — suppresses the ring for pointer-initiated focus.
+  // :has(:focus-visible) cannot be used here because browsers always match :focus-visible on <input>
+  // elements regardless of input method.
+  &:focus-within:not([data-mouse-focus]) &__field {
     box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
   }
 
@@ -172,7 +175,7 @@
       border-color: var(--color-border-input-error);
     }
 
-    &:has(:focus-visible) .ds-input__field {
+    &:focus-within:not([data-mouse-focus]) .ds-input__field {
       box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
     }
   }
