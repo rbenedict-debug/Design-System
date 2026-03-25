@@ -139,10 +139,14 @@ components/{name}/
 
 ### Button (`ds-button`)
 - Variants: `filled` | `outlined` | `text` | `destructive` | `destructive-outlined`
-- Sizes: `xs` (24px) | `sm` (32px) | `md` (42px, default) | `lg` (56px) — heights are fixed via `min-height`
-- **Icon vs. no-icon are separate Figma variants** — do not use `:has()` to infer padding.
-- Padding (horizontal only, no vertical): `xs=--spacing-sm`, `sm=--spacing-lg`, `md=--spacing-xl`, `lg=--spacing-xl`
+- Sizes: `xs` (24px) | `sm` (32px) | `md` (42px, default) | `lg` (56px) — heights fixed via `min-height`
+- **Padding (horizontal only, no vertical)**:
+  - No icon: `xs=--spacing-sm (8px)`, `sm=--spacing-lg (16px)`, `md=--spacing-xl (24px)`, `lg=32px (calc(xl+sm))`
+  - Icon present: icon side uses `--spacing-lg (16px)`, non-icon side keeps full padding
+  - Apply `ds-button--leading-icon` for leading icon, `ds-button--trailing-icon` for trailing icon — do NOT use `:has()` to infer padding
+- **Icon size**: `xs=12px`, `sm=16px`, `md=18px`, `lg=20px` — applies to both `__icon` SVG wrapper and `ds-icon` Material Symbol spans inside the button
 - Typography: label-large (`--ref-typescale-label-large-*`), weight-prominent (`--ref-typeface-weight-bold` = 600) — applies to all sizes except XS (label-small)
+- **Outlined border**: `--color-border-primary` (grey) — NOT `--color-border-brand` (blue). Text color is `--color-text-brand` (blue).
 - States: default, hover, focus, active, disabled, `.is-error`, `.is-loading`
 - **Error state** (`.is-error`): filled/destructive → `--color-surface-error` bg + `--color-text-error`; outlined/destructive-outlined → `--color-border-error` border + `--color-text-error`; text → `--color-text-error` only. Hover uses `--overlay-accent-red-hovered`.
 - **Loading state** (`.is-loading`): `cursor: wait`, `pointer-events: none`, CSS spinner via `::before` (14px circle border, `currentColor`, `border-top-color: transparent`, 0.7s spin animation `ds-btn-spin`)

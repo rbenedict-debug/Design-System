@@ -905,18 +905,27 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
     }
     .ds-button__icon svg { width: 100%; height: 100%; }
+    .ds-button .ds-icon { font-size: 18px; width: 18px; height: 18px; }
 
     /* Sizes */
     .ds-button--xs { font-size: var(--ref-typescale-label-small-size); min-height: 24px; padding: 0 var(--spacing-sm); gap: 2px; border-radius: 4px; }
-    .ds-button--xs .ds-button__icon { width: 12px; height: 12px; }
+    .ds-button--xs .ds-button__icon, .ds-button--xs .ds-icon { width: 12px; height: 12px; font-size: 12px; }
     .ds-button--sm { min-height: 32px; padding: 0 var(--spacing-lg); }
-    .ds-button--sm .ds-button__icon { width: 14px; height: 14px; }
-    .ds-button--lg { min-height: 56px; padding: 0 var(--spacing-xl); }
-    .ds-button--lg .ds-button__icon { width: 18px; height: 18px; }
+    .ds-button--sm .ds-button__icon, .ds-button--sm .ds-icon { width: 16px; height: 16px; font-size: 16px; }
+    .ds-button--lg { min-height: 56px; padding: 0 calc(var(--spacing-xl) + var(--spacing-sm)); }
+    .ds-button--lg .ds-button__icon, .ds-button--lg .ds-icon { width: 20px; height: 20px; font-size: 20px; }
+
+    /* Icon padding modifiers — icon side uses --spacing-lg (16px), opposite side keeps --spacing-xl */
+    .ds-button--leading-icon  { padding-left:  var(--spacing-lg); }
+    .ds-button--trailing-icon { padding-right: var(--spacing-lg); }
+    .ds-button--sm.ds-button--leading-icon  { padding-left:  var(--spacing-sm); }
+    .ds-button--sm.ds-button--trailing-icon { padding-right: var(--spacing-sm); }
+    .ds-button--lg.ds-button--leading-icon  { padding-left:  var(--spacing-xl); }
+    .ds-button--lg.ds-button--trailing-icon { padding-right: var(--spacing-xl); }
 
     /* Filled */
     .ds-button--filled { background: var(--color-surface-brand-bold); color: var(--color-text-on-brand); }
@@ -929,7 +938,7 @@
     .ds-button--filled.is-error:active:not(:disabled)::after { background: var(--overlay-accent-red-pressed); }
 
     /* Outlined */
-    .ds-button--outlined { background: transparent; color: var(--color-text-brand); border-color: var(--color-border-brand); }
+    .ds-button--outlined { background: transparent; color: var(--color-text-brand); border-color: var(--color-border-primary); }
     .ds-button--outlined:hover:not(:disabled) { background: var(--overlay-hovered); border-color: var(--color-border-input-hover); }
     .ds-button--outlined:focus-visible { background: var(--overlay-focused); border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-button--outlined:active:not(:disabled) { background: var(--overlay-pressed); border-color: var(--color-border-active); }
@@ -938,7 +947,7 @@
     .ds-button--outlined.is-error:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
 
     /* Text */
-    .ds-button--text { background: transparent; color: var(--color-text-brand); border-color: transparent; padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+    .ds-button--text { background: transparent; color: var(--color-text-brand); border-color: transparent; }
     .ds-button--text:hover:not(:disabled) { background: var(--overlay-hovered); }
     .ds-button--text:focus-visible { background: var(--overlay-focused); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-button--text:active:not(:disabled) { background: var(--overlay-pressed); }
@@ -2486,13 +2495,13 @@
             <div class="demo-row-label">Filled</div>
             <div class="demo-row-items">
               <button class="ds-button ds-button--filled">Button</button>
-              <button class="ds-button ds-button--filled">
-                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
+              <button class="ds-button ds-button--filled ds-button--leading-icon">
+                <span class="ds-icon">add</span>
                 With icon
               </button>
-              <button class="ds-button ds-button--filled">
+              <button class="ds-button ds-button--filled ds-button--trailing-icon">
                 Save changes
-                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="ds-icon">arrow_forward</span>
               </button>
               <div class="demo-divider"></div>
               <button class="ds-button ds-button--filled" disabled>Disabled</button>
@@ -2504,13 +2513,13 @@
             <div class="demo-row-label">Outlined</div>
             <div class="demo-row-items">
               <button class="ds-button ds-button--outlined">Button</button>
-              <button class="ds-button ds-button--outlined">
-                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
+              <button class="ds-button ds-button--outlined ds-button--leading-icon">
+                <span class="ds-icon">add</span>
                 With icon
               </button>
-              <button class="ds-button ds-button--outlined">
+              <button class="ds-button ds-button--outlined ds-button--trailing-icon">
                 Export
-                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="ds-icon">upload</span>
               </button>
               <div class="demo-divider"></div>
               <button class="ds-button ds-button--outlined" disabled>Disabled</button>
@@ -2522,13 +2531,13 @@
             <div class="demo-row-label">Text</div>
             <div class="demo-row-items">
               <button class="ds-button ds-button--text">Button</button>
-              <button class="ds-button ds-button--text">
-                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
+              <button class="ds-button ds-button--text ds-button--leading-icon">
+                <span class="ds-icon">add</span>
                 With icon
               </button>
-              <button class="ds-button ds-button--text">
+              <button class="ds-button ds-button--text ds-button--trailing-icon">
                 Learn more
-                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="ds-icon">arrow_forward</span>
               </button>
               <div class="demo-divider"></div>
               <button class="ds-button ds-button--text" disabled>Disabled</button>
@@ -2540,8 +2549,8 @@
             <div class="demo-row-label">Destructive</div>
             <div class="demo-row-items">
               <button class="ds-button ds-button--destructive">Delete</button>
-              <button class="ds-button ds-button--destructive">
-                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 4h10M6 4V3h4v1M5 4v8a1 1 0 001 1h4a1 1 0 001-1V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <button class="ds-button ds-button--destructive ds-button--leading-icon">
+                <span class="ds-icon">delete</span>
                 Delete item
               </button>
               <div class="demo-divider"></div>
@@ -2554,8 +2563,8 @@
             <div class="demo-row-label">Destr. Outlined</div>
             <div class="demo-row-items">
               <button class="ds-button ds-button--destructive-outlined">Remove</button>
-              <button class="ds-button ds-button--destructive-outlined">
-                <span class="ds-button__icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 4h10M6 4V3h4v1M5 4v8a1 1 0 001 1h4a1 1 0 001-1V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <button class="ds-button ds-button--destructive-outlined ds-button--leading-icon">
+                <span class="ds-icon">delete</span>
                 Remove item
               </button>
               <div class="demo-divider"></div>

@@ -66,16 +66,23 @@
     transition: background 0.1s ease;
   }
 
-  // Icon slot
+  // Icon slot — handles both __icon (SVG wrapper) and ds-icon (Material Symbols)
   &__icon {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
 
     svg { width: 100%; height: 100%; }
+  }
+
+  // Material Symbols icon inside button (MD default = 18px)
+  .ds-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
   }
 
 
@@ -87,22 +94,39 @@
     padding: 0 var(--spacing-sm);
     gap: 2px;
     border-radius: 4px;
-    .ds-button__icon { width: 12px; height: 12px; }
+    .ds-button__icon,
+    .ds-icon { width: 12px; height: 12px; font-size: 12px; }
   }
 
   &--sm {
     min-height: 32px;
     padding: 0 var(--spacing-lg);
-    .ds-button__icon { width: 14px; height: 14px; }
+    .ds-button__icon,
+    .ds-icon { width: 16px; height: 16px; font-size: 16px; }
   }
 
   // --md is the base above
 
   &--lg {
     min-height: 56px;
-    padding: 0 var(--spacing-xl);
-    .ds-button__icon { width: 18px; height: 18px; }
+    // 32px horizontal padding per Figma (no single token, use xl + sm)
+    padding: 0 calc(var(--spacing-xl) + var(--spacing-sm));
+    .ds-button__icon,
+    .ds-icon { width: 20px; height: 20px; font-size: 20px; }
   }
+
+
+  // ── Icon padding modifiers ──────────────────────────────────────────────────
+  // Icon side uses --spacing-lg (16px), non-icon side keeps --spacing-xl (24px)
+
+  &--leading-icon  { padding-left:  var(--spacing-lg); }
+  &--trailing-icon { padding-right: var(--spacing-lg); }
+
+  // Size overrides for icon padding modifiers
+  &--sm&--leading-icon  { padding-left:  var(--spacing-sm); }
+  &--sm&--trailing-icon { padding-right: var(--spacing-sm); }
+  &--lg&--leading-icon  { padding-left:  var(--spacing-xl); }
+  &--lg&--trailing-icon { padding-right: var(--spacing-xl); }
 
 
   // ── Variants ───────────────────────────────────────────────────────────────
@@ -126,11 +150,11 @@
     }
   }
 
-  // Outlined — transparent bg, brand border and text
+  // Outlined — transparent bg, grey border, brand text
   &--outlined {
     background: transparent;
     color: var(--color-text-brand);
-    border-color: var(--color-border-brand);
+    border-color: var(--color-border-primary);
 
     &:hover:not(:disabled)   { background: var(--overlay-hovered);  border-color: var(--color-border-input-hover); }
     &:focus-visible           { background: var(--overlay-focused);  border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
@@ -144,13 +168,11 @@
     }
   }
 
-  // Text — no border or background, just label
+  // Text — no border or background, just label (same horizontal padding as filled)
   &--text {
     background: transparent;
     color: var(--color-text-brand);
     border-color: transparent;
-    padding-left: var(--spacing-sm);
-    padding-right: var(--spacing-sm);
 
     &:hover:not(:disabled)   { background: var(--overlay-hovered); }
     &:focus-visible           { background: var(--overlay-focused);  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
