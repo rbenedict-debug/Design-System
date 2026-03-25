@@ -14,6 +14,7 @@
       [disabled]="disabled"
       [required]="required"
       [attr.aria-invalid]="isError ? 'true' : null"
+      [attr.aria-describedby]="(helperText || errorText) ? selectHelperId : null"
       (change)="onChange($event)"
     >
       <option value="" [disabled]="required">{{ placeholder }}</option>
@@ -24,13 +25,23 @@
         [selected]="opt.value === value"
       >{{ opt.label }}</option>
     </select>
-    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
+
+    <!-- Arrow — hidden in error state -->
+    <span *ngIf="!isError" class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
+
+    <!-- Error icon — shown in error state (matches ds-input pattern) -->
+    <span
+      *ngIf="isError && !disabled"
+      class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon"
+      aria-hidden="true"
+    >error</span>
   </div>
 
   <!-- Helper / error text -->
   <span
     *ngIf="displayHelper"
     class="ds-select__helper"
+    [id]="selectHelperId"
     [attr.role]="isError ? 'alert' : null"
   >{{ displayHelper }}</span>
 
