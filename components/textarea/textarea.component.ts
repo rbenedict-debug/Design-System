@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 /**
@@ -25,7 +25,36 @@ import { CommonModule } from '@angular/common';
   templateUrl: './textarea.component.html',
   styleUrls: ['./textarea.component.scss'],
 })
-export class DsTextareaComponent {
+export class DsTextareaComponent implements OnInit {
+  private _lastWasMouse = false;
+  private _textareaId = '';
+
+  constructor(private elementRef: ElementRef<HTMLElement>) {}
+
+  ngOnInit(): void {
+    this._textareaId = `ds-textarea-${this.label.toLowerCase().replace(/\s+/g, '-') || Math.random().toString(36).slice(2)}`;
+  }
+
+  @HostListener('mousedown')
+  @HostListener('touchstart')
+  onPointerDown(): void { this._lastWasMouse = true; }
+
+  @HostListener('keydown')
+  onKeyDown(): void { this._lastWasMouse = false; }
+
+  @HostListener('focusin')
+  onFocusIn(): void {
+    if (this._lastWasMouse) {
+      this.elementRef.nativeElement.setAttribute('data-mouse-focus', '');
+    }
+  }
+
+  @HostListener('focusout')
+  onFocusOut(): void {
+    this.elementRef.nativeElement.removeAttribute('data-mouse-focus');
+    this._lastWasMouse = false;
+  }
+
   /** Label text shown above the field. */
   @Input() label = '';
 
@@ -60,7 +89,7 @@ export class DsTextareaComponent {
   @Output() valueChange = new EventEmitter<string>();
 
   get textareaId(): string {
-    return `ds-textarea-${this.label.toLowerCase().replace(/\s+/g, '-') || Math.random().toString(36).slice(2)}`;
+    return this._textareaId;
   }
 
   get wrapperClasses(): string {
