@@ -32,7 +32,7 @@
   &__label {
     font-family: var(--ref-typeface-brand);
     font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typeface-weight-medium);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
     line-height: var(--ref-typescale-label-medium-line-height);
     color: var(--color-text-secondary);
     user-select: none;
@@ -62,6 +62,9 @@
 
   &:focus-within &__field {
     border-color: var(--color-border-input-active);
+  }
+
+  &:focus-within:not([data-mouse-focus]) &__field {
     box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
   }
 
@@ -98,30 +101,41 @@
     transition: transform 0.15s ease;
   }
 
-  &:focus-within &__arrow {
+  &:focus-within:not(.is-error) &__arrow {
     color: var(--color-icon-brand);
   }
 
   // ── Helper / error text ───────────────────────────────────────────────────
 
   &__helper {
-    font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-small-size);
-    line-height: var(--ref-typescale-label-small-line-height);
+    font-family: var(--ref-typeface-plain);
+    font-size: var(--ref-typescale-body-small-size);
+    line-height: var(--ref-typescale-body-small-line-height);
     color: var(--color-text-secondary);
   }
 
 
+  // ── Error icon ────────────────────────────────────────────────────────────
+
+  &__error-icon {
+    color: var(--color-icon-error);
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
   // ── Error state ───────────────────────────────────────────────────────────
 
   &.is-error {
-    .ds-select__field     { border-color: var(--color-border-input-error); }
-    .ds-select__label     { color: var(--color-text-error); }
-    .ds-select__helper    { color: var(--color-text-error); }
-    .ds-select__arrow     { color: var(--color-icon-error); }
+    .ds-select__field   { border-color: var(--color-border-input-error); }
+    .ds-select__helper  { color: var(--color-text-error); }
+    .ds-select__arrow   { display: none; }
+    // NOTE: label color intentionally NOT set — label stays --color-text-secondary
 
     &:focus-within .ds-select__field {
       border-color: var(--color-border-input-error);
+    }
+
+    &:focus-within:not([data-mouse-focus]) .ds-select__field {
       box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
     }
   }
