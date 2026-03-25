@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface DsSelectOption {
@@ -34,6 +34,30 @@ export interface DsSelectOption {
   styleUrls: ['./select.component.scss'],
 })
 export class DsSelectComponent {
+  private _lastWasMouse = false;
+
+  constructor(private elementRef: ElementRef<HTMLElement>) {}
+
+  @HostListener('mousedown')
+  @HostListener('touchstart')
+  onPointerDown(): void { this._lastWasMouse = true; }
+
+  @HostListener('keydown')
+  onKeyDown(): void { this._lastWasMouse = false; }
+
+  @HostListener('focusin')
+  onFocusIn(): void {
+    if (this._lastWasMouse) {
+      this.elementRef.nativeElement.setAttribute('data-mouse-focus', '');
+    }
+  }
+
+  @HostListener('focusout')
+  onFocusOut(): void {
+    this.elementRef.nativeElement.removeAttribute('data-mouse-focus');
+    this._lastWasMouse = false;
+  }
+
   /** Label text shown above the field. */
   @Input() label = '';
 
@@ -66,6 +90,10 @@ export class DsSelectComponent {
 
   get selectId(): string {
     return `ds-select-${this.label.toLowerCase().replace(/\s+/g, '-') || Math.random().toString(36).slice(2)}`;
+  }
+
+  get selectHelperId(): string {
+    return this.selectId + '-helper';
   }
 
   get wrapperClasses(): string {
