@@ -32,7 +32,8 @@ export class DsTextareaComponent implements OnInit {
   constructor(private elementRef: ElementRef<HTMLElement>) {}
 
   ngOnInit(): void {
-    this._textareaId = `ds-textarea-${this.label.toLowerCase().replace(/\s+/g, '-') || Math.random().toString(36).slice(2)}`;
+    const slug = this.label.trim().toLowerCase().replace(/\s+/g, '-') || 'field';
+    this._textareaId = `ds-textarea-${slug}-${Math.random().toString(36).slice(2)}`;
   }
 
   @HostListener('mousedown')

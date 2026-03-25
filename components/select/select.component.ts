@@ -90,7 +90,8 @@ export class DsSelectComponent implements OnInit {
   @Output() valueChange = new EventEmitter<string>();
 
   ngOnInit(): void {
-    this._selectId = `ds-select-${this.label.toLowerCase().replace(/\s+/g, '-') || Math.random().toString(36).slice(2)}`;
+    const slug = this.label.trim().toLowerCase().replace(/\s+/g, '-') || 'field';
+    this._selectId = `ds-select-${slug}-${Math.random().toString(36).slice(2)}`;
   }
 
   get selectId(): string {
