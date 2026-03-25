@@ -66,9 +66,13 @@
     &:hover { border-color: var(--color-border-input-hover); }
   }
 
-  // Focus ring on the field when the inner input is focused
+  // Active border on any focus (mouse or keyboard)
   &:focus-within &__field {
     border-color: var(--color-border-input-active);
+  }
+
+  // Focus ring only on keyboard navigation
+  &:has(:focus-visible) &__field {
     box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
   }
 
@@ -166,6 +170,9 @@
 
     &:focus-within .ds-input__field {
       border-color: var(--color-border-input-error);
+    }
+
+    &:has(:focus-visible) .ds-input__field {
       box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
     }
   }

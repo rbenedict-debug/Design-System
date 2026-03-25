@@ -1154,7 +1154,8 @@
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
     .ds-input__field:hover { border-color: var(--color-border-input-hover); }
-    .ds-input:focus-within .ds-input__field { border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-input:focus-within .ds-input__field { border-color: var(--color-border-input-active); }
+    .ds-input:has(:focus-visible) .ds-input__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
 
     .ds-input__control {
       flex: 1;
@@ -1192,7 +1193,8 @@
     .ds-input.is-error .ds-input__field { border-color: var(--color-border-input-error); }
     .ds-input.is-error .ds-input__action { display: none; }
     .ds-input.is-error .ds-input__helper { color: var(--color-text-error); }
-    .ds-input.is-error:focus-within .ds-input__field { border-color: var(--color-border-input-error); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-input.is-error:focus-within .ds-input__field { border-color: var(--color-border-input-error); }
+    .ds-input.is-error:has(:focus-visible) .ds-input__field { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-input__error-icon { color: var(--color-icon-error); flex-shrink: 0; pointer-events: none; }
 
     /* Input Disabled */
@@ -2800,6 +2802,58 @@
         </div>
 
         <div class="component-demo">
+
+          <!-- Figma variants: trailing icon on/off × input/placeholder -->
+          <div class="demo-row">
+            <div class="demo-row-label">Trailing icon</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <!-- Trailing icon=True, Content=Input -->
+              <div class="ds-input" style="width:220px;">
+                <label class="ds-input__label" for="inp-fi-val">Label</label>
+                <div class="ds-input__field">
+                  <input id="inp-fi-val" class="ds-input__control" type="text" value="Input" />
+                  <button class="ds-input__action" type="button" aria-label="Expand">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                  </button>
+                </div>
+                <span class="ds-input__helper">Supporting text</span>
+              </div>
+              <!-- Trailing icon=True, Content=Placeholder -->
+              <div class="ds-input" style="width:220px;">
+                <label class="ds-input__label" for="inp-fi-ph">Label</label>
+                <div class="ds-input__field">
+                  <input id="inp-fi-ph" class="ds-input__control" type="text" placeholder="Placeholder" />
+                  <button class="ds-input__action" type="button" aria-label="Expand">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                  </button>
+                </div>
+                <span class="ds-input__helper">Supporting text</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- No trailing icon -->
+          <div class="demo-row">
+            <div class="demo-row-label">No trailing icon</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <!-- Trailing icon=False, Content=Input -->
+              <div class="ds-input" style="width:220px;">
+                <label class="ds-input__label" for="inp-ni-val">Label</label>
+                <div class="ds-input__field">
+                  <input id="inp-ni-val" class="ds-input__control" type="text" value="Input" />
+                </div>
+                <span class="ds-input__helper">Supporting text</span>
+              </div>
+              <!-- Trailing icon=False, Content=Placeholder -->
+              <div class="ds-input" style="width:220px;">
+                <label class="ds-input__label" for="inp-ni-ph">Label</label>
+                <div class="ds-input__field">
+                  <input id="inp-ni-ph" class="ds-input__control" type="text" placeholder="Placeholder" />
+                </div>
+                <span class="ds-input__helper">Supporting text</span>
+              </div>
+            </div>
+          </div>
 
           <!-- Default -->
           <div class="demo-row">
