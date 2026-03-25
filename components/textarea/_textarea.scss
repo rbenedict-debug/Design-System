@@ -28,7 +28,7 @@
   &__label {
     font-family: var(--ref-typeface-brand);
     font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typeface-weight-medium);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
     line-height: var(--ref-typescale-label-medium-line-height);
     color: var(--color-text-secondary);
     user-select: none;
@@ -55,6 +55,9 @@
 
   &:focus-within &__field {
     border-color: var(--color-border-input-active);
+  }
+
+  &:focus-within:not([data-mouse-focus]) &__field {
     box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
   }
 
@@ -83,9 +86,9 @@
   // ── Helper / error text ───────────────────────────────────────────────────
 
   &__helper {
-    font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-small-size);
-    line-height: var(--ref-typescale-label-small-line-height);
+    font-family: var(--ref-typeface-plain);
+    font-size: var(--ref-typescale-body-small-size);
+    line-height: var(--ref-typescale-body-small-line-height);
     color: var(--color-text-secondary);
   }
 
@@ -94,11 +97,14 @@
 
   &.is-error {
     .ds-textarea__field   { border-color: var(--color-border-input-error); }
-    .ds-textarea__label   { color: var(--color-text-error); }
+    // NOTE: label color intentionally NOT set — label stays --color-text-secondary
     .ds-textarea__helper  { color: var(--color-text-error); }
 
     &:focus-within .ds-textarea__field {
       border-color: var(--color-border-input-error);
+    }
+
+    &:focus-within:not([data-mouse-focus]) .ds-textarea__field {
       box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
     }
   }
