@@ -34,9 +34,16 @@
     <!-- Suffix -->
     <span *ngIf="suffix" class="ds-input__suffix" aria-hidden="true">{{ suffix }}</span>
 
+    <!-- Error icon — replaces trailing icon in error state -->
+    <span
+      *ngIf="isError && !disabled"
+      class="ds-icon ds-icon--sm ds-icon--filled ds-input__error-icon"
+      aria-hidden="true"
+    >error</span>
+
     <!-- Trailing icon — clickable if trailingAction has listeners, otherwise decorative -->
     <button
-      *ngIf="trailingIcon && !disabled"
+      *ngIf="trailingIcon && !disabled && !isError"
       class="ds-input__action"
       type="button"
       [attr.aria-label]="'Clear ' + label"

@@ -1138,7 +1138,7 @@
        ════════════════════════════════════════════════════════════════════════ */
 
     .ds-input { display: flex; flex-direction: column; gap: var(--spacing-xs); }
-    .ds-input__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typeface-weight-medium); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-secondary); user-select: none; }
+    .ds-input__label { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typescale-label-medium-weight-prominent); line-height: var(--ref-typescale-label-medium-line-height); color: var(--color-text-secondary); user-select: none; }
     .ds-input__required { color: var(--color-text-error); margin-left: 2px; }
 
     .ds-input__field {
@@ -1186,14 +1186,14 @@
 
     .ds-input__prefix, .ds-input__suffix { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-medium-size); color: var(--color-text-secondary); white-space: nowrap; user-select: none; flex-shrink: 0; }
 
-    .ds-input__helper { font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif; font-size: var(--ref-typescale-label-small-size); line-height: var(--ref-typescale-label-small-line-height); color: var(--color-text-secondary); }
+    .ds-input__helper { font-family: var(--ref-typeface-plain), 'DM Sans', sans-serif; font-size: var(--ref-typescale-body-small-size); line-height: var(--ref-typescale-body-small-line-height); color: var(--color-text-secondary); }
 
     /* Input Error */
     .ds-input.is-error .ds-input__field { border-color: var(--color-border-input-error); }
-    .ds-input.is-error .ds-input__icon { color: var(--color-icon-error); }
-    .ds-input.is-error .ds-input__label { color: var(--color-text-error); }
+    .ds-input.is-error .ds-input__action { display: none; }
     .ds-input.is-error .ds-input__helper { color: var(--color-text-error); }
     .ds-input.is-error:focus-within .ds-input__field { border-color: var(--color-border-input-error); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-input__error-icon { color: var(--color-icon-error); flex-shrink: 0; pointer-events: none; }
 
     /* Input Disabled */
     .ds-input.is-disabled { pointer-events: none; }
@@ -2879,7 +2879,7 @@
                 <div class="ds-input__field">
                   <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">mail</span>
                   <input id="inp-err" class="ds-input__control" type="email" value="not-an-email" aria-invalid="true" />
-                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">error</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-input__error-icon" aria-hidden="true">error</span>
                 </div>
                 <span class="ds-input__helper" role="alert">Enter a valid email address.</span>
               </div>
@@ -2887,6 +2887,7 @@
                 <label class="ds-input__label" for="inp-err2">Username<span class="ds-input__required" aria-hidden="true">*</span></label>
                 <div class="ds-input__field">
                   <input id="inp-err2" class="ds-input__control" type="text" placeholder="username" aria-invalid="true" />
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-input__error-icon" aria-hidden="true">error</span>
                 </div>
                 <span class="ds-input__helper" role="alert">Username is required.</span>
               </div>

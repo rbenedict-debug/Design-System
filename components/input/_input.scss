@@ -37,7 +37,7 @@
   &__label {
     font-family: var(--ref-typeface-brand);
     font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typeface-weight-medium);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
     line-height: var(--ref-typescale-label-medium-line-height);
     color: var(--color-text-secondary);
     user-select: none;
@@ -101,6 +101,12 @@
     pointer-events: none;
   }
 
+  &__error-icon {
+    color: var(--color-icon-error);
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
 
   // ── Trailing action button (clear, show/hide, etc.) ───────────────────────
 
@@ -144,9 +150,9 @@
   // ── Helper / error text ───────────────────────────────────────────────────
 
   &__helper {
-    font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-small-size);
-    line-height: var(--ref-typescale-label-small-line-height);
+    font-family: var(--ref-typeface-plain);
+    font-size: var(--ref-typescale-body-small-size);
+    line-height: var(--ref-typescale-body-small-line-height);
     color: var(--color-text-secondary);
   }
 
@@ -155,8 +161,7 @@
 
   &.is-error {
     .ds-input__field     { border-color: var(--color-border-input-error); }
-    .ds-input__icon      { color: var(--color-icon-error); }
-    .ds-input__label     { color: var(--color-text-error); }
+    .ds-input__action    { display: none; }
     .ds-input__helper    { color: var(--color-text-error); }
 
     &:focus-within .ds-input__field {

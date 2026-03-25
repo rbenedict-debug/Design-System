@@ -163,6 +163,10 @@ components/{name}/
 ### Input Field (`ds-input`)
 - **Height: always 42px — fixed, no size variants**
 - Has: label, helper text, error text, leading icon, trailing action button, prefix text, suffix text
+- **Label typography**: label-medium, `weight-prominent` (600/bold = `--ref-typescale-label-medium-weight-prominent`), `--color-text-secondary` — label does NOT turn red in error state
+- **Helper/supporting text typography**: body-small (12px, 16px line-height) using `--ref-typescale-body-small-*` tokens
+- **Error icon**: filled `error` Material Symbol (`ds-icon--filled ds-input__error-icon`) always appears in the trailing position when `is-error && !disabled` — replaces the trailing action button
+- **Error state**: red border (`--color-border-input-error`), red helper text, filled error icon — label stays `--color-text-secondary` (NOT red), trailing action button is hidden
 - States: default, hover, focus, error (`.is-error`), disabled (`.is-disabled`), read-only (`.is-readonly`)
 - ADA: `aria-invalid="true"` on `<input>` when error; `role="alert"` on error message; `aria-describedby` links input to helper
 - Multi-line text: use `ds-textarea` (separate component — resizable, no fixed height)
