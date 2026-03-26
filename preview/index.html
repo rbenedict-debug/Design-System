@@ -1935,9 +1935,9 @@
 
     /* ── HOVER CARD  (ds-hover-card / composition/card-hover) ─────────────────── */
     .ds-hover-card__trigger { display: inline-block; }
-    .ds-hover-card { position: fixed; z-index: 9999; width: 360px; pointer-events: none; background: var(--color-surface-page); border: 1px solid var(--color-border-hover); border-top: 4px solid var(--color-border-hover); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 3px 12px 6px var(--shadow-elevation-3), 0 4px 4px 0 var(--shadow-elevation-3); opacity: 0; transform: translateY(-4px); transition: opacity 0.12s ease, transform 0.12s ease; }
+    .ds-hover-card { position: fixed; z-index: 9999; width: 360px; pointer-events: none; background: var(--color-surface-page); border-top: 4px solid var(--color-border-hover); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 3px 12px 6px var(--shadow-elevation-3), 0 4px 4px 0 var(--shadow-elevation-3); opacity: 0; transform: translateY(-4px); transition: opacity 0.12s ease, transform 0.12s ease; }
     .ds-hover-card.is-visible { opacity: 1; transform: translateY(0); }
-    .ds-hover-card--top { border-top-width: 1px; border-bottom: 4px solid var(--color-border-hover); transform: translateY(4px); }
+    .ds-hover-card--top { border-top: none; border-bottom: 4px solid var(--color-border-hover); transform: translateY(4px); }
     .ds-hover-card--top.is-visible { transform: translateY(0); }
     .ds-hover-card__body { display: flex; flex-direction: column; gap: var(--spacing-md); padding: var(--spacing-lg); }
     .ds-hover-card__title { font-family: var(--ref-typescale-title-h3-font); font-size: var(--ref-typescale-title-h3-size); font-weight: var(--ref-typeface-weight-bold); line-height: var(--ref-typescale-title-h3-line-height); letter-spacing: var(--ref-typescale-title-h3-tracking); color: var(--color-text-primary); margin: 0; }
@@ -3890,12 +3890,14 @@
         </div>
         <div class="component-demo">
 
-          <!-- bottom variant (default) -->
-          <div class="demo-row" style="flex-direction: column; align-items: flex-start; gap: 12px; padding-bottom: 24px;">
-            <div class="demo-label" style="width: auto;">Variant: bottom (card follows cursor below)</div>
-            <div class="demo-row-items" style="padding: 12px 0 200px;">
+          <!-- Both variants side by side — hover each trigger to experience them -->
+          <div class="demo-row" style="align-items: center; padding: 200px 0;">
+
+            <!-- bottom: card appears below cursor, accent on top -->
+            <div class="demo-label">bottom</div>
+            <div class="demo-row-items">
               <div class="ds-hover-card__trigger" data-hc-variant="bottom">
-                <button class="ds-button ds-button--outlined">Hover me</button>
+                <button class="ds-button ds-button--outlined">Hover — card below</button>
               </div>
               <div class="ds-hover-card" role="tooltip" aria-hidden="true">
                 <div class="ds-hover-card__body">
@@ -3904,15 +3906,10 @@
                   <p class="ds-hover-card__text">3 line items · Submitted 2 hours ago · Assigned to Sarah K.</p>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- top variant -->
-          <div class="demo-row" style="flex-direction: column; align-items: flex-start; gap: 12px; padding-top: 200px;">
-            <div class="demo-label" style="width: auto;">Variant: top (card follows cursor above)</div>
-            <div class="demo-row-items">
+              <!-- top: card appears above cursor, accent on bottom -->
               <div class="ds-hover-card__trigger" data-hc-variant="top">
-                <button class="ds-button ds-button--outlined">Hover me</button>
+                <button class="ds-button ds-button--outlined">Hover — card above</button>
               </div>
               <div class="ds-hover-card ds-hover-card--top" role="tooltip" aria-hidden="true">
                 <div class="ds-hover-card__body">
@@ -3924,9 +3921,9 @@
             </div>
           </div>
 
-          <!-- rich content variant -->
-          <div class="demo-row" style="flex-direction: column; align-items: flex-start; gap: 12px; padding-bottom: 240px;">
-            <div class="demo-label" style="width: auto;">Rich content (labels + text)</div>
+          <!-- Rich content: labels + text -->
+          <div class="demo-row" style="align-items: center; padding: 24px 0 200px;">
+            <div class="demo-label">Rich content</div>
             <div class="demo-row-items">
               <div class="ds-hover-card__trigger" data-hc-variant="bottom">
                 <button class="ds-button ds-button--filled">Preview record</button>

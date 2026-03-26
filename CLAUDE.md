@@ -280,7 +280,7 @@ components/{name}/
   - `top` — card appears above the cursor; 4px accent border on **bottom** edge
 - **Width**: 360px — fixed
 - **Background**: `--color-surface-page` (white)
-- **Border**: 1px `--color-border-hover` (light blue) on all sides; 4px `--color-border-hover` on the accent edge
+- **Border**: 4px `--color-border-hover` (light blue) on the accent edge only — no border on the other three sides
 - **Border radius**: `--radius-lg` (16px)
 - **Shadow**: `0 3px 12px 6px var(--shadow-elevation-3), 0 4px 4px 0 var(--shadow-elevation-3)` — matches Figma elevation
 - **Body padding**: `var(--spacing-lg)` (16px); gap between items: `var(--spacing-md)` (12px)

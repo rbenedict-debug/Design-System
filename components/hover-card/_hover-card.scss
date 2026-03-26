@@ -53,7 +53,6 @@
   // ── Visual ─────────────────────────────────────────────────────────────────
 
   background: var(--color-surface-page);
-  border: 1px solid var(--color-border-hover);
   border-radius: var(--radius-lg);
   overflow: hidden;
 
@@ -62,6 +61,17 @@
   box-shadow:
     0 3px 12px 6px var(--shadow-elevation-3),
     0 4px 4px 0 var(--shadow-elevation-3);
+
+  // ── Accent border (one side only) ──────────────────────────────────────────
+
+  // bottom variant (default): 4px accent on top edge → card opens downward
+  border-top: 4px solid var(--color-border-hover);
+
+  // top variant: 4px accent on bottom edge → card opens upward
+  &--top {
+    border-top: none;
+    border-bottom: 4px solid var(--color-border-hover);
+  }
 
   // ── Visibility / enter animation ───────────────────────────────────────────
 
@@ -76,15 +86,7 @@
     transform: translateY(0);
   }
 
-  // ── Accent border ───────────────────────────────────────────────────────────
-
-  // bottom variant (default): 4px accent on top edge → card opens downward
-  border-top: 4px solid var(--color-border-hover);
-
-  // top variant: 4px accent on bottom edge → card opens upward
   &--top {
-    border-top-width: 1px; // reset to default 1px
-    border-bottom: 4px solid var(--color-border-hover);
     transform: translateY(4px); // slides down from above
 
     &.is-visible {
