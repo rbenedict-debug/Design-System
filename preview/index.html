@@ -4222,6 +4222,7 @@
                   </div>
                   <!-- Customer col -->
                   <div class="ds-table-header-cell" style="width: var(--col-customer); flex-shrink: 0;">
+                    <div class="ds-table-header-cell__resize-handle"></div>
                     <div class="ds-table-header-cell__content">
                       <span class="ds-table-header-cell__label">Customer</span>
                       <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sorted ascending">
@@ -4239,6 +4240,7 @@
                   </div>
                   <!-- Status col -->
                   <div class="ds-table-header-cell" style="width: var(--col-status); flex-shrink: 0;">
+                    <div class="ds-table-header-cell__resize-handle"></div>
                     <div class="ds-table-header-cell__content">
                       <span class="ds-table-header-cell__label">Status</span>
                     </div>
@@ -4253,6 +4255,7 @@
                   </div>
                   <!-- Amount col (right-aligned) -->
                   <div class="ds-table-header-cell" style="width: var(--col-amount); flex-shrink: 0;">
+                    <div class="ds-table-header-cell__resize-handle"></div>
                     <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
                       <span class="ds-table-header-cell__label">Amount</span>
                     </div>
@@ -4391,7 +4394,7 @@
         <!-- Default (label only, right pipe) -->
         <div class="demo-row">
           <div class="demo-row-label">Default</div>
-          <div class="demo-row-items" style="flex-direction:column; gap:0; width:480px;">
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
             <div class="ds-table-header-cell">
               <div class="ds-table-header-cell__resize-handle"></div>
               <div class="ds-table-header-cell__content">
@@ -4409,7 +4412,7 @@
         <!-- With sorting — unsorted / asc / desc -->
         <div class="demo-row">
           <div class="demo-row-label">Sorting states</div>
-          <div class="demo-row-items" style="flex-direction:column; gap:0; width:480px;">
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
             <div class="ds-table-header-cell">
               <div class="ds-table-header-cell__resize-handle"></div>
               <div class="ds-table-header-cell__content">
@@ -4455,7 +4458,7 @@
         <!-- With filter + menu controls -->
         <div class="demo-row">
           <div class="demo-row-label">Filter + menu</div>
-          <div class="demo-row-items" style="flex-direction:column; gap:0; width:480px;">
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
             <div class="ds-table-header-cell">
               <div class="ds-table-header-cell__resize-handle"></div>
               <div class="ds-table-header-cell__content">
@@ -4479,7 +4482,7 @@
         <!-- With checkbox (select-all) -->
         <div class="demo-row">
           <div class="demo-row-label">Checkbox variants</div>
-          <div class="demo-row-items" style="flex-direction:column; gap:0; width:480px;">
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
             <div class="ds-table-header-cell">
               <div class="ds-table-header-cell__resize-handle"></div>
               <div class="ds-table-header-cell__content">
@@ -4531,7 +4534,7 @@
         <!-- Checkbox-only column (no label, fixed width, no resize) -->
         <div class="demo-row">
           <div class="demo-row-label">Checkbox-only column</div>
-          <div class="demo-row-items" style="flex-direction:column; gap:0; width:480px;">
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
             <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
               <div class="ds-table-header-cell__content">
                 <label class="ds-checkbox" aria-label="Select all">
@@ -4556,7 +4559,7 @@
         <!-- Right-aligned -->
         <div class="demo-row">
           <div class="demo-row-label">Align: Right</div>
-          <div class="demo-row-items" style="flex-direction:column; gap:0; width:480px;">
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
             <div class="ds-table-header-cell">
               <div class="ds-table-header-cell__resize-handle"></div>
               <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
@@ -4589,7 +4592,7 @@
         <!-- States: Default / Hover / Focus — shown as full rows -->
         <div class="demo-row">
           <div class="demo-row-label">States</div>
-          <div class="demo-row-items" style="flex-direction:column; gap:0; width:480px;">
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
             <!-- Default -->
             <div style="display:flex;">
               <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
@@ -4617,7 +4620,7 @@
         <!-- Checkbox selection — full rows -->
         <div class="demo-row">
           <div class="demo-row-label">Checkbox</div>
-          <div class="demo-row-items" style="flex-direction:column; gap:0; width:480px;">
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
             <!-- Unchecked -->
             <div style="display:flex;">
               <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
@@ -4638,7 +4641,7 @@
         <!-- Gripper (drag handle) — full row -->
         <div class="demo-row">
           <div class="demo-row-label">Gripper</div>
-          <div class="demo-row-items" style="flex-direction:column; gap:0; width:480px;">
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
             <div style="display:flex;">
               <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><button type="button" class="ds-table-row-cell__gripper" aria-label="Drag to reorder"><span class="ds-icon">drag_indicator</span></button></div></div>
               <div class="ds-table-row-cell" style="flex:1 0 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Frost &amp; Partners</span></div></div>
@@ -4651,7 +4654,7 @@
         <!-- Tier indents (tree / grouped rows) -->
         <div class="demo-row">
           <div class="demo-row-label">Tier indents</div>
-          <div class="demo-row-items" style="flex-direction:column; gap:0; width:480px;">
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
             <div class="ds-table-row-cell">
               <div class="ds-table-row-cell__content">
                 <span class="ds-table-row-cell__data">Root — Acme Corporation</span>
