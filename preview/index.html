@@ -1360,6 +1360,11 @@
     .ds-badge--outlined.ds-badge--warning { color: var(--color-icon-warning); border-color: var(--color-border-accent-yellow); }
     .ds-badge--outlined.ds-badge--error { color: var(--color-text-error); border-color: var(--color-border-accent-red); }
     .ds-badge--outlined.ds-badge--info { color: var(--color-icon-info); border-color: var(--color-border-accent-blue); }
+    /* Notification indicator (count/dot) */
+    .ds-badge-indicator { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; max-width: 36px; padding: 0 var(--spacing-xs); border-radius: var(--radius-full); background: var(--color-surface-accent-red-bold); color: var(--color-text-on-bold); font-family: var(--ref-typeface-brand); font-size: var(--ref-typescale-label-small-size); font-weight: var(--ref-typeface-weight-bold); line-height: 1; letter-spacing: var(--ref-typescale-label-small-tracking); overflow: hidden; white-space: nowrap; pointer-events: none; flex-shrink: 0; }
+    .ds-badge-indicator--dot { width: 6px; height: 6px; min-width: 6px; max-width: 6px; padding: 0; }
+    .ds-badge-indicator__host { position: relative; display: inline-flex; }
+    .ds-badge-indicator__host .ds-badge-indicator { position: absolute; top: -4px; right: -4px; }
 
 
     /* ════════════════════════════════════════════════════════════════════════
@@ -3378,7 +3383,7 @@
       <section class="section" id="badge">
         <div class="section-header">
           <h2 class="section-title">Badge / Tag / Chip</h2>
-          <p class="section-desc">Compact status indicator. Variants: filled, subtle, outlined. Colors: default, brand, success, warning, error, info. Sizes: sm, md. Source: <code>components/badge/_badge.scss</code></p>
+          <p class="section-desc">Two primitives: <strong>ds-badge</strong> — inline status chip (filled / subtle / outlined, 6 colors, sm / md sizes). <strong>ds-badge-indicator</strong> — notification count or dot overlaid on icon buttons or shown inline in tabs / nav items (Large = 20px count circle; Small = 6px dot). Source: <code>components/badge/_badge.scss</code></p>
         </div>
         <div class="component-demo">
 
@@ -3458,6 +3463,103 @@
                   <span class="ds-icon ds-icon--xs">close</span>
                 </button>
               </span>
+            </div>
+          </div>
+
+          <!-- Notification Indicator — Overlay (count) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Indicator — overlay count</div>
+            <div class="demo-row-items">
+              <div class="ds-badge-indicator__host">
+                <button class="ds-icon-button ds-icon-button--icon" aria-label="Notifications, 3 unread">
+                  <span class="ds-icon ds-icon--sm">notifications</span>
+                </button>
+                <span class="ds-badge-indicator" aria-hidden="true">3</span>
+              </div>
+              <div class="ds-badge-indicator__host">
+                <button class="ds-icon-button ds-icon-button--filled" aria-label="Messages, 12 unread">
+                  <span class="ds-icon ds-icon--sm ds-icon--filled">mail</span>
+                </button>
+                <span class="ds-badge-indicator" aria-hidden="true">12</span>
+              </div>
+              <div class="ds-badge-indicator__host">
+                <button class="ds-icon-button ds-icon-button--outlined" aria-label="Alerts, 99 plus unread">
+                  <span class="ds-icon ds-icon--sm">warning</span>
+                </button>
+                <span class="ds-badge-indicator" aria-hidden="true">99+</span>
+              </div>
+              <div class="ds-badge-indicator__host">
+                <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Chat, 5 unread">
+                  <span class="ds-icon ds-icon--xs">chat</span>
+                </button>
+                <span class="ds-badge-indicator" aria-hidden="true">5</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notification Indicator — Overlay (dot) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Indicator — overlay dot</div>
+            <div class="demo-row-items">
+              <div class="ds-badge-indicator__host">
+                <button class="ds-icon-button ds-icon-button--icon" aria-label="Notifications, new activity">
+                  <span class="ds-icon ds-icon--sm">notifications</span>
+                </button>
+                <span class="ds-badge-indicator ds-badge-indicator--dot" aria-hidden="true"></span>
+              </div>
+              <div class="ds-badge-indicator__host">
+                <button class="ds-icon-button ds-icon-button--filled" aria-label="Messages, new message">
+                  <span class="ds-icon ds-icon--sm ds-icon--filled">mail</span>
+                </button>
+                <span class="ds-badge-indicator ds-badge-indicator--dot" aria-hidden="true"></span>
+              </div>
+              <div class="ds-badge-indicator__host">
+                <button class="ds-icon-button ds-icon-button--outlined" aria-label="Updates, new update">
+                  <span class="ds-icon ds-icon--sm">update</span>
+                </button>
+                <span class="ds-badge-indicator ds-badge-indicator--dot" aria-hidden="true"></span>
+              </div>
+              <div class="ds-badge-indicator__host">
+                <button class="ds-icon-button ds-icon-button--monogram" aria-label="Rebecca Benedict, new">
+                  <span class="ds-icon-button__label">RB</span>
+                </button>
+                <span class="ds-badge-indicator ds-badge-indicator--dot" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notification Indicator — Inline (tab/menu items) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Indicator — inline</div>
+            <div class="demo-row-items" style="gap: 24px; flex-wrap: wrap; align-items: flex-start;">
+              <!-- Inline in tabs -->
+              <div class="ds-tabs" role="tablist" style="flex-shrink: 0;">
+                <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Overview</button>
+                <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1" aria-label="Activity, 4 new">
+                  Activity&nbsp;<span class="ds-badge-indicator" aria-hidden="true">4</span>
+                </button>
+                <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1" aria-label="Inbox, 12 new">
+                  Inbox&nbsp;<span class="ds-badge-indicator" aria-hidden="true">12</span>
+                </button>
+              </div>
+              <!-- Inline in nav-style list -->
+              <div style="display: flex; flex-direction: column; gap: 2px; min-width: 200px;">
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-md); background: var(--color-surface-brand); color: var(--color-text-brand);">
+                  <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">inbox</span>
+                  <span style="flex: 1; font-family: var(--ref-typeface-brand); font-size: 14px; font-weight: 500;">Inbox</span>
+                  <span class="ds-badge-indicator" aria-hidden="true">5</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-md); color: var(--color-text-primary);">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">notifications</span>
+                  <span style="flex: 1; font-family: var(--ref-typeface-brand); font-size: 14px; font-weight: 500;">Notifications</span>
+                  <span class="ds-badge-indicator" aria-hidden="true">99+</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-md); color: var(--color-text-primary);">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">chat</span>
+                  <span style="flex: 1; font-family: var(--ref-typeface-brand); font-size: 14px; font-weight: 500;">Messages</span>
+                  <span class="ds-badge-indicator ds-badge-indicator--dot" aria-hidden="true"></span>
+                </div>
+              </div>
             </div>
           </div>
 

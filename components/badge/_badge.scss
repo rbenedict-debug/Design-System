@@ -188,10 +188,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 16px;
-  min-height: 16px;
-  max-width: 34px;
-  max-height: 34px;
+  min-width: 20px;
+  height: 20px;
+  max-width: 36px;
   padding: 0 var(--spacing-xs);
   border-radius: var(--radius-full);
   background: var(--color-surface-accent-red-bold);
@@ -199,20 +198,19 @@
   font-family: var(--ref-typeface-brand);
   font-size: var(--ref-typescale-label-small-size);
   font-weight: var(--ref-typeface-weight-bold);
-  line-height: var(--ref-typescale-label-small-line-height);
+  line-height: 1;
   letter-spacing: var(--ref-typescale-label-small-tracking);
   overflow: hidden;
   white-space: nowrap;
   pointer-events: none;
+  flex-shrink: 0;
 
   // Small dot — no text, 6×6px
   &--dot {
     width: 6px;
     height: 6px;
     min-width: 6px;
-    min-height: 6px;
     max-width: 6px;
-    max-height: 6px;
     padding: 0;
   }
 }

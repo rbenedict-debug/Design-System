@@ -231,6 +231,29 @@ components/{name}/
 - ADA: `role="tablist"` on container, `role="tab"` + `aria-selected` on buttons, arrow key / Home / End navigation via `@HostListener('keydown')`
 - Angular Material base: `MatTabsModule` (mat-tab-group + mat-tab)
 
+### Badge (`ds-badge` + `ds-badge-indicator`)
+
+Two distinct primitives in one file:
+
+#### Label badge (`ds-badge`)
+- **Variants**: `filled` | `subtle` | `outlined`
+- **Colors**: `default` | `brand` | `success` | `warning` | `error` | `info`
+- **Sizes**: `sm` | `md` (default)
+- **Optional icon**: `<span class="ds-icon ds-icon--xs">icon_name</span>` as first child
+- **Dismissible**: add `ds-badge__dismiss` button with `aria-label="Dismiss"` inside the badge span
+- Angular Material base: `MatBadgeModule`
+
+#### Notification indicator (`ds-badge-indicator`)
+- **Two sizes** (Figma: Large / Small):
+  - **Large (count)**: `min-width: 20px; height: 20px` — red circle with white number. Label Small typography, bold weight.
+  - **Small (dot)**: `ds-badge-indicator--dot` — 6×6px solid red circle, no text.
+- **Color**: always `--color-surface-accent-red-bold` bg + `--color-text-on-bold` text (not themeable)
+- **Overlay mode**: wrap host in `<div class="ds-badge-indicator__host">` — gives `position: relative`; indicator is `position: absolute; top: -4px; right: -4px` (overlaps corner of icon button)
+- **Inline mode**: use `ds-badge-indicator` directly in flow (no host wrapper) — stays inline-flex alongside text in tab buttons or nav list items
+- **ADA**: indicator itself is always `aria-hidden="true"`; announce count via `aria-label` on the parent element (e.g. `aria-label="Notifications, 3 unread"`) or on the tab button
+- **Usage contexts**: icon buttons (overlay), tab labels (inline count), nav list items (inline count or dot)
+- Never use `ds-badge-indicator` directly on a screen as a standalone element — it's always attached to a host
+
 ### Alert (`ds-alert`)
 - **Sizes**: `sm` (default) | `lg`
 - **Variants**: `info` | `success` | `warning` | `error`
