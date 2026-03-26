@@ -1,73 +1,37 @@
-import {
-  Directive,
-  Input,
-  ElementRef,
-  Renderer2,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Directive } from '@angular/core';
+import { MatTooltip } from '@angular/material/tooltip';
 
-export type DsTooltipPosition = 'top' | 'bottom' | 'left' | 'right';
+export type DsTooltipPosition = 'above' | 'below' | 'left' | 'right';
 
 /**
  * Onflo Design System — Tooltip Directive
  *
- * Wraps the host element in a .ds-tooltip-wrapper and appends a .ds-tooltip.
- * The tooltip is shown via CSS :hover / :focus-within on the wrapper.
+ * Composes Angular Material's MatTooltip with the Onflo token-styled surface.
+ * Tooltip rendering, positioning, show/hide delay, and keyboard behaviour are
+ * all handled by MatTooltip via CDK Overlay — identical to [matTooltip] usage.
+ *
+ * The Onflo tokens are applied via global .mat-mdc-tooltip overrides in
+ * components/tooltip/_tooltip.scss.
  *
  * @example
  *   <button dsTooltip="Save changes">Save</button>
- *   <button [dsTooltip]="'Delete item'" dsTooltipPosition="bottom">Delete</button>
+ *   <button [dsTooltip]="'Delete item'" [dsTooltipPosition]="'below'">Delete</button>
+ *   <button dsTooltip="Disabled" [dsTooltipDisabled]="true">No tooltip</button>
  */
 @Directive({
   selector: '[dsTooltip]',
   standalone: true,
+  hostDirectives: [
+    {
+      directive: MatTooltip,
+      inputs: [
+        'matTooltip: dsTooltip',
+        'matTooltipPosition: dsTooltipPosition',
+        'matTooltipShowDelay: dsTooltipShowDelay',
+        'matTooltipHideDelay: dsTooltipHideDelay',
+        'matTooltipDisabled: dsTooltipDisabled',
+      ],
+    },
+  ],
 })
-export class DsTooltipDirective implements OnInit, OnDestroy {
-  /** Tooltip text content. */
-  @Input('dsTooltip') text = '';
-
-  /** Tooltip position. Default: 'top' */
-  @Input() dsTooltipPosition: DsTooltipPosition = 'top';
-
-  private wrapper!: HTMLElement;
-  private tooltipEl!: HTMLElement;
-
-  constructor(
-    private readonly el: ElementRef<HTMLElement>,
-    private readonly renderer: Renderer2,
-  ) {}
-
-  ngOnInit(): void {
-    const host = this.el.nativeElement;
-
-    // Create wrapper
-    this.wrapper = this.renderer.createElement('div') as HTMLElement;
-    this.renderer.addClass(this.wrapper, 'ds-tooltip-wrapper');
-
-    // Insert wrapper before host in the DOM
-    const parent = host.parentNode!;
-    this.renderer.insertBefore(parent, this.wrapper, host);
-    this.renderer.appendChild(this.wrapper, host);
-
-    // Create tooltip element
-    this.tooltipEl = this.renderer.createElement('div') as HTMLElement;
-    this.renderer.addClass(this.tooltipEl, 'ds-tooltip');
-    if (this.dsTooltipPosition !== 'top') {
-      this.renderer.addClass(this.tooltipEl, `ds-tooltip--${this.dsTooltipPosition}`);
-    }
-    this.renderer.setAttribute(this.tooltipEl, 'role', 'tooltip');
-    this.tooltipEl.textContent = this.text;
-
-    this.renderer.appendChild(this.wrapper, this.tooltipEl);
-  }
-
-  ngOnDestroy(): void {
-    if (this.wrapper && this.wrapper.parentNode) {
-      const parent = this.wrapper.parentNode;
-      const host = this.el.nativeElement;
-      this.renderer.insertBefore(parent, host, this.wrapper);
-      this.renderer.removeChild(parent, this.wrapper);
-    }
-  }
-}
+export class DsTooltipDirective {}

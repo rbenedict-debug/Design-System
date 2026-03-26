@@ -2,22 +2,49 @@
 // Onflo Design System — Tooltip Component
 // ============================================================
 //
-// Usage (HTML class API):
+// Angular directive (preferred):
+//   <button dsTooltip="Save changes">Save</button>
+//   <button [dsTooltip]="'Delete item'" [dsTooltipPosition]="'below'">Delete</button>
+//
+//   DsTooltipDirective composes MatTooltip via hostDirectives.
+//   CDK Overlay handles show/hide, positioning, and keyboard behaviour.
+//   Positions: above (default) | below | left | right
+//
+// CSS class API (HTML-only, no Angular):
 //   <div class="ds-tooltip-wrapper">
 //     <button>Trigger</button>
 //     <div class="ds-tooltip" role="tooltip">Tooltip text</div>
 //   </div>
 //
-//   Positions: default (top) | ds-tooltip--bottom | ds-tooltip--left | ds-tooltip--right
-//
-// Angular directive:
-//   <button dsTooltip="Save changes">Save</button>
-//   <button [dsTooltip]="'Delete item'" dsTooltipPosition="bottom">Delete</button>
-//
-// States:    shown on :hover / :focus-within of wrapper
+//   Positions: default (above) | ds-tooltip--below | ds-tooltip--left | ds-tooltip--right
+//   Shown on :hover / :focus-within of wrapper
 // ============================================================
 
 $tooltip-arrow-size: 5px;
+
+// ── Angular Material MDC overrides ────────────────────────────────────────
+// Applied globally — no ::ng-deep needed. The overlay is appended to
+// document.body so these class selectors always reach the tooltip panel.
+
+.mat-mdc-tooltip {
+  --mdc-plain-tooltip-container-color: var(--color-surface-tooltip);
+  --mdc-plain-tooltip-supporting-text-color: var(--color-text-tooltip);
+  --mdc-plain-tooltip-supporting-text-font: var(--ref-typescale-body-small-font);
+  --mdc-plain-tooltip-supporting-text-size: var(--ref-typescale-body-small-size);
+  --mdc-plain-tooltip-supporting-text-weight: var(--ref-typescale-body-small-weight);
+  --mdc-plain-tooltip-supporting-text-tracking: var(--ref-typescale-body-small-tracking);
+  --mdc-plain-tooltip-supporting-text-line-height: var(--ref-typescale-body-small-line-height);
+
+  .mdc-tooltip__surface {
+    border-radius: var(--radius-sm) !important;
+    max-width: 200px !important;
+    min-height: 24px !important;
+    padding: var(--spacing-xs) var(--spacing-sm) !important;
+    text-align: center;
+  }
+}
+
+// ── CSS class API (HTML preview / non-Angular) ────────────────────────────
 
 .ds-tooltip-wrapper {
   position: relative;
@@ -25,7 +52,6 @@ $tooltip-arrow-size: 5px;
   align-items: center;
   justify-content: center;
 
-  // Show tooltip on hover or keyboard focus anywhere inside
   &:hover .ds-tooltip,
   &:focus-within .ds-tooltip {
     opacity: 1;
@@ -55,14 +81,13 @@ $tooltip-arrow-size: 5px;
   opacity: 0;
   transition: opacity 0.15s ease, visibility 0.15s ease;
 
-  // Arrow pseudo-element
   &::before {
     content: '';
     position: absolute;
     border: $tooltip-arrow-size solid transparent;
   }
 
-  // ── Top (default) ─────────────────────────────────────────────────────────
+  // ── Above (default) ───────────────────────────────────────────────────
 
   bottom: calc(100% + #{$tooltip-arrow-size} + 4px);
   left: 50%;
@@ -76,9 +101,9 @@ $tooltip-arrow-size: 5px;
     border-bottom: none;
   }
 
-  // ── Bottom ────────────────────────────────────────────────────────────────
+  // ── Below ─────────────────────────────────────────────────────────────
 
-  &--bottom {
+  &--below {
     bottom: auto;
     top: calc(100% + #{$tooltip-arrow-size} + 4px);
     left: 50%;
@@ -96,7 +121,7 @@ $tooltip-arrow-size: 5px;
     }
   }
 
-  // ── Left ──────────────────────────────────────────────────────────────────
+  // ── Left ──────────────────────────────────────────────────────────────
 
   &--left {
     bottom: auto;
@@ -116,7 +141,7 @@ $tooltip-arrow-size: 5px;
     }
   }
 
-  // ── Right ─────────────────────────────────────────────────────────────────
+  // ── Right ─────────────────────────────────────────────────────────────
 
   &--right {
     bottom: auto;

@@ -1414,10 +1414,29 @@
 
 
     /* ════════════════════════════════════════════════════════════════════════
-       TOOLTIP  (ds-tooltip)
+       TOOLTIP  (ds-tooltip / DsTooltipDirective → MatTooltip)
        Source: components/tooltip/_tooltip.scss
        ════════════════════════════════════════════════════════════════════════ */
 
+    /* Angular Material MDC overrides — applied in consuming app global styles */
+    .mat-mdc-tooltip {
+      --mdc-plain-tooltip-container-color: var(--color-surface-tooltip);
+      --mdc-plain-tooltip-supporting-text-color: var(--color-text-tooltip);
+      --mdc-plain-tooltip-supporting-text-font: var(--ref-typescale-body-small-font);
+      --mdc-plain-tooltip-supporting-text-size: var(--ref-typescale-body-small-size);
+      --mdc-plain-tooltip-supporting-text-weight: var(--ref-typescale-body-small-weight);
+      --mdc-plain-tooltip-supporting-text-tracking: var(--ref-typescale-body-small-tracking);
+      --mdc-plain-tooltip-supporting-text-line-height: var(--ref-typescale-body-small-line-height);
+    }
+    .mat-mdc-tooltip .mdc-tooltip__surface {
+      border-radius: var(--radius-sm) !important;
+      max-width: 200px !important;
+      min-height: 24px !important;
+      padding: var(--spacing-xs) var(--spacing-sm) !important;
+      text-align: center;
+    }
+
+    /* CSS class API — HTML-only preview (no Angular / CDK Overlay) */
     .ds-tooltip-wrapper {
       position: relative;
       display: inline-flex;
@@ -1459,9 +1478,9 @@
       transform: translateX(-50%);
       border-top-color: var(--color-surface-tooltip);
     }
-    /* Bottom */
-    .ds-tooltip--bottom { bottom: auto; top: calc(100% + 9px); left: 50%; transform: translateX(-50%); }
-    .ds-tooltip--bottom::before { top: auto; bottom: 100%; left: 50%; transform: translateX(-50%); border-top-color: transparent; border-bottom: 5px solid var(--color-surface-tooltip); }
+    /* Below */
+    .ds-tooltip--below { bottom: auto; top: calc(100% + 9px); left: 50%; transform: translateX(-50%); }
+    .ds-tooltip--below::before { top: auto; bottom: 100%; left: 50%; transform: translateX(-50%); border-top-color: transparent; border-bottom: 5px solid var(--color-surface-tooltip); }
     /* Left */
     .ds-tooltip--left { bottom: auto; top: 50%; left: auto; right: calc(100% + 9px); transform: translateY(-50%); }
     .ds-tooltip--left::before { top: 50%; left: 100%; transform: translateY(-50%); border-top-color: transparent; border-left: 5px solid var(--color-surface-tooltip); }
@@ -3831,7 +3850,7 @@
       <section class="section" id="tooltip">
         <div class="section-header">
           <h2 class="section-title">Tooltip</h2>
-          <p class="section-desc">CSS-only tooltip triggered by hover or focus-within on a wrapper. Positions: top (default), bottom, left, right. Source: <code>components/tooltip/_tooltip.scss</code></p>
+          <p class="section-desc">Angular directive: <code>[dsTooltip]</code> composes <code>MatTooltip</code> via <code>hostDirectives</code> — CDK Overlay handles rendering, positioning, and keyboard behaviour. Positions: <code>above</code> (default) | <code>below</code> | <code>left</code> | <code>right</code>. The CSS class API below uses a wrapper for the HTML-only preview. Source: <code>components/tooltip/_tooltip.scss</code></p>
         </div>
         <div class="component-demo">
 
@@ -3850,11 +3869,11 @@
           </div>
 
           <div class="demo-row">
-            <div class="demo-row-label">Bottom</div>
+            <div class="demo-row-label">Below</div>
             <div class="demo-row-items" style="padding: 12px 0 48px;">
               <div class="ds-tooltip-wrapper">
                 <button class="ds-button ds-button--outlined ds-button--sm">Hover me</button>
-                <div class="ds-tooltip ds-tooltip--bottom" role="tooltip">Opens in a new tab</div>
+                <div class="ds-tooltip ds-tooltip--below" role="tooltip">Opens in a new tab</div>
               </div>
             </div>
           </div>
@@ -3890,11 +3909,8 @@
         </div>
         <div class="component-demo">
 
-          <!-- Both variants side by side — hover each trigger to experience them -->
-          <div class="demo-row" style="align-items: center; padding: 200px 0;">
-
-            <!-- bottom: card appears below cursor, accent on top -->
-            <div class="demo-label">bottom</div>
+          <!-- bottom: card appears below cursor, accent on top -->
+          <div class="demo-row" style="align-items: center; padding: 160px 0 48px;">
             <div class="demo-row-items">
               <div class="ds-hover-card__trigger" data-hc-variant="bottom">
                 <button class="ds-button ds-button--outlined">Hover — card below</button>
@@ -3906,8 +3922,12 @@
                   <p class="ds-hover-card__text">3 line items · Submitted 2 hours ago · Assigned to Sarah K.</p>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <!-- top: card appears above cursor, accent on bottom -->
+          <!-- top: card appears above cursor, accent on bottom -->
+          <div class="demo-row" style="align-items: center; padding: 48px 0 160px;">
+            <div class="demo-row-items">
               <div class="ds-hover-card__trigger" data-hc-variant="top">
                 <button class="ds-button ds-button--outlined">Hover — card above</button>
               </div>
@@ -3916,26 +3936,6 @@
                   <p class="ds-hover-card__title">Customer: Acme Corp</p>
                   <p class="ds-hover-card__subtitle">Enterprise · Active since 2021</p>
                   <p class="ds-hover-card__text">42 open orders · Last activity 3 days ago</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Rich content: labels + text -->
-          <div class="demo-row" style="align-items: center; padding: 24px 0 200px;">
-            <div class="demo-label">Rich content</div>
-            <div class="demo-row-items">
-              <div class="ds-hover-card__trigger" data-hc-variant="bottom">
-                <button class="ds-button ds-button--filled">Preview record</button>
-              </div>
-              <div class="ds-hover-card" role="tooltip" aria-hidden="true">
-                <div class="ds-hover-card__body">
-                  <p class="ds-hover-card__title">Invoice INV-2024-0391</p>
-                  <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-                    <span class="ds-label ds-label--green ds-label--xs">Paid</span>
-                    <span class="ds-label ds-label--blue ds-label--xs">Net 30</span>
-                  </div>
-                  <p class="ds-hover-card__text">Amount: $4,250.00 · Due: Mar 15, 2024 · Client: Meridian Solutions</p>
                 </div>
               </div>
             </div>

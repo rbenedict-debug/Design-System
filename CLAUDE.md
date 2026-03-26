@@ -269,10 +269,10 @@ components/{name}/
 - **Border radius**: `var(--radius-sm)`
 - **Min height**: 24px
 - **Max width**: 200px (multi-line wraps at this width)
-- **Positions**: top (default) | bottom | left | right — shown on `:hover` / `:focus-within`
-- **Arrow**: `::before` pseudo-element, 5px border triangle, same colour as tooltip surface
+- **Positions**: `above` (default) | `below` | `left` | `right` — values match Angular Material's `TooltipPosition` type
+- **Arrow**: `::before` pseudo-element, 5px border triangle, same colour as tooltip surface (CSS class API only; Angular Material uses its own arrow)
 - **ADA**: Required on all icon-only buttons; triggers on both hover and keyboard focus; `role="tooltip"` on the tooltip element
-- **Angular**: `[dsTooltip]="'text'"` directive + `dsTooltipPosition` input; Angular Material base: `MatTooltipModule` (matTooltip)
+- **Angular**: `[dsTooltip]="'text'"` directive + `[dsTooltipPosition]`, `[dsTooltipShowDelay]`, `[dsTooltipHideDelay]`, `[dsTooltipDisabled]` inputs. `DsTooltipDirective` composes `MatTooltip` via `hostDirectives` — no custom DOM manipulation. Onflo tokens applied via global `.mat-mdc-tooltip` overrides in `_tooltip.scss`. Angular Material base: `MatTooltipModule`
 
 ### Hover Card (`ds-hover-card`)
 - **Variants**: `bottom` (default) | `top`
