@@ -51,6 +51,7 @@ components/
   table/                   # ds-table-header-cell + ds-table-row-cell (AG Grid custom renderers)
   ag-paginator/            # ds-ag-paginator (AG Grid custom pagination panel)
   table-toolbar/           # ds-table-toolbar (toolbar above AG Grid — search, filter, actions)
+  hover-card/              # ds-hover-card (cursor-following floating info card)
 preview/
   index.html               # Self-contained visual token + component reference
 ```
@@ -272,6 +273,29 @@ components/{name}/
 - **Arrow**: `::before` pseudo-element, 5px border triangle, same colour as tooltip surface
 - **ADA**: Required on all icon-only buttons; triggers on both hover and keyboard focus; `role="tooltip"` on the tooltip element
 - **Angular**: `[dsTooltip]="'text'"` directive + `dsTooltipPosition` input; Angular Material base: `MatTooltipModule` (matTooltip)
+
+### Hover Card (`ds-hover-card`)
+- **Variants**: `bottom` (default) | `top`
+  - `bottom` — card appears below the cursor; 4px accent border on **top** edge
+  - `top` — card appears above the cursor; 4px accent border on **bottom** edge
+- **Width**: 360px — fixed
+- **Background**: `--color-surface-page` (white)
+- **Border**: 1px `--color-border-hover` (light blue) on all sides; 4px `--color-border-hover` on the accent edge
+- **Border radius**: `--radius-lg` (16px)
+- **Shadow**: `0 3px 12px 6px var(--shadow-elevation-3), 0 4px 4px 0 var(--shadow-elevation-3)` — matches Figma elevation
+- **Body padding**: `var(--spacing-lg)` (16px); gap between items: `var(--spacing-md)` (12px)
+- **Enter animation**: `opacity 0 → 1` + `translateY(-4px → 0)` (bottom), `translateY(4px → 0)` (top); 0.12s ease
+- **Visibility**: controlled by `.is-visible` class; `pointer-events: none` always (card never captures pointer)
+- **Typography helpers** (optional convenience classes):
+  - `__title` — Title H3 (16px, bold, 24px line-height, `--color-text-primary`)
+  - `__subtitle` — Title H4 (14px, bold, 20px line-height, `--color-text-secondary`)
+  - `__text` — Body Medium (14px, regular, 20px line-height, `--color-text-primary`)
+- **Angular inputs**: `[variant]="'bottom' | 'top'"`, `[offsetX]` (default 16), `[offsetY]` (default 16)
+- **Angular content projection**: default slot = trigger element; `[card-content]` attr slot = card body content
+- **Cursor tracking**: `mousemove` runs outside Angular zone via `NgZone.runOutsideAngular` + `Renderer2.listen`; position written directly via `renderer.setStyle` bypassing CD
+- **Keyboard**: also shown on `focusin` (positioned near the trigger rect); hidden on `focusout`
+- **ADA**: `role="tooltip"` + `[attr.aria-hidden]` on card; do not hide critical actions behind hover only
+- **No Angular Material base** — custom component
 
 ### Label (`ds-label`)
 - **Variants (color)**: `green` | `red` | `yellow` | `brand` | `blue` | `navy` | `teal` | `orange` | `purple` | `pink` | `disabled`

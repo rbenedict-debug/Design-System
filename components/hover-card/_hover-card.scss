@@ -1,0 +1,135 @@
+// ============================================================
+// Onflo Design System — Hover Card (composition/card-hover)
+// ============================================================
+//
+// A floating information card that follows the cursor.
+// Shown on hover / keyboard focus of the trigger element.
+//
+// Variants:
+//   bottom (default) — card appears below cursor; 4px accent border on top
+//   top              — card appears above cursor; 4px accent border on bottom
+//
+// HTML class API:
+//   <div class="ds-hover-card__trigger">
+//     <!-- trigger element -->
+//   </div>
+//   <div class="ds-hover-card" role="tooltip" aria-hidden="true">
+//     <div class="ds-hover-card__body">
+//       <!-- card content (text, labels, any composition) -->
+//     </div>
+//   </div>
+//   Position is controlled via inline style: style="left: Xpx; top: Ypx;"
+//
+// Angular:
+//   <ds-hover-card variant="bottom">
+//     <button>Hover me</button>
+//     <div card-content>
+//       <p class="ds-hover-card__title">Title</p>
+//       <p class="ds-hover-card__subtitle">Subtitle</p>
+//       <p class="ds-hover-card__text">Body text here.</p>
+//     </div>
+//   </ds-hover-card>
+//
+// ADA: Hover-revealed content is also accessible via keyboard focus.
+//      Do not hide critical actions behind hover only.
+// ============================================================
+
+// ── Trigger wrapper ─────────────────────────────────────────────────────────
+
+.ds-hover-card__trigger {
+  display: inline-block;
+}
+
+// ── Floating card ────────────────────────────────────────────────────────────
+
+.ds-hover-card {
+  // ── Positioning ────────────────────────────────────────────────────────────
+
+  position: fixed;
+  z-index: 9999;
+  width: 360px;
+  pointer-events: none; // card never captures pointer events — cursor always hits trigger
+
+  // ── Visual ─────────────────────────────────────────────────────────────────
+
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-hover);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+
+  // Drop shadow — Figma uses a custom elevation not in our token scale;
+  // approximated with elevation-3 colour at the Figma-specified spread/blur
+  box-shadow:
+    0 3px 12px 6px var(--shadow-elevation-3),
+    0 4px 4px 0 var(--shadow-elevation-3);
+
+  // ── Visibility / enter animation ───────────────────────────────────────────
+
+  opacity: 0;
+  transform: translateY(-4px); // slides up from below (bottom variant)
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  // ── Accent border ───────────────────────────────────────────────────────────
+
+  // bottom variant (default): 4px accent on top edge → card opens downward
+  border-top: 4px solid var(--color-border-hover);
+
+  // top variant: 4px accent on bottom edge → card opens upward
+  &--top {
+    border-top-width: 1px; // reset to default 1px
+    border-bottom: 4px solid var(--color-border-hover);
+    transform: translateY(4px); // slides down from above
+
+    &.is-visible {
+      transform: translateY(0);
+    }
+  }
+
+  // ── Content body ───────────────────────────────────────────────────────────
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+
+  // ── Typography helpers ─────────────────────────────────────────────────────
+
+  &__title {
+    font-family: var(--ref-typescale-title-h3-font);
+    font-size: var(--ref-typescale-title-h3-size);
+    font-weight: var(--ref-typeface-weight-bold);
+    line-height: var(--ref-typescale-title-h3-line-height);
+    letter-spacing: var(--ref-typescale-title-h3-tracking);
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-family: var(--ref-typescale-title-h4-font);
+    font-size: var(--ref-typescale-title-h4-size);
+    font-weight: var(--ref-typeface-weight-bold);
+    line-height: var(--ref-typescale-title-h4-line-height);
+    letter-spacing: var(--ref-typescale-title-h4-tracking);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  &__text {
+    font-family: var(--ref-typescale-body-medium-font);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typescale-body-medium-weight);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+}

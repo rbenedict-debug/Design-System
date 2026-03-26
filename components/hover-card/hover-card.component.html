@@ -1,0 +1,18 @@
+<div #triggerEl
+     class="ds-hover-card__trigger"
+     (mouseenter)="onMouseEnter($event)"
+     (mouseleave)="onMouseLeave()"
+     (focusin)="onFocusIn($event)"
+     (focusout)="onFocusOut()">
+  <ng-content />
+</div>
+<div #cardEl
+     class="ds-hover-card"
+     [class.ds-hover-card--top]="variant === 'top'"
+     [class.is-visible]="isVisible"
+     role="tooltip"
+     [attr.aria-hidden]="!isVisible">
+  <div class="ds-hover-card__body">
+    <ng-content select="[card-content]" />
+  </div>
+</div>

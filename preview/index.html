@@ -1932,6 +1932,17 @@
     .ds-table-toolbar__left { display: flex; align-items: center; gap: var(--spacing-sm); flex: 1 0 0; min-width: 0; }
     .ds-table-toolbar__right { display: flex; align-items: center; gap: var(--spacing-sm); flex: 1 0 0; min-width: 0; }
     .ds-table-toolbar .ds-search { flex: 1 0 0; min-width: 0; }
+
+    /* ── HOVER CARD  (ds-hover-card / composition/card-hover) ─────────────────── */
+    .ds-hover-card__trigger { display: inline-block; }
+    .ds-hover-card { position: fixed; z-index: 9999; width: 360px; pointer-events: none; background: var(--color-surface-page); border: 1px solid var(--color-border-hover); border-top: 4px solid var(--color-border-hover); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 3px 12px 6px var(--shadow-elevation-3), 0 4px 4px 0 var(--shadow-elevation-3); opacity: 0; transform: translateY(-4px); transition: opacity 0.12s ease, transform 0.12s ease; }
+    .ds-hover-card.is-visible { opacity: 1; transform: translateY(0); }
+    .ds-hover-card--top { border-top-width: 1px; border-bottom: 4px solid var(--color-border-hover); transform: translateY(4px); }
+    .ds-hover-card--top.is-visible { transform: translateY(0); }
+    .ds-hover-card__body { display: flex; flex-direction: column; gap: var(--spacing-md); padding: var(--spacing-lg); }
+    .ds-hover-card__title { font-family: var(--ref-typescale-title-h3-font); font-size: var(--ref-typescale-title-h3-size); font-weight: var(--ref-typeface-weight-bold); line-height: var(--ref-typescale-title-h3-line-height); letter-spacing: var(--ref-typescale-title-h3-tracking); color: var(--color-text-primary); margin: 0; }
+    .ds-hover-card__subtitle { font-family: var(--ref-typescale-title-h4-font); font-size: var(--ref-typescale-title-h4-size); font-weight: var(--ref-typeface-weight-bold); line-height: var(--ref-typescale-title-h4-line-height); letter-spacing: var(--ref-typescale-title-h4-tracking); color: var(--color-text-secondary); margin: 0; }
+    .ds-hover-card__text { font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); font-weight: var(--ref-typescale-body-medium-weight); line-height: var(--ref-typescale-body-medium-line-height); letter-spacing: var(--ref-typescale-body-medium-tracking); color: var(--color-text-primary); margin: 0; }
   </style>
 </head>
 <body>
@@ -1983,6 +1994,7 @@
       <a class="nav-link" href="#badge" onclick="setActive(this)"><span class="nav-dot"></span>Badge</a>
       <a class="nav-link" href="#alert" onclick="setActive(this)"><span class="nav-dot"></span>Alert</a>
       <a class="nav-link" href="#tooltip" onclick="setActive(this)"><span class="nav-dot"></span>Tooltip</a>
+      <a class="nav-link" href="#hover-card" onclick="setActive(this)"><span class="nav-dot"></span>Hover Card</a>
       <a class="nav-link" href="#progress" onclick="setActive(this)"><span class="nav-dot"></span>Progress</a>
 
       <div class="nav-group-label">Display</div>
@@ -3864,6 +3876,77 @@
         </div>
       </section>
 
+      <!-- ── Hover Card ───────────────────────────────────────────────────── -->
+      <hr class="divider" />
+      <section class="section" id="hover-card">
+        <div class="section-header">
+          <h2 class="section-title">Hover Card</h2>
+          <p class="section-desc">
+            A floating information card that follows the cursor, shown on hover or keyboard focus of a trigger element.
+            Use for inline previews or contextual information — never for critical actions.
+            Variants: <code>bottom</code> (card below cursor, accent on top) and <code>top</code> (card above cursor, accent on bottom).
+            Source: <code>components/hover-card/_hover-card.scss</code>
+          </p>
+        </div>
+        <div class="component-demo">
+
+          <!-- bottom variant (default) -->
+          <div class="demo-row" style="flex-direction: column; align-items: flex-start; gap: 12px; padding-bottom: 24px;">
+            <div class="demo-label" style="width: auto;">Variant: bottom (card follows cursor below)</div>
+            <div class="demo-row-items" style="padding: 12px 0 200px;">
+              <div class="ds-hover-card__trigger" data-hc-variant="bottom">
+                <button class="ds-button ds-button--outlined">Hover me</button>
+              </div>
+              <div class="ds-hover-card" role="tooltip" aria-hidden="true">
+                <div class="ds-hover-card__body">
+                  <p class="ds-hover-card__title">Order #4821</p>
+                  <p class="ds-hover-card__subtitle">Pending review</p>
+                  <p class="ds-hover-card__text">3 line items · Submitted 2 hours ago · Assigned to Sarah K.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- top variant -->
+          <div class="demo-row" style="flex-direction: column; align-items: flex-start; gap: 12px; padding-top: 200px;">
+            <div class="demo-label" style="width: auto;">Variant: top (card follows cursor above)</div>
+            <div class="demo-row-items">
+              <div class="ds-hover-card__trigger" data-hc-variant="top">
+                <button class="ds-button ds-button--outlined">Hover me</button>
+              </div>
+              <div class="ds-hover-card ds-hover-card--top" role="tooltip" aria-hidden="true">
+                <div class="ds-hover-card__body">
+                  <p class="ds-hover-card__title">Customer: Acme Corp</p>
+                  <p class="ds-hover-card__subtitle">Enterprise · Active since 2021</p>
+                  <p class="ds-hover-card__text">42 open orders · Last activity 3 days ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- rich content variant -->
+          <div class="demo-row" style="flex-direction: column; align-items: flex-start; gap: 12px; padding-bottom: 240px;">
+            <div class="demo-label" style="width: auto;">Rich content (labels + text)</div>
+            <div class="demo-row-items">
+              <div class="ds-hover-card__trigger" data-hc-variant="bottom">
+                <button class="ds-button ds-button--filled">Preview record</button>
+              </div>
+              <div class="ds-hover-card" role="tooltip" aria-hidden="true">
+                <div class="ds-hover-card__body">
+                  <p class="ds-hover-card__title">Invoice INV-2024-0391</p>
+                  <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+                    <span class="ds-label ds-label--green ds-label--xs">Paid</span>
+                    <span class="ds-label ds-label--blue ds-label--xs">Net 30</span>
+                  </div>
+                  <p class="ds-hover-card__text">Amount: $4,250.00 · Due: Mar 15, 2024 · Client: Meridian Solutions</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       <!-- ── Avatar ───────────────────────────────────────────────────────── -->
       <hr class="divider" />
       <section class="section" id="avatar">
@@ -4994,6 +5077,56 @@
   if (indetChk) indetChk.indeterminate = true;
   const headerSome = document.getElementById('chk-header-some');
   if (headerSome) headerSome.indeterminate = true;
+
+  // Hover card — cursor tracking
+  (function () {
+    function positionCard(card, x, y, variant) {
+      var cardH = card.offsetHeight;
+      var cardW = card.offsetWidth || 360;
+      var calcY = variant === 'top' ? y - cardH - 16 : y + 16;
+      var calcX = x + 16;
+      calcX = Math.max(8, Math.min(calcX, window.innerWidth - cardW - 8));
+      calcY = Math.max(8, Math.min(calcY, window.innerHeight - cardH - 8));
+      card.style.left = calcX + 'px';
+      card.style.top = calcY + 'px';
+    }
+
+    document.querySelectorAll('.ds-hover-card__trigger').forEach(function (trigger) {
+      var card = trigger.nextElementSibling;
+      if (!card || !card.classList.contains('ds-hover-card')) return;
+      var variant = trigger.getAttribute('data-hc-variant') || 'bottom';
+
+      trigger.addEventListener('mouseenter', function (e) {
+        card.setAttribute('aria-hidden', 'false');
+        card.classList.add('is-visible');
+        positionCard(card, e.clientX, e.clientY, variant);
+      });
+      trigger.addEventListener('mousemove', function (e) {
+        positionCard(card, e.clientX, e.clientY, variant);
+      });
+      trigger.addEventListener('mouseleave', function () {
+        card.setAttribute('aria-hidden', 'true');
+        card.classList.remove('is-visible');
+      });
+      trigger.addEventListener('focusin', function () {
+        var rect = trigger.getBoundingClientRect();
+        card.setAttribute('aria-hidden', 'false');
+        card.classList.add('is-visible');
+        var cardH = card.offsetHeight;
+        var cardW = card.offsetWidth || 360;
+        var x = Math.max(8, Math.min(rect.left, window.innerWidth - cardW - 8));
+        var y = variant === 'top'
+          ? Math.max(8, rect.top - cardH - 8)
+          : Math.min(rect.bottom + 8, window.innerHeight - cardH - 8);
+        card.style.left = x + 'px';
+        card.style.top = y + 'px';
+      });
+      trigger.addEventListener('focusout', function () {
+        card.setAttribute('aria-hidden', 'true');
+        card.classList.remove('is-visible');
+      });
+    });
+  })();
 
   // Table sim — column resize via drag handles
   // Updates grid-template-columns on #table-grid so header + all rows stay in sync
