@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type DsInputType =
@@ -51,8 +51,9 @@ export type DsInputType =
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
 })
-export class DsInputComponent {
+export class DsInputComponent implements OnInit {
   private _lastWasMouse = false;
+  private _inputId = '';
 
   constructor(private elementRef: ElementRef<HTMLElement>) {}
 
@@ -135,8 +136,13 @@ export class DsInputComponent {
       .join(' ');
   }
 
+  ngOnInit(): void {
+    const slug = this.label.trim().toLowerCase().replace(/\s+/g, '-') || 'field';
+    this._inputId = `ds-input-${slug}-${Math.random().toString(36).slice(2)}`;
+  }
+
   get inputId(): string {
-    return `ds-input-${this.label.toLowerCase().replace(/\s+/g, '-') || Math.random().toString(36).slice(2)}`;
+    return this._inputId;
   }
 
   onInput(event: Event): void {
