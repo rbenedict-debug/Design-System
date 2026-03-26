@@ -96,8 +96,11 @@
 
   // ── Icon buttons — filter, settings, download, custom trailing ────────────
   //
-  // Square 42×42px buttons with --radius-sm (not circular).
-  // Outlined by default; --toggle modifier adds selected state.
+  // The Angular component uses ds-icon-button / ds-icon-button-toggle
+  // (variant="outlined") for filter, settings, and download.
+  //
+  // __btn is preserved for the HTML class API and for content projected
+  // into toolbar-trailing slots. Use ds-icon-button--outlined styling rules.
 
   &__btn {
     appearance: none;
@@ -110,9 +113,9 @@
     height: 42px;
     padding: var(--spacing-xs);
     background: var(--color-surface-page);
-    border: 1px solid var(--color-border-secondary);
+    border: 1px solid var(--color-border-primary);
     border-radius: var(--radius-sm);
-    color: var(--color-icon-subtle);
+    color: var(--color-icon-default);
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -123,42 +126,14 @@
       color       0.12s ease;
 
     &:focus         { outline: none; }
-    &:hover:not(:disabled)  { background: var(--overlay-hovered); border-color: var(--color-border-input-hover); }
-    &:focus-visible          { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
-    &:active:not(:disabled) { background: var(--overlay-pressed); }
+    &:hover:not(:disabled)  { background: var(--overlay-hovered); border-color: var(--color-border-input-hover); color: var(--color-icon-brand); }
+    &:focus-visible          { background: var(--overlay-focused); border-color: var(--color-border-input-active); color: var(--color-icon-brand); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:active:not(:disabled) { background: var(--overlay-pressed); border-color: var(--color-border-active); color: var(--color-icon-brand); }
 
     &:disabled {
       color: var(--color-icon-disabled);
       border-color: var(--color-border-subtle);
       cursor: not-allowed;
-    }
-
-    // ── Toggle modifier — selected state ─────────────────────────────────────
-
-    &--toggle {
-      &.is-selected,
-      &[aria-pressed="true"] {
-        background: var(--color-surface-brand);
-        color: var(--color-icon-brand);
-        border-color: var(--color-border-active);
-
-        &:hover:not(:disabled) {
-          background: var(--color-surface-brand);
-          // overlay tint via ::after
-        }
-
-        &::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: transparent;
-          pointer-events: none;
-          transition: background 0.1s ease;
-        }
-
-        &:hover:not(:disabled)::after  { background: var(--overlay-hovered); }
-        &:active:not(:disabled)::after { background: var(--overlay-pressed); }
-      }
     }
   }
 }

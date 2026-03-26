@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DsSearchComponent } from '../search/search.component';
+import { DsIconButtonComponent } from '../icon-button/icon-button.component';
+import { DsIconButtonToggleComponent } from '../icon-button/icon-button-toggle.component';
 
 /**
  * Onflo Design System — Table Toolbar
@@ -46,7 +48,7 @@ import { DsSearchComponent } from '../search/search.component';
 @Component({
   selector: 'ds-table-toolbar',
   standalone: true,
-  imports: [CommonModule, DsSearchComponent],
+  imports: [CommonModule, DsSearchComponent, DsIconButtonComponent, DsIconButtonToggleComponent],
   templateUrl: './table-toolbar.component.html',
   styleUrls: ['./table-toolbar.component.scss'],
 })
@@ -92,13 +94,13 @@ export class DsTableToolbarComponent {
     this.searchValueChange.emit(value);
   }
 
-  onFilterToggle(): void {
-    this.filterActive = !this.filterActive;
-    this.filterActiveChange.emit(this.filterActive);
+  onFilterSelectedChange(selected: boolean): void {
+    this.filterActive = selected;
+    this.filterActiveChange.emit(selected);
   }
 
-  onSettingsToggle(): void {
-    this.settingsActive = !this.settingsActive;
-    this.settingsActiveChange.emit(this.settingsActive);
+  onSettingsSelectedChange(selected: boolean): void {
+    this.settingsActive = selected;
+    this.settingsActiveChange.emit(selected);
   }
 }

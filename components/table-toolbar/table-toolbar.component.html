@@ -21,39 +21,34 @@
     <ng-content select="[toolbar-extra]"></ng-content>
 
     <!-- Filter toggle button — always present -->
-    <button
-      class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle"
-      type="button"
-      [class.is-selected]="filterActive"
-      [attr.aria-pressed]="filterActive"
-      aria-label="Toggle filters"
-      (click)="onFilterToggle()"
+    <ds-icon-button-toggle
+      variant="outlined"
+      [selected]="filterActive"
+      (selectedChange)="onFilterSelectedChange($event)"
+      ariaLabel="Toggle filters"
     >
-      <span class="ds-icon">filter_alt</span>
-    </button>
+      <span class="ds-icon ds-icon--filled">filter_alt</span>
+    </ds-icon-button-toggle>
 
     <!-- Settings / column visibility toggle — always present -->
-    <button
-      class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle"
-      type="button"
-      [class.is-selected]="settingsActive"
-      [attr.aria-pressed]="settingsActive"
-      aria-label="Column settings"
-      (click)="onSettingsToggle()"
+    <ds-icon-button-toggle
+      variant="outlined"
+      [selected]="settingsActive"
+      (selectedChange)="onSettingsSelectedChange($event)"
+      ariaLabel="Column settings"
     >
-      <span class="ds-icon">settings</span>
-    </button>
+      <span class="ds-icon ds-icon--filled">settings</span>
+    </ds-icon-button-toggle>
 
     <!-- Download button — shown by default, hide with [showDownload]="false" -->
-    <button
+    <ds-icon-button
       *ngIf="showDownload"
-      class="ds-table-toolbar__btn"
-      type="button"
-      aria-label="Download"
-      (click)="downloadClick.emit()"
+      variant="outlined"
+      ariaLabel="Download"
+      (clicked)="downloadClick.emit()"
     >
       <span class="ds-icon">download</span>
-    </button>
+    </ds-icon-button>
 
     <!-- Optional slot: trailing action buttons (replaces or supplements download) -->
     <ng-content select="[toolbar-trailing]"></ng-content>

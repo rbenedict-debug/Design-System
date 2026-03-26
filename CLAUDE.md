@@ -343,7 +343,7 @@ components/{name}/
 - **Layout**: two `flex: 1 0 0` panels side-by-side with `gap: var(--spacing-xl)` (24px); padding `0 var(--spacing-lg)` (16px)
 - **Left panel** (`__left`): action buttons slot — `flex: 1 0 0`, `gap: var(--spacing-sm)`. Omit the `__left` div (or `[showActions]="false"`) for search-only mode; right panel fills full width.
 - **Right panel** (`__right`): `flex: 1 0 0`, `gap: var(--spacing-sm)`. Contains: search (flex-fills remaining space), optional `[toolbar-extra]` content, filter toggle, settings toggle, optional download / `[toolbar-trailing]` content.
-- **Icon buttons** (`__btn`): 42×42px, `--radius-sm` (square, not circular), outlined style using `--color-border-secondary`. Toggle modifier `__btn--toggle` adds `.is-selected` / `[aria-pressed="true"]` selected state (brand bg + brand icon + active border).
+- **Icon buttons**: The Angular component uses `ds-icon-button-toggle` (variant="outlined") for filter and settings, and `ds-icon-button` (variant="outlined") for download. The `__btn` CSS class is preserved for the HTML class API and projected `[toolbar-trailing]` slot content only — it mirrors `ds-icon-button--outlined` behavior.
 - **Content projection slots**:
   - `[toolbar-actions]` — left-side action buttons
   - `[toolbar-extra]` — right-side extras between search and fixed icon buttons (filter/date chips, dropdowns)
