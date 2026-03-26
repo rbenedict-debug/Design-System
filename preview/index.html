@@ -1433,10 +1433,11 @@
       max-width: 200px !important;
       min-height: 24px !important;
       padding: var(--spacing-xs) var(--spacing-sm) !important;
-      text-align: center;
+      text-align: left;
     }
+    .mat-mdc-tooltip .mdc-tooltip__surface::before { display: none !important; }
 
-    /* CSS class API — HTML-only preview (no Angular / CDK Overlay) */
+    /* CSS class API — HTML-only preview (no Angular / CDK Overlay). No arrow. */
     .ds-tooltip-wrapper {
       position: relative;
       display: inline-flex;
@@ -1460,33 +1461,21 @@
       min-height: 24px;
       max-width: 200px;
       white-space: normal;
-      text-align: center;
+      text-align: left;
       pointer-events: none;
       visibility: hidden;
       opacity: 0;
       transition: opacity 0.15s ease, visibility 0.15s ease;
-      bottom: calc(100% + 9px);
+      bottom: calc(100% + 8px);
       left: 50%;
       transform: translateX(-50%);
-    }
-    .ds-tooltip::before {
-      content: '';
-      position: absolute;
-      border: 5px solid transparent;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border-top-color: var(--color-surface-tooltip);
     }
     /* Below */
-    .ds-tooltip--below { bottom: auto; top: calc(100% + 9px); left: 50%; transform: translateX(-50%); }
-    .ds-tooltip--below::before { top: auto; bottom: 100%; left: 50%; transform: translateX(-50%); border-top-color: transparent; border-bottom: 5px solid var(--color-surface-tooltip); }
+    .ds-tooltip--below { bottom: auto; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); }
     /* Left */
-    .ds-tooltip--left { bottom: auto; top: 50%; left: auto; right: calc(100% + 9px); transform: translateY(-50%); }
-    .ds-tooltip--left::before { top: 50%; left: 100%; transform: translateY(-50%); border-top-color: transparent; border-left: 5px solid var(--color-surface-tooltip); }
+    .ds-tooltip--left { bottom: auto; top: 50%; left: auto; right: calc(100% + 8px); transform: translateY(-50%); }
     /* Right */
-    .ds-tooltip--right { bottom: auto; top: 50%; left: calc(100% + 9px); transform: translateY(-50%); }
-    .ds-tooltip--right::before { top: 50%; right: 100%; left: auto; transform: translateY(-50%); border-top-color: transparent; border-right: 5px solid var(--color-surface-tooltip); }
+    .ds-tooltip--right { bottom: auto; top: 50%; left: calc(100% + 8px); transform: translateY(-50%); }
 
 
     /* ════════════════════════════════════════════════════════════════════════

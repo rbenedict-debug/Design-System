@@ -270,7 +270,7 @@ components/{name}/
 - **Min height**: 24px
 - **Max width**: 200px (multi-line wraps at this width)
 - **Positions**: `above` (default) | `below` | `left` | `right` — values match Angular Material's `TooltipPosition` type
-- **Arrow**: `::before` pseudo-element, 5px border triangle, same colour as tooltip surface (CSS class API only; Angular Material uses its own arrow)
+- **No arrow** — plain rounded rectangle only; matches Figma design exactly. The Angular Material `::before` arrow is suppressed via `display: none` on `.mdc-tooltip__surface::before`.
 - **ADA**: Required on all icon-only buttons; triggers on both hover and keyboard focus; `role="tooltip"` on the tooltip element
 - **Angular**: `[dsTooltip]="'text'"` directive + `[dsTooltipPosition]`, `[dsTooltipShowDelay]`, `[dsTooltipHideDelay]`, `[dsTooltipDisabled]` inputs. `DsTooltipDirective` composes `MatTooltip` via `hostDirectives` — no custom DOM manipulation. Onflo tokens applied via global `.mat-mdc-tooltip` overrides in `_tooltip.scss`. Angular Material base: `MatTooltipModule`
 
