@@ -155,7 +155,8 @@ components/{name}/
 
 ### Icon Button (`ds-icon-button`)
 - Variants: `icon` (ghost) | `filled` | `outlined` | `monogram`
-- Sizes: `sm` (32px) | `md` (40px, default) — always circular (`--radius-full`)
+- Sizes: `sm` (32px) | `md` (42px, default) — always `--radius-sm` (rounded square, NOT circular)
+- **Outlined default**: grey border (`--color-border-primary`) + grey icon (`--color-icon-default`) + white bg (`--color-surface-page`) — turns blue on hover/focus/active
 - Toggle: add `ds-icon-button-toggle` class; use `[aria-pressed]` + `.is-selected`
 - Toggle variants: `icon` | `filled` | `outlined` | `outlined-letter`
 - ADA: always include `aria-label` — icon buttons have no visible text

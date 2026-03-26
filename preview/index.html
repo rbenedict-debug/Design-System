@@ -1009,9 +1009,9 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-full);
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-sm);
       border: 1px solid transparent;
       padding: 0;
       cursor: pointer;
@@ -1029,7 +1029,7 @@
       transition: background 0.1s ease;
     }
     .ds-icon-button > svg,
-    .ds-icon-button .ds-icon-button__icon { width: 20px; height: 20px; display: block; flex-shrink: 0; pointer-events: none; }
+    .ds-icon-button .ds-icon-button__icon { width: 24px; height: 24px; display: block; flex-shrink: 0; pointer-events: none; }
     .ds-icon-button .ds-icon-button__label {
       font-family: var(--ref-typeface-brand), 'DM Sans', sans-serif;
       font-size: 14px;
@@ -1042,7 +1042,7 @@
     /* Size — SM */
     .ds-icon-button--sm { width: 32px; height: 32px; }
     .ds-icon-button--sm > svg,
-    .ds-icon-button--sm .ds-icon-button__icon { width: 16px; height: 16px; }
+    .ds-icon-button--sm .ds-icon-button__icon { width: 20px; height: 20px; }
     .ds-icon-button--sm .ds-icon-button__label { font-size: 12px; }
 
     /* Ghost (icon) */
@@ -1061,10 +1061,10 @@
     .ds-icon-button--filled.is-error { background: var(--color-surface-accent-red-bold); color: var(--color-icon-on-brand); }
 
     /* Outlined */
-    .ds-icon-button--outlined { background: transparent; color: var(--color-icon-brand); border-color: var(--color-border-brand); }
-    .ds-icon-button--outlined:hover:not(:disabled) { background: var(--overlay-hovered); border-color: var(--color-border-input-hover); }
-    .ds-icon-button--outlined:focus-visible { background: var(--overlay-focused); border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
-    .ds-icon-button--outlined:active:not(:disabled) { background: var(--overlay-pressed); border-color: var(--color-border-active); }
+    .ds-icon-button--outlined { background: var(--color-surface-page); color: var(--color-icon-default); border-color: var(--color-border-primary); }
+    .ds-icon-button--outlined:hover:not(:disabled) { background: var(--overlay-hovered); color: var(--color-icon-brand); border-color: var(--color-border-input-hover); }
+    .ds-icon-button--outlined:focus-visible { background: var(--overlay-focused); color: var(--color-icon-brand); border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-icon-button--outlined:active:not(:disabled) { background: var(--overlay-pressed); color: var(--color-icon-brand); border-color: var(--color-border-active); }
     .ds-icon-button--outlined.is-error { color: var(--color-icon-error); border-color: var(--color-border-accent-red); }
 
     /* Monogram */
