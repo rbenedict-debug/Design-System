@@ -121,7 +121,7 @@ We use **Material Symbols Rounded** with the variable font FILL axis for outline
 - BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{modifier}`
 - State classes: `.is-error`, `.is-disabled`, `.is-readonly`, `.is-selected`
 - Interactive states: `:hover`, `:focus-visible`, `:active`, `:disabled`
-- Focus ring: always `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` — never `outline`
+- **Focus ring: keyboard-only, always.** Use `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` — never `outline`. For simple elements (buttons, links) use `:focus-visible`. For composite wrapper components that use `:focus-within`, you MUST use the `data-mouse-focus` suppression pattern — never apply `box-shadow` directly on `:focus-within` alone, as this fires on mouse clicks.
 - Overlay tints (hover/pressed/focused on filled surfaces): use `::after` pseudo-element with `var(--overlay-hovered)` etc.
 
 ### Component file structure
@@ -170,6 +170,24 @@ components/{name}/
 - States: default, hover, focus, error (`.is-error`), disabled (`.is-disabled`), read-only (`.is-readonly`)
 - ADA: `aria-invalid="true"` on `<input>` when error; `role="alert"` on error message; `aria-describedby` links input to helper
 - Multi-line text: use `ds-textarea` (separate component — resizable, no fixed height)
+
+### Textarea (`ds-textarea`)
+- **No fixed height — resizable** (min-height 96px); Angular Material base: `MatFormFieldModule` + `MatInputModule` (textarea)
+- **Label typography**: label-medium, `weight-prominent` (600/bold = `--ref-typescale-label-medium-weight-prominent`), `--color-text-secondary` — same as ds-input. Label does NOT turn red in error state.
+- **Helper/supporting text typography**: body-small (12px, 16px line-height) using `--ref-typescale-body-small-*` tokens — same as ds-input.
+- **Error state**: red border (`--color-border-input-error`), red helper text, label stays `--color-text-secondary` (NOT red)
+- **Focus ring**: keyboard-only via `data-mouse-focus` suppression pattern — same as ds-input
+
+### Select (`ds-select`)
+- **Visual design**: identical to ds-input — same 42px height, same label/helper/error token usage, same field appearance. They are the same component in Figma.
+- **Angular Material**: `MatSelectModule` — native `<select>` element with custom arrow icon
+- **Height: always 42px — fixed, matches ds-input**
+- **Label typography**: label-medium, `weight-prominent` (600/bold), `--color-text-secondary` — label does NOT turn red in error state
+- **Helper/supporting text**: body-small (12px, 16px line-height) using `--ref-typescale-body-small-*` tokens — same as ds-input
+- **Arrow icon**: `expand_more` Material Symbol (`ds-select__arrow`) — hidden in error state
+- **Error state**: red border (`--color-border-input-error`), red helper text, filled `error` icon replaces arrow (same pattern as ds-input error icon replacing trailing action), label stays `--color-text-secondary`
+- **Focus ring**: keyboard-only via `data-mouse-focus` suppression pattern — same as ds-input
+- States: default, hover, focus, error (`.is-error`), disabled (`.is-disabled`)
 
 ### Checkbox (`ds-checkbox`)
 - **Touch target**: 42×42px circle (`__touch` wrapper) — matches ADA touch target minimum
@@ -338,10 +356,21 @@ All components must meet WCAG 2.1 AA. These rules are non-negotiable.
 
 ### Focus ring
 - **Always** use `:focus-visible` (not `:focus`) for the visible focus ring — `:focus-visible` only activates during keyboard navigation, never on mouse clicks. This is correct ADA behaviour.
-- The two-rule pattern every interactive element must follow:
+- Two patterns apply depending on element type:
+
+  **Simple elements** (buttons, links, tabs — any element that is itself the focusable target):
   ```scss
   &:focus         { outline: none; }           // suppress browser default on ALL focus
   &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); } // keyboard only
+  ```
+
+  **Composite wrappers** (ds-input, ds-select, ds-textarea — wrapper divs that use `:focus-within` because the inner `<input>` receives focus, not the wrapper):
+  ```scss
+  // Composite wrappers using :focus-within (ds-input, ds-select, ds-textarea)
+  &:focus-within                         { /* border-color change only — no ring */ }
+  &:focus-within:not([data-mouse-focus]) { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+  // data-mouse-focus is set on mousedown/touchstart via HostListener in the Angular component
+  // and via the preview's JS handler — it suppresses the ring for pointer-initiated focus.
   ```
 - **Never** use `outline` as the focus indicator — it cannot be styled consistently across browsers
 - **Never** use `border-color` as a substitute for the focus ring — borders affect layout and are inconsistent
@@ -385,6 +414,8 @@ All components must meet WCAG 2.1 AA. These rules are non-negotiable.
 - Never put content inside the `<!-- ONFLO-TOKENS:START/END -->` block except token CSS
 - Never use `:has()` to infer icon presence in buttons — icon vs. no-icon are separate Figma variants
 - Never reference `--ref-*` tokens directly in component styles — go through semantic `--color-*` / `--spacing-*` etc.
+- Never apply `box-shadow` focus ring directly on `:focus-within` — always pair with `:not([data-mouse-focus])` guard or the ring will fire on mouse clicks
+- Never use `:focus` where `:focus-visible` is appropriate — `:focus-visible` is keyboard-only by design for simple elements
 
 ---
 
