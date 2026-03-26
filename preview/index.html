@@ -1084,24 +1084,47 @@
     .ds-icon-button--monogram:disabled { background: var(--color-surface-disabled); color: var(--color-icon-disabled); }
 
     /* ── Toggle ── */
-    .ds-icon-button-toggle.ds-icon-button--icon { color: var(--color-icon-subtle); }
-    .ds-icon-button-toggle.ds-icon-button--icon.is-selected,
-    .ds-icon-button-toggle.ds-icon-button--icon[aria-pressed="true"] { background: var(--color-surface-brand); color: var(--color-icon-brand); }
+    /* Outlined-letter label size */
+    .ds-icon-button--outlined-letter .ds-icon-button__label { font-size: 20px; font-weight: 600; line-height: 1; }
 
+    /* Ghost toggle — default grey; selected = brand blue (no bg fill) */
+    .ds-icon-button-toggle.ds-icon-button--icon { color: var(--color-icon-default); }
+    .ds-icon-button-toggle.ds-icon-button--icon.is-selected,
+    .ds-icon-button-toggle.ds-icon-button--icon[aria-pressed="true"] { color: var(--color-icon-brand); }
+
+    /* Filled toggle */
     .ds-icon-button-toggle.ds-icon-button--filled { background: var(--color-surface-brand); color: var(--color-icon-brand); }
     .ds-icon-button-toggle.ds-icon-button--filled.is-selected,
     .ds-icon-button-toggle.ds-icon-button--filled[aria-pressed="true"] { background: var(--color-surface-brand-bold); color: var(--color-icon-on-brand); }
 
-    .ds-icon-button-toggle.ds-icon-button--outlined { color: var(--color-icon-subtle); border-color: var(--color-border-secondary); }
+    /* Outlined toggle */
+    .ds-icon-button-toggle.ds-icon-button--outlined { background: var(--color-surface-page); color: var(--color-icon-default); border-color: var(--color-border-primary); }
+    .ds-icon-button-toggle.ds-icon-button--outlined:hover:not(:disabled) { border-color: var(--color-border-input-hover); color: var(--color-icon-brand); }
+    .ds-icon-button-toggle.ds-icon-button--outlined:focus-visible { border-color: var(--color-border-input-active); color: var(--color-icon-brand); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
     .ds-icon-button-toggle.ds-icon-button--outlined.is-selected,
     .ds-icon-button-toggle.ds-icon-button--outlined[aria-pressed="true"] { background: var(--color-surface-brand); color: var(--color-icon-brand); border-color: var(--color-border-active); }
+    .ds-icon-button-toggle.ds-icon-button--outlined.is-selected:hover:not(:disabled)::after,
+    .ds-icon-button-toggle.ds-icon-button--outlined[aria-pressed="true"]:hover:not(:disabled)::after { background: var(--overlay-hovered); }
+    .ds-icon-button-toggle.ds-icon-button--outlined.is-selected:hover:not(:disabled),
+    .ds-icon-button-toggle.ds-icon-button--outlined[aria-pressed="true"]:hover:not(:disabled) { border-color: var(--color-border-input-hover); }
 
-    .ds-icon-button-toggle.ds-icon-button--outlined-letter { color: var(--color-icon-subtle); border-color: var(--color-border-secondary); }
+    /* Outlined Letter toggle */
+    .ds-icon-button-toggle.ds-icon-button--outlined-letter { background: var(--color-surface-page); color: var(--color-text-primary); border-color: var(--color-border-primary); }
+    .ds-icon-button-toggle.ds-icon-button--outlined-letter:hover:not(:disabled) { background: var(--overlay-hovered); border-color: var(--color-border-input-hover); }
+    .ds-icon-button-toggle.ds-icon-button--outlined-letter:focus-visible { background: var(--overlay-focused); border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    .ds-icon-button-toggle.ds-icon-button--outlined-letter:active:not(:disabled) { background: var(--overlay-pressed); border-color: var(--color-border-active); }
     .ds-icon-button-toggle.ds-icon-button--outlined-letter.is-selected,
-    .ds-icon-button-toggle.ds-icon-button--outlined-letter[aria-pressed="true"] { background: var(--color-surface-brand-bold); color: var(--color-icon-on-brand); border-color: transparent; }
+    .ds-icon-button-toggle.ds-icon-button--outlined-letter[aria-pressed="true"] { background: var(--color-surface-brand); color: var(--color-text-brand); border-color: var(--color-border-active); }
+    .ds-icon-button-toggle.ds-icon-button--outlined-letter.is-selected:hover:not(:disabled)::after,
+    .ds-icon-button-toggle.ds-icon-button--outlined-letter[aria-pressed="true"]:hover:not(:disabled)::after { background: var(--overlay-hovered); }
+    .ds-icon-button-toggle.ds-icon-button--outlined-letter.is-selected:hover:not(:disabled),
+    .ds-icon-button-toggle.ds-icon-button--outlined-letter[aria-pressed="true"]:hover:not(:disabled) { border-color: var(--color-border-input-hover); }
 
+    /* Disabled selected */
     .ds-icon-button-toggle:disabled.is-selected,
     .ds-icon-button-toggle:disabled[aria-pressed="true"] { background: var(--color-surface-disabled); color: var(--color-icon-disabled); border-color: transparent; }
+    .ds-icon-button-toggle:disabled.is-selected::after,
+    .ds-icon-button-toggle:disabled[aria-pressed="true"]::after { background: transparent !important; }
 
 
     /* ════════════════════════════════════════════════════════════════════════

@@ -159,6 +159,8 @@ components/{name}/
 - **Outlined default**: grey border (`--color-border-primary`) + grey icon (`--color-icon-default`) + white bg (`--color-surface-page`) — turns blue on hover/focus/active
 - Toggle: add `ds-icon-button-toggle` class; use `[aria-pressed]` + `.is-selected`
 - Toggle variants: `icon` | `filled` | `outlined` | `outlined-letter`
+- **Icon toggle selected**: NO background fill — only icon color changes to `--color-icon-brand`. Caller swaps icon content (e.g. outline → filled Material Symbol) for visual state change.
+- **Outlined-letter toggle**: uses `--color-text-primary`/`--color-text-brand` (text tokens, not icon tokens); letter font = `--ref-typescale-title-h2-*` (20px, bold); unselected = white bg + grey border; selected = `--color-surface-brand` + `--color-border-active`
 - ADA: always include `aria-label` — icon buttons have no visible text
 
 ### Input Field (`ds-input`)

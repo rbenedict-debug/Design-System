@@ -97,6 +97,13 @@
     pointer-events: none;
   }
 
+  // Outlined-letter uses larger title scale for the letter
+  &--outlined-letter .ds-icon-button__label {
+    font-size: var(--ref-typescale-title-h2-size);        // 20px
+    font-weight: var(--ref-typescale-title-h2-weight);    // bold
+    line-height: 1;
+  }
+
 
   // ── Sizes ──────────────────────────────────────────────────────────────────
 
@@ -194,18 +201,18 @@
 
 .ds-icon-button-toggle {
 
-  // Ghost toggle — transparent → soft brand on select
+  // Ghost toggle — icon color is default grey; selected = brand blue (no bg fill)
+  // The icon itself changes via caller (e.g. outline → filled Material Symbol)
   &.ds-icon-button--icon {
-    color: var(--color-icon-subtle);
+    color: var(--color-icon-default);
 
     &.is-selected,
     &[aria-pressed="true"] {
-      background: var(--color-surface-brand);
       color: var(--color-icon-brand);
     }
   }
 
-  // Filled toggle — soft brand → bold brand on select
+  // Filled toggle — soft brand bg → bold brand bg on select
   &.ds-icon-button--filled {
     background: var(--color-surface-brand);
     color: var(--color-icon-brand);
@@ -217,39 +224,65 @@
     }
   }
 
-  // Outlined toggle — subtle border → brand border on select
+  // Outlined toggle — grey border/icon → brand on select
   &.ds-icon-button--outlined {
-    color: var(--color-icon-subtle);
-    border-color: var(--color-border-secondary);
+    background: var(--color-surface-page);
+    color: var(--color-icon-default);
+    border-color: var(--color-border-primary);
+
+    &:hover:not(:disabled)  { border-color: var(--color-border-input-hover); color: var(--color-icon-brand); }
+    &:focus-visible          { border-color: var(--color-border-input-active); color: var(--color-icon-brand); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:active:not(:disabled) { border-color: var(--color-border-active); color: var(--color-icon-brand); }
 
     &.is-selected,
     &[aria-pressed="true"] {
       background: var(--color-surface-brand);
       color: var(--color-icon-brand);
       border-color: var(--color-border-active);
+
+      &:hover:not(:disabled)::after     { background: var(--overlay-hovered); }
+      &:hover:not(:disabled)            { border-color: var(--color-border-input-hover); }
+      &:focus-visible::after             { background: var(--overlay-focused); }
+      &:focus-visible                    { border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+      &:active:not(:disabled)::after    { background: var(--overlay-pressed); }
+      &:active:not(:disabled)           { border-color: var(--color-border-active); }
     }
   }
 
-  // Outlined Letter toggle — subtle → solid brand on select
+  // Outlined Letter toggle — white bg + grey border + primary text (unselected)
+  //                        → brand-surface bg + active border + brand text (selected)
   &.ds-icon-button--outlined-letter {
-    color: var(--color-icon-subtle);
-    border-color: var(--color-border-secondary);
+    background: var(--color-surface-page);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-primary);
+
+    &:hover:not(:disabled)  { background: var(--overlay-hovered);  border-color: var(--color-border-input-hover); }
+    &:focus-visible          { background: var(--overlay-focused);  border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:active:not(:disabled) { background: var(--overlay-pressed);  border-color: var(--color-border-active); }
 
     &.is-selected,
     &[aria-pressed="true"] {
-      background: var(--color-surface-brand-bold);
-      color: var(--color-icon-on-brand);
-      border-color: transparent;
+      background: var(--color-surface-brand);
+      color: var(--color-text-brand);
+      border-color: var(--color-border-active);
+
+      &:hover:not(:disabled)::after     { background: var(--overlay-hovered); }
+      &:hover:not(:disabled)            { border-color: var(--color-border-input-hover); }
+      &:focus-visible::after             { background: var(--overlay-focused); }
+      &:focus-visible                    { border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+      &:active:not(:disabled)::after    { background: var(--overlay-pressed); }
+      &:active:not(:disabled)           { border-color: var(--color-border-active); }
     }
   }
 
-  // Disabled selected — same as regular disabled regardless of state
+  // Disabled selected — same as regular disabled regardless of variant
   &:disabled {
     &.is-selected,
     &[aria-pressed="true"] {
       background: var(--color-surface-disabled);
       color: var(--color-icon-disabled);
       border-color: transparent;
+      &::after { background: transparent !important; }
     }
   }
 }
