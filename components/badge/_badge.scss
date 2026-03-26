@@ -74,9 +74,16 @@
   position: relative;
   display: inline-flex;
 
+  // Large count badge (20px) — center badge on the button's top-right corner
   .ds-badge-indicator {
     position: absolute;
-    top: -4px;
-    right: -4px;
+    top: -10px;
+    right: -10px;
+  }
+
+  // Small dot badge (6px) — center dot on the button's top-right corner
+  .ds-badge-indicator--dot {
+    top: -3px;
+    right: -3px;
   }
 }

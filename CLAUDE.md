@@ -240,7 +240,8 @@ components/{name}/
   - **Large (count)**: `min-width: 20px; height: 20px` — red circle with white number. Label Small typography (12px), bold weight (600).
   - **Small (dot)**: add `ds-badge-indicator--dot` — 6×6px solid red circle, no text.
 - **Color**: always `--color-surface-accent-red-bold` bg + `--color-text-on-bold` text. Not themeable.
-- **Overlay mode** (on icon buttons): wrap host + button in `<div class="ds-badge-indicator__host">` — host gets `position: relative`; indicator is `position: absolute; top: -4px; right: -4px`
+- **Overlay mode** (on icon buttons): wrap host + button in `<div class="ds-badge-indicator__host">` — host gets `position: relative`; badge is centered on the button's top-right corner: count badge `top: -10px; right: -10px`, dot badge `top: -3px; right: -3px`
+- **Badge size pairing**: MD button (42px) → Large count badge only. SM button (32px) → Small dot badge only.
 - **Inline mode** (in tabs / nav): place `ds-badge-indicator` directly inside the tab `<button>` after the label text (no host wrapper needed — stays `inline-flex`)
 - **ADA**: element is always `aria-hidden="true"`; count/dot must be announced via `aria-label` on the parent button (e.g. `aria-label="Activity, 3 new"`)
 - **Angular**: `<ds-badge [count]="3" />` or `<ds-badge [dot]="true" />`
