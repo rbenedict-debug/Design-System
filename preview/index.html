@@ -1794,17 +1794,17 @@
     .ds-label { display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-xs); height: 42px; padding: 0 16px; border-radius: var(--radius-sm); border: 1px solid transparent; font-family: var(--ref-typescale-label-medium-font); font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typescale-label-medium-weight-prominent); line-height: var(--ref-typescale-label-medium-line-height); letter-spacing: var(--ref-typescale-label-medium-tracking); color: var(--color-text-primary); white-space: nowrap; vertical-align: middle; }
     .ds-label--sm { height: 32px; padding: 0 12px; }
     .ds-label--xs { height: 24px; padding: 0 10px; }
-    .ds-label--green  { background: var(--color-surface-accent-green); }
-    .ds-label--red    { background: var(--color-surface-accent-red); }
-    .ds-label--yellow { background: var(--color-surface-accent-yellow); }
-    .ds-label--brand  { background: var(--color-surface-brand); }
-    .ds-label--blue   { background: var(--color-surface-accent-blue); }
-    .ds-label--navy   { background: var(--color-surface-accent-navy); }
-    .ds-label--teal   { background: var(--color-surface-accent-teal); }
-    .ds-label--orange { background: var(--color-surface-accent-orange); }
-    .ds-label--purple { background: var(--color-surface-accent-purple); }
-    .ds-label--pink   { background: var(--color-surface-accent-pink); }
-    .ds-label--disabled { background: var(--color-surface-disabled); color: var(--color-text-disabled); }
+    .ds-label--green  { background: var(--color-surface-accent-green); --label-dot-color: var(--color-border-accent-green); }
+    .ds-label--red    { background: var(--color-surface-accent-red); --label-dot-color: var(--color-border-accent-red); }
+    .ds-label--yellow { background: var(--color-surface-accent-yellow); --label-dot-color: var(--color-border-accent-yellow); }
+    .ds-label--brand  { background: var(--color-surface-brand); --label-dot-color: var(--color-border-brand); }
+    .ds-label--blue   { background: var(--color-surface-accent-blue); --label-dot-color: var(--color-border-accent-blue); }
+    .ds-label--navy   { background: var(--color-surface-accent-navy); --label-dot-color: var(--color-border-accent-navy); }
+    .ds-label--teal   { background: var(--color-surface-accent-teal); --label-dot-color: var(--color-border-accent-teal); }
+    .ds-label--orange { background: var(--color-surface-accent-orange); --label-dot-color: var(--color-border-accent-orange); }
+    .ds-label--purple { background: var(--color-surface-accent-purple); --label-dot-color: var(--color-border-accent-purple); }
+    .ds-label--pink   { background: var(--color-surface-accent-pink); --label-dot-color: var(--color-border-accent-pink); }
+    .ds-label--disabled { background: var(--color-surface-disabled); color: var(--color-text-disabled); --label-dot-color: var(--color-border-subtle); }
     .ds-label--green.ds-label--outline  { border-color: var(--color-border-accent-green); }
     .ds-label--red.ds-label--outline    { border-color: var(--color-border-accent-red); }
     .ds-label--yellow.ds-label--outline { border-color: var(--color-border-accent-yellow); }
@@ -1817,6 +1817,12 @@
     .ds-label--pink.ds-label--outline   { border-color: var(--color-border-accent-pink); }
     .ds-label--disabled.ds-label--outline { border-color: var(--color-border-subtle); }
     .ds-label__icon { font-family: 'Material Symbols Rounded'; font-size: 12px; width: 12px; height: 12px; display: flex; align-items: center; justify-content: center; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    /* Pill modifier */
+    .ds-label--pill { border-radius: var(--radius-full); padding: 0 12px; }
+    .ds-label--pill.ds-label--xs { padding: 0 8px; }
+    .ds-label--pill.ds-label--has-dot { padding-left: 8px; }
+    .ds-label--pill.ds-label--xs.ds-label--has-dot { padding-left: 4px; }
+    .ds-label__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--label-dot-color, var(--color-border-primary)); flex-shrink: 0; }
 
     /* ════════════════════════════════════════════════════════════════════════
        SKELETON  (ds-skeleton)
