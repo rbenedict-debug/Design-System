@@ -4,7 +4,10 @@
   [class.ds-label--sm]="size === 'sm'"
   [class.ds-label--xs]="size === 'xs'"
   [class.ds-label--outline]="outline"
+  [class.ds-label--pill]="pill"
+  [class.ds-label--has-dot]="pill && dot"
 >
   <span *ngIf="icon" class="ds-label__icon">{{ icon }}</span>
+  <span *ngIf="pill && dot" class="ds-label__dot" aria-hidden="true"></span>
   <ng-content />
 </span>

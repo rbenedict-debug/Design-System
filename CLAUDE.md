@@ -268,6 +268,14 @@ components/{name}/
 - **Display-only**: not interactive, not removable — use `ds-chip` for removable items
 - **No Angular Material base** — custom component
 
+#### Pill style (`ds-label--pill`)
+- **Modifier**: `ds-label--pill` — overrides `border-radius` to `var(--radius-full)` (fully rounded); adjusts padding
+- **Pill padding**: MD = `0 12px`, SM = `0 12px`, XS = `0 8px` (tighter than rectangular)
+- **Dot indicator**: optional status dot — add `ds-label--has-dot` + `<span class="ds-label__dot" aria-hidden="true"></span>` as first child
+  - Dot = 10px solid circle, colored via `--label-dot-color` CSS var (set per variant to `--color-border-accent-{color}`)
+  - With dot: left padding reduces — MD/SM = `8px`, XS = `4px`
+- **Angular inputs**: `[pill]="true"` and `[dot]="true"` on `<ds-label>`; dot element rendered automatically when `pill && dot`
+
 ### Table Header Cell (`ds-table-header-cell`)
 - **Primitive** — internal component used inside `component/table-header-row`. AG Grid custom header renderer.
 - **Height: 56px — fixed**

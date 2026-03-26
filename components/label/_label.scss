@@ -10,10 +10,21 @@
 //   <span class="ds-label ds-label--red ds-label--sm">Urgent</span>
 //   <span class="ds-label ds-label--brand ds-label--outline">Brand</span>
 //
+// Pill style (fully rounded, optional dot):
+//   <span class="ds-label ds-label--green ds-label--pill">Active</span>
+//   <span class="ds-label ds-label--green ds-label--pill ds-label--has-dot">
+//     <span class="ds-label__dot" aria-hidden="true"></span>Active
+//   </span>
+//   <span class="ds-label ds-label--green ds-label--pill ds-label--outline ds-label--has-dot">
+//     <span class="ds-label__dot" aria-hidden="true"></span>Active
+//   </span>
+//
 // Variants (color): green | red | yellow | brand | blue | navy | teal |
 //                   orange | purple | pink | disabled
 // Sizes:   xs | sm | md (default)
 // Outline: ds-label--outline (adds colored border)
+// Pill:    ds-label--pill (fully rounded, pill shape)
+// Dot:     ds-label--has-dot + <span class="ds-label__dot"> (status indicator dot)
 // ============================================================
 
 .ds-label {
@@ -50,57 +61,68 @@
 
   &--green {
     background: var(--color-surface-accent-green);
+    --label-dot-color: var(--color-border-accent-green);
     &.ds-label--outline { border-color: var(--color-border-accent-green); }
   }
 
   &--red {
     background: var(--color-surface-accent-red);
+    --label-dot-color: var(--color-border-accent-red);
     &.ds-label--outline { border-color: var(--color-border-accent-red); }
   }
 
   &--yellow {
     background: var(--color-surface-accent-yellow);
+    --label-dot-color: var(--color-border-accent-yellow);
     &.ds-label--outline { border-color: var(--color-border-accent-yellow); }
   }
 
   &--brand {
     background: var(--color-surface-brand);
+    --label-dot-color: var(--color-border-brand);
     &.ds-label--outline { border-color: var(--color-border-brand); }
   }
 
   &--blue {
     background: var(--color-surface-accent-blue);
+    --label-dot-color: var(--color-border-accent-blue);
     &.ds-label--outline { border-color: var(--color-border-accent-blue); }
   }
 
   &--navy {
     background: var(--color-surface-accent-navy);
+    --label-dot-color: var(--color-border-accent-navy);
     &.ds-label--outline { border-color: var(--color-border-accent-navy); }
   }
 
   &--teal {
     background: var(--color-surface-accent-teal);
+    --label-dot-color: var(--color-border-accent-teal);
     &.ds-label--outline { border-color: var(--color-border-accent-teal); }
   }
 
   &--orange {
     background: var(--color-surface-accent-orange);
+    --label-dot-color: var(--color-border-accent-orange);
     &.ds-label--outline { border-color: var(--color-border-accent-orange); }
   }
 
   &--purple {
     background: var(--color-surface-accent-purple);
+    --label-dot-color: var(--color-border-accent-purple);
     &.ds-label--outline { border-color: var(--color-border-accent-purple); }
   }
 
   &--pink {
     background: var(--color-surface-accent-pink);
+    --label-dot-color: var(--color-border-accent-pink);
     &.ds-label--outline { border-color: var(--color-border-accent-pink); }
   }
 
   &--disabled {
     background: var(--color-surface-disabled);
     color: var(--color-text-disabled);
+    --label-dot-color: var(--color-border-subtle);
     &.ds-label--outline { border-color: var(--color-border-subtle); }
   }
 
@@ -115,5 +137,39 @@
     align-items: center;
     justify-content: center;
     font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  }
+
+  // ── Pill style — fully rounded with optional status dot ───────────────────
+
+  &--pill {
+    border-radius: var(--radius-full);
+    padding: 0 12px;  // MD: 12px (vs 16px for rectangular)
+
+    &.ds-label--sm {
+      padding: 0 12px;  // SM: same as rectangular
+    }
+
+    &.ds-label--xs {
+      padding: 0 8px;   // XS: 8px (vs 10px for rectangular)
+    }
+
+    // When dot is present: reduce left padding to tighten against the dot
+    &.ds-label--has-dot {
+      padding-left: 8px;
+
+      &.ds-label--xs {
+        padding-left: 4px;
+      }
+    }
+  }
+
+  // ── Status dot (pill only) ─────────────────────────────────────────────────
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--label-dot-color, var(--color-border-primary));
+    flex-shrink: 0;
   }
 }
