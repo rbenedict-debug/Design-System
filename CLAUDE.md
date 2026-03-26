@@ -301,9 +301,9 @@ components/{name}/
 - **Resize bar**: 2px × 14px, `--color-border-primary`, inside 16px handle container; `pipeRight = true` by default, `pipeLeft = false` by default; `--active` modifier on the trailing handle enables `cursor: col-resize` and drag behavior
 - **Resize drag**: `(mousedown)` on the right handle starts a drag that calls `params.api.setColumnWidth()` and emits `(widthChange)`; `AgHeaderParams` interface includes `column.getActualWidth()` and `api.setColumnWidth(key, newWidth)`
 - **Icon buttons** (sort / filter / menu): use `<ds-icon-button size="sm" variant="icon">` — 32×32px ghost
-- **Sort button**: `arrow_upward_alt` icon — sort state class on the projected icon span: `__sort-icon--asc` (brand), `__sort-icon--desc` (brand + rotate 180°), `__sort-icon--none` (subtle + opacity 0.5)
-- **Filter button**: `<span class="ds-icon ds-icon--filled">filter_alt</span>` — always filled icon
-- **Menu button**: icon uses `__menu-icon` class for brand color; passes wrapper `div#menuBtnEl` to `onMenuClick()` as AG Grid positioning anchor
+- **Sort button**: `arrow_upward_alt` icon — only shown when column IS sorted. Sort state class on the icon span: `__sort-icon--asc` (brand), `__sort-icon--desc` (brand + rotate 180°). **When unsorted (`sortDirection === null`), do NOT render the sort button at all — no arrow shown.**
+- **Filter button**: `<span class="ds-icon ds-icon--filled">filter_alt</span>` — always filled icon; default ghost colour (`--color-icon-default`)
+- **Menu button**: icon uses `__menu-icon` class — `--color-icon-default` (grey ghost, turns brand on hover via ghost button styles); passes wrapper `div#menuBtnEl` to `onMenuClick()` as AG Grid positioning anchor
 - **Checkbox** (select-all): `check_box_outline_blank` | `check_box` (filled, brand) | `indeterminate_check_box` (filled, brand)
 - **Checkbox-only column**: auto-detected when `checkbox === true && !label` — applies `--checkbox-only` modifier (56px fixed width, both resize handles hidden); use with no `label` input
 - **Right align**: `ds-table-header-cell__content--right` applies `justify-content: flex-end`

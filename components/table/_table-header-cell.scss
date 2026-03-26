@@ -132,8 +132,8 @@ $checkbox-only-width: 56px;
     opacity: 0.5;
   }
 
-  // ── Menu icon — always brand-coloured ─────────────────────────
+  // ── Menu icon — default icon colour (turns brand on hover via ghost button) ─
   &__menu-icon {
-    color: var(--color-icon-brand);
+    color: var(--color-icon-default);
   }
 }

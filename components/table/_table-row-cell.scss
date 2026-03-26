@@ -23,6 +23,13 @@ $tier2-indent: 64px;
   background: transparent;
   transition: background 80ms ease;
 
+  // ── Checkbox-only column — fixed 56px, matches header cell ──────────────
+  &--checkbox-only {
+    width: 56px;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
   // ── Interactive states ────────────────────────────────────────
   &.is-hovered {
     background: var(--overlay-hovered);
