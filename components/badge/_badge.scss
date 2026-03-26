@@ -1,188 +1,37 @@
 // ============================================================
-// Onflo Design System — Badge / Tag / Chip Component
+// Onflo Design System — Badge (ds-badge-indicator)
 // ============================================================
 //
-// TWO distinct badge primitives in this file:
+// Notification indicator primitive — count circle or dot.
+// Two sizes (Figma: Large / Small):
 //
-// 1. Label badge (ds-badge) — inline status chip
-//    Usage: <span class="ds-badge ds-badge--filled ds-badge--brand">Label</span>
-//    Angular: <ds-badge variant="filled" color="brand">Label</ds-badge>
-//    Variants:  filled | subtle | outlined
-//    Colors:    default | brand | success | warning | error | info
-//    Sizes:     sm | md (default)
+//   Large (count):
+//     <span class="ds-badge-indicator" aria-hidden="true">3</span>
 //
-// 2. Notification indicator (ds-badge-indicator) — count/dot overlay
-//    Usage (count): <span class="ds-badge-indicator" aria-hidden="true">3</span>
-//    Usage (dot):   <span class="ds-badge-indicator ds-badge-indicator--dot" aria-hidden="true"></span>
-//    Angular: <ds-badge type="indicator" [count]="3" />
-//             <ds-badge type="indicator" [dot]="true" />
-//    Position: absolute — parent must have position: relative
-//    Wrap host: <div class="ds-badge-indicator__host">…</div>
-//    ADA: Set aria-label on the parent element (e.g. "Notifications, 3 unread")
-//         The indicator element itself is aria-hidden="true"
+//   Small (dot):
+//     <span class="ds-badge-indicator ds-badge-indicator--dot" aria-hidden="true"></span>
+//
+//   Angular:
+//     <ds-badge [count]="3" />
+//     <ds-badge [dot]="true" />
+//
+// Usage — overlay on icon button:
+//   <div class="ds-badge-indicator__host">
+//     <button class="ds-icon-button ..." aria-label="Notifications, 3 unread">...</button>
+//     <span class="ds-badge-indicator" aria-hidden="true">3</span>
+//   </div>
+//
+// Usage — inline in tab / nav:
+//   <button class="ds-tabs__tab" aria-label="Inbox, 5 new">
+//     Inbox&nbsp;<span class="ds-badge-indicator" aria-hidden="true">5</span>
+//   </button>
+//
+// ADA: indicator itself is aria-hidden="true".
+//      Announce count via aria-label on the parent element.
 // ============================================================
 
-.ds-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  border-radius: var(--radius-full);
-  border: 1px solid transparent;
-  font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-medium-size);
-  font-weight: var(--ref-typeface-weight-medium);
-  line-height: 1;
-  white-space: nowrap;
-  padding: 4px var(--spacing-sm);
-  vertical-align: middle;
 
-  // ── Sizes ──────────────────────────────────────────────────────────────────
-
-  &--sm {
-    font-size: var(--ref-typescale-label-small-size);
-    padding: 2px var(--spacing-xs);
-    gap: 2px;
-  }
-
-  // ── Dismiss button ────────────────────────────────────────────────────────
-
-  &__dismiss {
-    appearance: none;
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin-left: 2px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: inherit;
-    opacity: 0.7;
-    border-radius: var(--radius-full);
-    transition: opacity 0.1s ease;
-
-    &:hover { opacity: 1; }
-    &:focus { outline: none; }
-    &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
-  }
-
-
-  // ══ FILLED ══════════════════════════════════════════════════════════════════
-
-  &--filled {
-    &.ds-badge--default {
-      background: var(--color-surface-default);
-      color: var(--color-text-primary);
-      border-color: var(--color-border-subtle);
-    }
-
-    &.ds-badge--brand {
-      background: var(--color-surface-brand-bold);
-      color: var(--color-text-on-brand);
-    }
-
-    &.ds-badge--success {
-      background: var(--color-surface-accent-green-bold);
-      color: var(--color-text-on-bold);
-    }
-
-    &.ds-badge--warning {
-      background: var(--color-surface-accent-yellow-bold);
-      color: var(--color-text-primary);
-    }
-
-    &.ds-badge--error {
-      background: var(--color-surface-accent-red-bold);
-      color: var(--color-text-on-bold);
-    }
-
-    &.ds-badge--info {
-      background: var(--color-surface-accent-blue-bold);
-      color: var(--color-text-on-bold);
-    }
-  }
-
-
-  // ══ SUBTLE ══════════════════════════════════════════════════════════════════
-
-  &--subtle {
-    &.ds-badge--default {
-      background: var(--color-surface-default);
-      color: var(--color-text-secondary);
-    }
-
-    &.ds-badge--brand {
-      background: var(--color-surface-brand);
-      color: var(--color-text-brand);
-    }
-
-    &.ds-badge--success {
-      background: var(--color-surface-success);
-      color: var(--color-icon-success);
-    }
-
-    &.ds-badge--warning {
-      background: var(--color-surface-warning);
-      color: var(--color-icon-warning);
-    }
-
-    &.ds-badge--error {
-      background: var(--color-surface-error);
-      color: var(--color-text-error);
-    }
-
-    &.ds-badge--info {
-      background: var(--color-surface-info);
-      color: var(--color-icon-info);
-    }
-  }
-
-
-  // ══ OUTLINED ════════════════════════════════════════════════════════════════
-
-  &--outlined {
-    background: transparent;
-
-    &.ds-badge--default {
-      color: var(--color-text-secondary);
-      border-color: var(--color-border-secondary);
-    }
-
-    &.ds-badge--brand {
-      color: var(--color-text-brand);
-      border-color: var(--color-border-brand);
-    }
-
-    &.ds-badge--success {
-      color: var(--color-icon-success);
-      border-color: var(--color-border-accent-green);
-    }
-
-    &.ds-badge--warning {
-      color: var(--color-icon-warning);
-      border-color: var(--color-border-accent-yellow);
-    }
-
-    &.ds-badge--error {
-      color: var(--color-text-error);
-      border-color: var(--color-border-accent-red);
-    }
-
-    &.ds-badge--info {
-      color: var(--color-icon-info);
-      border-color: var(--color-border-accent-blue);
-    }
-  }
-}
-
-
-// ── Notification Indicator ────────────────────────────────────────────────────
-// Count/dot badge overlaid on icon buttons or placed inline in tabs.
-// Positioned absolutely — parent needs `position: relative`.
-// Use `.ds-badge-indicator__host` wrapper for convenience.
-//
-// ADA: The indicator is aria-hidden="true"; announce counts via aria-label
-// on the parent element (e.g. button[aria-label="Notifications, 3 unread"]).
+// ── Count indicator (Large) ───────────────────────────────────────────────────
 
 .ds-badge-indicator {
   display: inline-flex;
@@ -204,8 +53,9 @@
   white-space: nowrap;
   pointer-events: none;
   flex-shrink: 0;
+  vertical-align: middle;
 
-  // Small dot — no text, 6×6px
+  // ── Dot indicator (Small) ────────────────────────────────────────────────
   &--dot {
     width: 6px;
     height: 6px;
@@ -215,8 +65,11 @@
   }
 }
 
-// Convenience host wrapper — gives the parent position: relative so the
-// indicator can be positioned absolutely at the corner.
+
+// ── Overlay host wrapper ──────────────────────────────────────────────────────
+// Wraps an icon button (or other element) so the badge can be positioned
+// absolutely at the top-right corner. The host itself stays inline-flex.
+
 .ds-badge-indicator__host {
   position: relative;
   display: inline-flex;
