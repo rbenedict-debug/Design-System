@@ -1886,7 +1886,10 @@
     .ds-table-header-cell__sort-icon--none { color: var(--color-icon-subtle); opacity: 0.5; }
     .ds-table-header-cell__menu-icon { color: var(--color-icon-default); }
     .ds-table-row-cell--checkbox-only { width: 56px; flex-shrink: 0; padding: 0; }
-    .sim-row:hover .ds-table-row-cell { background: var(--overlay-hovered); }
+    /* Sim grid: cells fill their grid column; row hover applied via JS on data-row siblings */
+    #table-grid .ds-table-header-cell,
+    #table-grid .ds-table-row-cell { width: auto; }
+    #table-grid .sim-cell.is-hovered { background: var(--overlay-hovered); }
 
     /* ── TABLE ROW CELL  (ds-table-row-cell) ─────────────────────────────────── */
     .ds-table-row-cell { display: flex; align-items: center; height: 56px; width: 100%; padding: 0 16px; border-bottom: 1px solid var(--color-border-subtle); box-sizing: border-box; overflow: hidden; position: relative; background: transparent; transition: background 80ms ease; }
@@ -4174,7 +4177,7 @@
         <p class="section-desc">Full AG Grid table simulation — toolbar, header row, data rows, and paginator. Drag the resize handles on column headers to adjust widths.</p>
 
         <div class="demo-row" style="flex-direction: column; align-items: stretch; gap: 0;">
-          <div id="table-sim" style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden; --col-customer: 260px; --col-status: 140px; --col-amount: 130px;">
+          <div id="table-sim" style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden;">
 
             <!-- Toolbar -->
             <div class="ds-table-toolbar">
@@ -4205,141 +4208,97 @@
               </div>
             </div>
 
-            <!-- Scrollable table body -->
-            <div style="overflow-x: auto;">
-              <div style="min-width: 590px;">
+            <!-- Table grid: header + rows share one CSS grid so columns stay aligned -->
+            <div id="table-grid" style="display:grid; grid-template-columns: 56px 260px 140px 130px;">
 
-                <!-- Header row -->
-                <div style="display:flex;">
-                  <!-- Checkbox col — no resize handles -->
-                  <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
-                    <div class="ds-table-header-cell__content" style="justify-content:center;">
-                      <label class="ds-checkbox" aria-label="Select all rows">
-                        <input type="checkbox" class="ds-checkbox__control" id="chk-table-sim-all" />
-                        <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
-                      </label>
-                    </div>
-                  </div>
-                  <!-- Customer col -->
-                  <div class="ds-table-header-cell" style="width: var(--col-customer); flex-shrink: 0;">
-                    <div class="ds-table-header-cell__resize-handle"></div>
-                    <div class="ds-table-header-cell__content">
-                      <span class="ds-table-header-cell__label">Customer</span>
-                      <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sorted ascending">
-                        <span class="ds-icon ds-table-header-cell__sort-icon--asc">arrow_upward_alt</span>
-                      </button>
-                    </div>
-                    <div class="ds-table-header-cell__actions">
-                      <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Customer">
-                        <span class="ds-icon ds-icon--filled">filter_alt</span>
-                      </button>
-                      <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="customer">
-                        <span class="ds-table-header-cell__resize-bar"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Status col -->
-                  <div class="ds-table-header-cell" style="width: var(--col-status); flex-shrink: 0;">
-                    <div class="ds-table-header-cell__resize-handle"></div>
-                    <div class="ds-table-header-cell__content">
-                      <span class="ds-table-header-cell__label">Status</span>
-                    </div>
-                    <div class="ds-table-header-cell__actions">
-                      <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Status column options">
-                        <span class="ds-icon ds-table-header-cell__menu-icon">more_vert</span>
-                      </button>
-                      <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="status">
-                        <span class="ds-table-header-cell__resize-bar"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Amount col (right-aligned) -->
-                  <div class="ds-table-header-cell" style="width: var(--col-amount); flex-shrink: 0;">
-                    <div class="ds-table-header-cell__resize-handle"></div>
-                    <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
-                      <span class="ds-table-header-cell__label">Amount</span>
-                    </div>
-                    <div class="ds-table-header-cell__actions">
-                      <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="amount">
-                        <span class="ds-table-header-cell__resize-bar"></span>
-                      </div>
-                    </div>
-                  </div>
+              <!-- Header row -->
+              <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
+                <div class="ds-table-header-cell__content" style="justify-content:center;">
+                  <label class="ds-checkbox" aria-label="Select all rows">
+                    <input type="checkbox" class="ds-checkbox__control" id="chk-table-sim-all" />
+                    <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
+                  </label>
                 </div>
-
-                <!-- Row 1 -->
-                <div class="sim-row" style="display:flex;">
-                  <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
-                    <div class="ds-table-row-cell__content" style="justify-content:center;">
-                      <label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label>
-                    </div>
-                  </div>
-                  <div class="ds-table-row-cell" style="width: var(--col-customer); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Acme Corporation</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-status); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-amount); flex-shrink: 0;"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span></div></div>
-                </div>
-
-                <!-- Row 2 -->
-                <div class="sim-row" style="display:flex;">
-                  <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
-                    <div class="ds-table-row-cell__content" style="justify-content:center;">
-                      <label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label>
-                    </div>
-                  </div>
-                  <div class="ds-table-row-cell" style="width: var(--col-customer); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Bright Futures Ltd</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-status); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-amount); flex-shrink: 0;"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$8,450.00</span></div></div>
-                </div>
-
-                <!-- Row 3 -->
-                <div class="sim-row" style="display:flex;">
-                  <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
-                    <div class="ds-table-row-cell__content" style="justify-content:center;">
-                      <label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" checked /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label>
-                    </div>
-                  </div>
-                  <div class="ds-table-row-cell" style="width: var(--col-customer); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Cloud Systems Inc</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-status); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-amount); flex-shrink: 0;"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span></div></div>
-                </div>
-
-                <!-- Row 4 -->
-                <div class="sim-row" style="display:flex;">
-                  <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
-                    <div class="ds-table-row-cell__content" style="justify-content:center;">
-                      <label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label>
-                    </div>
-                  </div>
-                  <div class="ds-table-row-cell" style="width: var(--col-customer); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Delta Dynamics LLC</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-status); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Inactive</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-amount); flex-shrink: 0;"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$2,100.00</span></div></div>
-                </div>
-
-                <!-- Row 5 -->
-                <div class="sim-row" style="display:flex;">
-                  <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
-                    <div class="ds-table-row-cell__content" style="justify-content:center;">
-                      <label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label>
-                    </div>
-                  </div>
-                  <div class="ds-table-row-cell" style="width: var(--col-customer); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Echo Ventures Group</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-status); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-amount); flex-shrink: 0;"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$57,800.00</span></div></div>
-                </div>
-
-                <!-- Row 6 -->
-                <div class="sim-row" style="display:flex;">
-                  <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
-                    <div class="ds-table-row-cell__content" style="justify-content:center;">
-                      <label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label>
-                    </div>
-                  </div>
-                  <div class="ds-table-row-cell" style="width: var(--col-customer); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Frost & Partners</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-status); flex-shrink: 0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
-                  <div class="ds-table-row-cell" style="width: var(--col-amount); flex-shrink: 0;"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$4,975.00</span></div></div>
-                </div>
-
               </div>
+              <div class="ds-table-header-cell" data-col="customer">
+                <div class="ds-table-header-cell__resize-handle"></div>
+                <div class="ds-table-header-cell__content">
+                  <span class="ds-table-header-cell__label">Customer</span>
+                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sorted ascending">
+                    <span class="ds-icon ds-table-header-cell__sort-icon--asc">arrow_upward_alt</span>
+                  </button>
+                </div>
+                <div class="ds-table-header-cell__actions">
+                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Customer">
+                    <span class="ds-icon ds-icon--filled">filter_alt</span>
+                  </button>
+                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="customer">
+                    <span class="ds-table-header-cell__resize-bar"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="ds-table-header-cell" data-col="status">
+                <div class="ds-table-header-cell__resize-handle"></div>
+                <div class="ds-table-header-cell__content">
+                  <span class="ds-table-header-cell__label">Status</span>
+                </div>
+                <div class="ds-table-header-cell__actions">
+                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Status column options">
+                    <span class="ds-icon ds-table-header-cell__menu-icon">more_vert</span>
+                  </button>
+                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="status">
+                    <span class="ds-table-header-cell__resize-bar"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="ds-table-header-cell" data-col="amount">
+                <div class="ds-table-header-cell__resize-handle"></div>
+                <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
+                  <span class="ds-table-header-cell__label">Amount</span>
+                </div>
+                <div class="ds-table-header-cell__actions">
+                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="amount">
+                    <span class="ds-table-header-cell__resize-bar"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 1 -->
+              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="1"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Acme Corporation</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="1"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span></div></div>
+
+              <!-- Row 2 -->
+              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="2"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Bright Futures Ltd</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="2"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$8,450.00</span></div></div>
+
+              <!-- Row 3 -->
+              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="3"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" checked /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Cloud Systems Inc</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="3"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span></div></div>
+
+              <!-- Row 4 -->
+              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="4"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Delta Dynamics LLC</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Inactive</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="4"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$2,100.00</span></div></div>
+
+              <!-- Row 5 -->
+              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="5"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Echo Ventures Group</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="5"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$57,800.00</span></div></div>
+
+              <!-- Row 6 -->
+              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="6"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="6"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Frost &amp; Partners</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="6"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
+              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="6"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$4,975.00</span></div></div>
+
             </div>
 
             <!-- Paginator -->
@@ -5016,26 +4975,50 @@
   if (headerSome) headerSome.indeterminate = true;
 
   // Table sim — column resize via drag handles
+  // Updates grid-template-columns on #table-grid so header + all rows stay in sync
   document.querySelectorAll('[data-resize-col]').forEach(function(handle) {
     handle.addEventListener('mousedown', function(e) {
-      var colName = handle.getAttribute('data-resize-col');
-      var sim = document.getElementById('table-sim');
-      if (!sim) return;
+      var grid = document.getElementById('table-grid');
+      if (!grid) return;
       e.preventDefault();
+      var colName = handle.getAttribute('data-resize-col');
+      var headerCell = handle.closest('.ds-table-header-cell');
       var startX = e.clientX;
-      var startWidth = parseInt(getComputedStyle(sim).getPropertyValue('--col-' + colName)) || 200;
+      var startWidth = headerCell.offsetWidth;
 
       function onMove(e) {
         var newWidth = Math.max(60, startWidth + (e.clientX - startX));
-        sim.style.setProperty('--col-' + colName, newWidth + 'px');
+        // Read current columns, update the named one
+        var cols = getComputedStyle(grid).gridTemplateColumns.split(' ');
+        // Map col name to column index (0=checkbox,1=customer,2=status,3=amount)
+        var idx = {customer:1, status:2, amount:3}[colName];
+        if (idx !== undefined) {
+          cols[idx] = newWidth + 'px';
+          grid.style.gridTemplateColumns = cols.join(' ');
+        }
       }
       function onUp() {
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
-        handle.closest('.ds-table-header-cell__resize-handle').style.cursor = '';
       }
       document.addEventListener('mousemove', onMove);
       document.addEventListener('mouseup', onUp);
+    });
+  });
+
+  // Table sim — row hover: highlight all cells in the same row
+  document.querySelectorAll('.sim-cell').forEach(function(cell) {
+    cell.addEventListener('mouseenter', function() {
+      var row = cell.getAttribute('data-row');
+      document.querySelectorAll('.sim-cell[data-row="' + row + '"]').forEach(function(c) {
+        c.classList.add('is-hovered');
+      });
+    });
+    cell.addEventListener('mouseleave', function() {
+      var row = cell.getAttribute('data-row');
+      document.querySelectorAll('.sim-cell[data-row="' + row + '"]').forEach(function(c) {
+        c.classList.remove('is-hovered');
+      });
     });
   });
 </script>
