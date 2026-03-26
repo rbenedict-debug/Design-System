@@ -86,8 +86,9 @@ export class DsTableRowCellComponent implements OnDestroy {
   /** Visual interaction state — typically driven by AG Grid row events. */
   @Input() state: TableCellState = 'default';
 
-  @HostBinding('class.is-hovered') get isHovered() { return this.state === 'hover'; }
-  @HostBinding('class.is-focused') get isFocused() { return this.state === 'focus'; }
+  @HostBinding('class.is-hovered')  get isHovered()  { return this.state === 'hover'; }
+  @HostBinding('class.is-focused')  get isFocused()  { return this.state === 'focus'; }
+  @HostBinding('class.is-selected') get isSelected() { return this.checked; }
 
   private agParams?: AgCellRendererParams;
   private rowSelectedListener?: () => void;

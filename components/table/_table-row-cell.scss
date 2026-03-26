@@ -39,6 +39,10 @@ $tier2-indent: 64px;
     background: var(--overlay-focused);
   }
 
+  &.is-selected {
+    background: var(--overlay-selected);
+  }
+
   // ── Content slot ──────────────────────────────────────────────
   &__content {
     display: flex;

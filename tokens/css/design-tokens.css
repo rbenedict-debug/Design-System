@@ -119,6 +119,7 @@
   --overlay-pressed: var(--ref-overlay-pressed);
   --overlay-focused: var(--ref-overlay-focused);
   --overlay-dragged: var(--ref-overlay-dragged);
+  --overlay-selected: var(--ref-overlay-dragged);
   --overlay-accent-red-hovered: var(--ref-overlay-red-hover);
   --overlay-accent-red-pressed: var(--ref-overlay-red-pressed);
   --overlay-accent-red-focused: var(--ref-overlay-red-focused);
