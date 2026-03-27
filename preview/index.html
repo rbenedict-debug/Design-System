@@ -1955,7 +1955,7 @@
       right: 0;
       z-index: 2;
       background: var(--color-surface-subtle);
-      box-shadow: -2px 0 6px rgba(0, 0, 0, 0.08);
+      box-shadow: -2px 0 6px var(--shadow-elevation-1);
     }
     /* Row cells default to page white; selection state renders over it */
     .ds-table-row-cell.ds-table-pinned-right {
@@ -4771,9 +4771,6 @@
                       <div class="ds-table-header-cell__resize-handle"></div>
                       <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
                         <span class="ds-table-header-cell__label">Amount</span>
-                        <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sort Amount">
-                          <span class="ds-icon ds-table-header-cell__sort-icon--none">arrow_upward_alt</span>
-                        </button>
                       </div>
                       <div class="ds-table-header-cell__actions">
                         <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="amount">
@@ -4914,10 +4911,10 @@
                 </button>
               </div>
               <div class="ds-column-panel__list">
-                <!-- Checkbox: system column, OFF -->
+                <!-- Checkbox: system column, ON (locked visible) -->
                 <div class="ds-column-panel__row ds-column-panel__row--system">
                   <label class="ds-toggle" aria-label="Toggle Checkbox column visibility">
-                    <input type="checkbox" class="ds-toggle__control" />
+                    <input type="checkbox" class="ds-toggle__control" checked />
                     <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
                   </label>
                   <span class="ds-column-panel__name">Checkbox</span>
@@ -4962,10 +4959,10 @@
                   </label>
                   <span class="ds-column-panel__name">Amount</span>
                 </div>
-                <!-- Actions: system column, OFF -->
+                <!-- Actions: system column, ON (locked visible) -->
                 <div class="ds-column-panel__row ds-column-panel__row--system">
                   <label class="ds-toggle" aria-label="Toggle Actions column visibility">
-                    <input type="checkbox" class="ds-toggle__control" />
+                    <input type="checkbox" class="ds-toggle__control" checked />
                     <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
                   </label>
                   <span class="ds-column-panel__name">Actions</span>
