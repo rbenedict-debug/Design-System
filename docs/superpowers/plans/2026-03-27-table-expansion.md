@@ -152,7 +152,7 @@ Create `components/column-panel/_column-panel.scss` with this exact content:
     align-items: center;
     gap: var(--spacing-md);
     padding: var(--spacing-sm) var(--spacing-lg);
-    min-height: 44px;
+    min-height: 48px;
 
     // System columns (Checkbox, Actions) are non-configurable
     &--system {
@@ -359,7 +359,7 @@ In `preview/index.html`, find the second `<style>` block (the component CSS bloc
   align-items: center;
   gap: var(--spacing-md);
   padding: var(--spacing-sm) var(--spacing-lg);
-  min-height: 44px;
+  min-height: 48px;
 }
 .ds-column-panel__row--system {
   opacity: 0.5;
