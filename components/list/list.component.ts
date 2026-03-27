@@ -30,18 +30,26 @@
 
 import {
   Component,
+  Directive,
   Input,
   ContentChild,
-  ElementRef,
   AfterContentInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
 
+/** Marker directive — place on any projected leading-slot element: `<span leading class="ds-icon">` */
+@Directive({ selector: '[leading]', standalone: true })
+export class DsLeadingDirective {}
+
+/** Marker directive — place on any projected trailing-slot element: `<span trailing class="ds-icon ds-icon--sm">` */
+@Directive({ selector: '[trailing]', standalone: true })
+export class DsTrailingDirective {}
+
 @Component({
   selector: 'ds-list-item',
   standalone: true,
-  imports: [],
+  imports: [DsLeadingDirective, DsTrailingDirective],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,11 +60,16 @@ export class DsListItemComponent implements AfterContentInit {
   @Input() overline = '';
   @Input() interactive = false;
   @Input() disabled = false;
-  /** '1-line' | '2-lines' | '3-lines' */
+  /**
+   * '1-line' | '2-lines' | '3-lines'
+   * Note: '1-line' and '2-lines' produce the natural single/two-text layout with no
+   * CSS modifier. '3-lines' applies `.ds-list-item--3-lines` which clamps the secondary
+   * text to 2 lines via -webkit-line-clamp.
+   */
   @Input() variant: '1-line' | '2-lines' | '3-lines' = '1-line';
 
-  @ContentChild('[leading]', { static: false }) private _leadingRef?: ElementRef;
-  @ContentChild('[trailing]', { static: false }) private _trailingRef?: ElementRef;
+  @ContentChild(DsLeadingDirective) private _leadingRef?: DsLeadingDirective;
+  @ContentChild(DsTrailingDirective) private _trailingRef?: DsTrailingDirective;
 
   hasLeading = false;
   hasTrailing = false;
