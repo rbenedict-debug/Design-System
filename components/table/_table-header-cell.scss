@@ -30,6 +30,14 @@ $checkbox-only-width: 56px;
     }
   }
 
+  // ── Drag-in-progress state (column being dragged) ─────────────
+  &--dragging {
+    background: var(--overlay-hovered);
+    outline: 2px solid var(--color-border-brand);
+    outline-offset: -2px;
+    cursor: grabbing;
+  }
+
   // ── Resize handles ────────────────────────────────────────────
   &__resize-handle {
     display: flex;
