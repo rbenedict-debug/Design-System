@@ -4630,177 +4630,351 @@
       <!-- ── TABLE — FULL SIMULATION ─────────────────────────────────────────── -->
       <section class="section" id="table">
         <h2 class="section-title">Table</h2>
-        <p class="section-desc">Full AG Grid table simulation — toolbar, header row, data rows, and paginator. Drag the resize handles on column headers to adjust widths.</p>
+        <p class="section-desc">Full AG Grid reskin — toolbar, column group headers, sticky header, scrollable data rows with custom scrollbars, right-pinned actions column, row grouping by Status, totals bar, and column tool panel. The Email column header shows the drag-in-progress state with a drop zone indicator between Status and Amount.</p>
 
         <div class="demo-row" style="flex-direction: column; align-items: stretch; gap: 0;">
-          <div id="table-sim" style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden;">
+          <div id="table-sim" data-panel-open style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden; display: flex; width: 100%;">
 
-            <!-- Toolbar -->
-            <div class="ds-table-toolbar">
-              <div class="ds-table-toolbar__left">
-                <button class="ds-button ds-button--filled ds-button--leading-icon" type="button">
-                  <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">add</span></span>
-                  New Item
-                </button>
-                <button class="ds-button ds-button--outlined ds-button--trailing-icon" type="button">
-                  Bulk Actions
-                  <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon">arrow_drop_down</span></span>
-                </button>
-                <button class="ds-button ds-button--destructive ds-button--leading-icon" type="button">
-                  <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">delete</span></span>
-                  Delete
-                </button>
-              </div>
-              <div class="ds-table-toolbar__right">
-                <div class="ds-search" role="search">
-                  <div class="ds-search__field">
-                    <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
-                    <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
-                  </div>
-                </div>
-                <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Toggle filters" onclick="togglePressed(this)">
-                  <span class="ds-icon ds-icon--filled">filter_alt</span>
-                </button>
-                <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Column settings" onclick="togglePressed(this)">
-                  <span class="ds-icon ds-icon--filled">settings</span>
-                </button>
-                <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Download">
-                  <span class="ds-icon">download</span>
-                </button>
-              </div>
-            </div>
+            <!-- ── Main content area ──────────────────────────────────────────── -->
+            <div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column;">
 
-            <!-- Table grid: header + rows share one CSS grid so columns stay aligned -->
-            <div id="table-grid" style="display:grid; grid-template-columns: 56px 1fr 140px 130px;">
-
-              <!-- Header row -->
-              <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
-                <div class="ds-table-header-cell__content" style="justify-content:center;">
-                  <label class="ds-checkbox" aria-label="Select all rows">
-                    <input type="checkbox" class="ds-checkbox__control" id="chk-table-sim-all" />
-                    <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
-                  </label>
-                </div>
-              </div>
-              <div class="ds-table-header-cell" data-col="customer">
-                <div class="ds-table-header-cell__resize-handle"></div>
-                <div class="ds-table-header-cell__content">
-                  <span class="ds-table-header-cell__label">Customer</span>
-                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sorted ascending">
-                    <span class="ds-icon ds-table-header-cell__sort-icon--asc">arrow_upward_alt</span>
+              <!-- Toolbar — settings is-selected (panel is open) -->
+              <div class="ds-table-toolbar">
+                <div class="ds-table-toolbar__left">
+                  <button class="ds-button ds-button--filled ds-button--leading-icon" type="button">
+                    <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">add</span></span>
+                    New Item
+                  </button>
+                  <button class="ds-button ds-button--outlined ds-button--trailing-icon" type="button">
+                    Bulk Actions
+                    <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon">arrow_drop_down</span></span>
+                  </button>
+                  <button class="ds-button ds-button--destructive ds-button--leading-icon" type="button">
+                    <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">delete</span></span>
+                    Delete
                   </button>
                 </div>
-                <div class="ds-table-header-cell__actions">
-                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Customer">
+                <div class="ds-table-toolbar__right">
+                  <div class="ds-search" role="search">
+                    <div class="ds-search__field">
+                      <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                      <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
+                    </div>
+                  </div>
+                  <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Toggle filters" onclick="togglePressed(this)">
                     <span class="ds-icon ds-icon--filled">filter_alt</span>
                   </button>
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="customer">
-                    <span class="ds-table-header-cell__resize-bar"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="ds-table-header-cell" data-col="status">
-                <div class="ds-table-header-cell__resize-handle"></div>
-                <div class="ds-table-header-cell__content">
-                  <span class="ds-table-header-cell__label">Status</span>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Status column options">
-                    <span class="ds-icon ds-table-header-cell__menu-icon">more_vert</span>
+                  <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined is-selected" type="button" aria-pressed="true" aria-label="Column settings" onclick="togglePressed(this)">
+                    <span class="ds-icon ds-icon--filled">settings</span>
                   </button>
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="status">
-                    <span class="ds-table-header-cell__resize-bar"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="ds-table-header-cell" data-col="amount">
-                <div class="ds-table-header-cell__resize-handle"></div>
-                <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
-                  <span class="ds-table-header-cell__label">Amount</span>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="amount">
-                    <span class="ds-table-header-cell__resize-bar"></span>
-                  </div>
+                  <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Download">
+                    <span class="ds-icon">download</span>
+                  </button>
                 </div>
               </div>
 
-              <!-- Row 1 -->
-              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="1"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Acme Corporation</span></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="1"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span></div></div>
+              <!-- Scroll container: column group headers + header row + data rows -->
+              <div id="table-scroll">
+                <div style="min-width: 1006px; position: relative;">
 
-              <!-- Row 2 -->
-              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="2"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Bright Futures Ltd</span></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="2"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$8,450.00</span></div></div>
-
-              <!-- Row 3 -->
-              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell is-selected" data-row="3"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" checked /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-              <div class="ds-table-row-cell sim-cell is-selected" data-col="customer" data-row="3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Cloud Systems Inc</span></div></div>
-              <div class="ds-table-row-cell sim-cell is-selected" data-col="status" data-row="3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-              <div class="ds-table-row-cell sim-cell is-selected" data-col="amount" data-row="3"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span></div></div>
-
-              <!-- Row 4 -->
-              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="4"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Delta Dynamics LLC</span></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Inactive</span></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="4"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$2,100.00</span></div></div>
-
-              <!-- Row 5 -->
-              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="5"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Echo Ventures Group</span></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="5"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$57,800.00</span></div></div>
-
-              <!-- Row 6 -->
-              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="6"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="6"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Frost &amp; Partners</span></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="status" data-row="6"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
-              <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="6"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$4,975.00</span></div></div>
-
-            </div>
-
-            <!-- Paginator -->
-            <div class="ds-ag-paginator" style="width:100%; border-top: 1px solid var(--color-border-subtle);">
-              <div class="ds-ag-paginator__inner">
-                <div class="ds-ag-paginator__counter">
-                  <span class="ds-ag-paginator__label">Items per page:</span>
-                  <div class="ds-ag-paginator__select-wrap">
-                    <select class="ds-ag-paginator__select" aria-label="Items per page">
-                      <option selected>100</option>
-                      <option>250</option>
-                      <option>500</option>
-                      <option>1000</option>
-                    </select>
-                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  <!-- Column group header row (sticky top: 0, z-index: 4) -->
+                  <!-- Grid: 56px 200px 220px [300px=dept+status] 130px 100px -->
+                  <div style="display: grid; grid-template-columns: 56px 200px 220px 300px 130px 100px; position: sticky; top: 0; z-index: 4; background: var(--color-surface-subtle); border-bottom: 1px solid var(--color-border-secondary);">
+                    <div style="height: 28px;"></div><!-- checkbox: blank -->
+                    <div style="height: 28px;"></div><!-- customer: blank -->
+                    <div style="height: 28px;"></div><!-- email: blank -->
+                    <div class="ds-table-col-group-header"><!-- Organization group -->
+                      <span class="ds-table-col-group-header__label">Organization</span>
+                    </div>
+                    <div style="height: 28px;"></div><!-- amount: blank -->
+                    <div class="ds-table-pinned-right" style="height: 28px;"></div><!-- actions: blank, pinned -->
                   </div>
+
+                  <!-- Normal header row (sticky top: 28px, z-index: 3) -->
+                  <!-- Grid: 56px 200px 220px 160px 140px 130px 100px = 1006px -->
+                  <div style="display: grid; grid-template-columns: 56px 200px 220px 160px 140px 130px 100px; position: sticky; top: 28px; z-index: 3;">
+
+                    <!-- Col 1: Checkbox header -->
+                    <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
+                      <div class="ds-table-header-cell__content" style="justify-content: center;">
+                        <label class="ds-checkbox" aria-label="Select all rows">
+                          <input type="checkbox" class="ds-checkbox__control" />
+                          <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <!-- Col 2: Customer (sorted ascending) -->
+                    <div class="ds-table-header-cell" data-col="customer">
+                      <div class="ds-table-header-cell__resize-handle"></div>
+                      <div class="ds-table-header-cell__content">
+                        <span class="ds-table-header-cell__label">Customer</span>
+                        <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sorted ascending">
+                          <span class="ds-icon ds-table-header-cell__sort-icon--asc">arrow_upward_alt</span>
+                        </button>
+                      </div>
+                      <div class="ds-table-header-cell__actions">
+                        <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Customer">
+                          <span class="ds-icon ds-icon--filled">filter_alt</span>
+                        </button>
+                        <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="customer">
+                          <span class="ds-table-header-cell__resize-bar"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 3: Email (drag-in-progress state) -->
+                    <div class="ds-table-header-cell ds-table-header-cell--dragging" data-col="email">
+                      <div class="ds-table-header-cell__resize-handle"></div>
+                      <div class="ds-table-header-cell__content">
+                        <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); flex-shrink: 0;">drag_indicator</span>
+                        <span class="ds-table-header-cell__label">Email</span>
+                      </div>
+                      <div class="ds-table-header-cell__actions">
+                        <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing" data-resize-col="email">
+                          <span class="ds-table-header-cell__resize-bar"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 4: Department (in Organization group) -->
+                    <div class="ds-table-header-cell" data-col="department">
+                      <div class="ds-table-header-cell__resize-handle"></div>
+                      <div class="ds-table-header-cell__content">
+                        <span class="ds-table-header-cell__label">Department</span>
+                      </div>
+                      <div class="ds-table-header-cell__actions">
+                        <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="department">
+                          <span class="ds-table-header-cell__resize-bar"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 5: Status (in Organization group, filterable) -->
+                    <div class="ds-table-header-cell" data-col="status">
+                      <div class="ds-table-header-cell__resize-handle"></div>
+                      <div class="ds-table-header-cell__content">
+                        <span class="ds-table-header-cell__label">Status</span>
+                      </div>
+                      <div class="ds-table-header-cell__actions">
+                        <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Status">
+                          <span class="ds-icon ds-icon--filled">filter_alt</span>
+                        </button>
+                        <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="status">
+                          <span class="ds-table-header-cell__resize-bar"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 6: Amount (right-aligned, sortable but unsorted) -->
+                    <div class="ds-table-header-cell" data-col="amount">
+                      <div class="ds-table-header-cell__resize-handle"></div>
+                      <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
+                        <span class="ds-table-header-cell__label">Amount</span>
+                        <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sort Amount">
+                          <span class="ds-icon ds-table-header-cell__sort-icon--none">arrow_upward_alt</span>
+                        </button>
+                      </div>
+                      <div class="ds-table-header-cell__actions">
+                        <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="amount">
+                          <span class="ds-table-header-cell__resize-bar"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Col 7: Actions (pinned right, no resize) -->
+                    <div class="ds-table-header-cell ds-table-pinned-right" data-col="actions">
+                      <div class="ds-table-header-cell__content" style="justify-content: center;">
+                        <span class="ds-table-header-cell__label">Actions</span>
+                      </div>
+                    </div>
+
+                  </div><!-- /header row -->
+
+                  <!-- Data rows (7-column grid, same template as header) -->
+                  <div style="display: grid; grid-template-columns: 56px 200px 220px 160px 140px 130px 100px; position: relative;">
+
+                    <!-- Drop zone indicator: between Status (ends at 776px) and Amount -->
+                    <div class="ds-table-drop-zone" style="left: 776px;"></div>
+
+                    <!-- ── Active group header (expanded) ──────────────────── -->
+                    <div style="grid-column: 1 / -1;">
+                      <div class="ds-table-group-row">
+                        <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-default);">keyboard_arrow_down</span>
+                        <span class="ds-table-group-row__label">Active <span class="ds-table-group-row__count">(4)</span></span>
+                      </div>
+                    </div>
+
+                    <!-- Active Row 1: Acme Corporation -->
+                    <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="a1"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Acme Corporation"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="a1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__indent--tier1"></span><span class="ds-table-row-cell__data">Acme Corporation</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="email" data-row="a1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">info@acmecorp.com</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="department" data-row="a1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="status" data-row="a1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="a1"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span></div></div>
+                    <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-col="actions" data-row="a1"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Acme Corporation"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Acme Corporation"><span class="ds-icon">delete</span></button></div></div>
+
+                    <!-- Active Row 2: Cloud Systems Inc (selected) -->
+                    <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell is-selected" data-row="a2"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Cloud Systems Inc"><input type="checkbox" class="ds-checkbox__control" checked /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                    <div class="ds-table-row-cell sim-cell is-selected" data-col="customer" data-row="a2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__indent--tier1"></span><span class="ds-table-row-cell__data">Cloud Systems Inc</span></div></div>
+                    <div class="ds-table-row-cell sim-cell is-selected" data-col="email" data-row="a2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">hello@cloudsys.io</span></div></div>
+                    <div class="ds-table-row-cell sim-cell is-selected" data-col="department" data-row="a2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Product</span></div></div>
+                    <div class="ds-table-row-cell sim-cell is-selected" data-col="status" data-row="a2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                    <div class="ds-table-row-cell sim-cell is-selected" data-col="amount" data-row="a2"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span></div></div>
+                    <div class="ds-table-row-cell ds-table-pinned-right sim-cell is-selected" data-col="actions" data-row="a2"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Cloud Systems Inc"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Cloud Systems Inc"><span class="ds-icon">delete</span></button></div></div>
+
+                    <!-- Active Row 3: Echo Ventures Group -->
+                    <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="a3"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Echo Ventures Group"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="a3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__indent--tier1"></span><span class="ds-table-row-cell__data">Echo Ventures Group</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="email" data-row="a3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">team@echoventures.co</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="department" data-row="a3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="status" data-row="a3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="a3"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$57,800.00</span></div></div>
+                    <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-col="actions" data-row="a3"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Echo Ventures Group"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Echo Ventures Group"><span class="ds-icon">delete</span></button></div></div>
+
+                    <!-- Active Row 4: Frontier Corp -->
+                    <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="a4"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Frontier Corp"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="a4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__indent--tier1"></span><span class="ds-table-row-cell__data">Frontier Corp</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="email" data-row="a4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">contact@frontierco.com</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="department" data-row="a4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="status" data-row="a4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                    <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="a4"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$22,400.00</span></div></div>
+                    <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-col="actions" data-row="a4"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Frontier Corp"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Frontier Corp"><span class="ds-icon">delete</span></button></div></div>
+
+                    <!-- ── Pending group header (collapsed — no child rows) ──── -->
+                    <div style="grid-column: 1 / -1;">
+                      <div class="ds-table-group-row">
+                        <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-default);">keyboard_arrow_right</span>
+                        <span class="ds-table-group-row__label">Pending <span class="ds-table-group-row__count">(2)</span></span>
+                      </div>
+                    </div>
+                    <!-- No child rows: Pending group is collapsed -->
+
+                  </div><!-- /data rows grid -->
+
+                </div><!-- /min-width wrapper -->
+              </div><!-- /table-scroll -->
+
+              <!-- Totals bar — pinned above paginator, does not scroll vertically -->
+              <div class="ds-table-totals-bar">
+                <div style="display: grid; grid-template-columns: 56px 200px 220px 160px 140px 130px 100px; min-width: 1006px;">
+                  <div class="ds-table-row-cell ds-table-row-cell--totals ds-table-row-cell--checkbox-only"></div>
+                  <div class="ds-table-row-cell ds-table-row-cell--totals"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data" style="font-weight: var(--ref-typeface-weight-bold);">Totals</span></div></div>
+                  <div class="ds-table-row-cell ds-table-row-cell--totals"></div><!-- email -->
+                  <div class="ds-table-row-cell ds-table-row-cell--totals"></div><!-- department -->
+                  <div class="ds-table-row-cell ds-table-row-cell--totals"></div><!-- status -->
+                  <div class="ds-table-row-cell ds-table-row-cell--totals"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$125,400.00</span></div></div>
+                  <div class="ds-table-row-cell ds-table-row-cell--totals ds-table-pinned-right"></div><!-- actions pinned -->
                 </div>
-                <div class="ds-ag-paginator__pagination">
-                  <span class="ds-ag-paginator__range" aria-live="polite">1 - 100 of 3842</span>
-                  <div class="ds-ag-paginator__nav">
-                    <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="First page" disabled>
-                      <span class="ds-icon">first_page</span>
-                    </button>
-                    <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Previous page" disabled>
-                      <span class="ds-icon">keyboard_arrow_left</span>
-                    </button>
-                    <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Next page">
-                      <span class="ds-icon">keyboard_arrow_right</span>
-                    </button>
-                    <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Last page">
-                      <span class="ds-icon">last_page</span>
-                    </button>
+              </div>
+
+              <!-- Paginator -->
+              <div class="ds-ag-paginator" style="width: 100%; border-top: 1px solid var(--color-border-subtle);">
+                <div class="ds-ag-paginator__inner">
+                  <div class="ds-ag-paginator__counter">
+                    <span class="ds-ag-paginator__label">Items per page:</span>
+                    <div class="ds-ag-paginator__select-wrap">
+                      <select class="ds-ag-paginator__select" aria-label="Items per page">
+                        <option selected>100</option>
+                        <option>250</option>
+                        <option>500</option>
+                        <option>1000</option>
+                      </select>
+                      <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                    </div>
+                  </div>
+                  <div class="ds-ag-paginator__pagination">
+                    <span class="ds-ag-paginator__range" aria-live="polite">1 - 100 of 3842</span>
+                    <div class="ds-ag-paginator__nav">
+                      <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="First page" disabled>
+                        <span class="ds-icon">first_page</span>
+                      </button>
+                      <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Previous page" disabled>
+                        <span class="ds-icon">keyboard_arrow_left</span>
+                      </button>
+                      <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Next page">
+                        <span class="ds-icon">keyboard_arrow_right</span>
+                      </button>
+                      <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Last page">
+                        <span class="ds-icon">last_page</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-          </div>
-        </div>
+            </div><!-- /main content area -->
 
+            <!-- ── Column tool panel ──────────────────────────────────────────── -->
+            <div class="ds-column-panel">
+              <div class="ds-column-panel__header">
+                <span class="ds-column-panel__title">Columns</span>
+                <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Close columns panel">
+                  <span class="ds-icon">close</span>
+                </button>
+              </div>
+              <div class="ds-column-panel__list">
+                <!-- Checkbox: system column, OFF -->
+                <div class="ds-column-panel__row ds-column-panel__row--system">
+                  <label class="ds-toggle" aria-label="Toggle Checkbox column visibility">
+                    <input type="checkbox" class="ds-toggle__control" />
+                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                  </label>
+                  <span class="ds-column-panel__name">Checkbox</span>
+                </div>
+                <!-- Customer: ON -->
+                <div class="ds-column-panel__row">
+                  <label class="ds-toggle" aria-label="Toggle Customer column visibility">
+                    <input type="checkbox" class="ds-toggle__control" checked />
+                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                  </label>
+                  <span class="ds-column-panel__name">Customer</span>
+                </div>
+                <!-- Email: ON -->
+                <div class="ds-column-panel__row">
+                  <label class="ds-toggle" aria-label="Toggle Email column visibility">
+                    <input type="checkbox" class="ds-toggle__control" checked />
+                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                  </label>
+                  <span class="ds-column-panel__name">Email</span>
+                </div>
+                <!-- Department: ON -->
+                <div class="ds-column-panel__row">
+                  <label class="ds-toggle" aria-label="Toggle Department column visibility">
+                    <input type="checkbox" class="ds-toggle__control" checked />
+                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                  </label>
+                  <span class="ds-column-panel__name">Department</span>
+                </div>
+                <!-- Status: ON -->
+                <div class="ds-column-panel__row">
+                  <label class="ds-toggle" aria-label="Toggle Status column visibility">
+                    <input type="checkbox" class="ds-toggle__control" checked />
+                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                  </label>
+                  <span class="ds-column-panel__name">Status</span>
+                </div>
+                <!-- Amount: ON -->
+                <div class="ds-column-panel__row">
+                  <label class="ds-toggle" aria-label="Toggle Amount column visibility">
+                    <input type="checkbox" class="ds-toggle__control" checked />
+                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                  </label>
+                  <span class="ds-column-panel__name">Amount</span>
+                </div>
+                <!-- Actions: system column, OFF -->
+                <div class="ds-column-panel__row ds-column-panel__row--system">
+                  <label class="ds-toggle" aria-label="Toggle Actions column visibility">
+                    <input type="checkbox" class="ds-toggle__control" />
+                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                  </label>
+                  <span class="ds-column-panel__name">Actions</span>
+                </div>
+              </div>
+            </div><!-- /column-panel -->
+
+          </div><!-- /table-sim -->
+        </div><!-- /demo-row -->
       </section>
 
       <!-- ── TABLE HEADER CELL ────────────────────────────────────────────────── -->
