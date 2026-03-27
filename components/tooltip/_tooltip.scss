@@ -36,7 +36,7 @@
 
   .mdc-tooltip__surface {
     border-radius: var(--radius-sm) !important;
-    max-width: 200px !important;
+    max-width: 300px !important;
     min-height: 24px !important;
     padding: var(--spacing-xs) var(--spacing-sm) !important;
     text-align: left;
@@ -76,8 +76,9 @@
   letter-spacing: var(--ref-typescale-body-small-tracking);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
+  width: max-content;
   min-height: 24px;
-  max-width: 200px;
+  max-width: 300px;
   white-space: normal;
   text-align: left;
   pointer-events: none;

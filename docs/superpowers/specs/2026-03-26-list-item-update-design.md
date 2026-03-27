@@ -73,7 +73,7 @@ preview/index.html                     ← update #list section demos
 
   &:hover:not(.is-disabled)  { background: var(--overlay-hovered); }
   &:focus                    { outline: none; }
-  &:focus-visible            { box-shadow: inset 0 0 0 3px var(--color-border-ada-focus-ring); }
+  &:focus-visible            { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
   &:active:not(.is-disabled) { background: var(--overlay-pressed); }
 }
 ```
@@ -100,13 +100,12 @@ preview/index.html                     ← update #list section demos
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 24px;
+  // No fixed width — content determines size.
+  // .ds-icon defaults to 24px (via ds-icon class); ds-checkbox touch target is self-sized (42px).
 
-  // Color icons but not checkboxes
+  // Apply color and variation settings to icon-only children.
+  // Do NOT set font-size/width/height — let .ds-icon class own its sizing.
   > .ds-icon {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
     color: var(--color-icon-default);
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   }
@@ -122,10 +121,8 @@ preview/index.html                     ← update #list section demos
   flex-shrink: 0;
   margin-left: auto;
 
+  // Do NOT set font-size/width/height — let .ds-icon / .ds-icon--sm own sizing.
   > .ds-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
     color: var(--color-icon-subtle);
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   }
@@ -139,7 +136,6 @@ preview/index.html                     ← update #list section demos
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 1px;
 }
 
 .ds-list-item__overline {
@@ -148,7 +144,7 @@ preview/index.html                     ← update #list section demos
   font-weight: var(--ref-typeface-weight-medium);
   line-height: var(--ref-typescale-label-small-line-height);
   color: var(--color-text-secondary);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ref-typescale-label-small-tracking, 0.06em); // token if defined, fallback em value
   text-transform: uppercase;
 }
 
@@ -199,6 +195,34 @@ preview/index.html                     ← update #list section demos
 
 **Removed inputs:** `icon`, `trailingIcon`, `trailingMeta`
 
+**Content slot guards** — use `@ContentChild` with `{static: false}` and set boolean flags in `ngAfterContentInit`. Because the component uses `ChangeDetectionStrategy.OnPush`, call `this.cdr.markForCheck()` after setting the flags so the `@if` guards in the template update:
+
+```ts
+import { Component, ContentChild, ElementRef, ChangeDetectorRef,
+         AfterContentInit, ChangeDetectionStrategy, Input } from '@angular/core';
+
+export class DsListItemComponent implements AfterContentInit {
+  // ... @Input() properties ...
+
+  @ContentChild('[leading]', { static: false }) private _leadingRef?: ElementRef;
+  @ContentChild('[trailing]', { static: false }) private _trailingRef?: ElementRef;
+  hasLeading = false;
+  hasTrailing = false;
+
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  ngAfterContentInit(): void {
+    this.hasLeading = !!this._leadingRef;
+    this.hasTrailing = !!this._trailingRef;
+    this.cdr.markForCheck();
+  }
+}
+```
+
+`CommonModule` import is no longer needed — `@if` is a built-in Angular 17+ control flow directive requiring no import.
+
+Use `hasLeading` / `hasTrailing` in the template to conditionally render the wrapper divs.
+
 ### DsListComponent
 Unchanged — wrapper `<ul class="ds-list">` with `ng-content`.
 
@@ -216,22 +240,30 @@ Unchanged — wrapper `<ul class="ds-list">` with `ng-content`.
   [attr.tabindex]="interactive ? 0 : null"
   [attr.aria-disabled]="disabled || null"
 >
-  <div class="ds-list-item__leading">
-    <ng-content select="[leading]" />
-  </div>
+  @if (hasLeading) {
+    <div class="ds-list-item__leading">
+      <ng-content select="[leading]" />
+    </div>
+  }
   <div class="ds-list-item__content">
-    <span *ngIf="overline" class="ds-list-item__overline">{{ overline }}</span>
+    @if (overline) {
+      <span class="ds-list-item__overline">{{ overline }}</span>
+    }
     <span class="ds-list-item__primary">{{ primary }}</span>
-    <span *ngIf="secondary" class="ds-list-item__secondary">{{ secondary }}</span>
+    @if (secondary) {
+      <span class="ds-list-item__secondary">{{ secondary }}</span>
+    }
   </div>
-  <div class="ds-list-item__trailing">
-    <ng-content select="[trailing]" />
-  </div>
+  @if (hasTrailing) {
+    <div class="ds-list-item__trailing">
+      <ng-content select="[trailing]" />
+    </div>
+  }
   <ng-content />
 </li>
 ```
 
-**Note:** `__leading` and `__trailing` wrappers are always rendered. When no content is projected, they collapse to 0×0 because they have no intrinsic content. Consider using `@ContentChild` checks in the component to conditionally render the wrapper divs only when content is present (avoids phantom gap). This is a refinement that can be done in implementation.
+`@if` built-in control flow (Angular 17+) — no `CommonModule` / `NgIf` import needed. `hasLeading` / `hasTrailing` are boolean properties set in `ngAfterContentInit` from `@ContentChild` queries.
 
 ---
 
@@ -248,7 +280,9 @@ Update (or add) the `#list` section. Demos to show:
 | Disabled | `.is-disabled` on a 2-line item with leading icon |
 | Text only | No leading/trailing, primary text only |
 
-**Trailing slot** is not featured in preview (lower use case per design decision).
+**Trailing slot** is not featured in Angular demo rows (lower use case per design decision). One HTML class API row that uses a trailing icon is included to fulfill the CSS class API requirement.
+
+Each section includes one plain HTML class API row per CLAUDE.md convention.
 
 ---
 
@@ -287,10 +321,18 @@ Update (or add) the `#list` section. Demos to show:
 
 ## ADA Notes
 
-- Interactive items: `tabindex="0"`, keyboard operable, `:focus-visible` ring (`inset 0 0 0 3px var(--color-border-ada-focus-ring)`)
+- Interactive items: `tabindex="0"`, keyboard operable, `:focus-visible` ring (`0 0 0 3px var(--color-border-ada-focus-ring)` — outset, consistent with all other components)
 - Disabled: `aria-disabled="true"` + `pointer-events: none`
 - Checkbox in leading slot: caller is responsible for `aria-label` on the checkbox (as per `ds-checkbox` spec)
 - No `role="list"` / `role="listitem"` changes needed — already present
+
+---
+
+## Implementation Notes
+
+- `--color-icon-subtle` — already referenced in the existing `_list.scss`; treat as valid.
+- `transition: background 0.12s ease` — hardcoded duration; accepted codebase-wide pattern (same in menu, hover-card, etc.).
+- `MatListModule` — the current `list.component.ts` does not import it; `CommonModule` import should also be removed since `@if` needs no import.
 
 ---
 
