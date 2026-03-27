@@ -1,0 +1,66 @@
+// Onflo Design System — Column Tool Panel
+// AG Grid reskinned column visibility panel
+// Shown as a flex sibling of the main grid when data-panel-open is present on #table-sim
+
+.ds-column-panel {
+  display: none; // revealed by #table-sim[data-panel-open]
+  flex-direction: column;
+  width: 260px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-page);
+
+  // ── Header: "Columns" title + close button ─────────────────────
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border-subtle);
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-family: var(--ref-typescale-label-large-font);
+    font-size: var(--ref-typescale-label-large-size);
+    font-weight: var(--ref-typescale-label-large-weight-prominent);
+    line-height: var(--ref-typescale-label-large-line-height);
+    color: var(--color-text-primary);
+  }
+
+  // ── Scrollable column list ──────────────────────────────────────
+  &__list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    flex: 1 0 0;
+  }
+
+  // ── Single toggle row ───────────────────────────────────────────
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    min-height: 44px;
+
+    // System columns (Checkbox, Actions) are non-configurable
+    &--system {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  &__name {
+    font-family: var(--ref-typescale-body-medium-font);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typescale-body-medium-weight);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    color: var(--color-text-primary);
+  }
+}
+
+// Production toggle mechanism (reference for Angular integration)
+#table-sim[data-panel-open] .ds-column-panel {
+  display: flex;
+}
