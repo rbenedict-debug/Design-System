@@ -2,43 +2,78 @@
  * ds-list / ds-list-item
  *
  * Based on Angular Material mat-list / mat-list-item.
- * Import MatListModule in your Angular module.
+ *
+ * Leading and trailing slots accept any projected content via attribute selectors:
+ *   [leading]  — leading icon, checkbox, avatar, etc.
+ *   [trailing] — trailing icon, chevron, etc.
  *
  * @example
+ * <!-- Icon leading (nav / interactive list) -->
  * <ds-list>
- *   <ds-list-item primary="Alice Johnson" secondary="alice@company.com" icon="person" />
- *   <ds-list-item primary="Settings" icon="settings" [interactive]="true" (click)="navigate()" />
+ *   <ds-list-item primary="Settings" [interactive]="true">
+ *     <span leading class="ds-icon">settings</span>
+ *   </ds-list-item>
+ * </ds-list>
+ *
+ * <!-- Checkbox leading (selection list) -->
+ * <ds-list>
+ *   <ds-list-item overline="Team" primary="Alice Johnson" secondary="alice@co.com" variant="3-lines">
+ *     <ds-checkbox leading aria-label="Select Alice Johnson" />
+ *   </ds-list-item>
+ * </ds-list>
+ *
+ * <!-- Text only -->
+ * <ds-list>
+ *   <ds-list-item primary="Simple item" />
  * </ds-list>
  */
 
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Input,
+  ContentChild,
+  ElementRef,
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 
 @Component({
   selector: 'ds-list-item',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DsListItemComponent {
+export class DsListItemComponent implements AfterContentInit {
   @Input() primary = '';
   @Input() secondary = '';
   @Input() overline = '';
-  @Input() icon?: string;
-  @Input() trailingIcon?: string;
-  @Input() trailingMeta = '';
   @Input() interactive = false;
   @Input() disabled = false;
   /** '1-line' | '2-lines' | '3-lines' */
   @Input() variant: '1-line' | '2-lines' | '3-lines' = '1-line';
+
+  @ContentChild('[leading]', { static: false }) private _leadingRef?: ElementRef;
+  @ContentChild('[trailing]', { static: false }) private _trailingRef?: ElementRef;
+
+  hasLeading = false;
+  hasTrailing = false;
+
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  ngAfterContentInit(): void {
+    this.hasLeading = !!this._leadingRef;
+    this.hasTrailing = !!this._trailingRef;
+    this.cdr.markForCheck();
+  }
 }
 
 @Component({
   selector: 'ds-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `<ul class="ds-list" role="list"><ng-content /></ul>`,
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

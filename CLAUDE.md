@@ -241,7 +241,7 @@ components/{name}/
   - **Large (count)**: `min-width: 20px; height: 20px` — red circle with white number. Label Small typography (12px), bold weight (600).
   - **Small (dot)**: add `ds-badge-indicator--dot` — 6×6px solid red circle, no text.
 - **Color**: always `--color-surface-accent-red-bold` bg + `--color-text-on-bold` text. Not themeable.
-- **Overlay mode** (on icon buttons): wrap host + button in `<div class="ds-badge-indicator__host">` — host gets `position: relative`; badge is centered on the button's top-right corner: count badge `top: -10px; right: -10px`, dot badge `top: -3px; right: -3px`
+- **Overlay mode** (on icon buttons): wrap host + button in `<div class="ds-badge-indicator__host">` — host gets `position: relative`; badge is centered on the button's top-right corner: count badge `top: -4px; right: -4px`, dot badge `top: -1px; right: -1px`
 - **Badge size pairing**: MD button (42px) → Large count badge only. SM button (32px) → Small dot badge only.
 - **Inline mode** (in tabs / nav): place `ds-badge-indicator` directly inside the tab `<button>` after the label text (no host wrapper needed — stays `inline-flex`)
 - **ADA**: element is always `aria-hidden="true"`; count/dot must be announced via `aria-label` on the parent button (e.g. `aria-label="Activity, 3 new"`)
@@ -268,7 +268,7 @@ components/{name}/
 - **Padding**: `var(--spacing-xs) var(--spacing-sm)` = 4px 8px
 - **Border radius**: `var(--radius-sm)`
 - **Min height**: 24px
-- **Max width**: 200px (multi-line wraps at this width)
+- **Max width**: 300px (multi-line wraps at this width)
 - **Positions**: `above` (default) | `below` | `left` | `right` — values match Angular Material's `TooltipPosition` type
 - **No arrow** — plain rounded rectangle only; matches Figma design exactly. The Angular Material `::before` arrow is suppressed via `display: none` on `.mdc-tooltip__surface::before`.
 - **ADA**: Required on all icon-only buttons; triggers on both hover and keyboard focus; `role="tooltip"` on the tooltip element
@@ -295,6 +295,20 @@ components/{name}/
 - **Cursor tracking**: `mousemove` runs outside Angular zone via `NgZone.runOutsideAngular` + `Renderer2.listen`; position written directly via `renderer.setStyle` bypassing CD
 - **Keyboard**: also shown on `focusin` (positioned near the trigger rect); hidden on `focusout`
 - **ADA**: `role="tooltip"` + `[attr.aria-hidden]` on card; do not hide critical actions behind hover only
+- **No Angular Material base** — custom component
+
+### List (`ds-list` + `ds-list-item`)
+- **Container** (`ds-list`): `<ul role="list">` wrapper — `border-radius: --radius-md`, 1px `--color-border-subtle` border, `overflow: hidden`
+- **Item** (`ds-list-item`): flex row, `gap: --spacing-md`, `padding: --spacing-md --spacing-lg`, `min-height: 48px`
+- **Text inputs**: `primary` (required), `secondary` (optional), `overline` (optional — uppercase label-small, letter-spacing token with 0.06em fallback)
+- **Variants**: `1-line` (default) | `2-lines` | `3-lines` — set via `[variant]` input; `--3-lines` modifier clamps secondary to 2 lines via `-webkit-line-clamp: 2`
+- **Leading slot**: `<ng-content select="[leading]">` — place `[leading]` attribute on projected content (`<span leading class="ds-icon">`, `<ds-checkbox leading />`, etc.)
+- **Trailing slot**: `<ng-content select="[trailing]">` — same pattern; use `ds-icon--sm` for trailing chevrons
+- **Slot guards**: `@ContentChild('[leading]', { static: false })` + `@ContentChild('[trailing]', { static: false })` with `ngAfterContentInit` + `markForCheck()` — wrapper divs only render when content is projected (prevents phantom flex gaps in OnPush)
+- **Interactive modifier**: `ds-list-item--interactive` — adds hover (`--overlay-hovered`), pressed (`--overlay-pressed`), `:focus-visible` ring. Use in menus, nav lists. Do NOT use in pure selection lists (checkbox-only).
+- **Disabled**: `.is-disabled` — `pointer-events: none`; text → `--color-text-disabled`; icons → `--color-icon-disabled` (scoped to `> .ds-icon` inside slots)
+- **Focus ring**: `:focus-visible` only — `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` (outset, keyboard-only, standard simple-element ADA pattern)
+- **ADA**: `role="listitem"` on items; `tabindex="0"` + `aria-disabled` on interactive/disabled items; checkbox in leading slot must have `aria-label` (caller responsibility)
 - **No Angular Material base** — custom component
 
 ### Label (`ds-label`)
