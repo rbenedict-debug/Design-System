@@ -30,6 +30,12 @@ $tier2-indent: 64px;
     padding: 0;
   }
 
+  // ── Totals bar row — pinned above paginator, subtle bg, no bottom border ──
+  &--totals {
+    background: var(--color-surface-subtle);
+    border-bottom: none;
+  }
+
   // ── Interactive states ────────────────────────────────────────
   &.is-hovered {
     background: var(--overlay-hovered);
