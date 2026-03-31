@@ -1,17 +1,10 @@
-<label [class]="wrapperClasses" [for]="inputId">
-  <input
-    [id]="inputId"
-    type="radio"
-    class="ds-radio__control"
-    [name]="name"
-    [value]="value"
-    [checked]="isChecked"
-    [disabled]="disabled"
-    (change)="onChange()"
-  />
-  <span class="ds-radio__touch">
-    <span class="ds-radio__dot"></span>
-  </span>
+<mat-radio-button
+  class="ds-radio"
+  [class.is-error]="isError"
+  [value]="value"
+  [disabled]="disabled"
+  [disableRipple]="true"
+>
   <span *ngIf="label" class="ds-radio__label">{{ label }}</span>
   <ng-content></ng-content>
-</label>
+</mat-radio-button>

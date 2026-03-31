@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatRadioModule, MatRadioChange } from '@angular/material/radio';
 
 /**
  * Onflo Design System — Radio Button
  *
- * A standalone Angular component wrapping the ds-radio CSS class API.
+ * Use inside <ds-radio-group> which owns value management via mat-radio-group.
  * For direct class usage without Angular:
  *   <label class="ds-radio">
  *     <input type="radio" class="ds-radio__control" name="group" />
@@ -13,17 +14,18 @@ import { CommonModule } from '@angular/common';
  *   </label>
  *
  * @example
- *   <div class="ds-radio-group">
- *     <ds-radio label="Option A" value="a" [selectedValue]="selected" name="plan" (selectedValueChange)="selected = $event" />
- *     <ds-radio label="Option B" value="b" [selectedValue]="selected" name="plan" (selectedValueChange)="selected = $event" />
- *   </div>
+ *   <ds-radio-group [(value)]="selected" name="plan">
+ *     <ds-radio label="Option A" value="a" />
+ *     <ds-radio label="Option B" value="b" />
+ *   </ds-radio-group>
  */
 @Component({
   selector: 'ds-radio',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatRadioModule],
   templateUrl: './radio.component.html',
   styleUrls: ['./radio.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsRadioComponent {
   /** Label text displayed next to the radio button. */
@@ -32,40 +34,51 @@ export class DsRadioComponent {
   /** The value this radio represents. */
   @Input() value = '';
 
-  /** The currently selected value in the group. */
-  @Input() selectedValue = '';
-
-  /** Radio group name — must match across all radios in the group. */
-  @Input() name = '';
-
   /** Applies error styling. */
   @Input() isError = false;
 
   /** Disables the radio button. */
   @Input() disabled = false;
+}
 
-  /** Emits the new selected value when this radio is selected. */
-  @Output() selectedValueChange = new EventEmitter<string>();
+/**
+ * Onflo Design System — Radio Group
+ *
+ * Wraps mat-radio-group to manage selection state across child ds-radio buttons.
+ *
+ * @example
+ *   <ds-radio-group [(value)]="selected" name="plan">
+ *     <ds-radio label="Option A" value="a" />
+ *     <ds-radio label="Option B" value="b" />
+ *   </ds-radio-group>
+ */
+@Component({
+  selector: 'ds-radio-group',
+  standalone: true,
+  imports: [MatRadioModule],
+  template: `
+    <mat-radio-group
+      class="ds-radio-group"
+      [value]="value"
+      [name]="name"
+      (change)="onChange($event)"
+    >
+      <ng-content />
+    </mat-radio-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class DsRadioGroupComponent {
+  /** Currently selected value. Use [(value)] for two-way binding. */
+  @Input() value = '';
 
-  readonly inputId = `ds-radio-${Math.random().toString(36).slice(2)}`;
+  /** Optional group name — shared across all child radios. */
+  @Input() name = '';
 
-  get isChecked(): boolean {
-    return this.selectedValue === this.value;
-  }
+  /** Emits the newly selected value. */
+  @Output() valueChange = new EventEmitter<string>();
 
-  get wrapperClasses(): string {
-    return [
-      'ds-radio',
-      this.isError ? 'is-error' : '',
-      this.disabled ? 'is-disabled' : '',
-    ]
-      .filter(Boolean)
-      .join(' ');
-  }
-
-  onChange(): void {
-    if (!this.disabled) {
-      this.selectedValueChange.emit(this.value);
-    }
+  onChange(event: MatRadioChange): void {
+    this.valueChange.emit(event.value);
   }
 }
