@@ -1,19 +1,18 @@
-<div
+<mat-chip
   class="ds-chip"
   [class.is-error]="error"
   [class.is-disabled]="disabled"
-  role="option"
-  [attr.aria-disabled]="disabled || null"
+  [disabled]="disabled"
+  (removed)="removed.emit()"
 >
   <span *ngIf="icon" class="ds-icon ds-icon--sm ds-chip__icon">{{ icon }}</span>
   <span class="ds-chip__label">{{ label }}</span>
   <button
     *ngIf="removable"
+    matChipRemove
     class="ds-chip__remove"
     [attr.aria-label]="'Remove ' + label"
-    (click)="removed.emit()"
-    [disabled]="disabled"
   >
     <span class="ds-icon ds-icon--sm">close</span>
   </button>
-</div>
+</mat-chip>

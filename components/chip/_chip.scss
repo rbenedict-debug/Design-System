@@ -119,3 +119,48 @@
   gap: var(--spacing-xs);
   align-items: center;
 }
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-chip to use Onflo tokens. No ::ng-deep.
+
+.mat-mdc-chip {
+  // Size and shape
+  --mdc-chip-container-height: 32px;
+  --mdc-chip-container-shape: var(--radius-full);
+
+  // Colors — default state
+  --mdc-chip-flat-container-color: var(--color-surface-default);
+  --mdc-chip-outline-color: var(--color-border-secondary);
+  --mdc-chip-label-text-color: var(--color-text-primary);
+  --mdc-chip-label-text-font: var(--ref-typeface-brand);
+  --mdc-chip-label-text-size: var(--ref-typescale-label-small-size);
+  --mdc-chip-label-text-weight: var(--ref-typeface-weight-medium);
+  --mdc-chip-label-text-line-height: var(--ref-typescale-label-small-line-height);
+
+  // Remove button
+  --mat-chip-trailing-action-color: var(--color-icon-subtle);
+  --mat-chip-disabled-trailing-action-color: var(--color-icon-disabled);
+
+  // Suppress MDC state layers — hover/focus handled by .ds-chip class rules
+  --mat-chip-hover-state-layer-opacity: 0;
+  --mat-chip-focus-state-layer-opacity: 0;
+  --mat-chip-selected-state-layer-opacity: 0;
+
+  // Disabled
+  --mdc-chip-disabled-label-text-color: var(--color-text-disabled);
+
+  // Error state
+  &.is-error {
+    --mdc-chip-flat-container-color: var(--color-surface-error);
+    --mdc-chip-outline-color: var(--color-border-input-error);
+    --mdc-chip-label-text-color: var(--color-text-error);
+    --mat-chip-trailing-action-color: var(--color-icon-error);
+  }
+
+  // Disabled state
+  &.is-disabled {
+    --mdc-chip-flat-container-color: var(--color-surface-disabled);
+    --mdc-chip-outline-color: var(--color-border-subtle);
+    --mdc-chip-label-text-color: var(--color-text-disabled);
+  }
+}
