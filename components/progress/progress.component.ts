@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 /**
  * Onflo Design System — Progress / Loader
@@ -22,7 +23,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'ds-progress',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatProgressBarModule],
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.scss'],
 })
@@ -44,16 +45,7 @@ export class DsProgressComponent {
     return Math.min(100, Math.max(0, this.value!));
   }
 
-  get wrapperClasses(): string {
-    return [
-      'ds-progress',
-      this.isIndeterminate ? 'ds-progress--indeterminate' : '',
-    ]
-      .filter(Boolean)
-      .join(' ');
-  }
-
-  get fillWidth(): string {
-    return this.isIndeterminate ? '' : `${this.clampedValue}%`;
+  get mode(): 'indeterminate' | 'determinate' {
+    return this.isIndeterminate ? 'indeterminate' : 'determinate';
   }
 }

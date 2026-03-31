@@ -1,16 +1,8 @@
-<div
-  [class]="wrapperClasses"
-  role="progressbar"
-  [attr.aria-valuenow]="isIndeterminate ? null : clampedValue"
-  [attr.aria-valuemin]="isIndeterminate ? null : 0"
-  [attr.aria-valuemax]="isIndeterminate ? null : 100"
-  [attr.aria-label]="label || 'Loading'"
->
+<div class="ds-progress">
   <span *ngIf="label" class="ds-progress__label">{{ label }}</span>
-  <div class="ds-progress__track">
-    <div
-      class="ds-progress__fill"
-      [style.width]="fillWidth"
-    ></div>
-  </div>
+  <mat-progress-bar
+    [mode]="mode"
+    [value]="clampedValue"
+    [attr.aria-label]="label || 'Loading'"
+  ></mat-progress-bar>
 </div>

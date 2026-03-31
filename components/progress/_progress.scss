@@ -93,3 +93,15 @@
     animation: ds-progress-indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) 1.15s infinite;
   }
 }
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-progress-bar to use Onflo tokens. No ::ng-deep.
+
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: var(--color-surface-brand-bold);
+  --mdc-linear-progress-track-color: var(--color-surface-default);
+  --mdc-linear-progress-active-indicator-height: 6px;
+  --mdc-linear-progress-track-height: 6px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
