@@ -1,30 +1,38 @@
+import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatMenuModule, MatMenu } from '@angular/material/menu';
+
 /**
- * ds-menu
+ * Onflo Design System — Menu
  *
  * Based on Angular Material mat-menu.
  * Import MatMenuModule in your Angular module.
  *
- * In Angular, use the [matMenuTriggerFor] directive to bind the trigger.
- * The ds-menu SCSS classes are applied to the mat-menu panel.
+ * Usage: add a template reference to <ds-menu> and pass its .matMenu to
+ * [matMenuTriggerFor] on the trigger element. Place items inside using
+ * mat-menu-item + the ds-menu CSS class API for full styling.
  *
  * @example
- * <button [matMenuTriggerFor]="myMenu">Options</button>
- * <mat-menu #myMenu class="ds-menu">
- *   <button mat-menu-item class="ds-menu__item">
- *     <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>Edit
- *   </button>
- * </mat-menu>
+ *   <button [matMenuTriggerFor]="myMenu.matMenu">Options</button>
+ *   <ds-menu #myMenu>
+ *     <button mat-menu-item class="ds-menu__item">
+ *       <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>Edit
+ *     </button>
+ *     <hr class="ds-menu__divider" />
+ *     <button mat-menu-item class="ds-menu__item ds-menu__item--destructive">
+ *       <span class="ds-icon ds-icon--sm ds-menu__item-icon">delete</span>Delete
+ *     </button>
+ *   </ds-menu>
  */
-
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 @Component({
   selector: 'ds-menu',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatMenuModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DsMenuComponent {}
+export class DsMenuComponent {
+  /** Exposes the mat-menu reference for use with [matMenuTriggerFor]. */
+  @ViewChild('menu') matMenu!: MatMenu;
+}

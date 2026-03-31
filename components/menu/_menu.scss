@@ -146,3 +146,70 @@
     margin: var(--spacing-xs) 0;
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-menu panel and mat-menu-item to use Onflo tokens.
+// No ::ng-deep. panelClass="ds-menu" is passed by DsMenuComponent — these global
+// rules target the CDK overlay panel via the .ds-menu scoping class.
+
+.mat-mdc-menu-panel.ds-menu {
+  // Panel shape, background, border, shadow — matches .ds-menu CSS class API
+  border-radius: var(--radius-md);
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow:
+    0 4px 16px var(--shadow-elevation-2),
+    0 1px 4px var(--shadow-elevation-1);
+  min-width: 160px;
+  max-width: 280px;
+
+  // Suppress Material's default box-shadow (we own it above)
+  --mat-menu-container-elevation-shadow: none;
+
+  // Padding on the panel container
+  .mat-mdc-menu-content { padding: var(--spacing-xs) 0; }
+
+  // ── Menu items ─────────────────────────────────────────────────────────────
+
+  .mat-mdc-menu-item {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    color: var(--color-text-primary);
+    min-height: unset;
+    padding: var(--spacing-sm) var(--spacing-lg);
+
+    // Suppress Material state layers — Onflo hover/pressed/focus rules own visuals
+    --mat-menu-item-hover-state-layer-opacity:    0;
+    --mat-menu-item-focus-state-layer-opacity:    0;
+    --mat-menu-item-pressed-state-layer-opacity:  0;
+
+    &:hover:not([disabled])  { background: var(--overlay-hovered); }
+    &:active:not([disabled]) { background: var(--overlay-pressed); }
+
+    &:focus { outline: none; }
+    &:focus-visible {
+      background: var(--overlay-focused);
+      box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring);
+    }
+
+    &[disabled] {
+      color: var(--color-text-disabled);
+      opacity: 1; // Material defaults to 0.38 — explicit colour carries meaning
+
+      .ds-menu__item-icon { color: var(--color-icon-disabled); }
+    }
+
+    // Destructive item
+    &.ds-menu__item--destructive {
+      color: var(--color-text-accent-red);
+
+      .ds-menu__item-icon          { color: var(--color-icon-error); }
+      &:hover:not([disabled])      { background: var(--overlay-accent-red-hovered); }
+      &:focus-visible              { box-shadow: inset 0 0 0 2px var(--color-border-accent-red); }
+      &:active:not([disabled])     { background: var(--overlay-accent-red-pressed); }
+    }
+  }
+}
