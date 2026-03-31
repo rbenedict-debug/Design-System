@@ -9,7 +9,8 @@
  * Selected state is indicated by a 2px brand-blue bottom bar.
  * Badge is a 6px notification dot (not a count) — use [showBadge]="true".
  *
- * ADA: aria-selected on active tab, tabindex managed for arrow-key nav.
+ * ADA: role="tablist" / role="tab" / aria-selected managed by mat-tab-group.
+ *      Arrow key, Home, End navigation handled by mat-tab-group internally.
  *
  * @example
  *   <ds-tabs>
@@ -22,14 +23,18 @@
 import {
   Component, Input, Output, EventEmitter,
   ContentChildren, QueryList, AfterContentInit,
-  ChangeDetectionStrategy, HostListener, ElementRef
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, TemplateRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'ds-tab',
   standalone: true,
-  template: '<ng-content />',
+  imports: [],
+  // Wraps projected body content in a TemplateRef so DsTabsComponent can forward
+  // it into the corresponding mat-tab via *ngTemplateOutlet.
+  template: `<ng-template><ng-content /></ng-template>`,
 })
 export class DsTabComponent {
   /** Tab label text. */
@@ -43,12 +48,15 @@ export class DsTabComponent {
 
   /** Disables the tab. */
   @Input() disabled = false;
+
+  /** TemplateRef capturing projected body content — read by DsTabsComponent. */
+  @ViewChild(TemplateRef, { static: true }) contentRef!: TemplateRef<unknown>;
 }
 
 @Component({
   selector: 'ds-tabs',
   standalone: true,
-  imports: [CommonModule, DsTabComponent],
+  imports: [CommonModule, MatTabsModule, DsTabComponent],
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,43 +70,16 @@ export class DsTabsComponent implements AfterContentInit {
   /** Emits the index of the newly selected tab. */
   @Output() tabChange = new EventEmitter<number>();
 
-  constructor(private el: ElementRef) {}
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngAfterContentInit(): void {
     const first = this.tabs.toArray().findIndex(t => !t.disabled);
     this.activeIndex = first >= 0 ? first : 0;
+    this.cdr.markForCheck();
   }
 
-  select(index: number): void {
-    if (!this.tabs.toArray()[index]?.disabled) {
-      this.activeIndex = index;
-      this.tabChange.emit(index);
-    }
-  }
-
-  @HostListener('keydown', ['$event'])
-  onKeydown(event: KeyboardEvent): void {
-    const tabs = this.tabs.toArray();
-    const total = tabs.length;
-    let next = this.activeIndex;
-
-    if (event.key === 'ArrowRight') {
-      do { next = (next + 1) % total; } while (tabs[next].disabled && next !== this.activeIndex);
-    } else if (event.key === 'ArrowLeft') {
-      do { next = (next - 1 + total) % total; } while (tabs[next].disabled && next !== this.activeIndex);
-    } else if (event.key === 'Home') {
-      next = tabs.findIndex(t => !t.disabled);
-    } else if (event.key === 'End') {
-      next = tabs.map(t => !t.disabled).lastIndexOf(true);
-    } else {
-      return;
-    }
-
-    event.preventDefault();
-    this.select(next);
-
-    // Move focus to the newly active tab button
-    const buttons = (this.el.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('.ds-tabs__tab');
-    buttons[next]?.focus();
+  onTabChange(index: number): void {
+    this.activeIndex = index;
+    this.tabChange.emit(index);
   }
 }

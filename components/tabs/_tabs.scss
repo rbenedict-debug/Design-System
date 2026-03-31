@@ -140,3 +140,62 @@
   font-size: var(--ref-typescale-body-medium-size, 14px);
   line-height: var(--ref-typescale-body-medium-line-height, 20px);
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-tab-group / mat-tab to use Onflo tokens. No ::ng-deep.
+
+.mat-mdc-tab-group {
+  // Selected indicator — 2px brand bar at bottom of active tab
+  --mdc-tab-indicator-active-indicator-color: var(--color-surface-nav-active);
+  --mdc-tab-indicator-active-indicator-height: 2px;
+
+  // Label typography
+  --mat-tab-header-label-text-font: var(--ref-typeface-brand);
+  --mat-tab-header-label-text-size: var(--ref-typescale-label-medium-size);
+  --mat-tab-header-label-text-weight: var(--ref-typeface-weight-bold);
+  --mat-tab-header-label-text-line-height: var(--ref-typescale-label-medium-line-height);
+
+  // Text color — always --color-text-primary in all states (CLAUDE.md spec)
+  --mat-tab-header-inactive-label-text-color: var(--color-text-primary);
+  --mat-tab-header-active-label-text-color: var(--color-text-primary);
+  --mat-tab-header-inactive-hover-label-text-color: var(--color-text-primary);
+  --mat-tab-header-active-hover-label-text-color: var(--color-text-primary);
+  --mat-tab-header-inactive-focus-label-text-color: var(--color-text-primary);
+  --mat-tab-header-active-focus-label-text-color: var(--color-text-primary);
+
+  // Bottom divider
+  --mat-tab-header-divider-color: var(--color-border-subtle);
+  --mat-tab-header-divider-height: 1px;
+
+  // Zero out Material's state layers — .mat-mdc-tab rules below own hover/focus visuals
+  --mat-tab-header-hover-state-layer-opacity: 0;
+  --mat-tab-header-focus-state-layer-opacity: 0;
+  --mat-tab-header-inactive-ripple-color: transparent;
+  --mat-tab-header-active-ripple-color: transparent;
+}
+
+// Disabled tab label colour
+.mat-mdc-tab.mat-mdc-tab-disabled {
+  --mat-tab-header-inactive-label-text-color: var(--color-text-disabled);
+}
+
+// Individual tab button — replaces .ds-tabs__tab rules (Material renders these buttons)
+.mat-mdc-tab {
+  min-width: 56px;
+  min-height: 48px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  overflow: hidden;
+  transition: background 0.15s ease;
+
+  &:focus         { outline: none; }
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    z-index: 1;
+  }
+
+  &:hover:not(.mat-mdc-tab-disabled)  { background: var(--overlay-hovered); }
+  &:active:not(.mat-mdc-tab-disabled) { background: var(--overlay-pressed); }
+}
