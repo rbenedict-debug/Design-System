@@ -129,3 +129,93 @@
     .ds-textarea__control { cursor: default; color: var(--color-text-secondary); }
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-form-field (appearance="outline", textarea) to use Onflo tokens.
+// No ::ng-deep. The <ds-textarea> host carries .ds-textarea via @HostBinding.
+//
+// Focus ring pattern (composite wrapper):
+//   :focus-within                         → border-color change only
+//   :focus-within:not([data-mouse-focus]) → box-shadow ring (keyboard only)
+
+.ds-textarea {
+
+  // mat-form-field fills the column width
+  .mat-mdc-form-field { width: 100%; }
+
+  // ── Shape and colors — default ────────────────────────────────────────────
+
+  --mdc-outlined-text-field-container-shape:                var(--radius-sm);
+  --mdc-outlined-text-field-outline-width:                  1px;
+  --mdc-outlined-text-field-outline-color:                  var(--color-border-input);
+  --mdc-outlined-text-field-hover-outline-color:            var(--color-border-input-hover);
+  --mdc-outlined-text-field-focus-outline-color:            var(--color-border-input-active);
+  --mdc-outlined-text-field-input-text-color:               var(--color-text-primary);
+  --mdc-outlined-text-field-input-text-placeholder-color:   var(--color-text-placeholder);
+  --mdc-outlined-text-field-caret-color:                    var(--color-border-input-active);
+  --mdc-outlined-text-field-input-text-font:                var(--ref-typeface-brand);
+  --mdc-outlined-text-field-input-text-size:                var(--ref-typescale-label-medium-size);
+  --mdc-outlined-text-field-input-text-weight:              var(--ref-typeface-weight-regular);
+
+  // ── Suppress floating label and subscript (both are external) ────────────
+
+  .mat-mdc-floating-label,
+  .mdc-floating-label                   { display: none; }
+  .mat-mdc-form-field-subscript-wrapper { display: none; }
+
+  // ── Field background and padding ─────────────────────────────────────────
+
+  .mat-mdc-text-field-wrapper {
+    background: var(--color-surface-input);
+    padding: var(--spacing-sm) var(--spacing-md);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  // Textarea resizes vertically; min-height 96px (80px control + 2×8px padding)
+  .mdc-text-field__input {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  // ── Focus ring — keyboard only (composite wrapper pattern) ───────────────
+
+  &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+  }
+
+  // ── Error state ───────────────────────────────────────────────────────────
+
+  &.is-error {
+    --mdc-outlined-text-field-outline-color:       var(--color-border-input-error);
+    --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+    --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+
+    &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
+  }
+
+  // ── Disabled state ────────────────────────────────────────────────────────
+
+  &.is-disabled {
+    --mdc-outlined-text-field-disabled-outline-color:     var(--color-border-subtle);
+    --mdc-outlined-text-field-disabled-input-text-color:  var(--color-text-disabled);
+    --mdc-outlined-text-field-disabled-outline-opacity:   1;
+
+    .mat-mdc-text-field-wrapper { background: var(--color-surface-input-disabled); }
+    .ds-textarea__label         { color: var(--color-text-disabled); }
+    .ds-textarea__helper        { color: var(--color-text-disabled); }
+    .mdc-text-field__input      { resize: none; }
+  }
+
+  // ── Read-only state ───────────────────────────────────────────────────────
+
+  &.is-readonly {
+    --mdc-outlined-text-field-outline-color:       var(--color-border-subtle);
+    --mdc-outlined-text-field-hover-outline-color: var(--color-border-subtle);
+
+    .mat-mdc-text-field-wrapper { background: var(--color-surface-default); cursor: default; }
+    .mdc-text-field__input      { cursor: default; color: var(--color-text-secondary); resize: none; }
+  }
+}
