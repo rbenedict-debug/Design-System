@@ -153,6 +153,7 @@ components/{name}/
 - States: default, hover, focus, active, disabled, `.is-error`, `.is-loading`
 - **Error state** (`.is-error`): filled → `--color-surface-error` bg + `--color-text-error`; outlined/destructive-outlined → `--color-border-error` border + `--color-text-error`; text/destructive → `--color-text-error` only. Hover uses `--overlay-accent-red-hovered`.
 - **Loading state** (`.is-loading`): `cursor: wait`, `pointer-events: none`, CSS spinner via `::before` (14px circle border, `currentColor`, `border-top-color: transparent`, 0.7s spin animation `ds-btn-spin`)
+- Angular Material base: `MatButtonModule`
 
 ### Icon Button (`ds-icon-button`)
 - Variants: `icon` (ghost) | `filled` | `outlined` | `monogram`
@@ -163,6 +164,7 @@ components/{name}/
 - **Icon toggle selected**: NO background fill — only icon color changes to `--color-icon-brand`. Caller swaps icon content (e.g. outline → filled Material Symbol) for visual state change.
 - **Outlined-letter toggle**: uses `--color-text-primary`/`--color-text-brand` (text tokens, not icon tokens); letter font = `--ref-typescale-title-h2-*` (20px, bold); unselected = white bg + grey border; selected = `--color-surface-brand` + `--color-border-active`
 - ADA: always include `aria-label` — icon buttons have no visible text
+- Angular Material base: `MatIconButtonModule`
 
 ### Input Field (`ds-input`)
 - **Height: always 42px — fixed, no size variants**
@@ -174,6 +176,7 @@ components/{name}/
 - States: default, hover, focus, error (`.is-error`), disabled (`.is-disabled`), read-only (`.is-readonly`)
 - ADA: `aria-invalid="true"` on `<input>` when error; `role="alert"` on error message; `aria-describedby` links input to helper
 - Multi-line text: use `ds-textarea` (separate component — resizable, no fixed height)
+- Angular Material base: `MatFormFieldModule` + `MatInputModule`
 
 ### Textarea (`ds-textarea`)
 - **No fixed height — resizable** (min-height 96px); Angular Material base: `MatFormFieldModule` + `MatInputModule` (textarea)
@@ -309,7 +312,7 @@ components/{name}/
 - **Disabled**: `.is-disabled` — `pointer-events: none`; text → `--color-text-disabled`; icons → `--color-icon-disabled` (scoped to `> .ds-icon` inside slots)
 - **Focus ring**: `:focus-visible` only — `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)` (outset, keyboard-only, standard simple-element ADA pattern)
 - **ADA**: `role="listitem"` on items; `tabindex="0"` + `aria-disabled` on interactive/disabled items; checkbox in leading slot must have `aria-label` (caller responsibility)
-- **No Angular Material base** — custom component
+- Angular Material base: `MatListModule`
 
 ### Label (`ds-label`)
 - **Variants (color)**: `green` | `red` | `yellow` | `brand` | `blue` | `navy` | `teal` | `orange` | `purple` | `pink` | `disabled`
@@ -517,6 +520,10 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-label` | Custom | Display-only tag — no Material equivalent |
 | `ds-skeleton` | Custom | No Material equivalent — aria-busy pattern |
 | `ds-ag-paginator` | Custom | AG Grid custom pagination panel — no Material equivalent |
+| `ds-hover-card` | Custom | No Material equivalent — cursor-following floating card |
+| `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
+| `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
+| `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |
 
 ---
 
