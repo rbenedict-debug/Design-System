@@ -519,6 +519,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-snackbar` | `MatSnackBarModule` | MatSnackBar service |
 | `ds-label` | Custom | Display-only tag — no Material equivalent |
 | `ds-skeleton` | Custom | No Material equivalent — aria-busy pattern |
+| `ds-search` | Custom | No Material equivalent — internal building block for ds-table-toolbar |
 | `ds-ag-paginator` | Custom | AG Grid custom pagination panel — no Material equivalent |
 | `ds-hover-card` | Custom | No Material equivalent — cursor-following floating card |
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
