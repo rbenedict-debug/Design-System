@@ -1,8 +1,10 @@
 <button
+  mat-icon-button
   [class]="buttonClasses"
   [disabled]="disabled"
   [type]="type"
   [attr.aria-label]="ariaLabel"
+  [disableRipple]="true"
   (click)="handleClick($event)"
 >
   <!-- Icon slot: <svg> or <ds-icon> goes here -->

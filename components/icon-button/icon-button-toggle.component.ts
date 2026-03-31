@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 
 export type DsIconButtonToggleVariant =
   | 'icon'
@@ -34,9 +34,10 @@ export type DsIconButtonToggleSize = 'sm' | 'md';
 @Component({
   selector: 'ds-icon-button-toggle',
   standalone: true,
-  imports: [CommonModule],
+  imports: [MatButtonModule],
   templateUrl: './icon-button-toggle.component.html',
   styleUrls: ['./icon-button-toggle.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsIconButtonToggleComponent {
   /** Visual style. Default: 'icon' (ghost) */
@@ -45,8 +46,8 @@ export class DsIconButtonToggleComponent {
   /** Size scale. Default: 'md' (40px) */
   @Input() size: DsIconButtonToggleSize = 'md';
 
-  /** Accessible label — required for screen readers. */
-  @Input() ariaLabel = '';
+  /** Accessible label — required for screen readers. No visible text on icon buttons. */
+  @Input({ required: true }) ariaLabel!: string;
 
   /** Whether the toggle is currently selected/pressed. */
   @Input() selected = false;

@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 
 export type DsIconButtonVariant = 'icon' | 'filled' | 'outlined' | 'monogram';
 export type DsIconButtonSize = 'sm' | 'md';
@@ -27,9 +27,10 @@ export type DsIconButtonSize = 'sm' | 'md';
 @Component({
   selector: 'ds-icon-button',
   standalone: true,
-  imports: [CommonModule],
+  imports: [MatButtonModule],
   templateUrl: './icon-button.component.html',
   styleUrls: ['./icon-button.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsIconButtonComponent {
   /** Visual style. Default: 'icon' (ghost) */
@@ -38,8 +39,8 @@ export class DsIconButtonComponent {
   /** Size scale. Default: 'md' (40px) */
   @Input() size: DsIconButtonSize = 'md';
 
-  /** Accessible label — required for screen readers. */
-  @Input() ariaLabel = '';
+  /** Accessible label — required for screen readers. No visible text on icon buttons. */
+  @Input({ required: true }) ariaLabel!: string;
 
   /** Applies error styling via .is-error class. */
   @Input() isError = false;

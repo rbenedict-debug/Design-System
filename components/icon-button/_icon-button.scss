@@ -286,3 +286,22 @@
     }
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-icon-button to use Onflo tokens. No ::ng-deep.
+// mat-icon-button is provided by MatButtonModule (@angular/material/button).
+
+.mat-mdc-icon-button.ds-icon-button {
+  // Suppress MDC state layers — ds-icon-button variant rules own all interaction visuals
+  --mat-icon-button-hover-state-layer-opacity: 0;
+  --mat-icon-button-focus-state-layer-opacity: 0;
+  --mat-icon-button-pressed-state-layer-opacity: 0;
+
+  // Align MDC state layer size with our button sizes (prevents oversized ripple container)
+  --mdc-icon-button-state-layer-size: 42px;
+
+  &.ds-icon-button--sm {
+    --mdc-icon-button-state-layer-size: 32px;
+  }
+}
