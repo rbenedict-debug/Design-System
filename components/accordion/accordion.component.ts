@@ -17,53 +17,48 @@
 
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'ds-accordion-panel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatExpansionModule],
   template: `
-    <div class="ds-accordion__panel" [class.is-open]="open">
-      <button
+    <mat-expansion-panel
+      class="ds-accordion__panel"
+      [expanded]="open"
+      [disabled]="disabled"
+      [hideToggle]="true"
+    >
+      <mat-expansion-panel-header
         class="ds-accordion__trigger"
-        [attr.aria-expanded]="open"
-        [attr.aria-controls]="panelId"
-        [disabled]="disabled"
-        (click)="toggle()"
+        collapsedHeight="auto"
+        expandedHeight="auto"
       >
         <span *ngIf="icon" class="ds-accordion__trigger-icon">{{ icon }}</span>
         <span class="ds-accordion__trigger-label">{{ title }}</span>
         <span class="ds-icon ds-accordion__chevron">expand_more</span>
-      </button>
-      <div class="ds-accordion__content" [id]="panelId" [hidden]="!open">
+      </mat-expansion-panel-header>
+      <div class="ds-accordion__content">
         <ng-content />
       </div>
-    </div>
+    </mat-expansion-panel>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsAccordionPanelComponent {
   @Input() title = '';
   @Input() icon?: string;
+  /** Initial expanded state. mat-expansion-panel owns open/close after first render. */
   @Input() open = false;
   @Input() disabled = false;
-
-  panelId = `ds-acc-${Math.random().toString(36).slice(2, 8)}`;
-
-  toggle(): void {
-    if (!this.disabled) this.open = !this.open;
-  }
 }
 
 @Component({
   selector: 'ds-accordion',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="ds-accordion">
-      <ng-content />
-    </div>
-  `,
+  imports: [MatExpansionModule],
+  template: `<mat-accordion class="ds-accordion" multi><ng-content /></mat-accordion>`,
   styleUrls: ['./accordion.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

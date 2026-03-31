@@ -146,3 +146,41 @@
     &[hidden] { display: none; }
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-accordion / mat-expansion-panel to use Onflo tokens. No ::ng-deep.
+// Note: mat-expansion-panel was not migrated to MDC — uses --mat-expansion-* tokens
+// (no mdc- prefix) and .mat-expansion-panel class names.
+
+.mat-expansion-panel {
+  --mat-expansion-container-background-color: var(--color-surface-page);
+  --mat-expansion-container-shape: var(--radius-md);
+  --mat-expansion-header-text-color: var(--color-text-primary);
+  --mat-expansion-header-text-font: var(--ref-typeface-brand);
+  --mat-expansion-header-text-size: var(--ref-typescale-label-medium-size);
+  --mat-expansion-header-text-weight: var(--ref-typeface-weight-medium);
+  --mat-expansion-header-text-line-height: var(--ref-typescale-label-medium-line-height);
+  // Zero out Material's state layers — .ds-accordion__trigger rules own hover/focus visuals
+  --mat-expansion-header-hover-state-layer-opacity: 0;
+  --mat-expansion-header-focus-state-layer-opacity: 0;
+}
+
+// Double-class for specificity over Material's default elevation
+.mat-expansion-panel.ds-accordion__panel {
+  border: 1px solid var(--color-border-accordion);
+  box-shadow: none;
+  overflow: hidden;
+
+  & + & { margin-top: var(--spacing-xs); }
+
+  // Open state — Material adds .mat-expanded to the host
+  &.mat-expanded {
+    box-shadow: 0 2px 8px var(--shadow-elevation-1);
+
+    .ds-accordion__chevron { transform: rotate(180deg); }
+  }
+}
+
+// Remove Material's default body padding — .ds-accordion__content owns all padding
+.mat-expansion-panel .mat-expansion-panel-body { padding: 0; }
