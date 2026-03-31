@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 /**
@@ -32,6 +32,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './badge.component.html',
   styleUrls: ['./badge.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsBadgeComponent {
   /** Count value shown inside the circle (Large size). Ignored when dot=true. */

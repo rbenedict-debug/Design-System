@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 export type DsIconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
@@ -20,6 +20,7 @@ export type DsIconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   selector: 'ds-icon',
   standalone: true,
   template: `<span [class]="classes" [attr.aria-hidden]="true">{{ name }}</span>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsIconComponent {
   /** Material Symbols icon name (e.g. "search", "bookmark", "close"). */

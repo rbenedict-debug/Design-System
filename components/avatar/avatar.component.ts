@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type DsAvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -25,6 +25,7 @@ export type DsAvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   imports: [CommonModule],
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsAvatarComponent implements OnInit {
   /** Image URL. Falls back to initials or icon if empty or on error. */

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DsSearchComponent } from '../search/search.component';
 import { DsIconButtonComponent } from '../icon-button/icon-button.component';
@@ -51,6 +51,7 @@ import { DsIconButtonToggleComponent } from '../icon-button/icon-button-toggle.c
   imports: [CommonModule, DsSearchComponent, DsIconButtonComponent, DsIconButtonToggleComponent],
   templateUrl: './table-toolbar.component.html',
   styleUrls: ['./table-toolbar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsTableToolbarComponent {
   /** Show the left-side action button panel. Default: true. */

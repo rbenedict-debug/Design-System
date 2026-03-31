@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
@@ -26,6 +26,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   imports: [CommonModule, MatProgressBarModule],
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsProgressComponent {
   /**
