@@ -123,3 +123,124 @@
     }
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-paginator to use Onflo tokens. No ::ng-deep.
+
+.mat-mdc-paginator {
+  // Container tokens
+  --mat-paginator-container-background-color: var(--color-surface-page);
+  --mat-paginator-container-text-color: var(--color-text-secondary);
+  --mat-paginator-enabled-icon-color: var(--color-icon-default);
+  --mat-paginator-disabled-icon-color: var(--color-icon-disabled);
+  --mat-paginator-select-trigger-text-size: var(--ref-typescale-label-small-size);
+
+  border-top: 1px solid var(--color-border-subtle);
+
+  // Main flex container
+  .mat-mdc-paginator-container {
+    justify-content: flex-end;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    min-height: unset;
+    flex-wrap: wrap;
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-small-size);
+  }
+
+  // "Items per page" label
+  .mat-mdc-paginator-page-size {
+    align-items: center;
+    margin: 0;
+  }
+
+  .mat-mdc-paginator-page-size-label {
+    margin: 0 var(--spacing-sm) 0 0;
+    color: var(--color-text-secondary);
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-small-size);
+    white-space: nowrap;
+  }
+
+  // Range text
+  .mat-mdc-paginator-range-actions {
+    gap: 0;
+  }
+
+  .mat-mdc-paginator-range-label {
+    margin: 0 var(--spacing-xl);
+    color: var(--color-text-secondary);
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-small-size);
+    min-width: 80px;
+    text-align: center;
+  }
+
+  // Navigation icon buttons — override Material's circular button to our 32px rounded-square
+  .mat-mdc-paginator-navigation-first,
+  .mat-mdc-paginator-navigation-previous,
+  .mat-mdc-paginator-navigation-next,
+  .mat-mdc-paginator-navigation-last {
+    --mdc-icon-button-state-layer-size: 32px;
+    --mat-icon-button-hover-state-layer-opacity: 0;
+    --mat-icon-button-focus-state-layer-opacity: 0;
+    --mat-icon-button-pressed-state-layer-opacity: 0;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: var(--radius-sm);
+
+    &:focus         { outline: none; }
+    &:hover:not([disabled])  { background: var(--overlay-hovered); }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:active:not([disabled]) { background: var(--overlay-pressed); }
+  }
+
+  // Page size select — strip form field chrome, style to match ds-paginator__select
+  .mat-mdc-paginator-page-size-select {
+    width: auto;
+    margin: 0;
+
+    // Suppress subscript (hint/error space)
+    .mat-mdc-form-field-subscript-wrapper { display: none; }
+
+    // Suppress fill-mode line ripple
+    .mdc-line-ripple { display: none; }
+
+    // Restyle the field wrapper to match the custom native select
+    .mat-mdc-text-field-wrapper {
+      padding: 0;
+      background: var(--color-surface-input);
+      border: 1px solid var(--color-border-input);
+      border-radius: var(--radius-sm);
+
+      &:hover { border-color: var(--color-border-input-hover); }
+    }
+
+    .mat-mdc-form-field-flex {
+      height: unset;
+      align-items: center;
+      padding: 0 var(--spacing-sm);
+    }
+
+    .mat-mdc-form-field-infix {
+      padding: 3px 0;
+      min-height: unset;
+      width: 48px;
+    }
+
+    .mat-mdc-select-trigger {
+      font-family: var(--ref-typeface-brand);
+      font-size: var(--ref-typescale-label-small-size);
+      color: var(--color-text-primary);
+    }
+
+    .mat-mdc-select-arrow { color: var(--color-icon-subtle); }
+
+    // Focus ring on the form field wrapper (keyboard only)
+    .mat-mdc-text-field-wrapper:focus-within:not([data-mouse-focus]) {
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
+  }
+}

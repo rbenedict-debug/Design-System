@@ -1,57 +1,9 @@
-<div class="ds-paginator" role="navigation" aria-label="Pagination">
-  <div class="ds-paginator__page-size">
-    <span class="ds-paginator__label">Rows per page:</span>
-    <select
-      class="ds-paginator__select"
-      [value]="pageSize"
-      (change)="onPageSizeChange(+$any($event.target).value)"
-      aria-label="Rows per page"
-    >
-      <option *ngFor="let opt of pageSizeOptions" [value]="opt">{{ opt }}</option>
-    </select>
-  </div>
-
-  <div class="ds-paginator__range-label" aria-live="polite">
-    {{ rangeStart }} – {{ rangeEnd }} of {{ total }}
-  </div>
-
-  <div class="ds-paginator__nav">
-    <button
-      *ngIf="showFirstLastButtons"
-      class="ds-paginator__btn"
-      aria-label="First page"
-      [disabled]="isFirstPage"
-      (click)="firstPage()"
-    >
-      <span class="ds-icon ds-icon--sm">first_page</span>
-    </button>
-
-    <button
-      class="ds-paginator__btn"
-      aria-label="Previous page"
-      [disabled]="isFirstPage"
-      (click)="prevPage()"
-    >
-      <span class="ds-icon ds-icon--sm">chevron_left</span>
-    </button>
-
-    <button
-      class="ds-paginator__btn"
-      aria-label="Next page"
-      [disabled]="isLastPage"
-      (click)="nextPage()"
-    >
-      <span class="ds-icon ds-icon--sm">chevron_right</span>
-    </button>
-
-    <button
-      *ngIf="showFirstLastButtons"
-      class="ds-paginator__btn"
-      aria-label="Last page"
-      [disabled]="isLastPage"
-      (click)="lastPage()"
-    >
-      <span class="ds-icon ds-icon--sm">last_page</span>
-    </button>
-  </div>
-</div>
+<mat-paginator
+  class="ds-paginator"
+  [length]="total"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex"
+  [pageSizeOptions]="pageSizeOptions"
+  [showFirstLastButtons]="showFirstLastButtons"
+  (page)="onPage($event)"
+></mat-paginator>
