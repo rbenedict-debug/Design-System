@@ -15,7 +15,7 @@
  * </ds-accordion>
  */
 
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 
@@ -26,7 +26,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
   template: `
     <mat-expansion-panel
       class="ds-accordion__panel"
-      [expanded]="open"
+      [expanded]="open()"
       [disabled]="disabled"
       [hideToggle]="true"
     >
@@ -50,7 +50,9 @@ export class DsAccordionPanelComponent {
   @Input() title = '';
   @Input() icon?: string;
   /** Initial expanded state. mat-expansion-panel owns open/close after first render. */
-  @Input() open = false;
+  @Input('open') set openInput(value: boolean) { this.open.set(value); }
+  readonly open = signal(false);
+  toggle(): void { this.open.set(!this.open()); }
   @Input() disabled = false;
 }
 
