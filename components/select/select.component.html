@@ -1,48 +1,46 @@
-<div [class]="wrapperClasses">
+<!-- External label — sits above the mat-form-field, not floating inside it -->
+<label *ngIf="label" class="ds-select__label" [for]="selectId">
+  {{ label }}<span *ngIf="required" class="ds-select__required" aria-hidden="true">*</span>
+</label>
 
-  <!-- Label -->
-  <label *ngIf="label" class="ds-select__label" [for]="selectId">
-    {{ label }}<span *ngIf="required" class="ds-select__required" aria-hidden="true">*</span>
-  </label>
+<!-- mat-form-field owns the field box and border -->
+<mat-form-field
+  appearance="outline"
+  subscriptSizing="dynamic"
+  class="ds-select__field-wrapper"
+>
+  <mat-select
+    [id]="selectId"
+    [value]="value"
+    [disabled]="disabled"
+    [required]="required"
+    [placeholder]="placeholder"
+    panelClass="ds-select-panel"
+    [attr.aria-invalid]="isError ? 'true' : null"
+    [attr.aria-describedby]="(helperText || errorText) ? selectId + '-helper' : null"
+    (selectionChange)="onChange($event)"
+  >
+    <mat-option
+      *ngFor="let opt of options"
+      [value]="opt.value"
+      [disabled]="opt.disabled ?? false"
+    >{{ opt.label }}</mat-option>
+  </mat-select>
 
-  <!-- Field wrapper -->
-  <div class="ds-select__field">
-    <select
-      [id]="selectId"
-      class="ds-select__control"
-      [value]="value"
-      [disabled]="disabled"
-      [required]="required"
-      [attr.aria-invalid]="isError ? 'true' : null"
-      [attr.aria-describedby]="(helperText || errorText) ? selectHelperId : null"
-      (change)="onChange($event)"
-    >
-      <option value="" [disabled]="required">{{ placeholder }}</option>
-      <option
-        *ngFor="let opt of options"
-        [value]="opt.value"
-        [disabled]="opt.disabled ?? false"
-        [selected]="opt.value === value"
-      >{{ opt.label }}</option>
-    </select>
+  <!-- Arrow icon — hidden in error state via is-error host class -->
+  <span *ngIf="!isError" matSuffix
+    class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
 
-    <!-- Arrow — hidden in error state -->
-    <span *ngIf="!isError" class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">expand_more</span>
+  <!-- Error icon — replaces arrow in error state -->
+  <span *ngIf="isError && !disabled" matSuffix
+    class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon" aria-hidden="true">error</span>
 
-    <!-- Error icon — shown in error state (matches ds-input pattern) -->
-    <span
-      *ngIf="isError && !disabled"
-      class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon"
-      aria-hidden="true"
-    >error</span>
-  </div>
+</mat-form-field>
 
-  <!-- Helper / error text -->
-  <span
-    *ngIf="displayHelper"
-    class="ds-select__helper"
-    [id]="selectHelperId"
-    [attr.role]="isError ? 'alert' : null"
-  >{{ displayHelper }}</span>
-
-</div>
+<!-- Helper / error text — external, below the field -->
+<span
+  *ngIf="(isError && errorText) || helperText"
+  class="ds-select__helper"
+  [id]="selectId + '-helper'"
+  [attr.role]="isError ? 'alert' : null"
+>{{ isError && errorText ? errorText : helperText }}</span>

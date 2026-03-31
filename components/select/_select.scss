@@ -153,3 +153,119 @@
     .ds-select__helper  { color: var(--color-text-disabled); }
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-form-field (appearance="outline") + mat-select to use Onflo tokens.
+// No ::ng-deep. The <ds-select> host carries .ds-select via @HostBinding.
+//
+// Focus ring pattern (composite wrapper) — same as ds-input:
+//   :focus-within:not([data-mouse-focus]) → box-shadow ring (keyboard only)
+
+.ds-select {
+
+  // mat-form-field fills the column width
+  .mat-mdc-form-field { width: 100%; }
+
+  // ── Sizing — matches ds-input fixed 42px height ───────────────────────────
+
+  --mat-form-field-container-height:          42px;
+  --mat-form-field-container-vertical-padding: 0px;
+  --mdc-outlined-text-field-container-shape:  var(--radius-sm);
+  --mdc-outlined-text-field-outline-width:    1px;
+
+  // ── Colors — default ─────────────────────────────────────────────────────
+
+  --mdc-outlined-text-field-outline-color:       var(--color-border-input);
+  --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
+  --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
+
+  // Select trigger (value / placeholder text) typography
+  --mat-select-trigger-text-font:        var(--ref-typeface-brand);
+  --mat-select-trigger-text-size:        var(--ref-typescale-label-medium-size);
+  --mat-select-trigger-text-weight:      var(--ref-typeface-weight-regular);
+  --mat-select-trigger-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mat-select-enabled-trigger-text-color:      var(--color-text-primary);
+  --mat-select-placeholder-text-color:          var(--color-text-placeholder);
+  --mat-select-disabled-trigger-text-color:     var(--color-text-disabled);
+
+  // ── Suppress floating label, subscript, and Material's built-in arrow ────
+
+  .mat-mdc-floating-label,
+  .mdc-floating-label                   { display: none; }
+  .mat-mdc-form-field-subscript-wrapper { display: none; }
+  .mat-mdc-select-arrow-wrapper         { display: none; } // replaced by matSuffix ds-icon
+
+  // ── Field background ─────────────────────────────────────────────────────
+
+  .mat-mdc-text-field-wrapper {
+    background: var(--color-surface-input);
+    padding: 0 var(--spacing-md);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+  }
+
+  // Arrow turns brand on focus (non-error)
+  &:focus-within:not(.is-error) .ds-select__arrow {
+    color: var(--color-icon-brand);
+  }
+
+  // ── Focus ring — keyboard only (composite wrapper pattern) ───────────────
+
+  &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+  }
+
+  // ── Error state ───────────────────────────────────────────────────────────
+
+  &.is-error {
+    --mdc-outlined-text-field-outline-color:       var(--color-border-input-error);
+    --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+    --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+
+    &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
+  }
+
+  // ── Disabled state ────────────────────────────────────────────────────────
+
+  &.is-disabled {
+    --mdc-outlined-text-field-disabled-outline-color:   var(--color-border-subtle);
+    --mdc-outlined-text-field-disabled-outline-opacity: 1;
+
+    .mat-mdc-text-field-wrapper { background: var(--color-surface-input-disabled); }
+    .ds-select__label           { color: var(--color-text-disabled); }
+    .ds-select__arrow           { color: var(--color-icon-disabled); }
+    .ds-select__helper          { color: var(--color-text-disabled); }
+  }
+}
+
+
+// ── Dropdown panel ────────────────────────────────────────────────────────────
+// panelClass="ds-select-panel" scopes these to Onflo dropdowns only.
+// The panel renders in a CDK overlay — outside the component DOM.
+
+.ds-select-panel {
+  background: var(--color-surface-overlay);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px var(--shadow-elevation-2);
+
+  .mat-mdc-option {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    color: var(--color-text-primary);
+
+    &:hover:not(.mdc-list-item--disabled)   { background: var(--overlay-hovered); }
+    &:active:not(.mdc-list-item--disabled)  { background: var(--overlay-pressed); }
+    &.mdc-list-item--selected               { color: var(--color-text-brand); }
+    &.mdc-list-item--disabled               { color: var(--color-text-disabled); opacity: 1; }
+
+    // Suppress Material's ripple and state layer
+    --mat-option-hover-state-layer-opacity:     0;
+    --mat-option-focus-state-layer-opacity:     0;
+    --mat-option-selected-state-layer-opacity:  0;
+    --mat-option-pressed-state-layer-opacity:   0;
+  }
+}
