@@ -157,3 +157,34 @@
     }
   }
 }
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-list / mat-list-item to use Onflo tokens. No ::ng-deep.
+
+// Reset mat-list container — .ds-list class owns all visual styling.
+.mat-mdc-list {
+  --mat-list-active-indicator-color: transparent;
+  padding: 0;
+}
+
+// Reset mat-list-item — .ds-list-item class owns all visual styling.
+.mat-mdc-list-item {
+  // Transparent background — .ds-list-item controls this
+  --mdc-list-list-item-container-color: transparent;
+
+  // Height — our min-height: 48px on .ds-list-item takes precedence, but align tokens too
+  --mdc-list-list-item-one-line-container-height: 48px;
+  --mdc-list-list-item-two-line-container-height: 48px;
+  --mdc-list-list-item-three-line-container-height: 48px;
+
+  // Suppress MDC state layers — .ds-list-item--interactive owns hover/focus/pressed visuals
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-list-item-focus-state-layer-opacity: 0;
+  --mdc-list-list-item-pressed-state-layer-opacity: 0;
+
+  // Dissolve MDC's content wrapper so ds-list-item__ divs are direct flex
+  // children of the mat-list-item host, preserving our leading/content/trailing layout.
+  .mdc-list-item__content {
+    display: contents;
+  }
+}

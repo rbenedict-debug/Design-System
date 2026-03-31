@@ -37,6 +37,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
+import { MatListModule } from '@angular/material/list';
 
 /** Marker directive — place on any projected leading-slot element: `<span leading class="ds-icon">` */
 @Directive({ selector: '[leading]', standalone: true })
@@ -49,7 +50,7 @@ export class DsTrailingDirective {}
 @Component({
   selector: 'ds-list-item',
   standalone: true,
-  imports: [DsLeadingDirective, DsTrailingDirective],
+  imports: [DsLeadingDirective, DsTrailingDirective, MatListModule],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -87,7 +88,8 @@ export class DsListItemComponent implements AfterContentInit {
   selector: 'ds-list',
   standalone: true,
   imports: [],
-  template: `<ul class="ds-list" role="list"><ng-content /></ul>`,
+  imports: [MatListModule],
+  template: `<mat-list class="ds-list"><ng-content /></mat-list>`,
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

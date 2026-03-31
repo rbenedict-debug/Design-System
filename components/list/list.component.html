@@ -1,9 +1,8 @@
-<li
+<mat-list-item
   class="ds-list-item"
   [class.ds-list-item--interactive]="interactive"
   [class.ds-list-item--3-lines]="variant === '3-lines'"
   [class.is-disabled]="disabled"
-  role="listitem"
   [attr.tabindex]="interactive ? 0 : null"
   [attr.aria-disabled]="disabled || null"
 >
@@ -27,4 +26,4 @@
     </div>
   }
   <ng-content />
-</li>
+</mat-list-item>
