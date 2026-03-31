@@ -16,12 +16,12 @@
  */
 
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'ds-spinner',
   standalone: true,
-  imports: [CommonModule],
+  imports: [MatProgressSpinnerModule],
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,11 +37,8 @@ export class DsSpinnerComponent {
   @Input() color: 'brand' | 'white' | 'subtle' = 'brand';
   @Input() ariaLabel = 'Loading';
 
-  // Circumference of r=18: 2π*18 ≈ 113.1px
-  readonly CIRCUMFERENCE = 113.1;
-
-  get strokeDashoffset(): number {
-    const fraction = Math.min(100, Math.max(0, this.value)) / 100;
-    return this.CIRCUMFERENCE * (1 - fraction);
+  get diameter(): number {
+    const sizes: Record<string, number> = { sm: 24, md: 40, lg: 56 };
+    return sizes[this.size];
   }
 }

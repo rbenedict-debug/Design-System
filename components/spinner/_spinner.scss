@@ -119,3 +119,18 @@
     .ds-spinner__fill { stroke: var(--color-icon-subtle); }
   }
 }
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-progress-spinner to use Onflo tokens. No ::ng-deep.
+
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: var(--color-surface-brand-bold);
+
+  &.ds-spinner--white {
+    --mdc-circular-progress-active-indicator-color: var(--color-text-inverse);
+  }
+
+  &.ds-spinner--subtle {
+    --mdc-circular-progress-active-indicator-color: var(--color-icon-subtle);
+  }
+}

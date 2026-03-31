@@ -1,33 +1,9 @@
-<div
-  class="ds-spinner"
-  [class.ds-spinner--sm]="size === 'sm'"
-  [class.ds-spinner--lg]="size === 'lg'"
-  [class.ds-spinner--determinate]="mode === 'determinate'"
+<mat-progress-spinner
+  [mode]="mode"
+  [value]="value"
+  [diameter]="diameter"
+  [strokeWidth]="3"
   [class.ds-spinner--white]="color === 'white'"
   [class.ds-spinner--subtle]="color === 'subtle'"
-  role="progressbar"
   [attr.aria-label]="ariaLabel"
-  [attr.aria-valuenow]="mode === 'determinate' ? value : null"
-  [attr.aria-valuemin]="mode === 'determinate' ? 0 : null"
-  [attr.aria-valuemax]="mode === 'determinate' ? 100 : null"
-  [attr.aria-valuetext]="mode === 'determinate' ? (value + '%') : ariaLabel"
->
-  <svg class="ds-spinner__svg" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-    <circle
-      *ngIf="mode === 'determinate'"
-      class="ds-spinner__track"
-      cx="22" cy="22" r="18"
-    />
-    <circle
-      *ngIf="mode === 'indeterminate'"
-      class="ds-spinner__circle"
-      cx="22" cy="22" r="18"
-    />
-    <circle
-      *ngIf="mode === 'determinate'"
-      class="ds-spinner__fill"
-      cx="22" cy="22" r="18"
-      [style.stroke-dashoffset.px]="strokeDashoffset"
-    />
-  </svg>
-</div>
+></mat-progress-spinner>
