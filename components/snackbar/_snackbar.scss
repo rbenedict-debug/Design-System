@@ -153,3 +153,36 @@
     &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// When DsSnackbarComponent is launched via MatSnackBar.openFromComponent(),
+// Material wraps the component in .mat-mdc-snack-bar-container inside a CDK overlay.
+// panelClass: 'ds-snackbar-host' scopes these overrides and positions the container.
+// No ::ng-deep — these are global rules targeting the CDK overlay panel class.
+
+.mat-mdc-snack-bar-container.ds-snackbar-host {
+  // Strip Material's default container styling — ds-snackbar provides its own
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  min-width: unset;
+  max-width: unset;
+
+  --mdc-snackbar-container-color:      transparent;
+  --mdc-snackbar-supporting-text-color: transparent;
+  --mat-snack-bar-button-color:         transparent;
+
+  // The MdcSnackbar surface hosts the projected component content
+  .mdc-snackbar__surface {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    min-width: unset;
+    max-width: unset;
+    border-radius: 0;
+  }
+
+  // Suppress Material's built-in action/dismiss buttons (component renders its own)
+  .mat-mdc-snack-bar-actions { display: none; }
+}
