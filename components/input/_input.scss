@@ -201,3 +201,96 @@
     .ds-input__control { cursor: default; color: var(--color-text-secondary); }
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-form-field (appearance="outline") to use Onflo tokens.
+// No ::ng-deep. The <ds-input> host carries .ds-input via @HostBinding, so
+// descendant selectors here target Material's internal DOM from the host.
+//
+// Focus ring pattern (composite wrapper):
+//   :focus-within                         → border-color change only
+//   :focus-within:not([data-mouse-focus]) → box-shadow ring (keyboard only)
+// data-mouse-focus is set on mousedown/touchstart by @HostListener and removed
+// on focusout — suppresses the ring for pointer-initiated focus.
+
+.ds-input {
+
+  // mat-form-field fills the column width
+  .mat-mdc-form-field { width: 100%; }
+
+  // ── Sizing ───────────────────────────────────────────────────────────────
+
+  --mat-form-field-container-height:          42px;
+  --mat-form-field-container-vertical-padding: 0px;
+  --mdc-outlined-text-field-container-shape:  var(--radius-sm);
+  --mdc-outlined-text-field-outline-width:    1px;
+
+  // ── Colors — default ─────────────────────────────────────────────────────
+
+  --mdc-outlined-text-field-outline-color:                  var(--color-border-input);
+  --mdc-outlined-text-field-hover-outline-color:            var(--color-border-input-hover);
+  --mdc-outlined-text-field-focus-outline-color:            var(--color-border-input-active);
+  --mdc-outlined-text-field-input-text-color:               var(--color-text-primary);
+  --mdc-outlined-text-field-input-text-placeholder-color:   var(--color-text-placeholder);
+  --mdc-outlined-text-field-caret-color:                    var(--color-border-input-active);
+  --mdc-outlined-text-field-input-text-font:                var(--ref-typeface-brand);
+  --mdc-outlined-text-field-input-text-size:                var(--ref-typescale-label-medium-size);
+  --mdc-outlined-text-field-input-text-weight:              var(--ref-typeface-weight-regular);
+  --mdc-outlined-text-field-input-text-line-height:         var(--ref-typescale-label-medium-line-height);
+
+  // ── Suppress floating label and subscript (both are external) ────────────
+
+  .mat-mdc-floating-label,
+  .mdc-floating-label               { display: none; }
+  .mat-mdc-form-field-subscript-wrapper { display: none; }
+
+  // ── Field background and padding ─────────────────────────────────────────
+
+  .mat-mdc-text-field-wrapper {
+    background: var(--color-surface-input);
+    padding: 0 var(--spacing-md);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  // ── Focus ring — keyboard only (composite wrapper pattern) ───────────────
+
+  &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+  }
+
+  // ── Error state ───────────────────────────────────────────────────────────
+
+  &.is-error {
+    --mdc-outlined-text-field-outline-color:       var(--color-border-input-error);
+    --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+    --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+
+    &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
+  }
+
+  // ── Disabled state ────────────────────────────────────────────────────────
+
+  &.is-disabled {
+    --mdc-outlined-text-field-disabled-outline-color:     var(--color-border-subtle);
+    --mdc-outlined-text-field-disabled-input-text-color:  var(--color-text-disabled);
+    --mdc-outlined-text-field-disabled-outline-opacity:   1;
+
+    .mat-mdc-text-field-wrapper { background: var(--color-surface-input-disabled); }
+    .ds-input__label            { color: var(--color-text-disabled); }
+    .ds-input__icon             { color: var(--color-icon-disabled); }
+    .ds-input__helper           { color: var(--color-text-disabled); }
+  }
+
+  // ── Read-only state ───────────────────────────────────────────────────────
+
+  &.is-readonly {
+    --mdc-outlined-text-field-outline-color:       var(--color-border-subtle);
+    --mdc-outlined-text-field-hover-outline-color: var(--color-border-subtle);
+
+    .mat-mdc-text-field-wrapper { background: var(--color-surface-default); cursor: default; }
+    .mdc-text-field__input      { cursor: default; color: var(--color-text-secondary); }
+  }
+}

@@ -1,73 +1,64 @@
-<div [class]="wrapperClasses">
+<!-- External label — sits above the mat-form-field, not floating inside it -->
+<label *ngIf="label" class="ds-input__label" [for]="inputId">
+  {{ label }}<span *ngIf="required" class="ds-input__required" aria-hidden="true">*</span>
+</label>
 
-  <!-- Label -->
-  <label *ngIf="label" class="ds-input__label" [for]="inputId">
-    {{ label }}<span *ngIf="required" class="ds-input__required" aria-hidden="true">*</span>
-  </label>
+<!-- mat-form-field owns the field box, border, prefix/suffix slots, and matInput -->
+<mat-form-field
+  appearance="outline"
+  subscriptSizing="dynamic"
+  class="ds-input__field-wrapper"
+>
 
-  <!-- Field wrapper -->
-  <div class="ds-input__field">
+  <!-- Leading icon -->
+  <span *ngIf="leadingIcon" matPrefix
+    class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">{{ leadingIcon }}</span>
 
-    <!-- Leading icon -->
-    <span *ngIf="leadingIcon" class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">
-      {{ leadingIcon }}
-    </span>
+  <!-- Prefix text -->
+  <span *ngIf="prefix" matPrefix
+    class="ds-input__prefix" aria-hidden="true">{{ prefix }}</span>
 
-    <!-- Prefix -->
-    <span *ngIf="prefix" class="ds-input__prefix" aria-hidden="true">{{ prefix }}</span>
+  <!-- Input control -->
+  <input
+    matInput
+    [id]="inputId"
+    [type]="type"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="disabled"
+    [readonly]="readOnly"
+    [required]="required"
+    [attr.aria-invalid]="isError ? 'true' : null"
+    [attr.aria-describedby]="(helperText || errorText) ? inputId + '-helper' : null"
+    (input)="onInput($event)"
+  />
 
-    <!-- Input control -->
-    <input
-      [id]="inputId"
-      class="ds-input__control"
-      [type]="type"
-      [placeholder]="placeholder"
-      [value]="value"
-      [disabled]="disabled"
-      [readOnly]="readOnly"
-      [required]="required"
-      [attr.aria-invalid]="isError ? 'true' : null"
-      [attr.aria-describedby]="(helperText || errorText) ? inputId + '-helper' : null"
-      (input)="onInput($event)"
-    />
+  <!-- Suffix text -->
+  <span *ngIf="suffix" matSuffix
+    class="ds-input__suffix" aria-hidden="true">{{ suffix }}</span>
 
-    <!-- Suffix -->
-    <span *ngIf="suffix" class="ds-input__suffix" aria-hidden="true">{{ suffix }}</span>
+  <!-- Error icon — replaces trailing action in error state -->
+  <span *ngIf="isError && !disabled" matSuffix
+    class="ds-icon ds-icon--sm ds-icon--filled ds-input__error-icon" aria-hidden="true">error</span>
 
-    <!-- Error icon — replaces trailing icon in error state -->
-    <span
-      *ngIf="isError && !disabled"
-      class="ds-icon ds-icon--sm ds-icon--filled ds-input__error-icon"
-      aria-hidden="true"
-    >error</span>
+  <!-- Trailing action button (clear, show/hide, etc.) -->
+  <button *ngIf="trailingIcon && !disabled && !isError" matSuffix
+    class="ds-input__action" type="button"
+    [attr.aria-label]="'Clear ' + label"
+    (click)="onTrailingAction()">
+    <span class="ds-icon ds-icon--sm" aria-hidden="true">{{ trailingIcon }}</span>
+  </button>
 
-    <!-- Trailing icon — clickable if trailingAction has listeners, otherwise decorative -->
-    <button
-      *ngIf="trailingIcon && !disabled && !isError"
-      class="ds-input__action"
-      type="button"
-      [attr.aria-label]="'Clear ' + label"
-      (click)="onTrailingAction()"
-    >
-      <span class="ds-icon ds-icon--sm" aria-hidden="true">{{ trailingIcon }}</span>
-    </button>
+  <!-- Trailing icon — decorative only when disabled -->
+  <span *ngIf="trailingIcon && disabled" matSuffix
+    class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">{{ trailingIcon }}</span>
 
-    <span
-      *ngIf="trailingIcon && disabled"
-      class="ds-icon ds-icon--sm ds-input__icon"
-      aria-hidden="true"
-    >{{ trailingIcon }}</span>
+</mat-form-field>
 
-  </div>
-
-  <!-- Helper / error text -->
-  <span
-    *ngIf="isError && errorText || helperText"
-    class="ds-input__helper"
-    [id]="inputId + '-helper'"
-    [attr.role]="isError ? 'alert' : null"
-  >
-    {{ isError && errorText ? errorText : helperText }}
-  </span>
-
-</div>
+<!-- Helper / error text — external, below the field -->
+<span
+  *ngIf="(isError && errorText) || helperText"
+  class="ds-input__helper"
+  [id]="inputId + '-helper'"
+  [attr.role]="isError ? 'alert' : null"
+>{{ isError && errorText ? errorText : helperText }}</span>

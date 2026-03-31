@@ -1,5 +1,11 @@
-import { Component, Input, Output, EventEmitter, ElementRef, HostListener, OnInit } from '@angular/core';
+import {
+  Component, Input, Output, EventEmitter,
+  ElementRef, HostListener, HostBinding,
+  ChangeDetectionStrategy, OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 export type DsInputType =
   | 'text'
@@ -13,69 +19,60 @@ export type DsInputType =
 /**
  * Onflo Design System — Input Field
  *
- * A standalone Angular component wrapping the ds-input CSS class API.
- * For direct class usage without Angular:
- *   <div class="ds-input">
- *     <label class="ds-input__label" for="id">Label</label>
- *     <div class="ds-input__field">
- *       <input id="id" class="ds-input__control" placeholder="..." />
- *     </div>
- *     <span class="ds-input__helper">Helper text</span>
- *   </div>
+ * Based on Angular Material mat-form-field + matInput (appearance="outline").
+ * Import MatFormFieldModule + MatInputModule in your Angular module.
+ *
+ * The host <ds-input> element acts as the .ds-input composite wrapper:
+ *   - @HostBinding adds ds-input / is-error / is-disabled / is-readonly classes
+ *   - data-mouse-focus attribute is set on mousedown/touchstart and removed on
+ *     focusout — this is the composite wrapper focus ring suppression pattern.
+ *     SCSS uses :focus-within for border-color and
+ *     :focus-within:not([data-mouse-focus]) for the box-shadow focus ring only.
  *
  * @example
  *   <ds-input label="Email" placeholder="you@company.com" [(value)]="email" />
- *
- *   <ds-input
- *     label="Search"
- *     leadingIcon="search"
- *     trailingIcon="close"
- *     placeholder="Search..."
- *     [(value)]="query"
- *     (trailingAction)="clearSearch()"
- *   />
- *
- *   <ds-input
- *     label="Amount"
- *     prefix="$"
- *     suffix="USD"
- *     type="number"
- *     [isError]="true"
- *     errorText="Must be a positive number"
- *   />
+ *   <ds-input label="Search" leadingIcon="search" trailingIcon="close"
+ *             [(value)]="query" (trailingAction)="clear()" />
+ *   <ds-input label="Amount" prefix="$" [isError]="true" errorText="Required" />
  */
 @Component({
   selector: 'ds-input',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule],
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsInputComponent implements OnInit {
-  private _lastWasMouse = false;
-  private _inputId = '';
 
-  constructor(private elementRef: ElementRef<HTMLElement>) {}
+  // ── Host element bindings ─────────────────────────────────────────────────
+  // <ds-input> acts as the .ds-input composite wrapper — state classes
+  // applied here let existing _input.scss rules (label, helper, icons) match.
+
+  @HostBinding('class.ds-input')    readonly hostClass  = true;
+  @HostBinding('class.is-error')    get hostError()     { return this.isError; }
+  @HostBinding('class.is-disabled') get hostDisabled()  { return this.disabled; }
+  @HostBinding('class.is-readonly') get hostReadonly()  { return this.readOnly; }
+
+  constructor(private el: ElementRef<HTMLElement>) {}
+
+  // ── Composite wrapper focus ring — data-mouse-focus suppression ───────────
+  // Set attribute on mousedown/touchstart (fires before focusin) so the SCSS
+  // :focus-within:not([data-mouse-focus]) rule never fires for pointer focus.
+  // Remove on focusout so keyboard re-focus to this field shows the ring again.
 
   @HostListener('mousedown')
   @HostListener('touchstart')
-  onPointerDown(): void { this._lastWasMouse = true; }
-
-  @HostListener('keydown')
-  onKeyDown(): void { this._lastWasMouse = false; }
-
-  @HostListener('focusin')
-  onFocusIn(): void {
-    if (this._lastWasMouse) {
-      this.elementRef.nativeElement.setAttribute('data-mouse-focus', '');
-    }
+  onPointerDown(): void {
+    this.el.nativeElement.setAttribute('data-mouse-focus', '');
   }
 
   @HostListener('focusout')
   onFocusOut(): void {
-    this.elementRef.nativeElement.removeAttribute('data-mouse-focus');
-    this._lastWasMouse = false;
+    this.el.nativeElement.removeAttribute('data-mouse-focus');
   }
+
+  // ── Inputs ────────────────────────────────────────────────────────────────
 
   /** Label text shown above the field. */
   @Input() label = '';
@@ -107,7 +104,7 @@ export class DsInputComponent implements OnInit {
   /** Helper text shown below the field. */
   @Input() helperText = '';
 
-  /** Error message shown below the field (replaces helperText when isError). */
+  /** Error message shown below the field when isError is true. */
   @Input() errorText = '';
 
   /** Applies error styling and shows errorText. */
@@ -119,30 +116,22 @@ export class DsInputComponent implements OnInit {
   /** Makes the field read-only. */
   @Input() readOnly = false;
 
-  /** Emits the new value on every keystroke. */
-  @Output() valueChange = new EventEmitter<string>();
+  // ── Outputs ───────────────────────────────────────────────────────────────
 
-  /** Emits when the trailing icon/action button is clicked. */
+  /** Emits the new value on every keystroke. */
+  @Output() valueChange    = new EventEmitter<string>();
+
+  /** Emits when the trailing action button is clicked. */
   @Output() trailingAction = new EventEmitter<void>();
 
-  get wrapperClasses(): string {
-    return [
-      'ds-input',
-      this.isError ? 'is-error' : '',
-      this.disabled ? 'is-disabled' : '',
-      this.readOnly ? 'is-readonly' : '',
-    ]
-      .filter(Boolean)
-      .join(' ');
-  }
+  // ── Internal ──────────────────────────────────────────────────────────────
+
+  private _inputId = '';
+  get inputId(): string { return this._inputId; }
 
   ngOnInit(): void {
     const slug = this.label.trim().toLowerCase().replace(/\s+/g, '-') || 'field';
     this._inputId = `ds-input-${slug}-${Math.random().toString(36).slice(2)}`;
-  }
-
-  get inputId(): string {
-    return this._inputId;
   }
 
   onInput(event: Event): void {
