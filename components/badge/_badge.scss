@@ -66,6 +66,24 @@
 }
 
 
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes the [matBadge] directive to match ds-badge-indicator styling.
+// Applied globally so [matBadge] usage anywhere in the app picks up Onflo tokens.
+// No ::ng-deep.
+
+.mat-badge {
+  --mat-badge-background-color: var(--color-surface-accent-red-bold);
+  --mat-badge-text-color: var(--color-text-on-bold);
+  --mat-badge-text-size: var(--ref-typescale-label-small-size);
+  --mat-badge-text-weight: var(--ref-typeface-weight-bold);
+  --mat-badge-container-size: 20px;
+  --mat-badge-container-shape: var(--radius-full);
+
+  &.mat-badge-small {
+    --mat-badge-container-size: 6px;
+  }
+}
+
 // ── Overlay host wrapper ──────────────────────────────────────────────────────
 // Wraps an icon button (or other element) so the badge can be positioned
 // absolutely at the top-right corner. The host itself stays inline-flex.

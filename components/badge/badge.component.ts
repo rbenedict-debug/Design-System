@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatBadgeModule } from '@angular/material/badge';
 
 /**
  * Onflo Design System — Badge
@@ -29,7 +30,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'ds-badge',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatBadgeModule],
   templateUrl: './badge.component.html',
   styleUrls: ['./badge.component.scss'],
 })
