@@ -95,3 +95,20 @@
     }
   }
 }
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-divider to use Onflo tokens. No ::ng-deep.
+
+.mat-divider {
+  border-color: var(--color-border-subtle);
+}
+
+.mat-divider-inset:not(.mat-divider-vertical) {
+  margin-left: var(--spacing-xl);
+}
+
+.mat-divider-vertical.mat-divider-inset {
+  margin: var(--spacing-md) 0;
+  height: auto;
+  flex: 1;
+}

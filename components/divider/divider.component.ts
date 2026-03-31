@@ -13,11 +13,12 @@
 
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'ds-divider',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatDividerModule],
   templateUrl: './divider.component.html',
   styleUrls: ['./divider.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
