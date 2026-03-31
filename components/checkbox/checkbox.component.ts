@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatCheckboxModule, MatCheckboxChange } from '@angular/material/checkbox';
 
 /**
  * Onflo Design System — Checkbox
@@ -20,9 +21,10 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'ds-checkbox',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatCheckboxModule],
   templateUrl: './checkbox.component.html',
   styleUrls: ['./checkbox.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsCheckboxComponent {
   /** Label text displayed next to the checkbox. */
@@ -43,22 +45,8 @@ export class DsCheckboxComponent {
   /** Emits the new checked value when toggled. */
   @Output() checkedChange = new EventEmitter<boolean>();
 
-  /** Unique ID for the input/label pair. */
-  readonly inputId = `ds-checkbox-${Math.random().toString(36).slice(2)}`;
-
-  get wrapperClasses(): string {
-    return [
-      'ds-checkbox',
-      this.isError ? 'is-error' : '',
-      this.disabled ? 'is-disabled' : '',
-    ]
-      .filter(Boolean)
-      .join(' ');
-  }
-
-  onChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.checked = input.checked;
+  onChange(event: MatCheckboxChange): void {
+    this.checked = event.checked;
     this.checkedChange.emit(this.checked);
   }
 }

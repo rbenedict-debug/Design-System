@@ -179,3 +179,99 @@
     }
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-checkbox to use Onflo tokens. No ::ng-deep.
+// mat-checkbox renders its own DOM; we map our spec onto MDC's internal elements
+// via global class selectors (.mdc-checkbox, .mdc-checkbox__*).
+
+.mat-mdc-checkbox.ds-checkbox {
+
+  // ── Icon colors ──────────────────────────────────────────────────────────────
+
+  --mdc-checkbox-selected-icon-color:           var(--color-surface-brand-bold);
+  --mdc-checkbox-selected-checkmark-color:      var(--color-text-on-brand);
+  --mdc-checkbox-unselected-icon-color:         var(--color-border-input);
+  --mdc-checkbox-selected-focus-icon-color:     var(--color-surface-brand-bold);
+  --mdc-checkbox-selected-hover-icon-color:     var(--color-surface-brand-bold);
+  --mdc-checkbox-selected-pressed-icon-color:   var(--color-surface-brand-bold);
+  --mdc-checkbox-unselected-focus-icon-color:   var(--color-border-input);
+  --mdc-checkbox-unselected-hover-icon-color:   var(--color-border-input);
+  --mdc-checkbox-unselected-pressed-icon-color: var(--color-border-input);
+  --mdc-checkbox-disabled-selected-icon-color:            var(--color-icon-disabled);
+  --mdc-checkbox-disabled-unselected-icon-color:          var(--color-icon-disabled);
+  --mdc-checkbox-disabled-selected-checkmark-color:       var(--color-surface-page);
+
+  // ── Touch target / state layer size (42px circle) ────────────────────────────
+
+  --mdc-checkbox-state-layer-size: 42px;
+
+  // ── Zero out Material state layers — hover/pressed rules below own overlays ──
+
+  --mat-checkbox-checked-hover-state-layer-opacity:     0;
+  --mat-checkbox-checked-focus-state-layer-opacity:     0;
+  --mat-checkbox-checked-pressed-state-layer-opacity:   0;
+  --mat-checkbox-unchecked-hover-state-layer-opacity:   0;
+  --mat-checkbox-unchecked-focus-state-layer-opacity:   0;
+  --mat-checkbox-unchecked-pressed-state-layer-opacity: 0;
+
+  // ── Label typography ─────────────────────────────────────────────────────────
+
+  --mat-checkbox-label-text-font:        var(--ref-typeface-brand);
+  --mat-checkbox-label-text-size:        var(--ref-typescale-label-medium-size);
+  --mat-checkbox-label-text-weight:      var(--ref-typeface-weight-regular);
+  --mat-checkbox-label-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mat-checkbox-label-text-color:       var(--color-text-primary);
+  --mat-checkbox-disabled-label-color:   var(--color-text-disabled);
+
+  // ── Suppress Material's focus ring element — ours is applied below ────────────
+
+  .mdc-checkbox__focus-ring { display: none; }
+
+  // ── Hover — background on the 42px .mdc-checkbox touch target circle ─────────
+
+  &:not(.mat-mdc-checkbox-disabled):hover .mdc-checkbox {
+    background: var(--overlay-hovered);
+    border-radius: var(--radius-full);
+  }
+
+  // ── Pressed ──────────────────────────────────────────────────────────────────
+
+  &:not(.mat-mdc-checkbox-disabled):active .mdc-checkbox {
+    background: var(--overlay-pressed);
+    border-radius: var(--radius-full);
+  }
+
+  // ── Focus ring — keyboard only via :focus-visible on the native input ─────────
+  // :has() with :focus-visible gives keyboard-only behavior without data-mouse-focus
+  // suppression — correct for simple focusable elements per CLAUDE.md ADA spec.
+
+  &:has(.mdc-checkbox__native-control:focus-visible) .mdc-checkbox {
+    background: var(--overlay-pressed);
+    border-radius: var(--radius-full);
+    box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring);
+  }
+
+
+  // ── Error state ──────────────────────────────────────────────────────────────
+
+  &.is-error {
+    --mdc-checkbox-unselected-icon-color:           var(--color-border-input-error);
+    --mdc-checkbox-unselected-focus-icon-color:     var(--color-border-input-error);
+    --mdc-checkbox-unselected-hover-icon-color:     var(--color-border-input-error);
+    --mdc-checkbox-unselected-pressed-icon-color:   var(--color-border-input-error);
+    --mdc-checkbox-selected-icon-color:             var(--color-surface-accent-red-bold);
+    --mdc-checkbox-selected-focus-icon-color:       var(--color-surface-accent-red-bold);
+    --mdc-checkbox-selected-hover-icon-color:       var(--color-surface-accent-red-bold);
+    --mdc-checkbox-selected-pressed-icon-color:     var(--color-surface-accent-red-bold);
+
+    &:not(.mat-mdc-checkbox-disabled):hover .mdc-checkbox  { background: var(--overlay-accent-red-hovered); }
+    &:not(.mat-mdc-checkbox-disabled):active .mdc-checkbox { background: var(--overlay-accent-red-pressed); }
+
+    &:has(.mdc-checkbox__native-control:focus-visible) .mdc-checkbox {
+      background: var(--overlay-accent-red-pressed);
+      box-shadow: 0 0 0 2px var(--color-border-input-error);
+    }
+  }
+}

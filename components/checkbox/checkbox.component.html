@@ -1,17 +1,12 @@
-<label [class]="wrapperClasses" [for]="inputId">
-  <input
-    [id]="inputId"
-    type="checkbox"
-    class="ds-checkbox__control"
-    [checked]="checked"
-    [indeterminate]="indeterminate"
-    [disabled]="disabled"
-    [attr.aria-checked]="indeterminate ? 'mixed' : checked"
-    (change)="onChange($event)"
-  />
-  <span class="ds-checkbox__touch">
-    <span class="ds-checkbox__box"></span>
-  </span>
+<mat-checkbox
+  class="ds-checkbox"
+  [class.is-error]="isError"
+  [checked]="checked"
+  [indeterminate]="indeterminate"
+  [disabled]="disabled"
+  [disableRipple]="true"
+  (change)="onChange($event)"
+>
   <span *ngIf="label" class="ds-checkbox__label">{{ label }}</span>
   <ng-content></ng-content>
-</label>
+</mat-checkbox>
