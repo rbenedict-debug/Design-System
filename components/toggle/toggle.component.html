@@ -1,17 +1,11 @@
-<label [class]="wrapperClasses" [for]="inputId">
-  <input
-    [id]="inputId"
-    type="checkbox"
-    role="switch"
-    class="ds-toggle__control"
-    [checked]="checked"
-    [disabled]="disabled"
-    [attr.aria-checked]="checked"
-    (change)="onChange($event)"
-  />
-  <span class="ds-toggle__track">
-    <span class="ds-toggle__thumb"></span>
-  </span>
+<mat-slide-toggle
+  class="ds-toggle"
+  [class.ds-toggle--icon]="showIcon"
+  [checked]="checked"
+  [disabled]="disabled"
+  [disableRipple]="true"
+  (change)="onChange($event)"
+>
   <span *ngIf="label" class="ds-toggle__label">{{ label }}</span>
   <ng-content></ng-content>
-</label>
+</mat-slide-toggle>

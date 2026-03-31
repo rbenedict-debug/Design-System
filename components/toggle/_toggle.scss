@@ -198,3 +198,132 @@
     }
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-slide-toggle to use Onflo tokens. No ::ng-deep.
+// mat-slide-toggle renders a <button role="switch"> (.mdc-switch) as the
+// focusable element — :focus-visible applies directly to it (simple element pattern).
+// The state layer canvas is .mdc-switch__ripple (40px circle centered on thumb).
+
+.mat-mdc-slide-toggle.ds-toggle {
+
+  // ── Track and handle sizing ───────────────────────────────────────────────
+
+  --mdc-switch-track-width:   52px;
+  --mdc-switch-track-height:  32px;
+  --mdc-switch-track-shape:   var(--radius-full);
+  --mdc-switch-handle-width:  24px;
+  --mdc-switch-handle-height: 24px;
+  --mdc-switch-handle-shape:  var(--radius-full);
+
+  // ── Track colors ─────────────────────────────────────────────────────────
+
+  --mdc-switch-selected-track-color:          var(--color-surface-brand-bold);
+  --mdc-switch-selected-focus-track-color:    var(--color-surface-brand-bold);
+  --mdc-switch-selected-hover-track-color:    var(--color-surface-brand-bold);
+  --mdc-switch-selected-pressed-track-color:  var(--color-surface-brand-bold);
+  --mdc-switch-unselected-track-color:        var(--color-surface-default);
+  --mdc-switch-unselected-focus-track-color:  var(--color-surface-default);
+  --mdc-switch-unselected-hover-track-color:  var(--color-surface-default);
+  --mdc-switch-unselected-pressed-track-color: var(--color-surface-default);
+
+  // No outline on track
+  --mdc-switch-unselected-outline-width:      0px;
+  --mdc-switch-selected-outline-width:        0px;
+
+  // ── Handle (thumb) colors ─────────────────────────────────────────────────
+
+  --mdc-switch-selected-handle-color:          var(--color-icon-on-brand);
+  --mdc-switch-selected-focus-handle-color:    var(--color-icon-on-brand);
+  --mdc-switch-selected-hover-handle-color:    var(--color-icon-on-brand);
+  --mdc-switch-selected-pressed-handle-color:  var(--color-icon-on-brand);
+  --mdc-switch-unselected-handle-color:        var(--color-icon-on-brand);
+  --mdc-switch-unselected-focus-handle-color:  var(--color-icon-on-brand);
+  --mdc-switch-unselected-hover-handle-color:  var(--color-icon-on-brand);
+  --mdc-switch-unselected-pressed-handle-color: var(--color-icon-on-brand);
+
+  // Suppress handle elevation shadow
+  --mdc-switch-handle-elevation: 0;
+  --mdc-switch-handle-shadow-color: transparent;
+
+  // ── Disabled state — full opacity; colours carry the visual meaning ───────
+
+  --mdc-switch-disabled-selected-track-color:    var(--color-surface-disabled);
+  --mdc-switch-disabled-unselected-track-color:  var(--color-surface-disabled);
+  --mdc-switch-disabled-selected-handle-color:   var(--color-icon-disabled);
+  --mdc-switch-disabled-unselected-handle-color: var(--color-icon-disabled);
+  --mdc-switch-disabled-handle-opacity:          1;
+  --mdc-switch-disabled-track-opacity:           1;
+  --mdc-switch-disabled-selected-icon-opacity:   1;
+  --mdc-switch-disabled-unselected-icon-opacity: 1;
+
+  // ── Zero out Material state layers — hover/pressed/focus rules below own them
+
+  --mat-switch-selected-hover-state-layer-opacity:     0;
+  --mat-switch-selected-focus-state-layer-opacity:     0;
+  --mat-switch-selected-pressed-state-layer-opacity:   0;
+  --mat-switch-unselected-hover-state-layer-opacity:   0;
+  --mat-switch-unselected-focus-state-layer-opacity:   0;
+  --mat-switch-unselected-pressed-state-layer-opacity: 0;
+
+  // ── Label typography ─────────────────────────────────────────────────────
+
+  --mat-switch-label-text-font:        var(--ref-typeface-brand);
+  --mat-switch-label-text-size:        var(--ref-typescale-label-medium-size);
+  --mat-switch-label-text-weight:      var(--ref-typeface-weight-regular);
+  --mat-switch-label-text-line-height: var(--ref-typescale-label-medium-line-height);
+
+  // ── Icons — default variant: hidden; icon variant: uses MDC SVGs ──────────
+
+  &:not(.ds-toggle--icon) .mdc-switch__icons { display: none; }
+
+  &.ds-toggle--icon {
+    --mdc-switch-selected-icon-color:   var(--color-surface-brand-bold);
+    --mdc-switch-unselected-icon-color: var(--color-text-secondary);
+
+    &.mat-mdc-slide-toggle-disabled {
+      --mdc-switch-selected-icon-color:   var(--color-icon-disabled);
+      --mdc-switch-unselected-icon-color: var(--color-icon-disabled);
+    }
+  }
+
+  // ── Suppress Material's focus ring element ───────────────────────────────
+
+  .mdc-switch__focus-ring { display: none; }
+
+  // ── Hover — background on .mdc-switch__ripple (40px circle over thumb) ───
+  // .mdc-switch is the <button> — :not([disabled]) guards against disabled state
+
+  .mdc-switch:not([disabled]):hover ~ * { /* prevent cascade interference */ }
+
+  &:not(.mat-mdc-slide-toggle-disabled):hover .mdc-switch__ripple {
+    background: var(--overlay-hovered);
+    border-radius: var(--radius-full);
+  }
+
+  // ── Pressed ──────────────────────────────────────────────────────────────
+
+  &:not(.mat-mdc-slide-toggle-disabled):active .mdc-switch__ripple {
+    background: var(--overlay-pressed);
+    border-radius: var(--radius-full);
+  }
+
+  // ── Focus ring — :focus-visible on .mdc-switch (the <button>) ────────────
+  // This is the simple element pattern: .mdc-switch is the focusable target.
+  // We style its children (.mdc-switch__track, .mdc-switch__ripple) from it.
+
+  .mdc-switch:focus         { outline: none; }
+  .mdc-switch:focus-visible .mdc-switch__track  { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+  .mdc-switch:focus-visible .mdc-switch__ripple {
+    background: var(--overlay-pressed);
+    border-radius: var(--radius-full);
+  }
+
+  // ── Disabled — border on track, disabled label ────────────────────────────
+
+  &.mat-mdc-slide-toggle-disabled {
+    .mdc-switch__track { border: 2px solid var(--color-border-subtle); }
+    .ds-toggle__label  { color: var(--color-text-disabled); }
+  }
+}

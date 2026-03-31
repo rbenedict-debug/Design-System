@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatSlideToggleModule, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 /**
  * Onflo Design System — Toggle / Switch
@@ -19,9 +20,10 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'ds-toggle',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatSlideToggleModule],
   templateUrl: './toggle.component.html',
   styleUrls: ['./toggle.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsToggleComponent {
   /** Label text displayed next to the toggle. */
@@ -39,21 +41,8 @@ export class DsToggleComponent {
   /** Emits the new checked value when toggled. */
   @Output() checkedChange = new EventEmitter<boolean>();
 
-  readonly inputId = `ds-toggle-${Math.random().toString(36).slice(2)}`;
-
-  get wrapperClasses(): string {
-    return [
-      'ds-toggle',
-      this.showIcon ? 'ds-toggle--icon' : '',
-      this.disabled ? 'is-disabled' : '',
-    ]
-      .filter(Boolean)
-      .join(' ');
-  }
-
-  onChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.checked = input.checked;
+  onChange(event: MatSlideToggleChange): void {
+    this.checked = event.checked;
     this.checkedChange.emit(this.checked);
   }
 }
