@@ -113,7 +113,7 @@
     appearance: none;
     border: none;
     background: transparent;
-    padding: 4px var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
     font-family: var(--ref-typeface-brand);
     font-size: var(--ref-typescale-label-small-size);
     font-weight: var(--ref-typeface-weight-bold);
@@ -137,7 +137,7 @@
     appearance: none;
     border: none;
     background: transparent;
-    padding: 4px;
+    padding: var(--spacing-xs);
     cursor: pointer;
     color: var(--color-text-tooltip);
     border-radius: var(--radius-sm);

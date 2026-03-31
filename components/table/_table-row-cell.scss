@@ -4,7 +4,7 @@
 // Height: 56px fixed
 
 $cell-height: 56px;
-$cell-padding: 16px;   // --spacing-lg
+$cell-padding: var(--spacing-lg);
 $gripper-size: 32px;
 $checkbox-size: 42px;
 $tier1-indent: 32px;

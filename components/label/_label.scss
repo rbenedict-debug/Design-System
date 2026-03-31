@@ -155,10 +155,10 @@
 
     // When dot is present: reduce left padding to tighten against the dot
     &.ds-label--has-dot {
-      padding-left: 8px;
+      padding-left: var(--spacing-sm);
 
       &.ds-label--xs {
-        padding-left: 4px;
+        padding-left: var(--spacing-xs);
       }
     }
   }
