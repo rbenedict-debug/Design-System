@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 export type DsButtonVariant =
   | 'filled'
@@ -17,6 +18,11 @@ export type DsButtonSize = 'xs' | 'sm' | 'md' | 'lg';
  * For direct class usage without the Angular component, use:
  *   <button class="ds-button ds-button--filled">Label</button>
  *
+ * Variant → Material directive mapping:
+ *   filled              → mat-flat-button
+ *   outlined            → mat-stroked-button
+ *   text / destructive / destructive-outlined → mat-button
+ *
  * @example
  *   <ds-button variant="filled" (clicked)="onSave()">Save</ds-button>
  *   <ds-button variant="outlined" size="sm" [disabled]="true">Cancel</ds-button>
@@ -25,9 +31,10 @@ export type DsButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 @Component({
   selector: 'ds-button',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsButtonComponent {
   /** Visual style. Default: 'filled' */
@@ -46,11 +53,7 @@ export class DsButtonComponent {
   @Output() clicked = new EventEmitter<MouseEvent>();
 
   get buttonClasses(): string {
-    return [
-      'ds-button',
-      `ds-button--${this.variant}`,
-      `ds-button--${this.size}`,
-    ].join(' ');
+    return `ds-button ds-button--${this.variant} ds-button--${this.size}`;
   }
 
   handleClick(event: MouseEvent): void {

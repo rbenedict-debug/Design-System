@@ -1,15 +1,48 @@
-<button
-  [class]="buttonClasses"
-  [disabled]="disabled"
-  [type]="type"
-  (click)="handleClick($event)"
->
-  <!-- Leading icon slot: <svg slot="icon-leading" ...> -->
-  <ng-content select="[slot='icon-leading']"></ng-content>
+<ng-container [ngSwitch]="variant">
 
-  <!-- Button label -->
-  <ng-content></ng-content>
+  <!-- filled → mat-flat-button -->
+  <button
+    *ngSwitchCase="'filled'"
+    mat-flat-button
+    [class]="buttonClasses"
+    [disabled]="disabled"
+    [type]="type"
+    [disableRipple]="true"
+    (click)="handleClick($event)"
+  >
+    <ng-content select="[slot='icon-leading']"></ng-content>
+    <ng-content></ng-content>
+    <ng-content select="[slot='icon-trailing']"></ng-content>
+  </button>
 
-  <!-- Trailing icon slot: <svg slot="icon-trailing" ...> -->
-  <ng-content select="[slot='icon-trailing']"></ng-content>
-</button>
+  <!-- outlined → mat-stroked-button -->
+  <button
+    *ngSwitchCase="'outlined'"
+    mat-stroked-button
+    [class]="buttonClasses"
+    [disabled]="disabled"
+    [type]="type"
+    [disableRipple]="true"
+    (click)="handleClick($event)"
+  >
+    <ng-content select="[slot='icon-leading']"></ng-content>
+    <ng-content></ng-content>
+    <ng-content select="[slot='icon-trailing']"></ng-content>
+  </button>
+
+  <!-- text / destructive / destructive-outlined → mat-button -->
+  <button
+    *ngSwitchDefault
+    mat-button
+    [class]="buttonClasses"
+    [disabled]="disabled"
+    [type]="type"
+    [disableRipple]="true"
+    (click)="handleClick($event)"
+  >
+    <ng-content select="[slot='icon-leading']"></ng-content>
+    <ng-content></ng-content>
+    <ng-content select="[slot='icon-trailing']"></ng-content>
+  </button>
+
+</ng-container>
