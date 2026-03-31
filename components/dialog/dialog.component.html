@@ -1,32 +1,36 @@
-<div class="ds-dialog-backdrop" role="presentation" *ngIf="open" (click)="close()">
-  <div
-    class="ds-dialog"
-    [class.ds-dialog--sm]="size === 'sm'"
-    [class.ds-dialog--lg]="size === 'lg'"
-    [class.ds-dialog--xl]="size === 'xl'"
-    [class.ds-dialog--center]="align === 'center'"
-    role="dialog"
-    aria-modal="true"
-    [attr.aria-labelledby]="title ? 'ds-dlg-title' : null"
-    (click)="$event.stopPropagation()"
-  >
-    <div class="ds-dialog__header" *ngIf="title">
-      <span *ngIf="icon" class="ds-icon ds-dialog__icon" [class]="'ds-dialog__icon--' + iconVariant">{{ icon }}</span>
-      <div class="ds-dialog__title-group">
-        <h2 class="ds-dialog__title" id="ds-dlg-title">{{ title }}</h2>
-        <p *ngIf="subtitle" class="ds-dialog__subtitle">{{ subtitle }}</p>
-      </div>
-      <button class="ds-dialog__close" (click)="close()" aria-label="Close dialog">
-        <span class="ds-icon ds-icon--sm">close</span>
-      </button>
+<!-- Dialog box — rendered as content inside Material's overlay (no backdrop here).
+     Material's panelClass="ds-dialog" applies the ds-dialog styles to the container.
+     For static HTML usage, wrap this in <div class="ds-dialog-backdrop">. -->
+<div
+  class="ds-dialog"
+  [class.ds-dialog--sm]="size === 'sm'"
+  [class.ds-dialog--lg]="size === 'lg'"
+  [class.ds-dialog--xl]="size === 'xl'"
+  [class.ds-dialog--center]="align === 'center'"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-labelledby]="title ? 'ds-dlg-title' : null"
+>
+  <div class="ds-dialog__header" *ngIf="title">
+    <span
+      *ngIf="icon"
+      class="ds-icon ds-dialog__icon"
+      [class]="'ds-dialog__icon--' + iconVariant"
+    >{{ icon }}</span>
+    <div class="ds-dialog__title-group">
+      <h2 class="ds-dialog__title" id="ds-dlg-title">{{ title }}</h2>
+      <p *ngIf="subtitle" class="ds-dialog__subtitle">{{ subtitle }}</p>
     </div>
+    <button class="ds-dialog__close" (click)="close()" aria-label="Close dialog">
+      <span class="ds-icon ds-icon--sm">close</span>
+    </button>
+  </div>
 
-    <div class="ds-dialog__content">
-      <ng-content select="[slot=content]" />
-    </div>
+  <div class="ds-dialog__content">
+    <ng-content select="[slot=content]" />
+  </div>
 
-    <div class="ds-dialog__actions">
-      <ng-content select="[slot=actions]" />
-    </div>
+  <div class="ds-dialog__actions">
+    <ng-content select="[slot=actions]" />
   </div>
 </div>

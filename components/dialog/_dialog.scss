@@ -178,3 +178,37 @@
     border-top: 1px solid var(--color-border-subtle);
   }
 }
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// When DsDialogComponent (or any custom component) is launched via MatDialog.open(),
+// Material wraps the content in .mat-mdc-dialog-container inside a CDK overlay.
+// panelClass: 'ds-dialog-overlay' strips Material's default container styling so
+// the projected .ds-dialog box provides all visual chrome.
+// No ::ng-deep — these are global rules targeting the CDK overlay panel class.
+
+.mat-mdc-dialog-container.ds-dialog-overlay {
+  // Strip Material's default container chrome — ds-dialog provides its own
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+
+  --mdc-dialog-container-color:       transparent;
+  --mdc-dialog-container-elevation:   none;
+  --mdc-dialog-container-shape:       0;
+
+  .mat-mdc-dialog-surface {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+  }
+}
+
+// ── Backdrop ─────────────────────────────────────────────────────────────────
+// Applied via MatDialogConfig.backdropClass or globally via MatDialog defaults.
+
+.cdk-overlay-backdrop.ds-dialog-backdrop {
+  background: var(--color-surface-scrim);
+}
