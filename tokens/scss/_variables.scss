@@ -75,7 +75,7 @@ $border-secondary: var(--color-border-secondary) !default;
 $border-subtle: var(--color-border-subtle) !default;
 $border-strong: var(--color-border-strong) !default;
 $border-inverse: var(--color-border-inverse) !default;
-$border-accordion: var(--color-border-accordion) !default;
+$border-accordian: var(--color-border-accordian) !default;
 $border-ada-focus-ring: var(--color-border-ada-focus-ring) !default;
 $border-hover: var(--color-border-hover) !default;
 $border-active: var(--color-border-active) !default;
@@ -112,13 +112,14 @@ $radius-none: 0px !default;
 $radius-sm: 6px !default;
 $radius-md: 8px !default;
 $radius-lg: 16px !default;
-$radius-xl: 24px !default;
 $radius-full: 9999px !default;
 
 // ── Shadow colours ──────────────────────────────────────
 $shadow-elevation-1: var(--shadow-elevation-1) !default;
 $shadow-elevation-2: var(--shadow-elevation-2) !default;
 $shadow-elevation-3: var(--shadow-elevation-3) !default;
+$shadow-elevation-4: var(--shadow-elevation-4) !default;
+$shadow-elevation-5: var(--shadow-elevation-5) !default;
 
 // ── Overlay / interaction colours ───────────────────────
 $overlay-hovered: var(--overlay-hovered) !default;

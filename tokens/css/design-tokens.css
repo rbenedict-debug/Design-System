@@ -7,18 +7,18 @@
 :root {
 
   /* ── Surface ───────────────────────────────────────── */
-  --color-surface-page: var(--ref-color-neutral-surface);
+  --color-surface-page: var(--ref-color-neutral-white);
   --color-surface-default: var(--ref-color-neutral-bg-default);
   --color-surface-subtle: var(--ref-color-neutral-bg-soft);
   --color-surface-disabled: var(--ref-color-neutral-bg-disabled);
   --color-surface-nav: var(--ref-color-primary-blue-bg-soft);
   --color-surface-nav-active: var(--ref-color-primary-blue-default);
   --color-surface-container: var(--ref-color-primary-blue-bg-soft);
-  --color-surface-overlay: var(--ref-color-neutral-surface);
+  --color-surface-overlay: var(--ref-color-neutral-white);
   --color-surface-scrim: var(--ref-color-neutral-scrim);
   --color-surface-tooltip: var(--ref-color-neutral-tooltip);
   --color-surface-scroll: var(--ref-color-neutral-scroll);
-  --color-surface-input: var(--ref-color-neutral-surface);
+  --color-surface-input: var(--ref-color-neutral-white);
   --color-surface-input-disabled: var(--ref-color-neutral-bg-disabled);
   --color-surface-error: var(--ref-color-accent-red-bg);
   --color-surface-warning: var(--ref-color-accent-yellow-bg);
@@ -50,30 +50,30 @@
   --color-text-secondary: var(--ref-color-neutral-text-soft);
   --color-text-placeholder: var(--ref-color-neutral-text-disabled);
   --color-text-disabled: var(--ref-color-neutral-text-disabled);
-  --color-text-inverse: var(--ref-color-neutral-surface);
+  --color-text-inverse: var(--ref-color-neutral-white);
   --color-text-brand: var(--ref-color-primary-blue-default);
-  --color-text-on-brand: var(--ref-color-neutral-surface);
+  --color-text-on-brand: var(--ref-color-neutral-white);
   --color-text-link: var(--ref-color-primary-blue-default);
   --color-text-error: var(--ref-color-accent-red-default);
   --color-text-warning: var(--ref-color-neutral-text-default);
   --color-text-success: var(--ref-color-neutral-text-default);
   --color-text-info: var(--ref-color-neutral-text-default);
-  --color-text-tooltip: var(--ref-color-neutral-surface);
-  --color-text-on-bold: var(--ref-color-neutral-surface);
+  --color-text-tooltip: var(--ref-color-neutral-white);
+  --color-text-on-bold: var(--ref-color-neutral-white);
   --color-text-accent-navy: var(--ref-color-accent-darkblue-default);
   --color-text-accent-red: var(--ref-color-accent-red-default);
 
   /* ── Border ────────────────────────────────────────── */
-  --color-border-primary: var(--ref-color-neutral-border-primary);
+  --color-border-primary: var(--ref-color-neutral-text-disabled);
   --color-border-secondary: var(--ref-color-neutral-border-soft);
   --color-border-subtle: var(--ref-color-neutral-border-subtle);
   --color-border-strong: var(--ref-color-neutral-text-soft);
-  --color-border-inverse: var(--ref-color-neutral-surface);
-  --color-border-accordion: var(--ref-color-accent-accordion-border);
+  --color-border-inverse: var(--ref-color-neutral-white);
+  --color-border-accordian: var(--ref-color-accent-accordian-border);
   --color-border-ada-focus-ring: var(--ref-color-accent-lightblue-default);
   --color-border-hover: var(--ref-color-accent-lightblue-default);
   --color-border-active: var(--ref-color-primary-blue-default);
-  --color-border-input: var(--ref-color-neutral-border-primary);
+  --color-border-input: var(--ref-color-neutral-text-disabled);
   --color-border-input-hover: var(--ref-color-accent-lightblue-default);
   --color-border-input-active: var(--ref-color-primary-blue-default);
   --color-border-input-error: var(--ref-color-accent-red-default);
@@ -93,33 +93,33 @@
   --color-border-accent-pink: var(--ref-color-accent-pink-default);
 
   /* ── Spacing ───────────────────────────────────────── */
-  --spacing-none: 0px;
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 12px;
-  --spacing-lg: 16px;
-  --spacing-xl: 24px;
-  --spacing-page: 48px;
+  --spacing-none: var(--ref-spacing-none);
+  --spacing-xs: var(--ref-spacing-xsmall);
+  --spacing-sm: var(--ref-spacing-small);
+  --spacing-md: var(--ref-spacing-medium);
+  --spacing-lg: var(--ref-spacing-large);
+  --spacing-xl: var(--ref-spacing-xlarge);
+  --spacing-page: var(--ref-spacing-page-spacing);
 
   /* ── Border Radius ─────────────────────────────────── */
-  --radius-none: 0px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-full: 9999px;
+  --radius-none: var(--ref-radius-none);
+  --radius-sm: var(--ref-radius-sm);
+  --radius-md: var(--ref-radius-md);
+  --radius-lg: var(--ref-radius-lg);
+  --radius-full: var(--ref-radius-full);
 
   /* ── Shadow ────────────────────────────────────────── */
   --shadow-elevation-1: var(--ref-shadow-elevation-1);
   --shadow-elevation-2: var(--ref-shadow-elevation-2);
   --shadow-elevation-3: var(--ref-shadow-elevation-3);
+  --shadow-elevation-4: var(--ref-shadow-elevation-4);
+  --shadow-elevation-5: var(--ref-shadow-elevation-5);
 
   /* ── Overlay / Interaction ─────────────────────────── */
   --overlay-hovered: var(--ref-overlay-hover);
   --overlay-pressed: var(--ref-overlay-pressed);
   --overlay-focused: var(--ref-overlay-focused);
   --overlay-dragged: var(--ref-overlay-dragged);
-  --overlay-selected: var(--ref-overlay-dragged);
   --overlay-accent-red-hovered: var(--ref-overlay-red-hover);
   --overlay-accent-red-pressed: var(--ref-overlay-red-pressed);
   --overlay-accent-red-focused: var(--ref-overlay-red-focused);
@@ -133,11 +133,11 @@
   --color-icon-default: var(--ref-color-neutral-text-default);
   --color-icon-subtle: var(--ref-color-neutral-text-soft);
   --color-icon-disabled: var(--ref-color-neutral-text-disabled);
-  --color-icon-inverse: var(--ref-color-neutral-surface);
+  --color-icon-inverse: var(--ref-color-neutral-white);
   --color-icon-brand: var(--ref-color-primary-blue-default);
-  --color-icon-on-brand: var(--ref-color-neutral-surface);
+  --color-icon-on-brand: var(--ref-color-neutral-white);
   --color-icon-nav: var(--ref-color-neutral-text-default);
-  --color-icon-nav-active: var(--ref-color-neutral-surface);
+  --color-icon-nav-active: var(--ref-color-neutral-white);
   --color-icon-error: var(--ref-color-accent-red-default);
   --color-icon-warning: var(--ref-color-accent-yellow-default);
   --color-icon-success: var(--ref-color-accent-green-default);
