@@ -4,6 +4,8 @@
   "description": "Onflo Design System — tokens, components, and patterns for Angular + .NET Core products",
   "scripts": {
     "generate-tokens": "node scripts/generate-tokens.js",
+    "build-preview": "node scripts/build-preview.js",
+    "build": "npm run generate-tokens && npm run build-preview",
     "preview": "open preview/index.html"
   },
   "engines": {
