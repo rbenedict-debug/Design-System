@@ -123,10 +123,10 @@
   &--trailing-icon { padding-right: var(--spacing-lg); }
 
   // Size overrides for icon padding modifiers
-  &--sm&--leading-icon  { padding-left:  var(--spacing-sm); }
-  &--sm&--trailing-icon { padding-right: var(--spacing-sm); }
-  &--lg&--leading-icon  { padding-left:  var(--spacing-xl); }
-  &--lg&--trailing-icon { padding-right: var(--spacing-xl); }
+  &--sm.ds-button--leading-icon  { padding-left:  var(--spacing-sm); }
+  &--sm.ds-button--trailing-icon { padding-right: var(--spacing-sm); }
+  &--lg.ds-button--leading-icon  { padding-left:  var(--spacing-xl); }
+  &--lg.ds-button--trailing-icon { padding-right: var(--spacing-xl); }
 
 
   // ── Variants ───────────────────────────────────────────────────────────────
