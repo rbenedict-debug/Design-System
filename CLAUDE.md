@@ -57,6 +57,7 @@ components/
   nav-sidebar/             # ds-nav-sidebar (main left navigation sidebar composition)
   nav-tab/                 # ds-nav-tab (browser-style document tab — primitive for top-nav)
   top-nav/                 # ds-top-nav (main top navigation bar composition — tabs + action buttons)
+  nav-expand/              # ds-nav-expand (sub-nav panel expand/collapse toggle — primitive for page layout)
 preview/
   index.html               # Self-contained visual token + component reference
 ```
@@ -184,6 +185,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-nav-sidebar` | Custom | No Material equivalent — main left navigation sidebar composition (composes nav-button + agent-status) |
 | `ds-nav-tab` | Custom | No Material equivalent — browser-style document tab primitive for top-nav; `[more]="true"` collapses to 26px overflow indicator showing "..." |
 | `ds-top-nav` | Custom | No Material equivalent — main top navigation bar composition (composes nav-tab + action buttons) |
+| `ds-nav-expand` | Custom | No Material equivalent — sub-nav panel expand/collapse toggle; `[open]` reflects current panel state; `(toggle)` emitted on click; icons: `right_panel_open` / `right_panel_close` (FILL=1, brand blue) |
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |

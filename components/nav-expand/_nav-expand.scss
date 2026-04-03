@@ -1,0 +1,86 @@
+// ============================================================
+// Onflo Design System — Nav Expand Primitive
+// ============================================================
+//
+// The expand/collapse toggle for the sub-navigation panel.
+// Shows the current panel state: right_panel_open when the
+// subnav is visible, right_panel_close when hidden.
+// Floats at the right edge of the subnav panel — positioning
+// is applied by the parent composition, not this component.
+//
+// Usage (HTML class API):
+//   <!-- panel open -->
+//   <button class="ds-nav-expand" type="button"
+//           aria-expanded="true" aria-label="Collapse navigation">
+//     <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+//   </button>
+//
+//   <!-- panel closed -->
+//   <button class="ds-nav-expand" type="button"
+//           aria-expanded="false" aria-label="Expand navigation">
+//     <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_close</span>
+//   </button>
+//
+// Angular:
+//   <ds-nav-expand [open]="isNavOpen" (toggle)="toggleNav()" />
+//
+// Figma: primitive/nav-expand
+// Angular Material: none — custom primitive
+// ADA: aria-expanded tracks panel state; aria-label changes with state.
+//      Focus ring uses box-shadow — safe even with overflow: hidden.
+// ============================================================
+
+.ds-nav-expand {
+  // Layout
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  padding: 0;
+
+  // Shape
+  border: none;
+  border-radius: 4px;
+  overflow: hidden; // clips the ::after state layer
+
+  // Appearance
+  background: var(--color-surface-page);
+  box-shadow:
+    0 1px 8px 0 var(--shadow-elevation-3),
+    0 2px 3px 0 var(--shadow-elevation-3);
+
+  // Icon — brand blue, fills the 24px button at opsz=20
+  color: var(--color-icon-brand);
+  cursor: pointer;
+
+  .ds-icon {
+    font-size: 20px;
+    line-height: 1;
+    color: currentColor;
+  }
+
+  // ── Interaction overlay (blue-tinted — matches brand palette) ────────────
+  // Uses --overlay-hovered / --overlay-pressed which resolve to
+  // rgba(67,173,242,0.08) and rgba(67,173,242,0.12) in the light theme.
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  &:hover::after  { background: var(--overlay-hovered); }
+  &:active::after { background: var(--overlay-pressed); }
+
+  // ── Focus ring — keyboard only ─────────────────────────────────────────
+  // box-shadow on the element is NOT clipped by its own overflow: hidden.
+
+  &:focus         { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+}
