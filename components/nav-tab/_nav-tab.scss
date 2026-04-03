@@ -28,9 +28,18 @@
 //     ...
 //   </div>
 //
+//   <!-- Collapsed / overflow indicator -->
+//   <div class="ds-nav-tab ds-nav-tab--more" role="button" tabindex="0"
+//        aria-label="More tabs" onclick="showMoreTabs()">
+//     <div class="ds-nav-tab__content">
+//       <span class="ds-nav-tab__label">...</span>
+//     </div>
+//   </div>
+//
 // Angular:
 //   <ds-nav-tab label="Ticket #4401" [active]="false"
 //     (tabClick)="activate(tab)" (tabClose)="close(tab)" />
+//   <ds-nav-tab [more]="true" (tabClick)="showMore()" />
 //
 // Figma: component/nav-tab
 // Angular Material: none — custom component
@@ -115,7 +124,7 @@
     background: transparent;
     cursor: pointer;
     border-radius: var(--radius-sm);
-    color: var(--color-icon-subtle);
+    color: var(--color-icon-default);
     // Sits above the ::after overlay tint so hover styles are independent
     position: relative;
     z-index: 1;
@@ -129,6 +138,13 @@
     &:active  { background: var(--overlay-pressed); }
     &:focus   { outline: none; }
     &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+  }
+
+  // ── More / collapsed state ───────────────────────────────────────────────
+  // Shown when the tab strip overflows — collapses to 26px showing "..."
+
+  &--more {
+    width: 26px;
   }
 
   // ── Active state ────────────────────────────────────────────────────────

@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common';
 export class NavTabComponent {
   @Input() label = '';
   @Input() active = false;
+  /** Collapsed overflow indicator — shows "..." at 26px width, no close button. */
+  @Input() more = false;
 
   /** Emitted when the tab body is clicked (activate this tab). */
   @Output() tabClick = new EventEmitter<void>();

@@ -182,7 +182,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-nav-button` | Custom | No Material equivalent — navigation rail button primitive for nav-sidebar |
 | `ds-agent-status` | Custom | No Material equivalent — support agent online/offline toggle primitive for nav-sidebar |
 | `ds-nav-sidebar` | Custom | No Material equivalent — main left navigation sidebar composition (composes nav-button + agent-status) |
-| `ds-nav-tab` | Custom | No Material equivalent — browser-style document tab primitive for top-nav |
+| `ds-nav-tab` | Custom | No Material equivalent — browser-style document tab primitive for top-nav; `[more]="true"` collapses to 26px overflow indicator showing "..." |
 | `ds-top-nav` | Custom | No Material equivalent — main top navigation bar composition (composes nav-tab + action buttons) |
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
