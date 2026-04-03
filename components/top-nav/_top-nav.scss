@@ -1,0 +1,171 @@
+// ============================================================
+// Onflo Design System — Top Nav Composition
+// ============================================================
+//
+// Application-wide top navigation bar. Contains the tab strip
+// on the left (browser-style document tabs) and action icon
+// buttons on the right (Chatsy, Notifications, New, Help,
+// Profile). The tab strip uses ds-nav-tab primitives.
+//
+// Usage (HTML class API):
+//   <header class="ds-top-nav" role="banner">
+//     <div class="ds-top-nav__tabs">
+//       <div class="ds-nav-tab is-active" ...>...</div>
+//       <div class="ds-nav-tab" ...>...</div>
+//     </div>
+//     <div class="ds-top-nav__actions">
+//       <button class="ds-top-nav__action-btn" type="button" aria-label="Chatsy">
+//         <span class="ds-icon" aria-hidden="true">chat</span>
+//       </button>
+//       <div class="ds-top-nav__action-badge">
+//         <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange"
+//                 type="button" aria-label="Notifications, 3 new">
+//           <span class="ds-icon" aria-hidden="true">notifications</span>
+//         </button>
+//         <div class="ds-badge-indicator" aria-hidden="true">3</div>
+//       </div>
+//       <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green"
+//               type="button" aria-label="New">
+//         <span class="ds-icon" aria-hidden="true">add</span>
+//       </button>
+//       <button class="ds-top-nav__action-btn" type="button" aria-label="Help">
+//         <span class="ds-icon" aria-hidden="true">help</span>
+//       </button>
+//       <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy"
+//               type="button" aria-label="Profile — Rebecca B.">
+//         R
+//       </button>
+//     </div>
+//   </header>
+//
+// Angular:
+//   <ds-top-nav>
+//     <ds-nav-tab label="Ticket #4401" [active]="true"
+//       (tabClick)="activate(0)" (tabClose)="close(0)" />
+//     <ds-nav-tab label="Asset #123"
+//       (tabClick)="activate(1)" (tabClose)="close(1)" />
+//
+//     <div top-nav-actions>
+//       <!-- action buttons projected into right slot -->
+//     </div>
+//   </ds-top-nav>
+//
+// Figma: composition/top-nav
+// Angular Material: none — custom composition
+// ADA: role="banner" on the header element;
+//      all action icon buttons require aria-label
+// ============================================================
+
+.ds-top-nav {
+  // Layout
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  height: 65px;
+  width: 100%;
+  padding: 0 var(--spacing-xl) 0 var(--spacing-md);
+  box-sizing: border-box;
+
+  // Appearance
+  background: var(--color-surface-page);
+  border-bottom: 2px solid var(--color-border-brand);
+
+  // ── Tabs area ────────────────────────────────────────────────────────────
+  // Tabs sit at the bottom of the bar — items-end so they flush to the
+  // bottom border, giving the appearance of growing up from it.
+
+  &__tabs {
+    display: flex;
+    flex: 1 0 0;
+    align-items: flex-end;
+    gap: var(--spacing-sm);
+    height: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  // ── Right-side action buttons area ───────────────────────────────────────
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex-shrink: 0;
+  }
+
+  // ── Circular action button (32 × 32px) ───────────────────────────────────
+  // Customised icon button variant — always radius-full (circular) and 32px.
+  // Default colour: brand blue. Use modifier classes for other colours.
+
+  &__action-btn {
+    // Layout
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    // Shape
+    border: none;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+
+    // Appearance
+    background: var(--color-surface-brand-bold);
+    color: var(--color-icon-on-brand);
+    cursor: pointer;
+
+    // Monogram typography (initial letter variant)
+    font-family: var(--ref-typescale-title-h2-font);
+    font-size: var(--ref-typescale-title-h2-size);
+    font-weight: var(--ref-typescale-title-h2-weight);
+    line-height: 1;
+    letter-spacing: var(--ref-typescale-title-h2-tracking);
+    text-align: center;
+
+    .ds-icon {
+      font-size: 18px;
+      color: currentColor;
+    }
+
+    // Interaction overlay
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    &:hover::after  { background: var(--overlay-hovered); }
+    &:active::after { background: var(--overlay-pressed); }
+
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+    // ── Colour variants ──────────────────────────────────────────────────
+
+    &--orange { background: var(--color-surface-accent-orange-bold); }
+    &--green  { background: var(--color-surface-accent-green-bold);  }
+    &--navy   { background: var(--color-surface-accent-navy-bold);   }
+  }
+
+  // ── Badge wrapper ────────────────────────────────────────────────────────
+  // Wraps an action button when it needs a notification badge.
+
+  &__action-badge {
+    position: relative;
+    flex-shrink: 0;
+
+    .ds-badge-indicator {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+    }
+  }
+}

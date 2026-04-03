@@ -5850,6 +5850,196 @@
   padding-bottom: var(--spacing-lg);
   flex-shrink: 0;
 }
+
+.ds-nav-tab {
+  display: flex;
+  align-items: stretch;
+  height: 32px;
+  width: 130px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  background: var(--color-surface-default);
+}
+.ds-nav-tab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+}
+.ds-nav-tab:hover::after {
+  background: var(--overlay-hovered);
+}
+.ds-nav-tab:active::after {
+  background: var(--overlay-pressed);
+}
+.ds-nav-tab:focus {
+  outline: none;
+}
+.ds-nav-tab:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-nav-tab__content {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding-left: var(--spacing-sm);
+  min-width: 0;
+}
+.ds-nav-tab__label {
+  flex: 1 0 0;
+  font-family: var(--ref-typescale-label-small-font);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+  letter-spacing: var(--ref-typescale-label-small-tracking);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.ds-nav-tab__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  color: var(--color-icon-subtle);
+  position: relative;
+  z-index: 1;
+}
+.ds-nav-tab__close .ds-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+.ds-nav-tab__close:hover {
+  background: var(--overlay-hovered);
+}
+.ds-nav-tab__close:active {
+  background: var(--overlay-pressed);
+}
+.ds-nav-tab__close:focus {
+  outline: none;
+}
+.ds-nav-tab__close:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-nav-tab.is-active {
+  background: var(--color-surface-brand-bold);
+}
+.ds-nav-tab.is-active .ds-nav-tab__label {
+  color: var(--color-text-on-brand);
+}
+.ds-nav-tab.is-active .ds-nav-tab__close {
+  color: var(--color-icon-on-brand);
+}
+
+.ds-top-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  height: 65px;
+  width: 100%;
+  padding: 0 var(--spacing-xl) 0 var(--spacing-md);
+  box-sizing: border-box;
+  background: var(--color-surface-page);
+  border-bottom: 2px solid var(--color-border-brand);
+}
+.ds-top-nav__tabs {
+  display: flex;
+  flex: 1 0 0;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+.ds-top-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  flex-shrink: 0;
+}
+.ds-top-nav__action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+  background: var(--color-surface-brand-bold);
+  color: var(--color-icon-on-brand);
+  cursor: pointer;
+  font-family: var(--ref-typescale-title-h2-font);
+  font-size: var(--ref-typescale-title-h2-size);
+  font-weight: var(--ref-typescale-title-h2-weight);
+  line-height: 1;
+  letter-spacing: var(--ref-typescale-title-h2-tracking);
+  text-align: center;
+}
+.ds-top-nav__action-btn .ds-icon {
+  font-size: 18px;
+  color: currentColor;
+}
+.ds-top-nav__action-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+}
+.ds-top-nav__action-btn:hover::after {
+  background: var(--overlay-hovered);
+}
+.ds-top-nav__action-btn:active::after {
+  background: var(--overlay-pressed);
+}
+.ds-top-nav__action-btn:focus {
+  outline: none;
+}
+.ds-top-nav__action-btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-top-nav__action-btn--orange {
+  background: var(--color-surface-accent-orange-bold);
+}
+.ds-top-nav__action-btn--green {
+  background: var(--color-surface-accent-green-bold);
+}
+.ds-top-nav__action-btn--navy {
+  background: var(--color-surface-accent-navy-bold);
+}
+.ds-top-nav__action-badge {
+  position: relative;
+  flex-shrink: 0;
+}
+.ds-top-nav__action-badge .ds-badge-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+}
 </style><!-- ONFLO-COMPONENTS:END -->
 </head>
 <body>
@@ -5890,6 +6080,8 @@
       <a class="nav-link" href="#nav-button" onclick="setActive(this)"><span class="nav-dot"></span>Nav Button</a>
       <a class="nav-link" href="#agent-status" onclick="setActive(this)"><span class="nav-dot"></span>Agent Status</a>
       <a class="nav-link" href="#nav-sidebar" onclick="setActive(this)"><span class="nav-dot"></span>Nav Sidebar</a>
+      <a class="nav-link" href="#nav-tab" onclick="setActive(this)"><span class="nav-dot"></span>Nav Tab</a>
+      <a class="nav-link" href="#top-nav" onclick="setActive(this)"><span class="nav-dot"></span>Top Nav</a>
 
       <div class="nav-group-label">Form</div>
       <a class="nav-link" href="#input" onclick="setActive(this)"><span class="nav-dot"></span>Input Field</a>
@@ -6905,76 +7097,6 @@
         <p class="section-desc">Main left navigation sidebar — composes <code>ds-nav-button</code> (product-section rail) and <code>ds-agent-status</code> (call/live queue availability) into the primary nav pattern. 80px wide, <code>height: 100%</code> (fills its containing column). Angular: <code>&lt;ds-nav-sidebar&gt;</code> with <code>[logo]</code>, <code>[nav]</code>, and <code>[bottom]</code> content projection slots. ADA: <code>role="navigation"</code> and <code>aria-label="Main navigation"</code> on the inner <code>&lt;nav&gt;</code>.</p>
         <div class="component-demo">
 
-          <!-- Full composition -->
-          <div class="demo-row" style="align-items: flex-start;">
-            <div class="demo-row-label" style="padding-top: 12px;">Composition</div>
-            <div class="demo-row-items" style="align-items: flex-start;">
-              <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="height: 640px;">
-
-                <!-- Logo -->
-                <div class="ds-nav-sidebar__logo">
-                  <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- C-body (dark navy) -->
-                    <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
-                    <!-- Accent L-block (blue) -->
-                    <g transform="translate(50.144 0.242)">
-                      <path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/>
-                    </g>
-                    <!-- Accent sliver (light blue, overlaps right of block) -->
-                    <g transform="translate(63.304 0.242)">
-                      <path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/>
-                    </g>
-                  </svg>
-                </div>
-
-                <!-- Nav buttons -->
-                <div class="ds-nav-sidebar__nav">
-                  <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
-                    <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
-                    <span class="ds-nav-button__label">Tickets</span>
-                  </button>
-                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
-                    <span class="ds-icon" aria-hidden="true">desktop_mac</span>
-                    <span class="ds-nav-button__label">Assets</span>
-                  </button>
-                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
-                    <span class="ds-icon" aria-hidden="true">equalizer</span>
-                    <span class="ds-nav-button__label">Analytics</span>
-                  </button>
-                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
-                    <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
-                    <span class="ds-nav-button__label">Settings</span>
-                  </button>
-                </div>
-
-                <!-- Agent status -->
-                <div class="ds-nav-sidebar__bottom">
-                  <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
-                    <div class="ds-agent-status__icon">
-                      <span class="ds-icon" aria-hidden="true">support_agent</span>
-                    </div>
-                    <div class="ds-agent-status__status">
-                      <span>Online</span>
-                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                    </div>
-                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                  </button>
-                  <button class="ds-agent-status is-offline" type="button" aria-pressed="false" aria-label="Live agent status: Offline">
-                    <div class="ds-agent-status__icon">
-                      <span class="ds-icon" aria-hidden="true">forum</span>
-                    </div>
-                    <div class="ds-agent-status__status">
-                      <span>Offline</span>
-                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                    </div>
-                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                  </button>
-                </div>
-
-              </nav>
-            </div>
-          </div>
-
           <!-- Interactive — click nav buttons to toggle active state -->
           <div class="demo-row" style="align-items: flex-start;">
             <div class="demo-row-label" style="padding-top: 12px;">Interactive</div>
@@ -7041,6 +7163,112 @@
                   </button>
                 </div>
               </nav>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Nav Tab ──────────────────────────────────────────────────────── -->
+      <section class="section" id="nav-tab">
+        <div class="section-header">
+          <h2 class="section-title">Nav Tab</h2>
+          <span class="section-source">components/nav-tab/_nav-tab.scss</span>
+        </div>
+        <p class="section-desc">Browser-style document tab used inside the top navigation bar. Each open page or window spawns a new tab. Clicking a tab activates it (dark blue); only one can be active at a time. The × close button dismisses the tab and activates the next one. Internal primitive — used inside <code>ds-top-nav</code>.</p>
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">Inactive</div>
+            <div class="demo-row-items">
+              <div class="ds-nav-tab" role="button" tabindex="0" aria-pressed="false" aria-label="Ticket #4401 tab">
+                <div class="ds-nav-tab__content">
+                  <span class="ds-nav-tab__label">Ticket #4401</span>
+                  <button class="ds-nav-tab__close" type="button" aria-label="Close Ticket #4401 tab">
+                    <span class="ds-icon" aria-hidden="true">close_small</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Active</div>
+            <div class="demo-row-items">
+              <div class="ds-nav-tab is-active" role="button" tabindex="0" aria-pressed="true" aria-label="Ticket #4401 tab — active">
+                <div class="ds-nav-tab__content">
+                  <span class="ds-nav-tab__label">Ticket #4401</span>
+                  <button class="ds-nav-tab__close" type="button" aria-label="Close Ticket #4401 tab">
+                    <span class="ds-icon" aria-hidden="true">close_small</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Top Nav ──────────────────────────────────────────────────────── -->
+      <section class="section" id="top-nav">
+        <div class="section-header">
+          <h2 class="section-title">Top Nav</h2>
+          <span class="section-source">components/top-nav/_top-nav.scss</span>
+        </div>
+        <p class="section-desc">Application-wide top navigation bar. Browser-style document tabs sit on the left — one tab per open page, active tab turns dark blue, only one active at a time. Clicking a tab activates it; clicking × closes it (if it was active, the next available tab activates). Action icon buttons on the right are 32px circular buttons — use the <code>--orange</code>, <code>--green</code>, and <code>--navy</code> modifiers for colour variants. Composes <code>ds-nav-tab</code> primitives inside.</p>
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">Interactive</div>
+            <div class="demo-row-items" style="display: block; width: 100%; padding: 0;">
+              <header class="ds-top-nav" role="banner">
+                <div class="ds-top-nav__tabs">
+                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
+                       aria-pressed="true" aria-label="Ticket #4401 tab — active"
+                       onclick="activateNavTab(this)">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Ticket #4401</span>
+                      <button class="ds-nav-tab__close" type="button"
+                              aria-label="Close Ticket #4401 tab"
+                              onclick="event.stopPropagation(); closeNavTab(this)">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ds-nav-tab" role="button" tabindex="0"
+                       aria-pressed="false" aria-label="Asset #AM-2301 tab"
+                       onclick="activateNavTab(this)">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Asset #AM-2301</span>
+                      <button class="ds-nav-tab__close" type="button"
+                              aria-label="Close Asset #AM-2301 tab"
+                              onclick="event.stopPropagation(); closeNavTab(this)">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="ds-top-nav__actions">
+                  <button class="ds-top-nav__action-btn" type="button" aria-label="Chatsy">
+                    <span class="ds-icon" aria-hidden="true">chat</span>
+                  </button>
+                  <div class="ds-top-nav__action-badge">
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                      <span class="ds-icon" aria-hidden="true">notifications</span>
+                    </button>
+                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
+                  </div>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
+                    <span class="ds-icon" aria-hidden="true">add</span>
+                  </button>
+                  <button class="ds-top-nav__action-btn" type="button" aria-label="Help">
+                    <span class="ds-icon" aria-hidden="true">help</span>
+                  </button>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
+                    R
+                  </button>
+                </div>
+              </header>
             </div>
           </div>
 
@@ -9868,6 +10096,36 @@
       }
     });
   })();
+</script>
+
+<!-- Nav tab interaction — activate and close -->
+<script>
+function activateNavTab(tab) {
+  var group = tab.closest('.ds-top-nav__tabs');
+  if (!group) return;
+  group.querySelectorAll('.ds-nav-tab').forEach(function(t) {
+    t.classList.remove('is-active');
+    t.setAttribute('aria-pressed', 'false');
+  });
+  tab.classList.add('is-active');
+  tab.setAttribute('aria-pressed', 'true');
+}
+
+function closeNavTab(closeBtn) {
+  var tab = closeBtn.closest('.ds-nav-tab');
+  if (!tab) return;
+  var wasActive = tab.classList.contains('is-active');
+  var group = tab.closest('.ds-top-nav__tabs');
+  tab.remove();
+  if (wasActive && group) {
+    var remaining = group.querySelectorAll('.ds-nav-tab');
+    if (remaining.length > 0) {
+      var next = remaining[remaining.length - 1];
+      next.classList.add('is-active');
+      next.setAttribute('aria-pressed', 'true');
+    }
+  }
+}
 </script>
 
 <!-- Text fields: keyboard-only focus ring — suppress ring when focus came from pointer -->

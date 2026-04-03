@@ -1,0 +1,147 @@
+// ============================================================
+// Onflo Design System — Nav Tab Component
+// ============================================================
+//
+// Browser-style document tab for the top navigation bar.
+// Used inside ds-top-nav to represent open pages/windows.
+// Only one tab can be active at a time; clicking activates it.
+// Each tab has a close (×) button to dismiss it.
+//
+// Usage (HTML class API):
+//   <div class="ds-nav-tab" role="button" tabindex="0"
+//        aria-pressed="false" aria-label="Ticket #4401 tab"
+//        onclick="activateNavTab(this)">
+//     <div class="ds-nav-tab__content">
+//       <span class="ds-nav-tab__label">Ticket #4401</span>
+//       <button class="ds-nav-tab__close" type="button"
+//               aria-label="Close Ticket #4401 tab"
+//               onclick="event.stopPropagation(); closeNavTab(this)">
+//         <span class="ds-icon" aria-hidden="true">close_small</span>
+//       </button>
+//     </div>
+//   </div>
+//
+//   <!-- Active state -->
+//   <div class="ds-nav-tab is-active" role="button" tabindex="0"
+//        aria-pressed="true" aria-label="Asset #123 tab — active"
+//        onclick="activateNavTab(this)">
+//     ...
+//   </div>
+//
+// Angular:
+//   <ds-nav-tab label="Ticket #4401" [active]="false"
+//     (tabClick)="activate(tab)" (tabClose)="close(tab)" />
+//
+// Figma: component/nav-tab
+// Angular Material: none — custom component
+// ADA: role="button" + aria-pressed on the wrapper;
+//      close button always has aria-label;
+//      keyboard: Enter/Space activate the tab
+// ============================================================
+
+.ds-nav-tab {
+  // Layout
+  display: flex;
+  align-items: stretch;
+  height: 32px;
+  width: 130px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+
+  // Appearance
+  background: var(--color-surface-default);
+
+  // ── Interaction overlay ─────────────────────────────────────────────────
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  &:hover::after  { background: var(--overlay-hovered); }
+  &:active::after { background: var(--overlay-pressed); }
+
+  &:focus         { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+  // ── Content row ─────────────────────────────────────────────────────────
+
+  &__content {
+    display: flex;
+    flex: 1 0 0;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding-left: var(--spacing-sm);
+    min-width: 0;
+  }
+
+  // ── Label ───────────────────────────────────────────────────────────────
+
+  &__label {
+    flex: 1 0 0;
+    font-family: var(--ref-typescale-label-small-font);
+    font-size: var(--ref-typescale-label-small-size);
+    font-weight: var(--ref-typescale-label-small-weight-prominent);
+    line-height: var(--ref-typescale-label-small-line-height);
+    letter-spacing: var(--ref-typescale-label-small-tracking);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  // ── Close button ────────────────────────────────────────────────────────
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    color: var(--color-icon-subtle);
+    // Sits above the ::after overlay tint so hover styles are independent
+    position: relative;
+    z-index: 1;
+
+    .ds-icon {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    &:hover   { background: var(--overlay-hovered); }
+    &:active  { background: var(--overlay-pressed); }
+    &:focus   { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+  }
+
+  // ── Active state ────────────────────────────────────────────────────────
+
+  &.is-active {
+    background: var(--color-surface-brand-bold);
+
+    .ds-nav-tab__label {
+      color: var(--color-text-on-brand);
+    }
+
+    .ds-nav-tab__close {
+      color: var(--color-icon-on-brand);
+    }
+  }
+}

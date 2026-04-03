@@ -55,6 +55,8 @@ components/
   nav-button/              # ds-nav-button (navigation rail button — primitive for nav-sidebar)
   agent-status/            # ds-agent-status (support agent online/offline toggle — primitive for nav-sidebar)
   nav-sidebar/             # ds-nav-sidebar (main left navigation sidebar composition)
+  nav-tab/                 # ds-nav-tab (browser-style document tab — primitive for top-nav)
+  top-nav/                 # ds-top-nav (main top navigation bar composition — tabs + action buttons)
 preview/
   index.html               # Self-contained visual token + component reference
 ```
@@ -180,6 +182,8 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-nav-button` | Custom | No Material equivalent — navigation rail button primitive for nav-sidebar |
 | `ds-agent-status` | Custom | No Material equivalent — support agent online/offline toggle primitive for nav-sidebar |
 | `ds-nav-sidebar` | Custom | No Material equivalent — main left navigation sidebar composition (composes nav-button + agent-status) |
+| `ds-nav-tab` | Custom | No Material equivalent — browser-style document tab primitive for top-nav |
+| `ds-top-nav` | Custom | No Material equivalent — main top navigation bar composition (composes nav-tab + action buttons) |
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |

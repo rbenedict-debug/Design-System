@@ -1,0 +1,23 @@
+<div
+  class="ds-nav-tab"
+  [class.is-active]="active"
+  role="button"
+  tabindex="0"
+  [attr.aria-pressed]="active"
+  [attr.aria-label]="label + (active ? ' tab — active' : ' tab')"
+  (click)="onTabClick()"
+  (keydown.enter)="onTabClick()"
+  (keydown.space)="$event.preventDefault(); onTabClick()"
+>
+  <div class="ds-nav-tab__content">
+    <span class="ds-nav-tab__label">{{ label }}</span>
+    <button
+      class="ds-nav-tab__close"
+      type="button"
+      [attr.aria-label]="'Close ' + label + ' tab'"
+      (click)="onCloseClick($event)"
+    >
+      <span class="ds-icon" aria-hidden="true">close_small</span>
+    </button>
+  </div>
+</div>
