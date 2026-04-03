@@ -15,21 +15,21 @@
 //     </div>
 //     <div class="ds-top-nav__actions">
 //       <button class="ds-top-nav__action-btn" type="button" aria-label="Chatsy">
-//         <span class="ds-icon" aria-hidden="true">chat</span>
+//         <svg aria-hidden="true" viewBox="0 0 18 18" ...><!-- Chatsy brand SVG --></svg>
 //       </button>
 //       <div class="ds-top-nav__action-badge">
 //         <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange"
 //                 type="button" aria-label="Notifications, 3 new">
-//           <span class="ds-icon" aria-hidden="true">notifications</span>
+//           <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
 //         </button>
 //         <div class="ds-badge-indicator" aria-hidden="true">3</div>
 //       </div>
 //       <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green"
 //               type="button" aria-label="New">
-//         <span class="ds-icon" aria-hidden="true">add</span>
+//         <span class="ds-icon" aria-hidden="true">add_2</span>
 //       </button>
 //       <button class="ds-top-nav__action-btn" type="button" aria-label="Help">
-//         <span class="ds-icon" aria-hidden="true">help</span>
+//         <span class="ds-icon ds-icon--filled" aria-hidden="true">person_raised_hand</span>
 //       </button>
 //       <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy"
 //               type="button" aria-label="Profile — Rebecca B.">

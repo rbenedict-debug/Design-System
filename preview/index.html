@@ -5824,6 +5824,8 @@
   overflow: hidden;
   background: var(--color-surface-nav);
   box-shadow: 0 1px 10px 4px var(--shadow-elevation-4), 0 4px 3px 0 var(--shadow-elevation-4);
+  position: relative;
+  z-index: 1;
 }
 .ds-nav-sidebar__logo {
   width: 100%;
@@ -6274,6 +6276,85 @@
               0 2px 6px 2px var(--shadow-elevation-2, rgba(65,65,65,.1));
   min-height: 0;
 }
+
+/* ── Split Page Layout Pattern ─────────────────────────────────────────── */
+.ds-split-page {
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-lg, 16px);
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ds-split-page__panel {
+  flex: 1 1 0;
+  background: var(--color-surface-page, white);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 0 2px 0 var(--shadow-elevation-2, rgba(65,65,65,.1)),
+              0 2px 6px 2px var(--shadow-elevation-2, rgba(65,65,65,.1));
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ds-split-page__handle {
+  flex-shrink: 0;
+  width: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-xl, 24px) 0;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+}
+
+.ds-split-page__handle-line {
+  flex: 1 0 0;
+  width: 2px;
+  background: var(--color-border-secondary, #cacaca);
+  border-radius: var(--radius-full, 1000px);
+  min-height: 1px;
+}
+
+.ds-split-page__handle .ds-icon {
+  flex-shrink: 0;
+  color: var(--color-icon-subtle, #73737f);
+}
+
+.ds-split-page--resizable {
+  gap: 4px;
+}
+
+.ds-split-page.is-dragging,
+.ds-split-page.is-dragging * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+/* Ratio variants */
+.ds-split-page--7030 .ds-split-page__panel--left  { flex: 7 1 0; }
+.ds-split-page--7030 .ds-split-page__panel--right { flex: 3 1 0; }
+.ds-split-page--3070 .ds-split-page__panel--left  { flex: 3 1 0; }
+.ds-split-page--3070 .ds-split-page__panel--right { flex: 7 1 0; }
+.ds-split-page--7525 .ds-split-page__panel--left  { flex: 3 1 0; }
+.ds-split-page--7525 .ds-split-page__panel--right { flex: 1 1 0; }
+.ds-split-page--2575 .ds-split-page__panel--left  { flex: 1 1 0; }
+.ds-split-page--2575 .ds-split-page__panel--right { flex: 3 1 0; }
+
+/* Compact variant preview tiles */
+.split-variant-preview {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 120px;
+  background: var(--color-surface-default, #f6f6f6);
+  border-radius: var(--radius-sm, 4px);
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
 </style>
 
 </head>
@@ -6319,6 +6400,7 @@
       <a class="nav-link" href="#top-nav" onclick="setActive(this)"><span class="nav-dot"></span>Top Nav</a>
       <a class="nav-link" href="#nav-expand" onclick="setActive(this)"><span class="nav-dot"></span>Nav Expand</a>
       <a class="nav-link" href="#page-layout" onclick="setActive(this)"><span class="nav-dot"></span>Page Layout</a>
+      <a class="nav-link" href="#split-page-layout" onclick="setActive(this)"><span class="nav-dot"></span>Split Page Layout</a>
 
       <div class="nav-group-label">Form</div>
       <a class="nav-link" href="#input" onclick="setActive(this)"><span class="nav-dot"></span>Input Field</a>
@@ -7703,10 +7785,10 @@
                   <div class="ds-page-content__heading">
                     <h1 class="ds-page-content__title">Page Title</h1>
                     <div class="ds-tabs" role="tablist" aria-label="Page sections">
-                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Overview</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Details</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Activity</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Settings</button>
+                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
                     </div>
                   </div>
                   <div class="ds-page-content__main"></div>
@@ -7726,6 +7808,732 @@
 
           </div><!-- /.onflo-page-demo -->
         </div><!-- /.component-demo -->
+
+        <!-- ── Split Page Layout ──────────────────────────────────────────── -->
+        <div class="section-header" id="split-page-layout" style="margin-top: 48px;">
+          <h2 class="section-title">Split Page Layout</h2>
+          <span class="section-source">Pattern: two-panel content area with optional resize handle</span>
+        </div>
+        <p class="section-desc">Two-panel content layout for views like ticket detail — a list or context panel beside a primary content panel. Five fixed split ratios: 50/50, 70/30, 30/70, 75/25, and 25/75. The resizable variant adds a drag handle (<code>ds-split-page__handle</code>) between the panels that users can drag to adjust widths. Angular: no built-in split pane in Angular Material — apply <code>cdkDrag cdkDragLockAxis="x"</code> from <code>@angular/cdk/drag-drop</code> on the handle element, or implement a lightweight custom resize directive using <code>mousedown</code> / <code>mousemove</code> / <code>mouseup</code> that updates the left and right panel <code>flex-grow</code> values directly. The composition demo below is interactive — drag the handle to resize.</p>
+
+        <!-- Static split ratio variants -->
+        <div class="component-demo">
+
+          <!-- 50 / 50 -->
+          <div class="demo-row">
+            <div class="demo-label">50 / 50</div>
+            <div class="demo-row-items" style="flex: 1; gap: 16px;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" aria-hidden="true">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 70 / 30 -->
+          <div class="demo-row">
+            <div class="demo-label">70 / 30</div>
+            <div class="demo-row-items" style="flex: 1; gap: 16px;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--7030">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--7030 ds-split-page--resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" aria-hidden="true">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 30 / 70 -->
+          <div class="demo-row">
+            <div class="demo-label">30 / 70</div>
+            <div class="demo-row-items" style="flex: 1; gap: 16px;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--3070">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--3070 ds-split-page--resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" aria-hidden="true">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 75 / 25 -->
+          <div class="demo-row">
+            <div class="demo-label">75 / 25</div>
+            <div class="demo-row-items" style="flex: 1; gap: 16px;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--7525">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--7525 ds-split-page--resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" aria-hidden="true">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 25 / 75 -->
+          <div class="demo-row">
+            <div class="demo-label">25 / 75</div>
+            <div class="demo-row-items" style="flex: 1; gap: 16px;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--2575">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--2575 ds-split-page--resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" aria-hidden="true">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.component-demo (static variants) -->
+
+        <!-- Resizable composition: full page shell with interactive drag handle -->
+        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+          <div class="onflo-page-demo" id="split-layout-demo">
+
+            <!-- Nav sidebar -->
+            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
+              <div class="ds-nav-sidebar__logo">
+                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                </svg>
+              </div>
+              <div class="ds-nav-sidebar__nav">
+                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+                  <span class="ds-nav-button__label">Tickets</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
+                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+                  <span class="ds-nav-button__label">Assets</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                  <span class="ds-icon" aria-hidden="true">equalizer</span>
+                  <span class="ds-nav-button__label">Analytics</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
+                  <span class="ds-nav-button__label">Settings</span>
+                </button>
+              </div>
+              <div class="ds-nav-sidebar__bottom">
+                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                  <div class="ds-agent-status__icon">
+                    <span class="ds-icon" aria-hidden="true">support_agent</span>
+                  </div>
+                  <div class="ds-agent-status__status">
+                    <span>Online</span>
+                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                  </div>
+                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                </button>
+              </div>
+            </nav>
+
+            <!-- Right side: top-nav + split content area -->
+            <div class="onflo-page-demo__content">
+
+              <!-- Top nav -->
+              <header class="ds-top-nav" role="banner">
+                <div class="ds-top-nav__tabs">
+                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
+                       aria-pressed="true" aria-label="Tab Label tab — active"
+                       onclick="activateNavTab(this)">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Tab Label</span>
+                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
+                              onclick="event.stopPropagation(); closeNavTab(this)">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ds-nav-tab" role="button" tabindex="0"
+                       aria-pressed="false" aria-label="Tab Label tab"
+                       onclick="activateNavTab(this)">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Tab Label</span>
+                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
+                              onclick="event.stopPropagation(); closeNavTab(this)">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="ds-top-nav__actions">
+                  <div class="ds-top-nav__action-badge">
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
+                    </button>
+                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
+                  </div>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
+                    <span class="ds-icon" aria-hidden="true">add_2</span>
+                  </button>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
+                    R
+                  </button>
+                </div>
+              </header>
+
+              <!-- Body: subnav + split content -->
+              <div class="onflo-page-demo__body">
+
+                <!-- Sub-navigation panel (collapsible) -->
+                <nav class="ds-subnav" id="subnav-panel-split" role="navigation" aria-label="Tickets navigation">
+                  <button class="ds-subnav-btn is-selected" type="button">Inbox</button>
+                  <button class="ds-subnav-btn" type="button">Bookmarks</button>
+                  <button class="ds-subnav-btn" type="button">Spam</button>
+                  <button class="ds-subnav-btn" type="button">Drafts</button>
+                  <button class="ds-subnav-header" type="button">
+                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
+                    <span class="ds-subnav-header__label">Saved Searches</span>
+                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                  </button>
+                </nav>
+
+                <!-- Page content: title + tabs + split panels replacing __main -->
+                <main class="ds-page-content" role="main">
+                  <div class="ds-page-content__heading">
+                    <h1 class="ds-page-content__title">Page Title</h1>
+                    <div class="ds-tabs" role="tablist" aria-label="Page sections">
+                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                    </div>
+                  </div>
+                  <div class="ds-split-page ds-split-page--resizable" id="split-page-resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" id="split-page-handle"
+                         role="separator" aria-label="Drag to resize panels" aria-orientation="vertical"
+                         tabindex="0">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon" aria-hidden="true">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </main>
+
+              </div><!-- /.onflo-page-demo__body -->
+
+            </div><!-- /.onflo-page-demo__content -->
+
+            <!-- Floating expand/collapse toggle (absolutely positioned) -->
+            <button class="ds-nav-expand" id="nav-expand-btn-split"
+                    type="button"
+                    aria-label="Collapse sub navigation"
+                    aria-expanded="true"
+                    onclick="toggleSubnavSplit()">
+              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+            </button>
+
+          </div><!-- /.onflo-page-demo -->
+        </div><!-- /.component-demo (composition) -->
+
+        <!-- Static 50/50 split composition -->
+        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); margin-top: 16px;">
+          <div class="onflo-page-demo" id="split-layout-demo-static">
+
+            <!-- Nav sidebar -->
+            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
+              <div class="ds-nav-sidebar__logo">
+                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                </svg>
+              </div>
+              <div class="ds-nav-sidebar__nav">
+                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+                  <span class="ds-nav-button__label">Tickets</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
+                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+                  <span class="ds-nav-button__label">Assets</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                  <span class="ds-icon" aria-hidden="true">equalizer</span>
+                  <span class="ds-nav-button__label">Analytics</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
+                  <span class="ds-nav-button__label">Settings</span>
+                </button>
+              </div>
+              <div class="ds-nav-sidebar__bottom">
+                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                  <div class="ds-agent-status__icon">
+                    <span class="ds-icon" aria-hidden="true">support_agent</span>
+                  </div>
+                  <div class="ds-agent-status__status">
+                    <span>Online</span>
+                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                  </div>
+                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                </button>
+              </div>
+            </nav>
+
+            <!-- Right side: top-nav + split content area -->
+            <div class="onflo-page-demo__content">
+
+              <!-- Top nav -->
+              <header class="ds-top-nav" role="banner">
+                <div class="ds-top-nav__tabs">
+                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
+                       aria-pressed="true" aria-label="Tab Label tab — active"
+                       onclick="activateNavTab(this)">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Tab Label</span>
+                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
+                              onclick="event.stopPropagation(); closeNavTab(this)">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ds-nav-tab" role="button" tabindex="0"
+                       aria-pressed="false" aria-label="Tab Label tab"
+                       onclick="activateNavTab(this)">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Tab Label</span>
+                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
+                              onclick="event.stopPropagation(); closeNavTab(this)">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="ds-top-nav__actions">
+                  <div class="ds-top-nav__action-badge">
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
+                    </button>
+                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
+                  </div>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
+                    <span class="ds-icon" aria-hidden="true">add_2</span>
+                  </button>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
+                    R
+                  </button>
+                </div>
+              </header>
+
+              <!-- Body: subnav + split content -->
+              <div class="onflo-page-demo__body">
+
+                <!-- Sub-navigation panel (collapsible) -->
+                <nav class="ds-subnav" id="subnav-panel-split-static" role="navigation" aria-label="Tickets navigation">
+                  <button class="ds-subnav-btn is-selected" type="button">Inbox</button>
+                  <button class="ds-subnav-btn" type="button">Bookmarks</button>
+                  <button class="ds-subnav-btn" type="button">Spam</button>
+                  <button class="ds-subnav-btn" type="button">Drafts</button>
+                  <button class="ds-subnav-header" type="button">
+                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
+                    <span class="ds-subnav-header__label">Saved Searches</span>
+                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                  </button>
+                </nav>
+
+                <!-- Page content: title + tabs + static 50/50 split -->
+                <main class="ds-page-content" role="main">
+                  <div class="ds-page-content__heading">
+                    <h1 class="ds-page-content__title">Page Title</h1>
+                    <div class="ds-tabs" role="tablist" aria-label="Page sections">
+                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                    </div>
+                  </div>
+                  <div class="ds-split-page">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </main>
+
+              </div><!-- /.onflo-page-demo__body -->
+
+            </div><!-- /.onflo-page-demo__content -->
+
+            <!-- Floating expand/collapse toggle (absolutely positioned) -->
+            <button class="ds-nav-expand" id="nav-expand-btn-split-static"
+                    type="button"
+                    aria-label="Collapse sub navigation"
+                    aria-expanded="true"
+                    onclick="toggleSubnavSplitStatic()">
+              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+            </button>
+
+          </div><!-- /.onflo-page-demo -->
+        </div><!-- /.component-demo (static 50/50 composition) -->
+
+        <!-- 25/75 split composition -->
+        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); margin-top: 16px;">
+          <div class="onflo-page-demo" id="split-layout-demo-2575">
+
+            <!-- Nav sidebar -->
+            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
+              <div class="ds-nav-sidebar__logo">
+                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                </svg>
+              </div>
+              <div class="ds-nav-sidebar__nav">
+                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+                  <span class="ds-nav-button__label">Tickets</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
+                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+                  <span class="ds-nav-button__label">Assets</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                  <span class="ds-icon" aria-hidden="true">equalizer</span>
+                  <span class="ds-nav-button__label">Analytics</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
+                  <span class="ds-nav-button__label">Settings</span>
+                </button>
+              </div>
+              <div class="ds-nav-sidebar__bottom">
+                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                  <div class="ds-agent-status__icon">
+                    <span class="ds-icon" aria-hidden="true">support_agent</span>
+                  </div>
+                  <div class="ds-agent-status__status">
+                    <span>Online</span>
+                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                  </div>
+                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                </button>
+              </div>
+            </nav>
+
+            <!-- Right side: top-nav + split content area -->
+            <div class="onflo-page-demo__content">
+
+              <!-- Top nav -->
+              <header class="ds-top-nav" role="banner">
+                <div class="ds-top-nav__tabs">
+                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
+                       aria-pressed="true" aria-label="Tab Label tab — active"
+                       onclick="activateNavTab(this)">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Tab Label</span>
+                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
+                              onclick="event.stopPropagation(); closeNavTab(this)">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ds-nav-tab" role="button" tabindex="0"
+                       aria-pressed="false" aria-label="Tab Label tab"
+                       onclick="activateNavTab(this)">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Tab Label</span>
+                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
+                              onclick="event.stopPropagation(); closeNavTab(this)">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="ds-top-nav__actions">
+                  <div class="ds-top-nav__action-badge">
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
+                    </button>
+                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
+                  </div>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
+                    <span class="ds-icon" aria-hidden="true">add_2</span>
+                  </button>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
+                    R
+                  </button>
+                </div>
+              </header>
+
+              <!-- Body: subnav + split content -->
+              <div class="onflo-page-demo__body">
+
+                <!-- Sub-navigation panel (collapsible) -->
+                <nav class="ds-subnav" id="subnav-panel-split-2575" role="navigation" aria-label="Tickets navigation">
+                  <button class="ds-subnav-btn is-selected" type="button">Inbox</button>
+                  <button class="ds-subnav-btn" type="button">Bookmarks</button>
+                  <button class="ds-subnav-btn" type="button">Spam</button>
+                  <button class="ds-subnav-btn" type="button">Drafts</button>
+                  <button class="ds-subnav-header" type="button">
+                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
+                    <span class="ds-subnav-header__label">Saved Searches</span>
+                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                  </button>
+                </nav>
+
+                <!-- Page content: title + tabs + 25/75 static split -->
+                <main class="ds-page-content" role="main">
+                  <div class="ds-page-content__heading">
+                    <h1 class="ds-page-content__title">Page Title</h1>
+                    <div class="ds-tabs" role="tablist" aria-label="Page sections">
+                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                    </div>
+                  </div>
+                  <div class="ds-split-page ds-split-page--2575">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </main>
+
+              </div><!-- /.onflo-page-demo__body -->
+
+            </div><!-- /.onflo-page-demo__content -->
+
+            <!-- Floating expand/collapse toggle (absolutely positioned) -->
+            <button class="ds-nav-expand" id="nav-expand-btn-split-2575"
+                    type="button"
+                    aria-label="Collapse sub navigation"
+                    aria-expanded="true"
+                    onclick="toggleSubnavSplit2575()">
+              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+            </button>
+
+          </div><!-- /.onflo-page-demo -->
+        </div><!-- /.component-demo (25/75 composition) -->
+
+        <!-- 75/25 split composition -->
+        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); margin-top: 16px;">
+          <div class="onflo-page-demo" id="split-layout-demo-7525">
+
+            <!-- Nav sidebar -->
+            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
+              <div class="ds-nav-sidebar__logo">
+                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                </svg>
+              </div>
+              <div class="ds-nav-sidebar__nav">
+                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+                  <span class="ds-nav-button__label">Tickets</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
+                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+                  <span class="ds-nav-button__label">Assets</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                  <span class="ds-icon" aria-hidden="true">equalizer</span>
+                  <span class="ds-nav-button__label">Analytics</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
+                  <span class="ds-nav-button__label">Settings</span>
+                </button>
+              </div>
+              <div class="ds-nav-sidebar__bottom">
+                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                  <div class="ds-agent-status__icon">
+                    <span class="ds-icon" aria-hidden="true">support_agent</span>
+                  </div>
+                  <div class="ds-agent-status__status">
+                    <span>Online</span>
+                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                  </div>
+                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                </button>
+              </div>
+            </nav>
+
+            <!-- Right side: top-nav + split content area -->
+            <div class="onflo-page-demo__content">
+
+              <!-- Top nav -->
+              <header class="ds-top-nav" role="banner">
+                <div class="ds-top-nav__tabs">
+                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
+                       aria-pressed="true" aria-label="Tab Label tab — active"
+                       onclick="activateNavTab(this)">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Tab Label</span>
+                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
+                              onclick="event.stopPropagation(); closeNavTab(this)">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ds-nav-tab" role="button" tabindex="0"
+                       aria-pressed="false" aria-label="Tab Label tab"
+                       onclick="activateNavTab(this)">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Tab Label</span>
+                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
+                              onclick="event.stopPropagation(); closeNavTab(this)">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="ds-top-nav__actions">
+                  <div class="ds-top-nav__action-badge">
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
+                    </button>
+                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
+                  </div>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
+                    <span class="ds-icon" aria-hidden="true">add_2</span>
+                  </button>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
+                    R
+                  </button>
+                </div>
+              </header>
+
+              <!-- Body: subnav + split content -->
+              <div class="onflo-page-demo__body">
+
+                <!-- Sub-navigation panel (collapsible) -->
+                <nav class="ds-subnav" id="subnav-panel-split-7525" role="navigation" aria-label="Tickets navigation">
+                  <button class="ds-subnav-btn is-selected" type="button">Inbox</button>
+                  <button class="ds-subnav-btn" type="button">Bookmarks</button>
+                  <button class="ds-subnav-btn" type="button">Spam</button>
+                  <button class="ds-subnav-btn" type="button">Drafts</button>
+                  <button class="ds-subnav-header" type="button">
+                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
+                    <span class="ds-subnav-header__label">Saved Searches</span>
+                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                  </button>
+                </nav>
+
+                <!-- Page content: title + tabs + 75/25 static split -->
+                <main class="ds-page-content" role="main">
+                  <div class="ds-page-content__heading">
+                    <h1 class="ds-page-content__title">Page Title</h1>
+                    <div class="ds-tabs" role="tablist" aria-label="Page sections">
+                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
+                    </div>
+                  </div>
+                  <div class="ds-split-page ds-split-page--7525">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </main>
+
+              </div><!-- /.onflo-page-demo__body -->
+
+            </div><!-- /.onflo-page-demo__content -->
+
+            <!-- Floating expand/collapse toggle (absolutely positioned) -->
+            <button class="ds-nav-expand" id="nav-expand-btn-split-7525"
+                    type="button"
+                    aria-label="Collapse sub navigation"
+                    aria-expanded="true"
+                    onclick="toggleSubnavSplit7525()">
+              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+            </button>
+
+          </div><!-- /.onflo-page-demo -->
+        </div><!-- /.component-demo (75/25 composition) -->
+
       </section>
 
       <hr class="divider" />
@@ -10572,6 +11380,86 @@ function toggleSubnav() {
     icon.textContent = 'right_panel_open';
   }
 }
+
+function toggleSubnavSplit() {
+  var panel = document.getElementById('subnav-panel-split');
+  var btn   = document.getElementById('nav-expand-btn-split');
+  var icon  = btn.querySelector('.ds-icon');
+  var isOpen = !panel.classList.contains('is-collapsed');
+  if (isOpen) {
+    panel.classList.add('is-collapsed');
+    btn.classList.add('is-collapsed');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Expand navigation');
+    icon.textContent = 'right_panel_close';
+  } else {
+    panel.classList.remove('is-collapsed');
+    btn.classList.remove('is-collapsed');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-label', 'Collapse navigation');
+    icon.textContent = 'right_panel_open';
+  }
+}
+
+function toggleSubnavSplitStatic() {
+  var panel = document.getElementById('subnav-panel-split-static');
+  var btn   = document.getElementById('nav-expand-btn-split-static');
+  var icon  = btn.querySelector('.ds-icon');
+  var isOpen = !panel.classList.contains('is-collapsed');
+  if (isOpen) {
+    panel.classList.add('is-collapsed');
+    btn.classList.add('is-collapsed');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Expand navigation');
+    icon.textContent = 'right_panel_close';
+  } else {
+    panel.classList.remove('is-collapsed');
+    btn.classList.remove('is-collapsed');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-label', 'Collapse navigation');
+    icon.textContent = 'right_panel_open';
+  }
+}
+
+function toggleSubnavSplit2575() {
+  var panel = document.getElementById('subnav-panel-split-2575');
+  var btn   = document.getElementById('nav-expand-btn-split-2575');
+  var icon  = btn.querySelector('.ds-icon');
+  var isOpen = !panel.classList.contains('is-collapsed');
+  if (isOpen) {
+    panel.classList.add('is-collapsed');
+    btn.classList.add('is-collapsed');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Expand navigation');
+    icon.textContent = 'right_panel_close';
+  } else {
+    panel.classList.remove('is-collapsed');
+    btn.classList.remove('is-collapsed');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-label', 'Collapse navigation');
+    icon.textContent = 'right_panel_open';
+  }
+}
+
+function toggleSubnavSplit7525() {
+  var panel = document.getElementById('subnav-panel-split-7525');
+  var btn   = document.getElementById('nav-expand-btn-split-7525');
+  var icon  = btn.querySelector('.ds-icon');
+  var isOpen = !panel.classList.contains('is-collapsed');
+  if (isOpen) {
+    panel.classList.add('is-collapsed');
+    btn.classList.add('is-collapsed');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Expand navigation');
+    icon.textContent = 'right_panel_close';
+  } else {
+    panel.classList.remove('is-collapsed');
+    btn.classList.remove('is-collapsed');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-label', 'Collapse navigation');
+    icon.textContent = 'right_panel_open';
+  }
+}
 </script>
 
 <!-- Nav tab interaction — activate and close -->
@@ -10627,6 +11515,59 @@ function closeNavTab(closeBtn) {
       (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea'));
     if (el) el.removeAttribute('data-mouse-focus');
   }, true);
+})();
+</script>
+
+<!-- Split page layout: functional resize handle -->
+<script>
+(function () {
+  var handle = document.getElementById('split-page-handle');
+  if (!handle) return;
+
+  /* Mouse drag */
+  handle.addEventListener('mousedown', function (e) {
+    e.preventDefault();
+    var container   = document.getElementById('split-page-resizable');
+    var leftPanel   = container.querySelector('.ds-split-page__panel--left');
+    var rightPanel  = container.querySelector('.ds-split-page__panel--right');
+    container.classList.add('is-dragging');
+
+    var startX          = e.clientX;
+    var containerWidth  = container.getBoundingClientRect().width;
+    var startLeftWidth  = leftPanel.getBoundingClientRect().width;
+    var totalPanelWidth = containerWidth - 26; /* 18px handle + 4px gap × 2 */
+    var minWidth        = 80;
+
+    function onMove(e) {
+      var newLeft = Math.max(minWidth, Math.min(totalPanelWidth - minWidth, startLeftWidth + (e.clientX - startX)));
+      leftPanel.style.flex  = newLeft + ' 1 0px';
+      rightPanel.style.flex = (totalPanelWidth - newLeft) + ' 1 0px';
+    }
+
+    function onUp() {
+      container.classList.remove('is-dragging');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup',   onUp);
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup',   onUp);
+  });
+
+  /* Keyboard: arrow keys move split in 20px steps */
+  handle.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    var container       = document.getElementById('split-page-resizable');
+    var leftPanel       = container.querySelector('.ds-split-page__panel--left');
+    var rightPanel      = container.querySelector('.ds-split-page__panel--right');
+    var containerWidth  = container.getBoundingClientRect().width;
+    var totalPanelWidth = containerWidth - 26;
+    var curLeft         = leftPanel.getBoundingClientRect().width;
+    var newLeft = Math.max(80, Math.min(totalPanelWidth - 80, curLeft + (e.key === 'ArrowRight' ? 20 : -20)));
+    leftPanel.style.flex  = newLeft + ' 1 0px';
+    rightPanel.style.flex = (totalPanelWidth - newLeft) + ' 1 0px';
+  });
 })();
 </script>
 </body>
