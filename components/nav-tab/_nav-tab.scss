@@ -16,7 +16,7 @@
 //       <button class="ds-nav-tab__close" type="button"
 //               aria-label="Close Ticket #4401 tab"
 //               onclick="event.stopPropagation(); closeNavTab(this)">
-//         <span class="ds-icon" aria-hidden="true">close_small</span>
+//         <span class="ds-icon ds-icon--xs" aria-hidden="true">close_small</span>
 //       </button>
 //     </div>
 //   </div>
@@ -124,15 +124,10 @@
     background: transparent;
     cursor: pointer;
     border-radius: var(--radius-sm);
-    color: var(--color-icon-default);
+    color: var(--color-icon-subtle);
     // Sits above the ::after overlay tint so hover styles are independent
     position: relative;
     z-index: 1;
-
-    .ds-icon {
-      font-size: 18px;
-      line-height: 1;
-    }
 
     &:hover   { background: var(--overlay-hovered); }
     &:active  { background: var(--overlay-pressed); }
