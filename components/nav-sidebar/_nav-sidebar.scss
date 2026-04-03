@@ -1,0 +1,89 @@
+// ============================================================
+// Onflo Design System — Nav Sidebar Composition
+// ============================================================
+//
+// Main left navigation sidebar. Composes ds-nav-button
+// (product-section nav rail) and ds-agent-status (call/live
+// queue availability toggles) into the primary nav pattern.
+//
+// Usage (HTML class API):
+//   <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+//     <div class="ds-nav-sidebar__logo"><!-- logo --></div>
+//     <div class="ds-nav-sidebar__nav">
+//       <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+//         <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+//         <span class="ds-nav-button__label">Tickets</span>
+//       </button>
+//       <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
+//         <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+//         <span class="ds-nav-button__label">Assets</span>
+//       </button>
+//     </div>
+//     <div class="ds-nav-sidebar__bottom">
+//       <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">...</button>
+//       <button class="ds-agent-status" type="button" aria-pressed="false" aria-label="Live agent status: Offline">...</button>
+//     </div>
+//   </nav>
+//
+// Angular component:
+//   <ds-nav-sidebar>
+//     <ng-container logo><!-- brand mark --></ng-container>
+//   </ds-nav-sidebar>
+//   (nav buttons and agent-status toggles are injected via content projection slots)
+//
+// Figma: composition/nav-sidebar
+// ADA: role="navigation" + aria-label="Main navigation" on the <nav> element
+// ============================================================
+
+.ds-nav-sidebar {
+  // Layout
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;
+  height: 100%;
+  padding: var(--spacing-xs);
+  box-sizing: border-box;
+  gap: var(--spacing-md);
+  overflow: hidden;
+
+  // Appearance
+  background: var(--color-surface-nav);
+  box-shadow:
+    0 1px 10px 4px var(--shadow-elevation-4),
+    0 4px 3px 0 var(--shadow-elevation-4);
+
+  // ── Logo region ───────────────────────────────────────────────────────────
+
+  &__logo {
+    width: 100%;
+    padding: var(--spacing-md);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  // ── Nav buttons region ────────────────────────────────────────────────────
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  // ── Bottom agent status region ────────────────────────────────────────────
+
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: center;
+    margin-top: auto;
+    padding-bottom: var(--spacing-lg);
+    flex-shrink: 0;
+  }
+}

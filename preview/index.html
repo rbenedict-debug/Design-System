@@ -5811,6 +5811,45 @@
 .ds-agent-status.is-offline .ds-agent-status__indicator {
   background: var(--color-icon-disabled);
 }
+
+.ds-nav-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;
+  height: 100%;
+  padding: var(--spacing-xs);
+  box-sizing: border-box;
+  gap: var(--spacing-md);
+  overflow: hidden;
+  background: var(--color-surface-nav);
+  box-shadow: 0 1px 10px 4px var(--shadow-elevation-4), 0 4px 3px 0 var(--shadow-elevation-4);
+}
+.ds-nav-sidebar__logo {
+  width: 100%;
+  padding: var(--spacing-md);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ds-nav-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: center;
+  flex-shrink: 0;
+}
+.ds-nav-sidebar__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: center;
+  margin-top: auto;
+  padding-bottom: var(--spacing-lg);
+  flex-shrink: 0;
+}
 </style><!-- ONFLO-COMPONENTS:END -->
 </head>
 <body>
@@ -5850,6 +5889,7 @@
       <a class="nav-link" href="#icon-button" onclick="setActive(this)"><span class="nav-dot"></span>Icon Button</a>
       <a class="nav-link" href="#nav-button" onclick="setActive(this)"><span class="nav-dot"></span>Nav Button</a>
       <a class="nav-link" href="#agent-status" onclick="setActive(this)"><span class="nav-dot"></span>Agent Status</a>
+      <a class="nav-link" href="#nav-sidebar" onclick="setActive(this)"><span class="nav-dot"></span>Nav Sidebar</a>
 
       <div class="nav-group-label">Form</div>
       <a class="nav-link" href="#input" onclick="setActive(this)"><span class="nav-dot"></span>Input Field</a>
@@ -6850,6 +6890,148 @@
                 </div>
                 <span class="ds-agent-status__indicator" aria-hidden="true"></span>
               </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Nav Sidebar ──────────────────────────────────────────────────── -->
+      <section class="section" id="nav-sidebar">
+        <div class="section-header">
+          <h2 class="section-title">Nav Sidebar</h2>
+          <span class="section-source">components/nav-sidebar/_nav-sidebar.scss</span>
+        </div>
+        <p class="section-desc">Main left navigation sidebar — composes <code>ds-nav-button</code> (product-section rail) and <code>ds-agent-status</code> (call/live queue availability) into the primary nav pattern. 80px wide, <code>height: 100%</code> (fills its containing column). Angular: <code>&lt;ds-nav-sidebar&gt;</code> with <code>[logo]</code>, <code>[nav]</code>, and <code>[bottom]</code> content projection slots. ADA: <code>role="navigation"</code> and <code>aria-label="Main navigation"</code> on the inner <code>&lt;nav&gt;</code>.</p>
+        <div class="component-demo">
+
+          <!-- Full composition -->
+          <div class="demo-row" style="align-items: flex-start;">
+            <div class="demo-row-label" style="padding-top: 12px;">Composition</div>
+            <div class="demo-row-items" style="align-items: flex-start;">
+              <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="height: 640px;">
+
+                <!-- Logo -->
+                <div class="ds-nav-sidebar__logo">
+                  <!-- Onflo brand mark (approximate) -->
+                  <svg aria-hidden="true" width="52" height="50" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M73 39C73 57.8 57.8 73 39 73C20.2 73 5 57.8 5 39C5 20.2 20.2 5 39 5C48.4 5 56.9 8.9 63.1 15.2L55 23.3C50.7 18.8 44.7 16 39 16C26.3 16 16 26.3 16 39C16 51.7 26.3 62 39 62C50 62 59.2 54.6 62.2 44.5H39V34H73V39Z"
+                      fill="var(--color-surface-brand-bold)"/>
+                    <ellipse cx="68" cy="12" rx="5.5" ry="5.5" fill="var(--color-surface-brand-bold)"/>
+                    <ellipse cx="76.5" cy="19" rx="3.5" ry="3.5" fill="var(--color-surface-brand-bold)"/>
+                  </svg>
+                </div>
+
+                <!-- Nav buttons -->
+                <div class="ds-nav-sidebar__nav">
+                  <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+                    <span class="ds-nav-button__label">Tickets</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
+                    <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+                    <span class="ds-nav-button__label">Assets</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                    <span class="ds-icon" aria-hidden="true">equalizer</span>
+                    <span class="ds-nav-button__label">Analytics</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
+                    <span class="ds-nav-button__label">Settings</span>
+                  </button>
+                </div>
+
+                <!-- Agent status -->
+                <div class="ds-nav-sidebar__bottom">
+                  <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">support_agent</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Online</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                  <button class="ds-agent-status is-offline" type="button" aria-pressed="false" aria-label="Live agent status: Offline">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">forum</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Offline</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                </div>
+
+              </nav>
+            </div>
+          </div>
+
+          <!-- Interactive — click nav buttons to toggle active state -->
+          <div class="demo-row" style="align-items: flex-start;">
+            <div class="demo-row-label" style="padding-top: 12px;">Interactive</div>
+            <div class="demo-row-items" style="align-items: flex-start;">
+              <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" id="demo-nav-sidebar" style="height: 640px;">
+                <div class="ds-nav-sidebar__logo">
+                  <svg aria-hidden="true" width="52" height="50" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M73 39C73 57.8 57.8 73 39 73C20.2 73 5 57.8 5 39C5 20.2 20.2 5 39 5C48.4 5 56.9 8.9 63.1 15.2L55 23.3C50.7 18.8 44.7 16 39 16C26.3 16 16 26.3 16 39C16 51.7 26.3 62 39 62C50 62 59.2 54.6 62.2 44.5H39V34H73V39Z"
+                      fill="var(--color-surface-brand-bold)"/>
+                    <ellipse cx="68" cy="12" rx="5.5" ry="5.5" fill="var(--color-surface-brand-bold)"/>
+                    <ellipse cx="76.5" cy="19" rx="3.5" ry="3.5" fill="var(--color-surface-brand-bold)"/>
+                  </svg>
+                </div>
+                <div class="ds-nav-sidebar__nav">
+                  <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets"
+                    onclick="document.querySelectorAll('#demo-nav-sidebar .ds-nav-button').forEach(b => { b.classList.remove('is-selected'); b.setAttribute('aria-pressed','false'); }); this.classList.add('is-selected'); this.setAttribute('aria-pressed','true');">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+                    <span class="ds-nav-button__label">Tickets</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets"
+                    onclick="document.querySelectorAll('#demo-nav-sidebar .ds-nav-button').forEach(b => { b.classList.remove('is-selected'); b.setAttribute('aria-pressed','false'); }); this.classList.add('is-selected'); this.setAttribute('aria-pressed','true');">
+                    <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+                    <span class="ds-nav-button__label">Assets</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics"
+                    onclick="document.querySelectorAll('#demo-nav-sidebar .ds-nav-button').forEach(b => { b.classList.remove('is-selected'); b.setAttribute('aria-pressed','false'); }); this.classList.add('is-selected'); this.setAttribute('aria-pressed','true');">
+                    <span class="ds-icon" aria-hidden="true">equalizer</span>
+                    <span class="ds-nav-button__label">Analytics</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings"
+                    onclick="document.querySelectorAll('#demo-nav-sidebar .ds-nav-button').forEach(b => { b.classList.remove('is-selected'); b.setAttribute('aria-pressed','false'); }); this.classList.add('is-selected'); this.setAttribute('aria-pressed','true');">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
+                    <span class="ds-nav-button__label">Settings</span>
+                  </button>
+                </div>
+                <div class="ds-nav-sidebar__bottom">
+                  <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online"
+                    onclick="var off=this.classList.toggle('is-offline'); this.setAttribute('aria-pressed',!off); this.setAttribute('aria-label','Call agent status: '+(off?'Offline':'Online')); this.querySelector('.ds-agent-status__status span:first-child').textContent=off?'Offline':'Online';">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">support_agent</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Online</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                  <button class="ds-agent-status is-offline" type="button" aria-pressed="false" aria-label="Live agent status: Offline"
+                    onclick="var off=this.classList.toggle('is-offline'); this.setAttribute('aria-pressed',!off); this.setAttribute('aria-label','Live agent status: '+(off?'Offline':'Online')); this.querySelector('.ds-agent-status__status span:first-child').textContent=off?'Offline':'Online';">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">forum</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Offline</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </nav>
             </div>
           </div>
 
