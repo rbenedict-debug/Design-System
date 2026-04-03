@@ -1,0 +1,16 @@
+<button
+  class="ds-agent-status"
+  [class.is-offline]="!online"
+  type="button"
+  [attr.aria-pressed]="online"
+  [attr.aria-label]="ariaLabel"
+>
+  <div class="ds-agent-status__icon">
+    <span class="ds-icon" aria-hidden="true">{{ icon }}</span>
+  </div>
+  <div class="ds-agent-status__status">
+    <span>{{ statusLabel }}</span>
+    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+  </div>
+  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+</button>

@@ -53,6 +53,7 @@ components/
   table-toolbar/           # ds-table-toolbar (toolbar above AG Grid — search, filter, actions)
   hover-card/              # ds-hover-card (cursor-following floating info card)
   nav-button/              # ds-nav-button (navigation rail button — primitive for nav-sidebar)
+  agent-status/            # ds-agent-status (support agent online/offline toggle — primitive for nav-sidebar)
 preview/
   index.html               # Self-contained visual token + component reference
 ```
@@ -176,6 +177,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-ag-paginator` | Custom | AG Grid custom pagination panel — no Material equivalent |
 | `ds-hover-card` | Custom | No Material equivalent — cursor-following floating card |
 | `ds-nav-button` | Custom | No Material equivalent — navigation rail button primitive for nav-sidebar |
+| `ds-agent-status` | Custom | No Material equivalent — support agent online/offline toggle primitive for nav-sidebar |
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |
