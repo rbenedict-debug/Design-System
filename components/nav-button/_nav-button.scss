@@ -23,11 +23,11 @@
 //   <ds-nav-button type="analytics" />
 //   <ds-nav-button type="settings" />
 //
-// Type → icon mapping (fixed per type):
-//   tickets   → inbox         assets    → desktop_mac
-//   analytics → equalizer     settings  → settings
+// Type → icon mapping (fixed per type, * = filled):
+//   tickets*  → inbox         assets    → desktop_mac
+//   analytics → equalizer     settings* → settings
 //   campaigns → campaign      home      → home
-//   requests  → inbox         systems   → monitor_heart
+//   requests* → inbox         systems   → monitor_heart
 //
 // Figma: primitive/nav-button
 // Angular Material: none — custom component (native <button>)

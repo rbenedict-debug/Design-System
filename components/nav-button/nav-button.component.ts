@@ -11,15 +11,15 @@ type NavButtonType =
   | 'requests'
   | 'systems';
 
-const NAV_BUTTON_CONFIG: Record<NavButtonType, { icon: string; label: string }> = {
-  tickets:   { icon: 'inbox',         label: 'Tickets'   },
-  assets:    { icon: 'desktop_mac',   label: 'Assets'    },
-  analytics: { icon: 'equalizer',     label: 'Analytics' },
-  settings:  { icon: 'settings',      label: 'Settings'  },
-  campaigns: { icon: 'campaign',      label: 'Campaign'  },
-  home:      { icon: 'home',          label: 'Home'      },
-  requests:  { icon: 'inbox',         label: 'Requests'  },
-  systems:   { icon: 'monitor_heart', label: 'Systems'   },
+const NAV_BUTTON_CONFIG: Record<NavButtonType, { icon: string; filled: boolean; label: string }> = {
+  tickets:   { icon: 'inbox',         filled: true,  label: 'Tickets'   },
+  assets:    { icon: 'desktop_mac',   filled: false, label: 'Assets'    },
+  analytics: { icon: 'equalizer',     filled: false, label: 'Analytics' },
+  settings:  { icon: 'settings',      filled: true,  label: 'Settings'  },
+  campaigns: { icon: 'campaign',      filled: false, label: 'Campaign'  },
+  home:      { icon: 'home',          filled: false, label: 'Home'      },
+  requests:  { icon: 'inbox',         filled: true,  label: 'Requests'  },
+  systems:   { icon: 'monitor_heart', filled: false, label: 'Systems'   },
 };
 
 @Component({
@@ -34,7 +34,7 @@ export class NavButtonComponent {
   @Input() type: NavButtonType = 'tickets';
   @Input() selected: boolean = false;
 
-  get config(): { icon: string; label: string } {
+  get config(): { icon: string; filled: boolean; label: string } {
     return NAV_BUTTON_CONFIG[this.type];
   }
 }

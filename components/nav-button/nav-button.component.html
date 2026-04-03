@@ -5,6 +5,6 @@
   [attr.aria-pressed]="selected"
   [attr.aria-label]="config.label"
 >
-  <span class="ds-icon" aria-hidden="true">{{ config.icon }}</span>
+  <span class="ds-icon" [class.ds-icon--filled]="config.filled" aria-hidden="true">{{ config.icon }}</span>
   <span class="ds-nav-button__label">{{ config.label }}</span>
 </button>
