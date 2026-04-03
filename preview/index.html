@@ -5664,6 +5664,63 @@
   color: var(--color-text-primary);
   margin: 0;
 }
+
+.ds-nav-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  width: 64px;
+  height: 52px;
+  padding: 4px 16px;
+  box-sizing: border-box;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  color: var(--color-icon-nav);
+  cursor: pointer;
+  font-family: var(--ref-typescale-label-small-font);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+  letter-spacing: var(--ref-typescale-label-small-tracking);
+  text-align: center;
+  position: relative;
+}
+.ds-nav-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+}
+.ds-nav-button:hover::after {
+  background: var(--overlay-hovered);
+}
+.ds-nav-button:active::after {
+  background: var(--overlay-pressed);
+}
+.ds-nav-button:focus {
+  outline: none;
+}
+.ds-nav-button:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-nav-button .ds-icon {
+  color: currentColor;
+  flex-shrink: 0;
+  font-size: 24px;
+}
+.ds-nav-button__label {
+  white-space: nowrap;
+}
+.ds-nav-button.is-selected {
+  background: var(--color-surface-nav-active);
+  color: var(--color-icon-nav-active);
+}
 </style><!-- ONFLO-COMPONENTS:END -->
 </head>
 <body>
@@ -5701,6 +5758,7 @@
       <div class="nav-group-label">Actions</div>
       <a class="nav-link" href="#button" onclick="setActive(this)"><span class="nav-dot"></span>Button</a>
       <a class="nav-link" href="#icon-button" onclick="setActive(this)"><span class="nav-dot"></span>Icon Button</a>
+      <a class="nav-link" href="#nav-button" onclick="setActive(this)"><span class="nav-dot"></span>Nav Button</a>
 
       <div class="nav-group-label">Form</div>
       <a class="nav-link" href="#input" onclick="setActive(this)"><span class="nav-dot"></span>Input Field</a>
@@ -6502,6 +6560,93 @@
               </button>
               <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined-letter" aria-label="Underline" aria-pressed="false" onclick="togglePressed(this)">
                 <span class="ds-icon-button__label">U</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- ── Nav Button ───────────────────────────────────────────────────── -->
+      <section class="section" id="nav-button">
+        <div class="section-header">
+          <h2 class="section-title">Nav Button</h2>
+          <span class="section-source">components/nav-button/_nav-button.scss</span>
+        </div>
+        <p class="section-desc">Primary navigation rail button — represents a top-level Onflo product section. Each <code>type</code> has a fixed icon and label. States: default (transparent), hover, pressed, and selected (blue background, white icon + text). Internal primitive used inside <code>nav-sidebar</code>.</p>
+        <div class="component-demo">
+
+          <!-- Default (unselected) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items">
+              <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Tickets">
+                <span class="ds-icon" aria-hidden="true">inbox</span>
+                <span class="ds-nav-button__label">Tickets</span>
+              </button>
+              <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
+                <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+                <span class="ds-nav-button__label">Assets</span>
+              </button>
+              <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                <span class="ds-icon" aria-hidden="true">equalizer</span>
+                <span class="ds-nav-button__label">Analytics</span>
+              </button>
+              <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                <span class="ds-icon" aria-hidden="true">settings</span>
+                <span class="ds-nav-button__label">Settings</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Selected -->
+          <div class="demo-row">
+            <div class="demo-row-label">Selected</div>
+            <div class="demo-row-items">
+              <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+                <span class="ds-icon" aria-hidden="true">inbox</span>
+                <span class="ds-nav-button__label">Tickets</span>
+              </button>
+              <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Assets">
+                <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+                <span class="ds-nav-button__label">Assets</span>
+              </button>
+              <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Analytics">
+                <span class="ds-icon" aria-hidden="true">equalizer</span>
+                <span class="ds-nav-button__label">Analytics</span>
+              </button>
+              <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Settings">
+                <span class="ds-icon" aria-hidden="true">settings</span>
+                <span class="ds-nav-button__label">Settings</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive — click to toggle selected -->
+          <div class="demo-row">
+            <div class="demo-row-label">Interactive</div>
+            <div class="demo-row-items">
+              <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Tickets"
+                onclick="this.classList.toggle('is-selected'); this.setAttribute('aria-pressed', this.classList.contains('is-selected'))">
+                <span class="ds-icon" aria-hidden="true">inbox</span>
+                <span class="ds-nav-button__label">Tickets</span>
+              </button>
+              <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets"
+                onclick="this.classList.toggle('is-selected'); this.setAttribute('aria-pressed', this.classList.contains('is-selected'))">
+                <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+                <span class="ds-nav-button__label">Assets</span>
+              </button>
+              <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics"
+                onclick="this.classList.toggle('is-selected'); this.setAttribute('aria-pressed', this.classList.contains('is-selected'))">
+                <span class="ds-icon" aria-hidden="true">equalizer</span>
+                <span class="ds-nav-button__label">Analytics</span>
+              </button>
+              <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings"
+                onclick="this.classList.toggle('is-selected'); this.setAttribute('aria-pressed', this.classList.contains('is-selected'))">
+                <span class="ds-icon" aria-hidden="true">settings</span>
+                <span class="ds-nav-button__label">Settings</span>
               </button>
             </div>
           </div>

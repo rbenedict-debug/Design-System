@@ -1,0 +1,111 @@
+// ============================================================
+// Onflo Design System — Nav Button Component
+// ============================================================
+//
+// Custom Onflo primitive — navigation rail button for top-level
+// product sections. Internal — used inside composition/nav-sidebar.
+//
+// Usage (HTML class API):
+//   <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Tickets">
+//     <span class="ds-icon" aria-hidden="true">inbox</span>
+//     <span class="ds-nav-button__label">Tickets</span>
+//   </button>
+//
+//   <!-- Selected state -->
+//   <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+//     <span class="ds-icon" aria-hidden="true">inbox</span>
+//     <span class="ds-nav-button__label">Tickets</span>
+//   </button>
+//
+// Angular component:
+//   <ds-nav-button type="tickets" [selected]="true" />
+//   <ds-nav-button type="assets" />
+//   <ds-nav-button type="analytics" />
+//   <ds-nav-button type="settings" />
+//
+// Type → icon mapping (fixed per type):
+//   tickets   → inbox         assets    → desktop_mac
+//   analytics → equalizer     settings  → settings
+//   campaigns → campaign      home      → home
+//   requests  → inbox         systems   → monitor_heart
+//
+// Figma: primitive/nav-button
+// Angular Material: none — custom component (native <button>)
+// ADA: aria-label on every button (icon is aria-hidden); aria-pressed for selected state
+// ============================================================
+
+.ds-nav-button {
+  // Layout
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  width: 64px;
+  height: 52px;
+  padding: 4px 16px;
+  box-sizing: border-box;
+
+  // Shape — overflow hidden clips the ::after overlay to the rounded corners
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+
+  // Appearance
+  background: transparent;
+  border: none;
+  color: var(--color-icon-nav);
+  cursor: pointer;
+
+  // Typography (label inherits from here)
+  font-family: var(--ref-typescale-label-small-font);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+  letter-spacing: var(--ref-typescale-label-small-tracking);
+  text-align: center;
+
+  // Stacking context for ::after overlay
+  position: relative;
+
+  // ── Interaction overlay ────────────────────────────────────────────────────
+  // box-shadow (focus ring) is NOT clipped by overflow: hidden on the same
+  // element — only by a parent. Safe to use box-shadow here.
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  &:hover::after  { background: var(--overlay-hovered);  }
+  &:active::after { background: var(--overlay-pressed);  }
+
+  // ── Focus (keyboard only) ─────────────────────────────────────────────────
+
+  &:focus         { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+  // ── Icon ──────────────────────────────────────────────────────────────────
+
+  .ds-icon {
+    color: currentColor;
+    flex-shrink: 0;
+    font-size: 24px; // default ds-icon size, explicit for clarity
+  }
+
+  // ── Label ─────────────────────────────────────────────────────────────────
+
+  &__label {
+    white-space: nowrap;
+  }
+
+  // ── Selected ──────────────────────────────────────────────────────────────
+
+  &.is-selected {
+    background: var(--color-surface-nav-active);
+    color: var(--color-icon-nav-active);
+  }
+}

@@ -1,0 +1,10 @@
+<button
+  class="ds-nav-button"
+  [class.is-selected]="selected"
+  type="button"
+  [attr.aria-pressed]="selected"
+  [attr.aria-label]="config.label"
+>
+  <span class="ds-icon" aria-hidden="true">{{ config.icon }}</span>
+  <span class="ds-nav-button__label">{{ config.label }}</span>
+</button>
