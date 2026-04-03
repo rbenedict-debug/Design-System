@@ -6264,37 +6264,7 @@
   padding: var(--spacing-sm, 8px) 0 0 var(--spacing-lg, 16px);
 }
 
-.ds-page-content__tabs-bar {
-  border-bottom: 2px solid var(--color-border-secondary, #cacaca);
-  display: flex;
-  min-height: 48px;
-}
-
-.ds-page-content__tab {
-  display: flex;
-  align-items: center;
-  padding: 0 var(--spacing-lg, 16px);
-  height: 100%;
-  font-family: var(--ref-typescale-label-medium-font, 'Proxima Nova', sans-serif);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-text-primary, #2d3638);
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.ds-page-content__tab.is-active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--color-surface-nav-active, #0b6eb4);
-}
+/* ds-page-content__tabs-bar removed — use ds-tabs directly */
 
 .ds-page-content__main {
   flex: 1 1 0;
@@ -7732,12 +7702,11 @@
                 <main class="ds-page-content" role="main">
                   <div class="ds-page-content__heading">
                     <h1 class="ds-page-content__title">Page Title</h1>
-                    <div class="ds-page-content__tabs-bar">
-                      <button class="ds-page-content__tab is-active" type="button">Tab</button>
-                      <button class="ds-page-content__tab" type="button">Tab</button>
-                      <button class="ds-page-content__tab" type="button">Tab</button>
-                      <button class="ds-page-content__tab" type="button">Tab</button>
-                      <button class="ds-page-content__tab" type="button">Tab</button>
+                    <div class="ds-tabs" role="tablist" aria-label="Page sections">
+                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Overview</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Details</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Activity</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Settings</button>
                     </div>
                   </div>
                   <div class="ds-page-content__main"></div>
