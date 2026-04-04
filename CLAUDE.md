@@ -60,6 +60,8 @@ components/
   nav-expand/              # ds-nav-expand (sub-nav panel expand/collapse toggle — primitive for page layout)
 preview/
   index.html               # Self-contained visual token + component reference
+  page-layout/             # ds-page-layout (standard app shell — top-nav + nav-sidebar + optional sub-nav panel)
+  split-page/              # ds-split-page (resizable two-pane layout — primary content + detail panel)
 ```
 
 ---
@@ -189,6 +191,8 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |
+| `ds-page-layout` | Custom | No Material equivalent — app shell composition (composes top-nav + nav-sidebar + ds-nav-expand); sub-nav open state managed via `[open]` input on ds-nav-expand and host class `.is-sub-nav-open` on the shell |
+| `ds-split-page` | CdkDrag (CDK only) | No Material equivalent — two-pane resizable layout; resize handle uses CDK drag for production, fixed 50/50 split acceptable in prototypes; replace with `CdkDragModule` in engineering handoff |
 
 ---
 

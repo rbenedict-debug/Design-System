@@ -6089,7 +6089,7 @@
 <style>
 /* ── Page Layout Pattern ──────────────────────────────────────────────────── */
 
-.onflo-page-demo {
+.ds-page-layout {
   position: relative;
   display: flex;
   width: 100%;
@@ -6098,14 +6098,14 @@
   overflow: hidden;
 }
 
-.onflo-page-demo__content {
+.ds-page-layout__content {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-.onflo-page-demo__body {
+.ds-page-layout__body {
   flex: 1 1 0;
   display: flex;
   padding: var(--spacing-md, 12px) var(--spacing-lg, 16px) var(--spacing-lg, 16px) 0;
@@ -6230,14 +6230,14 @@
 
 /* Nav expand — page-layout positioning context only.
    Visual styles come from the compiled component CSS above. */
-.onflo-page-demo .ds-nav-expand {
+.ds-page-layout .ds-nav-expand {
   position: absolute;
   top: 87px;
   left: 270px;
   z-index: 10;
   transition: left .2s ease;
 }
-.onflo-page-demo .ds-nav-expand.is-collapsed { left: 77px; }
+.ds-page-layout .ds-nav-expand.is-collapsed { left: 77px; }
 
 /* Page content area */
 .ds-page-content {
@@ -6399,6 +6399,8 @@
       <a class="nav-link" href="#nav-tab" onclick="setActive(this)"><span class="nav-dot"></span>Nav Tab</a>
       <a class="nav-link" href="#top-nav" onclick="setActive(this)"><span class="nav-dot"></span>Top Nav</a>
       <a class="nav-link" href="#nav-expand" onclick="setActive(this)"><span class="nav-dot"></span>Nav Expand</a>
+
+      <div class="nav-group-label">Page Layouts</div>
       <a class="nav-link" href="#page-layout" onclick="setActive(this)"><span class="nav-dot"></span>Page Layout</a>
       <a class="nav-link" href="#split-page-layout" onclick="setActive(this)"><span class="nav-dot"></span>Split Page Layout</a>
 
@@ -7663,12 +7665,12 @@
       <section class="section" id="page-layout">
         <div class="section-header">
           <h2 class="section-title">Page Layout</h2>
-          <span class="section-source">Pattern: nav-sidebar + subnav + page content</span>
+          <span class="section-source">CSS pattern · preview/index.html · see .claude/component-specs.md §Page Layouts</span>
         </div>
-        <p class="section-desc">Full application page shell — combines <code>ds-nav-sidebar</code>, <code>ds-top-nav</code>, a collapsible sub-navigation panel (<code>ds-subnav</code>), and a main content area. The floating <code>ds-nav-expand</code> toggle button sits at the right edge of the sub-nav panel and repositions as the panel opens or closes. Click the toggle to try it. ADA: <code>role="navigation"</code> on sidebar and subnav; <code>aria-expanded</code> on the toggle button tracks panel state.</p>
+        <p class="section-desc">Full application shell — composes <code>ds-nav-sidebar</code>, <code>ds-top-nav</code>, an optional collapsible sub-navigation panel (<code>ds-subnav</code>), and a main content area (<code>ds-page-content</code>). The floating <code>ds-nav-expand</code> toggle sits at the right edge of the sub-nav and repositions when the panel collapses. Sub-nav open state is managed via <code>[open]</code> on <code>ds-nav-expand</code> and <code>.is-collapsed</code> on <code>.ds-subnav</code>. Click the toggle to try it. ADA: <code>role="navigation"</code> on sidebar and subnav; <code>aria-expanded</code> on the toggle tracks panel state.</p>
 
         <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
-          <div class="onflo-page-demo" id="page-layout-demo">
+          <div class="ds-page-layout" id="page-layout-demo">
 
             <!-- ── Left nav sidebar ───────────────────────────────────────── -->
             <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
@@ -7722,7 +7724,7 @@
             </nav>
 
             <!-- ── Right side: top-nav + body ────────────────────────────── -->
-            <div class="onflo-page-demo__content">
+            <div class="ds-page-layout__content">
 
               <!-- Top nav -->
               <header class="ds-top-nav" role="banner">
@@ -7765,7 +7767,7 @@
               </header>
 
               <!-- Body: subnav + page content -->
-              <div class="onflo-page-demo__body">
+              <div class="ds-page-layout__body">
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel" role="navigation" aria-label="Tickets navigation">
@@ -7794,8 +7796,8 @@
                   <div class="ds-page-content__main"></div>
                 </main>
 
-              </div><!-- /.onflo-page-demo__body -->
-            </div><!-- /.onflo-page-demo__content -->
+              </div><!-- /.ds-page-layout__body -->
+            </div><!-- /.ds-page-layout__content -->
 
             <!-- Floating expand/collapse toggle (absolutely positioned) -->
             <button class="ds-nav-expand" id="nav-expand-btn"
@@ -7806,20 +7808,26 @@
               <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
             </button>
 
-          </div><!-- /.onflo-page-demo -->
+          </div><!-- /.ds-page-layout -->
         </div><!-- /.component-demo -->
 
-        <!-- ── Split Page Layout ──────────────────────────────────────────── -->
-        <div class="section-header" id="split-page-layout" style="margin-top: 48px;">
+      </section>
+
+      <hr class="divider" />
+
+      <!-- ── Split Page Layout ─────────────────────────────────────────────── -->
+      <section class="section" id="split-page-layout">
+        <div class="section-header">
           <h2 class="section-title">Split Page Layout</h2>
-          <span class="section-source">Pattern: two-panel content area with optional resize handle</span>
+          <span class="section-source">CSS pattern · preview/index.html · see .claude/component-specs.md §Page Layouts</span>
         </div>
-        <p class="section-desc">Two-panel content layout for views like ticket detail — a list or context panel beside a primary content panel. Five fixed split ratios: 50/50, 70/30, 30/70, 75/25, and 25/75. The resizable variant adds a drag handle (<code>ds-split-page__handle</code>) between the panels that users can drag to adjust widths. Angular: no built-in split pane in Angular Material — apply <code>cdkDrag cdkDragLockAxis="x"</code> from <code>@angular/cdk/drag-drop</code> on the handle element, or implement a lightweight custom resize directive using <code>mousedown</code> / <code>mousemove</code> / <code>mouseup</code> that updates the left and right panel <code>flex-grow</code> values directly. The composition demo below is interactive — drag the handle to resize.</p>
+        <p class="section-desc">Two-panel content area for detail views — a list or context panel beside a primary content panel. Used inside <code>ds-page-content__main</code>. Five fixed split ratios: 50/50, 70/30, 30/70, 75/25, and 25/75. Add <code>ds-split-page--resizable</code> and the <code>ds-split-page__handle</code> element for a drag handle. Angular: use <code>CdkDragModule</code> from <code>@angular/cdk/drag-drop</code> on the handle for production — fixed 50/50 is acceptable in hi-fi prototypes. See <code>.claude/component-specs.md §Split Page Layout</code> for Angular wiring details.</p>
 
         <!-- Static split ratio variants -->
         <div class="component-demo">
 
           <!-- 50 / 50 -->
+          <!-- Engineering: replace with CdkDragModule for resizable handle -->
           <div class="demo-row">
             <div class="demo-label">50 / 50</div>
             <div class="demo-row-items" style="flex: 1; gap: 16px;">
@@ -7973,7 +7981,7 @@
 
         <!-- Resizable composition: full page shell with interactive drag handle -->
         <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
-          <div class="onflo-page-demo" id="split-layout-demo">
+          <div class="ds-page-layout" id="split-layout-demo">
 
             <!-- Nav sidebar -->
             <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
@@ -8017,7 +8025,7 @@
             </nav>
 
             <!-- Right side: top-nav + split content area -->
-            <div class="onflo-page-demo__content">
+            <div class="ds-page-layout__content">
 
               <!-- Top nav -->
               <header class="ds-top-nav" role="banner">
@@ -8062,7 +8070,7 @@
               </header>
 
               <!-- Body: subnav + split content -->
-              <div class="onflo-page-demo__body">
+              <div class="ds-page-layout__body">
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel-split" role="navigation" aria-label="Tickets navigation">
@@ -8101,9 +8109,9 @@
                   </div>
                 </main>
 
-              </div><!-- /.onflo-page-demo__body -->
+              </div><!-- /.ds-page-layout__body -->
 
-            </div><!-- /.onflo-page-demo__content -->
+            </div><!-- /.ds-page-layout__content -->
 
             <!-- Floating expand/collapse toggle (absolutely positioned) -->
             <button class="ds-nav-expand" id="nav-expand-btn-split"
@@ -8114,12 +8122,12 @@
               <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
             </button>
 
-          </div><!-- /.onflo-page-demo -->
+          </div><!-- /.ds-page-layout -->
         </div><!-- /.component-demo (composition) -->
 
         <!-- Static 50/50 split composition -->
         <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); margin-top: 16px;">
-          <div class="onflo-page-demo" id="split-layout-demo-static">
+          <div class="ds-page-layout" id="split-layout-demo-static">
 
             <!-- Nav sidebar -->
             <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
@@ -8163,7 +8171,7 @@
             </nav>
 
             <!-- Right side: top-nav + split content area -->
-            <div class="onflo-page-demo__content">
+            <div class="ds-page-layout__content">
 
               <!-- Top nav -->
               <header class="ds-top-nav" role="banner">
@@ -8208,7 +8216,7 @@
               </header>
 
               <!-- Body: subnav + split content -->
-              <div class="onflo-page-demo__body">
+              <div class="ds-page-layout__body">
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel-split-static" role="navigation" aria-label="Tickets navigation">
@@ -8240,9 +8248,9 @@
                   </div>
                 </main>
 
-              </div><!-- /.onflo-page-demo__body -->
+              </div><!-- /.ds-page-layout__body -->
 
-            </div><!-- /.onflo-page-demo__content -->
+            </div><!-- /.ds-page-layout__content -->
 
             <!-- Floating expand/collapse toggle (absolutely positioned) -->
             <button class="ds-nav-expand" id="nav-expand-btn-split-static"
@@ -8253,12 +8261,12 @@
               <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
             </button>
 
-          </div><!-- /.onflo-page-demo -->
+          </div><!-- /.ds-page-layout -->
         </div><!-- /.component-demo (static 50/50 composition) -->
 
         <!-- 25/75 split composition -->
         <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); margin-top: 16px;">
-          <div class="onflo-page-demo" id="split-layout-demo-2575">
+          <div class="ds-page-layout" id="split-layout-demo-2575">
 
             <!-- Nav sidebar -->
             <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
@@ -8302,7 +8310,7 @@
             </nav>
 
             <!-- Right side: top-nav + split content area -->
-            <div class="onflo-page-demo__content">
+            <div class="ds-page-layout__content">
 
               <!-- Top nav -->
               <header class="ds-top-nav" role="banner">
@@ -8347,7 +8355,7 @@
               </header>
 
               <!-- Body: subnav + split content -->
-              <div class="onflo-page-demo__body">
+              <div class="ds-page-layout__body">
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel-split-2575" role="navigation" aria-label="Tickets navigation">
@@ -8379,9 +8387,9 @@
                   </div>
                 </main>
 
-              </div><!-- /.onflo-page-demo__body -->
+              </div><!-- /.ds-page-layout__body -->
 
-            </div><!-- /.onflo-page-demo__content -->
+            </div><!-- /.ds-page-layout__content -->
 
             <!-- Floating expand/collapse toggle (absolutely positioned) -->
             <button class="ds-nav-expand" id="nav-expand-btn-split-2575"
@@ -8392,12 +8400,12 @@
               <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
             </button>
 
-          </div><!-- /.onflo-page-demo -->
+          </div><!-- /.ds-page-layout -->
         </div><!-- /.component-demo (25/75 composition) -->
 
         <!-- 75/25 split composition -->
         <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); margin-top: 16px;">
-          <div class="onflo-page-demo" id="split-layout-demo-7525">
+          <div class="ds-page-layout" id="split-layout-demo-7525">
 
             <!-- Nav sidebar -->
             <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
@@ -8441,7 +8449,7 @@
             </nav>
 
             <!-- Right side: top-nav + split content area -->
-            <div class="onflo-page-demo__content">
+            <div class="ds-page-layout__content">
 
               <!-- Top nav -->
               <header class="ds-top-nav" role="banner">
@@ -8486,7 +8494,7 @@
               </header>
 
               <!-- Body: subnav + split content -->
-              <div class="onflo-page-demo__body">
+              <div class="ds-page-layout__body">
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel-split-7525" role="navigation" aria-label="Tickets navigation">
@@ -8518,9 +8526,9 @@
                   </div>
                 </main>
 
-              </div><!-- /.onflo-page-demo__body -->
+              </div><!-- /.ds-page-layout__body -->
 
-            </div><!-- /.onflo-page-demo__content -->
+            </div><!-- /.ds-page-layout__content -->
 
             <!-- Floating expand/collapse toggle (absolutely positioned) -->
             <button class="ds-nav-expand" id="nav-expand-btn-split-7525"
@@ -8531,7 +8539,7 @@
               <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
             </button>
 
-          </div><!-- /.onflo-page-demo -->
+          </div><!-- /.ds-page-layout -->
         </div><!-- /.component-demo (75/25 composition) -->
 
       </section>
