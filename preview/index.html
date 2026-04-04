@@ -577,13 +577,6 @@
       z-index: 50;
     }
 
-    .topbar-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--color-text-secondary);
-      letter-spacing: 0.02em;
-    }
-
     .topbar-actions { display: flex; align-items: center; gap: 12px; }
 
     /* Theme toggle */
@@ -640,12 +633,12 @@
     }
 
     /* Content */
-    .content { padding: 48px 40px; max-width: 1100px; }
+    .content { padding: 48px; width: 100%; }
 
     /* Table sim — break out of content padding to use full content-area width */
     #table .demo-row {
       width: calc(100vw - var(--sidebar-width));
-      margin-left: -40px;
+      margin-left: -48px;
     }
 
     /* ── Sections ────────────────────────────────────────────────────────────── */
@@ -5603,7 +5596,8 @@
   color: var(--color-text-primary);
 }
 
-#table-sim[data-panel-open] .ds-column-panel {
+#table-sim[data-panel-open] .ds-column-panel,
+#table-sim-pt[data-panel-open] .ds-column-panel {
   display: flex;
 }
 
@@ -6431,13 +6425,16 @@
       <a class="nav-link" href="#table-row-cell" onclick="setActive(this)"><span class="nav-dot"></span>Row Cell</a>
       <a class="nav-link" href="#ag-paginator" onclick="setActive(this)"><span class="nav-dot"></span>AG Grid Paginator</a>
       <a class="nav-link" href="#table-toolbar" onclick="setActive(this)"><span class="nav-dot"></span>Toolbar</a>
+
+      <div class="nav-group-label">Page Layouts</div>
+      <a class="nav-link" href="#split-page" onclick="setActive(this)"><span class="nav-dot"></span>Split Page</a>
     </nav>
 
     <nav class="sidebar-nav" id="nav-examples" style="display:none">
-      <div class="nav-section-label">Examples</div>
+      <div class="nav-section-label">Pages</div>
       <a class="nav-link" href="#page-layout" onclick="setActive(this)"><span class="nav-dot"></span>Page Layout</a>
       <a class="nav-link" href="#split-page-layout" onclick="setActive(this)"><span class="nav-dot"></span>Split Page</a>
-      <a class="nav-link" href="#table" onclick="setActive(this)"><span class="nav-dot"></span>Table</a>
+      <a class="nav-link" href="#page-layout-table" onclick="setActive(this)"><span class="nav-dot"></span>Page Layout + Table</a>
     </nav>
 
     <div class="sidebar-footer">
@@ -6448,19 +6445,20 @@
   <!-- ── Main ─────────────────────────────────────────────────────────────── -->
   <div class="main">
     <header class="topbar">
-      <span class="topbar-title">Onflo Design System</span>
       <div class="topbar-tabs">
         <button class="page-tab active" data-page="foundations" onclick="switchPage('foundations')">Foundations</button>
         <button class="page-tab" data-page="components" onclick="switchPage('components')">Components</button>
-        <button class="page-tab" data-page="examples" onclick="switchPage('examples')">Examples</button>
+        <button class="page-tab" data-page="examples" onclick="switchPage('examples')">Pages</button>
       </div>
-      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <circle cx="7" cy="7" r="3" fill="currentColor"/>
-          <path d="M7 1V2.5M7 11.5V13M1 7H2.5M11.5 7H13M2.9 2.9L3.96 3.96M10.04 10.04L11.1 11.1M11.1 2.9L10.04 3.96M3.96 10.04L2.9 11.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        <span id="themeLabel">Dark mode</span>
-      </button>
+      <div class="topbar-actions">
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="3" fill="currentColor"/>
+            <path d="M7 1V2.5M7 11.5V13M1 7H2.5M11.5 7H13M2.9 2.9L3.96 3.96M10.04 10.04L11.1 11.1M11.1 2.9L10.04 3.96M3.96 10.04L2.9 11.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span id="themeLabel">Dark mode</span>
+        </button>
+      </div>
     </header>
 
     <main class="content">
@@ -9824,6 +9822,169 @@
 
       </section>
 
+      <section class="section" id="split-page">
+        <div class="section-header">
+          <h2 class="section-title">Split Page</h2>
+          <span class="section-source">CSS pattern · preview/index.html · see .claude/component-specs.md §Split Page Layout</span>
+        </div>
+        <p class="section-desc">Two-panel content area for detail views — a list or context panel beside a primary content panel. Used inside <code>ds-page-content__main</code>. Five fixed split ratios: 50/50, 70/30, 30/70, 75/25, and 25/75. Add <code>ds-split-page--resizable</code> and the <code>ds-split-page__handle</code> element for a drag handle. Angular: use <code>CdkDragModule</code> from <code>@angular/cdk/drag-drop</code> on the handle for production — fixed 50/50 is acceptable in hi-fi prototypes.</p>
+
+        <div class="component-demo">
+
+          <!-- 50 / 50 -->
+          <!-- Engineering: replace with CdkDragModule for resizable handle -->
+          <div class="demo-row">
+            <div class="demo-label">50 / 50</div>
+            <div class="demo-row-items" style="flex: 1; gap: 16px;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" aria-hidden="true">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 70 / 30 -->
+          <div class="demo-row">
+            <div class="demo-label">70 / 30</div>
+            <div class="demo-row-items" style="flex: 1; gap: 16px;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--7030">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--7030 ds-split-page--resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" aria-hidden="true">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 30 / 70 -->
+          <div class="demo-row">
+            <div class="demo-label">30 / 70</div>
+            <div class="demo-row-items" style="flex: 1; gap: 16px;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--3070">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--3070 ds-split-page--resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" aria-hidden="true">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 75 / 25 -->
+          <div class="demo-row">
+            <div class="demo-label">75 / 25</div>
+            <div class="demo-row-items" style="flex: 1; gap: 16px;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--7525">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--7525 ds-split-page--resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" aria-hidden="true">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 25 / 75 -->
+          <div class="demo-row">
+            <div class="demo-label">25 / 75</div>
+            <div class="demo-row-items" style="flex: 1; gap: 16px;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--2575">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
+              </div>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+                <div class="split-variant-preview">
+                  <div class="ds-split-page ds-split-page--2575 ds-split-page--resizable">
+                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                    <div class="ds-split-page__handle" aria-hidden="true">
+                      <div class="ds-split-page__handle-line"></div>
+                      <span class="ds-icon">drag_indicator</span>
+                      <div class="ds-split-page__handle-line"></div>
+                    </div>
+                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                  </div>
+                </div>
+                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.component-demo -->
+      </section>
+
       </div><!-- /#page-components -->
 
       <div class="page" id="page-examples" style="display:none">
@@ -9982,163 +10143,7 @@
           <h2 class="section-title">Split Page Layout</h2>
           <span class="section-source">CSS pattern · preview/index.html · see .claude/component-specs.md §Page Layouts</span>
         </div>
-        <p class="section-desc">Two-panel content area for detail views — a list or context panel beside a primary content panel. Used inside <code>ds-page-content__main</code>. Five fixed split ratios: 50/50, 70/30, 30/70, 75/25, and 25/75. Add <code>ds-split-page--resizable</code> and the <code>ds-split-page__handle</code> element for a drag handle. Angular: use <code>CdkDragModule</code> from <code>@angular/cdk/drag-drop</code> on the handle for production — fixed 50/50 is acceptable in hi-fi prototypes. See <code>.claude/component-specs.md §Split Page Layout</code> for Angular wiring details.</p>
-
-        <!-- Static split ratio variants -->
-        <div class="component-demo">
-
-          <!-- 50 / 50 -->
-          <!-- Engineering: replace with CdkDragModule for resizable handle -->
-          <div class="demo-row">
-            <div class="demo-label">50 / 50</div>
-            <div class="demo-row-items" style="flex: 1; gap: 16px;">
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
-                <div class="split-variant-preview">
-                  <div class="ds-split-page">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </div>
-                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
-              </div>
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
-                <div class="split-variant-preview">
-                  <div class="ds-split-page ds-split-page--resizable">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__handle" aria-hidden="true">
-                      <div class="ds-split-page__handle-line"></div>
-                      <span class="ds-icon">drag_indicator</span>
-                      <div class="ds-split-page__handle-line"></div>
-                    </div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </div>
-                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 70 / 30 -->
-          <div class="demo-row">
-            <div class="demo-label">70 / 30</div>
-            <div class="demo-row-items" style="flex: 1; gap: 16px;">
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
-                <div class="split-variant-preview">
-                  <div class="ds-split-page ds-split-page--7030">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </div>
-                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
-              </div>
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
-                <div class="split-variant-preview">
-                  <div class="ds-split-page ds-split-page--7030 ds-split-page--resizable">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__handle" aria-hidden="true">
-                      <div class="ds-split-page__handle-line"></div>
-                      <span class="ds-icon">drag_indicator</span>
-                      <div class="ds-split-page__handle-line"></div>
-                    </div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </div>
-                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 30 / 70 -->
-          <div class="demo-row">
-            <div class="demo-label">30 / 70</div>
-            <div class="demo-row-items" style="flex: 1; gap: 16px;">
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
-                <div class="split-variant-preview">
-                  <div class="ds-split-page ds-split-page--3070">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </div>
-                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
-              </div>
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
-                <div class="split-variant-preview">
-                  <div class="ds-split-page ds-split-page--3070 ds-split-page--resizable">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__handle" aria-hidden="true">
-                      <div class="ds-split-page__handle-line"></div>
-                      <span class="ds-icon">drag_indicator</span>
-                      <div class="ds-split-page__handle-line"></div>
-                    </div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </div>
-                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 75 / 25 -->
-          <div class="demo-row">
-            <div class="demo-label">75 / 25</div>
-            <div class="demo-row-items" style="flex: 1; gap: 16px;">
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
-                <div class="split-variant-preview">
-                  <div class="ds-split-page ds-split-page--7525">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </div>
-                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
-              </div>
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
-                <div class="split-variant-preview">
-                  <div class="ds-split-page ds-split-page--7525 ds-split-page--resizable">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__handle" aria-hidden="true">
-                      <div class="ds-split-page__handle-line"></div>
-                      <span class="ds-icon">drag_indicator</span>
-                      <div class="ds-split-page__handle-line"></div>
-                    </div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </div>
-                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 25 / 75 -->
-          <div class="demo-row">
-            <div class="demo-label">25 / 75</div>
-            <div class="demo-row-items" style="flex: 1; gap: 16px;">
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
-                <div class="split-variant-preview">
-                  <div class="ds-split-page ds-split-page--2575">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </div>
-                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Fixed</span>
-              </div>
-              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px;">
-                <div class="split-variant-preview">
-                  <div class="ds-split-page ds-split-page--2575 ds-split-page--resizable">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__handle" aria-hidden="true">
-                      <div class="ds-split-page__handle-line"></div>
-                      <span class="ds-icon">drag_indicator</span>
-                      <div class="ds-split-page__handle-line"></div>
-                    </div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </div>
-                <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
-              </div>
-            </div>
-          </div>
-
-        </div><!-- /.component-demo (static variants) -->
+        <p class="section-desc">Split page layout demos — full application shell with split content area. See the <strong>Components</strong> tab → Split Page for ratio variants (50/50, 70/30, 30/70, 75/25, 25/75) and the fixed vs. resizable handle. Angular: use <code>CdkDragModule</code> from <code>@angular/cdk/drag-drop</code> on the handle for production. See <code>.claude/component-specs.md §Split Page Layout</code> for Angular wiring details.</p>
 
         <!-- Resizable composition: full page shell with interactive drag handle -->
         <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
@@ -10704,314 +10709,438 @@
         </div><!-- /.component-demo (75/25 composition) -->
 
       </section>
-      <section class="section" id="table">
-        <h2 class="section-title">Table</h2>
-        <p class="section-desc">Full AG Grid reskin — toolbar, column group headers, sticky header, scrollable data rows with custom scrollbars, right-pinned actions column, and column tool panel. Toggle the column panel with the settings button. Reorder columns by dragging rows in the panel.</p>
 
-        <div class="demo-row" style="flex-direction: column; align-items: stretch; gap: 0;">
-          <div id="table-sim" style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden; display: flex; width: 100%;">
+      <section class="section" id="page-layout-table">
+        <div class="section-header">
+          <h2 class="section-title">Page Layout + Table</h2>
+          <span class="section-source">CSS pattern · preview/index.html</span>
+        </div>
+        <p class="section-desc">Full application shell with a data table filling the main content area. Combines <code>ds-page-layout</code>, the collapsible <code>ds-subnav</code> panel, and the full table composition — toolbar, sticky column headers, scrollable rows, paginator, and column tool panel. Toggle the sub-nav with the floating expand button or the column panel with the settings button.</p>
 
-            <!-- ── Main content area ──────────────────────────────────────────── -->
-            <div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column;">
+        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+          <div class="ds-page-layout" id="page-layout-table-demo" style="height: 760px;">
 
-              <!-- Toolbar -->
-              <div class="ds-table-toolbar">
-                <div class="ds-table-toolbar__left">
-                  <button class="ds-button ds-button--filled ds-button--leading-icon" type="button">
-                    <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">add</span></span>
-                    New Item
-                  </button>
-                  <button class="ds-button ds-button--outlined ds-button--trailing-icon" type="button">
-                    Bulk Actions
-                    <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon">arrow_drop_down</span></span>
-                  </button>
-                  <button class="ds-button ds-button--destructive ds-button--leading-icon" type="button">
-                    <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">delete</span></span>
-                    Delete
-                  </button>
-                </div>
-                <div class="ds-table-toolbar__right">
-                  <div class="ds-search" role="search">
-                    <div class="ds-search__field">
-                      <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
-                      <input class="ds-search__control" type="search" placeholder="Search" aria-label="Search" />
-                    </div>
-                  </div>
-                  <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Toggle filters" onclick="togglePressed(this)">
-                    <span class="ds-icon ds-icon--filled">filter_alt</span>
-                  </button>
-                  <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Column settings" onclick="toggleColumnPanel(this)">
-                    <span class="ds-icon ds-icon--filled">settings</span>
-                  </button>
-                  <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Download">
-                    <span class="ds-icon">download</span>
-                  </button>
-                </div>
+            <!-- ── Left nav sidebar ───────────────────────────────────────── -->
+            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
+              <div class="ds-nav-sidebar__logo">
+                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                </svg>
               </div>
-
-              <!-- Scroll container: column group headers + header row + data rows -->
-              <div id="table-scroll">
-                <div style="width: 100%; min-width: 1006px; position: relative;">
-
-                  <!-- Header row (sticky top: 0, z-index: 3) -->
-                  <!-- Grid: 56px 200px 1fr 160px 140px 130px 100px (email col expands) -->
-                  <div id="table-header-grid" style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px; position: sticky; top: 0; z-index: 3;">
-
-                    <!-- Col 1: Checkbox header -->
-                    <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
-                      <div class="ds-table-header-cell__content" style="justify-content: center;">
-                        <label class="ds-checkbox" aria-label="Select all rows">
-                          <input type="checkbox" class="ds-checkbox__control" />
-                          <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
-                        </label>
-                      </div>
-                    </div>
-
-                    <!-- Col 2: Customer -->
-                    <div class="ds-table-header-cell" data-col="customer">
-                      <div class="ds-table-header-cell__resize-handle"></div>
-                      <div class="ds-table-header-cell__content">
-                        <span class="ds-table-header-cell__label">Customer</span>
-                      </div>
-                      <div class="ds-table-header-cell__actions">
-                        <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Customer">
-                          <span class="ds-icon ds-icon--filled">filter_alt</span>
-                        </button>
-                        <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="customer">
-                          <span class="ds-table-header-cell__resize-bar"></span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Col 3: Email -->
-                    <div class="ds-table-header-cell" data-col="email">
-                      <div class="ds-table-header-cell__resize-handle"></div>
-                      <div class="ds-table-header-cell__content">
-                        <span class="ds-table-header-cell__label">Email</span>
-                      </div>
-                      <div class="ds-table-header-cell__actions">
-                        <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="email">
-                          <span class="ds-table-header-cell__resize-bar"></span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Col 4: Department (in Organization group) -->
-                    <div class="ds-table-header-cell" data-col="department">
-                      <div class="ds-table-header-cell__resize-handle"></div>
-                      <div class="ds-table-header-cell__content">
-                        <span class="ds-table-header-cell__label">Department</span>
-                      </div>
-                      <div class="ds-table-header-cell__actions">
-                        <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="department">
-                          <span class="ds-table-header-cell__resize-bar"></span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Col 5: Status (in Organization group, filterable) -->
-                    <div class="ds-table-header-cell" data-col="status">
-                      <div class="ds-table-header-cell__resize-handle"></div>
-                      <div class="ds-table-header-cell__content">
-                        <span class="ds-table-header-cell__label">Status</span>
-                      </div>
-                      <div class="ds-table-header-cell__actions">
-                        <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Status">
-                          <span class="ds-icon ds-icon--filled">filter_alt</span>
-                        </button>
-                        <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="status">
-                          <span class="ds-table-header-cell__resize-bar"></span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Col 6: Amount (right-aligned, sortable but unsorted) -->
-                    <div class="ds-table-header-cell" data-col="amount">
-                      <div class="ds-table-header-cell__resize-handle"></div>
-                      <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
-                        <span class="ds-table-header-cell__label">Amount</span>
-                      </div>
-                      <div class="ds-table-header-cell__actions">
-                        <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="amount">
-                          <span class="ds-table-header-cell__resize-bar"></span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Col 7: Actions (pinned right, no resize) -->
-                    <div class="ds-table-header-cell ds-table-pinned-right" data-col="actions">
-                      <div class="ds-table-header-cell__content" style="justify-content: center;">
-                        <span class="ds-table-header-cell__label">Actions</span>
-                      </div>
-                    </div>
-
-                  </div><!-- /header row -->
-
-                  <!-- Data rows (7-column grid, same template as header) -->
-                  <div id="table-data-grid" style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px; position: relative;">
-
-                    <!-- Row 1: Acme Corporation -->
-                    <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="r1"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Acme Corporation"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="r1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Acme Corporation</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="email" data-row="r1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">info@acmecorp.com</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="department" data-row="r1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="status" data-row="r1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="r1"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span></div></div>
-                    <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-col="actions" data-row="r1"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Acme Corporation"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Acme Corporation"><span class="ds-icon">delete</span></button></div></div>
-
-                    <!-- Row 2: Cloud Systems Inc -->
-                    <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="r2"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Cloud Systems Inc"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="r2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Cloud Systems Inc</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="email" data-row="r2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">hello@cloudsys.io</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="department" data-row="r2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Product</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="status" data-row="r2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="r2"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span></div></div>
-                    <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-col="actions" data-row="r2"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Cloud Systems Inc"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Cloud Systems Inc"><span class="ds-icon">delete</span></button></div></div>
-
-                    <!-- Row 3: Echo Ventures Group -->
-                    <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="r3"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Echo Ventures Group"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="r3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Echo Ventures Group</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="email" data-row="r3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">team@echoventures.co</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="department" data-row="r3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="status" data-row="r3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="r3"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$57,800.00</span></div></div>
-                    <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-col="actions" data-row="r3"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Echo Ventures Group"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Echo Ventures Group"><span class="ds-icon">delete</span></button></div></div>
-
-                    <!-- Row 4: Frontier Corp -->
-                    <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="r4"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Frontier Corp"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="r4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Frontier Corp</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="email" data-row="r4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">contact@frontierco.com</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="department" data-row="r4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="status" data-row="r4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="r4"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$22,400.00</span></div></div>
-                    <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-col="actions" data-row="r4"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Frontier Corp"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Frontier Corp"><span class="ds-icon">delete</span></button></div></div>
-
-                    <!-- Row 5: Meridian Partners -->
-                    <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="r5"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Meridian Partners"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="customer" data-row="r5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Meridian Partners</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="email" data-row="r5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">ops@meridian.co</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="department" data-row="r5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Finance</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="status" data-row="r5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                    <div class="ds-table-row-cell sim-cell" data-col="amount" data-row="r5"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$8,750.00</span></div></div>
-                    <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-col="actions" data-row="r5"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Meridian Partners"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Meridian Partners"><span class="ds-icon">delete</span></button></div></div>
-
-                  </div><!-- /data rows grid -->
-
-                </div><!-- /min-width wrapper -->
-              </div><!-- /table-scroll -->
-
-              <!-- Paginator -->
-              <div class="ds-ag-paginator" style="width: 100%; border-top: 1px solid var(--color-border-subtle);">
-                <div class="ds-ag-paginator__inner">
-                  <div class="ds-ag-paginator__counter">
-                    <span class="ds-ag-paginator__label">Items per page:</span>
-                    <div class="ds-ag-paginator__select-wrap">
-                      <select class="ds-ag-paginator__select" aria-label="Items per page">
-                        <option selected>100</option>
-                        <option>250</option>
-                        <option>500</option>
-                        <option>1000</option>
-                      </select>
-                      <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
-                    </div>
-                  </div>
-                  <div class="ds-ag-paginator__pagination">
-                    <span class="ds-ag-paginator__range" aria-live="polite">1 - 100 of 3842</span>
-                    <div class="ds-ag-paginator__nav">
-                      <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="First page" disabled>
-                        <span class="ds-icon">first_page</span>
-                      </button>
-                      <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Previous page" disabled>
-                        <span class="ds-icon">keyboard_arrow_left</span>
-                      </button>
-                      <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Next page">
-                        <span class="ds-icon">keyboard_arrow_right</span>
-                      </button>
-                      <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Last page">
-                        <span class="ds-icon">last_page</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div><!-- /main content area -->
-
-            <!-- ── Column tool panel ──────────────────────────────────────────── -->
-            <div class="ds-column-panel" id="table-column-panel">
-              <div class="ds-column-panel__header">
-                <span class="ds-column-panel__title">Columns</span>
-                <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Close columns panel" onclick="closeColumnPanel()">
-                  <span class="ds-icon">close</span>
+              <div class="ds-nav-sidebar__nav">
+                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+                  <span class="ds-nav-button__label">Tickets</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
+                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
+                  <span class="ds-nav-button__label">Assets</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                  <span class="ds-icon" aria-hidden="true">equalizer</span>
+                  <span class="ds-nav-button__label">Analytics</span>
+                </button>
+                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
+                  <span class="ds-nav-button__label">Settings</span>
                 </button>
               </div>
-              <div class="ds-column-panel__list" id="column-panel-list">
-                <!-- Checkbox: system column, ON (locked visible) -->
-                <div class="ds-column-panel__row ds-column-panel__row--system" data-col-key="checkbox">
-                  <label class="ds-toggle" aria-label="Toggle Checkbox column visibility">
-                    <input type="checkbox" class="ds-toggle__control" checked />
-                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                  </label>
-                  <span class="ds-column-panel__name">Checkbox</span>
-                </div>
-                <!-- Customer: ON -->
-                <div class="ds-column-panel__row" draggable="true" data-col-key="customer">
-                  <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
-                  <label class="ds-toggle" aria-label="Toggle Customer column visibility">
-                    <input type="checkbox" class="ds-toggle__control" checked />
-                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                  </label>
-                  <span class="ds-column-panel__name">Customer</span>
-                </div>
-                <!-- Email: ON -->
-                <div class="ds-column-panel__row" draggable="true" data-col-key="email">
-                  <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
-                  <label class="ds-toggle" aria-label="Toggle Email column visibility">
-                    <input type="checkbox" class="ds-toggle__control" checked />
-                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                  </label>
-                  <span class="ds-column-panel__name">Email</span>
-                </div>
-                <!-- Department: ON -->
-                <div class="ds-column-panel__row" draggable="true" data-col-key="department">
-                  <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
-                  <label class="ds-toggle" aria-label="Toggle Department column visibility">
-                    <input type="checkbox" class="ds-toggle__control" checked />
-                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                  </label>
-                  <span class="ds-column-panel__name">Department</span>
-                </div>
-                <!-- Status: ON -->
-                <div class="ds-column-panel__row" draggable="true" data-col-key="status">
-                  <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
-                  <label class="ds-toggle" aria-label="Toggle Status column visibility">
-                    <input type="checkbox" class="ds-toggle__control" checked />
-                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                  </label>
-                  <span class="ds-column-panel__name">Status</span>
-                </div>
-                <!-- Amount: ON -->
-                <div class="ds-column-panel__row" draggable="true" data-col-key="amount">
-                  <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
-                  <label class="ds-toggle" aria-label="Toggle Amount column visibility">
-                    <input type="checkbox" class="ds-toggle__control" checked />
-                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                  </label>
-                  <span class="ds-column-panel__name">Amount</span>
-                </div>
-                <!-- Actions: system column, ON (locked visible) -->
-                <div class="ds-column-panel__row ds-column-panel__row--system" data-col-key="actions">
-                  <label class="ds-toggle" aria-label="Toggle Actions column visibility">
-                    <input type="checkbox" class="ds-toggle__control" checked />
-                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                  </label>
-                  <span class="ds-column-panel__name">Actions</span>
-                </div>
+              <div class="ds-nav-sidebar__bottom">
+                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                  <div class="ds-agent-status__icon">
+                    <span class="ds-icon" aria-hidden="true">support_agent</span>
+                  </div>
+                  <div class="ds-agent-status__status">
+                    <span>Online</span>
+                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                  </div>
+                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                </button>
+                <button class="ds-agent-status is-offline" type="button" aria-pressed="false" aria-label="Live agent status: Offline">
+                  <div class="ds-agent-status__icon">
+                    <span class="ds-icon" aria-hidden="true">forum</span>
+                  </div>
+                  <div class="ds-agent-status__status">
+                    <span>Offline</span>
+                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                  </div>
+                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                </button>
               </div>
-            </div><!-- /column-panel -->
+            </nav>
 
-          </div><!-- /table-sim -->
-        </div><!-- /demo-row -->
+            <!-- ── Right side: top-nav + body ────────────────────────────── -->
+            <div class="ds-page-layout__content">
+
+              <!-- Top nav -->
+              <header class="ds-top-nav" role="banner">
+                <div class="ds-top-nav__tabs">
+                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
+                       aria-pressed="true" aria-label="Customers tab — active">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Customers</span>
+                      <button class="ds-nav-tab__close" type="button" aria-label="Close Customers tab">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="ds-top-nav__actions">
+                  <button class="ds-top-nav__action-btn" type="button" aria-label="Chatsy">
+                    <svg aria-hidden="true" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;flex-shrink:0;">
+                      <path d="M16.6419 8.93096V11.2075C16.6434 11.8671 16.5159 12.5209 16.2662 13.1342C16.7456 13.071 17.1851 12.8411 17.5036 12.4871C17.8221 12.133 17.9979 11.6788 17.9986 11.2085V10.7708C17.9956 10.3651 17.8633 9.97022 17.62 9.64062C17.3767 9.31101 17.0343 9.06285 16.6399 8.9303" fill="currentColor"/>
+                      <path d="M1.6434 12.8987C1.6194 12.8306 1.59675 12.7617 1.57547 12.6919C1.56901 12.6721 1.56358 12.6516 1.55814 12.6318C1.54252 12.5763 1.52689 12.5224 1.51296 12.4666C1.50436 12.432 1.49643 12.3971 1.48919 12.3619C1.479 12.318 1.46881 12.2724 1.45963 12.2298C1.45046 12.1872 1.44299 12.1403 1.43484 12.0911C1.42668 12.0418 1.42193 12.0194 1.41649 11.9827C1.40732 11.9289 1.40189 11.8754 1.39543 11.8215C1.39543 11.7911 1.38728 11.7598 1.38456 11.732C1.37811 11.6712 1.37369 11.6101 1.36996 11.5484C1.3709 11.5228 1.36907 11.4972 1.36452 11.4721C1.36452 11.3825 1.35807 11.293 1.35807 11.2098V8.93328C0.964056 9.06555 0.621864 9.31327 0.378551 9.64238C0.135237 9.97149 0.00275433 10.3658 -0.000679157 10.7711V11.2088C-0.000193948 11.6792 0.175587 12.1335 0.494109 12.4876C0.812631 12.8417 1.25231 13.0715 1.73172 13.1345C1.70138 13.0594 1.67284 12.9833 1.64612 12.9063C1.64631 12.9039 1.64631 12.9014 1.64612 12.899" fill="currentColor"/>
+                      <path d="M11.0571 6.58443H6.97411C6.09783 6.58539 5.25773 6.92431 4.63811 7.52683C4.01848 8.12935 3.66995 8.94627 3.66896 9.79836V10.8144C3.66995 11.6665 4.01848 12.4834 4.63811 13.0859C5.25773 13.6885 6.09783 14.0274 6.97411 14.0283H11.0571C11.9334 14.0274 12.7735 13.6885 13.3931 13.0859C14.0128 12.4834 14.3613 11.6665 14.3623 10.8144V9.79836C14.3613 8.94627 14.0128 8.12935 13.3931 7.52683C12.7735 6.92431 11.9334 6.58539 11.0571 6.58443ZM5.46148 9.45979C5.46148 9.29301 5.51235 9.12997 5.60764 8.99129C5.70293 8.85261 5.83837 8.74453 5.99683 8.6807C6.1553 8.61687 6.32967 8.60017 6.49789 8.63271C6.66611 8.66525 6.82064 8.74557 6.94192 8.8635C7.0632 8.98144 7.1458 9.1317 7.17926 9.29528C7.21272 9.45886 7.19555 9.62841 7.12991 9.7825C7.06427 9.93659 6.95312 10.0683 6.81051 10.161C6.66789 10.2536 6.50023 10.3031 6.32871 10.3031C6.0987 10.3031 5.87812 10.2142 5.71549 10.0561C5.55285 9.89794 5.46148 9.68345 5.46148 9.45979ZM9.14403 12.4785C8.20061 12.4664 7.27635 12.2179 6.4605 11.7571L6.71085 11.3667C7.4117 11.7689 8.21064 11.9811 9.02446 11.9811C9.83828 11.9811 10.6372 11.7689 11.3381 11.3667L11.5996 11.7498C10.8746 12.2259 10.0192 12.479 9.14437 12.4765M11.6631 10.3011C11.4916 10.3011 11.324 10.2516 11.1813 10.159C11.0387 10.0663 10.9276 9.93461 10.8619 9.78052C10.7963 9.62643 10.7791 9.45688 10.8126 9.2933C10.846 9.12971 10.9286 8.97946 11.0499 8.86152C11.1712 8.74359 11.3257 8.66327 11.494 8.63073C11.6622 8.59819 11.8366 8.61489 11.995 8.67872C12.1535 8.74255 12.2889 8.85063 12.3842 8.98931C12.4795 9.12799 12.5304 9.29103 12.5304 9.45781C12.5304 9.68146 12.439 9.89596 12.2764 10.0541C12.1137 10.2122 11.8931 10.3011 11.6631 10.3011Z" fill="currentColor"/>
+                      <path d="M11.1913 4.2445H9.34342V3.39164C9.70111 3.31393 10.0164 3.10985 10.2281 2.81895C10.4399 2.52805 10.533 2.17107 10.4895 1.8172C10.4459 1.46333 10.2688 1.13779 9.99246 0.903685C9.71612 0.669579 9.36022 0.543586 8.99378 0.550132C8.62733 0.556677 8.27644 0.695295 8.00912 0.939113C7.7418 1.18293 7.57711 1.51458 7.54696 1.86976C7.51681 2.22495 7.62336 2.57837 7.84594 2.8615C8.06853 3.14464 8.39131 3.33733 8.75169 3.40221V4.24417H6.84333C5.6332 4.24659 4.46648 4.68283 3.56644 5.46942C2.6664 6.25601 2.09625 7.33771 1.96509 8.50751L1.95592 8.6066C1.94958 8.67729 1.94493 8.74533 1.94199 8.81073C1.93927 8.87679 1.93655 8.94946 1.93655 9.0185V11.2002C1.93655 11.2773 1.93871 11.3534 1.94301 11.4285V11.4526C1.94301 11.5252 1.9532 11.5976 1.96033 11.6702V11.7016C1.96848 11.7713 1.97698 11.8413 1.98785 11.91L1.9943 11.9467C2.00551 12.0148 2.0174 12.0811 2.03099 12.1472L2.04118 12.1948C2.05205 12.243 2.06326 12.2916 2.07515 12.3388C2.08704 12.386 2.09824 12.4283 2.11115 12.4709L2.13323 12.5489C2.2119 12.804 2.31234 13.0522 2.43352 13.2911L2.50145 13.4262C2.91877 14.1943 3.54355 14.8372 4.30859 15.2858C5.07362 15.7344 5.94996 15.9717 6.84333 15.9722H10.0897H10.0985L12.2535 17.6981C12.2831 17.7224 12.3193 17.738 12.3577 17.7431C12.3962 17.7481 12.4353 17.7424 12.4705 17.7266C12.5057 17.7107 12.5355 17.6855 12.5564 17.6538C12.5774 17.6221 12.5886 17.5852 12.5888 17.5475L12.6177 15.7701L12.7834 15.7152C13.7513 15.3922 14.5915 14.7837 15.1869 13.9745C15.7823 13.1653 16.1033 12.1956 16.1052 11.2005V9.02048C16.1041 7.75373 15.586 6.53921 14.6646 5.6437C13.7433 4.74819 12.494 4.24494 11.1913 4.2445ZM14.9391 10.8058C14.938 11.7971 14.5326 12.7474 13.8119 13.4484C13.0911 14.1494 12.1139 14.5437 11.0945 14.5449H7.01113C5.99176 14.5437 5.0145 14.1494 4.29376 13.4484C3.57302 12.7474 3.16764 11.7971 3.16656 10.8058V9.78845C3.16809 8.7975 3.57366 7.84757 4.29436 7.14695C5.01505 6.44633 5.99205 6.0522 7.01113 6.05098H11.0942C12.1133 6.05211 13.0904 6.44621 13.8112 7.14683C14.5319 7.84746 14.9376 8.79744 14.9391 9.78845V10.8058Z" fill="currentColor"/>
+                    </svg>
+                  </button>
+                  <div class="ds-top-nav__action-badge">
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
+                    </button>
+                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
+                  </div>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
+                    <span class="ds-icon" aria-hidden="true">add_2</span>
+                  </button>
+                  <button class="ds-top-nav__action-btn" type="button" aria-label="Help">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">person_raised_hand</span>
+                  </button>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
+                    R
+                  </button>
+                </div>
+              </header>
+
+              <!-- Body: subnav + page content -->
+              <div class="ds-page-layout__body">
+
+                <!-- Sub-navigation panel (collapsible) -->
+                <nav class="ds-subnav" id="subnav-panel-table" role="navigation" aria-label="Customers navigation">
+                  <button class="ds-subnav-btn is-selected" type="button">All Customers</button>
+                  <button class="ds-subnav-btn" type="button">Active</button>
+                  <button class="ds-subnav-btn" type="button">Pending</button>
+                  <button class="ds-subnav-btn" type="button">Inactive</button>
+                  <button class="ds-subnav-header" type="button">
+                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
+                    <span class="ds-subnav-header__label">Saved Filters</span>
+                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                  </button>
+                </nav>
+
+                <!-- Main page content -->
+                <main class="ds-page-content" role="main">
+                  <div class="ds-page-content__heading">
+                    <h1 class="ds-page-content__title">Customers</h1>
+                    <div class="ds-tabs" role="tablist" aria-label="Customer views">
+                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">All Customers</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Active</button>
+                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Pending</button>
+                    </div>
+                  </div>
+
+                  <!-- Content card: table fills it entirely -->
+                  <div class="ds-page-content__main" style="overflow: hidden; display: flex; flex-direction: column;">
+
+                    <div id="table-sim-pt" style="display: flex; flex: 1; min-height: 0;">
+
+                      <!-- ── Main table content ──────────────────────────── -->
+                      <div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column;">
+
+                        <!-- Toolbar -->
+                        <div class="ds-table-toolbar">
+                          <div class="ds-table-toolbar__left">
+                            <button class="ds-button ds-button--filled ds-button--leading-icon" type="button">
+                              <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">add</span></span>
+                              New Customer
+                            </button>
+                            <button class="ds-button ds-button--outlined ds-button--trailing-icon" type="button">
+                              Bulk Actions
+                              <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon">arrow_drop_down</span></span>
+                            </button>
+                            <button class="ds-button ds-button--destructive ds-button--leading-icon" type="button">
+                              <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">delete</span></span>
+                              Delete
+                            </button>
+                          </div>
+                          <div class="ds-table-toolbar__right">
+                            <div class="ds-search" role="search">
+                              <div class="ds-search__field">
+                                <span class="ds-search__search-btn" aria-hidden="true"><span class="ds-icon ds-icon--sm">search</span></span>
+                                <input class="ds-search__control" type="search" placeholder="Search customers" aria-label="Search customers" />
+                              </div>
+                            </div>
+                            <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Toggle filters" onclick="togglePressed(this)">
+                              <span class="ds-icon ds-icon--filled">filter_alt</span>
+                            </button>
+                            <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Column settings" onclick="toggleColumnPanelPT(this)">
+                              <span class="ds-icon ds-icon--filled">settings</span>
+                            </button>
+                            <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Download">
+                              <span class="ds-icon">download</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Scroll container: sticky header + data rows -->
+                        <div id="table-scroll-pt" style="flex: 1; overflow: auto; min-height: 0;">
+                          <div style="width: 100%; min-width: 1006px; position: relative;">
+
+                            <!-- Header row (sticky) -->
+                            <div style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px; position: sticky; top: 0; z-index: 3;">
+                              <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
+                                <div class="ds-table-header-cell__content" style="justify-content: center;">
+                                  <label class="ds-checkbox" aria-label="Select all rows">
+                                    <input type="checkbox" class="ds-checkbox__control" />
+                                    <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="ds-table-header-cell">
+                                <div class="ds-table-header-cell__resize-handle"></div>
+                                <div class="ds-table-header-cell__content">
+                                  <span class="ds-table-header-cell__label">Customer</span>
+                                </div>
+                                <div class="ds-table-header-cell__actions">
+                                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Customer">
+                                    <span class="ds-icon ds-icon--filled">filter_alt</span>
+                                  </button>
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                    <span class="ds-table-header-cell__resize-bar"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="ds-table-header-cell">
+                                <div class="ds-table-header-cell__resize-handle"></div>
+                                <div class="ds-table-header-cell__content">
+                                  <span class="ds-table-header-cell__label">Email</span>
+                                </div>
+                                <div class="ds-table-header-cell__actions">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                    <span class="ds-table-header-cell__resize-bar"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="ds-table-header-cell">
+                                <div class="ds-table-header-cell__resize-handle"></div>
+                                <div class="ds-table-header-cell__content">
+                                  <span class="ds-table-header-cell__label">Department</span>
+                                </div>
+                                <div class="ds-table-header-cell__actions">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                    <span class="ds-table-header-cell__resize-bar"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="ds-table-header-cell">
+                                <div class="ds-table-header-cell__resize-handle"></div>
+                                <div class="ds-table-header-cell__content">
+                                  <span class="ds-table-header-cell__label">Status</span>
+                                </div>
+                                <div class="ds-table-header-cell__actions">
+                                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Status">
+                                    <span class="ds-icon ds-icon--filled">filter_alt</span>
+                                  </button>
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                    <span class="ds-table-header-cell__resize-bar"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="ds-table-header-cell">
+                                <div class="ds-table-header-cell__resize-handle"></div>
+                                <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
+                                  <span class="ds-table-header-cell__label">Amount</span>
+                                </div>
+                                <div class="ds-table-header-cell__actions">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                    <span class="ds-table-header-cell__resize-bar"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="ds-table-header-cell ds-table-pinned-right">
+                                <div class="ds-table-header-cell__content" style="justify-content: center;">
+                                  <span class="ds-table-header-cell__label">Actions</span>
+                                </div>
+                              </div>
+                            </div><!-- /header row -->
+
+                            <!-- Data rows -->
+                            <div style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px; position: relative;">
+
+                              <!-- Row 1: Acme Corporation -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Acme Corporation"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Acme Corporation</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">info@acmecorp.com</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Acme Corporation"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Acme Corporation"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 2: Cloud Systems Inc -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Cloud Systems Inc"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Cloud Systems Inc</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">hello@cloudsys.io</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Product</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Cloud Systems Inc"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Cloud Systems Inc"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 3: Echo Ventures Group -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Echo Ventures Group"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Echo Ventures Group</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">team@echoventures.co</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$57,800.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Echo Ventures Group"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Echo Ventures Group"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 4: Frontier Corp -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Frontier Corp"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Frontier Corp</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">contact@frontierco.com</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$22,400.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Frontier Corp"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Frontier Corp"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 5: Meridian Partners -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Meridian Partners"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Meridian Partners</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">ops@meridian.co</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Finance</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$8,750.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Meridian Partners"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Meridian Partners"><span class="ds-icon">delete</span></button></div></div>
+
+                            </div><!-- /data rows grid -->
+
+                          </div><!-- /min-width wrapper -->
+                        </div><!-- /table-scroll-pt -->
+
+                        <!-- Paginator -->
+                        <div class="ds-ag-paginator" style="width: 100%; border-top: 1px solid var(--color-border-subtle);">
+                          <div class="ds-ag-paginator__inner">
+                            <div class="ds-ag-paginator__counter">
+                              <span class="ds-ag-paginator__label">Items per page:</span>
+                              <div class="ds-ag-paginator__select-wrap">
+                                <select class="ds-ag-paginator__select" aria-label="Items per page">
+                                  <option selected>100</option>
+                                  <option>250</option>
+                                  <option>500</option>
+                                  <option>1000</option>
+                                </select>
+                                <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                              </div>
+                            </div>
+                            <div class="ds-ag-paginator__pagination">
+                              <span class="ds-ag-paginator__range" aria-live="polite">1 - 100 of 3842</span>
+                              <div class="ds-ag-paginator__nav">
+                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="First page" disabled>
+                                  <span class="ds-icon">first_page</span>
+                                </button>
+                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Previous page" disabled>
+                                  <span class="ds-icon">keyboard_arrow_left</span>
+                                </button>
+                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Next page">
+                                  <span class="ds-icon">keyboard_arrow_right</span>
+                                </button>
+                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Last page">
+                                  <span class="ds-icon">last_page</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div><!-- /main table content -->
+
+                      <!-- ── Column tool panel ──────────────────────────── -->
+                      <div class="ds-column-panel" id="table-column-panel-pt">
+                        <div class="ds-column-panel__header">
+                          <span class="ds-column-panel__title">Columns</span>
+                          <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Close columns panel" onclick="closeColumnPanelPT()">
+                            <span class="ds-icon">close</span>
+                          </button>
+                        </div>
+                        <div class="ds-column-panel__list" id="column-panel-list-pt">
+                          <div class="ds-column-panel__row ds-column-panel__row--system" data-col-key="checkbox">
+                            <label class="ds-toggle" aria-label="Toggle Checkbox column visibility">
+                              <input type="checkbox" class="ds-toggle__control" checked />
+                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                            </label>
+                            <span class="ds-column-panel__name">Checkbox</span>
+                          </div>
+                          <div class="ds-column-panel__row" draggable="true" data-col-key="customer">
+                            <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
+                            <label class="ds-toggle" aria-label="Toggle Customer column visibility">
+                              <input type="checkbox" class="ds-toggle__control" checked />
+                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                            </label>
+                            <span class="ds-column-panel__name">Customer</span>
+                          </div>
+                          <div class="ds-column-panel__row" draggable="true" data-col-key="email">
+                            <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
+                            <label class="ds-toggle" aria-label="Toggle Email column visibility">
+                              <input type="checkbox" class="ds-toggle__control" checked />
+                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                            </label>
+                            <span class="ds-column-panel__name">Email</span>
+                          </div>
+                          <div class="ds-column-panel__row" draggable="true" data-col-key="department">
+                            <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
+                            <label class="ds-toggle" aria-label="Toggle Department column visibility">
+                              <input type="checkbox" class="ds-toggle__control" checked />
+                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                            </label>
+                            <span class="ds-column-panel__name">Department</span>
+                          </div>
+                          <div class="ds-column-panel__row" draggable="true" data-col-key="status">
+                            <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
+                            <label class="ds-toggle" aria-label="Toggle Status column visibility">
+                              <input type="checkbox" class="ds-toggle__control" checked />
+                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                            </label>
+                            <span class="ds-column-panel__name">Status</span>
+                          </div>
+                          <div class="ds-column-panel__row" draggable="true" data-col-key="amount">
+                            <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
+                            <label class="ds-toggle" aria-label="Toggle Amount column visibility">
+                              <input type="checkbox" class="ds-toggle__control" checked />
+                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                            </label>
+                            <span class="ds-column-panel__name">Amount</span>
+                          </div>
+                          <div class="ds-column-panel__row ds-column-panel__row--system" data-col-key="actions">
+                            <label class="ds-toggle" aria-label="Toggle Actions column visibility">
+                              <input type="checkbox" class="ds-toggle__control" checked />
+                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                            </label>
+                            <span class="ds-column-panel__name">Actions</span>
+                          </div>
+                        </div>
+                      </div><!-- /column-panel-pt -->
+
+                    </div><!-- /table-sim-pt -->
+                  </div><!-- /ds-page-content__main -->
+                </main>
+
+              </div><!-- /.ds-page-layout__body -->
+            </div><!-- /.ds-page-layout__content -->
+
+            <!-- Floating expand/collapse toggle (absolutely positioned) -->
+            <button class="ds-nav-expand" id="nav-expand-btn-table"
+                    type="button"
+                    aria-label="Collapse sub navigation"
+                    aria-expanded="true"
+                    onclick="toggleSubnavTable()">
+              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+            </button>
+
+          </div><!-- /.ds-page-layout -->
+        </div><!-- /.component-demo -->
+
       </section>
 
       </div><!-- /#page-examples -->
@@ -11124,7 +11253,8 @@
     'nav-tab': 'components', 'top-nav': 'components', 'nav-expand': 'components',
     'table-header-cell': 'components', 'table-row-cell': 'components',
     'ag-paginator': 'components', 'table-toolbar': 'components',
-    'page-layout': 'examples', 'split-page-layout': 'examples', table: 'examples',
+    'split-page': 'components',
+    'page-layout': 'examples', 'split-page-layout': 'examples', table: 'examples', 'page-layout-table': 'examples',
   };
   var initHash = window.location.hash.slice(1);
   if (initHash && anchorPageMap[initHash]) {
@@ -11417,6 +11547,50 @@ function toggleSubnavSplit7525() {
     btn.setAttribute('aria-expanded', 'true');
     btn.setAttribute('aria-label', 'Collapse navigation');
     icon.textContent = 'right_panel_open';
+  }
+}
+
+function toggleSubnavTable() {
+  var panel = document.getElementById('subnav-panel-table');
+  var btn   = document.getElementById('nav-expand-btn-table');
+  var icon  = btn.querySelector('.ds-icon');
+  var isOpen = !panel.classList.contains('is-collapsed');
+  if (isOpen) {
+    panel.classList.add('is-collapsed');
+    btn.classList.add('is-collapsed');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Expand navigation');
+    icon.textContent = 'right_panel_close';
+  } else {
+    panel.classList.remove('is-collapsed');
+    btn.classList.remove('is-collapsed');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-label', 'Collapse navigation');
+    icon.textContent = 'right_panel_open';
+  }
+}
+
+function toggleColumnPanelPT(btn) {
+  var sim = document.getElementById('table-sim-pt');
+  var open = sim.hasAttribute('data-panel-open');
+  if (open) {
+    sim.removeAttribute('data-panel-open');
+    btn.setAttribute('aria-pressed', 'false');
+    btn.classList.remove('is-selected');
+  } else {
+    sim.setAttribute('data-panel-open', '');
+    btn.setAttribute('aria-pressed', 'true');
+    btn.classList.add('is-selected');
+  }
+}
+
+function closeColumnPanelPT() {
+  var sim = document.getElementById('table-sim-pt');
+  sim.removeAttribute('data-panel-open');
+  var btn = sim.querySelector('[aria-label="Column settings"]');
+  if (btn) {
+    btn.setAttribute('aria-pressed', 'false');
+    btn.classList.remove('is-selected');
   }
 }
 </script>
