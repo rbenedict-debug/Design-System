@@ -10,12 +10,12 @@
 //         <option value="">Choose one...</option>
 //         <option value="a">Option A</option>
 //       </select>
-//       <span class="ds-icon ds-icon--sm ds-select__arrow">expand_more</span>
+//       <span class="ds-icon ds-icon--sm ds-select__arrow">arrow_drop_down</span>
 //     </div>
 //     <span class="ds-select__helper">Helper text</span>
 //   </div>
 //
-// Angular component:
+// Angular component (uses ds-menu for the dropdown panel):
 //   <ds-select label="Country" [(value)]="country" [options]="countries" />
 //
 // States:    default, hover, focus, .is-error, .is-disabled
@@ -44,6 +44,7 @@
   }
 
   // ── Field wrapper ────────────────────────────────────────────────────────
+  // Also used as a <button> in the Angular component — button resets included.
 
   &__field {
     display: flex;
@@ -57,7 +58,22 @@
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
     position: relative;
 
+    // Button resets (no-op on div in CSS class API)
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    text-align: left;
+    width: 100%;
+
     &:hover { border-color: var(--color-border-input-hover); }
+
+    // Focus ring — keyboard only
+    // :focus-visible covers button.ds-select__field (Angular component)
+    // :focus-within covers div.ds-select__field containing a native <select> (CSS class API)
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
   }
 
   &:focus-within &__field {
@@ -68,7 +84,17 @@
     box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
   }
 
-  // ── Control (<select>) ───────────────────────────────────────────────────
+  // ── Value text (Angular component — <span> inside button trigger) ─────────
+
+  &__value {
+    flex: 1;
+    min-width: 0;
+    color: var(--color-text-primary);
+
+    &--placeholder { color: var(--color-text-placeholder); }
+  }
+
+  // ── Control (<select> — CSS class API only) ───────────────────────────────
 
   &__control {
     flex: 1;
@@ -114,7 +140,6 @@
     color: var(--color-text-secondary);
   }
 
-
   // ── Error icon ────────────────────────────────────────────────────────────
 
   &__error-icon {
@@ -140,7 +165,6 @@
     }
   }
 
-
   // ── Disabled state ────────────────────────────────────────────────────────
 
   &.is-disabled {
@@ -149,6 +173,7 @@
     .ds-select__field   { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
     .ds-select__label   { color: var(--color-text-disabled); }
     .ds-select__control { color: var(--color-text-disabled); cursor: not-allowed; }
+    .ds-select__value   { color: var(--color-text-disabled); }
     .ds-select__arrow   { color: var(--color-icon-disabled); }
     .ds-select__helper  { color: var(--color-text-disabled); }
   }
@@ -156,11 +181,8 @@
 
 
 // ── Angular Material overrides ────────────────────────────────────────────────
-// Themes mat-form-field (appearance="outline") + mat-select to use Onflo tokens.
+// Themes mat-form-field (appearance="outline") + matInput to use Onflo tokens.
 // No ::ng-deep. The <ds-select> host carries .ds-select via @HostBinding.
-//
-// Focus ring pattern (composite wrapper) — same as ds-input:
-//   :focus-within:not([data-mouse-focus]) → box-shadow ring (keyboard only)
 
 .ds-select {
 
@@ -169,10 +191,10 @@
 
   // ── Sizing — matches ds-input fixed 42px height ───────────────────────────
 
-  --mat-form-field-container-height:          42px;
+  --mat-form-field-container-height:           42px;
   --mat-form-field-container-vertical-padding: 0px;
-  --mdc-outlined-text-field-container-shape:  var(--radius-sm);
-  --mdc-outlined-text-field-outline-width:    1px;
+  --mdc-outlined-text-field-container-shape:   var(--radius-sm);
+  --mdc-outlined-text-field-outline-width:     1px;
 
   // ── Colors — default ─────────────────────────────────────────────────────
 
@@ -180,21 +202,22 @@
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
 
-  // Select trigger (value / placeholder text) typography
-  --mat-select-trigger-text-font:        var(--ref-typeface-brand);
-  --mat-select-trigger-text-size:        var(--ref-typescale-label-medium-size);
-  --mat-select-trigger-text-weight:      var(--ref-typeface-weight-regular);
-  --mat-select-trigger-text-line-height: var(--ref-typescale-label-medium-line-height);
-  --mat-select-enabled-trigger-text-color:      var(--color-text-primary);
-  --mat-select-placeholder-text-color:          var(--color-text-placeholder);
-  --mat-select-disabled-trigger-text-color:     var(--color-text-disabled);
+  // Input text typography
+  --mdc-outlined-text-field-input-text-font:        var(--ref-typeface-brand);
+  --mdc-outlined-text-field-input-text-size:        var(--ref-typescale-label-medium-size);
+  --mdc-outlined-text-field-input-text-weight:      var(--ref-typeface-weight-regular);
+  --mdc-outlined-text-field-input-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mdc-outlined-text-field-input-text-color:       var(--color-text-primary);
+  --mdc-outlined-text-field-disabled-input-text-color: var(--color-text-disabled);
 
-  // ── Suppress floating label, subscript, and Material's built-in arrow ────
+  // Placeholder
+  --mdc-outlined-text-field-input-text-placeholder-color: var(--color-text-placeholder);
+
+  // ── Suppress floating label and subscript ─────────────────────────────────
 
   .mat-mdc-floating-label,
   .mdc-floating-label                   { display: none; }
   .mat-mdc-form-field-subscript-wrapper { display: none; }
-  .mat-mdc-select-arrow-wrapper         { display: none; } // replaced by matSuffix ds-icon
 
   // ── Field background ─────────────────────────────────────────────────────
 
@@ -238,34 +261,5 @@
     .ds-select__label           { color: var(--color-text-disabled); }
     .ds-select__arrow           { color: var(--color-icon-disabled); }
     .ds-select__helper          { color: var(--color-text-disabled); }
-  }
-}
-
-
-// ── Dropdown panel ────────────────────────────────────────────────────────────
-// panelClass="ds-select-panel" scopes these to Onflo dropdowns only.
-// The panel renders in a CDK overlay — outside the component DOM.
-
-.ds-select-panel {
-  background: var(--color-surface-overlay);
-  border-radius: var(--radius-sm);
-  box-shadow: 0 4px 16px var(--shadow-elevation-2);
-
-  .mat-mdc-option {
-    font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typeface-weight-regular);
-    color: var(--color-text-primary);
-
-    &:hover:not(.mdc-list-item--disabled)   { background: var(--overlay-hovered); }
-    &:active:not(.mdc-list-item--disabled)  { background: var(--overlay-pressed); }
-    &.mdc-list-item--selected               { color: var(--color-text-brand); }
-    &.mdc-list-item--disabled               { color: var(--color-text-disabled); opacity: 1; }
-
-    // Suppress Material's ripple and state layer
-    --mat-option-hover-state-layer-opacity:     0;
-    --mat-option-focus-state-layer-opacity:     0;
-    --mat-option-selected-state-layer-opacity:  0;
-    --mat-option-pressed-state-layer-opacity:   0;
   }
 }

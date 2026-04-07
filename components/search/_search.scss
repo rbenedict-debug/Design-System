@@ -2,18 +2,18 @@
 // Onflo Design System — Search Field Component
 // ============================================================
 //
-// Usage (SCSS):
-//   @use '@onflo/design-system/components/search/search';
+// ds-search is a search-specific variant of ds-input.
+// Always apply both ds-input and ds-search classes to the host element.
+// All field styling (border, focus ring, hover, disabled, icons,
+// action button) comes from ds-input — this file only adds the
+// search-specific webkit override.
 //
 // Usage (HTML class API):
-//   <div class="ds-search" role="search">
-//     <div class="ds-search__field">
-//       <button class="ds-search__search-btn" aria-label="Search" tabindex="-1">
-//         <span class="ds-icon ds-icon--sm" aria-hidden="true">search</span>
-//       </button>
-//       <input class="ds-search__control" type="search" placeholder="Search"
-//              aria-label="Search" />
-//       <button class="ds-search__clear" type="button" aria-label="Clear search">
+//   <div class="ds-input ds-search" role="search">
+//     <div class="ds-input__field">
+//       <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+//       <input class="ds-input__control" type="search" aria-label="Search" placeholder="Search" />
+//       <button class="ds-input__action" type="button" aria-label="Clear search">
 //         <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
 //       </button>
 //     </div>
@@ -22,132 +22,14 @@
 // Angular component:
 //   <ds-search placeholder="Search items..." [(value)]="query" (search)="onSearch($event)" />
 //
-// States:    default, :hover, :focus-within, .is-disabled
-// Height:    fixed 42px — no size variants
+// The Angular component host carries both ds-input and ds-search classes.
 // ============================================================
 
 
 .ds-search {
-  display: flex;
-  flex-direction: column;
-
-
-  // ── Field wrapper ────────────────────────────────────────────────────────
-
-  &__field {
-    display: flex;
-    align-items: center;
-    height: 42px;
-    background: var(--color-surface-input);
-    border: 1px solid var(--color-border-input);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    cursor: text;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-
-    &:hover { border-color: var(--color-border-input-hover); }
-  }
-
-  // Active border — any focus method
-  &:focus-within &__field {
-    border-color: var(--color-border-input-active);
-  }
-
-  // ADA focus ring — keyboard navigation only
-  // :has(:focus-visible) fires only when keyboard focus reaches an inner element.
-  // For <input> elements most browsers also set :focus-visible on click, but this
-  // is the correct semantic separation per the ADA focus ring pattern.
-  &:has(:focus-visible) &__field {
-    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-  }
-
-
-  // ── Leading search icon button ───────────────────────────────────────────
-  // Non-interactive visually — tabindex="-1" keeps it out of tab order.
-
-  &__search-btn {
-    appearance: none;
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    flex-shrink: 0;
-    color: var(--color-icon-subtle);
-    cursor: text; // clicking the icon should feel like clicking the field
-    pointer-events: none; // forward clicks to the input instead
-  }
-
-
-  // ── Input control ────────────────────────────────────────────────────────
-
-  &__control {
-    flex: 1;
-    min-width: 0;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-body-medium-size);
-    font-weight: var(--ref-typeface-weight-regular);
-    line-height: var(--ref-typescale-body-medium-line-height);
-    letter-spacing: var(--ref-typescale-body-medium-tracking);
-    color: var(--color-text-primary);
-    caret-color: var(--color-border-input-active);
-    padding: 0;
-
-    // Suppress browser-native appearance on type="search"
+  // Suppress browser-native search chrome (webkit cancel button and decoration)
+  input[type='search'] {
     &::-webkit-search-decoration,
     &::-webkit-search-cancel-button { display: none; }
-
-    &::placeholder { color: var(--color-text-placeholder); }
-
-    // Suppress individual-element focus ring — the field wrapper handles it
-    &:focus         { outline: none; }
-    &:focus-visible { outline: none; }
-  }
-
-  // When no leading icon, add left padding directly on the control wrapper
-  &--no-icon &__control {
-    padding-left: var(--spacing-lg);
-  }
-
-
-  // ── Clear button ─────────────────────────────────────────────────────────
-
-  &__clear {
-    appearance: none;
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    flex-shrink: 0;
-    color: var(--color-icon-subtle);
-    cursor: pointer;
-    transition: color 0.1s ease;
-
-    &:hover         { color: var(--color-icon-default); }
-    &:focus         { outline: none; }
-    &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
-  }
-
-
-  // ── Disabled state ────────────────────────────────────────────────────────
-
-  &.is-disabled {
-    pointer-events: none;
-
-    .ds-search__field   { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
-    .ds-search__control { color: var(--color-text-disabled); }
-    .ds-search__search-btn { color: var(--color-icon-disabled); }
   }
 }

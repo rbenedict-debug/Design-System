@@ -1,179 +1,175 @@
 // ============================================================
-// Onflo Design System — Snackbar / Toast Component
+// Onflo Design System — Snackbar / Toast
 // ============================================================
 //
-// Based on Angular Material MatSnackBar.
-// Import MatSnackBarModule in your Angular module.
+// Based on Angular Material MatSnackBar service.
+// The snackbar component is launched via the MatSnackBar service
+// and positioned at the top-center of the viewport.
 //
-// Usage (HTML class API):
-//   <div class="ds-snackbar" role="status" aria-live="polite">
-//     <span class="ds-icon ds-snackbar__icon">check_circle</span>
-//     <span class="ds-snackbar__message">Changes saved successfully.</span>
-//     <button class="ds-snackbar__action">Undo</button>
+// Service usage (recommended):
+//   const ref = this.snackBar.openFromComponent(DsSnackbarComponent, {
+//     data: {
+//       message:     'Changes saved.',
+//       variant:     'text-only',           // 'text-only' | 'text-action' | 'text-longer-action'
+//       actionLabel: 'Undo',                // required for text-action / text-longer-action
+//       showClose:   false,
+//     },
+//     panelClass:         'ds-snackbar-panel',
+//     duration:           5000,             // omit duration for action variants requiring user input
+//     verticalPosition:   'top',
+//     horizontalPosition: 'center',
+//   });
+//   ref.onAction().subscribe(() => { /* handle undo/action */ });
+//
+// HTML class API:
+//   <div class="ds-snackbar [ds-snackbar--text-action] [ds-snackbar--has-close]"
+//        role="status" aria-live="polite">
+//     <span class="ds-snackbar__message">Changes saved.</span>
+//     <!-- text-action: -->
+//     <button class="ds-button ds-button--filled ds-button--sm">Undo</button>
+//     <!-- optional close: -->
 //     <button class="ds-snackbar__close" aria-label="Dismiss">
 //       <span class="ds-icon ds-icon--sm">close</span>
 //     </button>
 //   </div>
 //
-// Variants: default (info) | success | warning | error
-// Position: ds-snackbar-host (fixed container bottom-center)
+// Layout variants:
+//   text-only           — no modifier
+//   text-action         — ds-snackbar--text-action
+//   text-longer-action  — ds-snackbar--text-longer-action
+//     (uses ds-snackbar__action-row child for the button row)
+//
+// Add ds-snackbar--has-close when the close button is present.
 // ============================================================
 
-// ── Host container (bottom of screen) ────────────────────────────────────────
-
-.ds-snackbar-host {
-  position: fixed;
-  bottom: var(--spacing-xl);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  align-items: center;
-  pointer-events: none;
-
-  .ds-snackbar {
-    pointer-events: all;
-  }
+@keyframes ds-snackbar-enter {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
-// ── Snackbar ──────────────────────────────────────────────────────────────────
+// ── Snackbar container ────────────────────────────────────────────────────────
 
 .ds-snackbar {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-surface-tooltip);
-  color: var(--color-text-tooltip);
-  border-radius: var(--radius-md);
-  box-shadow:
-    0 4px 16px var(--shadow-elevation-3),
-    0 1px 4px var(--shadow-elevation-2);
-  min-width: 280px;
+  flex-direction: row;
+  align-items: flex-start;
+  width: fit-content;
   max-width: 480px;
-  font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-medium-size);
-  line-height: var(--ref-typescale-label-medium-line-height);
+  padding: var(--spacing-lg);
+  background: var(--color-surface-tooltip);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-sm);
+  box-shadow:
+    0 3px 12px 6px var(--shadow-elevation-3),
+    0 4px 4px 0 var(--shadow-elevation-3);
   animation: ds-snackbar-enter 0.2s ease;
 
-  @keyframes ds-snackbar-enter {
-    from { transform: translateY(12px); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
-  }
+  // ── Variants ──────────────────────────────────────────────────────────────
 
-  // ── Variants ────────────────────────────────────────────────────────────────
-
-  &--success {
-    background: var(--color-surface-accent-green-bold);
-    .ds-snackbar__icon { color: var(--color-text-on-bold); }
-  }
-
-  &--error {
-    background: var(--color-surface-accent-red-bold);
-    .ds-snackbar__icon { color: var(--color-text-on-bold); }
-  }
-
-  &--warning {
-    background: var(--color-surface-accent-yellow-bold);
-    color: var(--color-text-primary);
-    .ds-snackbar__icon { color: var(--color-text-primary); }
-    .ds-snackbar__message { color: var(--color-text-primary); }
-    .ds-snackbar__action { color: var(--color-text-primary); }
-    .ds-snackbar__close { color: var(--color-text-primary); }
-  }
-
-  // ── Icon ─────────────────────────────────────────────────────────────────────
-
-  &__icon {
-    font-family: 'Material Symbols Rounded';
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    display: flex;
+  // Text + inline action button — single row, centered, fixed width
+  &--text-action {
+    width: 344px;
+    gap: var(--spacing-md);
     align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--color-text-tooltip);
-    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
   }
 
-  // ── Message ───────────────────────────────────────────────────────────────────
+  // Text + action button on second line — column layout, fixed width
+  &--text-longer-action {
+    width: 344px;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  // ── Close button present ──────────────────────────────────────────────────
+
+  // Row layouts with close: fixed width, center vertically, reduce right padding
+  &--has-close:not(.ds-snackbar--text-longer-action) {
+    width: 344px;
+    padding-right: var(--spacing-sm);
+    align-items: center;
+  }
+
+  // Longer action with close: fixed width, reduce right padding (column stays flex-start)
+  &--has-close.ds-snackbar--text-longer-action {
+    width: 344px;
+    padding-right: var(--spacing-sm);
+  }
+
+  // ── Elements ──────────────────────────────────────────────────────────────
 
   &__message {
     flex: 1;
     min-width: 0;
-    color: var(--color-text-tooltip);
+    font-family: var(--ref-typescale-body-medium-font);
+    font-size: var(--ref-typescale-body-medium-size);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    font-weight: var(--ref-typescale-body-medium-weight);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
+    color: var(--color-text-inverse);
   }
 
-  // ── Action button ────────────────────────────────────────────────────────────
-
-  &__action {
-    appearance: none;
-    border: none;
-    background: transparent;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-small-size);
-    font-weight: var(--ref-typeface-weight-bold);
-    color: var(--color-border-ada-focus-ring);
-    cursor: pointer;
-    border-radius: var(--radius-sm);
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: background 0.12s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-
-    &:focus { outline: none; }
-    &:hover { background: rgba(255,255,255,0.12); }
-    &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+  // Action row — used by text-longer-action; button (and optional close) right-aligned
+  &__action-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--spacing-sm);
+    width: 100%;
   }
 
-  // ── Close button ──────────────────────────────────────────────────────────────
+  // ── Close button ──────────────────────────────────────────────────────────
 
   &__close {
+    position: relative;
+    overflow: hidden;
     appearance: none;
     border: none;
     background: transparent;
-    padding: var(--spacing-xs);
-    cursor: pointer;
-    color: var(--color-text-tooltip);
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-inverse);
+    padding: 0;
     flex-shrink: 0;
-    transition: background 0.12s;
-    opacity: 0.7;
 
-    &:hover { background: rgba(255,255,255,0.12); opacity: 1; }
-    &:focus { outline: none; }
-    &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-sm);
+      pointer-events: none;
+    }
+
+    &:hover::after  { background: rgba(255, 255, 255, 0.12); }
+    &:active::after { background: rgba(255, 255, 255, 0.18); }
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
   }
 }
 
-
 // ── Angular Material overrides ────────────────────────────────────────────────
 // When DsSnackbarComponent is launched via MatSnackBar.openFromComponent(),
-// Material wraps the component in .mat-mdc-snack-bar-container inside a CDK overlay.
-// panelClass: 'ds-snackbar-host' scopes these overrides and positions the container.
-// No ::ng-deep — these are global rules targeting the CDK overlay panel class.
+// Material wraps the component in .mat-mdc-snack-bar-container.
+// panelClass: 'ds-snackbar-panel' scopes these overrides.
+// Position is configured by the caller:
+//   verticalPosition: 'top', horizontalPosition: 'center'
 
-.mat-mdc-snack-bar-container.ds-snackbar-host {
-  // Strip Material's default container styling — ds-snackbar provides its own
+.mat-mdc-snack-bar-container.ds-snackbar-panel {
   background: transparent;
   box-shadow: none;
   padding: 0;
   min-width: unset;
   max-width: unset;
 
-  --mdc-snackbar-container-color:      transparent;
+  --mdc-snackbar-container-color:       transparent;
   --mdc-snackbar-supporting-text-color: transparent;
   --mat-snack-bar-button-color:         transparent;
 
-  // The MdcSnackbar surface hosts the projected component content
   .mdc-snackbar__surface {
     background: transparent;
     box-shadow: none;
@@ -183,6 +179,6 @@
     border-radius: 0;
   }
 
-  // Suppress Material's built-in action/dismiss buttons (component renders its own)
+  // Suppress Material's built-in action/dismiss buttons — component renders its own
   .mat-mdc-snack-bar-actions { display: none; }
 }

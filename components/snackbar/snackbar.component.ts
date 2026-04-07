@@ -1,29 +1,32 @@
 /**
  * ds-snackbar
  *
- * Based on Angular Material MatSnackBar service.
- * Import MatSnackBarModule in your Angular module.
+ * Toast notification component backed by Angular Material MatSnackBar service.
+ * Always launched at the top-center of the viewport.
  *
- * Usage — via service (recommended):
+ * Service usage (recommended):
  *   const ref = this.snackBar.openFromComponent(DsSnackbarComponent, {
- *     data: { message: 'Saved.', actionLabel: 'Undo', variant: 'success', icon: 'check_circle' },
- *     panelClass: 'ds-snackbar-host',
- *     duration: 4000,
+ *     data: {
+ *       message:     'Changes saved.',
+ *       variant:     'text-only',           // 'text-only' | 'text-action' | 'text-longer-action'
+ *       actionLabel: 'Undo',                // required for text-action / text-longer-action
+ *       showClose:   false,
+ *     },
+ *     panelClass:         'ds-snackbar-panel',
+ *     duration:           5000,             // omit for action variants that require user input
+ *     verticalPosition:   'top',
+ *     horizontalPosition: 'center',
  *   });
+ *   ref.onAction().subscribe(() => { /* handle action *\/ });
  *
- * Usage — directly in template (CSS class API, no service needed):
- *   <ds-snackbar message="Saved successfully." variant="success" />
- *
- * @example
- *   <div class="ds-snackbar-host">
- *     <div class="ds-snackbar ds-snackbar--success" role="status" aria-live="polite">
- *       <span class="ds-icon ds-snackbar__icon">check_circle</span>
- *       <span class="ds-snackbar__message">Saved successfully.</span>
- *       <button class="ds-snackbar__action">Undo</button>
- *       <button class="ds-snackbar__close" aria-label="Dismiss">
- *         <span class="ds-icon ds-icon--sm">close</span>
- *       </button>
- *     </div>
+ * Template usage (CSS class API):
+ *   <div class="ds-snackbar ds-snackbar--text-action ds-snackbar--has-close"
+ *        role="status" aria-live="polite">
+ *     <span class="ds-snackbar__message">Item moved to archive.</span>
+ *     <button class="ds-button ds-button--filled ds-button--sm" type="button">Undo</button>
+ *     <button class="ds-snackbar__close" type="button" aria-label="Dismiss">
+ *       <span class="ds-icon ds-icon--sm">close</span>
+ *     </button>
  *   </div>
  */
 
@@ -35,19 +38,21 @@ import { CommonModule } from '@angular/common';
 import {
   MatSnackBarModule, MatSnackBarRef, MAT_SNACK_BAR_DATA,
 } from '@angular/material/snack-bar';
+import { DsButtonComponent } from '../button/button.component';
+
+export type DsSnackbarVariant = 'text-only' | 'text-action' | 'text-longer-action';
 
 export interface DsSnackbarData {
-  message?: string;
+  message?:     string;
+  variant?:     DsSnackbarVariant;
   actionLabel?: string;
-  variant?: 'default' | 'success' | 'error' | 'warning';
-  icon?: string;
-  dismissible?: boolean;
+  showClose?:   boolean;
 }
 
 @Component({
   selector: 'ds-snackbar',
   standalone: true,
-  imports: [CommonModule, MatSnackBarModule],
+  imports: [CommonModule, MatSnackBarModule, DsButtonComponent],
   templateUrl: './snackbar.component.html',
   styleUrls: ['./snackbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,24 +63,29 @@ export class DsSnackbarComponent {
     @Optional() private snackBarRef: MatSnackBarRef<DsSnackbarComponent>,
     @Optional() @Inject(MAT_SNACK_BAR_DATA) private data: DsSnackbarData | null,
   ) {
-    // When launched via service, populate inputs from injected data
     if (data) {
-      if (data.message    !== undefined) this.message     = data.message;
+      if (data.message     !== undefined) this.message     = data.message;
+      if (data.variant     !== undefined) this.variant     = data.variant;
       if (data.actionLabel !== undefined) this.actionLabel = data.actionLabel;
-      if (data.variant    !== undefined) this.variant     = data.variant;
-      if (data.icon       !== undefined) this.icon        = data.icon;
-      if (data.dismissible !== undefined) this.dismissible = data.dismissible;
+      if (data.showClose   !== undefined) this.showClose   = data.showClose;
     }
   }
 
-  @Input() message = '';
+  @Input() message     = '';
+  @Input() variant:    DsSnackbarVariant = 'text-only';
   @Input() actionLabel = '';
-  @Input() variant: 'default' | 'success' | 'error' | 'warning' = 'default';
-  @Input() icon?: string;
-  @Input() dismissible = true;
+  @Input() showClose   = false;
 
   @Output() action    = new EventEmitter<void>();
   @Output() dismissed = new EventEmitter<void>();
+
+  get hasAction(): boolean {
+    return this.variant === 'text-action' || this.variant === 'text-longer-action';
+  }
+
+  get isLongerAction(): boolean {
+    return this.variant === 'text-longer-action';
+  }
 
   onAction(): void {
     this.action.emit();

@@ -3,18 +3,13 @@
 
     <!-- Items per page selector -->
     <div class="ds-ag-paginator__counter">
-      <span class="ds-ag-paginator__label">Items per page:</span>
-      <div class="ds-ag-paginator__select-wrap">
-        <select
-          class="ds-ag-paginator__select"
-          [value]="pageSize"
-          (change)="onPageSizeChange($event)"
-          aria-label="Items per page"
-        >
-          <option *ngFor="let opt of pageSizeOptions" [value]="opt">{{ opt }}</option>
-        </select>
-        <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
-      </div>
+      <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
+      <ds-select
+        class="ds-ag-paginator__size-select"
+        [options]="pageSizeSelectOptions"
+        [value]="pageSizeStr"
+        (valueChange)="onPageSizeChange($event)"
+      />
     </div>
 
     <!-- Range + navigation -->

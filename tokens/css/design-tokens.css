@@ -7,18 +7,18 @@
 :root {
 
   /* ── Surface ───────────────────────────────────────── */
-  --color-surface-page: var(--ref-color-neutral-white);
+  --color-surface-page: var(--ref-color-neutral-surface);
   --color-surface-default: var(--ref-color-neutral-bg-default);
   --color-surface-subtle: var(--ref-color-neutral-bg-soft);
   --color-surface-disabled: var(--ref-color-neutral-bg-disabled);
   --color-surface-nav: var(--ref-color-primary-blue-bg-soft);
   --color-surface-nav-active: var(--ref-color-primary-blue-default);
   --color-surface-container: var(--ref-color-primary-blue-bg-soft);
-  --color-surface-overlay: var(--ref-color-neutral-white);
+  --color-surface-overlay: var(--ref-color-neutral-surface);
   --color-surface-scrim: var(--ref-color-neutral-scrim);
   --color-surface-tooltip: var(--ref-color-neutral-tooltip);
   --color-surface-scroll: var(--ref-color-neutral-scroll);
-  --color-surface-input: var(--ref-color-neutral-white);
+  --color-surface-input: var(--ref-color-neutral-surface);
   --color-surface-input-disabled: var(--ref-color-neutral-bg-disabled);
   --color-surface-error: var(--ref-color-accent-red-bg);
   --color-surface-warning: var(--ref-color-accent-yellow-bg);
@@ -50,30 +50,30 @@
   --color-text-secondary: var(--ref-color-neutral-text-soft);
   --color-text-placeholder: var(--ref-color-neutral-text-disabled);
   --color-text-disabled: var(--ref-color-neutral-text-disabled);
-  --color-text-inverse: var(--ref-color-neutral-white);
+  --color-text-inverse: var(--ref-color-neutral-surface);
   --color-text-brand: var(--ref-color-primary-blue-default);
-  --color-text-on-brand: var(--ref-color-neutral-white);
+  --color-text-on-brand: var(--ref-color-neutral-surface);
   --color-text-link: var(--ref-color-primary-blue-default);
   --color-text-error: var(--ref-color-accent-red-default);
   --color-text-warning: var(--ref-color-neutral-text-default);
   --color-text-success: var(--ref-color-neutral-text-default);
   --color-text-info: var(--ref-color-neutral-text-default);
-  --color-text-tooltip: var(--ref-color-neutral-white);
-  --color-text-on-bold: var(--ref-color-neutral-white);
+  --color-text-tooltip: var(--ref-color-neutral-surface);
+  --color-text-on-bold: var(--ref-color-neutral-surface);
   --color-text-accent-navy: var(--ref-color-accent-darkblue-default);
   --color-text-accent-red: var(--ref-color-accent-red-default);
 
   /* ── Border ────────────────────────────────────────── */
-  --color-border-primary: var(--ref-color-neutral-text-disabled);
+  --color-border-primary: var(--ref-color-neutral-border-primary);
   --color-border-secondary: var(--ref-color-neutral-border-soft);
   --color-border-subtle: var(--ref-color-neutral-border-subtle);
   --color-border-strong: var(--ref-color-neutral-text-soft);
-  --color-border-inverse: var(--ref-color-neutral-white);
-  --color-border-accordian: var(--ref-color-accent-accordian-border);
+  --color-border-inverse: var(--ref-color-neutral-surface);
+  --color-border-accordion: var(--ref-color-accent-accordion-border);
   --color-border-ada-focus-ring: var(--ref-color-accent-lightblue-default);
   --color-border-hover: var(--ref-color-accent-lightblue-default);
   --color-border-active: var(--ref-color-primary-blue-default);
-  --color-border-input: var(--ref-color-neutral-text-disabled);
+  --color-border-input: var(--ref-color-neutral-border-primary);
   --color-border-input-hover: var(--ref-color-accent-lightblue-default);
   --color-border-input-active: var(--ref-color-primary-blue-default);
   --color-border-input-error: var(--ref-color-accent-red-default);
@@ -94,26 +94,25 @@
 
   /* ── Spacing ───────────────────────────────────────── */
   --spacing-none: var(--ref-spacing-none);
-  --spacing-xs: var(--ref-spacing-xsmall);
-  --spacing-sm: var(--ref-spacing-small);
-  --spacing-md: var(--ref-spacing-medium);
-  --spacing-lg: var(--ref-spacing-large);
-  --spacing-xl: var(--ref-spacing-xlarge);
-  --spacing-page: var(--ref-spacing-page-spacing);
+  --spacing-xs: var(--ref-spacing-xs);
+  --spacing-sm: var(--ref-spacing-sm);
+  --spacing-md: var(--ref-spacing-md);
+  --spacing-lg: var(--ref-spacing-lg);
+  --spacing-xl: var(--ref-spacing-xl);
+  --spacing-page: var(--ref-spacing-page);
 
   /* ── Border Radius ─────────────────────────────────── */
   --radius-none: var(--ref-radius-none);
   --radius-sm: var(--ref-radius-sm);
   --radius-md: var(--ref-radius-md);
   --radius-lg: var(--ref-radius-lg);
+  --radius-xl: var(--ref-radius-xl);
   --radius-full: var(--ref-radius-full);
 
   /* ── Shadow ────────────────────────────────────────── */
   --shadow-elevation-1: var(--ref-shadow-elevation-1);
   --shadow-elevation-2: var(--ref-shadow-elevation-2);
   --shadow-elevation-3: var(--ref-shadow-elevation-3);
-  --shadow-elevation-4: var(--ref-shadow-elevation-4);
-  --shadow-elevation-5: var(--ref-shadow-elevation-5);
 
   /* ── Overlay / Interaction ─────────────────────────── */
   --overlay-hovered: var(--ref-overlay-hover);
@@ -133,11 +132,11 @@
   --color-icon-default: var(--ref-color-neutral-text-default);
   --color-icon-subtle: var(--ref-color-neutral-text-soft);
   --color-icon-disabled: var(--ref-color-neutral-text-disabled);
-  --color-icon-inverse: var(--ref-color-neutral-white);
+  --color-icon-inverse: var(--ref-color-neutral-surface);
   --color-icon-brand: var(--ref-color-primary-blue-default);
-  --color-icon-on-brand: var(--ref-color-neutral-white);
+  --color-icon-on-brand: var(--ref-color-neutral-surface);
   --color-icon-nav: var(--ref-color-neutral-text-default);
-  --color-icon-nav-active: var(--ref-color-neutral-white);
+  --color-icon-nav-active: var(--ref-color-neutral-surface);
   --color-icon-error: var(--ref-color-accent-red-default);
   --color-icon-warning: var(--ref-color-accent-yellow-default);
   --color-icon-success: var(--ref-color-accent-green-default);
@@ -151,4 +150,9 @@
   --color-icon-accent-orange: var(--ref-color-accent-orange-default);
   --color-icon-accent-purple: var(--ref-color-accent-purple-default);
   --color-icon-accent-pink: var(--ref-color-accent-pink-default);
+
+  /* ── table cell height ─────────────────────────────── */
+  --color-table-cell-height-comfortable-height: var(--ref-table-cell-height-comfort-height);
+  --color-table-cell-height-standard-height: var(--ref-table-cell-height-standard-height);
+  --color-table-cell-height-compact-height: var(--ref-table-cell-height-compact-height);
 }

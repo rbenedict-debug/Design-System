@@ -1,11 +1,16 @@
-import { Component, Input, Output, EventEmitter, HostBinding, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component, Input, Output, EventEmitter,
+  ElementRef, HostListener, HostBinding,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 /**
  * Onflo Design System — Search Field
  *
- * A standalone Angular component for search/filter inputs.
- * Shows a leading search icon and a clear (×) button when the field has a value.
+ * A search-specific variant of ds-input. The host element carries both
+ * ds-input and ds-search classes and role="search", so all ds-input field
+ * styles apply without duplication.
  *
  * ADA: Always provide an ariaLabel. Wire up an aria-live region in the parent
  * to announce result counts as the user types.
@@ -30,7 +35,38 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsSearchComponent {
-  /** Accessible label for the input. Required for ADA — visible label is not shown. */
+
+  // ── Host element bindings ─────────────────────────────────────────────────
+  // Applying ds-input alongside ds-search means all ds-input SCSS rules
+  // (field border, hover, focus ring, disabled, icon colours, action button)
+  // apply automatically — no duplication in _search.scss.
+
+  @HostBinding('class.ds-input')    readonly hostDsInput  = true;
+  @HostBinding('class.ds-search')   readonly hostDsSearch = true;
+  @HostBinding('attr.role')         readonly hostRole     = 'search';
+  @HostBinding('class.is-disabled') get hostDisabled()    { return this.disabled; }
+
+  constructor(private el: ElementRef<HTMLElement>) {}
+
+  // ── Composite wrapper focus ring — data-mouse-focus suppression ───────────
+  // Same pattern as DsInputComponent — suppresses the ADA focus ring
+  // (box-shadow via :focus-within:not([data-mouse-focus])) when focus
+  // was initiated by a pointer device rather than keyboard.
+
+  @HostListener('mousedown')
+  @HostListener('touchstart')
+  onPointerDown(): void {
+    this.el.nativeElement.setAttribute('data-mouse-focus', '');
+  }
+
+  @HostListener('focusout')
+  onFocusOut(): void {
+    this.el.nativeElement.removeAttribute('data-mouse-focus');
+  }
+
+  // ── Inputs ────────────────────────────────────────────────────────────────
+
+  /** Accessible label for the input. Required for ADA — no visible label is shown. */
   @Input() ariaLabel = 'Search';
 
   /** Placeholder text shown when the field is empty. */
@@ -45,6 +81,8 @@ export class DsSearchComponent {
   /** Disables the field. */
   @Input() disabled = false;
 
+  // ── Outputs ───────────────────────────────────────────────────────────────
+
   /** Emits the new value on every keystroke. */
   @Output() valueChange = new EventEmitter<string>();
 
@@ -54,15 +92,7 @@ export class DsSearchComponent {
   /** Emits when the clear button is clicked. */
   @Output() cleared = new EventEmitter<void>();
 
-  get wrapperClasses(): string {
-    return [
-      'ds-search',
-      !this.leadingIcon ? 'ds-search--no-icon' : '',
-      this.disabled ? 'is-disabled' : '',
-    ]
-      .filter(Boolean)
-      .join(' ');
-  }
+  // ── Internal ──────────────────────────────────────────────────────────────
 
   get hasValue(): boolean {
     return this.value.length > 0;

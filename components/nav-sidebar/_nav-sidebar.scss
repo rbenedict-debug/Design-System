@@ -50,8 +50,8 @@
   // Appearance
   background: var(--color-surface-nav);
   box-shadow:
-    0 1px 10px 4px var(--shadow-elevation-4),
-    0 4px 3px 0 var(--shadow-elevation-4);
+    0 1px 10px 4px var(--shadow-elevation-2),
+    0 4px 3px 0 var(--shadow-elevation-2);
 
   // Stacking — sidebar shadow must render above the subnav panel
   position: relative;

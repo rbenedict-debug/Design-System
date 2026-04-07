@@ -31,6 +31,7 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DsSelectComponent, DsSelectOption } from '../select/select.component';
 
 /** Minimal AG Grid API interface — avoids a hard ag-grid-community dependency. */
 export interface AgPaginationApi {
@@ -55,7 +56,7 @@ export interface AgPaginatorStatusPanelParams {
 @Component({
   selector: 'ds-ag-paginator',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DsSelectComponent],
   templateUrl: './ag-paginator.component.html',
   styleUrls: ['./ag-paginator.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -136,6 +137,14 @@ export class DsAgPaginatorComponent implements OnInit, OnDestroy {
   get isFirstPage(): boolean { return this.currentPage === 0; }
   get isLastPage(): boolean  { return this.currentPage >= this.totalPages - 1; }
 
+  /** Current page size as a string for ds-select value binding. */
+  get pageSizeStr(): string { return String(this.pageSize); }
+
+  /** Page size options mapped to DsSelectOption[] for ds-select. */
+  get pageSizeSelectOptions(): DsSelectOption[] {
+    return this.pageSizeOptions.map(n => ({ value: String(n), label: String(n) }));
+  }
+
   // ── Navigation ────────────────────────────────────────────────────────────
 
   firstPage(): void { this._api?.paginationGoToFirstPage(); }
@@ -143,8 +152,8 @@ export class DsAgPaginatorComponent implements OnInit, OnDestroy {
   nextPage(): void  { this._api?.paginationGoToNextPage(); }
   lastPage(): void  { this._api?.paginationGoToLastPage(); }
 
-  onPageSizeChange(event: Event): void {
-    const size = +(event.target as HTMLSelectElement).value;
-    this._api?.paginationSetPageSize(size);
+  onPageSizeChange(value: string): void {
+    const size = +value;
+    if (!isNaN(size)) { this._api?.paginationSetPageSize(size); }
   }
 }

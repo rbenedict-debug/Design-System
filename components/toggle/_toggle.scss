@@ -50,7 +50,7 @@
 
   // ── Track ──────────────────────────────────────────────────────────────────
   // 52×32px, radius-full, 4px padding
-  // Off: surface-default (light grey)
+  // Off: surface-accent-navy
   // On:  surface-brand-bold (blue)
 
   &__track {
@@ -58,7 +58,7 @@
     width: 52px;
     height: 32px;
     border-radius: var(--radius-full);
-    background: var(--color-surface-default);
+    background: var(--color-surface-accent-navy);
     display: flex;
     align-items: center;
     padding: var(--spacing-xs);
@@ -135,8 +135,6 @@
     font-style: normal;
     font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
     line-height: 1;
-    width: 16px;
-    height: 16px;
     position: absolute;
     inset: 0;
     display: flex;
@@ -223,10 +221,10 @@
   --mdc-switch-selected-focus-track-color:    var(--color-surface-brand-bold);
   --mdc-switch-selected-hover-track-color:    var(--color-surface-brand-bold);
   --mdc-switch-selected-pressed-track-color:  var(--color-surface-brand-bold);
-  --mdc-switch-unselected-track-color:        var(--color-surface-default);
-  --mdc-switch-unselected-focus-track-color:  var(--color-surface-default);
-  --mdc-switch-unselected-hover-track-color:  var(--color-surface-default);
-  --mdc-switch-unselected-pressed-track-color: var(--color-surface-default);
+  --mdc-switch-unselected-track-color:        var(--color-surface-accent-navy);
+  --mdc-switch-unselected-focus-track-color:  var(--color-surface-accent-navy);
+  --mdc-switch-unselected-hover-track-color:  var(--color-surface-accent-navy);
+  --mdc-switch-unselected-pressed-track-color: var(--color-surface-accent-navy);
 
   // No outline on track
   --mdc-switch-unselected-outline-width:      0px;

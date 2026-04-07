@@ -8,16 +8,16 @@
 // Usage (HTML class API):
 //   <div class="ds-menu" role="menu">
 //     <button class="ds-menu__item" role="menuitem">
-//       <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>
+//       <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">edit</span>
 //       Edit
 //     </button>
 //     <button class="ds-menu__item" role="menuitem">
-//       <span class="ds-icon ds-icon--sm ds-menu__item-icon">content_copy</span>
+//       <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">content_copy</span>
 //       Duplicate
 //     </button>
 //     <hr class="ds-menu__divider" />
 //     <button class="ds-menu__item ds-menu__item--destructive" role="menuitem">
-//       <span class="ds-icon ds-icon--sm ds-menu__item-icon">delete</span>
+//       <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">delete</span>
 //       Delete
 //     </button>
 //   </div>
@@ -77,8 +77,8 @@
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
   box-shadow:
-    0 4px 4px 0 var(--shadow-elevation-5),
-    0 3px 12px 6px var(--shadow-elevation-5);
+    0 4px 4px 0 var(--shadow-elevation-3),
+    0 3px 12px 6px var(--shadow-elevation-3);
   min-width: 160px;
   max-width: 280px;
   padding: var(--spacing-xs) 0;
@@ -204,7 +204,7 @@
   // ── Item icon (leading) ────────────────────────────────────────────────────
 
   &__item-icon {
-    color: var(--color-icon-subtle);
+    color: var(--color-icon-default);
     flex-shrink: 0;
   }
 
@@ -259,8 +259,8 @@
   background: var(--color-surface-page);
   border: 1px solid var(--color-border-subtle);
   box-shadow:
-    0 4px 4px 0 var(--shadow-elevation-5),
-    0 3px 12px 6px var(--shadow-elevation-5);
+    0 4px 4px 0 var(--shadow-elevation-3),
+    0 3px 12px 6px var(--shadow-elevation-3);
   min-width: 160px;
   max-width: 280px;
 

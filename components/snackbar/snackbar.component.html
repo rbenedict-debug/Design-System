@@ -1,22 +1,47 @@
 <div
   class="ds-snackbar"
-  [class.ds-snackbar--success]="variant === 'success'"
-  [class.ds-snackbar--error]="variant === 'error'"
-  [class.ds-snackbar--warning]="variant === 'warning'"
+  [class.ds-snackbar--text-action]="variant === 'text-action'"
+  [class.ds-snackbar--text-longer-action]="variant === 'text-longer-action'"
+  [class.ds-snackbar--has-close]="showClose"
   role="status"
   aria-live="polite"
 >
-  <span *ngIf="icon" class="ds-snackbar__icon">{{ icon }}</span>
-  <span class="ds-snackbar__message">{{ message }}</span>
-  <button *ngIf="actionLabel" class="ds-snackbar__action" (click)="onAction()">
-    {{ actionLabel }}
-  </button>
-  <button
-    *ngIf="dismissible"
-    class="ds-snackbar__close"
-    aria-label="Dismiss"
-    (click)="onDismiss()"
-  >
-    <span class="ds-icon ds-icon--sm">close</span>
-  </button>
+
+  <!-- text-longer-action: column layout — message on top, action row below -->
+  <ng-container *ngIf="isLongerAction; else rowLayout">
+    <span class="ds-snackbar__message">{{ message }}</span>
+    <div class="ds-snackbar__action-row">
+      <ds-button size="sm" variant="filled" (clicked)="onAction()">{{ actionLabel }}</ds-button>
+      <button
+        *ngIf="showClose"
+        class="ds-snackbar__close"
+        type="button"
+        aria-label="Dismiss"
+        (click)="onDismiss()"
+      >
+        <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+      </button>
+    </div>
+  </ng-container>
+
+  <!-- text-only / text-action: single row layout -->
+  <ng-template #rowLayout>
+    <span class="ds-snackbar__message">{{ message }}</span>
+    <ds-button
+      *ngIf="hasAction"
+      size="sm"
+      variant="filled"
+      (clicked)="onAction()"
+    >{{ actionLabel }}</ds-button>
+    <button
+      *ngIf="showClose"
+      class="ds-snackbar__close"
+      type="button"
+      aria-label="Dismiss"
+      (click)="onDismiss()"
+    >
+      <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+    </button>
+  </ng-template>
+
 </div>

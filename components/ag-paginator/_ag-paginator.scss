@@ -23,10 +23,9 @@
 //   <div class="ds-ag-paginator">
 //     <div class="ds-ag-paginator__inner">
 //       <div class="ds-ag-paginator__counter">
-//         <span class="ds-ag-paginator__label">Items per page:</span>
-//         <div class="ds-ag-paginator__select-wrap">
-//           <select class="ds-ag-paginator__select" aria-label="Items per page">…</select>
-//           <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+//         <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
+//         <div class="ds-select ds-ag-paginator__size-select">
+//           <!-- ds-select CSS class API -->
 //         </div>
 //       </div>
 //       <div class="ds-ag-paginator__pagination">
@@ -88,52 +87,10 @@
     white-space: nowrap;
   }
 
-  // Styled native select — 96px wide, 42px tall, matches ds-input appearance
-  &__select-wrap {
-    position: relative;
+  // ds-select — constrained width for the inline paginator layout, no label
+  &__size-select {
     width: 96px;
-    height: 42px;
     flex-shrink: 0;
-  }
-
-  &__select {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 100%;
-    height: 100%;
-    padding: 0 42px 0 16px;
-    border: 1px solid var(--color-border-input);
-    border-radius: var(--radius-sm);
-    background: var(--color-surface-input);
-    color: var(--color-text-primary);
-    font-family: var(--ref-typescale-body-medium-font);
-    font-size: var(--ref-typescale-body-medium-size);
-    font-weight: var(--ref-typescale-body-medium-weight);
-    line-height: var(--ref-typescale-body-medium-line-height);
-    letter-spacing: var(--ref-typescale-body-medium-tracking);
-    cursor: pointer;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-
-    &:focus         { outline: none; }
-    &:focus-visible {
-      border-color: var(--color-border-input-active);
-      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-    }
-    &:hover:not(:disabled) { border-color: var(--color-border-input-hover); }
-  }
-
-  // Dropdown arrow icon overlay — pointer-events: none so the select receives clicks
-  &__select-icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 42px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    color: var(--color-icon-default);
   }
 
 
