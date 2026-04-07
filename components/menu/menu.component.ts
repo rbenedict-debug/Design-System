@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
+import { DsSearchComponent } from '../search/search.component';
 
 /**
  * Onflo Design System — Menu
@@ -12,8 +13,12 @@ import { MatMenuModule, MatMenu } from '@angular/material/menu';
  * [matMenuTriggerFor] on the trigger element. Place items inside using
  * mat-menu-item + the ds-menu CSS class API for full styling.
  *
- * @example
- *   <button [matMenuTriggerFor]="myMenu.matMenu">Options</button>
+ * Positioning: 4px (--spacing-xs) gap from trigger via [yOffset]="4" on the
+ * [matMenuTriggerFor] directive. The CDK overlay auto-flips above or left/right
+ * when the panel would overflow the viewport.
+ *
+ * @example — Basic menu
+ *   <button [matMenuTriggerFor]="myMenu.matMenu" [yOffset]="4">Options</button>
  *   <ds-menu #myMenu>
  *     <button mat-menu-item class="ds-menu__item">
  *       <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>Edit
@@ -23,11 +28,37 @@ import { MatMenuModule, MatMenu } from '@angular/material/menu';
  *       <span class="ds-icon ds-icon--sm ds-menu__item-icon">delete</span>Delete
  *     </button>
  *   </ds-menu>
+ *
+ * @example — With search
+ *   <ds-menu #myMenu [search]="true" searchPlaceholder="Find action…" [(searchValue)]="query">
+ *     <!-- filtered items -->
+ *   </ds-menu>
+ *
+ * @example — With checkboxes (single or multi-select)
+ *   <button mat-menu-item class="ds-menu__item ds-menu__item--selected">
+ *     <span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled">check</span></span>
+ *     Option A
+ *   </button>
+ *   <button mat-menu-item class="ds-menu__item">
+ *     <span class="ds-menu__item-check"></span>
+ *     Option B
+ *   </button>
+ *
+ * @example — Submenu (multi-level)
+ *   <button mat-menu-item class="ds-menu__item" [matMenuTriggerFor]="subMenu.matMenu">
+ *     <span class="ds-icon ds-icon--sm ds-menu__item-icon">folder</span>
+ *     Move to
+ *     <span class="ds-menu__item-trailing"><span class="ds-icon ds-icon--sm">chevron_right</span></span>
+ *   </button>
+ *   <ds-menu #subMenu>
+ *     <button mat-menu-item class="ds-menu__item">Inbox</button>
+ *     <button mat-menu-item class="ds-menu__item">Archive</button>
+ *   </ds-menu>
  */
 @Component({
   selector: 'ds-menu',
   standalone: true,
-  imports: [CommonModule, MatMenuModule],
+  imports: [CommonModule, MatMenuModule, DsSearchComponent],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,4 +66,21 @@ import { MatMenuModule, MatMenu } from '@angular/material/menu';
 export class DsMenuComponent {
   /** Exposes the mat-menu reference for use with [matMenuTriggerFor]. */
   @ViewChild('menu') matMenu!: MatMenu;
+
+  /** Show a sticky search field at the top of the menu panel. */
+  @Input() search = false;
+
+  /** Placeholder text for the search field. */
+  @Input() searchPlaceholder = 'Search';
+
+  /** Current search value. Use [(searchValue)] for two-way binding. */
+  @Input() searchValue = '';
+
+  /** Emits on every keystroke in the search field. */
+  @Output() searchValueChange = new EventEmitter<string>();
+
+  onSearchChange(value: string): void {
+    this.searchValue = value;
+    this.searchValueChange.emit(value);
+  }
 }

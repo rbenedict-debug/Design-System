@@ -1,3 +1,18 @@
 <mat-menu #menu="matMenu" panelClass="ds-menu">
+  <!-- Search bar — pinned above the scrollable item list.
+       stopPropagation prevents mat-menu from closing on click and
+       prevents arrow keys from triggering item navigation. -->
+  <div *ngIf="search"
+       class="ds-menu__search"
+       (click)="$event.stopPropagation()"
+       (keydown)="$event.stopPropagation()">
+    <ds-search
+      [placeholder]="searchPlaceholder"
+      [value]="searchValue"
+      [ariaLabel]="searchPlaceholder"
+      (valueChange)="onSearchChange($event)"
+    />
+  </div>
+
   <ng-content />
 </mat-menu>
