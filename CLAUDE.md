@@ -40,6 +40,7 @@ components/
   menu/                    # ds-menu
   accordion/               # ds-accordion
   chip/                    # ds-chip
+  tag/                     # ds-tag (navy pill — removable / more / add variants)
   divider/                 # ds-divider
   list/                    # ds-list
   paginator/               # ds-paginator
@@ -173,6 +174,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-menu` | `MatMenuModule` | mat-menu |
 | `ds-accordion` | `MatExpansionModule` | mat-accordion + mat-expansion-panel |
 | `ds-chip` | `MatChipsModule` | mat-chip |
+| `ds-tag` | `MatChipsModule` | mat-chip — navy background + text-primary. Variants: default (removable/read-only), more (+N overflow), add (dashed-border button). Sizes: md (32px) / sm (24px) |
 | `ds-divider` | `MatDividerModule` | mat-divider |
 | `ds-list` | `MatListModule` | mat-list + mat-list-item |
 | `ds-paginator` | `MatPaginatorModule` | mat-paginator |

@@ -1,0 +1,260 @@
+// ============================================================
+// Onflo Design System — Tag Component
+// ============================================================
+//
+// A navy pill chip for showing applied tags/filters.
+// Differs from ds-chip: navy background, text-primary, grey remove icon.
+//
+// Variants:
+//   default — removable tag (read-only if no __remove button)
+//   more    — overflow count indicator (e.g. "+2") — add ds-tag--more
+//   add     — action button to create a new tag — use <button> + ds-tag--add
+//
+// Sizes: md (32px, default), sm (24px via ds-tag--sm)
+//
+// Usage (HTML class API):
+//
+//   <!-- Default — removable -->
+//   <div class="ds-tag" role="option" tabindex="0">
+//     <span class="ds-tag__label">Design</span>
+//     <button class="ds-tag__remove" aria-label="Remove Design">
+//       <span class="ds-icon ds-icon--xs">close</span>
+//     </button>
+//   </div>
+//
+//   <!-- Default — read-only (no remove button) -->
+//   <div class="ds-tag" role="option" tabindex="0">
+//     <span class="ds-tag__label">Read only</span>
+//   </div>
+//
+//   <!-- More — overflow count -->
+//   <button class="ds-tag ds-tag--more" type="button" aria-label="Show 2 more tags">
+//     <span class="ds-tag__label">+2</span>
+//   </button>
+//
+//   <!-- Add — create a new tag -->
+//   <button class="ds-tag ds-tag--add" type="button">
+//     <span class="ds-tag__label">+ tag</span>
+//   </button>
+//
+//   <!-- Tag list container -->
+//   <div class="ds-tag-list" role="listbox" aria-label="Selected tags">
+//     ...
+//   </div>
+// ============================================================
+
+.ds-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  height: 32px;
+  padding: 0 var(--spacing-md);
+  background: var(--color-surface-accent-navy);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  color: var(--color-text-primary);
+  cursor: default;
+  overflow: hidden;
+  position: relative;
+
+  // Overlay pseudo-element — sits above bg, below content
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  // ── Size SM ──────────────────────────────────────────────────────────────────
+
+  &--sm {
+    height: 24px;
+    padding: 0 var(--spacing-sm);
+  }
+
+  // ── Focus ring — keyboard only ────────────────────────────────────────────────
+
+  &:focus         { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+  // ── Hover ─────────────────────────────────────────────────────────────────────
+
+  &:hover:not(.is-disabled):not(.is-error) {
+    border-color: var(--color-border-hover);
+
+    &::after { background: var(--overlay-hovered); }
+  }
+
+  // ── Pressed ───────────────────────────────────────────────────────────────────
+
+  &:active:not(.is-disabled):not(.is-error) {
+    border-color: var(--color-border-active);
+
+    &::after { background: var(--overlay-pressed); }
+  }
+
+  // ── Error state ───────────────────────────────────────────────────────────────
+
+  &.is-error {
+    background: var(--color-surface-error);
+    color: var(--color-text-error);
+
+    .ds-tag__remove { color: var(--color-icon-error); }
+  }
+
+  // ── Disabled state ────────────────────────────────────────────────────────────
+
+  &.is-disabled {
+    background: var(--color-surface-disabled);
+    color: var(--color-text-disabled);
+    pointer-events: none;
+
+    .ds-tag__remove { color: var(--color-icon-disabled); }
+  }
+
+  // ── More variant — overflow count ─────────────────────────────────────────────
+
+  &--more {
+    cursor: pointer;
+  }
+
+  // ── Add variant — action button, dashed border ────────────────────────────────
+
+  &--add {
+    background: transparent;
+    border-style: dashed;
+    border-color: var(--color-border-primary);
+    cursor: pointer;
+    appearance: none;
+
+    &:hover:not(:disabled):not(.is-disabled):not(.is-error) {
+      border-style: solid;
+      border-color: var(--color-border-hover);
+
+      &::after { background: var(--overlay-hovered); }
+    }
+
+    &:active:not(:disabled):not(.is-disabled):not(.is-error) {
+      border-style: solid;
+      border-color: var(--color-border-active);
+
+      &::after { background: var(--overlay-pressed); }
+    }
+
+    &:disabled,
+    &.is-disabled {
+      background: transparent;
+      border-color: var(--color-border-subtle);
+      color: var(--color-text-disabled);
+      pointer-events: none;
+    }
+
+    &.is-error {
+      background: transparent;
+      border-style: dashed;
+      border-color: var(--color-border-input-error);
+      color: var(--color-text-error);
+    }
+  }
+
+  // ── Label ────────────────────────────────────────────────────────────────────
+
+  &__label {
+    white-space: nowrap;
+    position: relative; // above ::after overlay
+    z-index: 1;
+  }
+
+  // ── Remove button ─────────────────────────────────────────────────────────────
+
+  &__remove {
+    appearance: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-icon-default);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+    position: relative; // above ::after overlay
+    z-index: 1;
+    transition: background 0.12s;
+
+    &:hover         { background: var(--overlay-hovered); }
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+  }
+}
+
+// ── Tag list container ────────────────────────────────────────────────────────
+
+.ds-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+// ── Angular Material mat-chip overrides — scoped to ds-tag ────────────────────
+
+.ds-tag.mat-mdc-chip {
+  // Size and shape
+  --mdc-chip-container-height: 32px;
+  --mdc-chip-container-shape: var(--radius-full);
+
+  // Colors — default state
+  --mdc-chip-flat-container-color: var(--color-surface-accent-navy);
+  --mdc-chip-outline-color: transparent;
+  --mdc-chip-label-text-color: var(--color-text-primary);
+  --mdc-chip-label-text-font: var(--ref-typescale-label-medium-font);
+  --mdc-chip-label-text-size: var(--ref-typescale-label-medium-size);
+  --mdc-chip-label-text-weight: var(--ref-typescale-label-medium-weight-prominent);
+  --mdc-chip-label-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mdc-chip-label-text-tracking: var(--ref-typescale-label-medium-tracking);
+
+  // Remove button
+  --mat-chip-trailing-action-color: var(--color-icon-default);
+  --mat-chip-disabled-trailing-action-color: var(--color-icon-disabled);
+
+  // Suppress MDC state layers — interaction states handled by .ds-tag rules
+  --mat-chip-hover-state-layer-opacity: 0;
+  --mat-chip-focus-state-layer-opacity: 0;
+  --mat-chip-selected-state-layer-opacity: 0;
+
+  --mdc-chip-disabled-label-text-color: var(--color-text-disabled);
+
+  &.ds-tag--sm {
+    --mdc-chip-container-height: 24px;
+  }
+
+  &:hover:not(.mat-mdc-chip-disabled):not(.is-error) {
+    --mdc-chip-outline-color: var(--color-border-hover);
+  }
+
+  &:active:not(.mat-mdc-chip-disabled):not(.is-error) {
+    --mdc-chip-outline-color: var(--color-border-active);
+  }
+
+  &.is-error {
+    --mdc-chip-flat-container-color: var(--color-surface-error);
+    --mdc-chip-outline-color: transparent;
+    --mdc-chip-label-text-color: var(--color-text-error);
+    --mat-chip-trailing-action-color: var(--color-icon-error);
+  }
+
+  &.is-disabled,
+  &.mat-mdc-chip-disabled {
+    --mdc-chip-flat-container-color: var(--color-surface-disabled);
+    --mdc-chip-label-text-color: var(--color-text-disabled);
+  }
+}

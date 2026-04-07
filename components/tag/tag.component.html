@@ -1,0 +1,50 @@
+<!-- Default variant — removable or read-only tag -->
+<mat-chip
+  *ngIf="variant === 'default'"
+  class="ds-tag"
+  [class.ds-tag--sm]="size === 'sm'"
+  [class.is-error]="error"
+  [class.is-disabled]="disabled"
+  [disabled]="disabled"
+  (removed)="removed.emit()"
+>
+  <span class="ds-tag__label">{{ label }}</span>
+  <button
+    *ngIf="removable"
+    matChipRemove
+    class="ds-tag__remove"
+    [attr.aria-label]="'Remove ' + label"
+  >
+    <span class="ds-icon ds-icon--xs">close</span>
+  </button>
+</mat-chip>
+
+<!-- More variant — overflow count -->
+<button
+  *ngIf="variant === 'more'"
+  type="button"
+  class="ds-tag ds-tag--more"
+  [class.ds-tag--sm]="size === 'sm'"
+  [class.is-error]="error"
+  [class.is-disabled]="disabled"
+  [disabled]="disabled"
+  [attr.aria-label]="'Show ' + moreCount + ' more tags'"
+  (click)="moreClick.emit()"
+>
+  <span class="ds-tag__label">+{{ moreCount }}</span>
+</button>
+
+<!-- Add variant — create a new tag -->
+<button
+  *ngIf="variant === 'add'"
+  type="button"
+  class="ds-tag ds-tag--add"
+  [class.ds-tag--sm]="size === 'sm'"
+  [class.is-error]="error"
+  [class.is-disabled]="disabled"
+  [disabled]="disabled"
+  aria-label="Add tag"
+  (click)="add.emit()"
+>
+  <span class="ds-tag__label">+ tag</span>
+</button>

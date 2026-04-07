@@ -19,12 +19,13 @@
       --ref-color-primary-blue-bg-soft: #F5F8FC;
       --ref-color-neutral-text-default: #2D3638;
       --ref-color-neutral-text-soft: #73737F;
+      --ref-color-neutral-border-primary: #9F9F9F;
       --ref-color-neutral-text-disabled: #9F9F9F;
       --ref-color-neutral-bg-default: #F6F6F6;
       --ref-color-neutral-bg-soft: #FCFCFC;
       --ref-color-neutral-bg-disabled: #F6F6F6;
       --ref-color-neutral-border-soft: #CACACA;
-      --ref-color-neutral-white: #FFFFFF;
+      --ref-color-neutral-surface: #FFFFFF;
       --ref-color-neutral-tooltip: #000000;
       --ref-color-neutral-scrim: rgba(0, 0, 0, 0.4);
       --ref-color-neutral-scroll: rgba(115, 115, 127, 0.3);
@@ -39,8 +40,8 @@
       --ref-color-accent-green-bg: #EEFCE4;
       --ref-color-accent-yellow-default: #FFBF00;
       --ref-color-accent-teal-default: #159B8E;
-      --ref-color-accent-teal-bg: #EDFAF8;
       --ref-color-accent-yellow-bg: #FFF3D8;
+      --ref-color-accent-teal-bg: #EDFAF8;
       --ref-color-accent-orange-default: #EB6E08;
       --ref-color-accent-orange-bg: #FFF4EC;
       --ref-color-accent-purple-default: #622682;
@@ -48,7 +49,6 @@
       --ref-color-accent-pink-default: #E91E63;
       --ref-color-accent-pink-bg: #FFF0F5;
       --ref-color-accent-accordion-border: #E3ECF8;
-      --ref-color-neutral-border-primary: #9F9F9F;
       --ref-radius-none: 0px;
       --ref-radius-sm: 6px;
       --ref-radius-md: 8px;
@@ -88,16 +88,19 @@
       --ref-typescale-title-h4-tracking: 0.1px;
       --ref-typescale-body-large-font: var(--ref-typeface-plain);
       --ref-typescale-body-large-weight: var(--ref-typeface-weight-regular);
+      --ref-typescale-body-large-weight-prominent: var(--ref-typeface-weight-medium);
       --ref-typescale-body-large-size: 16px;
       --ref-typescale-body-large-line-height: 24px;
       --ref-typescale-body-large-tracking: 0.15px;
       --ref-typescale-body-medium-font: var(--ref-typeface-plain);
       --ref-typescale-body-medium-weight: var(--ref-typeface-weight-regular);
+      --ref-typescale-body-medium-weight-prominent: var(--ref-typeface-weight-medium);
       --ref-typescale-body-medium-size: 14px;
       --ref-typescale-body-medium-line-height: 20px;
       --ref-typescale-body-medium-tracking: 0.25px;
       --ref-typescale-body-small-font: var(--ref-typeface-plain);
       --ref-typescale-body-small-weight: var(--ref-typeface-weight-regular);
+      --ref-typescale-body-small-weight-prominent: var(--ref-typeface-weight-medium);
       --ref-typescale-body-small-size: 12px;
       --ref-typescale-body-small-line-height: 16px;
       --ref-typescale-body-small-tracking: 0.4px;
@@ -120,7 +123,7 @@
       --ref-typescale-label-small-line-height: 12px;
       --ref-typescale-label-small-tracking: 0.4px;
       --ref-shadow-elevation-1: rgba(65, 65, 65, 0.06);
-      --ref-shadow-elevation-2: rgba(65, 65, 65, 0.10);
+      --ref-shadow-elevation-2: rgba(65, 65, 65, 0.1);
       --ref-shadow-elevation-3: rgba(65, 65, 65, 0.12);
       --ref-overlay-hover: rgba(67, 173, 242, 0.08);
       --ref-overlay-pressed: rgba(67, 173, 242, 0.12);
@@ -135,26 +138,29 @@
       --ref-overlay-yellow-focused: rgba(255, 191, 0, 0.12);
       --ref-overlay-yellow-dragged: rgba(255, 191, 0, 0.16);
       --ref-spacing-none: 0px;
-      --ref-spacing-xsmall: 4px;
-      --ref-spacing-small: 8px;
-      --ref-spacing-medium: 12px;
-      --ref-spacing-large: 16px;
-      --ref-spacing-xlarge: 24px;
-      --ref-spacing-page-spacing: 48px;
+      --ref-spacing-xs: 4px;
+      --ref-spacing-sm: 8px;
+      --ref-spacing-md: 12px;
+      --ref-spacing-lg: 16px;
+      --ref-spacing-xl: 24px;
+      --ref-spacing-page: 48px;
+      --ref-table-cell-height-comfort-height: 68px;
+      --ref-table-cell-height-standard-height: 56px;
+      --ref-table-cell-height-compact-height: 42px;
 
       /* ── Semantic design tokens ── */
-      --color-surface-page: var(--ref-color-neutral-white);
+      --color-surface-page: var(--ref-color-neutral-surface);
       --color-surface-default: var(--ref-color-neutral-bg-default);
       --color-surface-subtle: var(--ref-color-neutral-bg-soft);
       --color-surface-disabled: var(--ref-color-neutral-bg-disabled);
       --color-surface-nav: var(--ref-color-primary-blue-bg-soft);
       --color-surface-nav-active: var(--ref-color-primary-blue-default);
       --color-surface-container: var(--ref-color-primary-blue-bg-soft);
-      --color-surface-overlay: var(--ref-color-neutral-white);
+      --color-surface-overlay: var(--ref-color-neutral-surface);
       --color-surface-scrim: var(--ref-color-neutral-scrim);
       --color-surface-tooltip: var(--ref-color-neutral-tooltip);
       --color-surface-scroll: var(--ref-color-neutral-scroll);
-      --color-surface-input: var(--ref-color-neutral-white);
+      --color-surface-input: var(--ref-color-neutral-surface);
       --color-surface-input-disabled: var(--ref-color-neutral-bg-disabled);
       --color-surface-error: var(--ref-color-accent-red-bg);
       --color-surface-warning: var(--ref-color-accent-yellow-bg);
@@ -184,26 +190,26 @@
       --color-text-secondary: var(--ref-color-neutral-text-soft);
       --color-text-placeholder: var(--ref-color-neutral-text-disabled);
       --color-text-disabled: var(--ref-color-neutral-text-disabled);
-      --color-text-inverse: var(--ref-color-neutral-white);
+      --color-text-inverse: var(--ref-color-neutral-surface);
       --color-text-brand: var(--ref-color-primary-blue-default);
-      --color-text-on-brand: var(--ref-color-neutral-white);
+      --color-text-on-brand: var(--ref-color-neutral-surface);
       --color-text-link: var(--ref-color-primary-blue-default);
       --color-text-error: var(--ref-color-accent-red-default);
       --color-text-warning: var(--ref-color-neutral-text-default);
       --color-text-success: var(--ref-color-neutral-text-default);
       --color-text-info: var(--ref-color-neutral-text-default);
-      --color-text-tooltip: var(--ref-color-neutral-white);
-      --color-text-on-bold: var(--ref-color-neutral-white);
+      --color-text-tooltip: var(--ref-color-neutral-surface);
+      --color-text-on-bold: var(--ref-color-neutral-surface);
       --color-text-accent-navy: var(--ref-color-accent-darkblue-default);
       --color-text-accent-red: var(--ref-color-accent-red-default);
       --color-icon-default: var(--ref-color-neutral-text-default);
       --color-icon-subtle: var(--ref-color-neutral-text-soft);
       --color-icon-disabled: var(--ref-color-neutral-text-disabled);
-      --color-icon-inverse: var(--ref-color-neutral-white);
+      --color-icon-inverse: var(--ref-color-neutral-surface);
       --color-icon-brand: var(--ref-color-primary-blue-default);
-      --color-icon-on-brand: var(--ref-color-neutral-white);
+      --color-icon-on-brand: var(--ref-color-neutral-surface);
       --color-icon-nav: var(--ref-color-neutral-text-default);
-      --color-icon-nav-active: var(--ref-color-neutral-white);
+      --color-icon-nav-active: var(--ref-color-neutral-surface);
       --color-icon-error: var(--ref-color-accent-red-default);
       --color-icon-warning: var(--ref-color-accent-yellow-default);
       --color-icon-success: var(--ref-color-accent-green-default);
@@ -221,12 +227,12 @@
       --color-border-secondary: var(--ref-color-neutral-border-soft);
       --color-border-subtle: var(--ref-color-neutral-border-subtle);
       --color-border-strong: var(--ref-color-neutral-text-soft);
-      --color-border-inverse: var(--ref-color-neutral-white);
+      --color-border-inverse: var(--ref-color-neutral-surface);
       --color-border-accordion: var(--ref-color-accent-accordion-border);
       --color-border-ada-focus-ring: var(--ref-color-accent-lightblue-default);
       --color-border-hover: var(--ref-color-accent-lightblue-default);
       --color-border-active: var(--ref-color-primary-blue-default);
-      --color-border-input: var(--ref-color-neutral-text-disabled);
+      --color-border-input: var(--ref-color-neutral-border-primary);
       --color-border-input-hover: var(--ref-color-accent-lightblue-default);
       --color-border-input-active: var(--ref-color-primary-blue-default);
       --color-border-input-error: var(--ref-color-accent-red-default);
@@ -244,6 +250,13 @@
       --color-border-accent-orange: var(--ref-color-accent-orange-default);
       --color-border-accent-purple: var(--ref-color-accent-purple-default);
       --color-border-accent-pink: var(--ref-color-accent-pink-default);
+      --spacing-none: var(--ref-spacing-none);
+      --spacing-xs: var(--ref-spacing-xs);
+      --spacing-sm: var(--ref-spacing-sm);
+      --spacing-md: var(--ref-spacing-md);
+      --spacing-lg: var(--ref-spacing-lg);
+      --spacing-xl: var(--ref-spacing-xl);
+      --spacing-page: var(--ref-spacing-page);
       --radius-none: var(--ref-radius-none);
       --radius-sm: var(--ref-radius-sm);
       --radius-md: var(--ref-radius-md);
@@ -265,13 +278,9 @@
       --overlay-accent-yellow-pressed: var(--ref-overlay-yellow-pressed);
       --overlay-accent-yellow-focused: var(--ref-overlay-yellow-focused);
       --overlay-accent-yellow-dragged: var(--ref-overlay-yellow-dragged);
-      --spacing-none: var(--ref-spacing-none);
-      --spacing-xs: var(--ref-spacing-xsmall);
-      --spacing-sm: var(--ref-spacing-small);
-      --spacing-md: var(--ref-spacing-medium);
-      --spacing-lg: var(--ref-spacing-large);
-      --spacing-xl: var(--ref-spacing-xlarge);
-      --spacing-page: var(--ref-spacing-page-spacing);
+      --color-table-cell-height-comfortable-height: var(--ref-table-cell-height-comfort-height);
+      --color-table-cell-height-standard-height: var(--ref-table-cell-height-standard-height);
+      --color-table-cell-height-compact-height: var(--ref-table-cell-height-compact-height);
     }
 
     [data-theme="dark"] {
@@ -280,12 +289,13 @@
       --ref-color-primary-blue-bg-soft: #0A1929;
       --ref-color-neutral-text-default: #F0F4F8;
       --ref-color-neutral-text-soft: #8DA4BE;
+      --ref-color-neutral-border-primary: #4A6580;
       --ref-color-neutral-text-disabled: #4A6580;
       --ref-color-neutral-bg-default: #112236;
       --ref-color-neutral-bg-soft: #0D1B2A;
       --ref-color-neutral-bg-disabled: #112236;
       --ref-color-neutral-border-soft: #112236;
-      --ref-color-neutral-white: #1C3D61;
+      --ref-color-neutral-surface: #1C3D61;
       --ref-color-neutral-tooltip: #2D3638;
       --ref-color-neutral-scrim: rgba(0, 0, 0, 0.6);
       --ref-color-neutral-scroll: rgba(141, 164, 190, 0.3);
@@ -300,8 +310,8 @@
       --ref-color-accent-green-bg: #0F2518;
       --ref-color-accent-yellow-default: #FFD04D;
       --ref-color-accent-teal-default: #1EC4B4;
-      --ref-color-accent-teal-bg: #0A2220;
       --ref-color-accent-yellow-bg: #261E07;
+      --ref-color-accent-teal-bg: #0A2220;
       --ref-color-accent-orange-default: #FF8C35;
       --ref-color-accent-orange-bg: #261508;
       --ref-color-accent-purple-default: #9B59C4;
@@ -309,7 +319,6 @@
       --ref-color-accent-pink-default: #FF5C8A;
       --ref-color-accent-pink-bg: #260A14;
       --ref-color-accent-accordion-border: #212324;
-      --ref-color-neutral-border-primary: #4A6580;
       --ref-radius-none: 0px;
       --ref-radius-sm: 6px;
       --ref-radius-md: 8px;
@@ -349,16 +358,19 @@
       --ref-typescale-title-h4-tracking: 0.1px;
       --ref-typescale-body-large-font: var(--ref-typeface-plain);
       --ref-typescale-body-large-weight: var(--ref-typeface-weight-regular);
+      --ref-typescale-body-large-weight-prominent: var(--ref-typeface-weight-medium);
       --ref-typescale-body-large-size: 16px;
       --ref-typescale-body-large-line-height: 24px;
       --ref-typescale-body-large-tracking: 0.15px;
       --ref-typescale-body-medium-font: var(--ref-typeface-plain);
       --ref-typescale-body-medium-weight: var(--ref-typeface-weight-regular);
+      --ref-typescale-body-medium-weight-prominent: var(--ref-typeface-weight-medium);
       --ref-typescale-body-medium-size: 14px;
       --ref-typescale-body-medium-line-height: 20px;
       --ref-typescale-body-medium-tracking: 0.25px;
       --ref-typescale-body-small-font: var(--ref-typeface-plain);
       --ref-typescale-body-small-weight: var(--ref-typeface-weight-regular);
+      --ref-typescale-body-small-weight-prominent: var(--ref-typeface-weight-medium);
       --ref-typescale-body-small-size: 12px;
       --ref-typescale-body-small-line-height: 16px;
       --ref-typescale-body-small-tracking: 0.4px;
@@ -380,8 +392,8 @@
       --ref-typescale-label-small-size: 12px;
       --ref-typescale-label-small-line-height: 12px;
       --ref-typescale-label-small-tracking: 0.4px;
-      --ref-shadow-elevation-1: rgba(0, 0, 0, 0.10);
-      --shadow-elevation-1: rgba(0, 0, 0, 0.10);
+      --ref-shadow-elevation-1: rgba(0, 0, 0, 0.1);
+      --shadow-elevation-1: rgba(0, 0, 0, 0.1);
       --ref-shadow-elevation-2: rgba(0, 0, 0, 0.14);
       --shadow-elevation-2: rgba(0, 0, 0, 0.14);
       --ref-shadow-elevation-3: rgba(0, 0, 0, 0.18);
@@ -411,12 +423,15 @@
       --ref-overlay-yellow-dragged: rgba(255, 208, 77, 0.16);
       --overlay-yellow-dragged: rgba(255, 208, 77, 0.16);
       --ref-spacing-none: 0px;
-      --ref-spacing-xsmall: 4px;
-      --ref-spacing-small: 8px;
-      --ref-spacing-medium: 12px;
-      --ref-spacing-large: 16px;
-      --ref-spacing-xlarge: 24px;
-      --ref-spacing-page-spacing: 48px;
+      --ref-spacing-xs: 4px;
+      --ref-spacing-sm: 8px;
+      --ref-spacing-md: 12px;
+      --ref-spacing-lg: 16px;
+      --ref-spacing-xl: 24px;
+      --ref-spacing-page: 48px;
+      --ref-table-cell-height-comfort-height: 68px;
+      --ref-table-cell-height-standard-height: 56px;
+      --ref-table-cell-height-compact-height: 42px;
     }
   </style>
 <!-- ONFLO-TOKENS:END -->
@@ -2676,10 +2691,6 @@
   flex-direction: column;
   gap: var(--spacing-xs);
 }
-/* Positional anchor for the dropdown — wraps __field + __dropdown only */
-.ds-select__field-row {
-  position: relative;
-}
 .ds-select__label {
   font-family: var(--ref-typeface-brand);
   font-size: var(--ref-typescale-label-medium-size);
@@ -2703,7 +2714,6 @@
   cursor: pointer;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   position: relative;
-  /* Button resets — no-op on div in CSS class API */
   appearance: none;
   -webkit-appearance: none;
   outline: none;
@@ -2716,18 +2726,15 @@
 .ds-select__field:hover {
   border-color: var(--color-border-input-hover);
 }
+.ds-select__field:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
 .ds-select:focus-within .ds-select__field {
   border-color: var(--color-border-input-active);
 }
 .ds-select:focus-within:not([data-mouse-focus]) .ds-select__field {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
-/* Focus ring for button.ds-select__field (Angular component) */
-.ds-select__field:focus-visible {
-  border-color: var(--color-border-input-active);
-  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-}
-/* Value span inside the button trigger (Angular component) */
 .ds-select__value {
   flex: 1;
   min-width: 0;
@@ -2817,18 +2824,67 @@
   color: var(--color-text-disabled);
 }
 
-/* Dropdown panel — teleported to <body> on open, positioned via JS */
-.ds-select__dropdown {
-  position: fixed;
-  z-index: 9999;
+.ds-select .mat-mdc-form-field {
+  width: 100%;
+}
+.ds-select {
+  --mat-form-field-container-height: 42px;
+  --mat-form-field-container-vertical-padding: 0px;
+  --mdc-outlined-text-field-container-shape: var(--radius-sm);
+  --mdc-outlined-text-field-outline-width: 1px;
+  --mdc-outlined-text-field-outline-color: var(--color-border-input);
+  --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
+  --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
+  --mdc-outlined-text-field-input-text-font: var(--ref-typeface-brand);
+  --mdc-outlined-text-field-input-text-size: var(--ref-typescale-label-medium-size);
+  --mdc-outlined-text-field-input-text-weight: var(--ref-typeface-weight-regular);
+  --mdc-outlined-text-field-input-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mdc-outlined-text-field-input-text-color: var(--color-text-primary);
+  --mdc-outlined-text-field-disabled-input-text-color: var(--color-text-disabled);
+  --mdc-outlined-text-field-input-text-placeholder-color: var(--color-text-placeholder);
+}
+.ds-select .mat-mdc-floating-label,
+.ds-select .mdc-floating-label {
   display: none;
 }
-.ds-select__dropdown.is-open {
-  display: block;
+.ds-select .mat-mdc-form-field-subscript-wrapper {
+  display: none;
 }
-.ds-select__dropdown .ds-menu {
-  max-width: none;
-  width: 100%;
+.ds-select .mat-mdc-text-field-wrapper {
+  background: var(--color-surface-input);
+  padding: 0 var(--spacing-md);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+.ds-select:focus-within:not(.is-error) .ds-select__arrow {
+  color: var(--color-icon-brand);
+}
+.ds-select:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-select.is-error {
+  --mdc-outlined-text-field-outline-color: var(--color-border-input-error);
+  --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+  --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+}
+.ds-select.is-error:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-select.is-disabled {
+  --mdc-outlined-text-field-disabled-outline-color: var(--color-border-subtle);
+  --mdc-outlined-text-field-disabled-outline-opacity: 1;
+}
+.ds-select.is-disabled .mat-mdc-text-field-wrapper {
+  background: var(--color-surface-input-disabled);
+}
+.ds-select.is-disabled .ds-select__label {
+  color: var(--color-text-disabled);
+}
+.ds-select.is-disabled .ds-select__arrow {
+  color: var(--color-icon-disabled);
+}
+.ds-select.is-disabled .ds-select__helper {
+  color: var(--color-text-disabled);
 }
 
 .ds-textarea {
@@ -4074,7 +4130,7 @@
   position: relative;
 }
 .ds-chip::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -4190,7 +4246,9 @@
 .mat-mdc-chip:hover:not(.mat-mdc-chip-disabled):not(.is-error) {
   --mdc-chip-outline-color: var(--color-border-hover);
 }
-.mat-mdc-chip:active:not(.mat-mdc-chip-disabled):not(.is-error),
+.mat-mdc-chip:active:not(.mat-mdc-chip-disabled):not(.is-error) {
+  --mdc-chip-outline-color: var(--color-border-active);
+}
 .mat-mdc-chip.is-active:not(.mat-mdc-chip-disabled) {
   --mdc-chip-outline-color: var(--color-border-active);
 }
@@ -4200,10 +4258,185 @@
   --mdc-chip-label-text-color: var(--color-text-error);
   --mat-chip-trailing-action-color: var(--color-icon-error);
 }
-.mat-mdc-chip.is-disabled,
-.mat-mdc-chip.mat-mdc-chip-disabled {
+.mat-mdc-chip.is-disabled, .mat-mdc-chip.mat-mdc-chip-disabled {
   --mdc-chip-flat-container-color: var(--color-surface-disabled);
   --mdc-chip-outline-color: var(--color-border-subtle);
+  --mdc-chip-label-text-color: var(--color-text-disabled);
+}
+
+.ds-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  height: 32px;
+  padding: 0 var(--spacing-md);
+  background: var(--color-surface-accent-navy);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  color: var(--color-text-primary);
+  cursor: default;
+  overflow: hidden;
+  position: relative;
+}
+.ds-tag::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ds-tag--sm {
+  height: 24px;
+  padding: 0 var(--spacing-sm);
+}
+.ds-tag:focus {
+  outline: none;
+}
+.ds-tag:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-tag:hover:not(.is-disabled):not(.is-error) {
+  border-color: var(--color-border-hover);
+}
+.ds-tag:hover:not(.is-disabled):not(.is-error)::after {
+  background: var(--overlay-hovered);
+}
+.ds-tag:active:not(.is-disabled):not(.is-error) {
+  border-color: var(--color-border-active);
+}
+.ds-tag:active:not(.is-disabled):not(.is-error)::after {
+  background: var(--overlay-pressed);
+}
+.ds-tag.is-error {
+  background: var(--color-surface-error);
+  color: var(--color-text-error);
+}
+.ds-tag.is-error .ds-tag__remove {
+  color: var(--color-icon-error);
+}
+.ds-tag.is-disabled {
+  background: var(--color-surface-disabled);
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
+.ds-tag.is-disabled .ds-tag__remove {
+  color: var(--color-icon-disabled);
+}
+.ds-tag--more {
+  cursor: pointer;
+}
+.ds-tag--add {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--color-border-primary);
+  cursor: pointer;
+  appearance: none;
+}
+.ds-tag--add:hover:not(:disabled):not(.is-disabled):not(.is-error) {
+  border-style: solid;
+  border-color: var(--color-border-hover);
+}
+.ds-tag--add:hover:not(:disabled):not(.is-disabled):not(.is-error)::after {
+  background: var(--overlay-hovered);
+}
+.ds-tag--add:active:not(:disabled):not(.is-disabled):not(.is-error) {
+  border-style: solid;
+  border-color: var(--color-border-active);
+}
+.ds-tag--add:active:not(:disabled):not(.is-disabled):not(.is-error)::after {
+  background: var(--overlay-pressed);
+}
+.ds-tag--add:disabled, .ds-tag--add.is-disabled {
+  background: transparent;
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
+.ds-tag--add.is-error {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--color-border-input-error);
+  color: var(--color-text-error);
+}
+.ds-tag__label {
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+.ds-tag__remove {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-icon-default);
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: background 0.12s;
+}
+.ds-tag__remove:hover {
+  background: var(--overlay-hovered);
+}
+.ds-tag__remove:focus {
+  outline: none;
+}
+.ds-tag__remove:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring);
+}
+
+.ds-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+.ds-tag.mat-mdc-chip {
+  --mdc-chip-container-height: 32px;
+  --mdc-chip-container-shape: var(--radius-full);
+  --mdc-chip-flat-container-color: var(--color-surface-accent-navy);
+  --mdc-chip-outline-color: transparent;
+  --mdc-chip-label-text-color: var(--color-text-primary);
+  --mdc-chip-label-text-font: var(--ref-typescale-label-medium-font);
+  --mdc-chip-label-text-size: var(--ref-typescale-label-medium-size);
+  --mdc-chip-label-text-weight: var(--ref-typescale-label-medium-weight-prominent);
+  --mdc-chip-label-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mdc-chip-label-text-tracking: var(--ref-typescale-label-medium-tracking);
+  --mat-chip-trailing-action-color: var(--color-icon-default);
+  --mat-chip-disabled-trailing-action-color: var(--color-icon-disabled);
+  --mat-chip-hover-state-layer-opacity: 0;
+  --mat-chip-focus-state-layer-opacity: 0;
+  --mat-chip-selected-state-layer-opacity: 0;
+  --mdc-chip-disabled-label-text-color: var(--color-text-disabled);
+}
+.ds-tag.mat-mdc-chip.ds-tag--sm {
+  --mdc-chip-container-height: 24px;
+}
+.ds-tag.mat-mdc-chip:hover:not(.mat-mdc-chip-disabled):not(.is-error) {
+  --mdc-chip-outline-color: var(--color-border-hover);
+}
+.ds-tag.mat-mdc-chip:active:not(.mat-mdc-chip-disabled):not(.is-error) {
+  --mdc-chip-outline-color: var(--color-border-active);
+}
+.ds-tag.mat-mdc-chip.is-error {
+  --mdc-chip-flat-container-color: var(--color-surface-error);
+  --mdc-chip-outline-color: transparent;
+  --mdc-chip-label-text-color: var(--color-text-error);
+  --mat-chip-trailing-action-color: var(--color-icon-error);
+}
+.ds-tag.mat-mdc-chip.is-disabled, .ds-tag.mat-mdc-chip.mat-mdc-chip-disabled {
+  --mdc-chip-flat-container-color: var(--color-surface-disabled);
   --mdc-chip-label-text-color: var(--color-text-disabled);
 }
 
@@ -4706,8 +4939,14 @@
 }
 
 @keyframes ds-snackbar-enter {
-  from { transform: translateY(-8px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+  from {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 .ds-snackbar {
   display: flex;
@@ -4719,9 +4958,7 @@
   background: var(--color-surface-tooltip);
   color: var(--color-text-inverse);
   border-radius: var(--radius-sm);
-  box-shadow:
-    0 3px 12px 6px var(--shadow-elevation-3),
-    0 4px 4px 0 var(--shadow-elevation-3);
+  box-shadow: 0 3px 12px 6px var(--shadow-elevation-3), 0 4px 4px 0 var(--shadow-elevation-3);
   animation: ds-snackbar-enter 0.2s ease;
 }
 .ds-snackbar--text-action {
@@ -4779,16 +5016,24 @@
   flex-shrink: 0;
 }
 .ds-snackbar__close::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: var(--radius-sm);
   pointer-events: none;
 }
-.ds-snackbar__close:hover::after  { background: rgba(255, 255, 255, 0.12); }
-.ds-snackbar__close:active::after { background: rgba(255, 255, 255, 0.18); }
-.ds-snackbar__close:focus         { outline: none; }
-.ds-snackbar__close:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+.ds-snackbar__close:hover::after {
+  background: rgba(255, 255, 255, 0.12);
+}
+.ds-snackbar__close:active::after {
+  background: rgba(255, 255, 255, 0.18);
+}
+.ds-snackbar__close:focus {
+  outline: none;
+}
+.ds-snackbar__close:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
 
 .mat-mdc-snack-bar-container.ds-snackbar-panel {
   background: transparent;
@@ -6295,6 +6540,7 @@
       <a class="nav-link" href="#avatar" onclick="setActive(this)"><span class="nav-dot"></span>Avatar</a>
       <a class="nav-link" href="#label" onclick="setActive(this)"><span class="nav-dot"></span>Label</a>
       <a class="nav-link" href="#chip" onclick="setActive(this)"><span class="nav-dot"></span>Chip</a>
+      <a class="nav-link" href="#tag" onclick="setActive(this)"><span class="nav-dot"></span>Tag</a>
       <a class="nav-link" href="#tabs" onclick="setActive(this)"><span class="nav-dot"></span>Tabs</a>
       <a class="nav-link" href="#list" onclick="setActive(this)"><span class="nav-dot"></span>List Item</a>
 
@@ -8899,6 +9145,138 @@
                     <span class="ds-icon ds-icon--sm">close</span>
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section" id="tag">
+        <div class="section-header">
+          <h2 class="section-title">Tag</h2>
+          <p class="section-desc">Navy pill chip for showing applied tags/filters. Background is <code>--color-surface-accent-navy</code> with <code>--color-text-primary</code>. Three variants: <strong>default</strong> (removable or read-only), <strong>more</strong> (overflow count), <strong>add</strong> (dashed-border action button). Sizes: MD (32px) and SM (24px). Source: <code>components/tag/_tag.scss</code></p>
+        </div>
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">MD — removable</div>
+            <div class="demo-row-items">
+              <div class="ds-tag" role="option" tabindex="0">
+                <span class="ds-tag__label">Design</span>
+                <button class="ds-tag__remove" aria-label="Remove Design">
+                  <span class="ds-icon ds-icon--xs">close</span>
+                </button>
+              </div>
+              <div class="ds-tag is-error" role="option" tabindex="0">
+                <span class="ds-tag__label">Error</span>
+                <button class="ds-tag__remove" aria-label="Remove Error">
+                  <span class="ds-icon ds-icon--xs">close</span>
+                </button>
+              </div>
+              <div class="ds-tag is-disabled" role="option" aria-disabled="true">
+                <span class="ds-tag__label">Disabled</span>
+                <button class="ds-tag__remove" aria-label="Remove Disabled" disabled>
+                  <span class="ds-icon ds-icon--xs">close</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">MD — read-only</div>
+            <div class="demo-row-items">
+              <div class="ds-tag" role="option" tabindex="0">
+                <span class="ds-tag__label">Design</span>
+              </div>
+              <div class="ds-tag is-error" role="option" tabindex="0">
+                <span class="ds-tag__label">Error</span>
+              </div>
+              <div class="ds-tag is-disabled" role="option" aria-disabled="true">
+                <span class="ds-tag__label">Disabled</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">SM — removable</div>
+            <div class="demo-row-items">
+              <div class="ds-tag ds-tag--sm" role="option" tabindex="0">
+                <span class="ds-tag__label">Design</span>
+                <button class="ds-tag__remove" aria-label="Remove Design">
+                  <span class="ds-icon ds-icon--xs">close</span>
+                </button>
+              </div>
+              <div class="ds-tag ds-tag--sm is-error" role="option" tabindex="0">
+                <span class="ds-tag__label">Error</span>
+                <button class="ds-tag__remove" aria-label="Remove Error">
+                  <span class="ds-icon ds-icon--xs">close</span>
+                </button>
+              </div>
+              <div class="ds-tag ds-tag--sm is-disabled" role="option" aria-disabled="true">
+                <span class="ds-tag__label">Disabled</span>
+                <button class="ds-tag__remove" aria-label="Remove Disabled" disabled>
+                  <span class="ds-icon ds-icon--xs">close</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">More (overflow)</div>
+            <div class="demo-row-items">
+              <button class="ds-tag ds-tag--more" type="button" aria-label="Show 2 more tags">
+                <span class="ds-tag__label">+2</span>
+              </button>
+              <button class="ds-tag ds-tag--more ds-tag--sm" type="button" aria-label="Show 5 more tags">
+                <span class="ds-tag__label">+5</span>
+              </button>
+              <button class="ds-tag ds-tag--more is-disabled" type="button" disabled aria-label="Show 2 more tags">
+                <span class="ds-tag__label">+2</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Add</div>
+            <div class="demo-row-items">
+              <button class="ds-tag ds-tag--add" type="button" aria-label="Add tag">
+                <span class="ds-tag__label">+ tag</span>
+              </button>
+              <button class="ds-tag ds-tag--add ds-tag--sm" type="button" aria-label="Add tag">
+                <span class="ds-tag__label">+ tag</span>
+              </button>
+              <button class="ds-tag ds-tag--add is-disabled" type="button" disabled aria-label="Add tag">
+                <span class="ds-tag__label">+ tag</span>
+              </button>
+              <button class="ds-tag ds-tag--add is-error" type="button" aria-label="Add tag">
+                <span class="ds-tag__label">+ tag</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Tag list</div>
+            <div class="demo-row-items">
+              <div class="ds-tag-list" role="listbox" aria-label="Selected tags">
+                <div class="ds-tag" role="option" tabindex="0">
+                  <span class="ds-tag__label">Design System</span>
+                  <button class="ds-tag__remove" aria-label="Remove Design System">
+                    <span class="ds-icon ds-icon--xs">close</span>
+                  </button>
+                </div>
+                <div class="ds-tag" role="option" tabindex="0">
+                  <span class="ds-tag__label">Angular</span>
+                  <button class="ds-tag__remove" aria-label="Remove Angular">
+                    <span class="ds-icon ds-icon--xs">close</span>
+                  </button>
+                </div>
+                <button class="ds-tag ds-tag--more" type="button" aria-label="Show 3 more tags">
+                  <span class="ds-tag__label">+3</span>
+                </button>
+                <button class="ds-tag ds-tag--add" type="button" aria-label="Add tag">
+                  <span class="ds-tag__label">+ tag</span>
+                </button>
               </div>
             </div>
           </div>
