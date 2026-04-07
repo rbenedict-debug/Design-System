@@ -24,6 +24,52 @@
 //
 // States:    hover, focus, active, disabled (.is-disabled)
 // Modifiers: ds-menu__item--destructive | ds-menu__item--indent | ds-menu__item--selected
+//
+// ── Section label (with optional select-all checkbox) ─────────────────────────
+//
+//   <!-- Non-interactive -->
+//   <div class="ds-menu__section-label">Priority</div>
+//   <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="true">
+//     <span class="ds-menu__item-check">
+//       <span class="ds-icon ds-icon--filled" aria-hidden="true">check</span>
+//     </span>
+//     Urgent
+//   </button>
+//   <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false">High</button>
+//
+//   <!-- With select-all checkbox (Angular: ds-checkbox [indeterminate] / [checked]) -->
+//   <button class="ds-menu__section-label" role="menuitemcheckbox" aria-checked="mixed">
+//     <!-- ds-checkbox here (see Angular notes) -->
+//     Columns
+//   </button>
+//   <button class="ds-menu__item ds-menu__item--indent" role="menuitemcheckbox" aria-checked="true">
+//     <!-- ds-checkbox checked -->
+//     Name
+//   </button>
+//
+// ── Multi-select — Angular ─────────────────────────────────────────────────────
+//
+//   Use <ds-checkbox> inside each mat-menu-item. The button row handles the
+//   click/toggle; set (click)="$event.stopPropagation()" on the checkbox to
+//   prevent double-toggle. aria-hidden="true" on the checkbox keeps screen
+//   readers on the button's role="menuitemcheckbox" + aria-checked.
+//
+//   <button mat-menu-item class="ds-menu__item"
+//           role="menuitemcheckbox" [attr.aria-checked]="item.selected"
+//           (click)="item.selected = !item.selected">
+//     <ds-checkbox [checked]="item.selected" [disableRipple]="true"
+//                  aria-hidden="true" (click)="$event.stopPropagation()" />
+//     {{ item.label }}
+//   </button>
+//
+//   <!-- Section select-all -->
+//   <button mat-menu-item class="ds-menu__section-label"
+//           role="menuitemcheckbox" [attr.aria-checked]="allChecked ? 'true' : someChecked ? 'mixed' : 'false'"
+//           (click)="toggleAll()">
+//     <ds-checkbox [checked]="allChecked" [indeterminate]="someChecked && !allChecked"
+//                  aria-hidden="true" (click)="$event.stopPropagation()" />
+//     Columns
+//   </button>
 // ============================================================
 
 .ds-menu {
@@ -40,22 +86,45 @@
   flex-direction: column;
 
   // ── Section label ──────────────────────────────────────────────────────────
+  // Body-medium, bold, primary colour. Non-interactive by default; use a
+  // <button> with role="menuitemcheckbox" when a select-all checkbox is present.
+  // Child items below a section label should use ds-menu__item--indent.
 
   &__section-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    min-height: 48px;
+    padding: var(--spacing-md) var(--spacing-lg);
     font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-small-size);
+    font-size: var(--ref-typescale-body-medium-size);
     font-weight: var(--ref-typeface-weight-bold);
-    line-height: var(--ref-typescale-label-small-line-height);
-    color: var(--color-text-secondary);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-xs);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
+    color: var(--color-text-primary);
     user-select: none;
+
+    // When used as a button (select-all checkbox header)
+    &[role="menuitemcheckbox"] {
+      appearance: none;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.1s ease;
+
+      &:focus { outline: none; }
+      &:hover:not(.is-disabled)  { background: var(--overlay-hovered); }
+      &:focus-visible { background: var(--overlay-focused); box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
+      &:active:not(.is-disabled) { background: var(--overlay-pressed); }
+    }
   }
 
   // ── Sticky search bar ──────────────────────────────────────────────────────
-  // Pinned above the scrollable item list. Wrap a ds-search (or ds-input.ds-search)
-  // inside this element. Use (click)/$event.stopPropagation() to prevent menu close.
+  // Pinned above the scrollable item list. Wrap ds-search inside this element.
+  // (click)/$event.stopPropagation() prevents the mat-menu overlay from closing;
+  // (keydown)/$event.stopPropagation() prevents arrow keys from navigating items.
 
   &__search {
     position: sticky;
@@ -63,7 +132,6 @@
     z-index: 1;
     background: var(--color-surface-page);
     padding: var(--spacing-xs) var(--spacing-sm);
-    border-bottom: 1px solid var(--color-border-subtle);
     flex-shrink: 0;
   }
 
@@ -94,36 +162,43 @@
 
     &:focus { outline: none; }
 
-    &:hover:not(.is-disabled) { background: var(--overlay-hovered); }
+    &:hover:not(.is-disabled)  { background: var(--overlay-hovered); }
     &:focus-visible { background: var(--overlay-focused); box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
     &:active:not(.is-disabled) { background: var(--overlay-pressed); }
 
-    // Indent variant for nested/hierarchical items
+    // Indent — child items under a section label
     &--indent { padding-left: calc(var(--spacing-lg) + 24px); }
 
-    // Selected state — shows the checkmark in __item-check
-    &--selected {
-      .ds-menu__item-check { visibility: visible; }
-    }
+    // Selected state — brand text; only render __item-check on selected items
+    // (no hidden placeholder — unselected items stay flush left)
+    &--selected { color: var(--color-text-brand); }
 
-    // Destructive action
+    // Destructive — neutral by default, red only on interaction
+    // Matches ds-button--destructive text behaviour exactly.
     &--destructive {
-      color: var(--color-text-accent-red);
-
-      .ds-menu__item-icon { color: var(--color-icon-error); }
+      &:hover:not(.is-disabled),
+      &:focus-visible,
+      &:active:not(.is-disabled) {
+        color: var(--color-text-accent-red);
+        .ds-menu__item-icon { color: var(--color-icon-error); }
+      }
       &:hover:not(.is-disabled)  { background: var(--overlay-accent-red-hovered); }
       &:focus-visible            { box-shadow: inset 0 0 0 2px var(--color-border-accent-red); }
       &:active:not(.is-disabled) { background: var(--overlay-accent-red-pressed); }
     }
 
-    // Disabled state
+    // Disabled
     &.is-disabled {
       color: var(--color-text-disabled);
       cursor: not-allowed;
       pointer-events: none;
-
       .ds-menu__item-icon { color: var(--color-icon-disabled); }
     }
+
+    // Suppress ds-checkbox's own 42px touch-target hover/pressed inside a menu item
+    // — the item row owns all interaction overlays.
+    .mat-mdc-checkbox:hover .mdc-checkbox,
+    .mat-mdc-checkbox:active .mdc-checkbox { background: transparent !important; }
   }
 
   // ── Item icon (leading) ────────────────────────────────────────────────────
@@ -134,7 +209,7 @@
   }
 
   // ── Item trailing ─────────────────────────────────────────────────────────
-  // Used for keyboard shortcut labels, chevrons, or submenu arrows.
+  // Keyboard shortcut label, submenu chevron, etc.
 
   &__item-trailing {
     margin-left: auto;
@@ -146,10 +221,9 @@
     flex-shrink: 0;
   }
 
-  // ── Checkbox item variant ─────────────────────────────────────────────────
-  // Invisible by default; set .ds-menu__item--selected on the item to show.
-  // For multi-select menus, always render this element in every item so that
-  // text stays left-aligned regardless of selection state.
+  // ── Single-select check ───────────────────────────────────────────────────
+  // Only render this element on the selected item — unselected items have no
+  // placeholder, so text stays flush left. Use role="menuitemradio" + aria-checked.
 
   &__item-check {
     width: 18px;
@@ -159,7 +233,6 @@
     align-items: center;
     justify-content: center;
     color: var(--color-icon-brand);
-    visibility: hidden;
 
     .ds-icon { font-size: 18px; }
   }
@@ -181,7 +254,7 @@
 // rules target the CDK overlay panel via the .ds-menu scoping class.
 
 .mat-mdc-menu-panel.ds-menu {
-  // Panel shape, background, border, shadow — matches .ds-menu CSS class API
+  // Panel shape, background, border, shadow
   border-radius: var(--radius-md);
   background: var(--color-surface-page);
   border: 1px solid var(--color-border-subtle);
@@ -190,12 +263,11 @@
     0 3px 12px 6px var(--shadow-elevation-5);
   min-width: 160px;
   max-width: 280px;
-  overflow: hidden; // clips child border-radius
 
-  // Suppress Material's default box-shadow (we own it above)
+  // Suppress Material's default box-shadow
   --mat-menu-container-elevation-shadow: none;
 
-  // Scrollable item list — max-height before scroll kicks in
+  // Scrollable item list
   overflow-y: auto;
   max-height: 400px;
 
@@ -220,7 +292,38 @@
     z-index: 1;
     background: var(--color-surface-page);
     padding: var(--spacing-xs) var(--spacing-sm);
-    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  // ── Section label ─────────────────────────────────────────────────────────
+
+  .ds-menu__section-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    min-height: 48px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typeface-weight-bold);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
+    color: var(--color-text-primary);
+    user-select: none;
+
+    &[role="menuitemcheckbox"] {
+      appearance: none;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.1s ease;
+
+      &:focus { outline: none; }
+      &:hover:not([disabled])  { background: var(--overlay-hovered); }
+      &:focus-visible { background: var(--overlay-focused); box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
+      &:active:not([disabled]) { background: var(--overlay-pressed); }
+    }
   }
 
   // ── Menu items ─────────────────────────────────────────────────────────────
@@ -235,7 +338,7 @@
     min-height: 48px;
     padding: var(--spacing-md) var(--spacing-lg);
 
-    // Suppress Material state layers — Onflo hover/pressed/focus rules own visuals
+    // Suppress Material state layers
     --mat-menu-item-hover-state-layer-opacity:    0;
     --mat-menu-item-focus-state-layer-opacity:    0;
     --mat-menu-item-pressed-state-layer-opacity:  0;
@@ -251,26 +354,32 @@
 
     &[disabled] {
       color: var(--color-text-disabled);
-      opacity: 1; // Material defaults to 0.38 — explicit colour carries meaning
-
+      opacity: 1;
       .ds-menu__item-icon { color: var(--color-icon-disabled); }
     }
 
-    // Indent variant for nested/hierarchical items
+    // Indent
     &.ds-menu__item--indent { padding-left: calc(var(--spacing-lg) + 24px); }
 
-    // Selected state (checkmark visible)
-    &.ds-menu__item--selected .ds-menu__item-check { visibility: visible; }
+    // Selected
+    &.ds-menu__item--selected { color: var(--color-text-brand); }
 
-    // Destructive item
+    // Destructive — neutral by default, red on interaction
     &.ds-menu__item--destructive {
-      color: var(--color-text-accent-red);
-
-      .ds-menu__item-icon          { color: var(--color-icon-error); }
-      &:hover:not([disabled])      { background: var(--overlay-accent-red-hovered); }
-      &:focus-visible              { box-shadow: inset 0 0 0 2px var(--color-border-accent-red); }
-      &:active:not([disabled])     { background: var(--overlay-accent-red-pressed); }
+      &:hover:not([disabled]),
+      &:focus-visible,
+      &:active:not([disabled]) {
+        color: var(--color-text-accent-red);
+        .ds-menu__item-icon { color: var(--color-icon-error); }
+      }
+      &:hover:not([disabled])  { background: var(--overlay-accent-red-hovered); }
+      &:focus-visible          { box-shadow: inset 0 0 0 2px var(--color-border-accent-red); }
+      &:active:not([disabled]) { background: var(--overlay-accent-red-pressed); }
     }
+
+    // Suppress ds-checkbox touch-target hover inside a menu item row
+    .mat-mdc-checkbox:hover .mdc-checkbox,
+    .mat-mdc-checkbox:active .mdc-checkbox { background: transparent !important; }
   }
 
   // Hide Material's built-in submenu arrow — callers use ds-menu__item-trailing

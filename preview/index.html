@@ -3692,15 +3692,40 @@
   flex-direction: column;
 }
 .ds-menu__section-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-height: 48px;
+  padding: var(--spacing-md) var(--spacing-lg);
   font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-small-size);
+  font-size: var(--ref-typescale-body-medium-size);
   font-weight: var(--ref-typeface-weight-bold);
-  line-height: var(--ref-typescale-label-small-line-height);
-  color: var(--color-text-secondary);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-xs);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-primary);
   user-select: none;
+}
+.ds-menu__section-label[role=menuitemcheckbox] {
+  appearance: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+.ds-menu__section-label[role=menuitemcheckbox]:focus {
+  outline: none;
+}
+.ds-menu__section-label[role=menuitemcheckbox]:hover:not(.is-disabled) {
+  background: var(--overlay-hovered);
+}
+.ds-menu__section-label[role=menuitemcheckbox]:focus-visible {
+  background: var(--overlay-focused);
+  box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring);
+}
+.ds-menu__section-label[role=menuitemcheckbox]:active:not(.is-disabled) {
+  background: var(--overlay-pressed);
 }
 .ds-menu__search {
   position: sticky;
@@ -3708,7 +3733,6 @@
   z-index: 1;
   background: var(--color-surface-page);
   padding: var(--spacing-xs) var(--spacing-sm);
-  border-bottom: 1px solid var(--color-border-subtle);
   flex-shrink: 0;
 }
 .ds-menu__item {
@@ -3750,13 +3774,13 @@
 .ds-menu__item--indent {
   padding-left: calc(var(--spacing-lg) + 24px);
 }
-.ds-menu__item--selected .ds-menu__item-check {
-  visibility: visible;
+.ds-menu__item--selected {
+  color: var(--color-text-brand);
 }
-.ds-menu__item--destructive {
+.ds-menu__item--destructive:hover:not(.is-disabled), .ds-menu__item--destructive:focus-visible, .ds-menu__item--destructive:active:not(.is-disabled) {
   color: var(--color-text-accent-red);
 }
-.ds-menu__item--destructive .ds-menu__item-icon {
+.ds-menu__item--destructive:hover:not(.is-disabled) .ds-menu__item-icon, .ds-menu__item--destructive:focus-visible .ds-menu__item-icon, .ds-menu__item--destructive:active:not(.is-disabled) .ds-menu__item-icon {
   color: var(--color-icon-error);
 }
 .ds-menu__item--destructive:hover:not(.is-disabled) {
@@ -3775,6 +3799,10 @@
 }
 .ds-menu__item.is-disabled .ds-menu__item-icon {
   color: var(--color-icon-disabled);
+}
+.ds-menu__item .mat-mdc-checkbox:hover .mdc-checkbox,
+.ds-menu__item .mat-mdc-checkbox:active .mdc-checkbox {
+  background: transparent !important;
 }
 .ds-menu__item-icon {
   color: var(--color-icon-subtle);
@@ -3797,7 +3825,6 @@
   align-items: center;
   justify-content: center;
   color: var(--color-icon-brand);
-  visibility: hidden;
 }
 .ds-menu__item-check .ds-icon {
   font-size: 18px;
@@ -3816,7 +3843,6 @@
   box-shadow: 0 4px 4px 0 var(--shadow-elevation-5), 0 3px 12px 6px var(--shadow-elevation-5);
   min-width: 160px;
   max-width: 280px;
-  overflow: hidden;
   --mat-menu-container-elevation-shadow: none;
   overflow-y: auto;
   max-height: 400px;
@@ -3844,7 +3870,42 @@
   z-index: 1;
   background: var(--color-surface-page);
   padding: var(--spacing-xs) var(--spacing-sm);
-  border-bottom: 1px solid var(--color-border-subtle);
+}
+.mat-mdc-menu-panel.ds-menu .ds-menu__section-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-height: 48px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typeface-weight-bold);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-primary);
+  user-select: none;
+}
+.mat-mdc-menu-panel.ds-menu .ds-menu__section-label[role=menuitemcheckbox] {
+  appearance: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+.mat-mdc-menu-panel.ds-menu .ds-menu__section-label[role=menuitemcheckbox]:focus {
+  outline: none;
+}
+.mat-mdc-menu-panel.ds-menu .ds-menu__section-label[role=menuitemcheckbox]:hover:not([disabled]) {
+  background: var(--overlay-hovered);
+}
+.mat-mdc-menu-panel.ds-menu .ds-menu__section-label[role=menuitemcheckbox]:focus-visible {
+  background: var(--overlay-focused);
+  box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring);
+}
+.mat-mdc-menu-panel.ds-menu .ds-menu__section-label[role=menuitemcheckbox]:active:not([disabled]) {
+  background: var(--overlay-pressed);
 }
 .mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item {
   font-family: var(--ref-typeface-brand);
@@ -3882,13 +3943,13 @@
 .mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--indent {
   padding-left: calc(var(--spacing-lg) + 24px);
 }
-.mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--selected .ds-menu__item-check {
-  visibility: visible;
+.mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--selected {
+  color: var(--color-text-brand);
 }
-.mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--destructive {
+.mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--destructive:hover:not([disabled]), .mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--destructive:focus-visible, .mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--destructive:active:not([disabled]) {
   color: var(--color-text-accent-red);
 }
-.mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--destructive .ds-menu__item-icon {
+.mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--destructive:hover:not([disabled]) .ds-menu__item-icon, .mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--destructive:focus-visible .ds-menu__item-icon, .mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--destructive:active:not([disabled]) .ds-menu__item-icon {
   color: var(--color-icon-error);
 }
 .mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--destructive:hover:not([disabled]) {
@@ -3899,6 +3960,10 @@
 }
 .mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.ds-menu__item--destructive:active:not([disabled]) {
   background: var(--overlay-accent-red-pressed);
+}
+.mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item .mat-mdc-checkbox:hover .mdc-checkbox,
+.mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item .mat-mdc-checkbox:active .mdc-checkbox {
+  background: transparent !important;
 }
 .mat-mdc-menu-panel.ds-menu .mat-mdc-menu-item.mat-mdc-menu-submenu-trigger::after {
   display: none;
@@ -7836,18 +7901,19 @@
         </div>
         <p class="section-desc">
           Dropdown and context menus triggered by button click or right-click. Supports icons, dividers,
-          section labels, search, single/multi-select checkboxes, indented sub-sections, and multi-level
-          (nested) menus. Based on Angular Material <code>MatMenuModule</code> — CDK Overlay handles
-          positioning and keyboard navigation automatically. Add <code>[yOffset]="4"</code> on the trigger
-          for the standard 4px gap. The panel auto-flips above or left/right when it would overflow the viewport.
+          section labels, single-select, multi-select (ds-checkbox), search for long dynamic lists, and
+          multi-level nested menus. Based on Angular Material <code>MatMenuModule</code> — CDK Overlay
+          handles positioning and keyboard navigation. Add <code>[yOffset]="4"</code> on the trigger for
+          the standard 4px gap; the panel auto-flips above or left/right at viewport edges.
+          Destructive items are neutral by default — red only on hover/active (same as <code>ds-button--destructive</code> text).
         </p>
         <div class="component-demo">
 
-          <!-- Basic — icons + divider + destructive -->
+          <!-- Basic — icons + divider + destructive (neutral by default) -->
           <div class="demo-row">
             <div class="demo-row-label">Basic</div>
             <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px;">
-              <div class="ds-menu" role="menu" style="position:relative;">
+              <div class="ds-menu" role="menu">
                 <button class="ds-menu__item" role="menuitem">
                   <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>
                   Edit
@@ -7862,6 +7928,7 @@
                   <span class="ds-menu__item-trailing">⌘ S</span>
                 </button>
                 <hr class="ds-menu__divider" />
+                <!-- Destructive: neutral text by default, red only on hover/active -->
                 <button class="ds-menu__item ds-menu__item--destructive" role="menuitem">
                   <span class="ds-icon ds-icon--sm ds-menu__item-icon">delete</span>
                   Delete
@@ -7870,27 +7937,27 @@
             </div>
           </div>
 
-          <!-- Section labels -->
+          <!-- Section labels — bold body-medium, primary colour, no dividers between sections -->
+          <!-- Children are indented; section label itself is not interactive unless it has a checkbox -->
           <div class="demo-row">
             <div class="demo-row-label">Section labels</div>
             <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px;">
               <div class="ds-menu" role="menu">
-                <span class="ds-menu__section-label">Account</span>
-                <button class="ds-menu__item" role="menuitem">
+                <div class="ds-menu__section-label">Account</div>
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
                   <span class="ds-icon ds-icon--sm ds-menu__item-icon">person</span>
                   Profile
                 </button>
-                <button class="ds-menu__item" role="menuitem">
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
                   <span class="ds-icon ds-icon--sm ds-menu__item-icon">settings</span>
                   Settings
                 </button>
-                <hr class="ds-menu__divider" />
-                <span class="ds-menu__section-label">Workspace</span>
-                <button class="ds-menu__item" role="menuitem">
+                <div class="ds-menu__section-label">Workspace</div>
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
                   <span class="ds-icon ds-icon--sm ds-menu__item-icon">group</span>
                   Team members
                 </button>
-                <button class="ds-menu__item" role="menuitem">
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
                   <span class="ds-icon ds-icon--sm ds-menu__item-icon">notifications</span>
                   Notifications
                 </button>
@@ -7898,120 +7965,109 @@
             </div>
           </div>
 
-          <!-- Single-select (checkbox checkmark) -->
+          <!-- Single select — check only on selected item; unselected items flush left; selected text = brand -->
           <div class="demo-row">
             <div class="demo-row-label">Single select</div>
             <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px;">
               <div class="ds-menu" role="menu">
                 <button class="ds-menu__item ds-menu__item--selected" role="menuitemradio" aria-checked="true">
-                  <span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" style="font-size:18px;">check</span></span>
+                  <span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" style="font-size:18px;" aria-hidden="true">check</span></span>
                   List view
                 </button>
-                <button class="ds-menu__item" role="menuitemradio" aria-checked="false">
-                  <span class="ds-menu__item-check"></span>
-                  Board view
-                </button>
-                <button class="ds-menu__item" role="menuitemradio" aria-checked="false">
-                  <span class="ds-menu__item-check"></span>
-                  Timeline
-                </button>
+                <button class="ds-menu__item" role="menuitemradio" aria-checked="false">Board view</button>
+                <button class="ds-menu__item" role="menuitemradio" aria-checked="false">Timeline</button>
+                <button class="ds-menu__item" role="menuitemradio" aria-checked="false">Calendar</button>
               </div>
             </div>
           </div>
 
-          <!-- Multi-select (checkboxes) -->
+          <!-- Multi-select — ds-checkbox for each item; section header with select-all (indeterminate) -->
+          <!-- Angular: <ds-checkbox [checked]="..." [indeterminate]="..." aria-hidden="true"
+                        (click)="$event.stopPropagation()" /> inside mat-menu-item button.
+               Button carries role="menuitemcheckbox" + aria-checked. -->
           <div class="demo-row">
             <div class="demo-row-label">Multi-select</div>
             <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px;">
-              <div class="ds-menu" role="menu">
-                <button class="ds-menu__item ds-menu__item--selected" role="menuitemcheckbox" aria-checked="true">
-                  <span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" style="font-size:18px;">check</span></span>
+              <div class="ds-menu" role="menu" style="width:220px;">
+                <!-- Select-all section header — indeterminate (some children checked) -->
+                <button class="ds-menu__section-label" role="menuitemcheckbox" aria-checked="mixed">
+                  <!-- indeterminate_check_box icon = ds-checkbox [indeterminate]="true" -->
+                  <span class="ds-icon ds-icon--filled" style="font-size:24px; color:var(--color-surface-brand-bold); flex-shrink:0;" aria-hidden="true">indeterminate_check_box</span>
+                  Columns
+                </button>
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitemcheckbox" aria-checked="true">
+                  <span class="ds-icon ds-icon--filled" style="font-size:24px; color:var(--color-surface-brand-bold); flex-shrink:0;" aria-hidden="true">check_box</span>
                   Assignee
                 </button>
-                <button class="ds-menu__item ds-menu__item--selected" role="menuitemcheckbox" aria-checked="true">
-                  <span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" style="font-size:18px;">check</span></span>
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitemcheckbox" aria-checked="true">
+                  <span class="ds-icon ds-icon--filled" style="font-size:24px; color:var(--color-surface-brand-bold); flex-shrink:0;" aria-hidden="true">check_box</span>
                   Priority
                 </button>
-                <button class="ds-menu__item" role="menuitemcheckbox" aria-checked="false">
-                  <span class="ds-menu__item-check"></span>
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitemcheckbox" aria-checked="false">
+                  <span class="ds-icon" style="font-size:24px; color:var(--color-border-input); flex-shrink:0;" aria-hidden="true">check_box_outline_blank</span>
                   Due date
                 </button>
-                <button class="ds-menu__item" role="menuitemcheckbox" aria-checked="false">
-                  <span class="ds-menu__item-check"></span>
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitemcheckbox" aria-checked="false">
+                  <span class="ds-icon" style="font-size:24px; color:var(--color-border-input); flex-shrink:0;" aria-hidden="true">check_box_outline_blank</span>
                   Labels
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Search + filtered list -->
+          <!-- Search — for long dynamic lists (people names, etc.); no icons on items; list scrolls -->
           <div class="demo-row">
             <div class="demo-row-label">With search</div>
             <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px;">
-              <div class="ds-menu" role="menu" style="width:240px;">
-                <!-- Sticky search bar (Angular: wrap ds-search in div.ds-menu__search with stopPropagation) -->
-                <div class="ds-menu__search">
+              <div class="ds-menu" role="menu" style="width:240px; max-height:280px; overflow-y:auto;">
+                <!-- Sticky search — no divider below; Angular: (click)/$event.stopPropagation() (keydown)/$event.stopPropagation() -->
+                <div class="ds-menu__search" style="position:sticky; top:0;">
                   <div class="ds-input ds-search" role="search" style="width:100%;">
                     <div class="ds-input__field">
                       <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
-                      <input class="ds-input__control" type="search" aria-label="Search" placeholder="Search actions…" />
+                      <input class="ds-input__control" type="search" aria-label="Search people" placeholder="Search…" />
                     </div>
                   </div>
                 </div>
-                <button class="ds-menu__item" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">archive</span>
-                  Archive
-                </button>
-                <button class="ds-menu__item" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">assignment</span>
-                  Assign to me
-                </button>
-                <button class="ds-menu__item" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">add_task</span>
-                  Add subtask
-                </button>
-                <button class="ds-menu__item" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">attach_file</span>
-                  Attach file
-                </button>
+                <button class="ds-menu__item" role="menuitem">Alice Johnson</button>
+                <button class="ds-menu__item" role="menuitem">Bob Smith</button>
+                <button class="ds-menu__item" role="menuitem">Carol White</button>
+                <button class="ds-menu__item" role="menuitem">David Lee</button>
+                <button class="ds-menu__item" role="menuitem">Eva Martinez</button>
+                <button class="ds-menu__item" role="menuitem">Frank Chen</button>
+                <button class="ds-menu__item" role="menuitem">Grace Kim</button>
+                <button class="ds-menu__item" role="menuitem">Henry Park</button>
               </div>
             </div>
           </div>
 
-          <!-- Indented items (nested hierarchy) -->
+          <!-- Indent — section header + indented children; single-select shown -->
           <div class="demo-row">
-            <div class="demo-row-label">Indent</div>
+            <div class="demo-row-label">Indent (single-select)</div>
             <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px;">
               <div class="ds-menu" role="menu">
-                <span class="ds-menu__section-label">Priority</span>
-                <button class="ds-menu__item ds-menu__item--selected" role="menuitemradio" aria-checked="true">
-                  <span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" style="font-size:18px;">check</span></span>
-                  Urgent
+                <div class="ds-menu__section-label">View</div>
+                <button class="ds-menu__item ds-menu__item--indent ds-menu__item--selected" role="menuitemradio" aria-checked="true">
+                  <span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" style="font-size:18px;" aria-hidden="true">check</span></span>
+                  Compact
                 </button>
-                <button class="ds-menu__item" role="menuitemradio" aria-checked="false">
-                  <span class="ds-menu__item-check"></span>
-                  High
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false">Comfortable</button>
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false">Spacious</button>
+                <div class="ds-menu__section-label">Group by</div>
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false">None</button>
+                <button class="ds-menu__item ds-menu__item--indent ds-menu__item--selected" role="menuitemradio" aria-checked="true">
+                  <span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" style="font-size:18px;" aria-hidden="true">check</span></span>
+                  Assignee
                 </button>
-                <hr class="ds-menu__divider" />
-                <span class="ds-menu__section-label">Sub-items</span>
-                <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
-                  Blocked
-                </button>
-                <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
-                  In review
-                </button>
-                <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
-                  Done
-                </button>
+                <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false">Priority</button>
               </div>
             </div>
           </div>
 
-          <!-- Multi-level / submenu pattern -->
+          <!-- Submenu — no gap between panels; submenu aligns to the triggering item -->
           <div class="demo-row">
             <div class="demo-row-label">Submenu</div>
-            <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px; gap: 4px;">
-              <!-- Parent menu -->
+            <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px; gap: 0;">
               <div class="ds-menu" role="menu">
                 <button class="ds-menu__item" role="menuitem">
                   <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>
@@ -8029,8 +8085,8 @@
                   Copy link
                 </button>
               </div>
-              <!-- Sub-menu (shown open for demo) -->
-              <div class="ds-menu" role="menu" style="margin-top: 48px;">
+              <!-- Sub-menu aligns to "Move to" row (4px panel-top + 48px Edit = 52px offset) -->
+              <div class="ds-menu" role="menu" style="margin-top: 52px;">
                 <button class="ds-menu__item" role="menuitem">Inbox</button>
                 <button class="ds-menu__item" role="menuitem">In Progress</button>
                 <button class="ds-menu__item" role="menuitem">Archive</button>
@@ -8039,9 +8095,9 @@
             </div>
           </div>
 
-          <!-- States: disabled -->
+          <!-- Disabled items + destructive (neutral default, red on hover) -->
           <div class="demo-row">
-            <div class="demo-row-label">Disabled items</div>
+            <div class="demo-row-label">Disabled + destructive</div>
             <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px;">
               <div class="ds-menu" role="menu">
                 <button class="ds-menu__item" role="menuitem">
@@ -8057,29 +8113,11 @@
                   Share
                 </button>
                 <hr class="ds-menu__divider" />
+                <!-- Neutral by default — hover to see red -->
                 <button class="ds-menu__item ds-menu__item--destructive" role="menuitem">
                   <span class="ds-icon ds-icon--sm ds-menu__item-icon">delete</span>
                   Delete
                 </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Scrollable -->
-          <div class="demo-row">
-            <div class="demo-row-label">Scrollable</div>
-            <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px;">
-              <div class="ds-menu" role="menu" style="max-height: 200px; overflow-y: auto;">
-                <button class="ds-menu__item" role="menuitem">Alice Johnson</button>
-                <button class="ds-menu__item" role="menuitem">Bob Smith</button>
-                <button class="ds-menu__item" role="menuitem">Carol White</button>
-                <button class="ds-menu__item" role="menuitem">David Lee</button>
-                <button class="ds-menu__item" role="menuitem">Eva Martinez</button>
-                <button class="ds-menu__item" role="menuitem">Frank Chen</button>
-                <button class="ds-menu__item" role="menuitem">Grace Kim</button>
-                <button class="ds-menu__item" role="menuitem">Henry Park</button>
-                <button class="ds-menu__item" role="menuitem">Isabel Torres</button>
-                <button class="ds-menu__item" role="menuitem">James Wilson</button>
               </div>
             </div>
           </div>
