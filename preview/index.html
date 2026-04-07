@@ -4060,8 +4060,8 @@
   gap: var(--spacing-xs);
   height: 32px;
   padding: 0 var(--spacing-md);
-  background: var(--color-surface-page);
-  border: 1px solid var(--color-border-brand);
+  background: var(--color-surface-brand);
+  border: 1px solid transparent;
   border-radius: var(--radius-full);
   font-family: var(--ref-typescale-label-medium-font);
   font-size: var(--ref-typescale-label-medium-size);
@@ -4070,8 +4070,14 @@
   letter-spacing: var(--ref-typescale-label-medium-tracking);
   color: var(--color-text-brand);
   cursor: default;
-  transition: background 0.12s;
+  overflow: hidden;
   position: relative;
+}
+.ds-chip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 .ds-chip:focus {
   outline: none;
@@ -4079,10 +4085,20 @@
 .ds-chip:focus-visible {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
-.ds-chip:hover:not(.is-disabled):not(.is-error),
-.ds-chip:active:not(.is-disabled):not(.is-error),
+.ds-chip:hover:not(.is-disabled):not(.is-error) {
+  border-color: var(--color-border-hover);
+}
+.ds-chip:hover:not(.is-disabled):not(.is-error)::after {
+  background: var(--overlay-hovered);
+}
+.ds-chip:active:not(.is-disabled):not(.is-error) {
+  border-color: var(--color-border-active);
+}
+.ds-chip:active:not(.is-disabled):not(.is-error)::after {
+  background: var(--overlay-pressed);
+}
 .ds-chip.is-active:not(.is-disabled) {
-  background: var(--color-surface-brand);
+  border-color: var(--color-border-active);
 }
 .ds-chip.is-error {
   background: var(--color-surface-error);
@@ -4110,9 +4126,13 @@
 .ds-chip__icon {
   color: var(--color-icon-brand);
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
 .ds-chip__label {
   white-space: nowrap;
+  position: relative;
+  z-index: 1;
 }
 .ds-chip__remove {
   appearance: none;
@@ -4128,6 +4148,8 @@
   color: var(--color-icon-brand);
   border-radius: var(--radius-full);
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
   transition: background 0.12s;
 }
 .ds-chip__remove:hover {
@@ -4150,8 +4172,8 @@
 .mat-mdc-chip {
   --mdc-chip-container-height: 32px;
   --mdc-chip-container-shape: var(--radius-full);
-  --mdc-chip-flat-container-color: var(--color-surface-page);
-  --mdc-chip-outline-color: var(--color-border-brand);
+  --mdc-chip-flat-container-color: var(--color-surface-brand);
+  --mdc-chip-outline-color: transparent;
   --mdc-chip-label-text-color: var(--color-text-brand);
   --mdc-chip-label-text-font: var(--ref-typescale-label-medium-font);
   --mdc-chip-label-text-size: var(--ref-typescale-label-medium-size);
@@ -4165,10 +4187,12 @@
   --mat-chip-selected-state-layer-opacity: 0;
   --mdc-chip-disabled-label-text-color: var(--color-text-disabled);
 }
-.mat-mdc-chip:hover:not(.mat-mdc-chip-disabled):not(.is-error),
+.mat-mdc-chip:hover:not(.mat-mdc-chip-disabled):not(.is-error) {
+  --mdc-chip-outline-color: var(--color-border-hover);
+}
 .mat-mdc-chip:active:not(.mat-mdc-chip-disabled):not(.is-error),
 .mat-mdc-chip.is-active:not(.mat-mdc-chip-disabled) {
-  --mdc-chip-flat-container-color: var(--color-surface-brand);
+  --mdc-chip-outline-color: var(--color-border-active);
 }
 .mat-mdc-chip.is-error {
   --mdc-chip-flat-container-color: var(--color-surface-error);
@@ -8744,7 +8768,7 @@
       <section class="section" id="chip">
         <div class="section-header">
           <h2 class="section-title">Chip</h2>
-          <p class="section-desc">Compact interactive element representing a filter or removable input. Blue border and text by default. Hover/active: light blue tint. Supports leading icon and trailing remove button. Source: <code>components/chip/_chip.scss</code></p>
+          <p class="section-desc">Compact interactive element representing a filter or removable input. Background is always <code>--color-surface-brand</code> (light blue). Default state has no border. Hover reveals <code>--color-border-hover</code> + overlay-hovered tint; press reveals <code>--color-border-active</code> + overlay-pressed tint. <code>.is-active</code> = persistent selected state (border-active, no overlay). Source: <code>components/chip/_chip.scss</code></p>
         </div>
         <div class="component-demo">
 

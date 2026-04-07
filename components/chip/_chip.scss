@@ -6,7 +6,7 @@
 // Import MatChipsModule in your Angular module.
 //
 // Usage (HTML class API):
-//   <div class="ds-chip" role="option">
+//   <div class="ds-chip" role="option" tabindex="0">
 //     <span class="ds-icon ds-icon--sm ds-chip__icon">local_offer</span>
 //     <span class="ds-chip__label">Label</span>
 //     <button class="ds-chip__remove" aria-label="Remove Label">
@@ -15,6 +15,11 @@
 //   </div>
 //
 // States:    default, hover, :active (pressed), .is-active (selected), .is-error, .is-disabled
+//
+// Overlay technique:
+//   Background is always --color-surface-brand. Interaction tints use ::after
+//   overlays. Border appears/changes on hover and active. overflow: hidden clips
+//   the ::after layer to the pill shape without affecting the box-shadow focus ring.
 // ============================================================
 
 .ds-chip {
@@ -23,8 +28,8 @@
   gap: var(--spacing-xs);
   height: 32px;
   padding: 0 var(--spacing-md);
-  background: var(--color-surface-page);
-  border: 1px solid var(--color-border-brand);
+  background: var(--color-surface-brand);
+  border: 1px solid transparent;
   border-radius: var(--radius-full);
   font-family: var(--ref-typescale-label-medium-font);
   font-size: var(--ref-typescale-label-medium-size);
@@ -33,25 +38,41 @@
   letter-spacing: var(--ref-typescale-label-medium-tracking);
   color: var(--color-text-brand);
   cursor: default;
-  transition: background 0.12s;
+  overflow: hidden;
   position: relative;
+
+  // Overlay pseudo-element — sits above the bg, below the content
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
 
   &:focus         { outline: none; }
   &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
 
+  // ── Hover ─────────────────────────────────────────────────────────────────
+
   &:hover:not(.is-disabled):not(.is-error) {
-    background: var(--color-surface-brand);
+    border-color: var(--color-border-hover);
+
+    &::after { background: var(--overlay-hovered); }
   }
 
+  // ── Pressed ───────────────────────────────────────────────────────────────
+
   &:active:not(.is-disabled):not(.is-error) {
-    background: var(--color-surface-brand);
+    border-color: var(--color-border-active);
+
+    &::after { background: var(--overlay-pressed); }
   }
 
   // ── Active / selected state ────────────────────────────────────────────────
-  // Use when the chip represents an active selection (e.g. applied filter).
+  // Persistent selected state — border-active without a tint overlay.
 
   &.is-active:not(.is-disabled) {
-    background: var(--color-surface-brand);
+    border-color: var(--color-border-active);
   }
 
   // ── Error state ────────────────────────────────────────────────────────────
@@ -82,12 +103,16 @@
   &__icon {
     color: var(--color-icon-brand);
     flex-shrink: 0;
+    position: relative; // above ::after overlay
+    z-index: 1;
   }
 
   // ── Label ──────────────────────────────────────────────────────────────────
 
   &__label {
     white-space: nowrap;
+    position: relative; // above ::after overlay
+    z-index: 1;
   }
 
   // ── Remove button ─────────────────────────────────────────────────────────
@@ -106,6 +131,8 @@
     color: var(--color-icon-brand);
     border-radius: var(--radius-full);
     flex-shrink: 0;
+    position: relative; // above ::after overlay
+    z-index: 1;
     transition: background 0.12s;
 
     &:hover   { background: var(--overlay-hovered); }
@@ -132,8 +159,8 @@
   --mdc-chip-container-shape: var(--radius-full);
 
   // Colors — default state
-  --mdc-chip-flat-container-color: var(--color-surface-page);
-  --mdc-chip-outline-color: var(--color-border-brand);
+  --mdc-chip-flat-container-color: var(--color-surface-brand);
+  --mdc-chip-outline-color: transparent;
   --mdc-chip-label-text-color: var(--color-text-brand);
   --mdc-chip-label-text-font: var(--ref-typescale-label-medium-font);
   --mdc-chip-label-text-size: var(--ref-typescale-label-medium-size);
@@ -153,11 +180,19 @@
   // Disabled
   --mdc-chip-disabled-label-text-color: var(--color-text-disabled);
 
-  // Hover / active / selected — light blue bg
-  &:hover:not(.mat-mdc-chip-disabled):not(.is-error),
-  &:active:not(.mat-mdc-chip-disabled):not(.is-error),
+  // Hover — border-hover + overlay (MDC override; visual overlay via .ds-chip::after)
+  &:hover:not(.mat-mdc-chip-disabled):not(.is-error) {
+    --mdc-chip-outline-color: var(--color-border-hover);
+  }
+
+  // Active/pressed — border-active
+  &:active:not(.mat-mdc-chip-disabled):not(.is-error) {
+    --mdc-chip-outline-color: var(--color-border-active);
+  }
+
+  // Selected — border-active (persistent)
   &.is-active:not(.mat-mdc-chip-disabled) {
-    --mdc-chip-flat-container-color: var(--color-surface-brand);
+    --mdc-chip-outline-color: var(--color-border-active);
   }
 
   // Error state
