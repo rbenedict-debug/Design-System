@@ -8,13 +8,13 @@
 // Usage (HTML class API):
 //   <div class="ds-chip" role="option">
 //     <span class="ds-icon ds-icon--sm ds-chip__icon">local_offer</span>
-//     <span class="ds-chip__label">Design</span>
-//     <button class="ds-chip__remove" aria-label="Remove Design">
+//     <span class="ds-chip__label">Label</span>
+//     <button class="ds-chip__remove" aria-label="Remove Label">
 //       <span class="ds-icon ds-icon--sm">close</span>
 //     </button>
 //   </div>
 //
-// States:    default, hover, focus, error (.is-error), disabled (.is-disabled)
+// States:    default, hover, :active (pressed), .is-active (selected), .is-error, .is-disabled
 // ============================================================
 
 .ds-chip {
@@ -22,31 +22,36 @@
   align-items: center;
   gap: var(--spacing-xs);
   height: 32px;
-  padding: 0 var(--spacing-sm) 0 var(--spacing-md);
-  background: var(--color-surface-default);
-  border: 1px solid var(--color-border-secondary);
+  padding: 0 var(--spacing-md);
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-brand);
   border-radius: var(--radius-full);
-  font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-small-size);
-  font-weight: var(--ref-typeface-weight-medium);
-  line-height: var(--ref-typescale-label-small-line-height);
-  color: var(--color-text-primary);
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  color: var(--color-text-brand);
   cursor: default;
-  transition: background 0.12s, border-color 0.12s;
+  transition: background 0.12s;
   position: relative;
 
-  &:focus { outline: none; }
+  &:focus         { outline: none; }
   &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
 
-  &:hover:not(.is-disabled) {
-    background: var(--color-surface-subtle);
-    border-color: var(--color-border-primary);
+  &:hover:not(.is-disabled):not(.is-error) {
+    background: var(--color-surface-brand);
   }
 
-  // ── No icon — no left padding increase ────────────────────────────────────
+  &:active:not(.is-disabled):not(.is-error) {
+    background: var(--color-surface-brand);
+  }
 
-  &--no-icon {
-    padding-left: var(--spacing-md);
+  // ── Active / selected state ────────────────────────────────────────────────
+  // Use when the chip represents an active selection (e.g. applied filter).
+
+  &.is-active:not(.is-disabled) {
+    background: var(--color-surface-brand);
   }
 
   // ── Error state ────────────────────────────────────────────────────────────
@@ -56,7 +61,7 @@
     border-color: var(--color-border-input-error);
     color: var(--color-text-error);
 
-    .ds-chip__icon { color: var(--color-icon-error); }
+    .ds-chip__icon   { color: var(--color-icon-error); }
     .ds-chip__remove { color: var(--color-icon-error); }
   }
 
@@ -68,14 +73,14 @@
     color: var(--color-text-disabled);
     pointer-events: none;
 
-    .ds-chip__icon { color: var(--color-icon-disabled); }
+    .ds-chip__icon   { color: var(--color-icon-disabled); }
     .ds-chip__remove { color: var(--color-icon-disabled); }
   }
 
-  // ── Icon ───────────────────────────────────────────────────────────────────
+  // ── Leading icon ───────────────────────────────────────────────────────────
 
   &__icon {
-    color: var(--color-icon-subtle);
+    color: var(--color-icon-brand);
     flex-shrink: 0;
   }
 
@@ -92,21 +97,19 @@
     border: none;
     background: transparent;
     padding: 0;
-    margin-left: var(--spacing-xs);
-    margin-right: calc(-1 * var(--spacing-xs));
     width: 20px;
     height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--color-icon-subtle);
+    color: var(--color-icon-brand);
     border-radius: var(--radius-full);
     flex-shrink: 0;
-    transition: color 0.12s, background 0.12s;
+    transition: background 0.12s;
 
-    &:hover { color: var(--color-icon-default); background: var(--overlay-hovered); }
-    &:focus { outline: none; }
+    &:hover   { background: var(--overlay-hovered); }
+    &:focus   { outline: none; }
     &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
   }
 }
@@ -129,25 +132,33 @@
   --mdc-chip-container-shape: var(--radius-full);
 
   // Colors — default state
-  --mdc-chip-flat-container-color: var(--color-surface-default);
-  --mdc-chip-outline-color: var(--color-border-secondary);
-  --mdc-chip-label-text-color: var(--color-text-primary);
-  --mdc-chip-label-text-font: var(--ref-typeface-brand);
-  --mdc-chip-label-text-size: var(--ref-typescale-label-small-size);
-  --mdc-chip-label-text-weight: var(--ref-typeface-weight-medium);
-  --mdc-chip-label-text-line-height: var(--ref-typescale-label-small-line-height);
+  --mdc-chip-flat-container-color: var(--color-surface-page);
+  --mdc-chip-outline-color: var(--color-border-brand);
+  --mdc-chip-label-text-color: var(--color-text-brand);
+  --mdc-chip-label-text-font: var(--ref-typescale-label-medium-font);
+  --mdc-chip-label-text-size: var(--ref-typescale-label-medium-size);
+  --mdc-chip-label-text-weight: var(--ref-typescale-label-medium-weight-prominent);
+  --mdc-chip-label-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mdc-chip-label-text-tracking: var(--ref-typescale-label-medium-tracking);
 
   // Remove button
-  --mat-chip-trailing-action-color: var(--color-icon-subtle);
+  --mat-chip-trailing-action-color: var(--color-icon-brand);
   --mat-chip-disabled-trailing-action-color: var(--color-icon-disabled);
 
-  // Suppress MDC state layers — hover/focus handled by .ds-chip class rules
+  // Suppress MDC state layers — interaction states handled by .ds-chip rules
   --mat-chip-hover-state-layer-opacity: 0;
   --mat-chip-focus-state-layer-opacity: 0;
   --mat-chip-selected-state-layer-opacity: 0;
 
   // Disabled
   --mdc-chip-disabled-label-text-color: var(--color-text-disabled);
+
+  // Hover / active / selected — light blue bg
+  &:hover:not(.mat-mdc-chip-disabled):not(.is-error),
+  &:active:not(.mat-mdc-chip-disabled):not(.is-error),
+  &.is-active:not(.mat-mdc-chip-disabled) {
+    --mdc-chip-flat-container-color: var(--color-surface-brand);
+  }
 
   // Error state
   &.is-error {
@@ -158,7 +169,8 @@
   }
 
   // Disabled state
-  &.is-disabled {
+  &.is-disabled,
+  &.mat-mdc-chip-disabled {
     --mdc-chip-flat-container-color: var(--color-surface-disabled);
     --mdc-chip-outline-color: var(--color-border-subtle);
     --mdc-chip-label-text-color: var(--color-text-disabled);

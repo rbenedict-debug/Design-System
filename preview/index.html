@@ -47,11 +47,13 @@
       --ref-color-accent-purple-bg: #F7EFFE;
       --ref-color-accent-pink-default: #E91E63;
       --ref-color-accent-pink-bg: #FFF0F5;
-      --ref-color-accent-accordian-border: #E3ECF8;
+      --ref-color-accent-accordion-border: #E3ECF8;
+      --ref-color-neutral-border-primary: #9F9F9F;
       --ref-radius-none: 0px;
       --ref-radius-sm: 6px;
       --ref-radius-md: 8px;
       --ref-radius-lg: 16px;
+      --ref-radius-xl: 24px;
       --ref-radius-full: 9999px;
       --ref-typeface-brand: "Proxima Nova";
       --ref-typeface-plain: "Proxima Nova";
@@ -117,11 +119,9 @@
       --ref-typescale-label-small-size: 12px;
       --ref-typescale-label-small-line-height: 12px;
       --ref-typescale-label-small-tracking: 0.4px;
-      --ref-shadow-elevation-1: rgba(65, 65, 65, 0.04);
-      --ref-shadow-elevation-2: rgba(65, 65, 65, 0.06);
-      --ref-shadow-elevation-3: rgba(65, 65, 65, 0.08);
-      --ref-shadow-elevation-4: rgba(65, 65, 65, 0.1);
-      --ref-shadow-elevation-5: rgba(65, 65, 65, 0.12);
+      --ref-shadow-elevation-1: rgba(65, 65, 65, 0.06);
+      --ref-shadow-elevation-2: rgba(65, 65, 65, 0.10);
+      --ref-shadow-elevation-3: rgba(65, 65, 65, 0.12);
       --ref-overlay-hover: rgba(67, 173, 242, 0.08);
       --ref-overlay-pressed: rgba(67, 173, 242, 0.12);
       --ref-overlay-focused: rgba(67, 173, 242, 0.12);
@@ -217,12 +217,12 @@
       --color-icon-accent-orange: var(--ref-color-accent-orange-default);
       --color-icon-accent-purple: var(--ref-color-accent-purple-default);
       --color-icon-accent-pink: var(--ref-color-accent-pink-default);
-      --color-border-primary: var(--ref-color-neutral-text-disabled);
+      --color-border-primary: var(--ref-color-neutral-border-primary);
       --color-border-secondary: var(--ref-color-neutral-border-soft);
       --color-border-subtle: var(--ref-color-neutral-border-subtle);
       --color-border-strong: var(--ref-color-neutral-text-soft);
       --color-border-inverse: var(--ref-color-neutral-white);
-      --color-border-accordian: var(--ref-color-accent-accordian-border);
+      --color-border-accordion: var(--ref-color-accent-accordion-border);
       --color-border-ada-focus-ring: var(--ref-color-accent-lightblue-default);
       --color-border-hover: var(--ref-color-accent-lightblue-default);
       --color-border-active: var(--ref-color-primary-blue-default);
@@ -248,12 +248,11 @@
       --radius-sm: var(--ref-radius-sm);
       --radius-md: var(--ref-radius-md);
       --radius-lg: var(--ref-radius-lg);
+      --radius-xl: var(--ref-radius-xl);
       --radius-full: var(--ref-radius-full);
       --shadow-elevation-1: var(--ref-shadow-elevation-1);
       --shadow-elevation-2: var(--ref-shadow-elevation-2);
       --shadow-elevation-3: var(--ref-shadow-elevation-3);
-      --shadow-elevation-4: var(--ref-shadow-elevation-4);
-      --shadow-elevation-5: var(--ref-shadow-elevation-5);
       --overlay-hovered: var(--ref-overlay-hover);
       --overlay-pressed: var(--ref-overlay-pressed);
       --overlay-focused: var(--ref-overlay-focused);
@@ -309,11 +308,13 @@
       --ref-color-accent-purple-bg: #180D26;
       --ref-color-accent-pink-default: #FF5C8A;
       --ref-color-accent-pink-bg: #260A14;
-      --ref-color-accent-accordian-border: #212324;
+      --ref-color-accent-accordion-border: #212324;
+      --ref-color-neutral-border-primary: #4A6580;
       --ref-radius-none: 0px;
       --ref-radius-sm: 6px;
       --ref-radius-md: 8px;
-      --ref-radius-lg: 24px;
+      --ref-radius-lg: 16px;
+      --ref-radius-xl: 24px;
       --ref-radius-full: 9999px;
       --ref-typeface-brand: "Proxima Nova";
       --ref-typeface-plain: "Proxima Nova";
@@ -379,16 +380,12 @@
       --ref-typescale-label-small-size: 12px;
       --ref-typescale-label-small-line-height: 12px;
       --ref-typescale-label-small-tracking: 0.4px;
-      --ref-shadow-elevation-1: rgba(0, 0, 0, 0.07);
-      --shadow-elevation-1: rgba(0, 0, 0, 0.07);
-      --ref-shadow-elevation-2: rgba(0, 0, 0, 0.1);
-      --shadow-elevation-2: rgba(0, 0, 0, 0.1);
-      --ref-shadow-elevation-3: rgba(0, 0, 0, 0.13);
-      --shadow-elevation-3: rgba(0, 0, 0, 0.13);
-      --ref-shadow-elevation-4: rgba(0, 0, 0, 0.14);
-      --shadow-elevation-4: rgba(0, 0, 0, 0.14);
-      --ref-shadow-elevation-5: rgba(0, 0, 0, 0.18);
-      --shadow-elevation-5: rgba(0, 0, 0, 0.18);
+      --ref-shadow-elevation-1: rgba(0, 0, 0, 0.10);
+      --shadow-elevation-1: rgba(0, 0, 0, 0.10);
+      --ref-shadow-elevation-2: rgba(0, 0, 0, 0.14);
+      --shadow-elevation-2: rgba(0, 0, 0, 0.14);
+      --ref-shadow-elevation-3: rgba(0, 0, 0, 0.18);
+      --shadow-elevation-3: rgba(0, 0, 0, 0.18);
       --ref-overlay-hover: rgba(109, 196, 245, 0.08);
       --overlay-hover: rgba(109, 196, 245, 0.08);
       --ref-overlay-pressed: rgba(109, 196, 245, 0.12);
@@ -419,7 +416,7 @@
       --ref-spacing-medium: 12px;
       --ref-spacing-large: 16px;
       --ref-spacing-xlarge: 24px;
-      --ref-spacing-page-spacing: 24px;
+      --ref-spacing-page-spacing: 48px;
     }
   </style>
 <!-- ONFLO-TOKENS:END -->
@@ -2679,6 +2676,10 @@
   flex-direction: column;
   gap: var(--spacing-xs);
 }
+/* Positional anchor for the dropdown — wraps __field + __dropdown only */
+.ds-select__field-row {
+  position: relative;
+}
 .ds-select__label {
   font-family: var(--ref-typeface-brand);
   font-size: var(--ref-typescale-label-medium-size);
@@ -2702,6 +2703,15 @@
   cursor: pointer;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   position: relative;
+  /* Button resets — no-op on div in CSS class API */
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  text-align: left;
+  width: 100%;
 }
 .ds-select__field:hover {
   border-color: var(--color-border-input-hover);
@@ -2711,6 +2721,20 @@
 }
 .ds-select:focus-within:not([data-mouse-focus]) .ds-select__field {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+/* Focus ring for button.ds-select__field (Angular component) */
+.ds-select__field:focus-visible {
+  border-color: var(--color-border-input-active);
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+/* Value span inside the button trigger (Angular component) */
+.ds-select__value {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text-primary);
+}
+.ds-select__value--placeholder {
+  color: var(--color-text-placeholder);
 }
 .ds-select__control {
   flex: 1;
@@ -2783,6 +2807,9 @@
   color: var(--color-text-disabled);
   cursor: not-allowed;
 }
+.ds-select.is-disabled .ds-select__value {
+  color: var(--color-text-disabled);
+}
 .ds-select.is-disabled .ds-select__arrow {
   color: var(--color-icon-disabled);
 }
@@ -2790,101 +2817,18 @@
   color: var(--color-text-disabled);
 }
 
-.ds-select .mat-mdc-form-field {
+/* Dropdown panel — teleported to <body> on open, positioned via JS */
+.ds-select__dropdown {
+  position: fixed;
+  z-index: 9999;
+  display: none;
+}
+.ds-select__dropdown.is-open {
+  display: block;
+}
+.ds-select__dropdown .ds-menu {
+  max-width: none;
   width: 100%;
-}
-.ds-select {
-  --mat-form-field-container-height: 42px;
-  --mat-form-field-container-vertical-padding: 0px;
-  --mdc-outlined-text-field-container-shape: var(--radius-sm);
-  --mdc-outlined-text-field-outline-width: 1px;
-  --mdc-outlined-text-field-outline-color: var(--color-border-input);
-  --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
-  --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
-  --mat-select-trigger-text-font: var(--ref-typeface-brand);
-  --mat-select-trigger-text-size: var(--ref-typescale-label-medium-size);
-  --mat-select-trigger-text-weight: var(--ref-typeface-weight-regular);
-  --mat-select-trigger-text-line-height: var(--ref-typescale-label-medium-line-height);
-  --mat-select-enabled-trigger-text-color: var(--color-text-primary);
-  --mat-select-placeholder-text-color: var(--color-text-placeholder);
-  --mat-select-disabled-trigger-text-color: var(--color-text-disabled);
-}
-.ds-select .mat-mdc-floating-label,
-.ds-select .mdc-floating-label {
-  display: none;
-}
-.ds-select .mat-mdc-form-field-subscript-wrapper {
-  display: none;
-}
-.ds-select .mat-mdc-select-arrow-wrapper {
-  display: none;
-}
-.ds-select .mat-mdc-text-field-wrapper {
-  background: var(--color-surface-input);
-  padding: 0 var(--spacing-md);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  cursor: pointer;
-}
-.ds-select:focus-within:not(.is-error) .ds-select__arrow {
-  color: var(--color-icon-brand);
-}
-.ds-select:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
-  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-}
-.ds-select.is-error {
-  --mdc-outlined-text-field-outline-color: var(--color-border-input-error);
-  --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
-  --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
-}
-.ds-select.is-error:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
-  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-}
-.ds-select.is-disabled {
-  --mdc-outlined-text-field-disabled-outline-color: var(--color-border-subtle);
-  --mdc-outlined-text-field-disabled-outline-opacity: 1;
-}
-.ds-select.is-disabled .mat-mdc-text-field-wrapper {
-  background: var(--color-surface-input-disabled);
-}
-.ds-select.is-disabled .ds-select__label {
-  color: var(--color-text-disabled);
-}
-.ds-select.is-disabled .ds-select__arrow {
-  color: var(--color-icon-disabled);
-}
-.ds-select.is-disabled .ds-select__helper {
-  color: var(--color-text-disabled);
-}
-
-.ds-select-panel {
-  background: var(--color-surface-overlay);
-  border-radius: var(--radius-sm);
-  box-shadow: 0 4px 16px var(--shadow-elevation-2);
-}
-.ds-select-panel .mat-mdc-option {
-  font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-medium-size);
-  font-weight: var(--ref-typeface-weight-regular);
-  color: var(--color-text-primary);
-}
-.ds-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
-  background: var(--overlay-hovered);
-}
-.ds-select-panel .mat-mdc-option:active:not(.mdc-list-item--disabled) {
-  background: var(--overlay-pressed);
-}
-.ds-select-panel .mat-mdc-option.mdc-list-item--selected {
-  color: var(--color-text-brand);
-}
-.ds-select-panel .mat-mdc-option.mdc-list-item--disabled {
-  color: var(--color-text-disabled);
-  opacity: 1;
-}
-.ds-select-panel .mat-mdc-option {
-  --mat-option-hover-state-layer-opacity: 0;
-  --mat-option-focus-state-layer-opacity: 0;
-  --mat-option-selected-state-layer-opacity: 0;
-  --mat-option-pressed-state-layer-opacity: 0;
 }
 
 .ds-textarea {
@@ -3684,7 +3628,7 @@
   background: var(--color-surface-page);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 4px 0 var(--shadow-elevation-5), 0 3px 12px 6px var(--shadow-elevation-5);
+  box-shadow: 0 4px 4px 0 var(--shadow-elevation-3), 0 3px 12px 6px var(--shadow-elevation-3);
   min-width: 160px;
   max-width: 280px;
   padding: var(--spacing-xs) 0;
@@ -3805,7 +3749,7 @@
   background: transparent !important;
 }
 .ds-menu__item-icon {
-  color: var(--color-icon-subtle);
+  color: var(--color-icon-default);
   flex-shrink: 0;
 }
 .ds-menu__item-trailing {
@@ -3840,7 +3784,7 @@
   border-radius: var(--radius-md);
   background: var(--color-surface-page);
   border: 1px solid var(--color-border-subtle);
-  box-shadow: 0 4px 4px 0 var(--shadow-elevation-5), 0 3px 12px 6px var(--shadow-elevation-5);
+  box-shadow: 0 4px 4px 0 var(--shadow-elevation-3), 0 3px 12px 6px var(--shadow-elevation-3);
   min-width: 160px;
   max-width: 280px;
   --mat-menu-container-elevation-shadow: none;
@@ -4115,17 +4059,18 @@
   align-items: center;
   gap: var(--spacing-xs);
   height: 32px;
-  padding: 0 var(--spacing-sm) 0 var(--spacing-md);
-  background: var(--color-surface-default);
-  border: 1px solid var(--color-border-secondary);
+  padding: 0 var(--spacing-md);
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-brand);
   border-radius: var(--radius-full);
-  font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-small-size);
-  font-weight: var(--ref-typeface-weight-medium);
-  line-height: var(--ref-typescale-label-small-line-height);
-  color: var(--color-text-primary);
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  color: var(--color-text-brand);
   cursor: default;
-  transition: background 0.12s, border-color 0.12s;
+  transition: background 0.12s;
   position: relative;
 }
 .ds-chip:focus {
@@ -4134,12 +4079,10 @@
 .ds-chip:focus-visible {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
-.ds-chip:hover:not(.is-disabled) {
-  background: var(--color-surface-subtle);
-  border-color: var(--color-border-primary);
-}
-.ds-chip--no-icon {
-  padding-left: var(--spacing-md);
+.ds-chip:hover:not(.is-disabled):not(.is-error),
+.ds-chip:active:not(.is-disabled):not(.is-error),
+.ds-chip.is-active:not(.is-disabled) {
+  background: var(--color-surface-brand);
 }
 .ds-chip.is-error {
   background: var(--color-surface-error);
@@ -4165,7 +4108,7 @@
   color: var(--color-icon-disabled);
 }
 .ds-chip__icon {
-  color: var(--color-icon-subtle);
+  color: var(--color-icon-brand);
   flex-shrink: 0;
 }
 .ds-chip__label {
@@ -4176,21 +4119,18 @@
   border: none;
   background: transparent;
   padding: 0;
-  margin-left: var(--spacing-xs);
-  margin-right: calc(-1 * var(--spacing-xs));
   width: 20px;
   height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--color-icon-subtle);
+  color: var(--color-icon-brand);
   border-radius: var(--radius-full);
   flex-shrink: 0;
-  transition: color 0.12s, background 0.12s;
+  transition: background 0.12s;
 }
 .ds-chip__remove:hover {
-  color: var(--color-icon-default);
   background: var(--overlay-hovered);
 }
 .ds-chip__remove:focus {
@@ -4210,19 +4150,25 @@
 .mat-mdc-chip {
   --mdc-chip-container-height: 32px;
   --mdc-chip-container-shape: var(--radius-full);
-  --mdc-chip-flat-container-color: var(--color-surface-default);
-  --mdc-chip-outline-color: var(--color-border-secondary);
-  --mdc-chip-label-text-color: var(--color-text-primary);
-  --mdc-chip-label-text-font: var(--ref-typeface-brand);
-  --mdc-chip-label-text-size: var(--ref-typescale-label-small-size);
-  --mdc-chip-label-text-weight: var(--ref-typeface-weight-medium);
-  --mdc-chip-label-text-line-height: var(--ref-typescale-label-small-line-height);
-  --mat-chip-trailing-action-color: var(--color-icon-subtle);
+  --mdc-chip-flat-container-color: var(--color-surface-page);
+  --mdc-chip-outline-color: var(--color-border-brand);
+  --mdc-chip-label-text-color: var(--color-text-brand);
+  --mdc-chip-label-text-font: var(--ref-typescale-label-medium-font);
+  --mdc-chip-label-text-size: var(--ref-typescale-label-medium-size);
+  --mdc-chip-label-text-weight: var(--ref-typescale-label-medium-weight-prominent);
+  --mdc-chip-label-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mdc-chip-label-text-tracking: var(--ref-typescale-label-medium-tracking);
+  --mat-chip-trailing-action-color: var(--color-icon-brand);
   --mat-chip-disabled-trailing-action-color: var(--color-icon-disabled);
   --mat-chip-hover-state-layer-opacity: 0;
   --mat-chip-focus-state-layer-opacity: 0;
   --mat-chip-selected-state-layer-opacity: 0;
   --mdc-chip-disabled-label-text-color: var(--color-text-disabled);
+}
+.mat-mdc-chip:hover:not(.mat-mdc-chip-disabled):not(.is-error),
+.mat-mdc-chip:active:not(.mat-mdc-chip-disabled):not(.is-error),
+.mat-mdc-chip.is-active:not(.mat-mdc-chip-disabled) {
+  --mdc-chip-flat-container-color: var(--color-surface-brand);
 }
 .mat-mdc-chip.is-error {
   --mdc-chip-flat-container-color: var(--color-surface-error);
@@ -4230,7 +4176,8 @@
   --mdc-chip-label-text-color: var(--color-text-error);
   --mat-chip-trailing-action-color: var(--color-icon-error);
 }
-.mat-mdc-chip.is-disabled {
+.mat-mdc-chip.is-disabled,
+.mat-mdc-chip.mat-mdc-chip-disabled {
   --mdc-chip-flat-container-color: var(--color-surface-disabled);
   --mdc-chip-outline-color: var(--color-border-subtle);
   --mdc-chip-label-text-color: var(--color-text-disabled);
@@ -4734,146 +4681,92 @@
   --mdc-circular-progress-active-indicator-color: var(--color-icon-subtle);
 }
 
-.ds-snackbar-host {
-  position: fixed;
-  bottom: var(--spacing-xl);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  align-items: center;
-  pointer-events: none;
+@keyframes ds-snackbar-enter {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
-.ds-snackbar-host .ds-snackbar {
-  pointer-events: all;
-}
-
 .ds-snackbar {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-surface-tooltip);
-  color: var(--color-text-tooltip);
-  border-radius: var(--radius-md);
-  box-shadow: 0 4px 16px var(--shadow-elevation-3), 0 1px 4px var(--shadow-elevation-2);
-  min-width: 280px;
+  flex-direction: row;
+  align-items: flex-start;
+  width: fit-content;
   max-width: 480px;
-  font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-medium-size);
-  line-height: var(--ref-typescale-label-medium-line-height);
+  padding: var(--spacing-lg);
+  background: var(--color-surface-tooltip);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-sm);
+  box-shadow:
+    0 3px 12px 6px var(--shadow-elevation-3),
+    0 4px 4px 0 var(--shadow-elevation-3);
   animation: ds-snackbar-enter 0.2s ease;
 }
-@keyframes ds-snackbar-enter {
-  from {
-    transform: translateY(12px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-.ds-snackbar--success {
-  background: var(--color-surface-accent-green-bold);
-}
-.ds-snackbar--success .ds-snackbar__icon {
-  color: var(--color-text-on-bold);
-}
-.ds-snackbar--error {
-  background: var(--color-surface-accent-red-bold);
-}
-.ds-snackbar--error .ds-snackbar__icon {
-  color: var(--color-text-on-bold);
-}
-.ds-snackbar--warning {
-  background: var(--color-surface-accent-yellow-bold);
-  color: var(--color-text-primary);
-}
-.ds-snackbar--warning .ds-snackbar__icon {
-  color: var(--color-text-primary);
-}
-.ds-snackbar--warning .ds-snackbar__message {
-  color: var(--color-text-primary);
-}
-.ds-snackbar--warning .ds-snackbar__action {
-  color: var(--color-text-primary);
-}
-.ds-snackbar--warning .ds-snackbar__close {
-  color: var(--color-text-primary);
-}
-.ds-snackbar__icon {
-  font-family: "Material Symbols Rounded";
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  display: flex;
+.ds-snackbar--text-action {
+  width: 344px;
+  gap: var(--spacing-md);
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  color: var(--color-text-tooltip);
-  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 20;
+}
+.ds-snackbar--text-longer-action {
+  width: 344px;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+.ds-snackbar--has-close:not(.ds-snackbar--text-longer-action) {
+  width: 344px;
+  padding-right: var(--spacing-sm);
+  align-items: center;
+}
+.ds-snackbar--has-close.ds-snackbar--text-longer-action {
+  width: 344px;
+  padding-right: var(--spacing-sm);
 }
 .ds-snackbar__message {
   flex: 1;
   min-width: 0;
-  color: var(--color-text-tooltip);
+  font-family: var(--ref-typescale-body-medium-font);
+  font-size: var(--ref-typescale-body-medium-size);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  font-weight: var(--ref-typescale-body-medium-weight);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-inverse);
 }
-.ds-snackbar__action {
-  appearance: none;
-  border: none;
-  background: transparent;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-small-size);
-  font-weight: var(--ref-typeface-weight-bold);
-  color: var(--color-border-ada-focus-ring);
-  cursor: pointer;
-  border-radius: var(--radius-sm);
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: background 0.12s;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.ds-snackbar__action:focus {
-  outline: none;
-}
-.ds-snackbar__action:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-.ds-snackbar__action:focus-visible {
-  box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring);
+.ds-snackbar__action-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
 }
 .ds-snackbar__close {
+  position: relative;
+  overflow: hidden;
   appearance: none;
   border: none;
   background: transparent;
-  padding: var(--spacing-xs);
-  cursor: pointer;
-  color: var(--color-text-tooltip);
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-inverse);
+  padding: 0;
   flex-shrink: 0;
-  transition: background 0.12s;
-  opacity: 0.7;
 }
-.ds-snackbar__close:hover {
-  background: rgba(255, 255, 255, 0.12);
-  opacity: 1;
+.ds-snackbar__close::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
 }
-.ds-snackbar__close:focus {
-  outline: none;
-}
-.ds-snackbar__close:focus-visible {
-  box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring);
-}
+.ds-snackbar__close:hover::after  { background: rgba(255, 255, 255, 0.12); }
+.ds-snackbar__close:active::after { background: rgba(255, 255, 255, 0.18); }
+.ds-snackbar__close:focus         { outline: none; }
+.ds-snackbar__close:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
 
-.mat-mdc-snack-bar-container.ds-snackbar-host {
+.mat-mdc-snack-bar-container.ds-snackbar-panel {
   background: transparent;
   box-shadow: none;
   padding: 0;
@@ -4883,7 +4776,7 @@
   --mdc-snackbar-supporting-text-color: transparent;
   --mat-snack-bar-button-color: transparent;
 }
-.mat-mdc-snack-bar-container.ds-snackbar-host .mdc-snackbar__surface {
+.mat-mdc-snack-bar-container.ds-snackbar-panel .mdc-snackbar__surface {
   background: transparent;
   box-shadow: none;
   padding: 0;
@@ -4891,7 +4784,7 @@
   max-width: unset;
   border-radius: 0;
 }
-.mat-mdc-snack-bar-container.ds-snackbar-host .mat-mdc-snack-bar-actions {
+.mat-mdc-snack-bar-container.ds-snackbar-panel .mat-mdc-snack-bar-actions {
   display: none;
 }
 
@@ -5386,51 +5279,9 @@
   color: var(--color-text-primary);
   white-space: nowrap;
 }
-.ds-ag-paginator__select-wrap {
-  position: relative;
+.ds-ag-paginator__size-select {
   width: 96px;
-  height: 42px;
   flex-shrink: 0;
-}
-.ds-ag-paginator__select {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 100%;
-  height: 100%;
-  padding: 0 42px 0 16px;
-  border: 1px solid var(--color-border-input);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-input);
-  color: var(--color-text-primary);
-  font-family: var(--ref-typescale-body-medium-font);
-  font-size: var(--ref-typescale-body-medium-size);
-  font-weight: var(--ref-typescale-body-medium-weight);
-  line-height: var(--ref-typescale-body-medium-line-height);
-  letter-spacing: var(--ref-typescale-body-medium-tracking);
-  cursor: pointer;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-.ds-ag-paginator__select:focus {
-  outline: none;
-}
-.ds-ag-paginator__select:focus-visible {
-  border-color: var(--color-border-input-active);
-  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-}
-.ds-ag-paginator__select:hover:not(:disabled) {
-  border-color: var(--color-border-input-hover);
-}
-.ds-ag-paginator__select-icon {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  color: var(--color-icon-default);
 }
 .ds-ag-paginator__pagination {
   display: flex;
@@ -5835,7 +5686,7 @@
   gap: var(--spacing-md);
   overflow: hidden;
   background: var(--color-surface-nav);
-  box-shadow: 0 1px 10px 4px var(--shadow-elevation-4), 0 4px 3px 0 var(--shadow-elevation-4);
+  box-shadow: 0 1px 10px 4px var(--shadow-elevation-2), 0 4px 3px 0 var(--shadow-elevation-2);
   position: relative;
   z-index: 1;
 }
@@ -6409,6 +6260,7 @@
       <a class="nav-link" href="#menu" onclick="setActive(this)"><span class="nav-dot"></span>Menu</a>
 
       <div class="nav-group-label">Feedback &amp; Status</div>
+      <a class="nav-link" href="#snackbar" onclick="setActive(this)"><span class="nav-dot"></span>Snackbar</a>
       <a class="nav-link" href="#alert" onclick="setActive(this)"><span class="nav-dot"></span>Alert</a>
       <a class="nav-link" href="#badge" onclick="setActive(this)"><span class="nav-dot"></span>Badge</a>
       <a class="nav-link" href="#tooltip" onclick="setActive(this)"><span class="nav-dot"></span>Tooltip</a>
@@ -6418,6 +6270,7 @@
       <div class="nav-group-label">Display</div>
       <a class="nav-link" href="#avatar" onclick="setActive(this)"><span class="nav-dot"></span>Avatar</a>
       <a class="nav-link" href="#label" onclick="setActive(this)"><span class="nav-dot"></span>Label</a>
+      <a class="nav-link" href="#chip" onclick="setActive(this)"><span class="nav-dot"></span>Chip</a>
       <a class="nav-link" href="#tabs" onclick="setActive(this)"><span class="nav-dot"></span>Tabs</a>
       <a class="nav-link" href="#list" onclick="setActive(this)"><span class="nav-dot"></span>List Item</a>
 
@@ -7054,90 +6907,146 @@
         <div class="section-header">
           <h2 class="section-title">Select / Dropdown</h2>
           <p class="section-desc">
-  Native <code>&lt;select&gt;</code> wrapper — same 42px height and visual treatment as Input Field.
-  Angular Material: <code>MatSelectModule</code>. Use <code>class="ds-select"</code> or <code>&lt;ds-select&gt;</code>.
+  Same 42px height and visual treatment as Input Field. The dropdown panel uses <code>ds-menu</code>
+  with the single-select checkmark pattern. Angular component uses <code>MatMenuModule</code> +
+  <code>DsMenuComponent</code>. Use <code>class="ds-select"</code> or <code>&lt;ds-select&gt;</code>.
   Source: <code>components/select/_select.scss</code>
 </p>
         </div>
         <div class="component-demo">
 
+          <!-- Default — placeholder + pre-selected -->
           <div class="demo-row">
             <div class="demo-row-label">Default</div>
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+
+              <!-- No selection — placeholder -->
               <div class="ds-select" style="width:220px;">
                 <label class="ds-select__label" for="sel-default">Plan</label>
-                <div class="ds-select__field">
-                  <select id="sel-default" class="ds-select__control">
-                    <option value="">Select a plan...</option>
-                    <option value="free">Free</option>
-                    <option value="pro">Pro — $12/mo</option>
-                    <option value="enterprise">Enterprise</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                <div class="ds-select__field-row">
+                  <div class="ds-select__field" onclick="document.getElementById('sel-default').focus()">
+                    <input type="text" id="sel-default" class="ds-select__control"
+                           placeholder="Select a plan..."
+                           data-default-placeholder="Select a plan..."
+                           autocomplete="off" spellcheck="false"
+                           role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="sel-default-menu"
+                           onfocus="dsSelectOpen('sel-default')"
+                           oninput="dsSelectFilter('sel-default', this.value)"
+                           onblur="dsSelectBlur('sel-default', event)">
+                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                  </div>
+                  <div class="ds-select__dropdown" id="sel-default-menu" role="listbox" aria-labelledby="sel-default">
+                    <div class="ds-menu">
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Free" onclick="dsSelectOption('sel-default', this)">Free</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Pro — $12/mo" onclick="dsSelectOption('sel-default', this)">Pro — $12/mo</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Enterprise" onclick="dsSelectOption('sel-default', this)">Enterprise</button>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <!-- Pre-selected value -->
               <div class="ds-select" style="width:220px;">
                 <label class="ds-select__label" for="sel-selected">Country</label>
-                <div class="ds-select__field">
-                  <select id="sel-selected" class="ds-select__control">
-                    <option value="">Select country...</option>
-                    <option value="us" selected>United States</option>
-                    <option value="ca">Canada</option>
-                    <option value="uk">United Kingdom</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                <div class="ds-select__field-row">
+                  <div class="ds-select__field" onclick="document.getElementById('sel-selected').focus()">
+                    <input type="text" id="sel-selected" class="ds-select__control"
+                           value="United States"
+                           data-default-placeholder="Select country..."
+                           autocomplete="off" spellcheck="false"
+                           role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="sel-selected-menu"
+                           onfocus="dsSelectOpen('sel-selected')"
+                           oninput="dsSelectFilter('sel-selected', this.value)"
+                           onblur="dsSelectBlur('sel-selected', event)">
+                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                  </div>
+                  <div class="ds-select__dropdown" id="sel-selected-menu" role="listbox" aria-labelledby="sel-selected">
+                    <div class="ds-menu">
+                      <!-- Only the selected item gets ds-menu__item-check — unselected stay flush left -->
+                      <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="United States" onclick="dsSelectOption('sel-selected', this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>United States</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Canada" onclick="dsSelectOption('sel-selected', this)">Canada</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="United Kingdom" onclick="dsSelectOption('sel-selected', this)">United Kingdom</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
+          <!-- With Helper — dropdown anchors to __field-row, helper text stays below -->
           <div class="demo-row">
             <div class="demo-row-label">With Helper</div>
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-select" style="width:220px;">
                 <label class="ds-select__label" for="sel-helper">Timezone</label>
-                <div class="ds-select__field">
-                  <select id="sel-helper" class="ds-select__control">
-                    <option value="">Select timezone...</option>
-                    <option value="et">Eastern (UTC-5)</option>
-                    <option value="ct">Central (UTC-6)</option>
-                    <option value="pt">Pacific (UTC-8)</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                <div class="ds-select__field-row">
+                  <div class="ds-select__field" onclick="document.getElementById('sel-helper').focus()">
+                    <input type="text" id="sel-helper" class="ds-select__control"
+                           placeholder="Select timezone..."
+                           data-default-placeholder="Select timezone..."
+                           autocomplete="off" spellcheck="false"
+                           role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="sel-helper-menu"
+                           onfocus="dsSelectOpen('sel-helper')"
+                           oninput="dsSelectFilter('sel-helper', this.value)"
+                           onblur="dsSelectBlur('sel-helper', event)">
+                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                  </div>
+                  <div class="ds-select__dropdown" id="sel-helper-menu" role="listbox" aria-labelledby="sel-helper">
+                    <div class="ds-menu">
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Eastern (UTC-5)" onclick="dsSelectOption('sel-helper', this)">Eastern (UTC-5)</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Central (UTC-6)" onclick="dsSelectOption('sel-helper', this)">Central (UTC-6)</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Pacific (UTC-8)" onclick="dsSelectOption('sel-helper', this)">Pacific (UTC-8)</button>
+                    </div>
+                  </div>
                 </div>
                 <span class="ds-select__helper">Affects all scheduled reports.</span>
               </div>
             </div>
           </div>
 
+          <!-- Error -->
           <div class="demo-row">
             <div class="demo-row-label">Error</div>
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-select is-error" style="width:220px;">
-                <label class="ds-select__label" for="sel-error">Role<span class="ds-select__required">*</span></label>
-                <div class="ds-select__field">
-                  <select id="sel-error" class="ds-select__control" aria-invalid="true">
-                    <option value="">Select a role...</option>
-                    <option value="admin">Admin</option>
-                    <option value="member">Member</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon" aria-hidden="true">error</span>
+                <label class="ds-select__label" for="sel-error">Role<span class="ds-select__required" aria-hidden="true">*</span></label>
+                <div class="ds-select__field-row">
+                  <div class="ds-select__field" onclick="document.getElementById('sel-error').focus()">
+                    <input type="text" id="sel-error" class="ds-select__control"
+                           placeholder="Select a role..."
+                           data-default-placeholder="Select a role..."
+                           autocomplete="off" spellcheck="false"
+                           role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-invalid="true" aria-controls="sel-error-menu"
+                           onfocus="dsSelectOpen('sel-error')"
+                           oninput="dsSelectFilter('sel-error', this.value)"
+                           onblur="dsSelectBlur('sel-error', event)">
+                    <span class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon" aria-hidden="true">error</span>
+                  </div>
+                  <div class="ds-select__dropdown" id="sel-error-menu" role="listbox" aria-labelledby="sel-error">
+                    <div class="ds-menu">
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Admin" onclick="dsSelectOption('sel-error', this)">Admin</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Member" onclick="dsSelectOption('sel-error', this)">Member</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Viewer" onclick="dsSelectOption('sel-error', this)">Viewer</button>
+                    </div>
+                  </div>
                 </div>
                 <span class="ds-select__helper" role="alert">Please select a role.</span>
               </div>
             </div>
           </div>
 
+          <!-- Disabled -->
           <div class="demo-row">
             <div class="demo-row-label">Disabled</div>
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-select is-disabled" style="width:220px;">
                 <label class="ds-select__label" for="sel-disabled">Subscription</label>
-                <div class="ds-select__field">
-                  <select id="sel-disabled" class="ds-select__control" disabled>
-                    <option value="enterprise">Enterprise</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                <div class="ds-select__field-row">
+                  <div class="ds-select__field">
+                    <input type="text" id="sel-disabled" class="ds-select__control"
+                           value="Enterprise" disabled>
+                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                  </div>
                 </div>
                 <span class="ds-select__helper">Contact sales to change your plan.</span>
               </div>
@@ -7915,22 +7824,22 @@
             <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px;">
               <div class="ds-menu" role="menu">
                 <button class="ds-menu__item" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">edit</span>
                   Edit
                 </button>
                 <button class="ds-menu__item" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">content_copy</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">content_copy</span>
                   Duplicate
                 </button>
                 <button class="ds-menu__item" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">share</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">share</span>
                   Share
                   <span class="ds-menu__item-trailing">⌘ S</span>
                 </button>
                 <hr class="ds-menu__divider" />
                 <!-- Destructive: neutral text by default, red only on hover/active -->
                 <button class="ds-menu__item ds-menu__item--destructive" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">delete</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">delete</span>
                   Delete
                 </button>
               </div>
@@ -7945,20 +7854,20 @@
               <div class="ds-menu" role="menu">
                 <div class="ds-menu__section-label">Account</div>
                 <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">person</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">person</span>
                   Profile
                 </button>
                 <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">settings</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">settings</span>
                   Settings
                 </button>
                 <div class="ds-menu__section-label">Workspace</div>
                 <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">group</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">group</span>
                   Team members
                 </button>
                 <button class="ds-menu__item ds-menu__item--indent" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">notifications</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">notifications</span>
                   Notifications
                 </button>
               </div>
@@ -8070,18 +7979,18 @@
             <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px; gap: 0;">
               <div class="ds-menu" role="menu">
                 <button class="ds-menu__item" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">edit</span>
                   Edit
                 </button>
                 <button class="ds-menu__item" role="menuitem" aria-haspopup="true" aria-expanded="true">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">folder</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">folder</span>
                   Move to
                   <span class="ds-menu__item-trailing">
                     <span class="ds-icon ds-icon--sm">chevron_right</span>
                   </span>
                 </button>
                 <button class="ds-menu__item" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">link</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">link</span>
                   Copy link
                 </button>
               </div>
@@ -8101,21 +8010,21 @@
             <div class="demo-row-items" style="align-items: flex-start; padding-top: 8px;">
               <div class="ds-menu" role="menu">
                 <button class="ds-menu__item" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">edit</span>
                   Edit
                 </button>
                 <button class="ds-menu__item is-disabled" role="menuitem" aria-disabled="true">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">content_copy</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">content_copy</span>
                   Duplicate
                 </button>
                 <button class="ds-menu__item is-disabled" role="menuitem" aria-disabled="true">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">share</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">share</span>
                   Share
                 </button>
                 <hr class="ds-menu__divider" />
                 <!-- Neutral by default — hover to see red -->
                 <button class="ds-menu__item ds-menu__item--destructive" role="menuitem">
-                  <span class="ds-icon ds-icon--sm ds-menu__item-icon">delete</span>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon">delete</span>
                   Delete
                 </button>
               </div>
@@ -8123,6 +8032,85 @@
           </div>
 
         </div>
+      </section>
+
+      <section class="section" id="snackbar">
+        <div class="section-header">
+          <h2 class="section-title">Snackbar</h2>
+          <p class="section-desc">Toast notifications shown top-center. Three layout variants. Launched via <code>MatSnackBar.openFromComponent(DsSnackbarComponent, { panelClass: 'ds-snackbar-panel', verticalPosition: 'top', horizontalPosition: 'center' })</code>. Source: <code>components/snackbar/_snackbar.scss</code></p>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">Text only</div>
+          <div class="demo-row-items">
+            <div class="ds-snackbar" role="status" aria-live="polite">
+              <span class="ds-snackbar__message">Changes saved successfully.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">Text only + close</div>
+          <div class="demo-row-items">
+            <div class="ds-snackbar ds-snackbar--has-close" role="status" aria-live="polite">
+              <span class="ds-snackbar__message">Changes saved successfully.</span>
+              <button class="ds-snackbar__close" type="button" aria-label="Dismiss">
+                <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">Text &amp; action</div>
+          <div class="demo-row-items">
+            <div class="ds-snackbar ds-snackbar--text-action" role="status" aria-live="polite">
+              <span class="ds-snackbar__message">Item moved to archive.</span>
+              <button class="ds-button ds-button--filled ds-button--sm" type="button">Undo</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">Text &amp; action + close</div>
+          <div class="demo-row-items">
+            <div class="ds-snackbar ds-snackbar--text-action ds-snackbar--has-close" role="status" aria-live="polite">
+              <span class="ds-snackbar__message">Item moved to archive.</span>
+              <button class="ds-button ds-button--filled ds-button--sm" type="button">Undo</button>
+              <button class="ds-snackbar__close" type="button" aria-label="Dismiss">
+                <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">Text &amp; longer action</div>
+          <div class="demo-row-items">
+            <div class="ds-snackbar ds-snackbar--text-longer-action" role="status" aria-live="polite">
+              <span class="ds-snackbar__message">This item will be permanently deleted after 30 days.</span>
+              <div class="ds-snackbar__action-row">
+                <button class="ds-button ds-button--filled ds-button--sm" type="button">Restore item</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <div class="demo-row-label">Text &amp; longer action + close</div>
+          <div class="demo-row-items">
+            <div class="ds-snackbar ds-snackbar--text-longer-action ds-snackbar--has-close" role="status" aria-live="polite">
+              <span class="ds-snackbar__message">This item will be permanently deleted after 30 days.</span>
+              <div class="ds-snackbar__action-row">
+                <button class="ds-button ds-button--filled ds-button--sm" type="button">Restore item</button>
+                <button class="ds-snackbar__close" type="button" aria-label="Dismiss">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <section class="section" id="alert">
@@ -8752,6 +8740,148 @@
 
         </div>
       </section>
+
+      <section class="section" id="chip">
+        <div class="section-header">
+          <h2 class="section-title">Chip</h2>
+          <p class="section-desc">Compact interactive element representing a filter or removable input. Blue border and text by default. Hover/active: light blue tint. Supports leading icon and trailing remove button. Source: <code>components/chip/_chip.scss</code></p>
+        </div>
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">Default — with remove</div>
+            <div class="demo-row-items">
+              <div class="ds-chip" role="option" tabindex="0">
+                <span class="ds-chip__label">Label</span>
+                <button class="ds-chip__remove" aria-label="Remove Label">
+                  <span class="ds-icon ds-icon--sm">close</span>
+                </button>
+              </div>
+              <div class="ds-chip is-active" role="option" tabindex="0">
+                <span class="ds-chip__label">Active</span>
+                <button class="ds-chip__remove" aria-label="Remove Active">
+                  <span class="ds-icon ds-icon--sm">close</span>
+                </button>
+              </div>
+              <div class="ds-chip is-error" role="option" tabindex="0">
+                <span class="ds-chip__label">Error</span>
+                <button class="ds-chip__remove" aria-label="Remove Error">
+                  <span class="ds-icon ds-icon--sm">close</span>
+                </button>
+              </div>
+              <div class="ds-chip is-disabled" role="option" aria-disabled="true">
+                <span class="ds-chip__label">Disabled</span>
+                <button class="ds-chip__remove" aria-label="Remove Disabled" disabled>
+                  <span class="ds-icon ds-icon--sm">close</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">With leading icon</div>
+            <div class="demo-row-items">
+              <div class="ds-chip" role="option" tabindex="0">
+                <span class="ds-icon ds-icon--sm ds-chip__icon">drag_indicator</span>
+                <span class="ds-chip__label">Label</span>
+                <button class="ds-chip__remove" aria-label="Remove Label">
+                  <span class="ds-icon ds-icon--sm">close</span>
+                </button>
+              </div>
+              <div class="ds-chip is-active" role="option" tabindex="0">
+                <span class="ds-icon ds-icon--sm ds-chip__icon">drag_indicator</span>
+                <span class="ds-chip__label">Active</span>
+                <button class="ds-chip__remove" aria-label="Remove Active">
+                  <span class="ds-icon ds-icon--sm">close</span>
+                </button>
+              </div>
+              <div class="ds-chip is-error" role="option" tabindex="0">
+                <span class="ds-icon ds-icon--sm ds-chip__icon">drag_indicator</span>
+                <span class="ds-chip__label">Error</span>
+                <button class="ds-chip__remove" aria-label="Remove Error">
+                  <span class="ds-icon ds-icon--sm">close</span>
+                </button>
+              </div>
+              <div class="ds-chip is-disabled" role="option" aria-disabled="true">
+                <span class="ds-icon ds-icon--sm ds-chip__icon">drag_indicator</span>
+                <span class="ds-chip__label">Disabled</span>
+                <button class="ds-chip__remove" aria-label="Remove Disabled" disabled>
+                  <span class="ds-icon ds-icon--sm">close</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">No remove button</div>
+            <div class="demo-row-items">
+              <div class="ds-chip" role="option" tabindex="0">
+                <span class="ds-chip__label">Label</span>
+              </div>
+              <div class="ds-chip is-active" role="option" tabindex="0">
+                <span class="ds-chip__label">Active</span>
+              </div>
+              <div class="ds-chip is-error" role="option" tabindex="0">
+                <span class="ds-chip__label">Error</span>
+              </div>
+              <div class="ds-chip is-disabled" role="option" aria-disabled="true">
+                <span class="ds-chip__label">Disabled</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">No remove — leading icon</div>
+            <div class="demo-row-items">
+              <div class="ds-chip" role="option" tabindex="0">
+                <span class="ds-icon ds-icon--sm ds-chip__icon">drag_indicator</span>
+                <span class="ds-chip__label">Label</span>
+              </div>
+              <div class="ds-chip is-active" role="option" tabindex="0">
+                <span class="ds-icon ds-icon--sm ds-chip__icon">drag_indicator</span>
+                <span class="ds-chip__label">Active</span>
+              </div>
+              <div class="ds-chip is-error" role="option" tabindex="0">
+                <span class="ds-icon ds-icon--sm ds-chip__icon">drag_indicator</span>
+                <span class="ds-chip__label">Error</span>
+              </div>
+              <div class="ds-chip is-disabled" role="option" aria-disabled="true">
+                <span class="ds-icon ds-icon--sm ds-chip__icon">drag_indicator</span>
+                <span class="ds-chip__label">Disabled</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Chip list</div>
+            <div class="demo-row-items">
+              <div class="ds-chip-list" role="listbox" aria-label="Selected filters">
+                <div class="ds-chip" role="option" tabindex="0">
+                  <span class="ds-chip__label">Design System</span>
+                  <button class="ds-chip__remove" aria-label="Remove Design System">
+                    <span class="ds-icon ds-icon--sm">close</span>
+                  </button>
+                </div>
+                <div class="ds-chip is-active" role="option" tabindex="0">
+                  <span class="ds-chip__label">Active filter</span>
+                  <button class="ds-chip__remove" aria-label="Remove Active filter">
+                    <span class="ds-icon ds-icon--sm">close</span>
+                  </button>
+                </div>
+                <div class="ds-chip" role="option" tabindex="0">
+                  <span class="ds-icon ds-icon--sm ds-chip__icon">label</span>
+                  <span class="ds-chip__label">Angular</span>
+                  <button class="ds-chip__remove" aria-label="Remove Angular">
+                    <span class="ds-icon ds-icon--sm">close</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       <section class="section" id="tabs">
         <div class="section-header">
           <h2 class="section-title">Tabs</h2>
@@ -9784,15 +9914,29 @@
             <div class="ds-ag-paginator" style="width:100%;">
               <div class="ds-ag-paginator__inner">
                 <div class="ds-ag-paginator__counter">
-                  <span class="ds-ag-paginator__label">Items per page:</span>
-                  <div class="ds-ag-paginator__select-wrap">
-                    <select class="ds-ag-paginator__select" aria-label="Items per page">
-                      <option selected>100</option>
-                      <option>250</option>
-                      <option>500</option>
-                      <option>1000</option>
-                    </select>
-                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
+                  <div class="ds-select ds-ag-paginator__size-select">
+                    <div class="ds-select__field-row">
+                      <div class="ds-select__field" onclick="document.getElementById('pag-size-default').focus()">
+                        <input type="text" id="pag-size-default" class="ds-select__control"
+                               value="100" data-default-placeholder=""
+                               autocomplete="off" spellcheck="false"
+                               role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                               aria-controls="pag-size-default-menu" aria-label="Items per page"
+                               onfocus="dsSelectOpen('pag-size-default')"
+                               oninput="dsSelectFilter('pag-size-default', this.value)"
+                               onblur="dsSelectBlur('pag-size-default', event)">
+                        <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                      </div>
+                      <div class="ds-select__dropdown" id="pag-size-default-menu" role="listbox" aria-label="Items per page">
+                        <div class="ds-menu">
+                          <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="100" onclick="dsSelectOption('pag-size-default', this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>100</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="250" onclick="dsSelectOption('pag-size-default', this)">250</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="500" onclick="dsSelectOption('pag-size-default', this)">500</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="1000" onclick="dsSelectOption('pag-size-default', this)">1000</button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="ds-ag-paginator__pagination">
@@ -9824,15 +9968,29 @@
             <div class="ds-ag-paginator" style="width:100%;">
               <div class="ds-ag-paginator__inner">
                 <div class="ds-ag-paginator__counter">
-                  <span class="ds-ag-paginator__label">Items per page:</span>
-                  <div class="ds-ag-paginator__select-wrap">
-                    <select class="ds-ag-paginator__select" aria-label="Items per page">
-                      <option selected>100</option>
-                      <option>250</option>
-                      <option>500</option>
-                      <option>1000</option>
-                    </select>
-                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
+                  <div class="ds-select ds-ag-paginator__size-select">
+                    <div class="ds-select__field-row">
+                      <div class="ds-select__field" onclick="document.getElementById('pag-size-mid').focus()">
+                        <input type="text" id="pag-size-mid" class="ds-select__control"
+                               value="100" data-default-placeholder=""
+                               autocomplete="off" spellcheck="false"
+                               role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                               aria-controls="pag-size-mid-menu" aria-label="Items per page"
+                               onfocus="dsSelectOpen('pag-size-mid')"
+                               oninput="dsSelectFilter('pag-size-mid', this.value)"
+                               onblur="dsSelectBlur('pag-size-mid', event)">
+                        <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                      </div>
+                      <div class="ds-select__dropdown" id="pag-size-mid-menu" role="listbox" aria-label="Items per page">
+                        <div class="ds-menu">
+                          <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="100" onclick="dsSelectOption('pag-size-mid', this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>100</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="250" onclick="dsSelectOption('pag-size-mid', this)">250</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="500" onclick="dsSelectOption('pag-size-mid', this)">500</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="1000" onclick="dsSelectOption('pag-size-mid', this)">1000</button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="ds-ag-paginator__pagination">
@@ -9864,15 +10022,29 @@
             <div class="ds-ag-paginator" style="width:100%;">
               <div class="ds-ag-paginator__inner">
                 <div class="ds-ag-paginator__counter">
-                  <span class="ds-ag-paginator__label">Items per page:</span>
-                  <div class="ds-ag-paginator__select-wrap">
-                    <select class="ds-ag-paginator__select" aria-label="Items per page">
-                      <option selected>100</option>
-                      <option>250</option>
-                      <option>500</option>
-                      <option>1000</option>
-                    </select>
-                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
+                  <div class="ds-select ds-ag-paginator__size-select">
+                    <div class="ds-select__field-row">
+                      <div class="ds-select__field" onclick="document.getElementById('pag-size-last').focus()">
+                        <input type="text" id="pag-size-last" class="ds-select__control"
+                               value="100" data-default-placeholder=""
+                               autocomplete="off" spellcheck="false"
+                               role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                               aria-controls="pag-size-last-menu" aria-label="Items per page"
+                               onfocus="dsSelectOpen('pag-size-last')"
+                               oninput="dsSelectFilter('pag-size-last', this.value)"
+                               onblur="dsSelectBlur('pag-size-last', event)">
+                        <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                      </div>
+                      <div class="ds-select__dropdown" id="pag-size-last-menu" role="listbox" aria-label="Items per page">
+                        <div class="ds-menu">
+                          <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="100" onclick="dsSelectOption('pag-size-last', this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>100</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="250" onclick="dsSelectOption('pag-size-last', this)">250</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="500" onclick="dsSelectOption('pag-size-last', this)">500</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="1000" onclick="dsSelectOption('pag-size-last', this)">1000</button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="ds-ag-paginator__pagination">
@@ -9904,15 +10076,29 @@
             <div class="ds-ag-paginator" style="width:100%;">
               <div class="ds-ag-paginator__inner">
                 <div class="ds-ag-paginator__counter">
-                  <span class="ds-ag-paginator__label">Items per page:</span>
-                  <div class="ds-ag-paginator__select-wrap">
-                    <select class="ds-ag-paginator__select" aria-label="Items per page">
-                      <option selected>100</option>
-                      <option>250</option>
-                      <option>500</option>
-                      <option>1000</option>
-                    </select>
-                    <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                  <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
+                  <div class="ds-select ds-ag-paginator__size-select">
+                    <div class="ds-select__field-row">
+                      <div class="ds-select__field" onclick="document.getElementById('pag-size-empty').focus()">
+                        <input type="text" id="pag-size-empty" class="ds-select__control"
+                               value="100" data-default-placeholder=""
+                               autocomplete="off" spellcheck="false"
+                               role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                               aria-controls="pag-size-empty-menu" aria-label="Items per page"
+                               onfocus="dsSelectOpen('pag-size-empty')"
+                               oninput="dsSelectFilter('pag-size-empty', this.value)"
+                               onblur="dsSelectBlur('pag-size-empty', event)">
+                        <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                      </div>
+                      <div class="ds-select__dropdown" id="pag-size-empty-menu" role="listbox" aria-label="Items per page">
+                        <div class="ds-menu">
+                          <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="100" onclick="dsSelectOption('pag-size-empty', this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>100</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="250" onclick="dsSelectOption('pag-size-empty', this)">250</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="500" onclick="dsSelectOption('pag-size-empty', this)">500</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="1000" onclick="dsSelectOption('pag-size-empty', this)">1000</button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="ds-ag-paginator__pagination">
@@ -10039,15 +10225,29 @@
                     <input class="ds-input__control" type="search" placeholder="Search" aria-label="Search" />
                   </div>
                 </div>
-                <!-- Extra control: a styled native select for filtering by status -->
-                <div class="ds-ag-paginator__select-wrap" style="width: 140px;">
-                  <select class="ds-ag-paginator__select" aria-label="Filter by status">
-                    <option value="">All Statuses</option>
-                    <option value="active">Active</option>
-                    <option value="pending">Pending</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
-                  <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                <!-- Extra control: ds-select for filtering by status -->
+                <div class="ds-select" style="width: 140px;">
+                  <div class="ds-select__field-row">
+                    <div class="ds-select__field" onclick="document.getElementById('toolbar-status-filter').focus()">
+                      <input type="text" id="toolbar-status-filter" class="ds-select__control"
+                             value="All Statuses" data-default-placeholder="All Statuses"
+                             autocomplete="off" spellcheck="false"
+                             role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                             aria-controls="toolbar-status-filter-menu" aria-label="Filter by status"
+                             onfocus="dsSelectOpen('toolbar-status-filter')"
+                             oninput="dsSelectFilter('toolbar-status-filter', this.value)"
+                             onblur="dsSelectBlur('toolbar-status-filter', event)">
+                      <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                    </div>
+                    <div class="ds-select__dropdown" id="toolbar-status-filter-menu" role="listbox" aria-label="Filter by status">
+                      <div class="ds-menu">
+                        <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="All Statuses" onclick="dsSelectOption('toolbar-status-filter', this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>All Statuses</button>
+                        <button class="ds-menu__item" role="option" aria-selected="false" data-label="Active" onclick="dsSelectOption('toolbar-status-filter', this)">Active</button>
+                        <button class="ds-menu__item" role="option" aria-selected="false" data-label="Pending" onclick="dsSelectOption('toolbar-status-filter', this)">Pending</button>
+                        <button class="ds-menu__item" role="option" aria-selected="false" data-label="Inactive" onclick="dsSelectOption('toolbar-status-filter', this)">Inactive</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined is-selected" type="button" aria-pressed="true" aria-label="Toggle filters" onclick="togglePressed(this)">
                   <span class="ds-icon ds-icon--filled">filter_alt</span>
@@ -11267,15 +11467,29 @@
                         <div class="ds-ag-paginator" style="width: 100%; border-top: 1px solid var(--color-border-subtle);">
                           <div class="ds-ag-paginator__inner">
                             <div class="ds-ag-paginator__counter">
-                              <span class="ds-ag-paginator__label">Items per page:</span>
-                              <div class="ds-ag-paginator__select-wrap">
-                                <select class="ds-ag-paginator__select" aria-label="Items per page">
-                                  <option selected>100</option>
-                                  <option>250</option>
-                                  <option>500</option>
-                                  <option>1000</option>
-                                </select>
-                                <span class="ds-ag-paginator__select-icon ds-icon">arrow_drop_down</span>
+                              <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
+                              <div class="ds-select ds-ag-paginator__size-select">
+                                <div class="ds-select__field-row">
+                                  <div class="ds-select__field" onclick="document.getElementById('pag-size-layout').focus()">
+                                    <input type="text" id="pag-size-layout" class="ds-select__control"
+                                           value="100" data-default-placeholder=""
+                                           autocomplete="off" spellcheck="false"
+                                           role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                                           aria-controls="pag-size-layout-menu" aria-label="Items per page"
+                                           onfocus="dsSelectOpen('pag-size-layout')"
+                                           oninput="dsSelectFilter('pag-size-layout', this.value)"
+                                           onblur="dsSelectBlur('pag-size-layout', event)">
+                                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                                  </div>
+                                  <div class="ds-select__dropdown" id="pag-size-layout-menu" role="listbox" aria-label="Items per page">
+                                    <div class="ds-menu">
+                                      <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="100" onclick="dsSelectOption('pag-size-layout', this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>100</button>
+                                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="250" onclick="dsSelectOption('pag-size-layout', this)">250</button>
+                                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="500" onclick="dsSelectOption('pag-size-layout', this)">500</button>
+                                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="1000" onclick="dsSelectOption('pag-size-layout', this)">1000</button>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                             <div class="ds-ag-paginator__pagination">
@@ -11892,6 +12106,178 @@ function closeNavTab(closeBtn) {
       (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search'));
     if (el) el.removeAttribute('data-mouse-focus');
   }, true);
+})();
+</script>
+
+<!-- Select / Dropdown: combobox — open on focus, filter on input, select from ds-menu -->
+<script>
+(function () {
+  // Per-input saved state: { prevValue, defaultPlaceholder }
+  var state = {};
+
+  function getInput(inputId)    { return document.getElementById(inputId); }
+  function getDropdown(inputId) { return document.getElementById(inputId + '-menu'); }
+
+  function closeAll(exceptId) {
+    document.querySelectorAll('.ds-select__dropdown.is-open').forEach(function (menu) {
+      var id = menu.getAttribute('aria-labelledby');
+      if (id === exceptId) return;
+      menu.classList.remove('is-open');
+      menu.classList.remove('is-above');
+      menu.style.top = menu.style.bottom = menu.style.left = menu.style.width = '';
+      var inp = getInput(id);
+      if (inp) {
+        inp.setAttribute('aria-expanded', 'false');
+        // Restore previously committed value
+        inp.value = (state[id] && state[id].prevValue) || '';
+        inp.placeholder = (state[id] && state[id].defaultPlaceholder) || inp.getAttribute('data-default-placeholder') || '';
+        // Show all items
+        menu.querySelectorAll('.ds-menu__item').forEach(function (b) { b.style.display = ''; });
+      }
+    });
+  }
+
+  window.dsSelectOpen = function (inputId) {
+    var inp = getInput(inputId);
+    var menu = getDropdown(inputId);
+    if (!inp || !menu || inp.disabled) return;
+
+    // Save default placeholder on first open
+    if (!state[inputId]) {
+      state[inputId] = {
+        prevValue: inp.value,
+        defaultPlaceholder: inp.getAttribute('data-default-placeholder') || inp.placeholder
+      };
+    } else {
+      state[inputId].prevValue = inp.value;
+    }
+
+    closeAll(inputId);
+
+    // While open: clear value so user can type; show selected label as placeholder hint
+    var selectedItem = menu.querySelector('.ds-menu__item--selected');
+    inp.placeholder = selectedItem
+      ? (selectedItem.getAttribute('data-label') || '')
+      : state[inputId].defaultPlaceholder;
+    inp.value = '';
+
+    // Show all items (reset any previous filter)
+    menu.querySelectorAll('.ds-menu__item').forEach(function (b) { b.style.display = ''; });
+
+    // Teleport to <body> so stacking contexts inside table / paginator containers
+    // can't clip the panel (same principle as Angular Material CDK overlay).
+    if (menu.parentElement !== document.body) {
+      document.body.appendChild(menu);
+    }
+
+    // Position with fixed coords derived from the trigger field's viewport rect
+    var field = inp.closest('.ds-select__field');
+    var triggerRect = field ? field.getBoundingClientRect() : inp.getBoundingClientRect();
+    menu.style.left   = triggerRect.left + 'px';
+    menu.style.width  = triggerRect.width + 'px';
+    menu.style.top    = (triggerRect.bottom + 4) + 'px';
+    menu.style.bottom = 'auto';
+
+    menu.classList.add('is-open');
+    inp.setAttribute('aria-expanded', 'true');
+
+    // Flip above the trigger if the panel extends past the viewport bottom
+    var menuRect = menu.getBoundingClientRect();
+    if (menuRect.bottom > window.innerHeight) {
+      menu.style.top    = 'auto';
+      menu.style.bottom = (window.innerHeight - triggerRect.top + 4) + 'px';
+    }
+  };
+
+  window.dsSelectFilter = function (inputId, query) {
+    var menu = getDropdown(inputId);
+    if (!menu) return;
+    var q = query.toLowerCase();
+    menu.querySelectorAll('.ds-menu__item').forEach(function (btn) {
+      var label = btn.getAttribute('data-label') || btn.textContent.trim();
+      btn.style.display = label.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+  };
+
+  // Delayed blur — allow click on menu item to fire before closing
+  window.dsSelectBlur = function (inputId, event) {
+    setTimeout(function () {
+      var menu = getDropdown(inputId);
+      if (!menu) return;
+      // If focus moved into the dropdown, don't close
+      if (menu.contains(document.activeElement)) return;
+      var inp = getInput(inputId);
+      menu.classList.remove('is-open');
+      menu.classList.remove('is-above');
+      menu.style.top = menu.style.bottom = menu.style.left = menu.style.width = '';
+      if (inp) {
+        inp.setAttribute('aria-expanded', 'false');
+        var s = state[inputId] || {};
+        inp.value = s.prevValue || '';
+        inp.placeholder = s.defaultPlaceholder || inp.getAttribute('data-default-placeholder') || '';
+        menu.querySelectorAll('.ds-menu__item').forEach(function (b) { b.style.display = ''; });
+      }
+    }, 150);
+  };
+
+  window.dsSelectOption = function (inputId, item) {
+    var inp = getInput(inputId);
+    var menu = getDropdown(inputId);
+    if (!inp || !menu) return;
+
+    var label = item.getAttribute('data-label') || item.textContent.trim();
+
+    // Update selection state — only selected item gets ds-menu__item-check
+    menu.querySelectorAll('.ds-menu__item').forEach(function (btn) {
+      btn.classList.remove('ds-menu__item--selected');
+      btn.setAttribute('aria-selected', 'false');
+      var chk = btn.querySelector('.ds-menu__item-check');
+      if (chk) chk.remove();
+    });
+    item.classList.add('ds-menu__item--selected');
+    item.setAttribute('aria-selected', 'true');
+    var chk = document.createElement('span');
+    chk.className = 'ds-menu__item-check';
+    chk.innerHTML = '<span class="ds-icon ds-icon--filled" aria-hidden="true">check</span>';
+    item.insertBefore(chk, item.firstChild);
+
+    // Commit selected value, restore default placeholder
+    if (!state[inputId]) state[inputId] = {};
+    state[inputId].prevValue = label;
+    state[inputId].defaultPlaceholder = inp.getAttribute('data-default-placeholder') || '';
+
+    inp.value = label;
+    inp.placeholder = state[inputId].defaultPlaceholder;
+    menu.querySelectorAll('.ds-menu__item').forEach(function (b) { b.style.display = ''; });
+
+    // Close and return focus
+    menu.classList.remove('is-open');
+    inp.setAttribute('aria-expanded', 'false');
+    inp.focus();
+  };
+
+  // Close on outside click
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.ds-select__field-row')) closeAll(null);
+  }, true);
+
+  // Close on Escape — restore value, return focus
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.ds-select__dropdown.is-open').forEach(function (menu) {
+      var id = menu.getAttribute('aria-labelledby');
+      var inp = getInput(id);
+      menu.classList.remove('is-open');
+      if (inp) {
+        inp.setAttribute('aria-expanded', 'false');
+        var s = state[id] || {};
+        inp.value = s.prevValue || '';
+        inp.placeholder = s.defaultPlaceholder || inp.getAttribute('data-default-placeholder') || '';
+        menu.querySelectorAll('.ds-menu__item').forEach(function (b) { b.style.display = ''; });
+        inp.focus();
+      }
+    });
+  });
 })();
 </script>
 

@@ -28,5 +28,6 @@ export class DsChipComponent {
   @Input() removable = true;
   @Input() disabled = false;
   @Input() error = false;
+  @Input() active = false;
   @Output() removed = new EventEmitter<void>();
 }
