@@ -9225,12 +9225,18 @@
           <div class="demo-row">
             <div class="demo-row-label">More (overflow)</div>
             <div class="demo-row-items">
-              <button class="ds-tag ds-tag--more" type="button" aria-label="Show 2 more tags">
-                <span class="ds-tag__label">+2</span>
-              </button>
-              <button class="ds-tag ds-tag--more ds-tag--sm" type="button" aria-label="Show 5 more tags">
-                <span class="ds-tag__label">+5</span>
-              </button>
+              <div class="ds-tooltip-wrapper">
+                <button class="ds-tag ds-tag--more" type="button" aria-label="Show 2 more tags: Typography, Components">
+                  <span class="ds-tag__label">+2</span>
+                </button>
+                <div class="ds-tooltip" role="tooltip">Typography<br>Components</div>
+              </div>
+              <div class="ds-tooltip-wrapper">
+                <button class="ds-tag ds-tag--more ds-tag--sm" type="button" aria-label="Show 5 more tags: Typography, Components, Accessibility, Tokens, Breakpoints">
+                  <span class="ds-tag__label">+5</span>
+                </button>
+                <div class="ds-tooltip" role="tooltip">Typography<br>Components<br>Accessibility<br>Tokens<br>Breakpoints</div>
+              </div>
               <button class="ds-tag ds-tag--more is-disabled" type="button" disabled aria-label="Show 2 more tags">
                 <span class="ds-tag__label">+2</span>
               </button>
@@ -9271,9 +9277,12 @@
                     <span class="ds-icon ds-icon--xs">close</span>
                   </button>
                 </div>
-                <button class="ds-tag ds-tag--more" type="button" aria-label="Show 3 more tags">
-                  <span class="ds-tag__label">+3</span>
-                </button>
+                <div class="ds-tooltip-wrapper">
+                  <button class="ds-tag ds-tag--more" type="button" aria-label="Show 3 more tags: Tokens, Typography, Components">
+                    <span class="ds-tag__label">+3</span>
+                  </button>
+                  <div class="ds-tooltip" role="tooltip">Tokens<br>Typography<br>Components</div>
+                </div>
                 <button class="ds-tag ds-tag--add" type="button" aria-label="Add tag">
                   <span class="ds-tag__label">+ tag</span>
                 </button>
