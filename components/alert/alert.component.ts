@@ -17,6 +17,8 @@ export type DsAlertSize = 'sm' | 'lg';
  * @example
  *   <ds-alert variant="info" title="Heads up" message="Your trial ends in 3 days." />
  *   <ds-alert variant="error" size="lg" title="Something went wrong" message="Please try again." [dismissible]="true" />
+ *   <ds-alert variant="info" size="lg" title="Info" message="Details." actionLabel="Cancel" primaryActionLabel="Confirm" />
+ *   <ds-alert variant="warning" message="Short message." [dismissible]="true" />
  */
 @Component({
   selector: 'ds-alert',
@@ -42,8 +44,11 @@ export class DsAlertComponent {
   /** Shows a dismiss (×) button. */
   @Input() dismissible = false;
 
-  /** Optional action button label (SM only). */
+  /** Secondary action button label (text style, brand colour). Shown bottom-right. */
   @Input() actionLabel = '';
+
+  /** Primary action button label (filled style). Shown bottom-right after secondary. */
+  @Input() primaryActionLabel = '';
 
   /** Whether the alert is currently visible. */
   visible = true;
@@ -51,8 +56,11 @@ export class DsAlertComponent {
   /** Emits when the dismiss button is clicked. */
   @Output() dismissed = new EventEmitter<void>();
 
-  /** Emits when the action button is clicked. */
+  /** Emits when the secondary action button is clicked. */
   @Output() actionClicked = new EventEmitter<void>();
+
+  /** Emits when the primary action button is clicked. */
+  @Output() primaryActionClicked = new EventEmitter<void>();
 
   get alertClasses(): string {
     const sizeClass = this.size === 'lg' ? ' ds-alert--lg' : '';
@@ -76,5 +84,9 @@ export class DsAlertComponent {
 
   onAction(): void {
     this.actionClicked.emit();
+  }
+
+  onPrimaryAction(): void {
+    this.primaryActionClicked.emit();
   }
 }

@@ -9,9 +9,20 @@
 //     <div class="ds-alert__header">
 //       <span class="ds-icon ds-alert__icon">info</span>
 //       <div class="ds-alert__content">
-//         <strong class="ds-alert__title">Title</strong>
-//         <p class="ds-alert__message">Message text.</p>
+//         <div class="ds-alert__text">
+//           <strong class="ds-alert__title">Title</strong>
+//           <p class="ds-alert__message">Message text.</p>
+//         </div>
+//         <!-- optional right-aligned action buttons -->
+//         <div class="ds-alert__buttons">
+//           <button class="ds-alert__action">Cancel</button>
+//           <button class="ds-alert__primary-action">Confirm</button>
+//         </div>
 //       </div>
+//       <!-- optional dismiss (32px ghost icon button) -->
+//       <button class="ds-alert__dismiss" aria-label="Dismiss alert">
+//         <span class="ds-icon ds-icon--sm">close</span>
+//       </button>
 //     </div>
 //   </div>
 //
@@ -22,13 +33,20 @@
 //       <span class="ds-alert__label">Label</span>
 //     </div>
 //     <div class="ds-alert__body">
-//       <p class="ds-alert__message">Message text.</p>
+//       <div class="ds-alert__text">
+//         <p class="ds-alert__message">Message text.</p>
+//       </div>
+//       <div class="ds-alert__buttons">
+//         <button class="ds-alert__action">Cancel</button>
+//         <button class="ds-alert__primary-action">Confirm</button>
+//       </div>
 //     </div>
 //   </div>
 //
 // Angular component:
 //   <ds-alert variant="info" title="Heads up" message="Something to know." />
-//   <ds-alert variant="error" size="lg" title="Error" message="Details here." />
+//   <ds-alert variant="error" size="lg" title="Error" message="Please try again." [dismissible]="true" />
+//   <ds-alert variant="info" size="lg" title="Info" message="Details." actionLabel="Cancel" primaryActionLabel="Confirm" />
 //
 // Variants:  info | success | warning | error
 // Sizes:     sm (default) | lg
@@ -58,11 +76,19 @@
     font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   }
 
-  // ── Content (SM — title + body stacked) ──────────────────────────────────
+  // ── Content (SM — column: text block + buttons row) ─────────────────────
 
   &__content {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg); // 16px — between __text block and __buttons row
+  }
+
+  // ── Text block (title + message, tight xs gap) ────────────────────────────
+
+  &__text {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
@@ -109,49 +135,124 @@
   &__body {
     padding: var(--spacing-lg);
     background: var(--color-surface-overlay);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg); // 16px — between __text block and __buttons row
   }
 
-  // ── Action ────────────────────────────────────────────────────────────────
+  // ── Buttons row (right-aligned — used in SM __content and LG __body) ─────
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-md); // 12px between buttons
+  }
+
+  // ── Action button (secondary — text style, brand colour) ─────────────────
 
   &__action {
     appearance: none;
     border: none;
     background: transparent;
-    padding: 0;
+    padding: 0 var(--spacing-lg);
+    height: 42px;
     cursor: pointer;
-    font-family: var(--ref-typeface-plain);
-    font-size: var(--ref-typescale-body-medium-size);
-    font-weight: var(--ref-typescale-body-medium-weight-prominent);
-    text-decoration: underline;
-    color: inherit;
-    margin-top: var(--spacing-xs);
-    display: inline-block;
+    font-family: var(--ref-typescale-label-large-font);
+    font-size: var(--ref-typescale-label-large-size);
+    font-weight: var(--ref-typescale-label-large-weight-prominent);
+    line-height: var(--ref-typescale-label-large-line-height);
+    letter-spacing: var(--ref-typescale-label-large-tracking);
+    color: var(--color-text-brand);
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    position: relative;
 
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      pointer-events: none;
+    }
+
+    &:hover::after  { background: var(--overlay-hovered); }
+    &:active::after { background: var(--overlay-pressed); }
     &:focus         { outline: none; }
-    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); border-radius: var(--radius-sm); }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
   }
 
-  // ── Dismiss ───────────────────────────────────────────────────────────────
+  // ── Primary action button (filled — brand bg) ─────────────────────────────
+
+  &__primary-action {
+    appearance: none;
+    border: none;
+    background: var(--color-surface-brand-bold);
+    padding: 0 var(--spacing-xl);
+    height: 42px;
+    cursor: pointer;
+    font-family: var(--ref-typescale-label-large-font);
+    font-size: var(--ref-typescale-label-large-size);
+    font-weight: var(--ref-typescale-label-large-weight-prominent);
+    line-height: var(--ref-typescale-label-large-line-height);
+    letter-spacing: var(--ref-typescale-label-large-tracking);
+    color: var(--color-text-on-brand);
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    &:hover::after  { background: var(--overlay-hovered); }
+    &:active::after { background: var(--overlay-pressed); }
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+  }
+
+  // ── Dismiss button (32px SM ghost icon button) ────────────────────────────
 
   &__dismiss {
     appearance: none;
     border: none;
     background: transparent;
-    padding: 2px;
+    padding: 0;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: inherit;
-    opacity: 0.7;
+    width: 32px;
+    height: 32px;
     border-radius: var(--radius-sm);
-    transition: opacity 0.1s ease;
+    color: var(--color-icon-default);
     margin-left: auto;
+    position: relative;
 
-    &:hover         { opacity: 1; }
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      pointer-events: none;
+    }
+
+    &:hover::after  { background: var(--overlay-hovered); }
+    &:active::after { background: var(--overlay-pressed); }
     &:focus         { outline: none; }
-    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); opacity: 1; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
   }
 
 
