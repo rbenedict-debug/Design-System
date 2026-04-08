@@ -87,7 +87,6 @@ export class DsListItemComponent implements AfterContentInit {
 @Component({
   selector: 'ds-list',
   standalone: true,
-  imports: [],
   imports: [MatListModule],
   template: `<mat-list class="ds-list"><ng-content /></mat-list>`,
   styleUrls: ['./list.component.scss'],

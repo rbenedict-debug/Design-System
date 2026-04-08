@@ -2,16 +2,41 @@
   "name": "@onflo/design-system",
   "version": "0.1.0",
   "description": "Onflo Design System — tokens, components, and patterns for Angular + .NET Core products",
+  "main": "./dist/fesm2022/onflo-design-system.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "esm2022": "./dist/esm2022/onflo-design-system.mjs",
+      "default": "./dist/fesm2022/onflo-design-system.mjs"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
+  },
+  "peerDependencies": {
+    "@angular/common": ">=14.0.0",
+    "@angular/core": ">=14.0.0"
+  },
   "scripts": {
     "generate-tokens": "node scripts/generate-tokens.js",
     "build-preview": "node scripts/build-preview.js",
-    "build": "npm run generate-tokens && npm run build-preview",
+    "build": "ng-packagr -p ng-package.json",
     "preview": "open preview/index.html"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
-    "sass": "^1.98.0"
+    "@angular/animations": "^21.2.7",
+    "@angular/cdk": "^21.2.5",
+    "@angular/common": "^21.2.7",
+    "@angular/compiler": "^21.2.7",
+    "@angular/compiler-cli": "^21.2.7",
+    "@angular/core": "^21.2.7",
+    "@angular/forms": "^21.2.7",
+    "@angular/material": "^21.2.5",
+    "ng-packagr": "^21.2.2",
+    "sass": "^1.98.0",
+    "typescript": "~5.9.0"
   }
 }
