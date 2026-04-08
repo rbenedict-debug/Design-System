@@ -21,6 +21,7 @@
     "generate-tokens": "node scripts/generate-tokens.js",
     "build-preview": "node scripts/build-preview.js",
     "build": "ng-packagr -p ng-package.json",
+    "prepare": "ng-packagr -p ng-package.json",
     "preview": "open preview/index.html"
   },
   "engines": {
