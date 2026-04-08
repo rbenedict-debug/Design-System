@@ -5,7 +5,7 @@
   "main": "./dist/fesm2022/onflo-design-system.mjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/types/onflo-design-system.d.ts",
       "esm2022": "./dist/esm2022/onflo-design-system.mjs",
       "default": "./dist/fesm2022/onflo-design-system.mjs"
     },
