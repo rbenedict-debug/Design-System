@@ -2907,6 +2907,25 @@
 .ds-select.is-disabled .ds-select__helper {
   color: var(--color-text-disabled);
 }
+.ds-select__field-row {
+  position: relative;
+}
+.ds-select__dropdown {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  overflow-y: auto;
+  max-height: 256px;
+  box-sizing: border-box;
+}
+.ds-select__dropdown .ds-menu {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+.ds-select__dropdown.is-open {
+  display: block;
+}
 
 .ds-select .mat-mdc-form-field {
   width: 100%;
@@ -11064,20 +11083,43 @@
             </div>
           </div>
 
-          <!-- Row 2: Richer body with multiple paragraphs -->
+          <!-- Row 2: Dialog with select input -->
           <div class="demo-row">
-            <div class="demo-row-label">Rich body</div>
+            <div class="demo-row-label">With select</div>
             <div class="demo-row-items" style="align-items: flex-start;">
-              <div class="ds-dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-demo-2" style="width: 400px;">
+              <div class="ds-dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-demo-3" style="width: 400px;">
                 <div class="ds-dialog__body">
-                  <h2 class="ds-dialog__title" id="dlg-demo-2">Remove team member</h2>
-                  <p class="ds-dialog__text">Are you sure you want to remove <strong>Jordan Ellis</strong> from the workspace? They will lose access to all projects and cannot rejoin without a new invitation.</p>
-                  <p class="ds-dialog__text" style="color: var(--color-text-secondary, #73737f);">Any content assigned to this user will remain in the workspace.</p>
+                  <h2 class="ds-dialog__title" id="dlg-demo-3">Assign to team</h2>
+                  <p class="ds-dialog__text">Choose a team to assign this conversation to. The selected team will be notified immediately.</p>
+                  <div class="ds-select">
+                    <label class="ds-select__label" for="dlg-sel-team">Team</label>
+                    <div class="ds-select__field-row">
+                      <div class="ds-select__field" onclick="document.getElementById('dlg-sel-team').focus()">
+                        <input type="text" id="dlg-sel-team" class="ds-select__control"
+                               placeholder="Select a team..."
+                               data-default-placeholder="Select a team..."
+                               autocomplete="off" spellcheck="false"
+                               role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="dlg-sel-team-menu"
+                               onfocus="dsSelectOpen('dlg-sel-team')"
+                               oninput="dsSelectFilter('dlg-sel-team', this.value)"
+                               onblur="dsSelectBlur('dlg-sel-team', event)">
+                        <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                      </div>
+                      <div class="ds-select__dropdown" id="dlg-sel-team-menu" role="listbox" aria-labelledby="dlg-sel-team">
+                        <div class="ds-menu">
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="Support" onclick="dsSelectOption('dlg-sel-team', this)">Support</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="Sales" onclick="dsSelectOption('dlg-sel-team', this)">Sales</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="Billing" onclick="dsSelectOption('dlg-sel-team', this)">Billing</button>
+                          <button class="ds-menu__item" role="option" aria-selected="false" data-label="Technical Support" onclick="dsSelectOption('dlg-sel-team', this)">Technical Support</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="ds-dialog__divider" aria-hidden="true"></div>
                 <div class="ds-dialog__actions">
                   <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
-                  <button class="ds-button ds-button--filled ds-button--md" type="button">Remove</button>
+                  <button class="ds-button ds-button--filled ds-button--md" type="button">Assign</button>
                 </div>
               </div>
             </div>

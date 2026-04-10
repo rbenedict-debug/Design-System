@@ -177,6 +177,38 @@
     .ds-select__arrow   { color: var(--color-icon-disabled); }
     .ds-select__helper  { color: var(--color-text-disabled); }
   }
+
+  // ── Field row (CSS class API — wraps trigger + dropdown) ──────────────────
+  // Used in the HTML class API demo only. The Angular component uses the
+  // Angular CDK overlay. position:relative bounds the JS outside-click hit-test.
+
+  &__field-row {
+    position: relative;
+  }
+
+  // ── Dropdown panel (CSS class API) ────────────────────────────────────────
+  // Hidden by default. JS teleports it to <body> and uses position:fixed +
+  // getBoundingClientRect() coords — same principle as Angular CDK overlay.
+  // .is-open shows it. Inner .ds-menu fills the wrapper width.
+
+  &__dropdown {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    overflow-y: auto;
+    max-height: 256px;
+    box-sizing: border-box;
+
+    .ds-menu {
+      width: 100%;
+      min-width: 0;
+      max-width: none;
+    }
+
+    &.is-open {
+      display: block;
+    }
+  }
 }
 
 
