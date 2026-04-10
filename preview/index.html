@@ -2942,13 +2942,16 @@
   --mdc-outlined-text-field-outline-color: var(--color-border-input);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
-  --mdc-outlined-text-field-input-text-font: var(--ref-typeface-brand);
-  --mdc-outlined-text-field-input-text-size: var(--ref-typescale-label-medium-size);
-  --mdc-outlined-text-field-input-text-weight: var(--ref-typeface-weight-regular);
-  --mdc-outlined-text-field-input-text-line-height: var(--ref-typescale-label-medium-line-height);
-  --mdc-outlined-text-field-input-text-color: var(--color-text-primary);
-  --mdc-outlined-text-field-disabled-input-text-color: var(--color-text-disabled);
-  --mdc-outlined-text-field-input-text-placeholder-color: var(--color-text-placeholder);
+  --mat-select-trigger-text-font: var(--ref-typeface-brand);
+  --mat-select-trigger-text-size: var(--ref-typescale-label-medium-size);
+  --mat-select-trigger-text-weight: var(--ref-typeface-weight-regular);
+  --mat-select-trigger-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mat-select-enabled-trigger-text-color: var(--color-text-primary);
+  --mat-select-disabled-trigger-text-color: var(--color-text-disabled);
+  --mat-select-placeholder-text-color: var(--color-text-placeholder);
+}
+.ds-select .mat-mdc-select-arrow-wrapper {
+  display: none;
 }
 .ds-select .mat-mdc-floating-label,
 .ds-select .mdc-floating-label {
@@ -2983,6 +2986,7 @@
 }
 .ds-select.is-disabled .mat-mdc-text-field-wrapper {
   background: var(--color-surface-input-disabled);
+  cursor: default;
 }
 .ds-select.is-disabled .ds-select__label {
   color: var(--color-text-disabled);
@@ -2992,6 +2996,212 @@
 }
 .ds-select.is-disabled .ds-select__helper {
   color: var(--color-text-disabled);
+}
+
+.ds-select__panel {
+  background: var(--color-surface-page) !important;
+  border: 1px solid var(--color-border-subtle) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 4px 4px 0 var(--shadow-elevation-3), 0 3px 12px 6px var(--shadow-elevation-3) !important;
+  padding: var(--spacing-xs) 0 !important;
+  --mat-select-container-elevation-shadow: none;
+}
+.ds-select__panel::-webkit-scrollbar {
+  width: 6px;
+}
+.ds-select__panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ds-select__panel::-webkit-scrollbar-thumb {
+  background: var(--color-surface-scroll);
+  border-radius: var(--radius-full);
+}
+.ds-select__panel {
+  scrollbar-color: var(--color-surface-scroll) transparent;
+  scrollbar-width: thin;
+}
+.ds-select__panel .mat-mdc-option {
+  min-height: 40px;
+  padding: 0 var(--spacing-lg);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  color: var(--color-text-primary);
+  --mat-option-hover-state-layer-color: transparent;
+  --mat-option-focus-state-layer-color: transparent;
+  --mat-option-selected-state-layer-color: transparent;
+}
+.ds-select__panel .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  background: var(--overlay-hovered);
+}
+.ds-select__panel .mat-mdc-option:active:not(.mdc-list-item--disabled) {
+  background: var(--overlay-pressed);
+}
+.ds-select__panel .mat-mdc-option:focus-visible {
+  background: var(--overlay-focused);
+}
+.ds-select__panel .mat-mdc-option .mat-pseudo-checkbox {
+  display: none;
+}
+.ds-select__panel .mat-mdc-option[aria-selected=true] {
+  color: var(--color-text-brand);
+}
+.ds-select__panel .mat-mdc-option.mdc-list-item--disabled {
+  color: var(--color-text-disabled);
+  opacity: 1;
+}
+
+.ds-autocomplete {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+.ds-autocomplete__label {
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  color: var(--color-text-secondary);
+  user-select: none;
+}
+.ds-autocomplete__required {
+  color: var(--color-text-error);
+  margin-left: 2px;
+}
+.ds-autocomplete__helper {
+  font-family: var(--ref-typeface-plain);
+  font-size: var(--ref-typescale-body-small-size);
+  line-height: var(--ref-typescale-body-small-line-height);
+  color: var(--color-text-secondary);
+}
+.ds-autocomplete__error-icon {
+  color: var(--color-icon-error);
+  flex-shrink: 0;
+  pointer-events: none;
+}
+.ds-autocomplete.is-error .ds-autocomplete__helper {
+  color: var(--color-text-error);
+}
+.ds-autocomplete.is-disabled {
+  pointer-events: none;
+}
+.ds-autocomplete.is-disabled .ds-autocomplete__label {
+  color: var(--color-text-disabled);
+}
+.ds-autocomplete.is-disabled .ds-autocomplete__helper {
+  color: var(--color-text-disabled);
+}
+
+.ds-autocomplete .mat-mdc-form-field {
+  width: 100%;
+}
+.ds-autocomplete {
+  --mat-form-field-container-height: 42px;
+  --mat-form-field-container-vertical-padding: 0px;
+  --mdc-outlined-text-field-container-shape: var(--radius-sm);
+  --mdc-outlined-text-field-outline-width: 1px;
+  --mdc-outlined-text-field-outline-color: var(--color-border-input);
+  --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
+  --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
+  --mdc-outlined-text-field-input-text-font: var(--ref-typeface-brand);
+  --mdc-outlined-text-field-input-text-size: var(--ref-typescale-label-medium-size);
+  --mdc-outlined-text-field-input-text-weight: var(--ref-typeface-weight-regular);
+  --mdc-outlined-text-field-input-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mdc-outlined-text-field-input-text-color: var(--color-text-primary);
+  --mdc-outlined-text-field-disabled-input-text-color: var(--color-text-disabled);
+  --mdc-outlined-text-field-input-text-placeholder-color: var(--color-text-placeholder);
+}
+.ds-autocomplete .mat-mdc-floating-label,
+.ds-autocomplete .mdc-floating-label {
+  display: none;
+}
+.ds-autocomplete .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+.ds-autocomplete .mat-mdc-text-field-wrapper {
+  background: var(--color-surface-input);
+  padding: 0 var(--spacing-md);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ds-autocomplete:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-autocomplete.is-error {
+  --mdc-outlined-text-field-outline-color: var(--color-border-input-error);
+  --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+  --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+}
+.ds-autocomplete.is-error:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-autocomplete.is-disabled {
+  --mdc-outlined-text-field-disabled-outline-color: var(--color-border-subtle);
+  --mdc-outlined-text-field-disabled-outline-opacity: 1;
+}
+.ds-autocomplete.is-disabled .mat-mdc-text-field-wrapper {
+  background: var(--color-surface-input-disabled);
+}
+.ds-autocomplete.is-readonly {
+  --mdc-outlined-text-field-outline-color: var(--color-border-subtle);
+  --mdc-outlined-text-field-hover-outline-color: var(--color-border-subtle);
+}
+.ds-autocomplete.is-readonly .mat-mdc-text-field-wrapper {
+  background: var(--color-surface-default);
+  cursor: default;
+}
+
+.ds-autocomplete__panel {
+  background: var(--color-surface-page) !important;
+  border: 1px solid var(--color-border-subtle) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 4px 4px 0 var(--shadow-elevation-3), 0 3px 12px 6px var(--shadow-elevation-3) !important;
+  padding: var(--spacing-xs) 0 !important;
+}
+.ds-autocomplete__panel::-webkit-scrollbar {
+  width: 6px;
+}
+.ds-autocomplete__panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ds-autocomplete__panel::-webkit-scrollbar-thumb {
+  background: var(--color-surface-scroll);
+  border-radius: var(--radius-full);
+}
+.ds-autocomplete__panel {
+  scrollbar-color: var(--color-surface-scroll) transparent;
+  scrollbar-width: thin;
+}
+.ds-autocomplete__panel .mat-mdc-option {
+  min-height: 40px;
+  padding: 0 var(--spacing-lg);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  color: var(--color-text-primary);
+  --mat-option-hover-state-layer-color: transparent;
+  --mat-option-focus-state-layer-color: transparent;
+  --mat-option-selected-state-layer-color: transparent;
+}
+.ds-autocomplete__panel .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  background: var(--overlay-hovered);
+}
+.ds-autocomplete__panel .mat-mdc-option:active:not(.mdc-list-item--disabled) {
+  background: var(--overlay-pressed);
+}
+.ds-autocomplete__panel .mat-mdc-option:focus-visible {
+  background: var(--overlay-focused);
+}
+.ds-autocomplete__panel .mat-mdc-option .mat-pseudo-checkbox {
+  display: none;
+}
+.ds-autocomplete__panel .mat-mdc-option.mat-mdc-option-active {
+  background: var(--overlay-focused);
+}
+.ds-autocomplete__panel .mat-mdc-option.mdc-list-item--disabled {
+  color: var(--color-text-disabled);
+  opacity: 1;
 }
 
 .ds-textarea {
@@ -8394,9 +8604,10 @@
         <div class="section-header">
           <h2 class="section-title">Select / Dropdown</h2>
           <p class="section-desc">
-  Same 42px height and visual treatment as Input Field. The dropdown panel uses <code>ds-menu</code>
-  with the single-select checkmark pattern. Angular component uses <code>MatMenuModule</code> +
-  <code>DsMenuComponent</code>. Use <code>class="ds-select"</code> or <code>&lt;ds-select&gt;</code>.
+  Same 42px height and visual treatment as Input Field. Angular component uses <code>MatSelectModule</code>
+  — <code>mat-select</code> inside <code>mat-form-field</code> provides <code>role="listbox"</code>,
+  keyboard navigation, and screen reader announcements. CSS class API uses a native <code>&lt;select&gt;</code>
+  inside <code>.ds-select__field</code>. Use <code>class="ds-select"</code> or <code>&lt;ds-select&gt;</code>.
   Source: <code>components/select/_select.scss</code>
 </p>
         </div>
@@ -8410,81 +8621,47 @@
               <!-- No selection — placeholder -->
               <div class="ds-select" style="width:220px;">
                 <label class="ds-select__label" for="sel-default">Plan</label>
-                <div class="ds-select__field-row">
-                  <div class="ds-select__field" onclick="document.getElementById('sel-default').focus()">
-                    <input type="text" id="sel-default" class="ds-select__control"
-                           placeholder="Select a plan..."
-                           data-default-placeholder="Select a plan..."
-                           autocomplete="off" spellcheck="false"
-                           role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="sel-default-menu"
-                           onfocus="dsSelectOpen('sel-default')"
-                           oninput="dsSelectFilter('sel-default', this.value)"
-                           onblur="dsSelectBlur('sel-default', event)">
-                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
-                  </div>
-                  <div class="ds-select__dropdown" id="sel-default-menu" role="listbox" aria-labelledby="sel-default">
-                    <div class="ds-menu">
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Free" onclick="dsSelectOption('sel-default', this)">Free</button>
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Pro — $12/mo" onclick="dsSelectOption('sel-default', this)">Pro — $12/mo</button>
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Enterprise" onclick="dsSelectOption('sel-default', this)">Enterprise</button>
-                    </div>
-                  </div>
+                <div class="ds-select__field">
+                  <select id="sel-default" class="ds-select__control">
+                    <option value="" disabled selected>Select a plan...</option>
+                    <option value="free">Free</option>
+                    <option value="pro">Pro — $12/mo</option>
+                    <option value="enterprise">Enterprise</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
                 </div>
               </div>
 
               <!-- Pre-selected value -->
               <div class="ds-select" style="width:220px;">
                 <label class="ds-select__label" for="sel-selected">Country</label>
-                <div class="ds-select__field-row">
-                  <div class="ds-select__field" onclick="document.getElementById('sel-selected').focus()">
-                    <input type="text" id="sel-selected" class="ds-select__control"
-                           value="United States"
-                           data-default-placeholder="Select country..."
-                           autocomplete="off" spellcheck="false"
-                           role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="sel-selected-menu"
-                           onfocus="dsSelectOpen('sel-selected')"
-                           oninput="dsSelectFilter('sel-selected', this.value)"
-                           onblur="dsSelectBlur('sel-selected', event)">
-                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
-                  </div>
-                  <div class="ds-select__dropdown" id="sel-selected-menu" role="listbox" aria-labelledby="sel-selected">
-                    <div class="ds-menu">
-                      <!-- Only the selected item gets ds-menu__item-check — unselected stay flush left -->
-                      <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="United States" onclick="dsSelectOption('sel-selected', this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>United States</button>
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Canada" onclick="dsSelectOption('sel-selected', this)">Canada</button>
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="United Kingdom" onclick="dsSelectOption('sel-selected', this)">United Kingdom</button>
-                    </div>
-                  </div>
+                <div class="ds-select__field">
+                  <select id="sel-selected" class="ds-select__control">
+                    <option value="" disabled>Select country...</option>
+                    <option value="us" selected>United States</option>
+                    <option value="ca">Canada</option>
+                    <option value="uk">United Kingdom</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- With Helper — dropdown anchors to __field-row, helper text stays below -->
+          <!-- With Helper -->
           <div class="demo-row">
             <div class="demo-row-label">With Helper</div>
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-select" style="width:220px;">
                 <label class="ds-select__label" for="sel-helper">Timezone</label>
-                <div class="ds-select__field-row">
-                  <div class="ds-select__field" onclick="document.getElementById('sel-helper').focus()">
-                    <input type="text" id="sel-helper" class="ds-select__control"
-                           placeholder="Select timezone..."
-                           data-default-placeholder="Select timezone..."
-                           autocomplete="off" spellcheck="false"
-                           role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="sel-helper-menu"
-                           onfocus="dsSelectOpen('sel-helper')"
-                           oninput="dsSelectFilter('sel-helper', this.value)"
-                           onblur="dsSelectBlur('sel-helper', event)">
-                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
-                  </div>
-                  <div class="ds-select__dropdown" id="sel-helper-menu" role="listbox" aria-labelledby="sel-helper">
-                    <div class="ds-menu">
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Eastern (UTC-5)" onclick="dsSelectOption('sel-helper', this)">Eastern (UTC-5)</button>
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Central (UTC-6)" onclick="dsSelectOption('sel-helper', this)">Central (UTC-6)</button>
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Pacific (UTC-8)" onclick="dsSelectOption('sel-helper', this)">Pacific (UTC-8)</button>
-                    </div>
-                  </div>
+                <div class="ds-select__field">
+                  <select id="sel-helper" class="ds-select__control">
+                    <option value="" disabled selected>Select timezone...</option>
+                    <option value="et">Eastern (UTC-5)</option>
+                    <option value="ct">Central (UTC-6)</option>
+                    <option value="pt">Pacific (UTC-8)</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
                 </div>
                 <span class="ds-select__helper">Affects all scheduled reports.</span>
               </div>
@@ -8497,27 +8674,17 @@
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-select is-error" style="width:220px;">
                 <label class="ds-select__label" for="sel-error">Role<span class="ds-select__required" aria-hidden="true">*</span></label>
-                <div class="ds-select__field-row">
-                  <div class="ds-select__field" onclick="document.getElementById('sel-error').focus()">
-                    <input type="text" id="sel-error" class="ds-select__control"
-                           placeholder="Select a role..."
-                           data-default-placeholder="Select a role..."
-                           autocomplete="off" spellcheck="false"
-                           role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-invalid="true" aria-controls="sel-error-menu"
-                           onfocus="dsSelectOpen('sel-error')"
-                           oninput="dsSelectFilter('sel-error', this.value)"
-                           onblur="dsSelectBlur('sel-error', event)">
-                    <span class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon" aria-hidden="true">error</span>
-                  </div>
-                  <div class="ds-select__dropdown" id="sel-error-menu" role="listbox" aria-labelledby="sel-error">
-                    <div class="ds-menu">
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Admin" onclick="dsSelectOption('sel-error', this)">Admin</button>
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Member" onclick="dsSelectOption('sel-error', this)">Member</button>
-                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Viewer" onclick="dsSelectOption('sel-error', this)">Viewer</button>
-                    </div>
-                  </div>
+                <div class="ds-select__field">
+                  <select id="sel-error" class="ds-select__control"
+                          aria-invalid="true" aria-describedby="sel-error-helper">
+                    <option value="" disabled selected>Select a role...</option>
+                    <option value="admin">Admin</option>
+                    <option value="member">Member</option>
+                    <option value="viewer">Viewer</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon" aria-hidden="true">error</span>
                 </div>
-                <span class="ds-select__helper" role="alert">Please select a role.</span>
+                <span class="ds-select__helper" id="sel-error-helper" role="alert">Please select a role.</span>
               </div>
             </div>
           </div>
@@ -8528,12 +8695,11 @@
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-select is-disabled" style="width:220px;">
                 <label class="ds-select__label" for="sel-disabled">Subscription</label>
-                <div class="ds-select__field-row">
-                  <div class="ds-select__field">
-                    <input type="text" id="sel-disabled" class="ds-select__control"
-                           value="Enterprise" disabled>
-                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
-                  </div>
+                <div class="ds-select__field">
+                  <select id="sel-disabled" class="ds-select__control" disabled>
+                    <option value="enterprise" selected>Enterprise</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
                 </div>
                 <span class="ds-select__helper">Contact sales to change your plan.</span>
               </div>
