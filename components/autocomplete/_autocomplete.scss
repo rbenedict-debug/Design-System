@@ -1,0 +1,220 @@
+// ============================================================
+// Onflo Design System — Autocomplete Component
+// ============================================================
+//
+// Usage (Angular component):
+//   <!-- Consumer defines the panel and filtering logic -->
+//   <mat-autocomplete #auto panelClass="ds-autocomplete__panel">
+//     <mat-option *ngFor="let opt of filtered" [value]="opt">{{ opt }}</mat-option>
+//   </mat-autocomplete>
+//
+//   <ds-autocomplete
+//     label="Search"
+//     [panel]="auto"
+//     [value]="query"
+//     (valueChange)="filter($event)"
+//   />
+//
+// States:    default, :hover, :focus-within, .is-error, .is-disabled, .is-readonly
+// Height:    fixed 42px — matches ds-input
+// ============================================================
+
+.ds-autocomplete {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+
+  // ── Label ────────────────────────────────────────────────────────────────
+
+  &__label {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    color: var(--color-text-secondary);
+    user-select: none;
+  }
+
+  &__required {
+    color: var(--color-text-error);
+    margin-left: 2px;
+  }
+
+  // ── Helper / error text ───────────────────────────────────────────────────
+
+  &__helper {
+    font-family: var(--ref-typeface-plain);
+    font-size: var(--ref-typescale-body-small-size);
+    line-height: var(--ref-typescale-body-small-line-height);
+    color: var(--color-text-secondary);
+  }
+
+  // ── Error icon ────────────────────────────────────────────────────────────
+
+  &__error-icon {
+    color: var(--color-icon-error);
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  // ── Error state ───────────────────────────────────────────────────────────
+
+  &.is-error {
+    .ds-autocomplete__helper { color: var(--color-text-error); }
+    // NOTE: label color intentionally NOT set — label stays --color-text-secondary
+  }
+
+  // ── Disabled state ────────────────────────────────────────────────────────
+
+  &.is-disabled {
+    pointer-events: none;
+
+    .ds-autocomplete__label  { color: var(--color-text-disabled); }
+    .ds-autocomplete__helper { color: var(--color-text-disabled); }
+  }
+}
+
+
+// ── Angular Material overrides ────────────────────────────────────────────────
+// Themes mat-form-field (appearance="outline") + matInput to use Onflo tokens.
+// No ::ng-deep. The <ds-autocomplete> host carries .ds-autocomplete via @HostBinding.
+
+.ds-autocomplete {
+
+  // mat-form-field fills the column width
+  .mat-mdc-form-field { width: 100%; }
+
+  // ── Sizing — matches ds-input fixed 42px height ───────────────────────────
+
+  --mat-form-field-container-height:           42px;
+  --mat-form-field-container-vertical-padding: 0px;
+  --mdc-outlined-text-field-container-shape:   var(--radius-sm);
+  --mdc-outlined-text-field-outline-width:     1px;
+
+  // ── Field border colors ────────────────────────────────────────────────────
+
+  --mdc-outlined-text-field-outline-color:       var(--color-border-input);
+  --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
+  --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
+
+  // ── Input text typography ─────────────────────────────────────────────────
+
+  --mdc-outlined-text-field-input-text-font:        var(--ref-typeface-brand);
+  --mdc-outlined-text-field-input-text-size:        var(--ref-typescale-label-medium-size);
+  --mdc-outlined-text-field-input-text-weight:      var(--ref-typeface-weight-regular);
+  --mdc-outlined-text-field-input-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mdc-outlined-text-field-input-text-color:       var(--color-text-primary);
+  --mdc-outlined-text-field-disabled-input-text-color: var(--color-text-disabled);
+
+  // Placeholder
+  --mdc-outlined-text-field-input-text-placeholder-color: var(--color-text-placeholder);
+
+  // ── Suppress floating label and subscript ─────────────────────────────────
+
+  .mat-mdc-floating-label,
+  .mdc-floating-label                   { display: none; }
+  .mat-mdc-form-field-subscript-wrapper { display: none; }
+
+  // ── Field background ──────────────────────────────────────────────────────
+
+  .mat-mdc-text-field-wrapper {
+    background: var(--color-surface-input);
+    padding: 0 var(--spacing-md);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  // ── Focus ring — keyboard only (composite wrapper pattern) ────────────────
+
+  &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+  }
+
+  // ── Error state ───────────────────────────────────────────────────────────
+
+  &.is-error {
+    --mdc-outlined-text-field-outline-color:       var(--color-border-input-error);
+    --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+    --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+
+    &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
+  }
+
+  // ── Disabled state ────────────────────────────────────────────────────────
+
+  &.is-disabled {
+    --mdc-outlined-text-field-disabled-outline-color:   var(--color-border-subtle);
+    --mdc-outlined-text-field-disabled-outline-opacity: 1;
+
+    .mat-mdc-text-field-wrapper { background: var(--color-surface-input-disabled); }
+  }
+
+  // ── Read-only state ───────────────────────────────────────────────────────
+
+  &.is-readonly {
+    --mdc-outlined-text-field-outline-color:       var(--color-border-subtle);
+    --mdc-outlined-text-field-hover-outline-color: var(--color-border-subtle);
+
+    .mat-mdc-text-field-wrapper { background: var(--color-surface-default); cursor: default; }
+  }
+}
+
+
+// ── ds-autocomplete overlay panel — global styles (opt-in) ───────────────────
+// Consumers apply panelClass="ds-autocomplete__panel" on their <mat-autocomplete>
+// to get Onflo-themed panel styling. Rendered in the CDK overlay outside the
+// component host, so these must be global (no host scope).
+
+.ds-autocomplete__panel {
+  background: var(--color-surface-page) !important;
+  border: 1px solid var(--color-border-subtle) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow:
+    0 4px 4px 0 var(--shadow-elevation-3),
+    0 3px 12px 6px var(--shadow-elevation-3) !important;
+  padding: var(--spacing-xs) 0 !important;
+
+  // Scrollbar — matches ds-menu
+  &::-webkit-scrollbar       { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-surface-scroll);
+    border-radius: var(--radius-full);
+  }
+  scrollbar-color: var(--color-surface-scroll) transparent;
+  scrollbar-width: thin;
+
+  // ── Option items ──────────────────────────────────────────────────────────
+
+  .mat-mdc-option {
+    min-height: 40px;
+    padding: 0 var(--spacing-lg);
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    color: var(--color-text-primary);
+
+    // Suppress Material state-layer colors — use Onflo overlays
+    --mat-option-hover-state-layer-color:    transparent;
+    --mat-option-focus-state-layer-color:    transparent;
+    --mat-option-selected-state-layer-color: transparent;
+
+    &:hover:not(.mdc-list-item--disabled)  { background: var(--overlay-hovered); }
+    &:active:not(.mdc-list-item--disabled) { background: var(--overlay-pressed); }
+    &:focus-visible { background: var(--overlay-focused); }
+
+    // Hide Material's pseudo-checkbox
+    .mat-pseudo-checkbox { display: none; }
+
+    // Active (keyboard-highlighted) option
+    &.mat-mdc-option-active { background: var(--overlay-focused); }
+
+    // Disabled option
+    &.mdc-list-item--disabled {
+      color: var(--color-text-disabled);
+      opacity: 1;
+    }
+  }
+}

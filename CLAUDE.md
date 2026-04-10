@@ -31,6 +31,7 @@ components/
   alert/                   # ds-alert
   tooltip/                 # ds-tooltip
   select/                  # ds-select
+  autocomplete/            # ds-autocomplete (type-to-filter input + consumer-owned panel)
   textarea/                # ds-textarea (no fixed height — resizable)
   avatar/                  # ds-avatar
   progress/                # ds-progress
@@ -165,7 +166,8 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-icon-button` | `MatIconButtonModule` | mat-icon-button |
 | `ds-input` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput |
 | `ds-textarea` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput (textarea) |
-| `ds-select` | `MatSelectModule` | mat-select inside mat-form-field |
+| `ds-select` | `MatSelectModule` | mat-select inside mat-form-field; `panelClass="ds-select__panel"` themes the dropdown |
+| `ds-autocomplete` | `MatAutocompleteModule` + `MatInputModule` | matInput + matAutocomplete; consumer owns `<mat-autocomplete>` panel and filtering; pass panel ref via `[panel]`; opt-in panel theme via `panelClass="ds-autocomplete__panel"` |
 | `ds-datepicker` | `MatDatepickerModule` + `MatNativeDateModule` | matInput `[matDatepicker]` + `mat-datepicker-toggle`; styled to match ds-input (42px, same label/helper/error tokens); calendar popup globally styled via `.mat-datepicker-content` |
 | `ds-date-range-picker` | `MatDatepickerModule` + `MatNativeDateModule` | `mat-date-range-input` with `matStartDate` / `matEndDate` inputs + `mat-date-range-picker`; same field appearance as ds-datepicker |
 | `ds-checkbox` | `MatCheckboxModule` | mat-checkbox |

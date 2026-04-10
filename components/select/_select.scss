@@ -15,7 +15,7 @@
 //     <span class="ds-select__helper">Helper text</span>
 //   </div>
 //
-// Angular component (uses ds-menu for the dropdown panel):
+// Angular component (uses mat-select for the dropdown panel):
 //   <ds-select label="Country" [(value)]="country" [options]="countries" />
 //
 // States:    default, hover, focus, .is-error, .is-disabled
@@ -218,7 +218,7 @@
 
 
 // ── Angular Material overrides ────────────────────────────────────────────────
-// Themes mat-form-field (appearance="outline") + matInput to use Onflo tokens.
+// Themes mat-form-field (appearance="outline") + mat-select to use Onflo tokens.
 // No ::ng-deep. The <ds-select> host carries .ds-select via @HostBinding.
 
 .ds-select {
@@ -233,22 +233,25 @@
   --mdc-outlined-text-field-container-shape:   var(--radius-sm);
   --mdc-outlined-text-field-outline-width:     1px;
 
-  // ── Colors — default ─────────────────────────────────────────────────────
+  // ── Field border colors ────────────────────────────────────────────────────
 
   --mdc-outlined-text-field-outline-color:       var(--color-border-input);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
 
-  // Input text typography
-  --mdc-outlined-text-field-input-text-font:        var(--ref-typeface-brand);
-  --mdc-outlined-text-field-input-text-size:        var(--ref-typescale-label-medium-size);
-  --mdc-outlined-text-field-input-text-weight:      var(--ref-typeface-weight-regular);
-  --mdc-outlined-text-field-input-text-line-height: var(--ref-typescale-label-medium-line-height);
-  --mdc-outlined-text-field-input-text-color:       var(--color-text-primary);
-  --mdc-outlined-text-field-disabled-input-text-color: var(--color-text-disabled);
+  // ── mat-select trigger text typography ────────────────────────────────────
+  // These apply to the displayed value and placeholder inside the select trigger.
 
-  // Placeholder
-  --mdc-outlined-text-field-input-text-placeholder-color: var(--color-text-placeholder);
+  --mat-select-trigger-text-font:        var(--ref-typeface-brand);
+  --mat-select-trigger-text-size:        var(--ref-typescale-label-medium-size);
+  --mat-select-trigger-text-weight:      var(--ref-typeface-weight-regular);
+  --mat-select-trigger-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mat-select-enabled-trigger-text-color:  var(--color-text-primary);
+  --mat-select-disabled-trigger-text-color: var(--color-text-disabled);
+  --mat-select-placeholder-text-color:      var(--color-text-placeholder);
+
+  // Suppress Material's built-in select arrow — we use our own matSuffix icon
+  .mat-mdc-select-arrow-wrapper { display: none; }
 
   // ── Suppress floating label and subscript ─────────────────────────────────
 
@@ -256,7 +259,7 @@
   .mdc-floating-label                   { display: none; }
   .mat-mdc-form-field-subscript-wrapper { display: none; }
 
-  // ── Field background ─────────────────────────────────────────────────────
+  // ── Field background ──────────────────────────────────────────────────────
 
   .mat-mdc-text-field-wrapper {
     background: var(--color-surface-input);
@@ -270,7 +273,7 @@
     color: var(--color-icon-brand);
   }
 
-  // ── Focus ring — keyboard only (composite wrapper pattern) ───────────────
+  // ── Focus ring — keyboard only (composite wrapper pattern) ────────────────
 
   &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
     box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
@@ -294,9 +297,70 @@
     --mdc-outlined-text-field-disabled-outline-color:   var(--color-border-subtle);
     --mdc-outlined-text-field-disabled-outline-opacity: 1;
 
-    .mat-mdc-text-field-wrapper { background: var(--color-surface-input-disabled); }
+    .mat-mdc-text-field-wrapper { background: var(--color-surface-input-disabled); cursor: default; }
     .ds-select__label           { color: var(--color-text-disabled); }
     .ds-select__arrow           { color: var(--color-icon-disabled); }
     .ds-select__helper          { color: var(--color-text-disabled); }
+  }
+}
+
+
+// ── ds-select overlay panel — global styles ───────────────────────────────────
+// Applied via panelClass="ds-select__panel" on <mat-select>. Rendered in the
+// CDK overlay outside the component host, so these must be global (no host scope).
+
+.ds-select__panel {
+  background: var(--color-surface-page) !important;
+  border: 1px solid var(--color-border-subtle) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow:
+    0 4px 4px 0 var(--shadow-elevation-3),
+    0 3px 12px 6px var(--shadow-elevation-3) !important;
+  padding: var(--spacing-xs) 0 !important;
+
+  // Suppress Material's internal elevation
+  --mat-select-container-elevation-shadow: none;
+
+  // Scrollbar — matches ds-menu
+  &::-webkit-scrollbar       { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-surface-scroll);
+    border-radius: var(--radius-full);
+  }
+  scrollbar-color: var(--color-surface-scroll) transparent;
+  scrollbar-width: thin;
+
+  // ── Option items ──────────────────────────────────────────────────────────
+
+  .mat-mdc-option {
+    min-height: 40px;
+    padding: 0 var(--spacing-lg);
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    color: var(--color-text-primary);
+
+    // Suppress Material state-layer colors — use Onflo overlays instead
+    --mat-option-hover-state-layer-color:    transparent;
+    --mat-option-focus-state-layer-color:    transparent;
+    --mat-option-selected-state-layer-color: transparent;
+
+    &:hover:not(.mdc-list-item--disabled)  { background: var(--overlay-hovered); }
+    &:active:not(.mdc-list-item--disabled) { background: var(--overlay-pressed); }
+    &:focus-visible { background: var(--overlay-focused); }
+
+    // Hide Material's pseudo-checkbox — selected state shown via text color
+    .mat-pseudo-checkbox { display: none; }
+
+    // Selected option — brand blue text (matches ds-menu__item--selected)
+    &[aria-selected="true"] { color: var(--color-text-brand); }
+
+    // Disabled option
+    &.mdc-list-item--disabled {
+      color: var(--color-text-disabled);
+      opacity: 1;
+    }
   }
 }

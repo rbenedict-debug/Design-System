@@ -9,23 +9,24 @@
   subscriptSizing="dynamic"
   class="ds-select__field-wrapper"
 >
-  <!-- Text input — user can type to filter options; click / focus opens ds-menu -->
-  <input
-    #selectInput
-    matInput
+  <!-- mat-select provides role="listbox", keyboard nav, and screen reader announcements -->
+  <mat-select
     [id]="selectId"
-    [placeholder]="inputPlaceholder"
+    [value]="value"
+    [placeholder]="placeholder"
     [disabled]="disabled"
     [required]="required"
+    panelClass="ds-select__panel"
     [attr.aria-invalid]="isError ? 'true' : null"
     [attr.aria-describedby]="(helperText || errorText) ? selectId + '-helper' : null"
-    [matMenuTriggerFor]="optionsMenu.matMenu"
-    autocomplete="off"
-    spellcheck="false"
-    (menuOpened)="onMenuOpened()"
-    (menuClosed)="onMenuClosed()"
-    (input)="onInput($event)"
+    (selectionChange)="onSelectionChange($event)"
   >
+    <mat-option
+      *ngFor="let opt of options"
+      [value]="opt.value"
+      [disabled]="opt.disabled ?? false"
+    >{{ opt.label }}</mat-option>
+  </mat-select>
 
   <!-- Arrow icon — hidden in error state via is-error host class -->
   <span *ngIf="!isError" matSuffix
@@ -36,24 +37,6 @@
     class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon" aria-hidden="true">error</span>
 
 </mat-form-field>
-
-<!-- Options via ds-menu — single-select checkmark pattern -->
-<ds-menu #optionsMenu>
-  <button
-    *ngFor="let opt of filteredOptions"
-    mat-menu-item
-    class="ds-menu__item"
-    [class.ds-menu__item--selected]="value === opt.value"
-    [disabled]="opt.disabled ?? false"
-    (click)="onOptionSelect(opt)"
-  >
-    <!-- Only the selected item renders ds-menu__item-check — unselected stay flush left -->
-    <span *ngIf="value === opt.value" class="ds-menu__item-check">
-      <span class="ds-icon ds-icon--filled" aria-hidden="true">check</span>
-    </span>
-    {{ opt.label }}
-  </button>
-</ds-menu>
 
 <!-- Helper / error text — external, below the field -->
 <span
