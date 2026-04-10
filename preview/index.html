@@ -6060,7 +6060,6 @@
   width: 100%;
   height: 32px;
   padding: 0 var(--spacing-sm) 0 var(--spacing-md);
-  gap: var(--spacing-xs);
   flex-shrink: 0;
   box-sizing: border-box;
   border: none;
@@ -6097,17 +6096,6 @@
 }
 .ds-subnav-button:focus-visible {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-}
-.ds-subnav-button__label {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.ds-subnav-button__filter {
-  flex-shrink: 0;
-  position: relative;
-  z-index: 1;
 }
 .ds-subnav-button.is-selected {
   background: var(--color-icon-brand);
@@ -6200,7 +6188,7 @@
 .ds-subnav-subheader__line {
   flex-shrink: 0;
   width: 1px;
-  background: var(--color-border-subtle);
+  background: var(--color-border-brand);
   border-radius: 1px;
   align-self: stretch;
 }
@@ -11389,7 +11377,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <h2 class="section-title">Subnav Button</h2>
           <span class="section-source">components/subnav-button/_subnav-button.scss</span>
         </div>
-        <p class="section-desc">Leaf navigation item inside the sub-navigation panel — represents a single destination. Selected state fills with brand blue and turns text white. Optional trailing <code>filter_alt</code> icon button (requires <code>div+role="button"</code> wrapper to avoid nesting <code>&lt;button&gt;</code> elements). Angular component: <code>&lt;ds-subnav-button&gt;</code> with <code>[label]</code>, <code>[selected]</code>, <code>[disabled]</code>, <code>[showFilter]</code> inputs and <code>(navClick)</code> / <code>(filterClick)</code> outputs.</p>
+        <p class="section-desc">Leaf navigation item inside the sub-navigation panel — represents a single destination. Selected state fills with brand blue and turns text white. Angular component: <code>&lt;ds-subnav-button&gt;</code> with <code>[label]</code>, <code>[selected]</code>, <code>[disabled]</code> inputs and <code>(navClick)</code> output.</p>
         <div class="component-demo">
 
           <!-- Default -->
@@ -11418,27 +11406,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 220px;">
               <button class="ds-subnav-button is-disabled" type="button" disabled aria-pressed="false">Inbox</button>
               <button class="ds-subnav-button is-selected is-disabled" type="button" disabled aria-pressed="true" style="margin-top: 6px;">Bookmarks</button>
-            </div>
-          </div>
-
-          <!-- With filter button -->
-          <div class="demo-row">
-            <div class="demo-row-label">With filter</div>
-            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 220px;">
-              <div class="ds-subnav-button" role="button" tabindex="0" aria-pressed="false">
-                <span class="ds-subnav-button__label">Inbox</span>
-                <button class="ds-subnav-button__filter ds-icon-button ds-icon-button--icon ds-icon-button--sm"
-                        type="button" aria-label="Filter" onclick="event.stopPropagation(); alert('Filter clicked')">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">filter_alt</span>
-                </button>
-              </div>
-              <div class="ds-subnav-button is-selected" role="button" tabindex="0" aria-pressed="true" style="margin-top: 6px;">
-                <span class="ds-subnav-button__label">Bookmarks</span>
-                <button class="ds-subnav-button__filter ds-icon-button ds-icon-button--icon ds-icon-button--sm"
-                        type="button" aria-label="Filter" onclick="event.stopPropagation(); alert('Filter clicked')">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">filter_alt</span>
-                </button>
-              </div>
             </div>
           </div>
 

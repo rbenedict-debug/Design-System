@@ -5,7 +5,7 @@
 // Navigation leaf item for the sub-navigation panel — represents
 // a single nav destination.
 //
-// Usage (HTML class API — simple, no nested action):
+// Usage (HTML class API):
 //   <button class="ds-subnav-button" type="button" aria-pressed="false">
 //     Inbox
 //   </button>
@@ -16,24 +16,14 @@
 //     Archived
 //   </button>
 //
-// Usage with filter action (requires div wrapper — nested buttons are invalid HTML):
-//   <div class="ds-subnav-button" role="button" tabindex="0" aria-pressed="false">
-//     <span class="ds-subnav-button__label">Inbox</span>
-//     <button class="ds-subnav-button__filter ds-icon-button ds-icon-button--icon ds-icon-button--sm"
-//             type="button" aria-label="Filter" onclick="event.stopPropagation()">
-//       <span class="ds-icon ds-icon--filled">filter_alt</span>
-//     </button>
-//   </div>
-//
 // Angular component:
 //   <ds-subnav-button label="Inbox" />
 //   <ds-subnav-button label="Inbox" [selected]="true" />
-//   <ds-subnav-button label="Inbox" [showFilter]="true" (filterClick)="onFilter()" />
 //   <ds-subnav-button label="Archived" [disabled]="true" />
 //
 // Figma: primitive/subnav-button
 // Angular Material: none — custom component
-// ADA: aria-pressed reflects selection; aria-disabled when disabled
+// ADA: aria-pressed reflects selection; disabled attribute removes from tab order
 // ============================================================
 
 .ds-subnav-button {
@@ -43,7 +33,6 @@
   width: 100%;
   height: 32px;
   padding: 0 var(--spacing-sm) 0 var(--spacing-md); // pr 8px, pl 12px
-  gap: var(--spacing-xs); // 4px gap between label and filter icon
   flex-shrink: 0;
   box-sizing: border-box;
 
@@ -85,23 +74,6 @@
   // ── Focus (keyboard-only) ─────────────────────────────────────────────────
   &:focus         { outline: none; }
   &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
-
-  // ── Label ─────────────────────────────────────────────────────────────────
-  &__label {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  // ── Filter trailing icon button ────────────────────────────────────────────
-  // Sits above the ::after overlay so clicks on it are captured correctly.
-  // Only used in the div-wrapper variant (not the plain <button> variant).
-  &__filter {
-    flex-shrink: 0;
-    position: relative;
-    z-index: 1;
-  }
 
   // ── Selected ──────────────────────────────────────────────────────────────
   &.is-selected {

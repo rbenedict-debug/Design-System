@@ -1,37 +1,9 @@
-<!-- Simple nav button — no filter action -->
-@if (!showFilter) {
-  <button
-    class="ds-subnav-button"
-    [class.is-selected]="selected"
-    [class.is-disabled]="disabled"
-    type="button"
-    [disabled]="disabled"
-    [attr.aria-pressed]="selected"
-    (click)="onNavClick()"
-  >{{ label }}</button>
-}
-
-<!-- Nav button with filter action — must use div to avoid nested <button> -->
-@if (showFilter) {
-  <div
-    class="ds-subnav-button"
-    [class.is-selected]="selected"
-    [class.is-disabled]="disabled"
-    role="button"
-    [attr.tabindex]="disabled ? -1 : 0"
-    [attr.aria-pressed]="selected"
-    [attr.aria-disabled]="disabled || null"
-    (click)="onNavClick()"
-  >
-    <span class="ds-subnav-button__label">{{ label }}</span>
-    <button
-      class="ds-subnav-button__filter ds-icon-button ds-icon-button--icon ds-icon-button--sm"
-      type="button"
-      aria-label="Filter"
-      [disabled]="disabled"
-      (click)="onFilterClick($event)"
-    >
-      <span class="ds-icon ds-icon--filled" aria-hidden="true">filter_alt</span>
-    </button>
-  </div>
-}
+<button
+  class="ds-subnav-button"
+  [class.is-selected]="selected"
+  [class.is-disabled]="disabled"
+  type="button"
+  [disabled]="disabled"
+  [attr.aria-pressed]="selected"
+  (click)="onNavClick()"
+>{{ label }}</button>
