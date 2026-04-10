@@ -1,0 +1,459 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Onflo Design System — Rich Text Editor (ds-rich-text-editor)
+// ─────────────────────────────────────────────────────────────────────────────
+// Third-party: CKEditor 5. Reference ckeditor.com for plugin and toolbar
+// configuration. This stylesheet provides the shell, toolbar, and CKEditor
+// overrides — do not use when simple text is sufficient (use ds-input or
+// ds-textarea instead).
+//
+// Required npm packages (install in consuming app):
+//   npm install @ckeditor/ckeditor5-angular @ckeditor/ckeditor5-build-classic
+//
+// HTML class API:
+//   .ds-rich-text-editor                    outer shell
+//   .ds-rich-text-editor.is-focused         active (dark blue) border
+//   .ds-rich-text-editor.is-error           error (red) border
+//   .ds-rich-text-editor.is-disabled        disabled state
+//   .ds-rich-text-editor.is-resizing        cursor override during drag resize
+//
+// Structure:
+//   __label                                 accessible label above the shell
+//   __toolbar                               top toolbar bar
+//     __toolbar-group                       flex group of icon buttons
+//     __toolbar-divider                     1px vertical separator
+//     __toolbar-spacer                      flex-1 pushes expand button right
+//     __toolbar-btn                         ghost 42×42 icon button
+//     __toolbar-btn.is-active               active/toggled state (bold on, etc.)
+//   __content                               CKEditor host wrapper (flex 1)
+//   __resize-handle                         bottom-right drag-resize corner
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Label ────────────────────────────────────────────────────────────────────
+// Rendered as a sibling above the shell (not inside it).
+
+.ds-rich-text-editor__label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-family: var(--ref-typeface-plain);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  color: var(--color-text-secondary);
+
+  &--required::after {
+    content: ' *';
+    color: var(--color-text-error);
+    aria-hidden: 'true';
+  }
+}
+
+// ── Shell ────────────────────────────────────────────────────────────────────
+
+.ds-rich-text-editor {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface-page);
+  min-width: 289px;
+  transition: border-color 120ms ease;
+
+  // Hover — only when not focused, error, or disabled
+  &:hover:not(.is-disabled):not(.is-focused):not(.is-error) {
+    border-color: var(--color-border-hover);
+  }
+
+  // Active / focused
+  &.is-focused {
+    border-color: var(--color-border-active);
+  }
+
+  // Error
+  &.is-error {
+    border-color: var(--color-border-input-error);
+  }
+
+  // Resizing cursor lock
+  &.is-resizing {
+    cursor: s-resize !important;
+    user-select: none;
+  }
+
+  // ── Disabled ────────────────────────────────────────────────────────────────
+  &.is-disabled {
+    border-color: var(--color-border-subtle);
+    pointer-events: none;
+
+    .ds-rich-text-editor__toolbar {
+      background: var(--color-surface-input-disabled);
+      border-color: var(--color-border-subtle);
+    }
+
+    .ds-rich-text-editor__content {
+      background: var(--color-surface-input-disabled);
+    }
+
+    .ds-rich-text-editor__toolbar-btn {
+      color: var(--color-icon-disabled);
+    }
+
+    .ds-rich-text-editor__toolbar-divider {
+      background: var(--color-border-subtle);
+    }
+  }
+
+  // ── Toolbar ──────────────────────────────────────────────────────────────────
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    background: var(--color-surface-page);
+    border-bottom: 1px solid var(--color-border-input);
+    flex-shrink: 0;
+  }
+
+  &__toolbar-group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  // 1px vertical separator — inset 8px top/bottom to match Figma
+  &__toolbar-divider {
+    width: 1px;
+    height: 26px;
+    background: var(--color-border-input);
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  // Pushes the expand button to the far right
+  &__toolbar-spacer {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  // Ghost 42×42 icon button — mirrors ds-icon-button--icon
+  &__toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: var(--spacing-xs);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    color: var(--color-icon-default);
+    flex-shrink: 0;
+    position: relative;
+
+    .ds-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+    }
+
+    // Overlay tint (matches ds-icon-button pattern)
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-sm);
+      pointer-events: none;
+    }
+
+    &:hover::after  { background: var(--overlay-hovered); }
+    &:active::after { background: var(--overlay-pressed); }
+
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+    // Active / toggled state (e.g. bold is currently on)
+    &.is-active {
+      color: var(--color-icon-brand);
+    }
+
+    &:disabled,
+    &.is-disabled {
+      color: var(--color-icon-disabled);
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  // ── Content area ─────────────────────────────────────────────────────────────
+  &__content {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    padding: var(--spacing-lg);
+    background: var(--color-surface-page);
+    overflow: auto;
+
+    // Give CKEditor's wrapper full height so the editable fills the area
+    .ck-editor {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+  }
+
+  // ── Helper / error text ───────────────────────────────────────────────────
+  &__helper {
+    display: block;
+    margin-top: var(--spacing-xs);
+    font-family: var(--ref-typeface-plain);
+    font-size: var(--ref-typescale-body-small-size, 12px);
+    font-weight: var(--ref-typescale-body-small-weight, 400);
+    line-height: var(--ref-typescale-body-small-line-height, 16px);
+    color: var(--color-text-secondary);
+
+    &--error {
+      color: var(--color-text-error);
+    }
+  }
+
+  // ── Resize handle ─────────────────────────────────────────────────────────
+  // Visual corner indicator; mousedown initiates JS resize on the host element.
+  &__resize-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 3px;
+    cursor: s-resize;
+    color: var(--color-icon-subtle);
+    z-index: 2;
+    // pointer-events: all — handle intercepts mousedown
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // CKEditor 5 Overrides (scoped to .ds-rich-text-editor)
+  // Suppress CKEditor's native chrome; apply Onflo tokens to the editable region.
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  // Hide CKEditor's built-in toolbar bar — we provide our own
+  .ck.ck-editor__top {
+    display: none !important;
+  }
+
+  // Strip CKEditor outer wrapper border and shadow
+  .ck.ck-editor {
+    border: none !important;
+    box-shadow: none !important;
+    width: 100%;
+    background: transparent;
+  }
+
+  .ck.ck-editor__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  // The contenteditable region
+  .ck.ck-content.ck-editor__editable {
+    flex: 1;
+    padding: 0;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    min-height: 0;
+
+    // Body Medium typography (matches Figma placeholder text spec)
+    font-family: var(--ref-typeface-plain);
+    font-size: var(--ref-typescale-body-medium-size, 14px);
+    font-weight: var(--ref-typescale-body-medium-weight, 400);
+    line-height: var(--ref-typescale-body-medium-line-height, 20px);
+    letter-spacing: var(--ref-typescale-body-medium-tracking, 0.25px);
+    color: var(--color-text-primary);
+
+    // Placeholder
+    &.ck-placeholder::before {
+      color: var(--color-text-placeholder) !important;
+      font-family: var(--ref-typeface-plain);
+      font-size: var(--ref-typescale-body-medium-size, 14px);
+      font-weight: var(--ref-typescale-body-medium-weight, 400);
+      line-height: var(--ref-typescale-body-medium-line-height, 20px);
+      cursor: text;
+      pointer-events: none;
+    }
+
+    // Suppress CKEditor's focus border/ring — outer shell shows focus state instead
+    &.ck-focused {
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+
+    // Lists
+    ul {
+      list-style-type: disc;
+      padding-left: 1.5em;
+      margin: var(--spacing-xs, 4px) 0;
+    }
+
+    ol {
+      list-style-type: decimal;
+      padding-left: 1.5em;
+      margin: var(--spacing-xs, 4px) 0;
+    }
+
+    li {
+      line-height: var(--ref-typescale-body-medium-line-height, 20px);
+    }
+
+    // Links
+    a {
+      color: var(--color-text-brand);
+      text-decoration: underline;
+    }
+
+    // Bold / strong
+    strong, b {
+      font-weight: var(--ref-typeface-weight-bold, 600);
+    }
+  }
+
+  // CKEditor balloon (link editing popup) — align to Onflo radius/shadow
+  .ck.ck-balloon-panel {
+    border-color: var(--color-border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: 0 2px 8px 0 var(--shadow-elevation-2) !important;
+
+    .ck-input {
+      border-radius: var(--radius-sm) !important;
+      border-color: var(--color-border-input) !important;
+      color: var(--color-text-primary) !important;
+      font-family: var(--ref-typeface-plain) !important;
+      font-size: var(--ref-typescale-body-medium-size, 14px) !important;
+
+      &:focus {
+        border-color: var(--color-border-active) !important;
+        box-shadow: none !important;
+        outline: none !important;
+      }
+    }
+
+    .ck-button {
+      border-radius: var(--radius-sm) !important;
+
+      &:hover {
+        background: var(--color-surface-default) !important;
+      }
+
+      &.ck-button_with-text .ck-button__label {
+        font-family: var(--ref-typeface-plain) !important;
+        font-size: var(--ref-typescale-body-medium-size, 14px) !important;
+      }
+    }
+  }
+}
+
+// ── Expand overlay ────────────────────────────────────────────────────────────
+// Full-screen backdrop + modal panel for the expanded editor.
+// Uses position:fixed to escape any overflow:hidden ancestors.
+
+.ds-rte-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-surface-scrim);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+}
+
+.ds-rte-overlay__modal {
+  background: var(--color-surface-page);
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 4px 24px 0 var(--shadow-elevation-3),
+    0 2px 8px 0 var(--shadow-elevation-2);
+  width: min(800px, 100%);
+  height: min(600px, calc(100vh - 96px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ds-rte-overlay__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-subtle);
+  flex-shrink: 0;
+  gap: var(--spacing-sm);
+}
+
+.ds-rte-overlay__title {
+  font-family: var(--ref-typeface-plain);
+  font-size: var(--ref-typescale-title-h3-size, 16px);
+  font-weight: var(--ref-typeface-weight-bold, 600);
+  line-height: var(--ref-typescale-title-h3-line-height, 24px);
+  color: var(--color-text-primary);
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-rte-overlay__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-icon-default);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-sm);
+    pointer-events: none;
+  }
+
+  &:hover::after  { background: var(--overlay-hovered); }
+  &:active::after { background: var(--overlay-pressed); }
+
+  &:focus         { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+}
+
+.ds-rte-overlay__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  // The RTE inside the modal fills the body without its own outer border
+  .ds-rich-text-editor {
+    flex: 1;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+    overflow: hidden;
+  }
+}

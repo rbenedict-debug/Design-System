@@ -1,0 +1,305 @@
+<!-- ─── Accessible label (sibling above the shell) ────────────────────────── -->
+@if (label) {
+  <span
+    class="ds-rich-text-editor__label"
+    [class.ds-rich-text-editor__label--required]="required"
+    [id]="editorId + '-label'"
+  >{{ label }}</span>
+}
+
+<!-- ─── Toolbar ────────────────────────────────────────────────────────────── -->
+<div
+  class="ds-rich-text-editor__toolbar"
+  role="toolbar"
+  [attr.aria-label]="label ? label + ' text formatting' : 'Text formatting'"
+  [attr.aria-controls]="editorId"
+>
+
+  <!-- Text formatting group: Bold · Italic · Underline · Remove Format -->
+  <div class="ds-rich-text-editor__toolbar-group" role="group" aria-label="Text style">
+    <button
+      class="ds-rich-text-editor__toolbar-btn"
+      [class.is-active]="isBold"
+      type="button"
+      aria-label="Bold"
+      [attr.aria-pressed]="isBold"
+      [disabled]="disabled"
+      (click)="execCommand('bold')"
+    ><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+
+    <button
+      class="ds-rich-text-editor__toolbar-btn"
+      [class.is-active]="isItalic"
+      type="button"
+      aria-label="Italic"
+      [attr.aria-pressed]="isItalic"
+      [disabled]="disabled"
+      (click)="execCommand('italic')"
+    ><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+
+    <button
+      class="ds-rich-text-editor__toolbar-btn"
+      [class.is-active]="isUnderline"
+      type="button"
+      aria-label="Underline"
+      [attr.aria-pressed]="isUnderline"
+      [disabled]="disabled"
+      (click)="execCommand('underline')"
+    ><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+
+    <button
+      class="ds-rich-text-editor__toolbar-btn"
+      type="button"
+      aria-label="Remove formatting"
+      [disabled]="disabled"
+      (click)="execCommand('removeFormat')"
+    ><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+  </div>
+
+  <div class="ds-rich-text-editor__toolbar-divider" role="separator" aria-orientation="vertical"></div>
+
+  <!-- Link group -->
+  <div class="ds-rich-text-editor__toolbar-group" role="group" aria-label="Insert">
+    <button
+      class="ds-rich-text-editor__toolbar-btn"
+      type="button"
+      aria-label="Insert link"
+      [disabled]="disabled"
+      (click)="execCommand('link')"
+    ><span class="ds-icon" aria-hidden="true">link</span></button>
+  </div>
+
+  <div class="ds-rich-text-editor__toolbar-divider" role="separator" aria-orientation="vertical"></div>
+
+  <!-- List group: Bulleted · Numbered -->
+  <div class="ds-rich-text-editor__toolbar-group" role="group" aria-label="Lists">
+    <button
+      class="ds-rich-text-editor__toolbar-btn"
+      [class.is-active]="isBulletedList"
+      type="button"
+      aria-label="Bulleted list"
+      [attr.aria-pressed]="isBulletedList"
+      [disabled]="disabled"
+      (click)="execCommand('bulletedList')"
+    ><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+
+    <button
+      class="ds-rich-text-editor__toolbar-btn"
+      [class.is-active]="isNumberedList"
+      type="button"
+      aria-label="Numbered list"
+      [attr.aria-pressed]="isNumberedList"
+      [disabled]="disabled"
+      (click)="execCommand('numberedList')"
+    ><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+  </div>
+
+  <!-- Spacer + expand button (right-aligned) -->
+  @if (showExpand) {
+    <div class="ds-rich-text-editor__toolbar-spacer">
+      <button
+        #expandBtn
+        class="ds-rich-text-editor__toolbar-btn"
+        type="button"
+        aria-label="Expand editor"
+        [attr.aria-haspopup]="'dialog'"
+        [disabled]="disabled"
+        (click)="expand(expandBtn)"
+      ><span class="ds-icon" aria-hidden="true">expand_content</span></button>
+    </div>
+  }
+
+</div><!-- /.ds-rich-text-editor__toolbar -->
+
+<!-- ─── CKEditor content area ────────────────────────────────────────────── -->
+<div class="ds-rich-text-editor__content" [id]="editorId">
+
+  <!--
+    Uncomment once @ckeditor/ckeditor5-angular and
+    @ckeditor/ckeditor5-build-classic are installed:
+
+  <ckeditor
+    [editor]="Editor"
+    [config]="editorConfig"
+    [data]="value"
+    [disabled]="disabled"
+    (ready)="onEditorReady($event)"
+    (change)="onEditorChange($event)"
+    (focus)="onEditorFocus($event)"
+    (blur)="onEditorBlur($event)"
+  ></ckeditor>
+  -->
+
+  <!-- ── Placeholder fallback (remove once CKEditor is wired up) ── -->
+  @if (!value) {
+    <span class="ds-rich-text-editor__placeholder">{{ placeholder }}</span>
+  }
+
+</div><!-- /.ds-rich-text-editor__content -->
+
+<!-- ─── Resize handle ────────────────────────────────────────────────────── -->
+@if (showResize) {
+  <div
+    class="ds-rich-text-editor__resize-handle"
+    aria-hidden="true"
+    (mousedown)="onResizeStart($event)"
+  >
+    <!-- Classic diagonal-lines resize grip (two parallel /  lines) -->
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+      <path
+        d="M9 3L3 9M9 7L7 9"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      />
+    </svg>
+  </div>
+}
+
+<!-- ─── Helper / error text ───────────────────────────────────────────────── -->
+@if (isError && errorText) {
+  <span
+    class="ds-rich-text-editor__helper ds-rich-text-editor__helper--error"
+    role="alert"
+    [attr.id]="editorId + '-error'"
+  >{{ errorText }}</span>
+} @else if (helperText) {
+  <span
+    class="ds-rich-text-editor__helper"
+    [attr.id]="editorId + '-helper'"
+  >{{ helperText }}</span>
+}
+
+<!-- ─── Expand overlay (position:fixed — escapes overflow:hidden) ─────────── -->
+@if (isExpanded) {
+  <div
+    class="ds-rte-overlay"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="editorId + '-overlay-title'"
+  >
+    <div class="ds-rte-overlay__modal">
+
+      <!-- Overlay header -->
+      <div class="ds-rte-overlay__header">
+        <span
+          class="ds-rte-overlay__title"
+          [id]="editorId + '-overlay-title'"
+        >{{ label || 'Editor' }}</span>
+
+        <button
+          class="ds-rte-overlay__close"
+          type="button"
+          aria-label="Close expanded editor"
+          (click)="closeExpand()"
+        >
+          <span class="ds-icon" aria-hidden="true">close</span>
+        </button>
+      </div><!-- /.ds-rte-overlay__header -->
+
+      <!-- Full-size editor inside the overlay -->
+      <div class="ds-rte-overlay__body">
+
+        <div class="ds-rich-text-editor is-focused">
+
+          <!-- Toolbar (expanded) — same structure; calls execCommand with expanded=true -->
+          <div
+            class="ds-rich-text-editor__toolbar"
+            role="toolbar"
+            [attr.aria-label]="label ? label + ' text formatting' : 'Text formatting'"
+          >
+            <div class="ds-rich-text-editor__toolbar-group" role="group" aria-label="Text style">
+              <button
+                class="ds-rich-text-editor__toolbar-btn"
+                [class.is-active]="isBold"
+                type="button"
+                aria-label="Bold"
+                [attr.aria-pressed]="isBold"
+                (click)="execCommand('bold', true)"
+              ><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+
+              <button
+                class="ds-rich-text-editor__toolbar-btn"
+                [class.is-active]="isItalic"
+                type="button"
+                aria-label="Italic"
+                [attr.aria-pressed]="isItalic"
+                (click)="execCommand('italic', true)"
+              ><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+
+              <button
+                class="ds-rich-text-editor__toolbar-btn"
+                [class.is-active]="isUnderline"
+                type="button"
+                aria-label="Underline"
+                [attr.aria-pressed]="isUnderline"
+                (click)="execCommand('underline', true)"
+              ><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+
+              <button
+                class="ds-rich-text-editor__toolbar-btn"
+                type="button"
+                aria-label="Remove formatting"
+                (click)="execCommand('removeFormat', true)"
+              ><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+            </div>
+
+            <div class="ds-rich-text-editor__toolbar-divider" role="separator" aria-orientation="vertical"></div>
+
+            <div class="ds-rich-text-editor__toolbar-group" role="group" aria-label="Insert">
+              <button
+                class="ds-rich-text-editor__toolbar-btn"
+                type="button"
+                aria-label="Insert link"
+                (click)="execCommand('link', true)"
+              ><span class="ds-icon" aria-hidden="true">link</span></button>
+            </div>
+
+            <div class="ds-rich-text-editor__toolbar-divider" role="separator" aria-orientation="vertical"></div>
+
+            <div class="ds-rich-text-editor__toolbar-group" role="group" aria-label="Lists">
+              <button
+                class="ds-rich-text-editor__toolbar-btn"
+                [class.is-active]="isBulletedList"
+                type="button"
+                aria-label="Bulleted list"
+                [attr.aria-pressed]="isBulletedList"
+                (click)="execCommand('bulletedList', true)"
+              ><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+
+              <button
+                class="ds-rich-text-editor__toolbar-btn"
+                [class.is-active]="isNumberedList"
+                type="button"
+                aria-label="Numbered list"
+                [attr.aria-pressed]="isNumberedList"
+                (click)="execCommand('numberedList', true)"
+              ><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+            </div>
+          </div><!-- /.ds-rich-text-editor__toolbar -->
+
+          <!-- CKEditor in expanded view -->
+          <div class="ds-rich-text-editor__content">
+            <!--
+              Uncomment once CKEditor packages are installed:
+
+            <ckeditor
+              [editor]="Editor"
+              [config]="editorConfig"
+              [data]="expandedValue"
+              (ready)="onExpandedEditorReady($event)"
+              (change)="onExpandedEditorChange($event)"
+            ></ckeditor>
+            -->
+            @if (!expandedValue) {
+              <span class="ds-rich-text-editor__placeholder">{{ placeholder }}</span>
+            }
+          </div>
+
+        </div><!-- /.ds-rich-text-editor (inner) -->
+
+      </div><!-- /.ds-rte-overlay__body -->
+
+    </div><!-- /.ds-rte-overlay__modal -->
+  </div><!-- /.ds-rte-overlay -->
+}

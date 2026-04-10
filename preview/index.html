@@ -7129,6 +7129,7 @@
       <a class="nav-link" href="#select" onclick="setActive(this)"><span class="nav-dot"></span>Select</a>
       <a class="nav-link" href="#textarea" onclick="setActive(this)"><span class="nav-dot"></span>Textarea</a>
       <a class="nav-link" href="#datepicker" onclick="setActive(this)"><span class="nav-dot"></span>Date Picker</a>
+      <a class="nav-link" href="#rich-text-editor" onclick="setActive(this)"><span class="nav-dot"></span>Rich Text Editor</a>
       <a class="nav-link" href="#checkbox" onclick="setActive(this)"><span class="nav-dot"></span>Checkbox</a>
       <a class="nav-link" href="#radio" onclick="setActive(this)"><span class="nav-dot"></span>Radio Button</a>
       <a class="nav-link" href="#toggle" onclick="setActive(this)"><span class="nav-dot"></span>Toggle</a>
@@ -13242,7 +13243,274 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
       </div><!-- /#page-examples -->
 
-    
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <!-- Rich Text Editor                                                    -->
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <section class="section" id="rich-text-editor">
+        <div class="section-header">
+          <h2 class="section-title">Rich Text Editor</h2>
+          <span class="section-source">components/rich-text-editor/_rich-text-editor.scss</span>
+        </div>
+        <p class="section-desc">
+          Full-featured rich text editor (<code>ds-rich-text-editor</code>) — powered by CKEditor 5 with a custom Onflo toolbar. The toolbar provides Bold, Italic, Underline, Remove Formatting, Link, Bulleted List, and Numbered List. An optional expand button opens a larger modal editor. An optional drag handle in the bottom-right corner lets the user resize the height.
+          Third-party dependency: <code>@ckeditor/ckeditor5-angular</code> + <code>@ckeditor/ckeditor5-build-classic</code>.
+          Source: <code>components/rich-text-editor/_rich-text-editor.scss</code>
+        </p>
+
+        <div class="component-demo">
+
+          <!-- Shared toolbar helper used across all demo rows -->
+          <style>
+            /* Demo-only: mock a static toolbar + content area */
+            .rte-demo { width: 520px; }
+            .rte-demo .ds-rich-text-editor { height: 200px; }
+            .rte-demo-sm .ds-rich-text-editor { height: 160px; }
+          </style>
+
+          <!-- Default state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items rte-demo">
+              <div class="ds-rich-text-editor">
+                <div class="ds-rich-text-editor__toolbar" role="toolbar" aria-label="Text formatting">
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-spacer">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Expand editor"><span class="ds-icon" aria-hidden="true">expand_content</span></button>
+                  </div>
+                </div>
+                <div class="ds-rich-text-editor__content">
+                  <span class="ds-rich-text-editor__placeholder">Type your message…</span>
+                </div>
+                <div class="ds-rich-text-editor__resize-handle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hover state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Hover</div>
+            <div class="demo-row-items rte-demo">
+              <div class="ds-rich-text-editor" style="border-color: var(--color-border-hover);">
+                <div class="ds-rich-text-editor__toolbar">
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-spacer">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Expand editor"><span class="ds-icon" aria-hidden="true">expand_content</span></button>
+                  </div>
+                </div>
+                <div class="ds-rich-text-editor__content">
+                  <span class="ds-rich-text-editor__placeholder">Type your message…</span>
+                </div>
+                <div class="ds-rich-text-editor__resize-handle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active / focused state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Active / focused</div>
+            <div class="demo-row-items rte-demo">
+              <div class="ds-rich-text-editor is-focused">
+                <div class="ds-rich-text-editor__toolbar">
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn is-active" type="button" aria-label="Bold" aria-pressed="true"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-spacer">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Expand editor"><span class="ds-icon" aria-hidden="true">expand_content</span></button>
+                  </div>
+                </div>
+                <div class="ds-rich-text-editor__content" style="font-family: var(--ref-typeface-plain); font-size: 14px; line-height: 20px; color: var(--color-text-primary);">
+                  This is <strong>bold text</strong> and some <em>italic text</em> typed into the editor.
+                </div>
+                <div class="ds-rich-text-editor__resize-handle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Error</div>
+            <div class="demo-row-items rte-demo">
+              <div>
+                <span class="ds-rich-text-editor__label" id="rte-err-label">Message<span style="color:var(--color-text-error);margin-left:2px;" aria-hidden="true">*</span></span>
+                <div class="ds-rich-text-editor is-error">
+                  <div class="ds-rich-text-editor__toolbar">
+                    <div class="ds-rich-text-editor__toolbar-group">
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                    </div>
+                    <div class="ds-rich-text-editor__toolbar-divider"></div>
+                    <div class="ds-rich-text-editor__toolbar-group">
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                    </div>
+                    <div class="ds-rich-text-editor__toolbar-divider"></div>
+                    <div class="ds-rich-text-editor__toolbar-group">
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                    </div>
+                  </div>
+                  <div class="ds-rich-text-editor__content">
+                    <span class="ds-rich-text-editor__placeholder">Type your message…</span>
+                  </div>
+                </div>
+                <span class="ds-rich-text-editor__helper ds-rich-text-editor__helper--error" role="alert">Message body is required.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Disabled state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled</div>
+            <div class="demo-row-items rte-demo">
+              <div class="ds-rich-text-editor is-disabled">
+                <div class="ds-rich-text-editor__toolbar">
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold" disabled><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic" disabled><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline" disabled><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting" disabled><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link" disabled><span class="ds-icon" aria-hidden="true">link</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list" disabled><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list" disabled><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                  </div>
+                </div>
+                <div class="ds-rich-text-editor__content">
+                  <span class="ds-rich-text-editor__placeholder">Content unavailable.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No resize / no expand (minimal variant) -->
+          <div class="demo-row">
+            <div class="demo-row-label">No resize / no expand</div>
+            <div class="demo-row-items rte-demo-sm">
+              <div class="ds-rich-text-editor" style="width: 400px;">
+                <div class="ds-rich-text-editor__toolbar">
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                  </div>
+                </div>
+                <div class="ds-rich-text-editor__content">
+                  <span class="ds-rich-text-editor__placeholder">Reply here…</span>
+                </div>
+                <!-- no resize handle, no expand button -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Expand overlay demo (static mockup) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Expand overlay</div>
+            <div class="demo-row-items" style="position: relative; height: 300px; width: 640px; background: var(--color-surface-default); border-radius: var(--radius-md); overflow: hidden;">
+              <!-- Simulated backdrop -->
+              <div style="position: absolute; inset: 0; background: var(--color-surface-scrim); z-index: 0;"></div>
+              <!-- Modal -->
+              <div class="ds-rte-overlay__modal" style="position: absolute; top: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); height: calc(100% - 32px); z-index: 1;">
+                <div class="ds-rte-overlay__header">
+                  <span class="ds-rte-overlay__title">Message</span>
+                  <button class="ds-rte-overlay__close" type="button" aria-label="Close">
+                    <span class="ds-icon" aria-hidden="true">close</span>
+                  </button>
+                </div>
+                <div class="ds-rte-overlay__body">
+                  <div class="ds-rich-text-editor is-focused">
+                    <div class="ds-rich-text-editor__toolbar">
+                      <div class="ds-rich-text-editor__toolbar-group">
+                        <button class="ds-rich-text-editor__toolbar-btn is-active" type="button" aria-label="Bold" aria-pressed="true"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                      </div>
+                      <div class="ds-rich-text-editor__toolbar-divider"></div>
+                      <div class="ds-rich-text-editor__toolbar-group">
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                      </div>
+                      <div class="ds-rich-text-editor__toolbar-divider"></div>
+                      <div class="ds-rich-text-editor__toolbar-group">
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                      </div>
+                    </div>
+                    <div class="ds-rich-text-editor__content" style="font-family: var(--ref-typeface-plain); font-size: 14px; line-height: 20px; color: var(--color-text-primary);">
+                      <strong>Hi Sarah,</strong><br><br>
+                      Following up on our meeting — the implementation is progressing well. Let me know if you have any questions.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.component-demo -->
+      </section><!-- /#rich-text-editor -->
+
+
     </main>
   </div>
 </div>

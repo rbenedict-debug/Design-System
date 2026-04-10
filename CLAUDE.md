@@ -62,6 +62,7 @@ components/
   save-bar/                # ds-save-bar (unsaved changes bar — Cancel / Save Progress / Save and Exit)
   modal/                   # ds-modal (full-featured modal — sticky header, scrollable body, optional tabs + actions footer)
   datepicker/              # ds-datepicker (single) + ds-date-range-picker (range)
+  rich-text-editor/        # ds-rich-text-editor (CKEditor 5 — custom toolbar, resize handle, expand modal)
 preview/
   index.html               # Self-contained visual token + component reference
   page-layout/             # ds-page-layout (standard app shell — top-nav + nav-sidebar + optional sub-nav panel)
@@ -202,6 +203,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |
 | `ds-page-layout` | Custom | No Material equivalent — app shell composition (composes top-nav + nav-sidebar + ds-nav-expand); sub-nav open state managed via `[open]` input on ds-nav-expand and host class `.is-sub-nav-open` on the shell |
 | `ds-split-page` | CdkDrag (CDK only) | No Material equivalent — two-pane resizable layout; resize handle uses CDK drag for production, fixed 50/50 split acceptable in prototypes; replace with `CdkDragModule` in engineering handoff |
+| `ds-rich-text-editor` | Custom (CKEditor 5) | No Angular Material equivalent — third-party CKEditor 5. Requires `@ckeditor/ckeditor5-angular` + `@ckeditor/ckeditor5-build-classic`. Custom toolbar calls `editor.execute()` commands; native CKEditor toolbar is suppressed via CSS. Inputs: `[label]`, `[placeholder]`, `[(value)]`, `[disabled]`, `[isError]`, `[showResize]`, `[showExpand]`. Resize = JS mousedown drag on host height. Expand = `position:fixed` overlay with a second editor instance that syncs back on close. |
 
 ---
 
