@@ -26,13 +26,13 @@
 // document.body so these class selectors always reach the tooltip panel.
 
 .mat-mdc-tooltip {
-  --mdc-plain-tooltip-container-color: var(--color-surface-tooltip);
-  --mdc-plain-tooltip-supporting-text-color: var(--color-text-tooltip);
-  --mdc-plain-tooltip-supporting-text-font: var(--ref-typescale-body-small-font);
-  --mdc-plain-tooltip-supporting-text-size: var(--ref-typescale-body-small-size);
-  --mdc-plain-tooltip-supporting-text-weight: var(--ref-typescale-body-small-weight);
-  --mdc-plain-tooltip-supporting-text-tracking: var(--ref-typescale-body-small-tracking);
-  --mdc-plain-tooltip-supporting-text-line-height: var(--ref-typescale-body-small-line-height);
+  --mat-tooltip-container-color: var(--color-surface-tooltip);
+  --mat-tooltip-supporting-text-color: var(--color-text-tooltip);
+  --mat-tooltip-supporting-text-font: var(--ref-typescale-body-small-font);
+  --mat-tooltip-supporting-text-size: var(--ref-typescale-body-small-size);
+  --mat-tooltip-supporting-text-weight: var(--ref-typescale-body-small-weight);
+  --mat-tooltip-supporting-text-tracking: var(--ref-typescale-body-small-tracking);
+  --mat-tooltip-supporting-text-line-height: var(--ref-typescale-body-small-line-height);
 
   .mdc-tooltip__surface {
     border-radius: var(--radius-sm) !important;

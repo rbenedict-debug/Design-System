@@ -40,6 +40,7 @@
   border: none;
   border-radius: var(--radius-sm); // 6px
   overflow: hidden;
+  min-width: 0;
 
   // Appearance
   background: var(--color-surface-page);
@@ -53,7 +54,6 @@
   line-height: var(--ref-typescale-label-medium-line-height);
   letter-spacing: var(--ref-typescale-label-medium-tracking);
   text-align: left;
-  white-space: nowrap;
 
   // Stacking context for ::after overlay
   position: relative;
@@ -88,5 +88,14 @@
     color: var(--color-icon-disabled);
     background: var(--color-surface-page);
     cursor: default;
+  }
+
+  // ── Label (truncation) ────────────────────────────────────────────────────
+  &__label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
