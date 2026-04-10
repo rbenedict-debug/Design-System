@@ -3069,6 +3069,46 @@
   color: var(--color-text-error);
   margin-left: 2px;
 }
+.ds-autocomplete__field {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  height: 42px;
+  background: var(--color-surface-input);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--spacing-md);
+  cursor: text;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ds-autocomplete__field:hover {
+  border-color: var(--color-border-input-hover);
+}
+.ds-autocomplete:focus-within .ds-autocomplete__field {
+  border-color: var(--color-border-input-active);
+}
+.ds-autocomplete:focus-within:not([data-mouse-focus]) .ds-autocomplete__field {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-autocomplete__control {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  color: var(--color-text-primary);
+  caret-color: var(--color-border-input-active);
+}
+.ds-autocomplete__control::placeholder {
+  color: var(--color-text-placeholder);
+}
+.ds-autocomplete__control:disabled {
+  cursor: not-allowed;
+}
 .ds-autocomplete__helper {
   font-family: var(--ref-typeface-plain);
   font-size: var(--ref-typescale-body-small-size);
@@ -3080,17 +3120,42 @@
   flex-shrink: 0;
   pointer-events: none;
 }
+.ds-autocomplete.is-error .ds-autocomplete__field {
+  border-color: var(--color-border-input-error);
+}
 .ds-autocomplete.is-error .ds-autocomplete__helper {
   color: var(--color-text-error);
+}
+.ds-autocomplete.is-error:focus-within .ds-autocomplete__field {
+  border-color: var(--color-border-input-error);
+}
+.ds-autocomplete.is-error:focus-within:not([data-mouse-focus]) .ds-autocomplete__field {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 .ds-autocomplete.is-disabled {
   pointer-events: none;
 }
+.ds-autocomplete.is-disabled .ds-autocomplete__field {
+  background: var(--color-surface-input-disabled);
+  border-color: var(--color-border-subtle);
+}
 .ds-autocomplete.is-disabled .ds-autocomplete__label {
+  color: var(--color-text-disabled);
+}
+.ds-autocomplete.is-disabled .ds-autocomplete__control {
   color: var(--color-text-disabled);
 }
 .ds-autocomplete.is-disabled .ds-autocomplete__helper {
   color: var(--color-text-disabled);
+}
+.ds-autocomplete.is-readonly .ds-autocomplete__field {
+  background: var(--color-surface-default);
+  border-color: var(--color-border-subtle);
+  cursor: default;
+}
+.ds-autocomplete.is-readonly .ds-autocomplete__control {
+  cursor: default;
+  color: var(--color-text-secondary);
 }
 
 .ds-autocomplete .mat-mdc-form-field {
@@ -7934,6 +7999,7 @@
       <div class="nav-group-label">Form Controls</div>
       <a class="nav-link" href="#input" onclick="setActive(this)"><span class="nav-dot"></span>Input Field</a>
       <a class="nav-link" href="#select" onclick="setActive(this)"><span class="nav-dot"></span>Select</a>
+      <a class="nav-link" href="#autocomplete" onclick="setActive(this)"><span class="nav-dot"></span>Autocomplete</a>
       <a class="nav-link" href="#textarea" onclick="setActive(this)"><span class="nav-dot"></span>Textarea</a>
       <a class="nav-link" href="#datepicker" onclick="setActive(this)"><span class="nav-dot"></span>Date Picker</a>
       <a class="nav-link" href="#rich-text-editor" onclick="setActive(this)"><span class="nav-dot"></span>Rich Text Editor</a>
@@ -8703,6 +8769,102 @@
                 </div>
                 <span class="ds-select__helper">Contact sales to change your plan.</span>
               </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+      <section class="section" id="autocomplete">
+        <div class="section-header">
+          <h2 class="section-title">Autocomplete</h2>
+          <p class="section-desc">
+  Type-to-filter text input. Visually identical to Input Field (42px, same label / helper / error pattern).
+  The dropdown panel and all filtering logic are owned by the consumer — this component provides only
+  the input field chrome. Angular component uses <code>MatAutocompleteModule</code> + <code>MatInputModule</code>;
+  pass a <code>&lt;mat-autocomplete&gt;</code> ref via <code>[panel]</code>.
+  The static preview below shows the field states only — the live dropdown requires Angular.
+  Source: <code>components/autocomplete/_autocomplete.scss</code>
+</p>
+        </div>
+        <div class="component-demo">
+
+          <!-- Default -->
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+
+              <!-- Empty / placeholder -->
+              <div class="ds-autocomplete" style="width:240px;">
+                <label class="ds-autocomplete__label" for="ac-default">Assignee</label>
+                <div class="ds-autocomplete__field">
+                  <input id="ac-default" class="ds-autocomplete__control" type="text" placeholder="Search people...">
+                </div>
+              </div>
+
+              <!-- With typed value -->
+              <div class="ds-autocomplete" style="width:240px;">
+                <label class="ds-autocomplete__label" for="ac-value">Tag</label>
+                <div class="ds-autocomplete__field">
+                  <input id="ac-value" class="ds-autocomplete__control" type="text" value="bug">
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- With Helper -->
+          <div class="demo-row">
+            <div class="demo-row-label">With Helper</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-autocomplete" style="width:240px;">
+                <label class="ds-autocomplete__label" for="ac-helper">Product</label>
+                <div class="ds-autocomplete__field">
+                  <input id="ac-helper" class="ds-autocomplete__control" type="text" placeholder="Search products...">
+                </div>
+                <span class="ds-autocomplete__helper">Start typing to filter results.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error -->
+          <div class="demo-row">
+            <div class="demo-row-label">Error</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+              <div class="ds-autocomplete is-error" style="width:240px;">
+                <label class="ds-autocomplete__label" for="ac-error">Owner<span class="ds-autocomplete__required" aria-hidden="true">*</span></label>
+                <div class="ds-autocomplete__field">
+                  <input id="ac-error" class="ds-autocomplete__control" type="text"
+                         placeholder="Search people..." aria-invalid="true" aria-describedby="ac-error-helper">
+                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-autocomplete__error-icon" aria-hidden="true">error</span>
+                </div>
+                <span class="ds-autocomplete__helper" id="ac-error-helper" role="alert">Please select a valid owner.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Disabled / Read-only -->
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled / Read-only</div>
+            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
+
+              <div class="ds-autocomplete is-disabled" style="width:240px;">
+                <label class="ds-autocomplete__label" for="ac-disabled">Category</label>
+                <div class="ds-autocomplete__field">
+                  <input id="ac-disabled" class="ds-autocomplete__control" type="text"
+                         value="Infrastructure" disabled>
+                </div>
+                <span class="ds-autocomplete__helper">Editing is not available.</span>
+              </div>
+
+              <div class="ds-autocomplete is-readonly" style="width:240px;">
+                <label class="ds-autocomplete__label" for="ac-readonly">Source</label>
+                <div class="ds-autocomplete__field">
+                  <input id="ac-readonly" class="ds-autocomplete__control" type="text"
+                         value="Zendesk" readonly>
+                </div>
+                <span class="ds-autocomplete__helper">Set automatically from the ticket.</span>
+              </div>
+
             </div>
           </div>
 

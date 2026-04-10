@@ -2,6 +2,15 @@
 // Onflo Design System — Autocomplete Component
 // ============================================================
 //
+// Usage (HTML class API):
+//   <div class="ds-autocomplete">
+//     <label class="ds-autocomplete__label" for="id">Label</label>
+//     <div class="ds-autocomplete__field">
+//       <input id="id" class="ds-autocomplete__control" placeholder="Search..." />
+//     </div>
+//     <span class="ds-autocomplete__helper">Helper text</span>
+//   </div>
+//
 // Usage (Angular component):
 //   <!-- Consumer defines the panel and filtering logic -->
 //   <mat-autocomplete #auto panelClass="ds-autocomplete__panel">
@@ -40,6 +49,50 @@
     margin-left: 2px;
   }
 
+  // ── Field wrapper (CSS class API) ─────────────────────────────────────────
+
+  &__field {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    height: 42px;
+    background: var(--color-surface-input);
+    border: 1px solid var(--color-border-input);
+    border-radius: var(--radius-sm);
+    padding: 0 var(--spacing-md);
+    cursor: text;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover { border-color: var(--color-border-input-hover); }
+  }
+
+  &:focus-within &__field {
+    border-color: var(--color-border-input-active);
+  }
+
+  &:focus-within:not([data-mouse-focus]) &__field {
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+  }
+
+  // ── Control <input> (CSS class API) ───────────────────────────────────────
+
+  &__control {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    color: var(--color-text-primary);
+    caret-color: var(--color-border-input-active);
+
+    &::placeholder { color: var(--color-text-placeholder); }
+    &:disabled     { cursor: not-allowed; }
+  }
+
   // ── Helper / error text ───────────────────────────────────────────────────
 
   &__helper {
@@ -60,8 +113,17 @@
   // ── Error state ───────────────────────────────────────────────────────────
 
   &.is-error {
+    .ds-autocomplete__field  { border-color: var(--color-border-input-error); }
     .ds-autocomplete__helper { color: var(--color-text-error); }
     // NOTE: label color intentionally NOT set — label stays --color-text-secondary
+
+    &:focus-within .ds-autocomplete__field {
+      border-color: var(--color-border-input-error);
+    }
+
+    &:focus-within:not([data-mouse-focus]) .ds-autocomplete__field {
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
   }
 
   // ── Disabled state ────────────────────────────────────────────────────────
@@ -69,8 +131,17 @@
   &.is-disabled {
     pointer-events: none;
 
-    .ds-autocomplete__label  { color: var(--color-text-disabled); }
-    .ds-autocomplete__helper { color: var(--color-text-disabled); }
+    .ds-autocomplete__field   { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
+    .ds-autocomplete__label   { color: var(--color-text-disabled); }
+    .ds-autocomplete__control { color: var(--color-text-disabled); }
+    .ds-autocomplete__helper  { color: var(--color-text-disabled); }
+  }
+
+  // ── Read-only state (CSS class API) ──────────────────────────────────────
+
+  &.is-readonly {
+    .ds-autocomplete__field   { background: var(--color-surface-default); border-color: var(--color-border-subtle); cursor: default; }
+    .ds-autocomplete__control { cursor: default; color: var(--color-text-secondary); }
   }
 }
 
