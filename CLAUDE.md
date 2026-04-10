@@ -172,7 +172,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-spinner` | `MatProgressSpinnerModule` | mat-progress-spinner |
 | `ds-tabs` | `MatTabsModule` | mat-tab-group + mat-tab |
 | `ds-card` | `MatCardModule` | mat-card |
-| `ds-dialog` | `MatDialogModule` | mat-dialog |
+| `ds-dialog` | `MatDialogModule` (optional) | Slot-based dialog panel — body slot (`[dialog-body]`) + actions slot (`[dialog-actions]`); variants: `left` (default) / `center`; `[titleId]` wires `aria-labelledby`; `panelClass: 'ds-dialog-overlay'` when using MatDialog |
 | `ds-menu` | `MatMenuModule` | mat-menu |
 | `ds-accordion` | `MatExpansionModule` | mat-accordion + mat-expansion-panel |
 | `ds-chip` | `MatChipsModule` | mat-chip |

@@ -3603,145 +3603,65 @@
 
 .ds-dialog {
   background: var(--color-surface-page);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 24px var(--shadow-elevation-3), 0 2px 8px var(--shadow-elevation-2);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 10px 4px var(--shadow-elevation-3), 0 4px 3px 0 var(--shadow-elevation-2);
+  min-width: 280px;
+  max-width: 560px;
   width: 100%;
-  max-width: 480px;
-  max-height: calc(100vh - 96px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
-.ds-dialog--sm {
-  max-width: 360px;
-}
-.ds-dialog--lg {
-  max-width: 640px;
-}
-.ds-dialog--xl {
-  max-width: 800px;
-}
-.ds-dialog--center .ds-dialog__header {
-  flex-direction: column;
+.ds-dialog--center .ds-dialog__body {
   align-items: center;
-  text-align: center;
-  padding-bottom: 0;
-}
-.ds-dialog--center .ds-dialog__close {
-  position: absolute;
-  top: var(--spacing-md);
-  right: var(--spacing-md);
-}
-.ds-dialog--center .ds-dialog__icon {
-  margin-bottom: var(--spacing-sm);
-}
-.ds-dialog--center .ds-dialog__content {
   text-align: center;
 }
 .ds-dialog--center .ds-dialog__actions {
   justify-content: center;
 }
-.ds-dialog__header {
+.ds-dialog__body {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: var(--spacing-md);
-  padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-md);
-  position: relative;
-  flex-shrink: 0;
-}
-.ds-dialog__icon {
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  color: var(--color-icon-brand);
-  margin-top: 2px;
-}
-.ds-dialog__icon--error {
-  color: var(--color-icon-error);
-}
-.ds-dialog__icon--warning {
-  color: var(--color-icon-warning);
-}
-.ds-dialog__icon--success {
-  color: var(--color-icon-success);
-}
-.ds-dialog__icon--info {
-  color: var(--color-icon-info);
-}
-.ds-dialog__title-group {
-  flex: 1;
-  min-width: 0;
+  padding: var(--spacing-lg) var(--spacing-lg) 0;
 }
 .ds-dialog__title {
-  font-family: var(--ref-typeface-brand);
+  font-family: var(--ref-typescale-title-h3-font);
   font-size: var(--ref-typescale-title-h3-size);
-  font-weight: var(--ref-typeface-weight-bold);
+  font-weight: var(--ref-typescale-title-h3-weight);
   line-height: var(--ref-typescale-title-h3-line-height);
+  letter-spacing: var(--ref-typescale-title-h3-tracking);
   color: var(--color-text-primary);
-  margin: 0 0 4px;
-}
-.ds-dialog__subtitle {
-  font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-small-size);
-  line-height: var(--ref-typescale-label-small-line-height);
-  color: var(--color-text-secondary);
   margin: 0;
 }
-.ds-dialog__close {
-  appearance: none;
-  border: none;
-  background: transparent;
-  padding: var(--spacing-xs);
-  margin: -var(--spacing-xs);
-  cursor: pointer;
-  color: var(--color-icon-subtle);
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: color 0.12s, background 0.12s;
+.ds-dialog--center .ds-dialog__title {
+  font-size: var(--ref-typescale-title-h2-size);
+  font-weight: var(--ref-typescale-title-h2-weight);
+  line-height: var(--ref-typescale-title-h2-line-height);
+  letter-spacing: var(--ref-typescale-title-h2-tracking);
 }
-.ds-dialog__close:hover {
-  color: var(--color-icon-default);
-  background: var(--overlay-hovered);
-}
-.ds-dialog__close:focus {
-  outline: none;
-}
-.ds-dialog__close:focus-visible {
-  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+.ds-dialog__text {
+  font-family: var(--ref-typescale-body-medium-font);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typescale-body-medium-weight);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-primary);
+  margin: 0;
 }
 .ds-dialog__divider {
+  flex-shrink: 0;
   height: 1px;
   background: var(--color-border-subtle);
-  flex-shrink: 0;
-  margin: 0 var(--spacing-xl);
-}
-.ds-dialog__content {
-  flex: 1;
-  overflow-y: auto;
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-body-medium-size);
-  line-height: var(--ref-typescale-body-medium-line-height);
-  color: var(--color-text-secondary);
-}
-.ds-dialog__content:first-child {
-  padding-top: var(--spacing-xl);
+  margin-top: var(--spacing-lg);
 }
 .ds-dialog__actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-xl) var(--spacing-xl);
+  padding: var(--spacing-lg);
   flex-shrink: 0;
-  border-top: 1px solid var(--color-border-subtle);
 }
 
 .mat-mdc-dialog-container.ds-dialog-overlay {
@@ -6799,6 +6719,7 @@
       <a class="nav-link" href="#tooltip" onclick="setActive(this)"><span class="nav-dot"></span>Tooltip</a>
       <a class="nav-link" href="#progress" onclick="setActive(this)"><span class="nav-dot"></span>Progress</a>
       <a class="nav-link" href="#hover-card" onclick="setActive(this)"><span class="nav-dot"></span>Hover Card</a>
+      <a class="nav-link" href="#dialog" onclick="setActive(this)"><span class="nav-dot"></span>Dialog</a>
       <a class="nav-link" href="#save-bar" onclick="setActive(this)"><span class="nav-dot"></span>Save Bar</a>
       <a class="nav-link" href="#modal" onclick="setActive(this)"><span class="nav-dot"></span>Modal</a>
 
@@ -11122,6 +11043,73 @@
                   </div>
                 </div>
                 <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Resizable</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.component-demo -->
+      </section>
+
+      <section class="section" id="dialog">
+        <div class="section-header">
+          <h2 class="section-title">Dialog</h2>
+          <span class="section-source">components/dialog/_dialog.scss</span>
+        </div>
+        <p class="section-desc">Focused overlay for confirmations, forms, and alerts. Body slot holds all content (title, body text, form fields); actions slot holds the button row — always present. Two alignment variants: <strong>left</strong> (default) and <strong>center</strong>. Wrap in <code>ds-dialog-backdrop</code> for static HTML. Angular component: <code>&lt;ds-dialog&gt;</code> with <code>[align]</code>, <code>[showDivider]</code>, and <code>[titleId]</code> inputs. Project body into <code>[dialog-body]</code> slot; actions into <code>[dialog-actions]</code> slot. ADA: Focus trapped while open; Escape dismisses; set <code>titleId</code> to wire up <code>aria-labelledby</code> to the heading. Source: <code>components/dialog/_dialog.scss</code></p>
+
+        <div class="component-demo">
+
+          <!-- Row 1: Left-aligned (default) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Left aligned</div>
+            <div class="demo-row-items" style="align-items: flex-start;">
+              <div class="ds-dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-demo-1" style="width: 360px;">
+                <div class="ds-dialog__body">
+                  <h2 class="ds-dialog__title" id="dlg-demo-1">Confirm delete</h2>
+                  <p class="ds-dialog__text">This action will permanently delete the selected item. Once deleted, it cannot be recovered.</p>
+                </div>
+                <div class="ds-dialog__divider" aria-hidden="true"></div>
+                <div class="ds-dialog__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
+                  <button class="ds-button ds-button--filled ds-button--md" type="button">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Center-aligned -->
+          <div class="demo-row">
+            <div class="demo-row-label">Center aligned</div>
+            <div class="demo-row-items" style="align-items: flex-start;">
+              <div class="ds-dialog ds-dialog--center" role="dialog" aria-modal="true" aria-labelledby="dlg-demo-2" style="width: 360px;">
+                <div class="ds-dialog__body">
+                  <h2 class="ds-dialog__title" id="dlg-demo-2">Save changes?</h2>
+                  <p class="ds-dialog__text">You have unsaved changes. Would you like to save them before leaving this page?</p>
+                </div>
+                <div class="ds-dialog__divider" aria-hidden="true"></div>
+                <div class="ds-dialog__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button">Discard</button>
+                  <button class="ds-button ds-button--filled ds-button--md" type="button">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Richer body content -->
+          <div class="demo-row">
+            <div class="demo-row-label">Rich body</div>
+            <div class="demo-row-items" style="align-items: flex-start;">
+              <div class="ds-dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-demo-3" style="width: 400px;">
+                <div class="ds-dialog__body">
+                  <h2 class="ds-dialog__title" id="dlg-demo-3">Remove team member</h2>
+                  <p class="ds-dialog__text">Are you sure you want to remove <strong>Jordan Ellis</strong> from the workspace? They will lose access to all projects and cannot rejoin without a new invitation.</p>
+                  <p class="ds-dialog__text" style="color: var(--color-text-secondary, #73737f);">Any content assigned to this user will remain in the workspace.</p>
+                </div>
+                <div class="ds-dialog__divider" aria-hidden="true"></div>
+                <div class="ds-dialog__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
+                  <button class="ds-button ds-button--destructive-outlined ds-button--md" type="button">Remove</button>
+                </div>
               </div>
             </div>
           </div>
