@@ -61,6 +61,7 @@ components/
   nav-expand/              # ds-nav-expand (sub-nav panel expand/collapse toggle — primitive for page layout)
   save-bar/                # ds-save-bar (unsaved changes bar — Cancel / Save Progress / Save and Exit)
   modal/                   # ds-modal (full-featured modal — sticky header, scrollable body, optional tabs + actions footer)
+  datepicker/              # ds-datepicker (single) + ds-date-range-picker (range)
 preview/
   index.html               # Self-contained visual token + component reference
   page-layout/             # ds-page-layout (standard app shell — top-nav + nav-sidebar + optional sub-nav panel)
@@ -161,6 +162,8 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-input` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput |
 | `ds-textarea` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput (textarea) |
 | `ds-select` | `MatSelectModule` | mat-select inside mat-form-field |
+| `ds-datepicker` | `MatDatepickerModule` + `MatNativeDateModule` | matInput `[matDatepicker]` + `mat-datepicker-toggle`; styled to match ds-input (42px, same label/helper/error tokens); calendar popup globally styled via `.mat-datepicker-content` |
+| `ds-date-range-picker` | `MatDatepickerModule` + `MatNativeDateModule` | `mat-date-range-input` with `matStartDate` / `matEndDate` inputs + `mat-date-range-picker`; same field appearance as ds-datepicker |
 | `ds-checkbox` | `MatCheckboxModule` | mat-checkbox |
 | `ds-radio` + `ds-radio-group` | `MatRadioModule` | mat-radio-group + mat-radio-button |
 | `ds-toggle` | `MatSlideToggleModule` | mat-slide-toggle |

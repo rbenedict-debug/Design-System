@@ -1,0 +1,54 @@
+<!-- External label — sits above the mat-form-field, not floating inside it -->
+<label *ngIf="label" class="ds-datepicker__label" [for]="fieldId">
+  {{ label }}<span *ngIf="required" class="ds-datepicker__required" aria-hidden="true">*</span>
+</label>
+
+<!-- mat-form-field owns the field box, border, and matInput -->
+<mat-form-field
+  appearance="outline"
+  subscriptSizing="dynamic"
+  class="ds-datepicker__field-wrapper"
+>
+
+  <!-- Date input wired to the datepicker -->
+  <input
+    matInput
+    [matDatepicker]="picker"
+    [id]="fieldId"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="disabled"
+    [min]="minDate"
+    [max]="maxDate"
+    [required]="required"
+    [attr.aria-invalid]="isError ? 'true' : null"
+    [attr.aria-describedby]="(helperText || errorText) ? fieldId + '-helper' : null"
+    (dateChange)="onDateChange($event)"
+  />
+
+  <!-- Error icon — shown in error state (replaces toggle) -->
+  <span *ngIf="isError && !disabled" matIconSuffix
+    class="ds-icon ds-icon--sm ds-icon--filled ds-datepicker__error-icon" aria-hidden="true">error</span>
+
+  <!-- Calendar toggle button — hidden when error + not disabled -->
+  <mat-datepicker-toggle
+    *ngIf="!(isError && !disabled)"
+    matIconSuffix
+    [for]="picker"
+    class="ds-datepicker__toggle"
+    [attr.aria-label]="'Open ' + (label || 'date') + ' picker'"
+  >
+    <span matDatepickerToggleIcon class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+  </mat-datepicker-toggle>
+
+  <mat-datepicker #picker />
+
+</mat-form-field>
+
+<!-- Helper / error text — external, below the field -->
+<span
+  *ngIf="(isError && errorText) || helperText"
+  class="ds-datepicker__helper"
+  [id]="fieldId + '-helper'"
+  [attr.role]="isError ? 'alert' : null"
+>{{ isError && errorText ? errorText : helperText }}</span>

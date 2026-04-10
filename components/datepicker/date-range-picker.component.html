@@ -1,0 +1,65 @@
+<!-- External label — sits above the mat-form-field, not floating inside it -->
+<label *ngIf="label" class="ds-date-range-picker__label" [for]="startId">
+  {{ label }}<span *ngIf="required" class="ds-date-range-picker__required" aria-hidden="true">*</span>
+</label>
+
+<!-- mat-form-field owns the field box, border, and range input -->
+<mat-form-field
+  appearance="outline"
+  subscriptSizing="dynamic"
+  class="ds-date-range-picker__field-wrapper"
+>
+
+  <!-- mat-date-range-input contains start + end inputs with a separator -->
+  <mat-date-range-input
+    [rangePicker]="picker"
+    [disabled]="disabled"
+    [min]="minDate"
+    [max]="maxDate"
+    [required]="required"
+    [attr.aria-describedby]="(helperText || errorText) ? startId + '-helper' : null"
+  >
+    <input
+      matStartDate
+      [id]="startId"
+      [placeholder]="startPlaceholder"
+      [value]="startDate"
+      [attr.aria-invalid]="isError ? 'true' : null"
+      (dateChange)="onStartDateChange($event)"
+    />
+    <input
+      matEndDate
+      [id]="endId"
+      [placeholder]="endPlaceholder"
+      [value]="endDate"
+      [attr.aria-invalid]="isError ? 'true' : null"
+      (dateChange)="onEndDateChange($event)"
+    />
+  </mat-date-range-input>
+
+  <!-- Error icon — shown in error state (replaces toggle) -->
+  <span *ngIf="isError && !disabled" matIconSuffix
+    class="ds-icon ds-icon--sm ds-icon--filled ds-date-range-picker__error-icon" aria-hidden="true">error</span>
+
+  <!-- Calendar toggle button — hidden when error + not disabled -->
+  <mat-datepicker-toggle
+    *ngIf="!(isError && !disabled)"
+    matIconSuffix
+    [for]="picker"
+    class="ds-date-range-picker__toggle"
+    [attr.aria-label]="'Open ' + (label || 'date range') + ' picker'"
+  >
+    <span matDatepickerToggleIcon class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+  </mat-datepicker-toggle>
+
+  <mat-date-range-picker #picker />
+
+</mat-form-field>
+
+<!-- Helper / error text — external, below the field -->
+<span
+  *ngIf="(isError && errorText) || helperText"
+  class="ds-date-range-picker__helper"
+  [id]="startId + '-helper'"
+  [attr.role]="isError ? 'alert' : null"
+>{{ isError && errorText ? errorText : helperText }}</span>
