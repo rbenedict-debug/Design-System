@@ -35,50 +35,48 @@ Every token you see in Figma Variables has a matching CSS custom property:
 
 ### Quick start — new Angular project
 
-**Step 1.** Copy the `tokens/` folder into your Angular project's `src/styles/` directory.
+**Step 1.** Install the design system from GitHub (SSH — see [SETUP.md](./SETUP.md) for first-time SSH setup):
 
-```
-your-angular-project/
-  src/
-    styles/
-      tokens/          ← copy this folder from the design system repo
-        css/
-          index.css
-        scss/
-          index.scss
-          _variables.scss
-          _mixins.scss
+```bash
+npm install git+ssh://git@github.com/rbenedict-debug/Design-System.git
 ```
 
-**Step 2.** Import the CSS in `angular.json`:
+**Step 2.** Add the token CSS to `angular.json`:
 
 ```json
 "styles": [
-  "src/styles/tokens/css/index.css",
+  "node_modules/@onflo/design-system/tokens/css/index.css",
   "src/styles.scss"
 ]
 ```
 
-Or import in `src/styles.scss`:
+**Step 3.** Add `provideAnimationsAsync()` to your app config (required by Angular Material):
 
-```scss
-@import 'styles/tokens/css/index.css';
+```typescript
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+export const appConfig = { providers: [provideAnimationsAsync()] };
 ```
 
-**Step 3.** Import the SCSS in your component stylesheets:
+**Step 4.** Add the design system rules to your project's `CLAUDE.md`:
 
-```scss
-@use 'styles/tokens/scss' as ds;
-
-.my-button {
-  background:    ds.$surface-brand-bold;
-  color:         ds.$text-on-brand;
-  padding:       ds.$spacing-sm ds.$spacing-lg;
-  border-radius: ds.$radius-sm;
-}
+```markdown
+# Design System
+@node_modules/@onflo/design-system/AGENT-GUIDE.md
 ```
 
-That's it. Your component now uses the design system.
+**Step 5.** Start using components:
+
+```typescript
+import { DsButtonComponent, DsInputComponent } from '@onflo/design-system';
+```
+
+**To get the latest updates** (run whenever Rebecca pushes changes):
+
+```bash
+npm update @onflo/design-system
+```
+
+See [SETUP.md](./SETUP.md) for full setup instructions including SSH key setup.
 
 ---
 
@@ -99,7 +97,7 @@ That's it. Your component now uses the design system.
 #### SCSS variables (import the SCSS module first)
 
 ```scss
-@use 'styles/tokens/scss' as ds;
+@use 'node_modules/@onflo/design-system/tokens/scss/variables' as ds;
 
 .card {
   background:    ds.$surface-page;
@@ -114,7 +112,7 @@ That's it. Your component now uses the design system.
 Apply a complete type style in one line:
 
 ```scss
-@use 'styles/tokens/scss' as ds;
+@use 'node_modules/@onflo/design-system/tokens/scss/variables' as ds;
 
 h1 { @include ds.type-title-h1; }
 h2 { @include ds.type-title-h2; }
