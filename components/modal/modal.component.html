@@ -1,0 +1,51 @@
+<div
+  class="ds-modal"
+  [class.ds-modal--full]="size === 'full'"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-labelledby]="titleId"
+>
+
+  <!-- Dismiss button — absolute top-right, close (×) or collapse -->
+  <button
+    class="ds-modal__dismiss"
+    type="button"
+    [attr.aria-label]="variant === 'collapse' ? 'Minimize' : 'Close'"
+    (click)="onDismiss()"
+  >
+    <span class="ds-icon ds-icon--filled" aria-hidden="true">
+      {{ variant === 'collapse' ? 'collapse_content' : 'close' }}
+    </span>
+  </button>
+
+  <!-- Header (always sticky) -->
+  <header
+    class="ds-modal__header"
+    [class.ds-modal__header--with-tabs]="hasTabs"
+  >
+    <h2 class="ds-modal__title" [id]="titleId">{{ title }}</h2>
+    @if (subtitle) {
+      <p class="ds-modal__subtitle">{{ subtitle }}</p>
+    }
+  </header>
+
+  <!-- Tabs slot (rendered only when [modal-tabs] content is projected) -->
+  @if (hasTabs) {
+    <div class="ds-modal__tabs">
+      <ng-content select="[modal-tabs]" />
+    </div>
+  }
+
+  <!-- Body (always scrollable — content adds its own padding) -->
+  <div class="ds-modal__body">
+    <ng-content />
+  </div>
+
+  <!-- Actions footer (rendered only when [modal-actions] content is projected) -->
+  @if (hasActions) {
+    <footer class="ds-modal__actions">
+      <ng-content select="[modal-actions]" />
+    </footer>
+  }
+
+</div>

@@ -6349,6 +6349,138 @@
 .ds-save-bar--error .ds-save-bar__dot {
   background: var(--color-icon-error);
 }
+
+.ds-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--color-surface-scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-xl);
+}
+
+.ds-modal {
+  background: var(--color-surface-page);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 10px 4px var(--shadow-elevation-3), 0 4px 3px 0 var(--shadow-elevation-3);
+  width: 500px;
+  max-width: 100%;
+  max-height: calc(100vh - 2 * var(--spacing-xl));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+.ds-modal--full {
+  width: 100%;
+  height: calc(100vh - 2 * var(--spacing-xl));
+}
+.ds-modal__dismiss {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-icon-subtle);
+  z-index: 1;
+  flex-shrink: 0;
+  transition: color 0.12s, background 0.12s;
+}
+.ds-modal__dismiss:hover {
+  color: var(--color-icon-default);
+  background: var(--overlay-hovered);
+}
+.ds-modal__dismiss:active {
+  background: var(--overlay-pressed);
+}
+.ds-modal__dismiss:focus {
+  outline: none;
+}
+.ds-modal__dismiss:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-modal__dismiss .ds-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.ds-modal__header {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-lg);
+  padding-right: calc(42px + var(--spacing-sm));
+}
+.ds-modal__header--with-tabs {
+  padding-bottom: 0;
+}
+.ds-modal__title {
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-title-h2-size);
+  font-weight: var(--ref-typeface-weight-bold);
+  line-height: var(--ref-typescale-title-h2-line-height);
+  letter-spacing: var(--ref-typescale-title-h2-tracking, 0);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+.ds-modal__subtitle {
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+.ds-modal__tabs {
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.ds-modal__body {
+  flex: 1 0 0;
+  overflow-y: auto;
+  min-height: 0;
+}
+.ds-modal__actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.mat-mdc-dialog-container.ds-modal-overlay {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  --mdc-dialog-container-color: transparent;
+  --mdc-dialog-container-elevation: none;
+  --mdc-dialog-container-shape: 0;
+}
+.mat-mdc-dialog-container.ds-modal-overlay .mat-mdc-dialog-surface {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+.cdk-overlay-backdrop.ds-modal-backdrop {
+  background: var(--color-surface-scrim);
+}
 </style><!-- ONFLO-COMPONENTS:END -->
 
 <style>
@@ -6669,6 +6801,7 @@
       <a class="nav-link" href="#progress" onclick="setActive(this)"><span class="nav-dot"></span>Progress</a>
       <a class="nav-link" href="#hover-card" onclick="setActive(this)"><span class="nav-dot"></span>Hover Card</a>
       <a class="nav-link" href="#save-bar" onclick="setActive(this)"><span class="nav-dot"></span>Save Bar</a>
+      <a class="nav-link" href="#modal" onclick="setActive(this)"><span class="nav-dot"></span>Modal</a>
 
       <div class="nav-group-label">Display</div>
       <a class="nav-link" href="#avatar" onclick="setActive(this)"><span class="nav-dot"></span>Avatar</a>
@@ -11073,6 +11206,203 @@
 
         </div>
       </section>
+
+      <section class="section" id="modal">
+        <div class="section-header">
+          <h2 class="section-title">Modal</h2>
+          <span class="section-source">components/modal/_modal.scss</span>
+        </div>
+        <p class="section-desc">Full-featured modal panel with a sticky header, always-scrollable body, optional tabs row below the header, and an optional sticky actions footer. Two dismiss variants: <code>close</code> (×) hides the view; <code>collapse</code> (<code>collapse_content</code> icon) minimizes to a tray. Two sizes: <code>fixed</code> (500px, default) and <code>full</code> (fills available space). Omit the actions footer entirely when no actions are needed. Angular component: <code>&lt;ds-modal&gt;</code> with <code>[title]</code>, <code>[subtitle]</code>, <code>[variant]</code>, <code>[size]</code>, and <code>(dismissClick)</code>. Project body content into the default slot; use <code>[modal-tabs]</code> and <code>[modal-actions]</code> marker attributes for the tabs and actions slots.</p>
+
+        <div class="component-demo">
+
+          <!-- Row 1: Close variant, no tabs, with actions -->
+          <div class="demo-row">
+            <div class="demo-row-label">Close / Actions</div>
+            <div class="demo-row-items" style="gap: 24px; align-items: flex-start;">
+              <div class="ds-modal" role="dialog" aria-modal="true" aria-labelledby="modal-demo-title-1" style="height: 480px;">
+                <button class="ds-modal__dismiss" type="button" aria-label="Close">
+                  <span class="ds-icon" aria-hidden="true">close</span>
+                </button>
+                <header class="ds-modal__header">
+                  <h2 class="ds-modal__title" id="modal-demo-title-1">Modal Title</h2>
+                  <p class="ds-modal__subtitle">Optional subtitle or context description</p>
+                </header>
+                <div class="ds-modal__body" style="padding: var(--spacing-lg, 16px);">
+                  <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-primary, #2d3638); margin: 0 0 12px;">This is the scrollable body area. It accepts any content — forms, lists, media, or rich text. The header and footer remain fixed while this region scrolls independently.</p>
+                  <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-secondary, #73737f); margin: 0 0 12px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+                  <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-secondary, #73737f); margin: 0;">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                </div>
+                <footer class="ds-modal__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
+                  <button class="ds-button ds-button--filled ds-button--md" type="button">Confirm</button>
+                </footer>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Collapse variant, no tabs, with actions -->
+          <div class="demo-row">
+            <div class="demo-row-label">Collapse / Actions</div>
+            <div class="demo-row-items" style="gap: 24px; align-items: flex-start;">
+              <div class="ds-modal" role="dialog" aria-modal="true" aria-labelledby="modal-demo-title-2" style="height: 480px;">
+                <button class="ds-modal__dismiss" type="button" aria-label="Minimize">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">collapse_content</span>
+                </button>
+                <header class="ds-modal__header">
+                  <h2 class="ds-modal__title" id="modal-demo-title-2">Modal Title</h2>
+                  <p class="ds-modal__subtitle">Optional subtitle or context description</p>
+                </header>
+                <div class="ds-modal__body" style="padding: var(--spacing-lg, 16px);">
+                  <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-primary, #2d3638); margin: 0 0 12px;">Collapse variant — the dismiss icon indicates this panel can be minimized to a tray rather than fully closed. Typically used in workflows where the user may need to return to the modal.</p>
+                  <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-secondary, #73737f); margin: 0;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                </div>
+                <footer class="ds-modal__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
+                  <button class="ds-button ds-button--filled ds-button--md" type="button">Save</button>
+                </footer>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Close variant with tabs, with actions -->
+          <div class="demo-row">
+            <div class="demo-row-label">Close / Tabs / Actions</div>
+            <div class="demo-row-items" style="gap: 24px; align-items: flex-start;">
+              <div class="ds-modal" role="dialog" aria-modal="true" aria-labelledby="modal-demo-title-3" style="height: 520px;">
+                <button class="ds-modal__dismiss" type="button" aria-label="Close">
+                  <span class="ds-icon" aria-hidden="true">close</span>
+                </button>
+                <header class="ds-modal__header ds-modal__header--with-tabs">
+                  <h2 class="ds-modal__title" id="modal-demo-title-3">Modal Title</h2>
+                </header>
+                <div class="ds-modal__tabs" role="tablist" aria-label="Modal sections">
+                  <button class="ds-tab is-selected" type="button" role="tab" aria-selected="true">Details</button>
+                  <button class="ds-tab" type="button" role="tab" aria-selected="false">Settings</button>
+                  <button class="ds-tab" type="button" role="tab" aria-selected="false">History</button>
+                  <button class="ds-tab" type="button" role="tab" aria-selected="false">Notes</button>
+                </div>
+                <div class="ds-modal__body" style="padding: var(--spacing-lg, 16px);">
+                  <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-primary, #2d3638); margin: 0 0 12px;">Tabs variant — a tab row sits directly below the header with no gap. The tab row has a bottom border that acts as the container rule. Body content scrolls independently of the header and tabs.</p>
+                  <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-secondary, #73737f); margin: 0 0 12px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                  <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-secondary, #73737f); margin: 0;">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                </div>
+                <footer class="ds-modal__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
+                  <button class="ds-button ds-button--filled ds-button--md" type="button">Save Changes</button>
+                </footer>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 4: No actions (body fills to bottom) -->
+          <div class="demo-row">
+            <div class="demo-row-label">No actions footer</div>
+            <div class="demo-row-items" style="gap: 24px; align-items: flex-start;">
+              <div class="ds-modal" role="dialog" aria-modal="true" aria-labelledby="modal-demo-title-4" style="height: 380px;">
+                <button class="ds-modal__dismiss" type="button" aria-label="Close">
+                  <span class="ds-icon" aria-hidden="true">close</span>
+                </button>
+                <header class="ds-modal__header">
+                  <h2 class="ds-modal__title" id="modal-demo-title-4">Informational Modal</h2>
+                </header>
+                <div class="ds-modal__body" style="padding: var(--spacing-lg, 16px);">
+                  <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-primary, #2d3638); margin: 0 0 12px;">No footer actions — use when the modal is purely informational or when the only action is the dismiss button. The body grows to fill all available space below the header.</p>
+                  <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-secondary, #73737f); margin: 0;">No <code>ds-modal__actions</code> footer element — the body automatically expands to the bottom edge of the modal.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 5: Interactive demo with backdrop -->
+          <div class="demo-row">
+            <div class="demo-row-label">Interactive</div>
+            <div class="demo-row-items">
+              <button class="ds-button ds-button--filled ds-button--md" type="button" onclick="document.getElementById('modal-interactive-backdrop').style.display='flex'">Open Modal</button>
+              <button class="ds-button ds-button--outlined ds-button--md" type="button" onclick="document.getElementById('modal-interactive-full-backdrop').style.display='flex'">Open Full-width</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Interactive modal (fixed) — rendered outside demo flow -->
+      <div class="ds-modal-backdrop" id="modal-interactive-backdrop" style="display:none;"
+           onclick="if(event.target===this)this.style.display='none'">
+        <div class="ds-modal" role="dialog" aria-modal="true" aria-labelledby="modal-interactive-title" style="height: 520px;">
+          <button class="ds-modal__dismiss" type="button" aria-label="Close"
+                  onclick="document.getElementById('modal-interactive-backdrop').style.display='none'">
+            <span class="ds-icon" aria-hidden="true">close</span>
+          </button>
+          <header class="ds-modal__header ds-modal__header--with-tabs">
+            <h2 class="ds-modal__title" id="modal-interactive-title">Edit Asset</h2>
+          </header>
+          <div class="ds-modal__tabs" role="tablist" aria-label="Asset sections">
+            <button class="ds-tab is-selected" type="button" role="tab" aria-selected="true" onclick="setModalTab(this, 'tab1')">Details</button>
+            <button class="ds-tab" type="button" role="tab" aria-selected="false" onclick="setModalTab(this, 'tab2')">Settings</button>
+            <button class="ds-tab" type="button" role="tab" aria-selected="false" onclick="setModalTab(this, 'tab3')">History</button>
+          </div>
+          <div class="ds-modal__body" style="padding: var(--spacing-lg, 16px);">
+            <div id="modal-tab1">
+              <p style="font-family: var(--ref-typeface-brand, 'Proxima Nova', sans-serif); font-size: 14px; line-height: 20px; color: var(--color-text-primary, #2d3638); margin: 0 0 12px; font-weight: 600;">Asset Name</p>
+              <div style="border: 1px solid var(--color-border-input, #c4c4c9); border-radius: var(--radius-sm, 6px); padding: 10px 12px; margin-bottom: 16px; font-size: 14px; color: var(--color-text-primary, #2d3638);">Dell Latitude 5520 Laptop</div>
+              <p style="font-family: var(--ref-typeface-brand, 'Proxima Nova', sans-serif); font-size: 14px; line-height: 20px; color: var(--color-text-primary, #2d3638); margin: 0 0 12px; font-weight: 600;">Serial Number</p>
+              <div style="border: 1px solid var(--color-border-input, #c4c4c9); border-radius: var(--radius-sm, 6px); padding: 10px 12px; margin-bottom: 16px; font-size: 14px; color: var(--color-text-secondary, #73737f);">SN-20240312-0049</div>
+              <p style="font-family: var(--ref-typeface-brand, 'Proxima Nova', sans-serif); font-size: 14px; line-height: 20px; color: var(--color-text-primary, #2d3638); margin: 0 0 12px; font-weight: 600;">Notes</p>
+              <div style="border: 1px solid var(--color-border-input, #c4c4c9); border-radius: var(--radius-sm, 6px); padding: 10px 12px; height: 80px; font-size: 14px; color: var(--color-text-secondary, #73737f);">Deployed to IT team — floor 3</div>
+            </div>
+            <div id="modal-tab2" style="display:none;">
+              <p style="font-family: var(--ref-typeface-brand, 'Proxima Nova', sans-serif); font-size: 14px; line-height: 20px; color: var(--color-text-secondary, #73737f); margin: 0;">Settings tab content would appear here.</p>
+            </div>
+            <div id="modal-tab3" style="display:none;">
+              <p style="font-family: var(--ref-typeface-brand, 'Proxima Nova', sans-serif); font-size: 14px; line-height: 20px; color: var(--color-text-secondary, #73737f); margin: 0;">History tab content would appear here.</p>
+            </div>
+          </div>
+          <footer class="ds-modal__actions">
+            <button class="ds-button ds-button--text ds-button--md" type="button"
+                    onclick="document.getElementById('modal-interactive-backdrop').style.display='none'">Cancel</button>
+            <button class="ds-button ds-button--filled ds-button--md" type="button"
+                    onclick="document.getElementById('modal-interactive-backdrop').style.display='none'">Save Changes</button>
+          </footer>
+        </div>
+      </div>
+
+      <!-- Interactive modal (full width) -->
+      <div class="ds-modal-backdrop" id="modal-interactive-full-backdrop" style="display:none;"
+           onclick="if(event.target===this)this.style.display='none'">
+        <div class="ds-modal ds-modal--full" role="dialog" aria-modal="true" aria-labelledby="modal-interactive-full-title">
+          <button class="ds-modal__dismiss" type="button" aria-label="Close"
+                  onclick="document.getElementById('modal-interactive-full-backdrop').style.display='none'">
+            <span class="ds-icon" aria-hidden="true">close</span>
+          </button>
+          <header class="ds-modal__header">
+            <h2 class="ds-modal__title" id="modal-interactive-full-title">Full-width Modal</h2>
+            <p class="ds-modal__subtitle">Fills the available space with page padding on all sides</p>
+          </header>
+          <div class="ds-modal__body" style="padding: var(--spacing-lg, 16px);">
+            <p style="font-family: var(--ref-typeface-brand, 'Proxima Nova', sans-serif); font-size: 14px; line-height: 20px; color: var(--color-text-primary, #2d3638); margin: 0 0 12px;">Full-width (<code>ds-modal--full</code>) — the modal fills the entire backdrop area minus the standard page padding. Use for complex workflows that benefit from maximum horizontal space.</p>
+            <p style="font-family: var(--ref-typeface-brand, 'Proxima Nova', sans-serif); font-size: 14px; line-height: 20px; color: var(--color-text-secondary, #73737f); margin: 0;">Click outside the modal or use the dismiss button to close.</p>
+          </div>
+          <footer class="ds-modal__actions">
+            <button class="ds-button ds-button--text ds-button--md" type="button"
+                    onclick="document.getElementById('modal-interactive-full-backdrop').style.display='none'">Cancel</button>
+            <button class="ds-button ds-button--filled ds-button--md" type="button"
+                    onclick="document.getElementById('modal-interactive-full-backdrop').style.display='none'">Done</button>
+          </footer>
+        </div>
+      </div>
+
+      <script>
+        function setModalTab(btn, tabId) {
+          var tabBtns = btn.closest('[role="tablist"]').querySelectorAll('[role="tab"]');
+          tabBtns.forEach(function(b) { b.classList.remove('is-selected'); b.setAttribute('aria-selected', 'false'); });
+          btn.classList.add('is-selected'); btn.setAttribute('aria-selected', 'true');
+          ['tab1','tab2','tab3'].forEach(function(id) {
+            var el = document.getElementById('modal-' + id);
+            if (el) el.style.display = (id === tabId) ? '' : 'none';
+          });
+        }
+      </script>
 
       </div><!-- /#page-components -->
 

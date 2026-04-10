@@ -60,6 +60,7 @@ components/
   top-nav/                 # ds-top-nav (main top navigation bar composition — tabs + action buttons)
   nav-expand/              # ds-nav-expand (sub-nav panel expand/collapse toggle — primitive for page layout)
   save-bar/                # ds-save-bar (unsaved changes bar — Cancel / Save Progress / Save and Exit)
+  modal/                   # ds-modal (full-featured modal — sticky header, scrollable body, optional tabs + actions footer)
 preview/
   index.html               # Self-contained visual token + component reference
   page-layout/             # ds-page-layout (standard app shell — top-nav + nav-sidebar + optional sub-nav panel)
@@ -192,6 +193,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-top-nav` | Custom | No Material equivalent — main top navigation bar composition (composes nav-tab + action buttons) |
 | `ds-nav-expand` | Custom | No Material equivalent — sub-nav panel expand/collapse toggle; `[open]` reflects current panel state; `(toggle)` emitted on click; icons: `right_panel_open` / `right_panel_close` (FILL=1, brand blue) |
 | `ds-save-bar` | Custom | No Material equivalent — unsaved-changes bar; variants: `default` (blue border, info dot) / `error` (red border, error dot); outputs: `(cancelClick)`, `(saveProgressClick)`, `(saveAndExitClick)`; ADA: `role="status"` (default) / `role="alert"` (error) |
+| `ds-modal` | `MatDialogModule` (optional) | Full-featured modal — sticky header, scrollable body, optional tabs slot (`[modal-tabs]`), optional actions footer (`[modal-actions]`); variants: `close` (×) / `collapse` (minimize); sizes: `fixed` (500px) / `full` (fills backdrop); `(dismissClick)` output; panelClass: `'ds-modal-overlay'` when using MatDialog |
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |

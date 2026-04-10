@@ -1,0 +1,219 @@
+// ============================================================
+// Onflo Design System — Modal Component
+// ============================================================
+//
+// A full-featured modal with sticky header, scrollable body,
+// optional tabs slot, and optional sticky actions footer.
+//
+// Variants:
+//   close    — top-right × icon (default)
+//   collapse — top-right collapse_content icon (minimize / tray)
+//
+// Sizes:
+//   (default) — 500px fixed width, centered in backdrop
+//   --full    — fills backdrop width, height stretches to fill
+//
+// Usage (HTML class API):
+//
+//   <!-- Backdrop -->
+//   <div class="ds-modal-backdrop">
+//     <div class="ds-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-1">
+//
+//       <!-- Dismiss button (close or collapse) -->
+//       <button class="ds-modal__dismiss" type="button" aria-label="Close">
+//         <span class="ds-icon" aria-hidden="true">close</span>
+//       </button>
+//
+//       <!-- Header (always sticky) -->
+//       <header class="ds-modal__header">
+//         <h2 class="ds-modal__title" id="modal-title-1">Dialog Title</h2>
+//         <p class="ds-modal__subtitle">Optional subtitle or description</p>
+//       </header>
+//
+//       <!-- Optional: tabs slot — add ds-modal__header--with-tabs when present -->
+//       <div class="ds-modal__tabs">
+//         <!-- ds-tabs / mat-tab-group content -->
+//       </div>
+//
+//       <!-- Body (scrollable, no padding — content adds its own) -->
+//       <div class="ds-modal__body">
+//         <!-- dynamic content -->
+//       </div>
+//
+//       <!-- Optional: actions footer -->
+//       <footer class="ds-modal__actions">
+//         <button class="ds-button ds-button--text ds-button--md">Cancel</button>
+//         <button class="ds-button ds-button--filled ds-button--md">Confirm</button>
+//       </footer>
+//
+//     </div>
+//   </div>
+//
+// Collapse variant: swap `close` icon for `collapse_content` (filled).
+// Full-size:       add `ds-modal--full` to the .ds-modal element.
+// No actions:      omit the <footer class="ds-modal__actions"> element entirely.
+// No subtitle:     omit the <p class="ds-modal__subtitle"> element.
+// ============================================================
+
+// ── Backdrop ─────────────────────────────────────────────────────────────────
+
+.ds-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--color-surface-scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-xl);
+}
+
+// ── Modal container ───────────────────────────────────────────────────────────
+
+.ds-modal {
+  background: var(--color-surface-page);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 1px 10px 4px var(--shadow-elevation-3),
+    0 4px 3px 0 var(--shadow-elevation-3);
+  width: 500px;
+  max-width: 100%;
+  max-height: calc(100vh - 2 * var(--spacing-xl));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+
+  // Full-width variant — fills the backdrop, used for large content areas
+  &--full {
+    width: 100%;
+    height: calc(100vh - 2 * var(--spacing-xl));
+  }
+
+  // ── Dismiss button (absolute top-right corner) ───────────────────────────
+
+  &__dismiss {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    color: var(--color-icon-subtle);
+    z-index: 1;
+    flex-shrink: 0;
+    transition: color 0.12s, background 0.12s;
+
+    &:hover  { color: var(--color-icon-default); background: var(--overlay-hovered); }
+    &:active { background: var(--overlay-pressed); }
+    &:focus  { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+    .ds-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+  }
+
+  // ── Header (always sticky / non-scrolling) ───────────────────────────────
+
+  &__header {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-lg);
+    // Reserve space for the 42px dismiss button at top-right
+    padding-right: calc(42px + var(--spacing-sm));
+
+    // When tabs are present: flush bottom so tabs sit directly below title
+    &--with-tabs {
+      padding-bottom: 0;
+    }
+  }
+
+  &__title {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-title-h2-size);
+    font-weight: var(--ref-typeface-weight-bold);
+    line-height: var(--ref-typescale-title-h2-line-height);
+    letter-spacing: var(--ref-typescale-title-h2-tracking, 0);
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  // ── Tabs slot ─────────────────────────────────────────────────────────────
+
+  // Tabs sit flush below the header when present. The ds-tabs component
+  // renders its own bottom border (the active indicator). We add a container
+  // border-bottom here to visually separate the tab row from the body.
+  &__tabs {
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  // ── Body (always scrollable) ──────────────────────────────────────────────
+
+  &__body {
+    flex: 1 0 0;
+    overflow-y: auto;
+    min-height: 0; // required for flex children to scroll correctly
+  }
+
+  // ── Actions footer (sticky, optional) ────────────────────────────────────
+
+  &__actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+}
+
+// ── Angular Material CDK overrides ────────────────────────────────────────────
+// Apply panelClass: 'ds-modal-overlay' to MatDialogConfig to strip Material's
+// default container chrome when launching DsModalComponent via MatDialog.open().
+
+.mat-mdc-dialog-container.ds-modal-overlay {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+
+  --mdc-dialog-container-color:     transparent;
+  --mdc-dialog-container-elevation: none;
+  --mdc-dialog-container-shape:     0;
+
+  .mat-mdc-dialog-surface {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+  }
+}
+
+// CDK backdrop scrim — apply via backdropClass: 'ds-modal-backdrop'
+.cdk-overlay-backdrop.ds-modal-backdrop {
+  background: var(--color-surface-scrim);
+}
