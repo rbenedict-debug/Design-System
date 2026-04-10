@@ -2912,7 +2912,11 @@
 }
 .ds-select__dropdown {
   display: none;
-  position: fixed;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
   z-index: 1000;
   overflow-y: auto;
   max-height: 256px;
@@ -13106,8 +13110,6 @@ function closeNavTab(closeBtn) {
       var id = menu.getAttribute('aria-labelledby');
       if (id === exceptId) return;
       menu.classList.remove('is-open');
-      menu.classList.remove('is-above');
-      menu.style.top = menu.style.bottom = menu.style.left = menu.style.width = '';
       var inp = getInput(id);
       if (inp) {
         inp.setAttribute('aria-expanded', 'false');
@@ -13147,29 +13149,8 @@ function closeNavTab(closeBtn) {
     // Show all items (reset any previous filter)
     menu.querySelectorAll('.ds-menu__item').forEach(function (b) { b.style.display = ''; });
 
-    // Teleport to <body> so stacking contexts inside table / paginator containers
-    // can't clip the panel (same principle as Angular Material CDK overlay).
-    if (menu.parentElement !== document.body) {
-      document.body.appendChild(menu);
-    }
-
-    // Position with fixed coords derived from the trigger field's viewport rect
-    var field = inp.closest('.ds-select__field');
-    var triggerRect = field ? field.getBoundingClientRect() : inp.getBoundingClientRect();
-    menu.style.left   = triggerRect.left + 'px';
-    menu.style.width  = triggerRect.width + 'px';
-    menu.style.top    = (triggerRect.bottom + 4) + 'px';
-    menu.style.bottom = 'auto';
-
     menu.classList.add('is-open');
     inp.setAttribute('aria-expanded', 'true');
-
-    // Flip above the trigger if the panel extends past the viewport bottom
-    var menuRect = menu.getBoundingClientRect();
-    if (menuRect.bottom > window.innerHeight) {
-      menu.style.top    = 'auto';
-      menu.style.bottom = (window.innerHeight - triggerRect.top + 4) + 'px';
-    }
   };
 
   window.dsSelectFilter = function (inputId, query) {
@@ -13191,8 +13172,6 @@ function closeNavTab(closeBtn) {
       if (menu.contains(document.activeElement)) return;
       var inp = getInput(inputId);
       menu.classList.remove('is-open');
-      menu.classList.remove('is-above');
-      menu.style.top = menu.style.bottom = menu.style.left = menu.style.width = '';
       if (inp) {
         inp.setAttribute('aria-expanded', 'false');
         var s = state[inputId] || {};

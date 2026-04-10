@@ -179,21 +179,26 @@
   }
 
   // ── Field row (CSS class API — wraps trigger + dropdown) ──────────────────
+  // position:relative makes it the containing block for the absolute dropdown.
   // Used in the HTML class API demo only. The Angular component uses the
-  // Angular CDK overlay. position:relative bounds the JS outside-click hit-test.
+  // Angular CDK overlay.
 
   &__field-row {
     position: relative;
   }
 
   // ── Dropdown panel (CSS class API) ────────────────────────────────────────
-  // Hidden by default. JS teleports it to <body> and uses position:fixed +
-  // getBoundingClientRect() coords — same principle as Angular CDK overlay.
-  // .is-open shows it. Inner .ds-menu fills the wrapper width.
+  // Hidden by default; .is-open shows it. Positioned absolutely below the
+  // trigger field so it scrolls with the page and stays tied to the input.
+  // Inner .ds-menu fills the wrapper width.
 
   &__dropdown {
     display: none;
-    position: fixed;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
     z-index: 1000;
     overflow-y: auto;
     max-height: 256px;
