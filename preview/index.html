@@ -6706,6 +6706,360 @@
   background: var(--color-surface-brand-bold);
   color: var(--color-text-on-bold);
 }
+
+.ds-rich-text-editor__label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-family: var(--ref-typeface-plain);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  color: var(--color-text-secondary);
+}
+.ds-rich-text-editor__label--required::after {
+  content: " *";
+  color: var(--color-text-error);
+}
+
+.ds-rich-text-editor {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface-page);
+  min-width: 289px;
+  transition: border-color 120ms ease;
+}
+.ds-rich-text-editor:hover:not(.is-disabled):not(.is-focused):not(.is-error) {
+  border-color: var(--color-border-hover);
+}
+.ds-rich-text-editor.is-focused {
+  border-color: var(--color-border-active);
+}
+.ds-rich-text-editor.is-error {
+  border-color: var(--color-border-input-error);
+}
+.ds-rich-text-editor.is-resizing {
+  cursor: s-resize !important;
+  user-select: none;
+}
+.ds-rich-text-editor.is-disabled {
+  border-color: var(--color-border-subtle);
+  pointer-events: none;
+}
+.ds-rich-text-editor.is-disabled .ds-rich-text-editor__toolbar {
+  background: var(--color-surface-input-disabled);
+  border-color: var(--color-border-subtle);
+}
+.ds-rich-text-editor.is-disabled .ds-rich-text-editor__content {
+  background: var(--color-surface-input-disabled);
+}
+.ds-rich-text-editor.is-disabled .ds-rich-text-editor__toolbar-btn {
+  color: var(--color-icon-disabled);
+}
+.ds-rich-text-editor.is-disabled .ds-rich-text-editor__toolbar-divider {
+  background: var(--color-border-subtle);
+}
+.ds-rich-text-editor__toolbar {
+  display: flex;
+  align-items: center;
+  background: var(--color-surface-page);
+  border-bottom: 1px solid var(--color-border-input);
+  flex-shrink: 0;
+}
+.ds-rich-text-editor__toolbar-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.ds-rich-text-editor__toolbar-divider {
+  width: 1px;
+  height: 26px;
+  background: var(--color-border-input);
+  flex-shrink: 0;
+  align-self: center;
+}
+.ds-rich-text-editor__toolbar-spacer {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.ds-rich-text-editor__toolbar-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-icon-default);
+  position: relative;
+  overflow: hidden;
+}
+.ds-rich-text-editor__toolbar-btn:hover:not(:disabled) {
+  background: var(--overlay-hovered);
+}
+.ds-rich-text-editor__toolbar-btn:active:not(:disabled) {
+  background: var(--overlay-pressed);
+}
+.ds-rich-text-editor__toolbar-btn:focus {
+  outline: none;
+}
+.ds-rich-text-editor__toolbar-btn:focus-visible {
+  background: var(--overlay-focused);
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-rich-text-editor__toolbar-btn.is-active {
+  color: var(--color-icon-brand);
+}
+.ds-rich-text-editor__toolbar-btn:disabled {
+  color: var(--color-icon-disabled);
+  cursor: default;
+  pointer-events: none;
+}
+.ds-rich-text-editor__content {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  padding: var(--spacing-lg);
+  background: var(--color-surface-page);
+  overflow: auto;
+}
+.ds-rich-text-editor__content .ck-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.ds-rich-text-editor__helper {
+  display: block;
+  margin-top: var(--spacing-xs);
+  font-family: var(--ref-typeface-plain);
+  font-size: var(--ref-typescale-body-small-size, 12px);
+  font-weight: var(--ref-typescale-body-small-weight, 400);
+  line-height: var(--ref-typescale-body-small-line-height, 16px);
+  color: var(--color-text-secondary);
+}
+.ds-rich-text-editor__helper--error {
+  color: var(--color-text-error);
+}
+.ds-rich-text-editor__placeholder {
+  display: block;
+  font-family: var(--ref-typeface-plain);
+  font-size: var(--ref-typescale-body-medium-size, 14px);
+  font-weight: var(--ref-typescale-body-medium-weight, 400);
+  line-height: var(--ref-typescale-body-medium-line-height, 20px);
+  letter-spacing: var(--ref-typescale-body-medium-tracking, 0.25px);
+  color: var(--color-text-placeholder);
+  pointer-events: none;
+  user-select: none;
+}
+.ds-rich-text-editor__resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 3px;
+  cursor: s-resize;
+  color: var(--color-icon-subtle);
+  z-index: 2;
+}
+.ds-rich-text-editor .ck.ck-editor__top {
+  display: none !important;
+}
+.ds-rich-text-editor .ck.ck-editor {
+  border: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  background: transparent;
+}
+.ds-rich-text-editor .ck.ck-editor__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.ds-rich-text-editor .ck.ck-content.ck-editor__editable {
+  flex: 1;
+  padding: 0;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  min-height: 0;
+  font-family: var(--ref-typeface-plain);
+  font-size: var(--ref-typescale-body-medium-size, 14px);
+  font-weight: var(--ref-typescale-body-medium-weight, 400);
+  line-height: var(--ref-typescale-body-medium-line-height, 20px);
+  letter-spacing: var(--ref-typescale-body-medium-tracking, 0.25px);
+  color: var(--color-text-primary);
+}
+.ds-rich-text-editor .ck.ck-content.ck-editor__editable.ck-placeholder::before {
+  color: var(--color-text-placeholder) !important;
+  font-family: var(--ref-typeface-plain);
+  font-size: var(--ref-typescale-body-medium-size, 14px);
+  font-weight: var(--ref-typescale-body-medium-weight, 400);
+  line-height: var(--ref-typescale-body-medium-line-height, 20px);
+  cursor: text;
+  pointer-events: none;
+}
+.ds-rich-text-editor .ck.ck-content.ck-editor__editable.ck-focused {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.ds-rich-text-editor .ck.ck-content.ck-editor__editable ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+  margin: var(--spacing-xs, 4px) 0;
+}
+.ds-rich-text-editor .ck.ck-content.ck-editor__editable ol {
+  list-style-type: decimal;
+  padding-left: 1.5em;
+  margin: var(--spacing-xs, 4px) 0;
+}
+.ds-rich-text-editor .ck.ck-content.ck-editor__editable li {
+  line-height: var(--ref-typescale-body-medium-line-height, 20px);
+}
+.ds-rich-text-editor .ck.ck-content.ck-editor__editable a {
+  color: var(--color-text-brand);
+  text-decoration: underline;
+}
+.ds-rich-text-editor .ck.ck-content.ck-editor__editable strong, .ds-rich-text-editor .ck.ck-content.ck-editor__editable b {
+  font-weight: var(--ref-typeface-weight-bold, 600);
+}
+.ds-rich-text-editor .ck.ck-balloon-panel {
+  border-color: var(--color-border-subtle) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 2px 8px 0 var(--shadow-elevation-2) !important;
+}
+.ds-rich-text-editor .ck.ck-balloon-panel .ck-input {
+  border-radius: var(--radius-sm) !important;
+  border-color: var(--color-border-input) !important;
+  color: var(--color-text-primary) !important;
+  font-family: var(--ref-typeface-plain) !important;
+  font-size: var(--ref-typescale-body-medium-size, 14px) !important;
+}
+.ds-rich-text-editor .ck.ck-balloon-panel .ck-input:focus {
+  border-color: var(--color-border-active) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.ds-rich-text-editor .ck.ck-balloon-panel .ck-button {
+  border-radius: var(--radius-sm) !important;
+}
+.ds-rich-text-editor .ck.ck-balloon-panel .ck-button:hover {
+  background: var(--color-surface-default) !important;
+}
+.ds-rich-text-editor .ck.ck-balloon-panel .ck-button.ck-button_with-text .ck-button__label {
+  font-family: var(--ref-typeface-plain) !important;
+  font-size: var(--ref-typescale-body-medium-size, 14px) !important;
+}
+
+.ds-rte-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-surface-scrim);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+}
+
+.ds-rte-overlay__modal {
+  background: var(--color-surface-page);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 24px 0 var(--shadow-elevation-3), 0 2px 8px 0 var(--shadow-elevation-2);
+  width: min(800px, 100%);
+  height: min(600px, 100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ds-rte-overlay__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-subtle);
+  flex-shrink: 0;
+  gap: var(--spacing-sm);
+}
+
+.ds-rte-overlay__title {
+  font-family: var(--ref-typeface-plain);
+  font-size: var(--ref-typescale-title-h3-size, 16px);
+  font-weight: var(--ref-typeface-weight-bold, 600);
+  line-height: var(--ref-typescale-title-h3-line-height, 24px);
+  color: var(--color-text-primary);
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-rte-overlay__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-icon-default);
+  position: relative;
+}
+.ds-rte-overlay__close::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+}
+.ds-rte-overlay__close:hover::after {
+  background: var(--overlay-hovered);
+}
+.ds-rte-overlay__close:active::after {
+  background: var(--overlay-pressed);
+}
+.ds-rte-overlay__close:focus {
+  outline: none;
+}
+.ds-rte-overlay__close:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+
+.ds-rte-overlay__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.ds-rte-overlay__body .ds-rich-text-editor {
+  flex: 1;
+  min-height: 0;
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+}
 </style><!-- ONFLO-COMPONENTS:END -->
 
 <style>
@@ -13259,19 +13613,11 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
         <div class="component-demo">
 
-          <!-- Shared toolbar helper used across all demo rows -->
-          <style>
-            /* Demo-only: mock a static toolbar + content area */
-            .rte-demo { width: 520px; }
-            .rte-demo .ds-rich-text-editor { height: 200px; }
-            .rte-demo-sm .ds-rich-text-editor { height: 160px; }
-          </style>
-
           <!-- Default state -->
           <div class="demo-row">
             <div class="demo-row-label">Default</div>
-            <div class="demo-row-items rte-demo">
-              <div class="ds-rich-text-editor">
+            <div class="demo-row-items" style="width: 520px;">
+              <div class="ds-rich-text-editor" style="height: 200px;">
                 <div class="ds-rich-text-editor__toolbar" role="toolbar" aria-label="Text formatting">
                   <div class="ds-rich-text-editor__toolbar-group">
                     <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
@@ -13305,8 +13651,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <!-- Hover state -->
           <div class="demo-row">
             <div class="demo-row-label">Hover</div>
-            <div class="demo-row-items rte-demo">
-              <div class="ds-rich-text-editor" style="border-color: var(--color-border-hover);">
+            <div class="demo-row-items" style="width: 520px;">
+              <div class="ds-rich-text-editor" style="height: 200px; border-color: var(--color-border-hover);">
                 <div class="ds-rich-text-editor__toolbar">
                   <div class="ds-rich-text-editor__toolbar-group">
                     <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
@@ -13340,8 +13686,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <!-- Active / focused state -->
           <div class="demo-row">
             <div class="demo-row-label">Active / focused</div>
-            <div class="demo-row-items rte-demo">
-              <div class="ds-rich-text-editor is-focused">
+            <div class="demo-row-items" style="width: 520px;">
+              <div class="ds-rich-text-editor is-focused" style="height: 200px;">
                 <div class="ds-rich-text-editor__toolbar">
                   <div class="ds-rich-text-editor__toolbar-group">
                     <button class="ds-rich-text-editor__toolbar-btn is-active" type="button" aria-label="Bold" aria-pressed="true"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
@@ -13375,10 +13721,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <!-- Error state -->
           <div class="demo-row">
             <div class="demo-row-label">Error</div>
-            <div class="demo-row-items rte-demo">
+            <div class="demo-row-items" style="width: 520px;">
               <div>
-                <span class="ds-rich-text-editor__label" id="rte-err-label">Message<span style="color:var(--color-text-error);margin-left:2px;" aria-hidden="true">*</span></span>
-                <div class="ds-rich-text-editor is-error">
+                <span class="ds-rich-text-editor__label ds-rich-text-editor__label--required" id="rte-err-label">Message</span>
+                <div class="ds-rich-text-editor is-error" style="height: 200px;">
                   <div class="ds-rich-text-editor__toolbar">
                     <div class="ds-rich-text-editor__toolbar-group">
                       <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
@@ -13408,8 +13754,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <!-- Disabled state -->
           <div class="demo-row">
             <div class="demo-row-label">Disabled</div>
-            <div class="demo-row-items rte-demo">
-              <div class="ds-rich-text-editor is-disabled">
+            <div class="demo-row-items" style="width: 520px;">
+              <div class="ds-rich-text-editor is-disabled" style="height: 200px;">
                 <div class="ds-rich-text-editor__toolbar">
                   <div class="ds-rich-text-editor__toolbar-group">
                     <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold" disabled><span class="ds-icon" aria-hidden="true">format_bold</span></button>
@@ -13437,8 +13783,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <!-- No resize / no expand (minimal variant) -->
           <div class="demo-row">
             <div class="demo-row-label">No resize / no expand</div>
-            <div class="demo-row-items rte-demo-sm">
-              <div class="ds-rich-text-editor" style="width: 400px;">
+            <div class="demo-row-items" style="width: 520px;">
+              <div class="ds-rich-text-editor" style="height: 160px;">
                 <div class="ds-rich-text-editor__toolbar">
                   <div class="ds-rich-text-editor__toolbar-group">
                     <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>

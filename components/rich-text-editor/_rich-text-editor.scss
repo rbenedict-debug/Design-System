@@ -44,7 +44,6 @@
   &--required::after {
     content: ' *';
     color: var(--color-text-error);
-    aria-hidden: 'true';
   }
 }
 
@@ -138,51 +137,46 @@
     justify-content: flex-end;
   }
 
-  // Ghost 42×42 icon button — mirrors ds-icon-button--icon
+  // Ghost 42×42 icon button — mirrors ds-icon-button--icon exactly
   &__toolbar-btn {
-    display: flex;
+    // Reset
+    appearance: none;
+    -webkit-appearance: none;
+
+    // Layout — fixed square, centred icon
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 42px;
     height: 42px;
-    padding: var(--spacing-xs);
+    padding: 0;
+    flex-shrink: 0;
+
+    // Ghost styling
     background: transparent;
-    border: none;
+    border: 1px solid transparent;
     border-radius: var(--radius-sm);
     cursor: pointer;
     color: var(--color-icon-default);
-    flex-shrink: 0;
     position: relative;
+    overflow: hidden; // clips hover/active tint to rounded corners
 
-    .ds-icon {
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-      line-height: 24px;
-    }
-
-    // Overlay tint (matches ds-icon-button pattern)
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius-sm);
-      pointer-events: none;
-    }
-
-    &:hover::after  { background: var(--overlay-hovered); }
-    &:active::after { background: var(--overlay-pressed); }
+    // Hover / active — direct background change, same as ds-icon-button--icon
+    &:hover:not(:disabled)  { background: var(--overlay-hovered); }
+    &:active:not(:disabled) { background: var(--overlay-pressed); }
 
     &:focus         { outline: none; }
-    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:focus-visible {
+      background: var(--overlay-focused);
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
 
     // Active / toggled state (e.g. bold is currently on)
     &.is-active {
       color: var(--color-icon-brand);
     }
 
-    &:disabled,
-    &.is-disabled {
+    &:disabled {
       color: var(--color-icon-disabled);
       cursor: default;
       pointer-events: none;
@@ -219,6 +213,19 @@
     &--error {
       color: var(--color-text-error);
     }
+  }
+
+  // ── Placeholder (static fallback — visible when CKEditor is not installed) ─
+  &__placeholder {
+    display: block;
+    font-family: var(--ref-typeface-plain);
+    font-size: var(--ref-typescale-body-medium-size, 14px);
+    font-weight: var(--ref-typescale-body-medium-weight, 400);
+    line-height: var(--ref-typescale-body-medium-line-height, 20px);
+    letter-spacing: var(--ref-typescale-body-medium-tracking, 0.25px);
+    color: var(--color-text-placeholder);
+    pointer-events: none;
+    user-select: none;
   }
 
   // ── Resize handle ─────────────────────────────────────────────────────────
