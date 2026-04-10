@@ -372,9 +372,11 @@ declare class DsBadgeComponent {
     count: string | number;
     /** Renders as a 6×6px dot with no text (Small size). */
     dot: boolean;
+    /** Color variant. Defaults to red (notification). Use blue for informational, grey for neutral/inactive. */
+    variant: 'red' | 'blue' | 'grey';
     get indicatorClasses(): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsBadgeComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<DsBadgeComponent, "ds-badge", never, { "count": { "alias": "count"; "required": false; }; "dot": { "alias": "dot"; "required": false; }; }, {}, never, never, true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsBadgeComponent, "ds-badge", never, { "count": { "alias": "count"; "required": false; }; "dot": { "alias": "dot"; "required": false; }; "variant": { "alias": "variant"; "required": false; }; }, {}, never, never, true, never>;
 }
 
 type DsButtonVariant = 'filled' | 'outlined' | 'text' | 'destructive' | 'destructive-outlined';

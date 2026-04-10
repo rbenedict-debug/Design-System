@@ -41,8 +41,15 @@ export class DsBadgeComponent {
   /** Renders as a 6×6px dot with no text (Small size). */
   @Input() dot = false;
 
+  /** Color variant. Defaults to red (notification). Use blue for informational, grey for neutral/inactive. */
+  @Input() variant: 'red' | 'blue' | 'grey' = 'red';
+
   get indicatorClasses(): string {
-    return ['ds-badge-indicator', this.dot ? 'ds-badge-indicator--dot' : '']
+    return [
+      'ds-badge-indicator',
+      this.dot ? 'ds-badge-indicator--dot' : '',
+      this.variant !== 'red' ? `ds-badge-indicator--${this.variant}` : '',
+    ]
       .filter(Boolean)
       .join(' ');
   }

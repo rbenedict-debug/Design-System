@@ -2412,6 +2412,12 @@
   flex-shrink: 0;
   vertical-align: middle;
 }
+.ds-badge-indicator--blue {
+  background: var(--color-surface-brand-bold);
+}
+.ds-badge-indicator--grey {
+  background: var(--color-icon-subtle);
+}
 .ds-badge-indicator--dot {
   width: 6px;
   height: 6px;
@@ -2430,6 +2436,12 @@
 }
 .mat-badge.mat-badge-small {
   --mat-badge-container-size: 6px;
+}
+.mat-badge.mat-badge--blue {
+  --mat-badge-background-color: var(--color-surface-brand-bold);
+}
+.mat-badge.mat-badge--grey {
+  --mat-badge-background-color: var(--color-icon-subtle);
 }
 
 .ds-badge-indicator__host {
@@ -10754,13 +10766,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       <section class="section" id="badge">
         <div class="section-header">
           <h2 class="section-title">Badge</h2>
-          <p class="section-desc">Notification indicator primitive. Two sizes: <strong>Large</strong> (20px count circle) and <strong>Small</strong> (6×6px dot). Always red. Used overlaid on icon buttons or inline in tabs. Angular: <code>&lt;ds-badge [count]="3" /&gt;</code> or <code>&lt;ds-badge [dot]="true" /&gt;</code>. Source: <code>components/badge/_badge.scss</code></p>
+          <p class="section-desc">Notification indicator primitive. Two sizes: <strong>Large</strong> (20px count circle) and <strong>Small</strong> (6×6px dot). Three color variants: <strong>red</strong> (default, notification), <strong>blue</strong> (informational), <strong>grey</strong> (neutral/inactive). Used overlaid on icon buttons or inline in tabs. Angular: <code>&lt;ds-badge [count]="3" /&gt;</code>, <code>&lt;ds-badge [dot]="true" variant="blue" /&gt;</code>. Source: <code>components/badge/_badge.scss</code></p>
         </div>
         <div class="component-demo">
 
-          <!-- Large — count circle -->
+          <!-- Large — count circle, all variants -->
           <div class="demo-row">
-            <div class="demo-row-label">Large — count</div>
+            <div class="demo-row-label">Large — Red</div>
             <div class="demo-row-items">
               <span class="ds-badge-indicator" aria-hidden="true">3</span>
               <span class="ds-badge-indicator" aria-hidden="true">12</span>
@@ -10768,11 +10780,31 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div>
           </div>
 
-          <!-- Small — dot -->
+          <div class="demo-row">
+            <div class="demo-row-label">Large — Blue</div>
+            <div class="demo-row-items">
+              <span class="ds-badge-indicator ds-badge-indicator--blue" aria-hidden="true">3</span>
+              <span class="ds-badge-indicator ds-badge-indicator--blue" aria-hidden="true">12</span>
+              <span class="ds-badge-indicator ds-badge-indicator--blue" aria-hidden="true">99+</span>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Large — Grey</div>
+            <div class="demo-row-items">
+              <span class="ds-badge-indicator ds-badge-indicator--grey" aria-hidden="true">3</span>
+              <span class="ds-badge-indicator ds-badge-indicator--grey" aria-hidden="true">12</span>
+              <span class="ds-badge-indicator ds-badge-indicator--grey" aria-hidden="true">99+</span>
+            </div>
+          </div>
+
+          <!-- Small — dot, all variants -->
           <div class="demo-row">
             <div class="demo-row-label">Small — dot</div>
             <div class="demo-row-items">
               <span class="ds-badge-indicator ds-badge-indicator--dot" aria-hidden="true"></span>
+              <span class="ds-badge-indicator ds-badge-indicator--dot ds-badge-indicator--blue" aria-hidden="true"></span>
+              <span class="ds-badge-indicator ds-badge-indicator--dot ds-badge-indicator--grey" aria-hidden="true"></span>
             </div>
           </div>
 
@@ -12195,6 +12227,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <button class="ds-subnav-button" type="button" aria-pressed="false">Inbox</button>
               <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Bookmarks</button>
               <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Spam</button>
+              <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Drafts</button>
             </div>
           </div>
 
@@ -12205,6 +12238,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
               <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Bookmarks</button>
               <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Spam</button>
+              <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Drafts</button>
             </div>
           </div>
 
@@ -12217,7 +12251,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div>
           </div>
 
-          <!-- Interactive — click to toggle selected -->
+          <!-- Interactive — full Tickets nav with collapsible Saved Searches -->
           <div class="demo-row">
             <div class="demo-row-label">Interactive</div>
             <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 220px;"
@@ -12226,6 +12260,20 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Bookmarks</button>
               <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Spam</button>
               <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Drafts</button>
+              <div class="ds-subnav-header is-expanded" id="subnav-btn-saved-searches" style="margin-top: 6px;">
+                <button class="ds-subnav-header__row" type="button" aria-expanded="true"
+                  onclick="event.stopPropagation(); var p=document.getElementById('subnav-btn-saved-searches'); var e=p.classList.toggle('is-expanded'); this.setAttribute('aria-expanded',e); this.querySelector('.ds-icon:last-child').textContent=e?'arrow_drop_down':'arrow_right';">
+                  <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
+                  <span class="ds-subnav-header__label">Saved Searches</span>
+                  <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
+                </button>
+                <div class="ds-subnav-header__children">
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">My Queue</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">High Priority</button>
+                </div>
+              </div>
             </div>
           </div>
 

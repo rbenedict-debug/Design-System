@@ -55,6 +55,18 @@
   flex-shrink: 0;
   vertical-align: middle;
 
+  // ── Color variants ───────────────────────────────────────────────────────
+  // Default (no modifier) = Red — always use --color-surface-accent-red-bold.
+  // Apply a modifier class for alternate colours.
+
+  &--blue {
+    background: var(--color-surface-brand-bold);
+  }
+
+  &--grey {
+    background: var(--color-icon-subtle);
+  }
+
   // ── Dot indicator (Small) ────────────────────────────────────────────────
   &--dot {
     width: 6px;
@@ -81,6 +93,14 @@
 
   &.mat-badge-small {
     --mat-badge-container-size: 6px;
+  }
+
+  &.mat-badge--blue {
+    --mat-badge-background-color: var(--color-surface-brand-bold);
+  }
+
+  &.mat-badge--grey {
+    --mat-badge-background-color: var(--color-icon-subtle);
   }
 }
 

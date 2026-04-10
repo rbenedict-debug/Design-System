@@ -189,9 +189,13 @@ Detailed per-component specs for the Onflo Design System. Referenced from root C
 ### Badge (`ds-badge-indicator`)
 - **This component is the notification indicator only** — not a label, chip, or status tag
 - **Two sizes** (Figma: Large / Small):
-  - **Large (count)**: `min-width: 20px; height: 20px` — red circle with white number. Label Small typography (12px), bold weight (600).
-  - **Small (dot)**: add `ds-badge-indicator--dot` — 6×6px solid red circle, no text.
-- **Color**: always `--color-surface-accent-red-bold` bg + `--color-text-on-bold` text. Not themeable.
+  - **Large (count)**: `min-width: 20px; height: 20px` — coloured circle with white number. Label Small typography (12px), bold weight (600).
+  - **Small (dot)**: add `ds-badge-indicator--dot` — 6×6px solid coloured circle, no text.
+- **Color variants**: `red` (default) | `blue` | `grey` — all use `--color-text-on-bold` (white) text.
+  - `red` (no modifier): `--color-surface-accent-red-bold` — notification / alert
+  - `blue` (`ds-badge-indicator--blue`): `--color-surface-brand-bold` — informational
+  - `grey` (`ds-badge-indicator--grey`): `--color-icon-subtle` — neutral / inactive
+- **Angular `[variant]` input**: `'red'` (default) | `'blue'` | `'grey'` — adds the corresponding modifier class automatically.
 - **Overlay mode** (on icon buttons): wrap host + button in `<div class="ds-badge-indicator__host">` — host gets `position: relative`; badge is centered on the button's top-right corner: count badge `top: -4px; right: -4px`, dot badge `top: -1px; right: -1px`
 - **Badge size pairing**: MD button (42px) → Large count badge only. SM button (32px) → Small dot badge only.
 - **Inline mode** (in tabs / nav): place `ds-badge-indicator` directly inside the tab `<button>` after the label text (no host wrapper needed — stays `inline-flex`)
