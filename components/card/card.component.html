@@ -2,7 +2,48 @@
   class="ds-card"
   [class.ds-card--outlined]="variant === 'outlined'"
   [class.ds-card--elevated]="variant === 'elevated'"
-  [class.ds-card--interactive]="interactive"
 >
-  <ng-content />
+
+  @if (hasHeader) {
+    <div class="ds-card__header">
+
+      @if (icon) {
+        <span class="ds-icon ds-card__header-icon" aria-hidden="true">{{ icon }}</span>
+      }
+
+      @if (title || subtitle) {
+        <div class="ds-card__header-text">
+          @if (title) {
+            <h3 class="ds-card__title">{{ title }}</h3>
+          }
+          @if (subtitle) {
+            <p class="ds-card__subtitle">{{ subtitle }}</p>
+          }
+        </div>
+      }
+
+      @if (showClose) {
+        <button
+          class="ds-icon-button ds-icon-button--icon ds-icon-button--sm ds-card__close"
+          type="button"
+          aria-label="Close"
+          (click)="onClose()"
+        >
+          <span class="ds-icon" aria-hidden="true">close</span>
+        </button>
+      }
+
+    </div>
+  }
+
+  <div class="ds-card__body">
+    <ng-content />
+  </div>
+
+  @if (hasActions) {
+    <div class="ds-card__actions">
+      <ng-content select="[card-actions]" />
+    </div>
+  }
+
 </mat-card>

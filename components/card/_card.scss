@@ -1,30 +1,21 @@
 // ============================================================
-// Onflo Design System — Card Component
+// Onflo Design System — Card Components
 // ============================================================
 //
-// Based on Angular Material mat-card.
-// Import MatCardModule in your Angular module.
+// Two components:
 //
-// Usage (HTML class API):
-//   <div class="ds-card">
-//     <div class="ds-card__header">
-//       <span class="ds-icon ds-card__header-icon">folder</span>
-//       <div class="ds-card__header-text">
-//         <h3 class="ds-card__title">Card Title</h3>
-//         <p class="ds-card__subtitle">Subtitle text</p>
-//       </div>
-//       <button class="ds-card__header-action">...</button>
-//     </div>
-//     <div class="ds-card__content">Content goes here</div>
-//     <div class="ds-card__actions">
-//       <button class="ds-button ds-button--text">Cancel</button>
-//       <button class="ds-button ds-button--filled">Save</button>
-//     </div>
-//   </div>
+//   ds-card       — large vertical content card
+//                   Header (icon + title + subtitle + optional close),
+//                   body content area, optional actions footer.
 //
-// Variants: ds-card--outlined | ds-card--elevated
-// States:   default, hover, focus, :is-interactive
+//   ds-card-item  — compact horizontal card
+//                   Optional leading icon, primary + secondary text,
+//                   optional trailing icon, optional action button.
+//                   Entire card is clickable when --interactive is set.
+//
 // ============================================================
+
+// ── ds-card (large vertical card) ─────────────────────────────────────────────
 
 .ds-card {
   background: var(--color-surface-page);
@@ -45,27 +36,6 @@
     box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
   }
 
-  // ── Interactive card ───────────────────────────────────────────────────────
-
-  &--interactive {
-    cursor: pointer;
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: transparent;
-      pointer-events: none;
-      transition: background 0.12s ease;
-      border-radius: inherit;
-    }
-
-    &:hover::after { background: var(--overlay-hovered); }
-    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); outline: none; }
-    &:focus-visible::after { background: var(--overlay-focused); }
-    &:active::after { background: var(--overlay-pressed); }
-  }
-
   // ── Header ─────────────────────────────────────────────────────────────────
 
   &__header {
@@ -78,9 +48,6 @@
 
   &__header-icon {
     color: var(--color-icon-brand);
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
     flex-shrink: 0;
     margin-top: 2px;
   }
@@ -90,7 +57,7 @@
     min-width: 0;
   }
 
-  &__header-action {
+  &__close {
     flex-shrink: 0;
     margin: -4px -4px 0 0;
   }
@@ -115,9 +82,9 @@
     margin: 2px 0 0;
   }
 
-  // ── Content area ───────────────────────────────────────────────────────────
+  // ── Body content area ──────────────────────────────────────────────────────
 
-  &__content {
+  &__body {
     padding: var(--spacing-lg);
     font-family: var(--ref-typeface-brand);
     font-size: var(--ref-typescale-body-medium-size);
@@ -125,21 +92,8 @@
     color: var(--color-text-secondary);
   }
 
-  // When header is present, reduce top padding of content
-  &__header + &__content {
+  &__header + &__body {
     padding-top: var(--spacing-sm);
-  }
-
-  // ── Media ──────────────────────────────────────────────────────────────────
-
-  &__media {
-    width: 100%;
-    display: block;
-    object-fit: cover;
-    background: var(--color-surface-default);
-
-    &--square { aspect-ratio: 1 / 1; }
-    &--wide    { aspect-ratio: 16 / 9; }
   }
 
   // ── Actions footer ─────────────────────────────────────────────────────────
@@ -156,41 +110,16 @@
   &__actions--start {
     justify-content: flex-start;
   }
-
-  // ── Horizontal layout ──────────────────────────────────────────────────────
-
-  &--horizontal {
-    display: flex;
-    align-items: stretch;
-
-    .ds-card__media {
-      width: 80px;
-      flex-shrink: 0;
-      object-fit: cover;
-    }
-
-    .ds-card__body {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .ds-card__content {
-      flex: 1;
-    }
-  }
 }
 
 // ── Angular Material overrides ────────────────────────────────────────────────
-// Themes mat-card to use Onflo tokens. No ::ng-deep.
+// Theme mat-card to use Onflo tokens. No ::ng-deep.
 
 .mat-mdc-card {
   --mdc-elevated-card-container-color: var(--color-surface-page);
   --mdc-outlined-card-container-color: var(--color-surface-page);
   --mdc-outlined-card-outline-color: var(--color-border-subtle);
 
-  // Reset MDC's default elevation; variant classes below re-apply ours.
   border-radius: var(--radius-md);
   box-shadow: none;
 
@@ -202,5 +131,130 @@
   &.ds-card--outlined {
     border: 1px solid var(--color-border-subtle);
     box-shadow: none;
+  }
+}
+
+// ── ds-card-item (compact horizontal card) ────────────────────────────────────
+
+.ds-card-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 0 var(--spacing-md);
+  min-height: 56px;
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+
+  // ── Elevated variant ───────────────────────────────────────────────────────
+
+  &--elevated {
+    border: 1px solid transparent;
+    box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+  }
+
+  // ── Interactive — entire card is clickable ─────────────────────────────────
+
+  &--interactive {
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: transparent;
+      pointer-events: none;
+      transition: background 0.12s ease;
+    }
+
+    &:hover::after         { background: var(--overlay-hovered); }
+    &:focus-visible        { outline: none; box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+    &:focus-visible::after { background: var(--overlay-focused); }
+    &:active::after        { background: var(--overlay-pressed); }
+  }
+
+  // ── Disabled ───────────────────────────────────────────────────────────────
+
+  &.is-disabled {
+    pointer-events: none;
+    cursor: default;
+
+    .ds-card-item__primary   { color: var(--color-text-disabled); }
+    .ds-card-item__secondary { color: var(--color-text-disabled); }
+    .ds-card-item__leading   { color: var(--color-icon-disabled); }
+    .ds-card-item__trailing  { color: var(--color-icon-disabled); }
+  }
+
+  // ── Leading slot (icon, avatar, etc.) ──────────────────────────────────────
+
+  &__leading {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    color: var(--color-icon-default);
+    position: relative;
+    z-index: 1;
+  }
+
+  // ── Body text ──────────────────────────────────────────────────────────────
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__primary {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__secondary {
+    font-family: var(--ref-typeface-brand);
+    font-size: var(--ref-typescale-body-small-size);
+    font-weight: var(--ref-typeface-weight-regular);
+    line-height: var(--ref-typescale-body-small-line-height);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+  }
+
+  // ── Trailing slot (static icon, status dot, etc.) ──────────────────────────
+
+  &__trailing {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    color: var(--color-icon-default);
+    position: relative;
+    z-index: 1;
+  }
+
+  // ── Action button slot ─────────────────────────────────────────────────────
+  // Clicks inside __action stop propagation so they don't trigger card click.
+
+  &__action {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
   }
 }

@@ -35,7 +35,7 @@ components/
   avatar/                  # ds-avatar
   progress/                # ds-progress
   tabs/                    # ds-tabs + ds-tab
-  card/                    # ds-card
+  card/                    # ds-card + ds-card-item
   dialog/                  # ds-dialog
   menu/                    # ds-menu
   accordion/               # ds-accordion
@@ -175,7 +175,8 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-progress` | `MatProgressBarModule` | mat-progress-bar |
 | `ds-spinner` | `MatProgressSpinnerModule` | mat-progress-spinner |
 | `ds-tabs` | `MatTabsModule` | mat-tab-group + mat-tab |
-| `ds-card` | `MatCardModule` | mat-card |
+| `ds-card` | `MatCardModule` | Large vertical card — optional header (`[icon]`, `[title]`, `[subtitle]`, `[showClose]`), body slot (default), optional actions footer (`[card-actions]`); `(closeClick)` output; variants: `outlined` / `elevated` |
+| `ds-card-item` | Custom | Compact 56px horizontal card — `[primary]`, `[secondary]`, `[interactive]`, `[variant]`, `[disabled]`; `(cardClick)` output; content slots: `[leading]` icon, `[trailing]` icon, `[card-action]` button (click stops propagation to card); `--interactive` makes whole card clickable with hover/press overlay |
 | `ds-dialog` | `MatDialogModule` (optional) | Slot-based dialog panel — body slot (`[dialog-body]`) + actions slot (`[dialog-actions]`); left-aligned only; `[titleId]` wires `aria-labelledby`; `panelClass: 'ds-dialog-overlay'` when using MatDialog |
 | `ds-menu` | `MatMenuModule` | mat-menu |
 | `ds-accordion` | `MatExpansionModule` | mat-accordion + mat-expansion-panel |

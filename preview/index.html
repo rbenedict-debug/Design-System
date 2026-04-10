@@ -3481,31 +3481,6 @@
   border: 1px solid transparent;
   box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
 }
-.ds-card--interactive {
-  cursor: pointer;
-}
-.ds-card--interactive::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: transparent;
-  pointer-events: none;
-  transition: background 0.12s ease;
-  border-radius: inherit;
-}
-.ds-card--interactive:hover::after {
-  background: var(--overlay-hovered);
-}
-.ds-card--interactive:focus-visible {
-  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-  outline: none;
-}
-.ds-card--interactive:focus-visible::after {
-  background: var(--overlay-focused);
-}
-.ds-card--interactive:active::after {
-  background: var(--overlay-pressed);
-}
 .ds-card__header {
   display: flex;
   align-items: flex-start;
@@ -3515,9 +3490,6 @@
 }
 .ds-card__header-icon {
   color: var(--color-icon-brand);
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -3525,7 +3497,7 @@
   flex: 1;
   min-width: 0;
 }
-.ds-card__header-action {
+.ds-card__close {
   flex-shrink: 0;
   margin: -4px -4px 0 0;
 }
@@ -3545,27 +3517,15 @@
   color: var(--color-text-secondary);
   margin: 2px 0 0;
 }
-.ds-card__content {
+.ds-card__body {
   padding: var(--spacing-lg);
   font-family: var(--ref-typeface-brand);
   font-size: var(--ref-typescale-body-medium-size);
   line-height: var(--ref-typescale-body-medium-line-height);
   color: var(--color-text-secondary);
 }
-.ds-card__header + .ds-card__content {
+.ds-card__header + .ds-card__body {
   padding-top: var(--spacing-sm);
-}
-.ds-card__media {
-  width: 100%;
-  display: block;
-  object-fit: cover;
-  background: var(--color-surface-default);
-}
-.ds-card__media--square {
-  aspect-ratio: 1/1;
-}
-.ds-card__media--wide {
-  aspect-ratio: 16/9;
 }
 .ds-card__actions {
   display: flex;
@@ -3577,24 +3537,6 @@
 }
 .ds-card__actions--start {
   justify-content: flex-start;
-}
-.ds-card--horizontal {
-  display: flex;
-  align-items: stretch;
-}
-.ds-card--horizontal .ds-card__media {
-  width: 80px;
-  flex-shrink: 0;
-  object-fit: cover;
-}
-.ds-card--horizontal .ds-card__body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-.ds-card--horizontal .ds-card__content {
-  flex: 1;
 }
 
 .mat-mdc-card {
@@ -3611,6 +3553,119 @@
 .mat-mdc-card.ds-card--outlined {
   border: 1px solid var(--color-border-subtle);
   box-shadow: none;
+}
+
+.ds-card-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 0 var(--spacing-md);
+  min-height: 56px;
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.ds-card-item--elevated {
+  border: 1px solid transparent;
+  box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+}
+.ds-card-item--interactive {
+  cursor: pointer;
+}
+.ds-card-item--interactive::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+  transition: background 0.12s ease;
+}
+.ds-card-item--interactive:hover::after {
+  background: var(--overlay-hovered);
+}
+.ds-card-item--interactive:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-card-item--interactive:focus-visible::after {
+  background: var(--overlay-focused);
+}
+.ds-card-item--interactive:active::after {
+  background: var(--overlay-pressed);
+}
+.ds-card-item.is-disabled {
+  pointer-events: none;
+  cursor: default;
+}
+.ds-card-item.is-disabled .ds-card-item__primary {
+  color: var(--color-text-disabled);
+}
+.ds-card-item.is-disabled .ds-card-item__secondary {
+  color: var(--color-text-disabled);
+}
+.ds-card-item.is-disabled .ds-card-item__leading {
+  color: var(--color-icon-disabled);
+}
+.ds-card-item.is-disabled .ds-card-item__trailing {
+  color: var(--color-icon-disabled);
+}
+.ds-card-item__leading {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--color-icon-default);
+  position: relative;
+  z-index: 1;
+}
+.ds-card-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+.ds-card-item__primary {
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-card-item__secondary {
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-body-small-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  line-height: var(--ref-typescale-body-small-line-height);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+.ds-card-item__trailing {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--color-icon-default);
+  position: relative;
+  z-index: 1;
+}
+.ds-card-item__action {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .ds-dialog-backdrop {
@@ -7512,6 +7567,8 @@
       <a class="nav-link" href="#tag" onclick="setActive(this)"><span class="nav-dot"></span>Tag</a>
       <a class="nav-link" href="#tabs" onclick="setActive(this)"><span class="nav-dot"></span>Tabs</a>
       <a class="nav-link" href="#list" onclick="setActive(this)"><span class="nav-dot"></span>List Item</a>
+      <a class="nav-link" href="#card" onclick="setActive(this)"><span class="nav-dot"></span>Card</a>
+      <a class="nav-link" href="#card-item" onclick="setActive(this)"><span class="nav-dot"></span>Card Item</a>
 
       <div class="nav-group-label">Navigation</div>
       <a class="nav-link" href="#nav-button" onclick="setActive(this)"><span class="nav-dot"></span>Nav Button</a>
@@ -10818,6 +10875,275 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
         </div>
       </section>
+
+      <!-- ── Card ──────────────────────────────────────────────────────────── -->
+      <section class="section" id="card">
+        <div class="section-header">
+          <h2 class="section-title">Card</h2>
+          <span class="section-source">components/card/_card.scss</span>
+        </div>
+        <p class="section-desc">Large vertical content card with an optional header (icon, title, subtitle, close button), a body content area, and an optional actions footer. Angular component: <code>&lt;ds-card&gt;</code> with <code>[icon]</code>, <code>[title]</code>, <code>[subtitle]</code>, <code>[showClose]</code> inputs and <code>(closeClick)</code> output. Project body content into the default slot; project footer buttons into <code>[card-actions]</code>. Variants: <code>outlined</code> (default) and <code>elevated</code>.</p>
+
+        <div class="component-demo">
+
+          <!-- Row 1: Full card — header with icon, title, subtitle, close, body, actions -->
+          <div class="demo-row">
+            <div class="demo-row-label">Full card</div>
+            <div class="demo-row-items" style="align-items: flex-start; gap: 24px;">
+              <div class="ds-card ds-card--outlined" style="width: 320px;">
+                <div class="ds-card__header">
+                  <span class="ds-icon ds-card__header-icon" aria-hidden="true">folder</span>
+                  <div class="ds-card__header-text">
+                    <h3 class="ds-card__title">Documents</h3>
+                    <p class="ds-card__subtitle">12 items · Updated today</p>
+                  </div>
+                  <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm ds-card__close" type="button" aria-label="Close">
+                    <span class="ds-icon" aria-hidden="true">close</span>
+                  </button>
+                </div>
+                <div class="ds-card__body">
+                  <p style="margin:0;">Your shared documents are synced and up to date. Last sync was 3 minutes ago.</p>
+                </div>
+                <div class="ds-card__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
+                  <button class="ds-button ds-button--filled ds-button--md" type="button">Open</button>
+                </div>
+              </div>
+
+              <div class="ds-card ds-card--elevated" style="width: 320px;">
+                <div class="ds-card__header">
+                  <span class="ds-icon ds-card__header-icon" aria-hidden="true">bar_chart</span>
+                  <div class="ds-card__header-text">
+                    <h3 class="ds-card__title">Performance</h3>
+                    <p class="ds-card__subtitle">Last 30 days</p>
+                  </div>
+                </div>
+                <div class="ds-card__body">
+                  <p style="margin:0;">Average handle time is down 8% compared to the previous period. First contact resolution improved to 74%.</p>
+                </div>
+                <div class="ds-card__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button">View Report</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Header only — no actions -->
+          <div class="demo-row">
+            <div class="demo-row-label">Header + body</div>
+            <div class="demo-row-items" style="align-items: flex-start; gap: 24px;">
+              <div class="ds-card ds-card--outlined" style="width: 320px;">
+                <div class="ds-card__header">
+                  <span class="ds-icon ds-card__header-icon" aria-hidden="true">info</span>
+                  <div class="ds-card__header-text">
+                    <h3 class="ds-card__title">Account notice</h3>
+                  </div>
+                </div>
+                <div class="ds-card__body">
+                  <p style="margin:0;">Your subscription renews on May 1st. No action is needed — your payment method on file will be charged automatically.</p>
+                </div>
+              </div>
+
+              <div class="ds-card ds-card--outlined" style="width: 320px;">
+                <div class="ds-card__header">
+                  <div class="ds-card__header-text">
+                    <h3 class="ds-card__title">No icon</h3>
+                    <p class="ds-card__subtitle">Subtitle only</p>
+                  </div>
+                  <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm ds-card__close" type="button" aria-label="Close">
+                    <span class="ds-icon" aria-hidden="true">close</span>
+                  </button>
+                </div>
+                <div class="ds-card__body">
+                  <p style="margin:0;">A card without a leading icon — close button stays pinned to the top right of the header.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Body only — no header -->
+          <div class="demo-row">
+            <div class="demo-row-label">Body only</div>
+            <div class="demo-row-items" style="align-items: flex-start; gap: 24px;">
+              <div class="ds-card ds-card--outlined" style="width: 320px;">
+                <div class="ds-card__body">
+                  <p style="margin:0;">A card with no header — body content fills the full card with standard padding on all sides.</p>
+                </div>
+              </div>
+
+              <div class="ds-card ds-card--outlined" style="width: 320px;">
+                <div class="ds-card__body">
+                  <p style="margin:0 0 12px;">Body-only card with actions below.</p>
+                  <p style="margin:0; color: var(--color-text-secondary); font-size: 13px;">Any content can go inside the body — forms, stats, lists, or prose.</p>
+                </div>
+                <div class="ds-card__actions">
+                  <button class="ds-button ds-button--outlined ds-button--md" type="button">Learn more</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.component-demo -->
+      </section>
+
+      <!-- ── Card Item ──────────────────────────────────────────────────────── -->
+      <section class="section" id="card-item">
+        <div class="section-header">
+          <h2 class="section-title">Card Item</h2>
+          <span class="section-source">components/card/_card.scss</span>
+        </div>
+        <p class="section-desc">Compact 56px horizontal card. Use <code>ds-card-item--interactive</code> to make the entire card hoverable and clickable. Optional leading icon, trailing static icon, and a <code>__action</code> slot for a context menu button (clicks inside <code>__action</code> do not bubble to the card click). Angular component: <code>&lt;ds-card-item&gt;</code> with <code>[primary]</code>, <code>[secondary]</code>, <code>[interactive]</code>, <code>[variant]</code>, <code>[disabled]</code> inputs, <code>(cardClick)</code> output, and content slots <code>[leading]</code>, <code>[trailing]</code>, <code>[card-action]</code>.</p>
+
+        <div class="component-demo">
+
+          <!-- Row 1: Basic variants -->
+          <div class="demo-row">
+            <div class="demo-row-label">Basic</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
+              <div class="ds-card-item">
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Primary text only</span>
+                </div>
+              </div>
+              <div class="ds-card-item" style="margin-top: 8px;">
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">With secondary text</span>
+                  <span class="ds-card-item__secondary">Supporting detail below the label</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Interactive — full-card click -->
+          <div class="demo-row">
+            <div class="demo-row-label">Interactive</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
+              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" onclick="alert('Card clicked')">
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Click anywhere on this card</span>
+                  <span class="ds-card-item__secondary">Hover and focus states active</span>
+                </div>
+              </div>
+              <div class="ds-card-item ds-card-item--interactive ds-card-item--elevated" tabindex="0" role="button" style="margin-top: 8px;" onclick="alert('Elevated card clicked')">
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Elevated + interactive</span>
+                  <span class="ds-card-item__secondary">Shadow elevation variant</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Leading icon -->
+          <div class="demo-row">
+            <div class="demo-row-label">Leading icon</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
+              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button">
+                <div class="ds-card-item__leading">
+                  <span class="ds-icon" aria-hidden="true">support_agent</span>
+                </div>
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Team: Support</span>
+                  <span class="ds-card-item__secondary">14 agents online</span>
+                </div>
+              </div>
+              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" style="margin-top: 8px;">
+                <div class="ds-card-item__leading">
+                  <span class="ds-icon" aria-hidden="true">filter_alt</span>
+                </div>
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Unresolved tickets</span>
+                  <span class="ds-card-item__secondary">Filter: status = open</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 4: Trailing icon -->
+          <div class="demo-row">
+            <div class="demo-row-label">Trailing icon</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
+              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button">
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Open analytics page</span>
+                </div>
+                <div class="ds-card-item__trailing">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">chevron_right</span>
+                </div>
+              </div>
+              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" style="margin-top: 8px;">
+                <div class="ds-card-item__leading">
+                  <span class="ds-icon" aria-hidden="true">inbox</span>
+                </div>
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Inbox</span>
+                  <span class="ds-card-item__secondary">3 unread</span>
+                </div>
+                <div class="ds-card-item__trailing">
+                  <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-accent-green);" aria-hidden="true">circle</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 5: Action button (more menu) — click doesn't bubble to card -->
+          <div class="demo-row">
+            <div class="demo-row-label">Action button</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
+              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" onclick="alert('Card body clicked')">
+                <div class="ds-card-item__leading">
+                  <span class="ds-icon" aria-hidden="true">bookmark</span>
+                </div>
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Saved view: My tickets</span>
+                  <span class="ds-card-item__secondary">Last used 2 hours ago</span>
+                </div>
+                <div class="ds-card-item__action" onclick="event.stopPropagation()">
+                  <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="More options" onclick="alert('Action menu')">
+                    <span class="ds-icon" aria-hidden="true">more_vert</span>
+                  </button>
+                </div>
+              </div>
+              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" style="margin-top: 8px;" onclick="alert('Card body clicked')">
+                <div class="ds-card-item__leading">
+                  <span class="ds-icon" aria-hidden="true">star</span>
+                </div>
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Favourites queue</span>
+                </div>
+                <div class="ds-card-item__trailing">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">chevron_right</span>
+                </div>
+                <div class="ds-card-item__action" onclick="event.stopPropagation()">
+                  <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="More options" onclick="alert('Action menu')">
+                    <span class="ds-icon" aria-hidden="true">more_vert</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 6: Disabled -->
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
+              <div class="ds-card-item ds-card-item--interactive is-disabled" aria-disabled="true">
+                <div class="ds-card-item__leading">
+                  <span class="ds-icon" aria-hidden="true">lock</span>
+                </div>
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Restricted view</span>
+                  <span class="ds-card-item__secondary">You don't have access</span>
+                </div>
+                <div class="ds-card-item__trailing">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">chevron_right</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.component-demo -->
+      </section>
+
       <section class="section" id="nav-button">
         <div class="section-header">
           <h2 class="section-title">Nav Button</h2>
