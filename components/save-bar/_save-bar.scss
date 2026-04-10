@@ -1,0 +1,110 @@
+// ============================================================
+// Onflo Design System — Save Bar
+// ============================================================
+//
+// Persistent bar that appears when a user has unsaved changes.
+// Provides Cancel, Save Progress, and Save and Exit actions.
+//
+// Usage (HTML class API):
+//
+//   Default (unsaved changes):
+//   <div class="ds-save-bar" role="status" aria-live="polite">
+//     <div class="ds-save-bar__message">
+//       <span class="ds-save-bar__dot" aria-hidden="true"></span>
+//       <span class="ds-save-bar__text">You have unsaved changes</span>
+//     </div>
+//     <div class="ds-save-bar__actions">
+//       <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
+//       <button class="ds-button ds-button--outlined ds-button--md" type="button">Save Progress</button>
+//       <button class="ds-button ds-button--filled ds-button--md" type="button">Save and Exit</button>
+//     </div>
+//   </div>
+//
+//   Error (required information missing):
+//   <div class="ds-save-bar ds-save-bar--error" role="alert">
+//     <div class="ds-save-bar__message">
+//       <span class="ds-save-bar__dot" aria-hidden="true"></span>
+//       <span class="ds-save-bar__text">Required information missing</span>
+//     </div>
+//     <div class="ds-save-bar__actions">
+//       <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
+//       <button class="ds-button ds-button--outlined ds-button--md" type="button">Save Progress</button>
+//       <button class="ds-button ds-button--filled ds-button--md" type="button">Save and Exit</button>
+//     </div>
+//   </div>
+//
+// Angular component:
+//   <ds-save-bar (cancelClick)="onCancel()" (saveProgressClick)="onSave()" (saveAndExitClick)="onSaveExit()" />
+//   <ds-save-bar variant="error" message="Please fill in all required fields."
+//     (cancelClick)="onCancel()" (saveProgressClick)="onSave()" (saveAndExitClick)="onSaveExit()" />
+//
+// Variants: default | error
+// ============================================================
+
+.ds-save-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border-info);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container);
+  box-shadow:
+    0 0 2px 0 var(--shadow-elevation-2),
+    0 2px 6px 0 var(--shadow-elevation-2);
+
+  // ── Message section (left — fills available space) ─────────────────────────
+
+  &__message {
+    flex: 1 0 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  // ── Status dot ────────────────────────────────────────────────────────────
+
+  &__dot {
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+    background: var(--color-icon-info);
+  }
+
+  // ── Message text ──────────────────────────────────────────────────────────
+
+  &__text {
+    font-family: var(--ref-typescale-body-medium-font);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typescale-body-medium-weight);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ── Actions (right side) ──────────────────────────────────────────────────
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-shrink: 0;
+  }
+
+
+  // ══ Variant — Error ═════════════════════════════════════════════════════════
+
+  &--error {
+    background: var(--color-surface-error);
+    border-color: var(--color-border-error);
+
+    .ds-save-bar__dot {
+      background: var(--color-icon-error);
+    }
+  }
+}

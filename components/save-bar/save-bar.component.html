@@ -1,0 +1,14 @@
+<div [class]="hostClass" [attr.role]="role" aria-live="polite">
+
+  <div class="ds-save-bar__message">
+    <span class="ds-save-bar__dot" aria-hidden="true"></span>
+    <span class="ds-save-bar__text">{{ displayMessage }}</span>
+  </div>
+
+  <div class="ds-save-bar__actions">
+    <ds-button variant="text" (clicked)="onCancel()">{{ cancelLabel }}</ds-button>
+    <ds-button variant="outlined" (clicked)="onSaveProgress()">{{ saveProgressLabel }}</ds-button>
+    <ds-button variant="filled" (clicked)="onSaveAndExit()">{{ saveAndExitLabel }}</ds-button>
+  </div>
+
+</div>

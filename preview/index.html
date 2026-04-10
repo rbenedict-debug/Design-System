@@ -6300,6 +6300,55 @@
 .ds-nav-expand:focus-visible {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
+
+.ds-save-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border-info);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container);
+  box-shadow: 0 0 2px 0 var(--shadow-elevation-2), 0 2px 6px 0 var(--shadow-elevation-2);
+}
+.ds-save-bar__message {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+.ds-save-bar__dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-icon-info);
+}
+.ds-save-bar__text {
+  font-family: var(--ref-typescale-body-medium-font);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typescale-body-medium-weight);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-save-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+.ds-save-bar--error {
+  background: var(--color-surface-error);
+  border-color: var(--color-border-error);
+}
+.ds-save-bar--error .ds-save-bar__dot {
+  background: var(--color-icon-error);
+}
 </style><!-- ONFLO-COMPONENTS:END -->
 
 <style>
@@ -6619,6 +6668,7 @@
       <a class="nav-link" href="#tooltip" onclick="setActive(this)"><span class="nav-dot"></span>Tooltip</a>
       <a class="nav-link" href="#progress" onclick="setActive(this)"><span class="nav-dot"></span>Progress</a>
       <a class="nav-link" href="#hover-card" onclick="setActive(this)"><span class="nav-dot"></span>Hover Card</a>
+      <a class="nav-link" href="#save-bar" onclick="setActive(this)"><span class="nav-dot"></span>Save Bar</a>
 
       <div class="nav-group-label">Display</div>
       <a class="nav-link" href="#avatar" onclick="setActive(this)"><span class="nav-dot"></span>Avatar</a>
@@ -10945,6 +10995,83 @@
           </div>
 
         </div><!-- /.component-demo -->
+      </section>
+
+      <section class="section" id="save-bar">
+        <div class="section-header">
+          <h2 class="section-title">Save Bar</h2>
+          <span class="section-source">components/save-bar/_save-bar.scss</span>
+        </div>
+        <p class="section-desc">Persistent bar that appears when a user has unsaved changes — provides Cancel, Save Progress, and Save and Exit actions. Two variants: <code>default</code> (blue border, info dot) and <code>error</code> (red border, error dot). ADA: <code>role="status"</code> (default) / <code>role="alert"</code> (error) with <code>aria-live</code> to announce appearance. Angular component: <code>&lt;ds-save-bar&gt;</code> with <code>(cancelClick)</code>, <code>(saveProgressClick)</code>, and <code>(saveAndExitClick)</code> outputs.</p>
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items" style="width: 100%; max-width: 860px;">
+              <div class="ds-save-bar" role="status" aria-live="polite" style="width: 100%;">
+                <div class="ds-save-bar__message">
+                  <span class="ds-save-bar__dot" aria-hidden="true"></span>
+                  <span class="ds-save-bar__text">You have unsaved changes</span>
+                </div>
+                <div class="ds-save-bar__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
+                  <button class="ds-button ds-button--outlined ds-button--md" type="button">Save Progress</button>
+                  <button class="ds-button ds-button--filled ds-button--md" type="button">Save and Exit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Error</div>
+            <div class="demo-row-items" style="width: 100%; max-width: 860px;">
+              <div class="ds-save-bar ds-save-bar--error" role="alert" style="width: 100%;">
+                <div class="ds-save-bar__message">
+                  <span class="ds-save-bar__dot" aria-hidden="true"></span>
+                  <span class="ds-save-bar__text">Required information missing</span>
+                </div>
+                <div class="ds-save-bar__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button">Cancel</button>
+                  <button class="ds-button ds-button--outlined ds-button--md" type="button">Save Progress</button>
+                  <button class="ds-button ds-button--filled ds-button--md" type="button">Save and Exit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Interactive</div>
+            <div class="demo-row-items" style="width: 100%; max-width: 860px; flex-direction: column; gap: 8px; align-items: stretch;">
+              <div id="save-bar-demo" class="ds-save-bar" role="status" aria-live="polite" style="width: 100%;">
+                <div class="ds-save-bar__message">
+                  <span class="ds-save-bar__dot" aria-hidden="true"></span>
+                  <span id="save-bar-demo-text" class="ds-save-bar__text">You have unsaved changes</span>
+                </div>
+                <div class="ds-save-bar__actions">
+                  <button class="ds-button ds-button--text ds-button--md" type="button"
+                    onclick="
+                      var bar = document.getElementById('save-bar-demo');
+                      var txt = document.getElementById('save-bar-demo-text');
+                      bar.classList.remove('ds-save-bar--error');
+                      bar.setAttribute('role', 'status');
+                      txt.textContent = 'You have unsaved changes';
+                    ">Cancel</button>
+                  <button class="ds-button ds-button--outlined ds-button--md" type="button">Save Progress</button>
+                  <button class="ds-button ds-button--filled ds-button--md" type="button"
+                    onclick="
+                      var bar = document.getElementById('save-bar-demo');
+                      var txt = document.getElementById('save-bar-demo-text');
+                      bar.classList.add('ds-save-bar--error');
+                      bar.setAttribute('role', 'alert');
+                      txt.textContent = 'Required information missing';
+                    ">Save and Exit</button>
+                </div>
+              </div>
+              <span style="font-size: 11px; color: var(--color-text-secondary, #73737f);">Cancel resets to default · Save and Exit triggers error state</span>
+            </div>
+          </div>
+
+        </div>
       </section>
 
       </div><!-- /#page-components -->

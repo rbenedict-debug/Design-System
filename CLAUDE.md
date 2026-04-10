@@ -59,6 +59,7 @@ components/
   nav-tab/                 # ds-nav-tab (browser-style document tab — primitive for top-nav)
   top-nav/                 # ds-top-nav (main top navigation bar composition — tabs + action buttons)
   nav-expand/              # ds-nav-expand (sub-nav panel expand/collapse toggle — primitive for page layout)
+  save-bar/                # ds-save-bar (unsaved changes bar — Cancel / Save Progress / Save and Exit)
 preview/
   index.html               # Self-contained visual token + component reference
   page-layout/             # ds-page-layout (standard app shell — top-nav + nav-sidebar + optional sub-nav panel)
@@ -190,6 +191,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-nav-tab` | Custom | No Material equivalent — browser-style document tab primitive for top-nav; `[more]="true"` collapses to 26px overflow indicator showing "..." |
 | `ds-top-nav` | Custom | No Material equivalent — main top navigation bar composition (composes nav-tab + action buttons) |
 | `ds-nav-expand` | Custom | No Material equivalent — sub-nav panel expand/collapse toggle; `[open]` reflects current panel state; `(toggle)` emitted on click; icons: `right_panel_open` / `right_panel_close` (FILL=1, brand blue) |
+| `ds-save-bar` | Custom | No Material equivalent — unsaved-changes bar; variants: `default` (blue border, info dot) / `error` (red border, error dot); outputs: `(cancelClick)`, `(saveProgressClick)`, `(saveAndExitClick)`; ADA: `role="status"` (default) / `role="alert"` (error) |
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |
