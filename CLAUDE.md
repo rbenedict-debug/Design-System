@@ -59,6 +59,9 @@ components/
   nav-tab/                 # ds-nav-tab (browser-style document tab — primitive for top-nav)
   top-nav/                 # ds-top-nav (main top navigation bar composition — tabs + action buttons)
   nav-expand/              # ds-nav-expand (sub-nav panel expand/collapse toggle — primitive for page layout)
+  subnav-button/           # ds-subnav-button (leaf nav item in sub-nav panel — primitive for subnav)
+  subnav-subheader/        # ds-subnav-subheader (expandable section group in sub-nav panel — label + vertical accent + children)
+  subnav-header/           # ds-subnav-header (top-level collapsible header in sub-nav panel — icon + label + expand arrow)
   save-bar/                # ds-save-bar (unsaved changes bar — Cancel / Save Progress / Save and Exit)
   modal/                   # ds-modal (full-featured modal — sticky header, scrollable body, optional tabs + actions footer)
   datepicker/              # ds-datepicker (single) + ds-date-range-picker (range)
@@ -197,6 +200,9 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-nav-tab` | Custom | No Material equivalent — browser-style document tab primitive for top-nav; `[more]="true"` collapses to 26px overflow indicator showing "..." |
 | `ds-top-nav` | Custom | No Material equivalent — main top navigation bar composition (composes nav-tab + action buttons) |
 | `ds-nav-expand` | Custom | No Material equivalent — sub-nav panel expand/collapse toggle; `[open]` reflects current panel state; `(toggle)` emitted on click; icons: `right_panel_open` / `right_panel_close` (FILL=1, brand blue) |
+| `ds-subnav-button` | Custom | No Material equivalent — leaf navigation item (32px, full width); selected = brand blue bg + white text; optional `[showFilter]` trailing `filter_alt` icon button (uses div+role="button" wrapper to avoid nested `<button>`); `[label]`, `[selected]`, `[disabled]`, `[showFilter]` inputs; `(navClick)`, `(filterClick)` outputs |
+| `ds-subnav-subheader` | Custom | No Material equivalent — expandable section grouping label (32px row); `arrow_right` when collapsed, `arrow_drop_down` when expanded; children indented 8px with left vertical accent line (`--color-border-subtle`); `[text]`, `[expanded]`, `[(expanded)]`, `[disabled]`; children projected via `ng-content` |
+| `ds-subnav-header` | Custom | No Material equivalent — top-level collapsible section header (32px row); 12px `[icon]` (defaults to `language`) + `[text]` label + expand arrow; Label Small typography; `--color-icon-subtle` default / `--color-icon-brand` expanded; children indented 8px (no vertical line); `[text]`, `[icon]`, `[expanded]`, `[(expanded)]`, `[disabled]`; children projected via `ng-content` |
 | `ds-save-bar` | Custom | No Material equivalent — unsaved-changes bar; variants: `default` (blue border, info dot) / `error` (red border, error dot); outputs: `(cancelClick)`, `(saveProgressClick)`, `(saveAndExitClick)`; ADA: `role="status"` (default) / `role="alert"` (error) |
 | `ds-modal` | `MatDialogModule` (optional) | Full-featured modal — sticky header, scrollable body, optional tabs slot (`[modal-tabs]`), optional actions footer (`[modal-actions]`); variants: `close` (×) / `collapse` (minimize); sizes: `fixed` (500px) / `full` (fills backdrop); `(dismissClick)` output; panelClass: `'ds-modal-overlay'` when using MatDialog |
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |

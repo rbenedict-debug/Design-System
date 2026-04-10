@@ -1,0 +1,22 @@
+<div
+  class="ds-subnav-header"
+  [class.is-expanded]="expanded"
+>
+  <button
+    class="ds-subnav-header__row"
+    type="button"
+    [disabled]="disabled"
+    [attr.aria-expanded]="expanded"
+    (click)="toggle()"
+  >
+    <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">{{ icon }}</span>
+    <span class="ds-subnav-header__label">{{ text }}</span>
+    <span class="ds-icon" aria-hidden="true">
+      {{ expanded ? 'arrow_drop_down' : 'arrow_right' }}
+    </span>
+  </button>
+
+  <div class="ds-subnav-header__children" [attr.aria-hidden]="!expanded">
+    <ng-content />
+  </div>
+</div>

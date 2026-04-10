@@ -6054,6 +6054,247 @@
   flex-shrink: 0;
 }
 
+.ds-subnav-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 32px;
+  padding: 0 var(--spacing-sm) 0 var(--spacing-md);
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border: none;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--color-surface-page);
+  color: var(--color-icon-default);
+  cursor: pointer;
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  text-align: left;
+  white-space: nowrap;
+  position: relative;
+}
+.ds-subnav-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+}
+.ds-subnav-button:hover::after {
+  background: var(--overlay-hovered);
+}
+.ds-subnav-button:active::after {
+  background: var(--overlay-pressed);
+}
+.ds-subnav-button:focus {
+  outline: none;
+}
+.ds-subnav-button:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-subnav-button__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-subnav-button__filter {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.ds-subnav-button.is-selected {
+  background: var(--color-icon-brand);
+  color: var(--color-icon-on-brand);
+}
+.ds-subnav-button.is-disabled, .ds-subnav-button:disabled {
+  pointer-events: none;
+  color: var(--color-icon-disabled);
+  background: var(--color-surface-page);
+  cursor: default;
+}
+
+.ds-subnav-subheader {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  flex-shrink: 0;
+}
+.ds-subnav-subheader__row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 32px;
+  padding: 0 var(--spacing-xs) 0 var(--spacing-md);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-page);
+  color: var(--color-icon-default);
+  cursor: pointer;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  text-align: left;
+}
+.ds-subnav-subheader__row::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+}
+.ds-subnav-subheader__row:hover::after {
+  background: var(--overlay-hovered);
+}
+.ds-subnav-subheader__row:active::after {
+  background: var(--overlay-pressed);
+}
+.ds-subnav-subheader__row:focus {
+  outline: none;
+}
+.ds-subnav-subheader__row:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-subnav-subheader__row .ds-icon {
+  flex-shrink: 0;
+  color: currentColor;
+}
+.ds-subnav-subheader__row:disabled {
+  pointer-events: none;
+  color: var(--color-icon-disabled);
+  cursor: default;
+}
+.ds-subnav-subheader__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ds-subnav-subheader.is-expanded .ds-subnav-subheader__row {
+  background: var(--color-surface-container);
+  color: var(--color-icon-brand);
+}
+.ds-subnav-subheader__children {
+  display: none;
+  padding-left: var(--spacing-sm);
+  gap: var(--spacing-xs);
+}
+.ds-subnav-subheader.is-expanded .ds-subnav-subheader__children {
+  display: flex;
+}
+.ds-subnav-subheader__line {
+  flex-shrink: 0;
+  width: 1px;
+  background: var(--color-border-subtle);
+  border-radius: 1px;
+  align-self: stretch;
+}
+.ds-subnav-subheader__slot {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ds-subnav-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  flex-shrink: 0;
+}
+.ds-subnav-header__row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 32px;
+  padding: 0 var(--spacing-xs) 0 var(--spacing-sm);
+  gap: var(--spacing-xs);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-page);
+  color: var(--color-icon-subtle);
+  cursor: pointer;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--ref-typescale-label-small-font);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+  letter-spacing: var(--ref-typescale-label-small-tracking);
+  text-align: left;
+}
+.ds-subnav-header__row::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+}
+.ds-subnav-header__row:hover::after {
+  background: var(--overlay-hovered);
+}
+.ds-subnav-header__row:active::after {
+  background: var(--overlay-pressed);
+}
+.ds-subnav-header__row:focus {
+  outline: none;
+}
+.ds-subnav-header__row:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-subnav-header__row .ds-icon {
+  flex-shrink: 0;
+  color: currentColor;
+}
+.ds-subnav-header__row:disabled {
+  pointer-events: none;
+  color: var(--color-icon-disabled);
+  cursor: default;
+}
+.ds-subnav-header__icon {
+  font-size: 12px;
+}
+.ds-subnav-header__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ds-subnav-header.is-expanded .ds-subnav-header__row {
+  background: var(--color-surface-container);
+  color: var(--color-icon-brand);
+}
+.ds-subnav-header__children {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: var(--spacing-sm);
+}
+.ds-subnav-header.is-expanded .ds-subnav-header__children {
+  display: flex;
+}
+
 .ds-nav-tab {
   display: flex;
   align-items: stretch;
@@ -7290,95 +7531,6 @@
   pointer-events: none;
 }
 
-/* Subnav navigation button */
-.ds-subnav-btn {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 32px;
-  padding: 0 8px 0 12px;
-  border: none;
-  border-radius: var(--radius-sm, 6px);
-  background: var(--color-surface-page, white);
-  color: var(--color-text-primary, #2d3638);
-  font-family: var(--ref-typescale-label-medium-font, 'Proxima Nova', sans-serif);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: .25px;
-  text-align: left;
-  cursor: pointer;
-  flex-shrink: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  position: relative;
-  box-sizing: border-box;
-}
-
-.ds-subnav-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: transparent;
-  pointer-events: none;
-}
-
-.ds-subnav-btn:hover::after  { background: var(--overlay-hovered, rgba(0,0,0,.06)); }
-.ds-subnav-btn:active::after { background: var(--overlay-pressed, rgba(0,0,0,.1)); }
-.ds-subnav-btn:focus         { outline: none; }
-.ds-subnav-btn:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
-
-.ds-subnav-btn.is-selected {
-  background: var(--color-surface-nav-active, #0b6eb4);
-  color: white;
-}
-
-/* Subnav section header row */
-.ds-subnav-header {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 32px;
-  padding: 0 4px 0 8px;
-  border: none;
-  border-radius: var(--radius-sm, 6px);
-  background: transparent;
-  cursor: pointer;
-  gap: 4px;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  position: relative;
-}
-
-.ds-subnav-header::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: transparent;
-  pointer-events: none;
-}
-
-.ds-subnav-header:hover::after  { background: var(--overlay-hovered, rgba(0,0,0,.06)); }
-.ds-subnav-header:focus         { outline: none; }
-.ds-subnav-header:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
-
-.ds-subnav-header .ds-icon { color: var(--color-icon-subtle, #73737f); }
-
-.ds-subnav-header__label {
-  flex: 1;
-  font-family: var(--ref-typescale-label-small-font, 'Proxima Nova', sans-serif);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 12px;
-  letter-spacing: .4px;
-  color: var(--color-icon-subtle, #73737f);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 /* Nav expand — page-layout positioning context only.
    Visual styles come from the compiled component CSS above. */
 .ds-page-layout .ds-nav-expand {
@@ -7572,6 +7724,9 @@
 
       <div class="nav-group-label">Navigation</div>
       <a class="nav-link" href="#nav-button" onclick="setActive(this)"><span class="nav-dot"></span>Nav Button</a>
+      <a class="nav-link" href="#subnav-button" onclick="setActive(this)"><span class="nav-dot"></span>Subnav Button</a>
+      <a class="nav-link" href="#subnav-subheader" onclick="setActive(this)"><span class="nav-dot"></span>Subnav Subheader</a>
+      <a class="nav-link" href="#subnav-header" onclick="setActive(this)"><span class="nav-dot"></span>Subnav Header</a>
       <a class="nav-link" href="#agent-status" onclick="setActive(this)"><span class="nav-dot"></span>Agent Status</a>
       <a class="nav-link" href="#nav-sidebar" onclick="setActive(this)"><span class="nav-dot"></span>Nav Sidebar</a>
       <a class="nav-link" href="#nav-tab" onclick="setActive(this)"><span class="nav-dot"></span>Nav Tab</a>
@@ -11227,6 +11382,259 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
         </div>
       </section>
+
+      <!-- ── Subnav Button ─────────────────────────────────────────────────── -->
+      <section class="section" id="subnav-button">
+        <div class="section-header">
+          <h2 class="section-title">Subnav Button</h2>
+          <span class="section-source">components/subnav-button/_subnav-button.scss</span>
+        </div>
+        <p class="section-desc">Leaf navigation item inside the sub-navigation panel — represents a single destination. Selected state fills with brand blue and turns text white. Optional trailing <code>filter_alt</code> icon button (requires <code>div+role="button"</code> wrapper to avoid nesting <code>&lt;button&gt;</code> elements). Angular component: <code>&lt;ds-subnav-button&gt;</code> with <code>[label]</code>, <code>[selected]</code>, <code>[disabled]</code>, <code>[showFilter]</code> inputs and <code>(navClick)</code> / <code>(filterClick)</code> outputs.</p>
+        <div class="component-demo">
+
+          <!-- Default -->
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 220px;">
+              <button class="ds-subnav-button" type="button" aria-pressed="false">Inbox</button>
+              <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Bookmarks</button>
+              <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Spam</button>
+            </div>
+          </div>
+
+          <!-- Selected -->
+          <div class="demo-row">
+            <div class="demo-row-label">Selected</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 220px;">
+              <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
+              <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Bookmarks</button>
+              <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Spam</button>
+            </div>
+          </div>
+
+          <!-- Disabled -->
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 220px;">
+              <button class="ds-subnav-button is-disabled" type="button" disabled aria-pressed="false">Inbox</button>
+              <button class="ds-subnav-button is-selected is-disabled" type="button" disabled aria-pressed="true" style="margin-top: 6px;">Bookmarks</button>
+            </div>
+          </div>
+
+          <!-- With filter button -->
+          <div class="demo-row">
+            <div class="demo-row-label">With filter</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 220px;">
+              <div class="ds-subnav-button" role="button" tabindex="0" aria-pressed="false">
+                <span class="ds-subnav-button__label">Inbox</span>
+                <button class="ds-subnav-button__filter ds-icon-button ds-icon-button--icon ds-icon-button--sm"
+                        type="button" aria-label="Filter" onclick="event.stopPropagation(); alert('Filter clicked')">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">filter_alt</span>
+                </button>
+              </div>
+              <div class="ds-subnav-button is-selected" role="button" tabindex="0" aria-pressed="true" style="margin-top: 6px;">
+                <span class="ds-subnav-button__label">Bookmarks</span>
+                <button class="ds-subnav-button__filter ds-icon-button ds-icon-button--icon ds-icon-button--sm"
+                        type="button" aria-label="Filter" onclick="event.stopPropagation(); alert('Filter clicked')">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">filter_alt</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive — click to toggle selected -->
+          <div class="demo-row">
+            <div class="demo-row-label">Interactive</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 220px;"
+                 onclick="var btns=this.querySelectorAll('.ds-subnav-button'); btns.forEach(b=>{b.classList.remove('is-selected'); b.setAttribute('aria-pressed','false');}); if(event.target.closest('.ds-subnav-button')){var b=event.target.closest('.ds-subnav-button'); b.classList.add('is-selected'); b.setAttribute('aria-pressed','true');}">
+              <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
+              <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Bookmarks</button>
+              <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Spam</button>
+              <button class="ds-subnav-button" type="button" aria-pressed="false" style="margin-top: 6px;">Drafts</button>
+            </div>
+          </div>
+
+        </div><!-- /.component-demo -->
+      </section>
+
+      <!-- ── Subnav Subheader ───────────────────────────────────────────────── -->
+      <section class="section" id="subnav-subheader">
+        <div class="section-header">
+          <h2 class="section-title">Subnav Subheader</h2>
+          <span class="section-source">components/subnav-subheader/_subnav-subheader.scss</span>
+        </div>
+        <p class="section-desc">Expandable section grouping label within the sub-navigation panel. Shows <code>arrow_right</code> when collapsed, <code>arrow_drop_down</code> when expanded. Expanded state shows child nav items indented with a left vertical accent line (<code>--color-border-subtle</code>). Angular component: <code>&lt;ds-subnav-subheader&gt;</code> with <code>[text]</code>, <code>[expanded]</code>, <code>[(expanded)]</code> two-way binding, <code>[disabled]</code>, and <code>ng-content</code> for child <code>ds-subnav-button</code> items.</p>
+        <div class="component-demo">
+
+          <!-- Collapsed -->
+          <div class="demo-row">
+            <div class="demo-row-label">Collapsed</div>
+            <div class="demo-row-items" style="width: 220px;">
+              <div class="ds-subnav-subheader" style="width: 100%;">
+                <button class="ds-subnav-subheader__row" type="button" aria-expanded="false">
+                  <span class="ds-subnav-subheader__label">Settings</span>
+                  <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Expanded -->
+          <div class="demo-row">
+            <div class="demo-row-label">Expanded</div>
+            <div class="demo-row-items" style="width: 220px;">
+              <div class="ds-subnav-subheader is-expanded" style="width: 100%;">
+                <button class="ds-subnav-subheader__row" type="button" aria-expanded="true">
+                  <span class="ds-subnav-subheader__label">Settings</span>
+                  <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
+                </button>
+                <div class="ds-subnav-subheader__children">
+                  <div class="ds-subnav-subheader__line" aria-hidden="true"></div>
+                  <div class="ds-subnav-subheader__slot">
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Billing</button>
+                    <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Users</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Preferences</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Disabled -->
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled</div>
+            <div class="demo-row-items" style="width: 220px;">
+              <div class="ds-subnav-subheader" style="width: 100%;">
+                <button class="ds-subnav-subheader__row" type="button" aria-expanded="false" disabled>
+                  <span class="ds-subnav-subheader__label">Settings</span>
+                  <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive -->
+          <div class="demo-row">
+            <div class="demo-row-label">Interactive</div>
+            <div class="demo-row-items" style="width: 220px;">
+              <div class="ds-subnav-subheader" id="subheader-demo" style="width: 100%;">
+                <button class="ds-subnav-subheader__row" type="button" aria-expanded="false"
+                  onclick="var p=document.getElementById('subheader-demo'); var e=p.classList.toggle('is-expanded'); this.setAttribute('aria-expanded',e); this.querySelector('.ds-icon:last-child').textContent=e?'arrow_drop_down':'arrow_right';">
+                  <span class="ds-subnav-subheader__label">Settings</span>
+                  <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                </button>
+                <div class="ds-subnav-subheader__children">
+                  <div class="ds-subnav-subheader__line" aria-hidden="true"></div>
+                  <div class="ds-subnav-subheader__slot">
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Billing</button>
+                    <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Users</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Preferences</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.component-demo -->
+      </section>
+
+      <!-- ── Subnav Header ──────────────────────────────────────────────────── -->
+      <section class="section" id="subnav-header">
+        <div class="section-header">
+          <h2 class="section-title">Subnav Header</h2>
+          <span class="section-source">components/subnav-header/_subnav-header.scss</span>
+        </div>
+        <p class="section-desc">Top-level collapsible section header for the sub-navigation panel. Shows a 12px section icon (<code>language</code> by default), a label, and an expand arrow. Uses Label Small (12px) typography and <code>--color-icon-subtle</code> text — lighter than the subheader. When expanded, child items appear with 8px left indent and no vertical divider. Angular component: <code>&lt;ds-subnav-header&gt;</code> with <code>[text]</code>, <code>[icon]</code>, <code>[expanded]</code>, <code>[(expanded)]</code> two-way binding, <code>[disabled]</code>, and <code>ng-content</code> for child items.</p>
+        <div class="component-demo">
+
+          <!-- Collapsed -->
+          <div class="demo-row">
+            <div class="demo-row-label">Collapsed</div>
+            <div class="demo-row-items" style="width: 220px;">
+              <div class="ds-subnav-header" style="width: 100%;">
+                <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                  <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">language</span>
+                  <span class="ds-subnav-header__label">Global</span>
+                  <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Expanded -->
+          <div class="demo-row">
+            <div class="demo-row-label">Expanded</div>
+            <div class="demo-row-items" style="width: 220px;">
+              <div class="ds-subnav-header is-expanded" style="width: 100%;">
+                <button class="ds-subnav-header__row" type="button" aria-expanded="true">
+                  <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">language</span>
+                  <span class="ds-subnav-header__label">Global</span>
+                  <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
+                </button>
+                <div class="ds-subnav-header__children">
+                  <div class="ds-subnav-subheader">
+                    <button class="ds-subnav-subheader__row" type="button" aria-expanded="false">
+                      <span class="ds-subnav-subheader__label">Settings</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                    </button>
+                  </div>
+                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Dashboard</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Reports</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom icon -->
+          <div class="demo-row">
+            <div class="demo-row-label">Custom icon</div>
+            <div class="demo-row-items" style="width: 220px;">
+              <div class="ds-subnav-header" style="width: 100%;">
+                <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                  <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
+                  <span class="ds-subnav-header__label">Saved Searches</span>
+                  <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive -->
+          <div class="demo-row">
+            <div class="demo-row-label">Interactive</div>
+            <div class="demo-row-items" style="width: 220px;">
+              <div class="ds-subnav-header" id="subnav-header-demo" style="width: 100%;">
+                <button class="ds-subnav-header__row" type="button" aria-expanded="false"
+                  onclick="var p=document.getElementById('subnav-header-demo'); var e=p.classList.toggle('is-expanded'); this.setAttribute('aria-expanded',e); this.querySelector('.ds-icon:last-child').textContent=e?'arrow_drop_down':'arrow_right';">
+                  <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">language</span>
+                  <span class="ds-subnav-header__label">Global</span>
+                  <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                </button>
+                <div class="ds-subnav-header__children">
+                  <div class="ds-subnav-subheader" id="subheader-in-header-demo">
+                    <button class="ds-subnav-subheader__row" type="button" aria-expanded="false"
+                      onclick="var p=document.getElementById('subheader-in-header-demo'); var e=p.classList.toggle('is-expanded'); this.setAttribute('aria-expanded',e); this.querySelector('.ds-icon:last-child').textContent=e?'arrow_drop_down':'arrow_right';">
+                      <span class="ds-subnav-subheader__label">Settings</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                    </button>
+                    <div class="ds-subnav-subheader__children">
+                      <div class="ds-subnav-subheader__line" aria-hidden="true"></div>
+                      <div class="ds-subnav-subheader__slot">
+                        <button class="ds-subnav-button" type="button" aria-pressed="false">Billing</button>
+                        <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Users</button>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Dashboard</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Reports</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.component-demo -->
+      </section>
+
       <section class="section" id="agent-status">
         <div class="section-header">
           <h2 class="section-title">Agent Status</h2>
@@ -12861,15 +13269,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel" role="navigation" aria-label="Tickets navigation">
-                  <button class="ds-subnav-btn is-selected" type="button">Inbox</button>
-                  <button class="ds-subnav-btn" type="button">Bookmarks</button>
-                  <button class="ds-subnav-btn" type="button">Spam</button>
-                  <button class="ds-subnav-btn" type="button">Drafts</button>
-                  <button class="ds-subnav-header" type="button">
-                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
-                    <span class="ds-subnav-header__label">Saved Searches</span>
-                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
-                  </button>
+                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
+                  <div class="ds-subnav-header">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
+                      <span class="ds-subnav-header__label">Saved Searches</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                    </button>
+                  </div>
                 </nav>
 
                 <!-- Main page content -->
@@ -13004,15 +13414,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel-split" role="navigation" aria-label="Tickets navigation">
-                  <button class="ds-subnav-btn is-selected" type="button">Inbox</button>
-                  <button class="ds-subnav-btn" type="button">Bookmarks</button>
-                  <button class="ds-subnav-btn" type="button">Spam</button>
-                  <button class="ds-subnav-btn" type="button">Drafts</button>
-                  <button class="ds-subnav-header" type="button">
-                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
-                    <span class="ds-subnav-header__label">Saved Searches</span>
-                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
-                  </button>
+                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
+                  <div class="ds-subnav-header">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
+                      <span class="ds-subnav-header__label">Saved Searches</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                    </button>
+                  </div>
                 </nav>
 
                 <!-- Page content: title + tabs + split panels replacing __main -->
@@ -13150,15 +13562,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel-split-static" role="navigation" aria-label="Tickets navigation">
-                  <button class="ds-subnav-btn is-selected" type="button">Inbox</button>
-                  <button class="ds-subnav-btn" type="button">Bookmarks</button>
-                  <button class="ds-subnav-btn" type="button">Spam</button>
-                  <button class="ds-subnav-btn" type="button">Drafts</button>
-                  <button class="ds-subnav-header" type="button">
-                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
-                    <span class="ds-subnav-header__label">Saved Searches</span>
-                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
-                  </button>
+                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
+                  <div class="ds-subnav-header">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
+                      <span class="ds-subnav-header__label">Saved Searches</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                    </button>
+                  </div>
                 </nav>
 
                 <!-- Page content: title + tabs + static 50/50 split -->
@@ -13289,15 +13703,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel-split-2575" role="navigation" aria-label="Tickets navigation">
-                  <button class="ds-subnav-btn is-selected" type="button">Inbox</button>
-                  <button class="ds-subnav-btn" type="button">Bookmarks</button>
-                  <button class="ds-subnav-btn" type="button">Spam</button>
-                  <button class="ds-subnav-btn" type="button">Drafts</button>
-                  <button class="ds-subnav-header" type="button">
-                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
-                    <span class="ds-subnav-header__label">Saved Searches</span>
-                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
-                  </button>
+                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
+                  <div class="ds-subnav-header">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
+                      <span class="ds-subnav-header__label">Saved Searches</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                    </button>
+                  </div>
                 </nav>
 
                 <!-- Page content: title + tabs + 25/75 static split -->
@@ -13428,15 +13844,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel-split-7525" role="navigation" aria-label="Tickets navigation">
-                  <button class="ds-subnav-btn is-selected" type="button">Inbox</button>
-                  <button class="ds-subnav-btn" type="button">Bookmarks</button>
-                  <button class="ds-subnav-btn" type="button">Spam</button>
-                  <button class="ds-subnav-btn" type="button">Drafts</button>
-                  <button class="ds-subnav-header" type="button">
-                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
-                    <span class="ds-subnav-header__label">Saved Searches</span>
-                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
-                  </button>
+                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
+                  <div class="ds-subnav-header">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
+                      <span class="ds-subnav-header__label">Saved Searches</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                    </button>
+                  </div>
                 </nav>
 
                 <!-- Page content: title + tabs + 75/25 static split -->
@@ -13583,15 +14001,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                 <!-- Sub-navigation panel (collapsible) -->
                 <nav class="ds-subnav" id="subnav-panel-table" role="navigation" aria-label="Customers navigation">
-                  <button class="ds-subnav-btn is-selected" type="button">All Customers</button>
-                  <button class="ds-subnav-btn" type="button">Active</button>
-                  <button class="ds-subnav-btn" type="button">Pending</button>
-                  <button class="ds-subnav-btn" type="button">Inactive</button>
-                  <button class="ds-subnav-header" type="button">
-                    <span class="ds-icon" style="font-size:12px;" aria-hidden="true">search</span>
-                    <span class="ds-subnav-header__label">Saved Filters</span>
-                    <span class="ds-icon" aria-hidden="true">arrow_right</span>
-                  </button>
+                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">All Customers</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Active</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Pending</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Inactive</button>
+                  <div class="ds-subnav-header">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
+                      <span class="ds-subnav-header__label">Saved Filters</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                    </button>
+                  </div>
                 </nav>
 
                 <!-- Main page content -->
