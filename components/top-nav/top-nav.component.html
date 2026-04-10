@@ -1,8 +1,74 @@
-<header class="ds-top-nav" role="banner">
-  <div class="ds-top-nav__tabs">
-    <ng-content />
+<header class="ds-top-nav" role="banner" #topNavHeader>
+
+  <!-- Tab strip — only renders visibleCount tabs; more-wrapper is the anchor for the panel -->
+  <div class="ds-top-nav__tabs" #tabsContainer>
+
+    @for (tab of visibleTabs; track tab.id) {
+      <ds-nav-tab
+        [label]="tab.label"
+        [active]="tab.active ?? false"
+        (tabClick)="onTabClick(tab)"
+        (tabClose)="onTabClose(tab)"
+      />
+    }
+
+    @if (hasOverflow) {
+      <div class="ds-top-nav__more-wrapper" #moreWrapper>
+        <ds-nav-tab [more]="true" (tabClick)="onMoreClick()" />
+      </div>
+    }
+
   </div>
+
+  <!-- Overflow panel — sibling of __tabs so it escapes overflow:hidden -->
+  @if (showMorePanel) {
+    <div
+      class="ds-top-nav__more-panel"
+      role="menu"
+      aria-label="More tabs"
+      [style.left.px]="morePanelLeft"
+      (keydown)="onPanelKeydown($event)"
+    >
+      <ul class="ds-top-nav__more-list" role="none">
+        @for (tab of overflowTabs; track tab.id) {
+          <li
+            class="ds-top-nav__more-item"
+            [class.is-active]="tab.active"
+            role="menuitem"
+            tabindex="0"
+            [attr.aria-label]="tab.label + (tab.active ? ' — active' : '')"
+            (click)="onPanelTabActivate(tab)"
+            (keydown.enter)="onPanelTabActivate(tab)"
+            (keydown.space)="$event.preventDefault(); onPanelTabActivate(tab)"
+          >
+            <span class="ds-top-nav__more-item-label">{{ tab.label }}</span>
+            <button
+              class="ds-top-nav__more-item-close"
+              type="button"
+              [attr.aria-label]="'Close ' + tab.label + ' tab'"
+              (click)="onPanelTabClose(tab, $event)"
+            >
+              <span class="ds-icon ds-icon--xs" aria-hidden="true">close_small</span>
+            </button>
+          </li>
+        }
+      </ul>
+
+      <div class="ds-top-nav__more-footer">
+        <button
+          class="ds-top-nav__more-close-all"
+          type="button"
+          (click)="onCloseAll()"
+        >
+          Close all tabs
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Right-side action buttons -->
   <div class="ds-top-nav__actions">
     <ng-content select="[top-nav-actions]" />
   </div>
+
 </header>

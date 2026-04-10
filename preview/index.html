@@ -6390,6 +6390,7 @@
   box-sizing: border-box;
   background: var(--color-surface-page);
   border-bottom: 2px solid var(--color-border-brand);
+  position: relative;
 }
 .ds-top-nav__tabs {
   display: flex;
@@ -6399,6 +6400,147 @@
   height: 100%;
   min-width: 0;
   overflow: hidden;
+}
+.ds-top-nav__more-wrapper {
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+.ds-top-nav__more-panel {
+  position: absolute;
+  top: 100%;
+  margin-top: 4px;
+  z-index: 200;
+  min-width: 220px;
+  max-width: 300px;
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elevation-2), 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+.ds-top-nav__more-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: var(--spacing-xs) 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.ds-top-nav__more-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  height: 36px;
+  padding: 0 var(--spacing-xs) 0 var(--spacing-md);
+  cursor: pointer;
+  position: relative;
+}
+.ds-top-nav__more-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  pointer-events: none;
+}
+.ds-top-nav__more-item:hover::after {
+  background: var(--overlay-hovered);
+}
+.ds-top-nav__more-item:active::after {
+  background: var(--overlay-pressed);
+}
+.ds-top-nav__more-item:focus {
+  outline: none;
+}
+.ds-top-nav__more-item:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring);
+}
+.ds-top-nav__more-item.is-active .ds-top-nav__more-item-label {
+  color: var(--color-text-brand);
+  font-weight: var(--ref-typeface-weight-bold);
+}
+.ds-top-nav__more-item-label {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: var(--ref-typescale-body-small-font);
+  font-size: var(--ref-typescale-body-small-size);
+  font-weight: var(--ref-typescale-body-small-weight);
+  line-height: var(--ref-typescale-body-small-line-height);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-top-nav__more-item-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  color: var(--color-icon-subtle);
+  position: relative;
+  z-index: 1;
+}
+.ds-top-nav__more-item-close:hover {
+  background: var(--overlay-hovered);
+  color: var(--color-icon-default);
+}
+.ds-top-nav__more-item-close:active {
+  background: var(--overlay-pressed);
+}
+.ds-top-nav__more-item-close:focus {
+  outline: none;
+}
+.ds-top-nav__more-item-close:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring);
+}
+.ds-top-nav__more-footer {
+  border-top: 1px solid var(--color-border-subtle);
+  padding: var(--spacing-xs);
+}
+.ds-top-nav__more-close-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 32px;
+  padding: 0 var(--spacing-sm);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--ref-typescale-label-small-font);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+  color: var(--color-text-accent-red);
+  position: relative;
+}
+.ds-top-nav__more-close-all::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+}
+.ds-top-nav__more-close-all:hover::after {
+  background: var(--overlay-accent-red-hovered);
+}
+.ds-top-nav__more-close-all:active::after {
+  background: var(--overlay-accent-red-pressed);
+}
+.ds-top-nav__more-close-all:focus {
+  outline: none;
+}
+.ds-top-nav__more-close-all:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 .ds-top-nav__actions {
   display: flex;
@@ -8793,6 +8935,265 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
         </div><!-- /.component-demo -->
       </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <!-- Rich Text Editor                                                    -->
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <section class="section" id="rich-text-editor">
+        <div class="section-header">
+          <h2 class="section-title">Rich Text Editor</h2>
+          <span class="section-source">components/rich-text-editor/_rich-text-editor.scss</span>
+        </div>
+        <p class="section-desc">
+          Full-featured rich text editor (<code>ds-rich-text-editor</code>) — powered by CKEditor 5 with a custom Onflo toolbar. The toolbar provides Bold, Italic, Underline, Remove Formatting, Link, Bulleted List, and Numbered List. An optional expand button opens a larger modal editor. An optional drag handle in the bottom-right corner lets the user resize the height.
+          Third-party dependency: <code>@ckeditor/ckeditor5-angular</code> + <code>@ckeditor/ckeditor5-build-classic</code>.
+          Source: <code>components/rich-text-editor/_rich-text-editor.scss</code>
+        </p>
+
+        <div class="component-demo">
+
+          <!-- Default state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items" style="width: 520px;">
+              <div class="ds-rich-text-editor" style="height: 200px;">
+                <div class="ds-rich-text-editor__toolbar" role="toolbar" aria-label="Text formatting">
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-spacer">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Expand editor"><span class="ds-icon" aria-hidden="true">expand_content</span></button>
+                  </div>
+                </div>
+                <div class="ds-rich-text-editor__content">
+                  <span class="ds-rich-text-editor__placeholder">Type your message…</span>
+                </div>
+                <div class="ds-rich-text-editor__resize-handle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hover state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Hover</div>
+            <div class="demo-row-items" style="width: 520px;">
+              <div class="ds-rich-text-editor" style="height: 200px; border-color: var(--color-border-hover);">
+                <div class="ds-rich-text-editor__toolbar">
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-spacer">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Expand editor"><span class="ds-icon" aria-hidden="true">expand_content</span></button>
+                  </div>
+                </div>
+                <div class="ds-rich-text-editor__content">
+                  <span class="ds-rich-text-editor__placeholder">Type your message…</span>
+                </div>
+                <div class="ds-rich-text-editor__resize-handle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active / focused state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Active / focused</div>
+            <div class="demo-row-items" style="width: 520px;">
+              <div class="ds-rich-text-editor is-focused" style="height: 200px;">
+                <div class="ds-rich-text-editor__toolbar">
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn is-active" type="button" aria-label="Bold" aria-pressed="true"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-spacer">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Expand editor"><span class="ds-icon" aria-hidden="true">expand_content</span></button>
+                  </div>
+                </div>
+                <div class="ds-rich-text-editor__content" style="font-family: var(--ref-typeface-plain); font-size: 14px; line-height: 20px; color: var(--color-text-primary);">
+                  This is <strong>bold text</strong> and some <em>italic text</em> typed into the editor.
+                </div>
+                <div class="ds-rich-text-editor__resize-handle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Error</div>
+            <div class="demo-row-items" style="width: 520px;">
+              <div>
+                <span class="ds-rich-text-editor__label ds-rich-text-editor__label--required" id="rte-err-label">Message</span>
+                <div class="ds-rich-text-editor is-error" style="height: 200px;">
+                  <div class="ds-rich-text-editor__toolbar">
+                    <div class="ds-rich-text-editor__toolbar-group">
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                    </div>
+                    <div class="ds-rich-text-editor__toolbar-divider"></div>
+                    <div class="ds-rich-text-editor__toolbar-group">
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                    </div>
+                    <div class="ds-rich-text-editor__toolbar-divider"></div>
+                    <div class="ds-rich-text-editor__toolbar-group">
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                    </div>
+                  </div>
+                  <div class="ds-rich-text-editor__content">
+                    <span class="ds-rich-text-editor__placeholder">Type your message…</span>
+                  </div>
+                </div>
+                <span class="ds-rich-text-editor__helper ds-rich-text-editor__helper--error" role="alert">Message body is required.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Disabled state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled</div>
+            <div class="demo-row-items" style="width: 520px;">
+              <div class="ds-rich-text-editor is-disabled" style="height: 200px;">
+                <div class="ds-rich-text-editor__toolbar">
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold" disabled><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic" disabled><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline" disabled><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting" disabled><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link" disabled><span class="ds-icon" aria-hidden="true">link</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list" disabled><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list" disabled><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                  </div>
+                </div>
+                <div class="ds-rich-text-editor__content">
+                  <span class="ds-rich-text-editor__placeholder">Content unavailable.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No resize / no expand (minimal variant) -->
+          <div class="demo-row">
+            <div class="demo-row-label">No resize / no expand</div>
+            <div class="demo-row-items" style="width: 520px;">
+              <div class="ds-rich-text-editor" style="height: 160px;">
+                <div class="ds-rich-text-editor__toolbar">
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                  </div>
+                  <div class="ds-rich-text-editor__toolbar-divider"></div>
+                  <div class="ds-rich-text-editor__toolbar-group">
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                  </div>
+                </div>
+                <div class="ds-rich-text-editor__content">
+                  <span class="ds-rich-text-editor__placeholder">Reply here…</span>
+                </div>
+                <!-- no resize handle, no expand button -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Expand overlay demo (static mockup) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Expand overlay</div>
+            <div class="demo-row-items" style="position: relative; height: 300px; width: 640px; background: var(--color-surface-default); border-radius: var(--radius-md); overflow: hidden;">
+              <!-- Simulated backdrop -->
+              <div style="position: absolute; inset: 0; background: var(--color-surface-scrim); z-index: 0;"></div>
+              <!-- Modal -->
+              <div class="ds-rte-overlay__modal" style="position: absolute; top: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); height: calc(100% - 32px); z-index: 1;">
+                <div class="ds-rte-overlay__header">
+                  <span class="ds-rte-overlay__title">Message</span>
+                  <button class="ds-rte-overlay__close" type="button" aria-label="Close">
+                    <span class="ds-icon" aria-hidden="true">close</span>
+                  </button>
+                </div>
+                <div class="ds-rte-overlay__body">
+                  <div class="ds-rich-text-editor is-focused">
+                    <div class="ds-rich-text-editor__toolbar">
+                      <div class="ds-rich-text-editor__toolbar-group">
+                        <button class="ds-rich-text-editor__toolbar-btn is-active" type="button" aria-label="Bold" aria-pressed="true"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
+                      </div>
+                      <div class="ds-rich-text-editor__toolbar-divider"></div>
+                      <div class="ds-rich-text-editor__toolbar-group">
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
+                      </div>
+                      <div class="ds-rich-text-editor__toolbar-divider"></div>
+                      <div class="ds-rich-text-editor__toolbar-group">
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
+                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
+                      </div>
+                    </div>
+                    <div class="ds-rich-text-editor__content" style="font-family: var(--ref-typeface-plain); font-size: 14px; line-height: 20px; color: var(--color-text-primary);">
+                      <strong>Hi Sarah,</strong><br><br>
+                      Following up on our meeting — the implementation is progressing well. Let me know if you have any questions.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.component-demo -->
+      </section><!-- /#rich-text-editor -->
 
       <section class="section" id="checkbox">
         <div class="section-header">
@@ -11824,6 +12225,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div>
           </div>
 
+          <div class="demo-row">
+            <div class="demo-row-label">More / overflow</div>
+            <div class="demo-row-items">
+              <div class="ds-nav-tab ds-nav-tab--more" role="button" tabindex="0" aria-label="More tabs">
+                <div class="ds-nav-tab__content">
+                  <span class="ds-nav-tab__label">...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
       <section class="section" id="top-nav">
@@ -11831,38 +12243,15 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <h2 class="section-title">Top Nav</h2>
           <span class="section-source">components/top-nav/_top-nav.scss</span>
         </div>
-        <p class="section-desc">Application-wide top navigation bar. Browser-style document tabs sit on the left — one tab per open page, active tab turns dark blue, only one active at a time. Clicking a tab activates it; clicking × closes it (if it was active, the next available tab activates). Action icon buttons on the right are 32px circular buttons — use the <code>--orange</code>, <code>--green</code>, and <code>--navy</code> modifiers for colour variants. Composes <code>ds-nav-tab</code> primitives inside.</p>
+        <p class="section-desc">Application-wide top navigation bar. Browser-style document tabs sit on the left — one tab per open page, active tab turns dark blue, only one active at a time. When tabs overflow the available strip width the rightmost slot collapses into a <code>ds-nav-tab--more</code> indicator ("..."). Clicking it opens an overflow panel listing the hidden tabs — each row has a close button, and "Close all tabs" clears everything at once. Action icon buttons on the right are 32px circular buttons — use the <code>--orange</code>, <code>--green</code>, and <code>--navy</code> modifiers for colour variants. Composes <code>ds-nav-tab</code> primitives inside.</p>
         <div class="component-demo">
 
           <div class="demo-row">
-            <div class="demo-row-label">Interactive</div>
+            <div class="demo-row-label">Interactive<br><small style="font-weight:400;color:var(--color-text-secondary);">Resize the window to trigger overflow</small></div>
             <div class="demo-row-items" style="display: block; width: 100%; padding: 0;">
-              <header class="ds-top-nav" role="banner">
-                <div class="ds-top-nav__tabs">
-                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
-                       aria-pressed="true" aria-label="Ticket #4401 tab — active"
-                       onclick="activateNavTab(this)">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Ticket #4401</span>
-                      <button class="ds-nav-tab__close" type="button"
-                              aria-label="Close Ticket #4401 tab"
-                              onclick="event.stopPropagation(); closeNavTab(this)">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="ds-nav-tab" role="button" tabindex="0"
-                       aria-pressed="false" aria-label="Asset #AM-2301 tab"
-                       onclick="activateNavTab(this)">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Asset #AM-2301</span>
-                      <button class="ds-nav-tab__close" type="button"
-                              aria-label="Close Asset #AM-2301 tab"
-                              onclick="event.stopPropagation(); closeNavTab(this)">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
-                      </button>
-                    </div>
-                  </div>
+              <header class="ds-top-nav" role="banner" id="tnav-header">
+                <div class="ds-top-nav__tabs" id="tnav-strip">
+                  <!-- Tabs rendered by tnav JS below -->
                 </div>
                 <div class="ds-top-nav__actions">
                   <button class="ds-top-nav__action-btn" type="button" aria-label="Chatsy">
@@ -14310,264 +14699,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
       </div><!-- /#page-examples -->
 
-      <!-- ═══════════════════════════════════════════════════════════════════ -->
-      <!-- Rich Text Editor                                                    -->
-      <!-- ═══════════════════════════════════════════════════════════════════ -->
-      <section class="section" id="rich-text-editor">
-        <div class="section-header">
-          <h2 class="section-title">Rich Text Editor</h2>
-          <span class="section-source">components/rich-text-editor/_rich-text-editor.scss</span>
-        </div>
-        <p class="section-desc">
-          Full-featured rich text editor (<code>ds-rich-text-editor</code>) — powered by CKEditor 5 with a custom Onflo toolbar. The toolbar provides Bold, Italic, Underline, Remove Formatting, Link, Bulleted List, and Numbered List. An optional expand button opens a larger modal editor. An optional drag handle in the bottom-right corner lets the user resize the height.
-          Third-party dependency: <code>@ckeditor/ckeditor5-angular</code> + <code>@ckeditor/ckeditor5-build-classic</code>.
-          Source: <code>components/rich-text-editor/_rich-text-editor.scss</code>
-        </p>
-
-        <div class="component-demo">
-
-          <!-- Default state -->
-          <div class="demo-row">
-            <div class="demo-row-label">Default</div>
-            <div class="demo-row-items" style="width: 520px;">
-              <div class="ds-rich-text-editor" style="height: 200px;">
-                <div class="ds-rich-text-editor__toolbar" role="toolbar" aria-label="Text formatting">
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-divider"></div>
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-divider"></div>
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-spacer">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Expand editor"><span class="ds-icon" aria-hidden="true">expand_content</span></button>
-                  </div>
-                </div>
-                <div class="ds-rich-text-editor__content">
-                  <span class="ds-rich-text-editor__placeholder">Type your message…</span>
-                </div>
-                <div class="ds-rich-text-editor__resize-handle" aria-hidden="true">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Hover state -->
-          <div class="demo-row">
-            <div class="demo-row-label">Hover</div>
-            <div class="demo-row-items" style="width: 520px;">
-              <div class="ds-rich-text-editor" style="height: 200px; border-color: var(--color-border-hover);">
-                <div class="ds-rich-text-editor__toolbar">
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-divider"></div>
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-divider"></div>
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-spacer">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Expand editor"><span class="ds-icon" aria-hidden="true">expand_content</span></button>
-                  </div>
-                </div>
-                <div class="ds-rich-text-editor__content">
-                  <span class="ds-rich-text-editor__placeholder">Type your message…</span>
-                </div>
-                <div class="ds-rich-text-editor__resize-handle" aria-hidden="true">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Active / focused state -->
-          <div class="demo-row">
-            <div class="demo-row-label">Active / focused</div>
-            <div class="demo-row-items" style="width: 520px;">
-              <div class="ds-rich-text-editor is-focused" style="height: 200px;">
-                <div class="ds-rich-text-editor__toolbar">
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn is-active" type="button" aria-label="Bold" aria-pressed="true"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-divider"></div>
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-divider"></div>
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-spacer">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Expand editor"><span class="ds-icon" aria-hidden="true">expand_content</span></button>
-                  </div>
-                </div>
-                <div class="ds-rich-text-editor__content" style="font-family: var(--ref-typeface-plain); font-size: 14px; line-height: 20px; color: var(--color-text-primary);">
-                  This is <strong>bold text</strong> and some <em>italic text</em> typed into the editor.
-                </div>
-                <div class="ds-rich-text-editor__resize-handle" aria-hidden="true">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Error state -->
-          <div class="demo-row">
-            <div class="demo-row-label">Error</div>
-            <div class="demo-row-items" style="width: 520px;">
-              <div>
-                <span class="ds-rich-text-editor__label ds-rich-text-editor__label--required" id="rte-err-label">Message</span>
-                <div class="ds-rich-text-editor is-error" style="height: 200px;">
-                  <div class="ds-rich-text-editor__toolbar">
-                    <div class="ds-rich-text-editor__toolbar-group">
-                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
-                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
-                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
-                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
-                    </div>
-                    <div class="ds-rich-text-editor__toolbar-divider"></div>
-                    <div class="ds-rich-text-editor__toolbar-group">
-                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
-                    </div>
-                    <div class="ds-rich-text-editor__toolbar-divider"></div>
-                    <div class="ds-rich-text-editor__toolbar-group">
-                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
-                      <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
-                    </div>
-                  </div>
-                  <div class="ds-rich-text-editor__content">
-                    <span class="ds-rich-text-editor__placeholder">Type your message…</span>
-                  </div>
-                </div>
-                <span class="ds-rich-text-editor__helper ds-rich-text-editor__helper--error" role="alert">Message body is required.</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Disabled state -->
-          <div class="demo-row">
-            <div class="demo-row-label">Disabled</div>
-            <div class="demo-row-items" style="width: 520px;">
-              <div class="ds-rich-text-editor is-disabled" style="height: 200px;">
-                <div class="ds-rich-text-editor__toolbar">
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold" disabled><span class="ds-icon" aria-hidden="true">format_bold</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic" disabled><span class="ds-icon" aria-hidden="true">format_italic</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline" disabled><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting" disabled><span class="ds-icon" aria-hidden="true">format_clear</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-divider"></div>
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link" disabled><span class="ds-icon" aria-hidden="true">link</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-divider"></div>
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list" disabled><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list" disabled><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
-                  </div>
-                </div>
-                <div class="ds-rich-text-editor__content">
-                  <span class="ds-rich-text-editor__placeholder">Content unavailable.</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- No resize / no expand (minimal variant) -->
-          <div class="demo-row">
-            <div class="demo-row-label">No resize / no expand</div>
-            <div class="demo-row-items" style="width: 520px;">
-              <div class="ds-rich-text-editor" style="height: 160px;">
-                <div class="ds-rich-text-editor__toolbar">
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bold"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-divider"></div>
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
-                  </div>
-                  <div class="ds-rich-text-editor__toolbar-divider"></div>
-                  <div class="ds-rich-text-editor__toolbar-group">
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
-                    <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
-                  </div>
-                </div>
-                <div class="ds-rich-text-editor__content">
-                  <span class="ds-rich-text-editor__placeholder">Reply here…</span>
-                </div>
-                <!-- no resize handle, no expand button -->
-              </div>
-            </div>
-          </div>
-
-          <!-- Expand overlay demo (static mockup) -->
-          <div class="demo-row">
-            <div class="demo-row-label">Expand overlay</div>
-            <div class="demo-row-items" style="position: relative; height: 300px; width: 640px; background: var(--color-surface-default); border-radius: var(--radius-md); overflow: hidden;">
-              <!-- Simulated backdrop -->
-              <div style="position: absolute; inset: 0; background: var(--color-surface-scrim); z-index: 0;"></div>
-              <!-- Modal -->
-              <div class="ds-rte-overlay__modal" style="position: absolute; top: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); height: calc(100% - 32px); z-index: 1;">
-                <div class="ds-rte-overlay__header">
-                  <span class="ds-rte-overlay__title">Message</span>
-                  <button class="ds-rte-overlay__close" type="button" aria-label="Close">
-                    <span class="ds-icon" aria-hidden="true">close</span>
-                  </button>
-                </div>
-                <div class="ds-rte-overlay__body">
-                  <div class="ds-rich-text-editor is-focused">
-                    <div class="ds-rich-text-editor__toolbar">
-                      <div class="ds-rich-text-editor__toolbar-group">
-                        <button class="ds-rich-text-editor__toolbar-btn is-active" type="button" aria-label="Bold" aria-pressed="true"><span class="ds-icon" aria-hidden="true">format_bold</span></button>
-                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Italic"><span class="ds-icon" aria-hidden="true">format_italic</span></button>
-                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Underline"><span class="ds-icon" aria-hidden="true">format_underlined</span></button>
-                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Remove formatting"><span class="ds-icon" aria-hidden="true">format_clear</span></button>
-                      </div>
-                      <div class="ds-rich-text-editor__toolbar-divider"></div>
-                      <div class="ds-rich-text-editor__toolbar-group">
-                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Insert link"><span class="ds-icon" aria-hidden="true">link</span></button>
-                      </div>
-                      <div class="ds-rich-text-editor__toolbar-divider"></div>
-                      <div class="ds-rich-text-editor__toolbar-group">
-                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Bulleted list"><span class="ds-icon" aria-hidden="true">format_list_bulleted</span></button>
-                        <button class="ds-rich-text-editor__toolbar-btn" type="button" aria-label="Numbered list"><span class="ds-icon" aria-hidden="true">format_list_numbered</span></button>
-                      </div>
-                    </div>
-                    <div class="ds-rich-text-editor__content" style="font-family: var(--ref-typeface-plain); font-size: 14px; line-height: 20px; color: var(--color-text-primary);">
-                      <strong>Hi Sarah,</strong><br><br>
-                      Following up on our meeting — the implementation is progressing well. Let me know if you have any questions.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div><!-- /.component-demo -->
-      </section><!-- /#rich-text-editor -->
 
 
     </main>
@@ -15047,6 +15178,188 @@ function closeNavTab(closeBtn) {
     }
   }
 }
+</script>
+
+<!-- Top nav overflow — tab strip with ResizeObserver-based overflow management -->
+<script>
+(function () {
+  var TAB_WIDTH = 130;
+  var MORE_WIDTH = 26;
+  var GAP = 8;
+
+  var tabs = [
+    { id: 1, label: 'Ticket #4401',   active: true  },
+    { id: 2, label: 'Asset #AM-2301', active: false },
+    { id: 3, label: 'Contract #891',  active: false },
+    { id: 4, label: 'Invoice #1192',  active: false },
+    { id: 5, label: 'Ticket #4822',   active: false },
+    { id: 6, label: 'Asset #AM-4401', active: false },
+    { id: 7, label: 'Project #33',    active: false },
+    { id: 8, label: 'Report Q1-2026', active: false },
+  ];
+
+  var strip  = document.getElementById('tnav-strip');
+  var header = document.getElementById('tnav-header');
+  if (!strip || !header) return;
+
+  function calcVisible() {
+    var w = strip.offsetWidth;
+    var n = tabs.length;
+    if (n === 0) return 0;
+    var allFitWidth = (TAB_WIDTH + GAP) * n - GAP;
+    if (allFitWidth <= w) return n;
+    var count = Math.floor((w - MORE_WIDTH) / (TAB_WIDTH + GAP));
+    return Math.max(0, Math.min(count, n - 1));
+  }
+
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function tabHTML(tab) {
+    return '<div class="ds-nav-tab' + (tab.active ? ' is-active' : '') + '"' +
+      ' role="button" tabindex="0"' +
+      ' aria-pressed="' + tab.active + '"' +
+      ' aria-label="' + esc(tab.label) + (tab.active ? ' tab \u2014 active' : ' tab') + '"' +
+      ' onclick="tnavActivate(' + tab.id + ')"' +
+      ' onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();tnavActivate(' + tab.id + ')}">' +
+      '<div class="ds-nav-tab__content">' +
+      '<span class="ds-nav-tab__label">' + esc(tab.label) + '</span>' +
+      '<button class="ds-nav-tab__close" type="button" aria-label="Close ' + esc(tab.label) + ' tab"' +
+      ' onclick="event.stopPropagation();tnavClose(' + tab.id + ')">' +
+      '<span class="ds-icon" aria-hidden="true">close_small</span>' +
+      '</button>' +
+      '</div>' +
+      '</div>';
+  }
+
+  function renderStrip() {
+    var visCount = calcVisible();
+    var visible  = tabs.slice(0, visCount);
+    var overflow = tabs.slice(visCount);
+
+    var html = visible.map(tabHTML).join('');
+
+    if (overflow.length > 0) {
+      html += '<div class="ds-top-nav__more-wrapper" id="tnav-more-wrapper">' +
+        '<div class="ds-nav-tab ds-nav-tab--more" role="button" tabindex="0"' +
+        ' aria-label="More tabs (' + overflow.length + ')" onclick="tnavTogglePanel()"' +
+        ' onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();tnavTogglePanel()}">' +
+        '<div class="ds-nav-tab__content">' +
+        '<span class="ds-nav-tab__label">...</span>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    }
+
+    strip.innerHTML = html;
+    closePanel();
+  }
+
+  function closePanel() {
+    var p = header.querySelector('.ds-top-nav__more-panel');
+    if (p) p.remove();
+  }
+
+  window.tnavTogglePanel = function () {
+    if (header.querySelector('.ds-top-nav__more-panel')) { closePanel(); return; }
+
+    var wrapper    = document.getElementById('tnav-more-wrapper');
+    var headerRect = header.getBoundingClientRect();
+    var wrapperRect = wrapper ? wrapper.getBoundingClientRect() : { left: headerRect.left };
+    var panelLeft  = Math.round(wrapperRect.left - headerRect.left);
+
+    var visCount = calcVisible();
+    var overflow = tabs.slice(visCount);
+
+    var items = overflow.map(function (tab) {
+      return '<li class="ds-top-nav__more-item' + (tab.active ? ' is-active' : '') + '"' +
+        ' role="menuitem" tabindex="0"' +
+        ' aria-label="' + esc(tab.label) + (tab.active ? ' \u2014 active' : '') + '"' +
+        ' onclick="tnavActivate(' + tab.id + ')"' +
+        ' onkeydown="tnavItemKey(event,' + tab.id + ')">' +
+        '<span class="ds-top-nav__more-item-label">' + esc(tab.label) + '</span>' +
+        '<button class="ds-top-nav__more-item-close" type="button" aria-label="Close ' + esc(tab.label) + ' tab"' +
+        ' onclick="event.stopPropagation();tnavClose(' + tab.id + ')">' +
+        '<span class="ds-icon ds-icon--xs" aria-hidden="true">close_small</span>' +
+        '</button>' +
+        '</li>';
+    }).join('');
+
+    var panelHTML =
+      '<div class="ds-top-nav__more-panel" id="tnav-panel" role="menu" aria-label="More tabs"' +
+      ' style="left:' + panelLeft + 'px;"' +
+      ' onkeydown="tnavPanelKey(event)">' +
+      '<ul class="ds-top-nav__more-list" role="none">' + items + '</ul>' +
+      '<div class="ds-top-nav__more-footer">' +
+      '<button class="ds-top-nav__more-close-all" type="button" onclick="tnavCloseAll()">Close all tabs</button>' +
+      '</div>' +
+      '</div>';
+
+    header.insertAdjacentHTML('beforeend', panelHTML);
+  };
+
+  window.tnavItemKey = function (event, id) {
+    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); tnavActivate(id); }
+  };
+
+  window.tnavPanelKey = function (event) {
+    var panel = document.getElementById('tnav-panel');
+    if (!panel) return;
+    var items = Array.from(panel.querySelectorAll('.ds-top-nav__more-item'));
+    var idx   = items.indexOf(document.activeElement);
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      items[(idx + 1) % items.length].focus();
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      items[(idx - 1 + items.length) % items.length].focus();
+    } else if (event.key === 'Escape') {
+      event.stopPropagation();
+      closePanel();
+      var moreBtn = document.querySelector('#tnav-more-wrapper .ds-nav-tab--more');
+      if (moreBtn) moreBtn.focus();
+    }
+  };
+
+  window.tnavActivate = function (id) {
+    tabs.forEach(function (t) { t.active = t.id === id; });
+    renderStrip();
+  };
+
+  window.tnavClose = function (id) {
+    var tab = tabs.find(function (t) { return t.id === id; });
+    var wasActive = tab && tab.active;
+    tabs = tabs.filter(function (t) { return t.id !== id; });
+    if (wasActive && tabs.length > 0) tabs[tabs.length - 1].active = true;
+    renderStrip();
+  };
+
+  window.tnavCloseAll = function () {
+    tabs = [];
+    renderStrip();
+  };
+
+  // Close panel on outside click or Escape
+  document.addEventListener('click', function (e) {
+    if (header && !header.contains(e.target)) closePanel();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (header && header.querySelector('.ds-top-nav__more-panel')) {
+        closePanel();
+        var moreBtn = document.querySelector('#tnav-more-wrapper .ds-nav-tab--more');
+        if (moreBtn) moreBtn.focus();
+      }
+    }
+  });
+
+  // Initial render + resize observer
+  renderStrip();
+  if (window.ResizeObserver) {
+    new ResizeObserver(renderStrip).observe(strip);
+  }
+}());
 </script>
 
 <!-- Text fields: keyboard-only focus ring — suppress ring when focus came from pointer -->

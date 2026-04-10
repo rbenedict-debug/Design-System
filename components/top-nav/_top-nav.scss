@@ -7,53 +7,39 @@
 // buttons on the right (Chatsy, Notifications, New, Help,
 // Profile). The tab strip uses ds-nav-tab primitives.
 //
+// When the visible tabs overflow the available strip width the
+// rightmost slot collapses into a ds-nav-tab--more indicator
+// (26 px, shows "..."). Clicking it opens an overflow panel
+// listing the hidden tabs — each row has a close button, and a
+// "Close all tabs" footer button clears all tabs at once.
+//
 // Usage (HTML class API):
 //   <header class="ds-top-nav" role="banner">
-//     <div class="ds-top-nav__tabs">
+//     <div class="ds-top-nav__tabs" id="myTabStrip">
 //       <div class="ds-nav-tab is-active" ...>...</div>
 //       <div class="ds-nav-tab" ...>...</div>
+//       <!-- more-wrapper + panel rendered by JS -->
 //     </div>
 //     <div class="ds-top-nav__actions">
-//       <button class="ds-top-nav__action-btn" type="button" aria-label="Chatsy">
-//         <svg aria-hidden="true" viewBox="0 0 18 18" ...><!-- Chatsy brand SVG --></svg>
-//       </button>
-//       <div class="ds-top-nav__action-badge">
-//         <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange"
-//                 type="button" aria-label="Notifications, 3 new">
-//           <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
-//         </button>
-//         <div class="ds-badge-indicator" aria-hidden="true">3</div>
-//       </div>
-//       <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green"
-//               type="button" aria-label="New">
-//         <span class="ds-icon" aria-hidden="true">add_2</span>
-//       </button>
-//       <button class="ds-top-nav__action-btn" type="button" aria-label="Help">
-//         <span class="ds-icon ds-icon--filled" aria-hidden="true">person_raised_hand</span>
-//       </button>
-//       <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy"
-//               type="button" aria-label="Profile — Rebecca B.">
-//         R
-//       </button>
+//       <button class="ds-top-nav__action-btn" ...>...</button>
 //     </div>
 //   </header>
 //
 // Angular:
-//   <ds-top-nav>
-//     <ds-nav-tab label="Ticket #4401" [active]="true"
-//       (tabClick)="activate(0)" (tabClose)="close(0)" />
-//     <ds-nav-tab label="Asset #123"
-//       (tabClick)="activate(1)" (tabClose)="close(1)" />
-//
-//     <div top-nav-actions>
-//       <!-- action buttons projected into right slot -->
-//     </div>
+//   <ds-top-nav
+//     [tabs]="tabItems"
+//     (tabActivate)="activate($event)"
+//     (tabClose)="close($event)"
+//     (tabCloseAll)="closeAll()">
+//     <div top-nav-actions><!-- action buttons --></div>
 //   </ds-top-nav>
 //
 // Figma: composition/top-nav
 // Angular Material: none — custom composition
 // ADA: role="banner" on the header element;
-//      all action icon buttons require aria-label
+//      all action icon buttons require aria-label;
+//      overflow panel: role="menu" + role="menuitem" per item;
+//      arrow keys navigate items; Escape closes panel
 // ============================================================
 
 .ds-top-nav {
@@ -70,6 +56,9 @@
   background: var(--color-surface-page);
   border-bottom: 2px solid var(--color-border-brand);
 
+  // Required so the overflow panel (position: absolute) is contained here
+  position: relative;
+
   // ── Tabs area ────────────────────────────────────────────────────────────
   // Tabs sit at the bottom of the bar — items-end so they flush to the
   // bottom border, giving the appearance of growing up from it.
@@ -82,6 +71,154 @@
     height: 100%;
     min-width: 0;
     overflow: hidden;
+  }
+
+  // ── More wrapper — anchors the more tab inside the strip ─────────────────
+  // The panel itself is rendered at the header level to escape overflow:hidden.
+
+  &__more-wrapper {
+    flex-shrink: 0;
+    align-self: flex-end;
+  }
+
+  // ── Overflow / more panel ────────────────────────────────────────────────
+  // Positioned absolutely relative to .ds-top-nav (position: relative above).
+  // top: 100% = 65px below the bar. left is set inline by the Angular
+  // component (or by JS in the preview) to align with the more button.
+
+  &__more-panel {
+    position: absolute;
+    top: 100%;
+    margin-top: 4px;
+    z-index: 200;
+    min-width: 220px;
+    max-width: 300px;
+    background: var(--color-surface-page);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    box-shadow:
+      var(--shadow-elevation-2),
+      0 2px 8px 0 rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  // ── Panel list ───────────────────────────────────────────────────────────
+
+  &__more-list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: var(--spacing-xs) 0;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+
+  // ── Panel row ────────────────────────────────────────────────────────────
+
+  &__more-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    height: 36px;
+    padding: 0 var(--spacing-xs) 0 var(--spacing-md);
+    cursor: pointer;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    &:hover::after  { background: var(--overlay-hovered); }
+    &:active::after { background: var(--overlay-pressed); }
+
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
+
+    // Active tab label is brand blue + bold
+    &.is-active .ds-top-nav__more-item-label {
+      color: var(--color-text-brand);
+      font-weight: var(--ref-typeface-weight-bold);
+    }
+  }
+
+  &__more-item-label {
+    flex: 1 0 0;
+    min-width: 0;
+    font-family: var(--ref-typescale-body-small-font);
+    font-size: var(--ref-typescale-body-small-size);
+    font-weight: var(--ref-typescale-body-small-weight);
+    line-height: var(--ref-typescale-body-small-line-height);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__more-item-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    color: var(--color-icon-subtle);
+    position: relative;
+    z-index: 1;
+
+    &:hover   { background: var(--overlay-hovered); color: var(--color-icon-default); }
+    &:active  { background: var(--overlay-pressed); }
+    &:focus   { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+  }
+
+  // ── Panel footer ─────────────────────────────────────────────────────────
+
+  &__more-footer {
+    border-top: 1px solid var(--color-border-subtle);
+    padding: var(--spacing-xs);
+  }
+
+  &__more-close-all {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 32px;
+    padding: 0 var(--spacing-sm);
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: var(--ref-typescale-label-small-font);
+    font-size: var(--ref-typescale-label-small-size);
+    font-weight: var(--ref-typescale-label-small-weight-prominent);
+    line-height: var(--ref-typescale-label-small-line-height);
+    color: var(--color-text-accent-red);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    &:hover::after  { background: var(--overlay-accent-red-hovered); }
+    &:active::after { background: var(--overlay-accent-red-pressed); }
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
   }
 
   // ── Right-side action buttons area ───────────────────────────────────────
