@@ -298,7 +298,7 @@ export class DsRichTextEditorComponent implements OnInit, OnDestroy {
 
   /** Escape key closes the expand modal (bubbles from host). */
   @HostListener('keydown.escape', ['$event'])
-  onEscape(event: KeyboardEvent): void {
+  onEscape(event: Event): void {
     if (this.isExpanded) {
       event.stopPropagation();
       this.closeExpand();

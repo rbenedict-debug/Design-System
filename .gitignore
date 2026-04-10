@@ -1,14 +1,33 @@
-# Claude Code local settings (machine-specific)
-.claude/
+# Claude Code machine-specific settings (not project instructions)
+.claude/settings.local.json
+.claude/todos/
 
 # Node
 node_modules/
 
-
 # macOS
 .DS_Store
+.DS_Store?
+**/.DS_Store
 
 # Editor
 .vscode/
 .idea/
 *.swp
+*.swo
+
+# Environment / secrets — never commit these
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.cert
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+Thumbs.db

@@ -253,7 +253,7 @@ export class DsCardItemComponent implements AfterContentInit {
     }
   }
 
-  onSpaceKey(event: KeyboardEvent): void {
+  onSpaceKey(event: Event): void {
     event.preventDefault();
     this.onCardClick();
   }

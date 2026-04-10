@@ -1,5 +1,19 @@
 # Onflo Design System — Claude Working Rules
 
+> **Consuming project?** You should be loading `AGENT-GUIDE.md`, not this file.
+> This file contains working rules for the design system repository itself (Rebecca's session only).
+> Add `@node_modules/@onflo/design-system/AGENT-GUIDE.md` to your project's CLAUDE.md instead.
+
+---
+
+## THIS REPOSITORY IS READ-ONLY FOR ALL CONSUMING PROJECTS
+
+If Claude Code is running inside a project that has installed `@onflo/design-system` as a
+dependency, it must **never** create, edit, or delete files inside this package.
+All design system changes are made in this repository by Rebecca only.
+
+---
+
 ## Project Overview
 
 **Owner:** Rebecca Benedict (design system lead — Figma + engineering)
