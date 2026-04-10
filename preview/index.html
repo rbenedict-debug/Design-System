@@ -6445,7 +6445,6 @@
 }
 .ds-modal__tabs {
   flex-shrink: 0;
-  border-bottom: 1px solid var(--color-border-subtle);
 }
 .ds-modal__body {
   flex: 1 0 0;
@@ -11276,11 +11275,13 @@
                 <header class="ds-modal__header ds-modal__header--with-tabs">
                   <h2 class="ds-modal__title" id="modal-demo-title-3">Modal Title</h2>
                 </header>
-                <div class="ds-modal__tabs" role="tablist" aria-label="Modal sections">
-                  <button class="ds-tab is-selected" type="button" role="tab" aria-selected="true">Details</button>
-                  <button class="ds-tab" type="button" role="tab" aria-selected="false">Settings</button>
-                  <button class="ds-tab" type="button" role="tab" aria-selected="false">History</button>
-                  <button class="ds-tab" type="button" role="tab" aria-selected="false">Notes</button>
+                <div class="ds-modal__tabs">
+                  <div class="ds-tabs" role="tablist" aria-label="Modal sections">
+                    <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Details</button>
+                    <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Settings</button>
+                    <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">History</button>
+                    <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Notes</button>
+                  </div>
                 </div>
                 <div class="ds-modal__body" style="padding: var(--spacing-lg, 16px);">
                   <p style="font-size: var(--ref-typescale-body-medium-size, 14px); line-height: var(--ref-typescale-body-medium-line-height, 20px); color: var(--color-text-primary, #2d3638); margin: 0 0 12px;">Tabs variant — a tab row sits directly below the header with no gap. The tab row has a bottom border that acts as the container rule. Body content scrolls independently of the header and tabs.</p>
@@ -11337,10 +11338,12 @@
           <header class="ds-modal__header ds-modal__header--with-tabs">
             <h2 class="ds-modal__title" id="modal-interactive-title">Edit Asset</h2>
           </header>
-          <div class="ds-modal__tabs" role="tablist" aria-label="Asset sections">
-            <button class="ds-tab is-selected" type="button" role="tab" aria-selected="true" onclick="setModalTab(this, 'tab1')">Details</button>
-            <button class="ds-tab" type="button" role="tab" aria-selected="false" onclick="setModalTab(this, 'tab2')">Settings</button>
-            <button class="ds-tab" type="button" role="tab" aria-selected="false" onclick="setModalTab(this, 'tab3')">History</button>
+          <div class="ds-modal__tabs">
+            <div class="ds-tabs" role="tablist" aria-label="Asset sections">
+              <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0" onclick="setModalTab(this, 'tab1')">Details</button>
+              <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1" onclick="setModalTab(this, 'tab2')">Settings</button>
+              <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1" onclick="setModalTab(this, 'tab3')">History</button>
+            </div>
           </div>
           <div class="ds-modal__body" style="padding: var(--spacing-lg, 16px);">
             <div id="modal-tab1">
@@ -11395,8 +11398,14 @@
       <script>
         function setModalTab(btn, tabId) {
           var tabBtns = btn.closest('[role="tablist"]').querySelectorAll('[role="tab"]');
-          tabBtns.forEach(function(b) { b.classList.remove('is-selected'); b.setAttribute('aria-selected', 'false'); });
-          btn.classList.add('is-selected'); btn.setAttribute('aria-selected', 'true');
+          tabBtns.forEach(function(b) {
+            b.classList.remove('is-selected');
+            b.setAttribute('aria-selected', 'false');
+            b.setAttribute('tabindex', '-1');
+          });
+          btn.classList.add('is-selected');
+          btn.setAttribute('aria-selected', 'true');
+          btn.setAttribute('tabindex', '0');
           ['tab1','tab2','tab3'].forEach(function(id) {
             var el = document.getElementById('modal-' + id);
             if (el) el.style.display = (id === tabId) ? '' : 'none';

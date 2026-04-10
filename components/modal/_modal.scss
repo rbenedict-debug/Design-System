@@ -162,12 +162,10 @@
 
   // ── Tabs slot ─────────────────────────────────────────────────────────────
 
-  // Tabs sit flush below the header when present. The ds-tabs component
-  // renders its own bottom border (the active indicator). We add a container
-  // border-bottom here to visually separate the tab row from the body.
+  // Wrapper for a ds-tabs component placed below the header.
+  // ds-tabs provides its own border-bottom — no additional border needed here.
   &__tabs {
     flex-shrink: 0;
-    border-bottom: 1px solid var(--color-border-subtle);
   }
 
   // ── Body (always scrollable) ──────────────────────────────────────────────
