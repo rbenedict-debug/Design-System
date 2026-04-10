@@ -5,8 +5,6 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-export type DsDialogAlign = 'left' | 'center';
-
 /**
  * Onflo Design System — Dialog
  *
@@ -22,7 +20,7 @@ export type DsDialogAlign = 'left' | 'center';
  *
  * @example
  *   <!-- Angular component -->
- *   <ds-dialog titleId="confirm-dlg" align="left">
+ *   <ds-dialog titleId="confirm-dlg">
  *     <div dialog-body>
  *       <h2 class="ds-dialog__title" id="confirm-dlg">Confirm delete?</h2>
  *       <p class="ds-dialog__text">This action cannot be undone.</p>
@@ -47,9 +45,6 @@ export type DsDialogAlign = 'left' | 'center';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DsDialogComponent {
-  /** Text alignment of the body and actions row. Default: 'left'. */
-  @Input() align: DsDialogAlign = 'left';
-
   /** Whether to render the divider line between body and actions. Default: true. */
   @Input() showDivider = true;
 
