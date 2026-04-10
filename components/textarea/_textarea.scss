@@ -27,10 +27,10 @@
 
   &__label {
     font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typescale-label-medium-weight-prominent);
-    line-height: var(--ref-typescale-label-medium-line-height);
-    color: var(--color-text-secondary);
+    font-size: var(--ref-typescale-label-small-size);
+    font-weight: var(--ref-typescale-label-small-weight-prominent);
+    line-height: var(--ref-typescale-label-small-line-height);
+    color: var(--color-text-primary);
     user-select: none;
   }
 
@@ -43,6 +43,8 @@
 
   &__field {
     display: flex;
+    position: relative;
+    overflow: hidden;
     background: var(--color-surface-input);
     border: 1px solid var(--color-border-input);
     border-radius: var(--radius-sm);
@@ -76,11 +78,38 @@
     line-height: 1.5;
     color: var(--color-text-primary);
     caret-color: var(--color-border-input-active);
-    resize: vertical;
+    resize: none;
 
     &::placeholder { color: var(--color-text-placeholder); }
-    &:disabled { cursor: not-allowed; resize: none; }
-    &[readonly] { cursor: default; resize: none; }
+    &:disabled { cursor: not-allowed; }
+    &[readonly] { cursor: default; }
+  }
+
+  // ── Resize handle ─────────────────────────────────────────────────────────
+  // Matches the ds-rich-text-editor resize handle style exactly.
+  // Positioned at the bottom-right of __field; clipped to border-radius by
+  // __field's overflow: hidden.
+
+  &__resize-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 3px;
+    cursor: s-resize;
+    color: var(--color-icon-subtle);
+    z-index: 2;
+  }
+
+  // ── Resize drag lock ──────────────────────────────────────────────────────
+
+  &.is-resizing {
+    cursor: s-resize !important;
+    user-select: none;
   }
 
   // ── Helper / error text ───────────────────────────────────────────────────
@@ -97,7 +126,7 @@
 
   &.is-error {
     .ds-textarea__field   { border-color: var(--color-border-input-error); }
-    // NOTE: label color intentionally NOT set — label stays --color-text-secondary
+    // NOTE: label color intentionally NOT set — label stays --color-text-primary
     .ds-textarea__helper  { color: var(--color-text-error); }
 
     &:focus-within .ds-textarea__field {
@@ -115,18 +144,20 @@
   &.is-disabled {
     pointer-events: none;
 
-    .ds-textarea__field   { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
-    .ds-textarea__label   { color: var(--color-text-disabled); }
-    .ds-textarea__control { color: var(--color-text-disabled); }
-    .ds-textarea__helper  { color: var(--color-text-disabled); }
+    .ds-textarea__field          { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
+    .ds-textarea__label          { color: var(--color-text-disabled); }
+    .ds-textarea__control        { color: var(--color-text-disabled); }
+    .ds-textarea__helper         { color: var(--color-text-disabled); }
+    .ds-textarea__resize-handle  { display: none; }
   }
 
 
   // ── Read-only state ───────────────────────────────────────────────────────
 
   &.is-readonly {
-    .ds-textarea__field   { background: var(--color-surface-default); border-color: var(--color-border-subtle); cursor: default; }
-    .ds-textarea__control { cursor: default; color: var(--color-text-secondary); }
+    .ds-textarea__field          { background: var(--color-surface-default); border-color: var(--color-border-subtle); cursor: default; }
+    .ds-textarea__control        { cursor: default; color: var(--color-text-secondary); }
+    .ds-textarea__resize-handle  { display: none; }
   }
 }
 
@@ -143,6 +174,9 @@
 
   // mat-form-field fills the column width
   .mat-mdc-form-field { width: 100%; }
+
+  // ── Field wrapper (Angular template wraps mat-form-field for handle positioning)
+  &__field-wrap { position: relative; }
 
   // ── Shape and colors — default ────────────────────────────────────────────
 
@@ -172,10 +206,10 @@
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
-  // Textarea resizes vertically; min-height 96px (80px control + 2×8px padding)
+  // Textarea min-height 96px (80px control + 2×8px padding); JS drag handles resize
   .mdc-text-field__input {
     min-height: 80px;
-    resize: vertical;
+    resize: none;
   }
 
   // ── Focus ring — keyboard only (composite wrapper pattern) ───────────────
@@ -203,10 +237,9 @@
     --mdc-outlined-text-field-disabled-input-text-color:  var(--color-text-disabled);
     --mdc-outlined-text-field-disabled-outline-opacity:   1;
 
-    .mat-mdc-text-field-wrapper { background: var(--color-surface-input-disabled); }
-    .ds-textarea__label         { color: var(--color-text-disabled); }
-    .ds-textarea__helper        { color: var(--color-text-disabled); }
-    .mdc-text-field__input      { resize: none; }
+    .mat-mdc-text-field-wrapper        { background: var(--color-surface-input-disabled); }
+    .ds-textarea__label                { color: var(--color-text-disabled); }
+    .ds-textarea__helper               { color: var(--color-text-disabled); }
   }
 
   // ── Read-only state ───────────────────────────────────────────────────────
@@ -216,6 +249,6 @@
     --mdc-outlined-text-field-hover-outline-color: var(--color-border-subtle);
 
     .mat-mdc-text-field-wrapper { background: var(--color-surface-default); cursor: default; }
-    .mdc-text-field__input      { cursor: default; color: var(--color-text-secondary); resize: none; }
+    .mdc-text-field__input      { cursor: default; color: var(--color-text-secondary); }
   }
 }

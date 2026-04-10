@@ -24,7 +24,11 @@
     (input)="onInput($event)"
   >
 
-  <!-- Error icon — shown in error state (no static arrow in autocomplete) -->
+  <!-- Arrow icon — always shown except in error state -->
+  <span *ngIf="!isError" matSuffix
+    class="ds-icon ds-icon--sm ds-autocomplete__arrow" aria-hidden="true">arrow_drop_down</span>
+
+  <!-- Error icon — replaces arrow in error state -->
   <span *ngIf="isError && !disabled" matSuffix
     class="ds-icon ds-icon--sm ds-icon--filled ds-autocomplete__error-icon" aria-hidden="true">error</span>
 

@@ -3,25 +3,43 @@
   {{ label }}<span *ngIf="required" class="ds-textarea__required" aria-hidden="true">*</span>
 </label>
 
-<!-- mat-form-field owns the field box, border, and matInput textarea -->
-<mat-form-field
-  appearance="outline"
-  subscriptSizing="dynamic"
-  class="ds-textarea__field-wrapper"
->
-  <textarea
-    matInput
-    [id]="textareaId"
-    [placeholder]="placeholder"
-    [rows]="rows"
-    [disabled]="disabled"
-    [readonly]="readOnly"
-    [required]="required"
-    [attr.aria-invalid]="isError ? 'true' : null"
-    [attr.aria-describedby]="(helperText || errorText) ? textareaId + '-helper' : null"
-    (input)="onInput($event)"
-  >{{ value }}</textarea>
-</mat-form-field>
+<!-- Field wrapper — provides positioning context for the custom resize handle -->
+<div class="ds-textarea__field-wrap">
+
+  <!-- mat-form-field owns the field box, border, and matInput textarea -->
+  <mat-form-field
+    appearance="outline"
+    subscriptSizing="dynamic"
+    class="ds-textarea__field-wrapper"
+  >
+    <textarea
+      matInput
+      [id]="textareaId"
+      [placeholder]="placeholder"
+      [rows]="rows"
+      [disabled]="disabled"
+      [readonly]="readOnly"
+      [required]="required"
+      [attr.aria-invalid]="isError ? 'true' : null"
+      [attr.aria-describedby]="(helperText || errorText) ? textareaId + '-helper' : null"
+      (input)="onInput($event)"
+    >{{ value }}</textarea>
+  </mat-form-field>
+
+  <!-- Custom resize handle — matches ds-rich-text-editor style -->
+  @if (!disabled && !readOnly) {
+    <div
+      class="ds-textarea__resize-handle"
+      aria-hidden="true"
+      (mousedown)="onResizeStart($event)"
+    >
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+        <path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+  }
+
+</div><!-- /.ds-textarea__field-wrap -->
 
 <!-- Helper / error text — external, below the field -->
 <span

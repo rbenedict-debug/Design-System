@@ -36,10 +36,10 @@
 
   &__label {
     font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typescale-label-medium-weight-prominent);
-    line-height: var(--ref-typescale-label-medium-line-height);
-    color: var(--color-text-secondary);
+    font-size: var(--ref-typescale-label-small-size);
+    font-weight: var(--ref-typescale-label-small-weight-prominent);
+    line-height: var(--ref-typescale-label-small-line-height);
+    color: var(--color-text-primary);
     user-select: none;
   }
 

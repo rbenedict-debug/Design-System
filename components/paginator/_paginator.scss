@@ -9,11 +9,23 @@
 //   <div class="ds-paginator" role="navigation" aria-label="Pagination">
 //     <div class="ds-paginator__page-size">
 //       <span class="ds-paginator__label">Rows per page:</span>
-//       <select class="ds-paginator__select">
-//         <option>10</option>
-//         <option>25</option>
-//         <option>50</option>
-//       </select>
+//       <!-- Use ds-select CSS class API (branded interactive dropdown) — not a native <select> -->
+//       <div class="ds-select ds-paginator__select">
+//         <div class="ds-select__field-row">
+//           <div class="ds-select__field">
+//             <input type="text" class="ds-select__control" value="25"
+//                    role="combobox" aria-haspopup="listbox" aria-label="Rows per page">
+//             <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+//           </div>
+//           <div class="ds-select__dropdown" role="listbox" aria-label="Rows per page">
+//             <div class="ds-menu">
+//               <button class="ds-menu__item" role="option" data-label="10">10</button>
+//               <button class="ds-menu__item ds-menu__item--selected" role="option" data-label="25">25</button>
+//               <button class="ds-menu__item" role="option" data-label="50">50</button>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
 //     </div>
 //     <div class="ds-paginator__range-label">1 – 10 of 243</div>
 //     <div class="ds-paginator__nav">

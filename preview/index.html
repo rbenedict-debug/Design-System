@@ -1622,10 +1622,10 @@
 }
 .ds-input__label {
   font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-medium-size);
-  font-weight: var(--ref-typescale-label-medium-weight-prominent);
-  line-height: var(--ref-typescale-label-medium-line-height);
-  color: var(--color-text-secondary);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+  color: var(--color-text-primary);
   user-select: none;
 }
 .ds-input__required {
@@ -2777,10 +2777,10 @@
 }
 .ds-select__label {
   font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-medium-size);
-  font-weight: var(--ref-typescale-label-medium-weight-prominent);
-  line-height: var(--ref-typescale-label-medium-line-height);
-  color: var(--color-text-secondary);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+  color: var(--color-text-primary);
   user-select: none;
 }
 .ds-select__required {
@@ -2918,14 +2918,14 @@
   right: 0;
   margin-top: 4px;
   z-index: 1000;
-  overflow-y: auto;
-  max-height: 256px;
   box-sizing: border-box;
 }
 .ds-select__dropdown .ds-menu {
   width: 100%;
   min-width: 0;
   max-width: none;
+  overflow-y: auto;
+  max-height: 256px;
 }
 .ds-select__dropdown.is-open {
   display: block;
@@ -3021,6 +3021,8 @@
   scrollbar-width: thin;
 }
 .ds-select__panel .mat-mdc-option {
+  display: flex;
+  align-items: center;
   min-height: 40px;
   padding: 0 var(--spacing-lg);
   font-family: var(--ref-typeface-brand);
@@ -3059,10 +3061,10 @@
 }
 .ds-autocomplete__label {
   font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-medium-size);
-  font-weight: var(--ref-typescale-label-medium-weight-prominent);
-  line-height: var(--ref-typescale-label-medium-line-height);
-  color: var(--color-text-secondary);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+  color: var(--color-text-primary);
   user-select: none;
 }
 .ds-autocomplete__required {
@@ -3115,6 +3117,15 @@
   line-height: var(--ref-typescale-body-small-line-height);
   color: var(--color-text-secondary);
 }
+.ds-autocomplete__arrow {
+  color: var(--color-icon-subtle);
+  flex-shrink: 0;
+  pointer-events: none;
+  transition: transform 0.15s ease;
+}
+.ds-autocomplete:focus-within:not(.is-error) .ds-autocomplete__arrow {
+  color: var(--color-icon-brand);
+}
 .ds-autocomplete__error-icon {
   color: var(--color-icon-error);
   flex-shrink: 0;
@@ -3125,6 +3136,9 @@
 }
 .ds-autocomplete.is-error .ds-autocomplete__helper {
   color: var(--color-text-error);
+}
+.ds-autocomplete.is-error .ds-autocomplete__arrow {
+  display: none;
 }
 .ds-autocomplete.is-error:focus-within .ds-autocomplete__field {
   border-color: var(--color-border-input-error);
@@ -3144,6 +3158,9 @@
 }
 .ds-autocomplete.is-disabled .ds-autocomplete__control {
   color: var(--color-text-disabled);
+}
+.ds-autocomplete.is-disabled .ds-autocomplete__arrow {
+  color: var(--color-icon-disabled);
 }
 .ds-autocomplete.is-disabled .ds-autocomplete__helper {
   color: var(--color-text-disabled);
@@ -3189,6 +3206,9 @@
   padding: 0 var(--spacing-md);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
+.ds-autocomplete:focus-within:not(.is-error) .ds-autocomplete__arrow {
+  color: var(--color-icon-brand);
+}
 .ds-autocomplete:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
@@ -3206,6 +3226,9 @@
 }
 .ds-autocomplete.is-disabled .mat-mdc-text-field-wrapper {
   background: var(--color-surface-input-disabled);
+}
+.ds-autocomplete.is-disabled .ds-autocomplete__arrow {
+  color: var(--color-icon-disabled);
 }
 .ds-autocomplete.is-readonly {
   --mdc-outlined-text-field-outline-color: var(--color-border-subtle);
@@ -3238,6 +3261,8 @@
   scrollbar-width: thin;
 }
 .ds-autocomplete__panel .mat-mdc-option {
+  display: flex;
+  align-items: center;
   min-height: 40px;
   padding: 0 var(--spacing-lg);
   font-family: var(--ref-typeface-brand);
@@ -3276,10 +3301,10 @@
 }
 .ds-textarea__label {
   font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-medium-size);
-  font-weight: var(--ref-typescale-label-medium-weight-prominent);
-  line-height: var(--ref-typescale-label-medium-line-height);
-  color: var(--color-text-secondary);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+  color: var(--color-text-primary);
   user-select: none;
 }
 .ds-textarea__required {
@@ -3288,6 +3313,8 @@
 }
 .ds-textarea__field {
   display: flex;
+  position: relative;
+  overflow: hidden;
   background: var(--color-surface-input);
   border: 1px solid var(--color-border-input);
   border-radius: var(--radius-sm);
@@ -3317,18 +3344,34 @@
   line-height: 1.5;
   color: var(--color-text-primary);
   caret-color: var(--color-border-input-active);
-  resize: vertical;
+  resize: none;
 }
 .ds-textarea__control::placeholder {
   color: var(--color-text-placeholder);
 }
 .ds-textarea__control:disabled {
   cursor: not-allowed;
-  resize: none;
 }
 .ds-textarea__control[readonly] {
   cursor: default;
-  resize: none;
+}
+.ds-textarea__resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 3px;
+  cursor: s-resize;
+  color: var(--color-icon-subtle);
+  z-index: 2;
+}
+.ds-textarea.is-resizing {
+  cursor: s-resize !important;
+  user-select: none;
 }
 .ds-textarea__helper {
   font-family: var(--ref-typeface-plain);
@@ -3364,6 +3407,9 @@
 .ds-textarea.is-disabled .ds-textarea__helper {
   color: var(--color-text-disabled);
 }
+.ds-textarea.is-disabled .ds-textarea__resize-handle {
+  display: none;
+}
 .ds-textarea.is-readonly .ds-textarea__field {
   background: var(--color-surface-default);
   border-color: var(--color-border-subtle);
@@ -3373,9 +3419,15 @@
   cursor: default;
   color: var(--color-text-secondary);
 }
+.ds-textarea.is-readonly .ds-textarea__resize-handle {
+  display: none;
+}
 
 .ds-textarea .mat-mdc-form-field {
   width: 100%;
+}
+.ds-textarea__field-wrap {
+  position: relative;
 }
 .ds-textarea {
   --mdc-outlined-text-field-container-shape: var(--radius-sm);
@@ -3404,7 +3456,7 @@
 }
 .ds-textarea .mdc-text-field__input {
   min-height: 80px;
-  resize: vertical;
+  resize: none;
 }
 .ds-textarea:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
@@ -3431,9 +3483,6 @@
 .ds-textarea.is-disabled .ds-textarea__helper {
   color: var(--color-text-disabled);
 }
-.ds-textarea.is-disabled .mdc-text-field__input {
-  resize: none;
-}
 .ds-textarea.is-readonly {
   --mdc-outlined-text-field-outline-color: var(--color-border-subtle);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-subtle);
@@ -3445,7 +3494,6 @@
 .ds-textarea.is-readonly .mdc-text-field__input {
   cursor: default;
   color: var(--color-text-secondary);
-  resize: none;
 }
 
 .ds-avatar {
@@ -7027,10 +7075,10 @@
 .ds-datepicker__label,
 .ds-date-range-picker__label {
   font-family: var(--ref-typeface-brand);
-  font-size: var(--ref-typescale-label-medium-size);
-  font-weight: var(--ref-typescale-label-medium-weight-prominent);
-  line-height: var(--ref-typescale-label-medium-line-height);
-  color: var(--color-text-secondary);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+  color: var(--color-text-primary);
   user-select: none;
 }
 .ds-datepicker__required,
@@ -7790,6 +7838,79 @@
   border-radius: 0 var(--radius-full) var(--radius-full) 0;
 }
 
+/* ── Date Picker live demo field wrappers (preview-only) ─────────────────── */
+/* Replaces static ds-input__field mockup with functional native date inputs.
+   The calendar popup reuses .ds-datepicker-cal-mock styles and is positioned
+   absolutely via JS — matching the Angular Material calendar popup appearance. */
+
+/* Popup overlay positioning */
+.ds-datepicker-cal-popup {
+  position: absolute;
+  z-index: 9999;
+}
+
+.dp-demo-field {
+  display: flex;
+  align-items: center;
+  height: 42px;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-input);
+  padding: 0 0 0 var(--spacing-md);
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  gap: 2px;
+}
+.dp-demo-field:hover { border-color: var(--color-border-input-hover); }
+.dp-demo-field:focus-within { border-color: var(--color-border-input-active); }
+.dp-demo-field input[type="date"] {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-medium-size);
+  color: var(--color-text-primary);
+  min-width: 0;
+  cursor: text;
+  padding: 0;
+}
+/* Hide the browser's built-in calendar icon — our button replaces it */
+.dp-demo-field input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
+.dp-demo-field__icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 100%;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-icon-subtle);
+  cursor: pointer;
+  padding: 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  transition: color 0.1s ease;
+}
+.dp-demo-field__icon-btn:hover { color: var(--color-icon-default); }
+.dp-demo-field__icon-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring);
+}
+.dp-demo-field--error { border-color: var(--color-border-input-error) !important; }
+.dp-demo-field--disabled {
+  background: var(--color-surface-input-disabled);
+  border-color: var(--color-border-subtle);
+  pointer-events: none;
+}
+.dp-demo-sep {
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-medium-size);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+  user-select: none;
+}
+
 /* ── Page Layout Pattern ──────────────────────────────────────────────────── */
 
 .ds-page-layout {
@@ -7998,6 +8119,7 @@
     <nav class="sidebar-nav" id="nav-components" style="display:none">
       <div class="nav-group-label">Form Controls</div>
       <a class="nav-link" href="#input" onclick="setActive(this)"><span class="nav-dot"></span>Input Field</a>
+      <a class="nav-link" href="#search" onclick="setActive(this)"><span class="nav-dot"></span>Search Field</a>
       <a class="nav-link" href="#select" onclick="setActive(this)"><span class="nav-dot"></span>Select</a>
       <a class="nav-link" href="#autocomplete" onclick="setActive(this)"><span class="nav-dot"></span>Autocomplete</a>
       <a class="nav-link" href="#textarea" onclick="setActive(this)"><span class="nav-dot"></span>Textarea</a>
@@ -8006,7 +8128,6 @@
       <a class="nav-link" href="#checkbox" onclick="setActive(this)"><span class="nav-dot"></span>Checkbox</a>
       <a class="nav-link" href="#radio" onclick="setActive(this)"><span class="nav-dot"></span>Radio Button</a>
       <a class="nav-link" href="#toggle" onclick="setActive(this)"><span class="nav-dot"></span>Toggle</a>
-      <a class="nav-link" href="#search" onclick="setActive(this)"><span class="nav-dot"></span>Search Field</a>
 
       <div class="nav-group-label">Actions</div>
       <a class="nav-link" href="#button" onclick="setActive(this)"><span class="nav-dot"></span>Button</a>
@@ -8574,16 +8695,6 @@
             <div class="demo-row-label">With Icons</div>
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-input" style="width:220px;">
-                <label class="ds-input__label" for="inp-search">Search</label>
-                <div class="ds-input__field">
-                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
-                  <input id="inp-search" class="ds-input__control" type="search" placeholder="Search..." />
-                  <button class="ds-input__action" type="button" aria-label="Clear search">
-                    <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
-                  </button>
-                </div>
-              </div>
-              <div class="ds-input" style="width:220px;">
                 <label class="ds-input__label" for="inp-pass">Password</label>
                 <div class="ds-input__field">
                   <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">lock</span>
@@ -8666,14 +8777,132 @@
 
         </div>
       </section>
+      <section class="section" id="search">
+        <div class="section-header">
+          <h2 class="section-title">Search Field</h2>
+          <span class="section-source">components/search/_search.scss</span>
+        </div>
+        <p class="section-desc">A search input for filtering or finding content. A variant of ds-input — uses <code>ds-input</code> + <code>ds-search</code> classes on the wrapper. Shows a leading search icon and a clear button when text is present. Focus ring only appears on keyboard navigation (Tab key), not on mouse click.</p>
+
+        <div class="component-demo">
+
+          <!-- Default / empty states -->
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items">
+              <div class="ds-input ds-search" role="search" style="width:320px;">
+                <div class="ds-input__field">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                  <input class="ds-input__control" type="search" placeholder="Search" aria-label="Search" />
+                </div>
+              </div>
+              <div class="ds-input ds-search" role="search" style="width:320px;">
+                <div class="ds-input__field">
+                  <input class="ds-input__control" type="search" placeholder="Search (no icon)" aria-label="Search" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulated hover -->
+          <div class="demo-row">
+            <div class="demo-row-label">Hover</div>
+            <div class="demo-row-items">
+              <div class="ds-input ds-search" role="search" style="width:320px;">
+                <div class="ds-input__field" style="border-color: var(--color-border-input-hover);">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                  <input class="ds-input__control" type="search" placeholder="Search" aria-label="Search" />
+                </div>
+              </div>
+              <div class="ds-input ds-search" role="search" style="width:320px;">
+                <div class="ds-input__field" style="border-color: var(--color-border-input-hover);">
+                  <input class="ds-input__control" type="search" placeholder="Search (no icon)" aria-label="Search" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulated focus (keyboard — with ADA ring) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Focus (keyboard)</div>
+            <div class="demo-row-items">
+              <div class="ds-input ds-search" role="search" style="width:320px;">
+                <div class="ds-input__field" style="border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                  <input class="ds-input__control" type="search" placeholder="Search" aria-label="Search" />
+                </div>
+              </div>
+              <div class="ds-input ds-search" role="search" style="width:320px;">
+                <div class="ds-input__field" style="border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);">
+                  <input class="ds-input__control" type="search" placeholder="Search (no icon)" aria-label="Search" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- With value + clear button -->
+          <div class="demo-row">
+            <div class="demo-row-label">With value</div>
+            <div class="demo-row-items">
+              <div class="ds-input ds-search" role="search" style="width:320px;">
+                <div class="ds-input__field">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                  <input class="ds-input__control" type="search" value="Invoice" aria-label="Search" />
+                  <button class="ds-input__action" type="button" aria-label="Clear search"><span class="ds-icon ds-icon--sm" aria-hidden="true">close</span></button>
+                </div>
+              </div>
+              <div class="ds-input ds-search" role="search" style="width:320px;">
+                <div class="ds-input__field">
+                  <input class="ds-input__control" type="search" value="Invoice" aria-label="Search" />
+                  <button class="ds-input__action" type="button" aria-label="Clear search"><span class="ds-icon ds-icon--sm" aria-hidden="true">close</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Disabled -->
+          <div class="demo-row">
+            <div class="demo-row-label">Disabled</div>
+            <div class="demo-row-items">
+              <div class="ds-input ds-search is-disabled" role="search" style="width:320px;">
+                <div class="ds-input__field">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                  <input class="ds-input__control" type="search" placeholder="Search" aria-label="Search" disabled />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live demo — try typing -->
+          <div class="demo-row">
+            <div class="demo-row-label">Live demo</div>
+            <div class="demo-row-items">
+              <div class="ds-input ds-search" role="search" style="width:400px;" id="live-search-wrapper">
+                <div class="ds-input__field">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                  <input class="ds-input__control" type="search" placeholder="Search items…" aria-label="Search items"
+                    oninput="document.getElementById('live-clear').style.display = this.value ? 'flex' : 'none';"
+                    id="live-search-input" />
+                  <button class="ds-input__action" type="button" aria-label="Clear search" id="live-clear" style="display:none;"
+                    onclick="document.getElementById('live-search-input').value=''; this.style.display='none'; document.getElementById('live-search-input').focus();">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
       <section class="section" id="select">
         <div class="section-header">
           <h2 class="section-title">Select / Dropdown</h2>
           <p class="section-desc">
   Same 42px height and visual treatment as Input Field. Angular component uses <code>MatSelectModule</code>
   — <code>mat-select</code> inside <code>mat-form-field</code> provides <code>role="listbox"</code>,
-  keyboard navigation, and screen reader announcements. CSS class API uses a native <code>&lt;select&gt;</code>
-  inside <code>.ds-select__field</code>. Use <code>class="ds-select"</code> or <code>&lt;ds-select&gt;</code>.
+  keyboard navigation, and screen reader announcements. CSS class API uses a branded interactive dropdown
+  (<code>.ds-select__field-row</code> + <code>.ds-select__dropdown</code> + <code>.ds-menu</code> panel).
+  Use <code>class="ds-select"</code> or <code>&lt;ds-select&gt;</code>.
   Source: <code>components/select/_select.scss</code>
 </p>
         </div>
@@ -8687,28 +8916,51 @@
               <!-- No selection — placeholder -->
               <div class="ds-select" style="width:220px;">
                 <label class="ds-select__label" for="sel-default">Plan</label>
-                <div class="ds-select__field">
-                  <select id="sel-default" class="ds-select__control">
-                    <option value="" disabled selected>Select a plan...</option>
-                    <option value="free">Free</option>
-                    <option value="pro">Pro — $12/mo</option>
-                    <option value="enterprise">Enterprise</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                <div class="ds-select__field-row">
+                  <div class="ds-select__field" onclick="document.getElementById('sel-default').focus()">
+                    <input type="text" id="sel-default" class="ds-select__control"
+                           value="" data-default-placeholder="Select a plan..."
+                           placeholder="Select a plan..."
+                           autocomplete="off" spellcheck="false"
+                           role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                           aria-controls="sel-default-menu" aria-label="Plan"
+                           onfocus="dsSelectOpen('sel-default')"
+                           oninput="dsSelectFilter('sel-default', this.value)"
+                           onblur="dsSelectBlur('sel-default', event)">
+                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                  </div>
+                  <div class="ds-select__dropdown" id="sel-default-menu" role="listbox" aria-label="Plan">
+                    <div class="ds-menu">
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Free" onclick="dsSelectOption('sel-default', this)">Free</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Pro — $12/mo" onclick="dsSelectOption('sel-default', this)">Pro — $12/mo</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Enterprise" onclick="dsSelectOption('sel-default', this)">Enterprise</button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <!-- Pre-selected value -->
               <div class="ds-select" style="width:220px;">
                 <label class="ds-select__label" for="sel-selected">Country</label>
-                <div class="ds-select__field">
-                  <select id="sel-selected" class="ds-select__control">
-                    <option value="" disabled>Select country...</option>
-                    <option value="us" selected>United States</option>
-                    <option value="ca">Canada</option>
-                    <option value="uk">United Kingdom</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                <div class="ds-select__field-row">
+                  <div class="ds-select__field" onclick="document.getElementById('sel-selected').focus()">
+                    <input type="text" id="sel-selected" class="ds-select__control"
+                           value="United States" data-default-placeholder=""
+                           autocomplete="off" spellcheck="false"
+                           role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                           aria-controls="sel-selected-menu" aria-label="Country"
+                           onfocus="dsSelectOpen('sel-selected')"
+                           oninput="dsSelectFilter('sel-selected', this.value)"
+                           onblur="dsSelectBlur('sel-selected', event)">
+                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                  </div>
+                  <div class="ds-select__dropdown" id="sel-selected-menu" role="listbox" aria-label="Country">
+                    <div class="ds-menu">
+                      <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="United States" onclick="dsSelectOption('sel-selected', this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>United States</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Canada" onclick="dsSelectOption('sel-selected', this)">Canada</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="United Kingdom" onclick="dsSelectOption('sel-selected', this)">United Kingdom</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -8720,14 +8972,26 @@
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-select" style="width:220px;">
                 <label class="ds-select__label" for="sel-helper">Timezone</label>
-                <div class="ds-select__field">
-                  <select id="sel-helper" class="ds-select__control">
-                    <option value="" disabled selected>Select timezone...</option>
-                    <option value="et">Eastern (UTC-5)</option>
-                    <option value="ct">Central (UTC-6)</option>
-                    <option value="pt">Pacific (UTC-8)</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                <div class="ds-select__field-row">
+                  <div class="ds-select__field" onclick="document.getElementById('sel-helper').focus()">
+                    <input type="text" id="sel-helper" class="ds-select__control"
+                           value="" data-default-placeholder="Select timezone..."
+                           placeholder="Select timezone..."
+                           autocomplete="off" spellcheck="false"
+                           role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                           aria-controls="sel-helper-menu" aria-label="Timezone"
+                           onfocus="dsSelectOpen('sel-helper')"
+                           oninput="dsSelectFilter('sel-helper', this.value)"
+                           onblur="dsSelectBlur('sel-helper', event)">
+                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                  </div>
+                  <div class="ds-select__dropdown" id="sel-helper-menu" role="listbox" aria-label="Timezone">
+                    <div class="ds-menu">
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Eastern (UTC-5)" onclick="dsSelectOption('sel-helper', this)">Eastern (UTC-5)</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Central (UTC-6)" onclick="dsSelectOption('sel-helper', this)">Central (UTC-6)</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Pacific (UTC-8)" onclick="dsSelectOption('sel-helper', this)">Pacific (UTC-8)</button>
+                    </div>
+                  </div>
                 </div>
                 <span class="ds-select__helper">Affects all scheduled reports.</span>
               </div>
@@ -8740,15 +9004,27 @@
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-select is-error" style="width:220px;">
                 <label class="ds-select__label" for="sel-error">Role<span class="ds-select__required" aria-hidden="true">*</span></label>
-                <div class="ds-select__field">
-                  <select id="sel-error" class="ds-select__control"
-                          aria-invalid="true" aria-describedby="sel-error-helper">
-                    <option value="" disabled selected>Select a role...</option>
-                    <option value="admin">Admin</option>
-                    <option value="member">Member</option>
-                    <option value="viewer">Viewer</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon" aria-hidden="true">error</span>
+                <div class="ds-select__field-row">
+                  <div class="ds-select__field" onclick="document.getElementById('sel-error').focus()">
+                    <input type="text" id="sel-error" class="ds-select__control"
+                           value="" data-default-placeholder="Select a role..."
+                           placeholder="Select a role..."
+                           autocomplete="off" spellcheck="false"
+                           role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                           aria-controls="sel-error-menu" aria-label="Role"
+                           aria-invalid="true" aria-describedby="sel-error-helper"
+                           onfocus="dsSelectOpen('sel-error')"
+                           oninput="dsSelectFilter('sel-error', this.value)"
+                           onblur="dsSelectBlur('sel-error', event)">
+                    <span class="ds-icon ds-icon--sm ds-icon--filled ds-select__error-icon" aria-hidden="true">error</span>
+                  </div>
+                  <div class="ds-select__dropdown" id="sel-error-menu" role="listbox" aria-label="Role">
+                    <div class="ds-menu">
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Admin" onclick="dsSelectOption('sel-error', this)">Admin</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Member" onclick="dsSelectOption('sel-error', this)">Member</button>
+                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="Viewer" onclick="dsSelectOption('sel-error', this)">Viewer</button>
+                    </div>
+                  </div>
                 </div>
                 <span class="ds-select__helper" id="sel-error-helper" role="alert">Please select a role.</span>
               </div>
@@ -8761,11 +9037,12 @@
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-select is-disabled" style="width:220px;">
                 <label class="ds-select__label" for="sel-disabled">Subscription</label>
-                <div class="ds-select__field">
-                  <select id="sel-disabled" class="ds-select__control" disabled>
-                    <option value="enterprise" selected>Enterprise</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                <div class="ds-select__field-row">
+                  <div class="ds-select__field">
+                    <input type="text" id="sel-disabled" class="ds-select__control"
+                           value="Enterprise" disabled aria-label="Subscription">
+                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                  </div>
                 </div>
                 <span class="ds-select__helper">Contact sales to change your plan.</span>
               </div>
@@ -8782,46 +9059,38 @@
   The dropdown panel and all filtering logic are owned by the consumer — this component provides only
   the input field chrome. Angular component uses <code>MatAutocompleteModule</code> + <code>MatInputModule</code>;
   pass a <code>&lt;mat-autocomplete&gt;</code> ref via <code>[panel]</code>.
-  The static preview below shows the field states only — the live dropdown requires Angular.
+  The demo below includes a working interactive dropdown (CSS class API) — focus the field or start typing to see options filter. In Angular, the consumer provides the <code>&lt;mat-autocomplete&gt;</code> panel and filtering logic.
   Source: <code>components/autocomplete/_autocomplete.scss</code>
 </p>
         </div>
         <div class="component-demo">
 
-          <!-- Default -->
+          <!-- With Dropdown (live interactive demo) -->
           <div class="demo-row">
-            <div class="demo-row-label">Default</div>
-            <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
-
-              <!-- Empty / placeholder -->
-              <div class="ds-autocomplete" style="width:240px;">
-                <label class="ds-autocomplete__label" for="ac-default">Assignee</label>
-                <div class="ds-autocomplete__field">
-                  <input id="ac-default" class="ds-autocomplete__control" type="text" placeholder="Search people...">
-                </div>
-              </div>
-
-              <!-- With typed value -->
-              <div class="ds-autocomplete" style="width:240px;">
-                <label class="ds-autocomplete__label" for="ac-value">Tag</label>
-                <div class="ds-autocomplete__field">
-                  <input id="ac-value" class="ds-autocomplete__control" type="text" value="bug">
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- With Helper -->
-          <div class="demo-row">
-            <div class="demo-row-label">With Helper</div>
+            <div class="demo-row-label">With Dropdown</div>
             <div class="demo-row-items" style="align-items:flex-start; gap:24px; flex-wrap:wrap;">
               <div class="ds-autocomplete" style="width:240px;">
-                <label class="ds-autocomplete__label" for="ac-helper">Product</label>
-                <div class="ds-autocomplete__field">
-                  <input id="ac-helper" class="ds-autocomplete__control" type="text" placeholder="Search products...">
+                <label class="ds-autocomplete__label" for="ac-live">Assignee</label>
+                <div style="position:relative;">
+                  <div class="ds-autocomplete__field">
+                    <input id="ac-live" class="ds-autocomplete__control" type="text"
+                           placeholder="Search people..." autocomplete="off"
+                           role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                           aria-controls="ac-live-panel"
+                           onfocus="dsAcOpen('ac-live')"
+                           oninput="dsAcFilter('ac-live', this.value)"
+                           onblur="dsAcBlur('ac-live', event)">
+                    <span class="ds-icon ds-icon--sm ds-autocomplete__arrow" aria-hidden="true">arrow_drop_down</span>
+                  </div>
+                  <div id="ac-live-panel" class="ds-autocomplete__panel" role="listbox" aria-labelledby="ac-live"
+                       style="display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; z-index:100;">
+                    <div class="mat-mdc-option" role="option" tabindex="-1" style="cursor:pointer;" onclick="dsAcSelect('ac-live', 'Alice Chen')">Alice Chen</div>
+                    <div class="mat-mdc-option" role="option" tabindex="-1" style="cursor:pointer;" onclick="dsAcSelect('ac-live', 'Bob Miller')">Bob Miller</div>
+                    <div class="mat-mdc-option" role="option" tabindex="-1" style="cursor:pointer;" onclick="dsAcSelect('ac-live', 'Carol White')">Carol White</div>
+                    <div class="mat-mdc-option" role="option" tabindex="-1" style="cursor:pointer;" onclick="dsAcSelect('ac-live', 'David Lee')">David Lee</div>
+                    <div class="mat-mdc-option" role="option" tabindex="-1" style="cursor:pointer;" onclick="dsAcSelect('ac-live', 'Eva Torres')">Eva Torres</div>
+                  </div>
                 </div>
-                <span class="ds-autocomplete__helper">Start typing to filter results.</span>
               </div>
             </div>
           </div>
@@ -8852,6 +9121,7 @@
                 <div class="ds-autocomplete__field">
                   <input id="ac-disabled" class="ds-autocomplete__control" type="text"
                          value="Infrastructure" disabled>
+                  <span class="ds-icon ds-icon--sm ds-autocomplete__arrow" aria-hidden="true">arrow_drop_down</span>
                 </div>
                 <span class="ds-autocomplete__helper">Editing is not available.</span>
               </div>
@@ -8861,6 +9131,7 @@
                 <div class="ds-autocomplete__field">
                   <input id="ac-readonly" class="ds-autocomplete__control" type="text"
                          value="Zendesk" readonly>
+                  <span class="ds-icon ds-icon--sm ds-autocomplete__arrow" aria-hidden="true">arrow_drop_down</span>
                 </div>
                 <span class="ds-autocomplete__helper">Set automatically from the ticket.</span>
               </div>
@@ -8888,12 +9159,18 @@
                 <label class="ds-textarea__label" for="ta-default">Description</label>
                 <div class="ds-textarea__field">
                   <textarea id="ta-default" class="ds-textarea__control" rows="4" placeholder="Write a short description..."></textarea>
+                  <div class="ds-textarea__resize-handle" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  </div>
                 </div>
               </div>
               <div class="ds-textarea" style="width:280px;">
                 <label class="ds-textarea__label" for="ta-helper">Notes</label>
                 <div class="ds-textarea__field">
                   <textarea id="ta-helper" class="ds-textarea__control" rows="3" placeholder="Add notes..."></textarea>
+                  <div class="ds-textarea__resize-handle" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  </div>
                 </div>
                 <span class="ds-textarea__helper">Visible only to team members.</span>
               </div>
@@ -8907,6 +9184,9 @@
                 <label class="ds-textarea__label" for="ta-error">Summary<span class="ds-textarea__required">*</span></label>
                 <div class="ds-textarea__field">
                   <textarea id="ta-error" class="ds-textarea__control" rows="3" aria-invalid="true"></textarea>
+                  <div class="ds-textarea__resize-handle" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M9 3L3 9M9 7L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  </div>
                 </div>
                 <span class="ds-textarea__helper" role="alert">Summary is required.</span>
               </div>
@@ -8942,7 +9222,7 @@
           <span class="section-source">components/datepicker/_datepicker.scss</span>
         </div>
         <p class="section-desc">
-Single date picker (<code>ds-datepicker</code>) and date range picker (<code>ds-date-range-picker</code>) — both styled identically to ds-input: 42px height, same label, helper, and error token usage. Built on Angular Material <code>MatDatepickerModule</code> + <code>MatNativeDateModule</code>. The calendar popup is globally styled via <code>.mat-datepicker-content</code> overrides. The demo below shows field states; the calendar popup appears live when using the Angular components.
+Single date picker (<code>ds-datepicker</code>) and date range picker (<code>ds-date-range-picker</code>) — both styled identically to ds-input: 42px height, same label, helper, and error token usage. Built on Angular Material <code>MatDatepickerModule</code> + <code>MatNativeDateModule</code>. The calendar popup is globally styled via <code>.mat-datepicker-content</code> overrides. The preview demos below use native <code>&lt;input type="date"&gt;</code> — click the field to type a date manually, or click the calendar icon to open the browser date picker. The calendar popup mockup shows the Onflo-themed Angular Material popup design.
 Source: <code>components/datepicker/_datepicker.scss</code>
         </p>
 
@@ -8954,18 +9234,20 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div class="demo-row-items" style="align-items: flex-start; gap: 24px; flex-wrap: wrap;">
               <div class="ds-datepicker" style="width: 220px;">
                 <label class="ds-datepicker__label" for="dp-default">Appointment date</label>
-                <div class="ds-input__field" style="cursor: text;">
-                  <input id="dp-default" class="ds-input__control" type="text" placeholder="MM/DD/YYYY" />
-                  <button class="ds-input__action" type="button" aria-label="Open date picker">
+                <div class="dp-demo-field">
+                  <input id="dp-default" type="date" />
+                  <button class="dp-demo-field__icon-btn" type="button" aria-label="Open date picker"
+                          onclick="openDatePicker('dp-default')">
                     <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
                   </button>
                 </div>
               </div>
               <div class="ds-datepicker" style="width: 220px;">
                 <label class="ds-datepicker__label" for="dp-filled">Due date</label>
-                <div class="ds-input__field" style="cursor: text;">
-                  <input id="dp-filled" class="ds-input__control" type="text" value="04/15/2026" />
-                  <button class="ds-input__action" type="button" aria-label="Open date picker">
+                <div class="dp-demo-field">
+                  <input id="dp-filled" type="date" value="2026-04-15" />
+                  <button class="dp-demo-field__icon-btn" type="button" aria-label="Open date picker"
+                          onclick="openDatePicker('dp-filled')">
                     <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
                   </button>
                 </div>
@@ -8978,19 +9260,23 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <div class="demo-row">
             <div class="demo-row-label">Single — error</div>
             <div class="demo-row-items" style="align-items: flex-start; gap: 24px; flex-wrap: wrap;">
-              <div class="ds-datepicker is-error" style="width: 220px;">
-                <label class="ds-datepicker__label" for="dp-err">Start date<span class="ds-input__required" aria-hidden="true">*</span></label>
-                <div class="ds-input__field" style="border-color: var(--color-border-input-error);">
-                  <input id="dp-err" class="ds-input__control" type="text" placeholder="MM/DD/YYYY" aria-invalid="true" />
-                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-input__error-icon" aria-hidden="true">error</span>
+              <div class="ds-datepicker" style="width: 220px;">
+                <label class="ds-datepicker__label" for="dp-err">Start date<span class="ds-datepicker__required" aria-hidden="true">*</span></label>
+                <div class="dp-demo-field dp-demo-field--error">
+                  <input id="dp-err" type="date" aria-invalid="true" />
+                  <span class="dp-demo-field__icon-btn" aria-hidden="true" style="color: var(--color-icon-error); cursor: default;">
+                    <span class="ds-icon ds-icon--sm ds-icon--filled">error</span>
+                  </span>
                 </div>
                 <span class="ds-datepicker__helper" style="color: var(--color-text-error);" role="alert">Date is required.</span>
               </div>
-              <div class="ds-datepicker is-error" style="width: 220px;">
+              <div class="ds-datepicker" style="width: 220px;">
                 <label class="ds-datepicker__label" for="dp-err2">End date</label>
-                <div class="ds-input__field" style="border-color: var(--color-border-input-error);">
-                  <input id="dp-err2" class="ds-input__control" type="text" value="01/01/2020" aria-invalid="true" />
-                  <span class="ds-icon ds-icon--sm ds-icon--filled ds-input__error-icon" aria-hidden="true">error</span>
+                <div class="dp-demo-field dp-demo-field--error">
+                  <input id="dp-err2" type="date" value="2020-01-01" aria-invalid="true" />
+                  <span class="dp-demo-field__icon-btn" aria-hidden="true" style="color: var(--color-icon-error); cursor: default;">
+                    <span class="ds-icon ds-icon--sm ds-icon--filled">error</span>
+                  </span>
                 </div>
                 <span class="ds-datepicker__helper" style="color: var(--color-text-error);" role="alert">Date cannot be in the past.</span>
               </div>
@@ -9001,11 +9287,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <div class="demo-row">
             <div class="demo-row-label">Single — disabled</div>
             <div class="demo-row-items" style="align-items: flex-start; gap: 24px; flex-wrap: wrap;">
-              <div class="ds-datepicker is-disabled" style="width: 220px;">
-                <label class="ds-datepicker__label" for="dp-dis">Contract date</label>
-                <div class="ds-input__field" style="background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle);">
-                  <input id="dp-dis" class="ds-input__control" type="text" value="03/01/2026" disabled />
-                  <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-disabled);" aria-hidden="true">calendar_today</span>
+              <div class="ds-datepicker" style="width: 220px;">
+                <label class="ds-datepicker__label" style="color: var(--color-text-disabled);" for="dp-dis">Contract date</label>
+                <div class="dp-demo-field dp-demo-field--disabled">
+                  <input id="dp-dis" type="date" value="2026-03-01" disabled />
+                  <span class="dp-demo-field__icon-btn" aria-hidden="true" style="color: var(--color-icon-disabled); cursor: default;">
+                    <span class="ds-icon ds-icon--sm">calendar_today</span>
+                  </span>
                 </div>
                 <span class="ds-datepicker__helper" style="color: var(--color-text-disabled);">Set by the system.</span>
               </div>
@@ -9016,28 +9304,30 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <div class="demo-row">
             <div class="demo-row-label">Range — default</div>
             <div class="demo-row-items" style="align-items: flex-start; gap: 24px; flex-wrap: wrap;">
-              <div class="ds-datepicker" style="width: 280px;">
-                <label class="ds-datepicker__label" for="drp-start">Stay dates</label>
-                <div class="ds-input__field" style="cursor: text; gap: 4px;">
-                  <input id="drp-start" class="ds-input__control" type="text" placeholder="Check-in" style="min-width: 0; width: 90px; flex: 1;" />
-                  <span style="color: var(--color-text-secondary); font-family: var(--ref-typeface-brand); font-size: var(--ref-typescale-label-medium-size); flex-shrink: 0;">–</span>
-                  <input class="ds-input__control" type="text" placeholder="Check-out" style="min-width: 0; width: 90px; flex: 1;" />
-                  <button class="ds-input__action" type="button" aria-label="Open date range picker" style="flex-shrink: 0;">
+              <div class="ds-date-range-picker" style="width: 300px;">
+                <label class="ds-date-range-picker__label" for="drp-start">Stay dates</label>
+                <div class="dp-demo-field">
+                  <input id="drp-start" type="date" style="min-width: 0;" />
+                  <span class="dp-demo-sep" aria-hidden="true">–</span>
+                  <input id="drp-end" type="date" style="min-width: 0;" />
+                  <button class="dp-demo-field__icon-btn" type="button" aria-label="Open start date picker"
+                          onclick="openDatePicker('drp-start','drp-end')">
                     <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
                   </button>
                 </div>
               </div>
-              <div class="ds-datepicker" style="width: 280px;">
-                <label class="ds-datepicker__label" for="drp-start2">Report period</label>
-                <div class="ds-input__field" style="cursor: text; gap: 4px;">
-                  <input id="drp-start2" class="ds-input__control" type="text" value="04/01/2026" style="min-width: 0; width: 90px; flex: 1;" />
-                  <span style="color: var(--color-text-secondary); font-family: var(--ref-typeface-brand); font-size: var(--ref-typescale-label-medium-size); flex-shrink: 0;">–</span>
-                  <input class="ds-input__control" type="text" value="04/30/2026" style="min-width: 0; width: 90px; flex: 1;" />
-                  <button class="ds-input__action" type="button" aria-label="Open date range picker" style="flex-shrink: 0;">
+              <div class="ds-date-range-picker" style="width: 300px;">
+                <label class="ds-date-range-picker__label" for="drp-start2">Report period</label>
+                <div class="dp-demo-field">
+                  <input id="drp-start2" type="date" value="2026-04-01" style="min-width: 0;" />
+                  <span class="dp-demo-sep" aria-hidden="true">–</span>
+                  <input id="drp-end2" type="date" value="2026-04-30" style="min-width: 0;" />
+                  <button class="dp-demo-field__icon-btn" type="button" aria-label="Open start date picker"
+                          onclick="openDatePicker('drp-start2','drp-end2')">
                     <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
                   </button>
                 </div>
-                <span class="ds-datepicker__helper">April 2026</span>
+                <span class="ds-date-range-picker__helper">April 2026</span>
               </div>
             </div>
           </div>
@@ -9690,123 +9980,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
         </div>
       </section>
-      <section class="section" id="search">
-        <div class="section-header">
-          <h2 class="section-title">Search Field</h2>
-          <span class="section-source">components/search/_search.scss</span>
-        </div>
-        <p class="section-desc">A search input for filtering or finding content. A variant of ds-input — uses <code>ds-input</code> + <code>ds-search</code> classes on the wrapper. Shows a leading search icon and a clear button when text is present. Focus ring only appears on keyboard navigation (Tab key), not on mouse click.</p>
-
-        <div class="component-demo">
-
-          <!-- Default / empty states -->
-          <div class="demo-row">
-            <div class="demo-row-label">Default</div>
-            <div class="demo-row-items">
-              <div class="ds-input ds-search" role="search" style="width:320px;">
-                <div class="ds-input__field">
-                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
-                  <input class="ds-input__control" type="search" placeholder="Search" aria-label="Search" />
-                </div>
-              </div>
-              <div class="ds-input ds-search" role="search" style="width:320px;">
-                <div class="ds-input__field">
-                  <input class="ds-input__control" type="search" placeholder="Search (no icon)" aria-label="Search" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Simulated hover -->
-          <div class="demo-row">
-            <div class="demo-row-label">Hover</div>
-            <div class="demo-row-items">
-              <div class="ds-input ds-search" role="search" style="width:320px;">
-                <div class="ds-input__field" style="border-color: var(--color-border-input-hover);">
-                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
-                  <input class="ds-input__control" type="search" placeholder="Search" aria-label="Search" />
-                </div>
-              </div>
-              <div class="ds-input ds-search" role="search" style="width:320px;">
-                <div class="ds-input__field" style="border-color: var(--color-border-input-hover);">
-                  <input class="ds-input__control" type="search" placeholder="Search (no icon)" aria-label="Search" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Simulated focus (keyboard — with ADA ring) -->
-          <div class="demo-row">
-            <div class="demo-row-label">Focus (keyboard)</div>
-            <div class="demo-row-items">
-              <div class="ds-input ds-search" role="search" style="width:320px;">
-                <div class="ds-input__field" style="border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);">
-                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
-                  <input class="ds-input__control" type="search" placeholder="Search" aria-label="Search" />
-                </div>
-              </div>
-              <div class="ds-input ds-search" role="search" style="width:320px;">
-                <div class="ds-input__field" style="border-color: var(--color-border-input-active); box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);">
-                  <input class="ds-input__control" type="search" placeholder="Search (no icon)" aria-label="Search" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- With value + clear button -->
-          <div class="demo-row">
-            <div class="demo-row-label">With value</div>
-            <div class="demo-row-items">
-              <div class="ds-input ds-search" role="search" style="width:320px;">
-                <div class="ds-input__field">
-                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
-                  <input class="ds-input__control" type="search" value="Invoice" aria-label="Search" />
-                  <button class="ds-input__action" type="button" aria-label="Clear search"><span class="ds-icon ds-icon--sm" aria-hidden="true">close</span></button>
-                </div>
-              </div>
-              <div class="ds-input ds-search" role="search" style="width:320px;">
-                <div class="ds-input__field">
-                  <input class="ds-input__control" type="search" value="Invoice" aria-label="Search" />
-                  <button class="ds-input__action" type="button" aria-label="Clear search"><span class="ds-icon ds-icon--sm" aria-hidden="true">close</span></button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Disabled -->
-          <div class="demo-row">
-            <div class="demo-row-label">Disabled</div>
-            <div class="demo-row-items">
-              <div class="ds-input ds-search is-disabled" role="search" style="width:320px;">
-                <div class="ds-input__field">
-                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
-                  <input class="ds-input__control" type="search" placeholder="Search" aria-label="Search" disabled />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Live demo — try typing -->
-          <div class="demo-row">
-            <div class="demo-row-label">Live demo</div>
-            <div class="demo-row-items">
-              <div class="ds-input ds-search" role="search" style="width:400px;" id="live-search-wrapper">
-                <div class="ds-input__field">
-                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
-                  <input class="ds-input__control" type="search" placeholder="Search items…" aria-label="Search items"
-                    oninput="document.getElementById('live-clear').style.display = this.value ? 'flex' : 'none';"
-                    id="live-search-input" />
-                  <button class="ds-input__action" type="button" aria-label="Clear search" id="live-clear" style="display:none;"
-                    onclick="document.getElementById('live-search-input').value=''; this.style.display='none'; document.getElementById('live-search-input').focus();">
-                    <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
       <section class="section" id="button">
         <div class="section-header">
           <h2 class="section-title">Button</h2>
@@ -10121,8 +10294,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           Dropdown and context menus triggered by button click or right-click. Supports icons, dividers,
           section labels, single-select, multi-select (ds-checkbox), search for long dynamic lists, and
           multi-level nested menus. Based on Angular Material <code>MatMenuModule</code> — CDK Overlay
-          handles positioning and keyboard navigation. Add <code>[yOffset]="4"</code> on the trigger for
-          the standard 4px gap; the panel auto-flips above or left/right at viewport edges.
+          handles positioning and keyboard navigation. Control panel direction via <code>[xPosition]</code>
+          and <code>[yPosition]</code> on <code>&lt;ds-menu&gt;</code>; the panel auto-flips at viewport edges.
           Destructive items are neutral by default — red only on hover/active (same as <code>ds-button--destructive</code> text).
         </p>
         <div class="component-demo">
@@ -13863,12 +14036,16 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
-                  <div class="ds-subnav-header">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                  <div class="ds-subnav-header is-expanded">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
                       <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
                       <span class="ds-subnav-header__label">Saved Searches</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
                     </button>
+                    <div class="ds-subnav-header__children">
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
+                    </div>
                   </div>
                 </nav>
 
@@ -14008,12 +14185,16 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
-                  <div class="ds-subnav-header">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                  <div class="ds-subnav-header is-expanded">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
                       <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
                       <span class="ds-subnav-header__label">Saved Searches</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
                     </button>
+                    <div class="ds-subnav-header__children">
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
+                    </div>
                   </div>
                 </nav>
 
@@ -14156,12 +14337,16 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
-                  <div class="ds-subnav-header">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                  <div class="ds-subnav-header is-expanded">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
                       <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
                       <span class="ds-subnav-header__label">Saved Searches</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
                     </button>
+                    <div class="ds-subnav-header__children">
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
+                    </div>
                   </div>
                 </nav>
 
@@ -14297,12 +14482,16 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
-                  <div class="ds-subnav-header">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                  <div class="ds-subnav-header is-expanded">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
                       <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
                       <span class="ds-subnav-header__label">Saved Searches</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
                     </button>
+                    <div class="ds-subnav-header__children">
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
+                    </div>
                   </div>
                 </nav>
 
@@ -14438,12 +14627,16 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
-                  <div class="ds-subnav-header">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                  <div class="ds-subnav-header is-expanded">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
                       <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
                       <span class="ds-subnav-header__label">Saved Searches</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
                     </button>
+                    <div class="ds-subnav-header__children">
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
+                    </div>
                   </div>
                 </nav>
 
@@ -14595,12 +14788,16 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Active</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Pending</button>
                   <button class="ds-subnav-button" type="button" aria-pressed="false">Inactive</button>
-                  <div class="ds-subnav-header">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="false">
+                  <div class="ds-subnav-header is-expanded">
+                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
                       <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
                       <span class="ds-subnav-header__label">Saved Filters</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_right</span>
+                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
                     </button>
+                    <div class="ds-subnav-header__children">
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">High Priority</button>
+                      <button class="ds-subnav-button" type="button" aria-pressed="false">New This Week</button>
+                    </div>
                   </div>
                 </nav>
 
@@ -14940,6 +15137,230 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 </div>
 
 <script>
+  /* ── Date picker calendar popup (preview-only) ───────────────────────────
+     Single mode:  openDatePicker('inputId')             → click once, done.
+     Range mode:   openDatePicker('startId', 'endId')    → 1st click = start,
+       stay open, hover previews range highlight, 2nd click = end, close.
+     Reuses .ds-datepicker-cal-mock CSS for Onflo-styled popup. */
+  (function() {
+    var MONTHS = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+
+    // ── shared state ─────────────────────────────────────────────────────────
+    var s = {
+      el: null, anchor: null,
+      // single
+      input: null,
+      // range
+      isRange: false, startInput: null, endInput: null,
+      phase: 'start',    // 'start' | 'end'
+      pendingStart: null // ISO of first click in range picking
+    };
+
+    // ── utilities ────────────────────────────────────────────────────────────
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function toISO(y, m, d) { return y + '-' + pad(m) + '-' + pad(d); }
+    function parseISO(str) {
+      if (!str || !/^\d{4}-\d{2}-\d{2}$/.test(str)) return null;
+      var p = str.split('-'); return { y:+p[0], m:+p[1], d:+p[2] };
+    }
+    function cmp(a, b) { return a < b ? -1 : a > b ? 1 : 0; }
+    function todayISO() {
+      var t = new Date(); return toISO(t.getFullYear(), t.getMonth()+1, t.getDate());
+    }
+
+    // ── grid ─────────────────────────────────────────────────────────────────
+    // opts: { selectedISO } for single  |  { startISO, endISO } for range
+    function buildGrid(y, m, opts) {
+      var td = todayISO();
+      var g = document.createElement('div');
+      g.className = 'ds-datepicker-cal-mock__grid';
+      ['S','M','T','W','T','F','S'].forEach(function(d) {
+        var sp = document.createElement('span');
+        sp.className = 'ds-datepicker-cal-mock__dow';
+        sp.textContent = d; g.appendChild(sp);
+      });
+      var firstDow = new Date(y, m-1, 1).getDay();
+      var lastD    = new Date(y, m, 0).getDate();
+      var rs = opts.startISO || null, re = opts.endISO || null;
+      for (var i = 0; i < firstDow; i++) g.appendChild(document.createElement('span'));
+      for (var d = 1; d <= lastD; d++) {
+        var iso = toISO(y, m, d);
+        var btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'ds-datepicker-cal-mock__cell';
+        btn.textContent = d; btn.dataset.iso = iso;
+        // today ring — only when cell isn't the filled range endpoint
+        if (iso === td && iso !== rs && iso !== re)
+          btn.classList.add('ds-datepicker-cal-mock__cell--today');
+        // single selection
+        if (opts.selectedISO && iso === opts.selectedISO)
+          btn.classList.add('ds-datepicker-cal-mock__cell--selected');
+        // range highlighting
+        if (rs && re) {
+          if      (iso === rs)                          btn.classList.add('ds-datepicker-cal-mock__cell--range-start');
+          else if (iso === re)                          btn.classList.add('ds-datepicker-cal-mock__cell--range-end');
+          else if (cmp(iso, rs) > 0 && cmp(iso, re) < 0) btn.classList.add('ds-datepicker-cal-mock__cell--in-range');
+        } else if (rs && !re && iso === rs) {
+          // start chosen, waiting for end
+          btn.classList.add('ds-datepicker-cal-mock__cell--range-start');
+        }
+        g.appendChild(btn);
+      }
+      return g;
+    }
+
+    // ── hover range preview ───────────────────────────────────────────────────
+    function applyRangePreview(hoverISO) {
+      if (!s.el || !s.pendingStart) return;
+      var start = s.pendingStart, end = hoverISO;
+      if (cmp(end, start) < 0) { var t = start; start = end; end = t; }
+      s.el.querySelectorAll('[data-iso]').forEach(function(cell) {
+        var iso = cell.dataset.iso;
+        cell.classList.remove(
+          'ds-datepicker-cal-mock__cell--range-start',
+          'ds-datepicker-cal-mock__cell--range-end',
+          'ds-datepicker-cal-mock__cell--in-range'
+        );
+        if      (iso === s.pendingStart)                    cell.classList.add('ds-datepicker-cal-mock__cell--range-start');
+        if      (iso === hoverISO && iso !== s.pendingStart) cell.classList.add('ds-datepicker-cal-mock__cell--range-end');
+        else if (cmp(iso, start) > 0 && cmp(iso, end) < 0) cell.classList.add('ds-datepicker-cal-mock__cell--in-range');
+      });
+    }
+
+    // ── calendar wrapper ──────────────────────────────────────────────────────
+    function buildCal(y, m, opts) {
+      var wrap = document.createElement('div');
+      wrap.className = 'ds-datepicker-cal-mock ds-datepicker-cal-popup';
+      wrap.dataset.y = y; wrap.dataset.m = m;
+
+      // header
+      var hdr = document.createElement('div');
+      hdr.className = 'ds-datepicker-cal-mock__header';
+      function navBtn(label, icon) {
+        var b = document.createElement('button'); b.type = 'button';
+        b.className = 'ds-datepicker-cal-mock__nav'; b.setAttribute('aria-label', label);
+        b.innerHTML = '<span class="ds-icon ds-icon--sm" aria-hidden="true">'+icon+'</span>';
+        return b;
+      }
+      var prev = navBtn('Previous month', 'chevron_left');
+      var period = document.createElement('span');
+      period.className = 'ds-datepicker-cal-mock__period';
+      period.textContent = MONTHS[m-1] + ' ' + y;
+      var next = navBtn('Next month', 'chevron_right');
+      hdr.appendChild(prev); hdr.appendChild(period); hdr.appendChild(next);
+      wrap.appendChild(hdr);
+      wrap.appendChild(buildGrid(y, m, opts));
+
+      prev.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var cy=+s.el.dataset.y, cm=+s.el.dataset.m; cm--; if(cm<1){cm=12;cy--;} rerender(cy,cm);
+      });
+      next.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var cy=+s.el.dataset.y, cm=+s.el.dataset.m; cm++; if(cm>12){cm=1;cy++;} rerender(cy,cm);
+      });
+
+      // cell clicks
+      wrap.addEventListener('click', function(e) {
+        var cell = e.target.closest('[data-iso]');
+        if (!cell) return;
+        if (s.isRange) handleRangeClick(cell.dataset.iso);
+        else           handleSingleClick(cell.dataset.iso);
+      });
+
+      // hover preview (range mode only)
+      if (s.isRange) {
+        wrap.addEventListener('mouseover', function(e) {
+          var cell = e.target.closest('[data-iso]');
+          if (cell && s.phase === 'end') applyRangePreview(cell.dataset.iso);
+        });
+      }
+
+      return wrap;
+    }
+
+    function handleSingleClick(iso) {
+      if (s.input) s.input.value = iso;
+      close();
+    }
+
+    function handleRangeClick(iso) {
+      if (s.phase === 'start') {
+        s.pendingStart = iso;
+        s.phase = 'end';
+        rerender(+s.el.dataset.y, +s.el.dataset.m); // re-render showing start highlighted
+      } else {
+        var start = s.pendingStart, end = iso;
+        if (cmp(end, start) < 0) { var t = start; start = end; end = t; }
+        if (s.startInput) s.startInput.value = start;
+        if (s.endInput)   s.endInput.value   = end;
+        close();
+      }
+    }
+
+    function rerender(y, m) {
+      if (!s.el) return;
+      var opts = s.isRange
+        ? { startISO: s.pendingStart, endISO: null }
+        : { selectedISO: s.input ? s.input.value : '' };
+      var n = buildCal(y, m, opts);
+      s.el.parentNode.replaceChild(n, s.el);
+      s.el = n;
+      positionBelow(n, s.anchor);
+    }
+
+    function positionBelow(el, anchor) {
+      var r = anchor.getBoundingClientRect();
+      el.style.top  = (r.bottom + (window.scrollY||window.pageYOffset) + 4) + 'px';
+      el.style.left = (r.left   + (window.scrollX||window.pageXOffset))     + 'px';
+    }
+
+    function close() {
+      if (s.el && s.el.parentNode) s.el.parentNode.removeChild(s.el);
+      s.el=null; s.anchor=null; s.input=null;
+      s.isRange=false; s.startInput=null; s.endInput=null;
+      s.phase='start'; s.pendingStart=null;
+    }
+
+    // ── public ────────────────────────────────────────────────────────────────
+    window.openDatePicker = function(inputId, endInputId) {
+      var input = document.getElementById(inputId);
+      if (!input) return;
+      var isRange = !!endInputId;
+      // toggle off if same picker already open
+      if (s.el && !isRange && s.input === input)       { close(); return; }
+      if (s.el &&  isRange && s.startInput === input)  { close(); return; }
+      close();
+      var anchor = input.closest('.dp-demo-field') || input;
+      var t = new Date(), sel, y, m;
+      if (isRange) {
+        sel = parseISO(input.value);
+        y = sel ? sel.y : t.getFullYear(); m = sel ? sel.m : t.getMonth()+1;
+        s.isRange=true; s.startInput=input; s.endInput=document.getElementById(endInputId);
+        s.phase='start'; s.pendingStart=null;
+      } else {
+        sel = parseISO(input.value);
+        y = sel ? sel.y : t.getFullYear(); m = sel ? sel.m : t.getMonth()+1;
+        s.input = input;
+      }
+      s.anchor = anchor;
+      var opts = isRange ? { startISO: null, endISO: null } : { selectedISO: input.value };
+      var cal = buildCal(y, m, opts);
+      document.body.appendChild(cal);
+      s.el = cal;
+      positionBelow(cal, anchor);
+    };
+
+    document.addEventListener('click', function(e) {
+      if (!s.el) return;
+      if (s.el.contains(e.target)) return;
+      if (e.target.closest('.dp-demo-field__icon-btn')) return;
+      close();
+    }, true);
+
+    document.addEventListener('keydown', function(e) { if (e.key==='Escape') close(); });
+  })();
+
   function toggleTheme() {
     const html  = document.documentElement;
     const isDark = html.getAttribute('data-theme') === 'dark';
@@ -15057,6 +15478,34 @@ Source: <code>components/datepicker/_datepicker.scss</code>
   if (indetChk) indetChk.indeterminate = true;
   const headerSome = document.getElementById('chk-header-some');
   if (headerSome) headerSome.indeterminate = true;
+
+  // Textarea — custom resize handles (replaces browser native resize: vertical)
+  document.querySelectorAll('.ds-textarea__resize-handle').forEach(function(handle) {
+    var field    = handle.closest('.ds-textarea__field');
+    var textarea = field && field.querySelector('.ds-textarea__control');
+    if (!textarea) return;
+
+    handle.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      var wrapper   = handle.closest('.ds-textarea');
+      var startY    = e.clientY;
+      var startH    = textarea.offsetHeight;
+
+      if (wrapper) wrapper.classList.add('is-resizing');
+
+      function onMove(e) {
+        var newH = Math.max(80, startH + (e.clientY - startY));
+        textarea.style.height = newH + 'px';
+      }
+      function onUp() {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        if (wrapper) wrapper.classList.remove('is-resizing');
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
 
   // Hover card — cursor tracking
   (function () {
@@ -15608,7 +16057,7 @@ function closeNavTab(closeBtn) {
   document.addEventListener('keydown', function () { lastWasMouse = false; }, true);
   document.addEventListener('focusin', function (e) {
     var el = e.target && e.target.closest &&
-      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search'));
+      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search') || e.target.closest('.ds-autocomplete'));
     if (!el) return;
     if (lastWasMouse) { el.setAttribute('data-mouse-focus', ''); }
     else              { el.removeAttribute('data-mouse-focus'); }
@@ -15618,7 +16067,7 @@ function closeNavTab(closeBtn) {
     // Resetting here would clear the flag before the next focusin fires
     // when clicking from one field directly to another.
     var el = e.target && e.target.closest &&
-      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search'));
+      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search') || e.target.closest('.ds-autocomplete'));
     if (el) el.removeAttribute('data-mouse-focus');
   }, true);
 })();
@@ -15766,6 +16215,122 @@ function closeNavTab(closeBtn) {
         menu.querySelectorAll('.ds-menu__item').forEach(function (b) { b.style.display = ''; });
         inp.focus();
       }
+    });
+  });
+})();
+</script>
+
+<!-- Autocomplete: focus to open, type to filter, click to select -->
+<script>
+(function () {
+  function getAcInput(id) { return document.getElementById(id); }
+  function getAcPanel(id) { return document.getElementById(id + '-panel'); }
+
+  window.dsAcOpen = function (inputId) {
+    var inp = getAcInput(inputId);
+    var panel = getAcPanel(inputId);
+    if (!panel || !inp || inp.disabled || inp.readOnly) return;
+    // Show options matching current value (all if empty)
+    window.dsAcFilter(inputId, inp.value);
+  };
+
+  window.dsAcFilter = function (inputId, query) {
+    var panel = getAcPanel(inputId);
+    if (!panel) return;
+    var q = (query || '').toLowerCase();
+    var anyVisible = false;
+    panel.querySelectorAll('.mat-mdc-option').forEach(function (opt) {
+      var text = opt.textContent.trim().toLowerCase();
+      var show = q === '' || text.indexOf(q) !== -1;
+      opt.style.display = show ? '' : 'none';
+      if (show) anyVisible = true;
+    });
+    panel.style.display = anyVisible ? 'block' : 'none';
+    var inp = getAcInput(inputId);
+    if (inp) inp.setAttribute('aria-expanded', anyVisible ? 'true' : 'false');
+  };
+
+  window.dsAcSelect = function (inputId, value) {
+    var inp = getAcInput(inputId);
+    var panel = getAcPanel(inputId);
+    if (!inp || !panel) return;
+    inp.value = value;
+    panel.style.display = 'none';
+    inp.setAttribute('aria-expanded', 'false');
+    inp.focus();
+  };
+
+  window.dsAcBlur = function (inputId, event) {
+    setTimeout(function () {
+      var panel = getAcPanel(inputId);
+      if (!panel) return;
+      // If focus moved inside the panel (e.g. option clicked), don't close
+      if (panel.contains(document.activeElement)) return;
+      panel.style.display = 'none';
+      var inp = getAcInput(inputId);
+      if (inp) inp.setAttribute('aria-expanded', 'false');
+    }, 150);
+  };
+
+  // Close all open autocomplete panels on outside click
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('.ds-autocomplete')) return;
+    document.querySelectorAll('.ds-autocomplete__panel').forEach(function (p) {
+      if (p.style.display === 'block') {
+        p.style.display = 'none';
+        var id = p.id.replace('-panel', '');
+        var inp = document.getElementById(id);
+        if (inp) inp.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }, true);
+
+  // Close on Escape, return focus to input
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    var active = document.activeElement;
+    var wrapper = active && active.closest && active.closest('.ds-autocomplete');
+    if (!wrapper) return;
+    var inp = wrapper.querySelector('input');
+    if (!inp) return;
+    var panel = document.getElementById(inp.id + '-panel');
+    if (panel && panel.style.display === 'block') {
+      panel.style.display = 'none';
+      inp.setAttribute('aria-expanded', 'false');
+      inp.focus();
+      e.preventDefault();
+    }
+  });
+})();
+</script>
+
+<!-- Rich Text Editor: drag-to-resize handle -->
+<script>
+(function () {
+  document.querySelectorAll('.ds-rich-text-editor__resize-handle').forEach(function (handle) {
+    handle.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      var shell = handle.closest('.ds-rich-text-editor');
+      if (!shell) return;
+
+      var startY      = e.clientY;
+      var startHeight = shell.offsetHeight;
+
+      shell.classList.add('is-resizing');
+
+      function onMove(e) {
+        var newHeight = Math.max(120, startHeight + (e.clientY - startY));
+        shell.style.height = newHeight + 'px';
+      }
+
+      function onUp() {
+        shell.classList.remove('is-resizing');
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup',   onUp);
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup',   onUp);
     });
   });
 })();

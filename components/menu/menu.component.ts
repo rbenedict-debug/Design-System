@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatMenuModule, MatMenu } from '@angular/material/menu';
+import { MatMenuModule, MatMenu, MenuPositionX, MenuPositionY } from '@angular/material/menu';
 import { DsSearchComponent } from '../search/search.component';
 
 /**
@@ -13,12 +13,12 @@ import { DsSearchComponent } from '../search/search.component';
  * [matMenuTriggerFor] on the trigger element. Place items inside using
  * mat-menu-item + the ds-menu CSS class API for full styling.
  *
- * Positioning: 4px (--spacing-xs) gap from trigger via [yOffset]="4" on the
- * [matMenuTriggerFor] directive. The CDK overlay auto-flips above or left/right
- * when the panel would overflow the viewport.
+ * Positioning: control panel direction via [xPosition] and [yPosition] on ds-menu.
+ * The CDK overlay auto-flips above or left/right when the panel would overflow
+ * the viewport.
  *
  * @example — Basic menu
- *   <button [matMenuTriggerFor]="myMenu.matMenu" [yOffset]="4">Options</button>
+ *   <button [matMenuTriggerFor]="myMenu.matMenu">Options</button>
  *   <ds-menu #myMenu>
  *     <button mat-menu-item class="ds-menu__item">
  *       <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>Edit
@@ -66,6 +66,12 @@ import { DsSearchComponent } from '../search/search.component';
 export class DsMenuComponent {
   /** Exposes the mat-menu reference for use with [matMenuTriggerFor]. */
   @ViewChild('menu') matMenu!: MatMenu;
+
+  /** Horizontal position of the panel relative to the trigger. Default: 'after'. */
+  @Input() xPosition: MenuPositionX = 'after';
+
+  /** Vertical position of the panel relative to the trigger. Default: 'below'. */
+  @Input() yPosition: MenuPositionY = 'below';
 
   /** Show a sticky search field at the top of the menu panel. */
   @Input() search = false;

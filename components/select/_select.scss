@@ -31,10 +31,10 @@
 
   &__label {
     font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typescale-label-medium-weight-prominent);
-    line-height: var(--ref-typescale-label-medium-line-height);
-    color: var(--color-text-secondary);
+    font-size: var(--ref-typescale-label-small-size);
+    font-weight: var(--ref-typescale-label-small-weight-prominent);
+    line-height: var(--ref-typescale-label-small-line-height);
+    color: var(--color-text-primary);
     user-select: none;
   }
 
@@ -154,7 +154,7 @@
     .ds-select__field   { border-color: var(--color-border-input-error); }
     .ds-select__helper  { color: var(--color-text-error); }
     .ds-select__arrow   { display: none; }
-    // NOTE: label color intentionally NOT set — label stays --color-text-secondary
+    // NOTE: label color intentionally NOT set — label stays --color-text-primary
 
     &:focus-within .ds-select__field {
       border-color: var(--color-border-input-error);
@@ -200,14 +200,16 @@
     right: 0;
     margin-top: 4px;
     z-index: 1000;
-    overflow-y: auto;
-    max-height: 256px;
+    // overflow-y must NOT be set here — any non-visible overflow on a parent clips
+    // the box-shadow of child elements. Scroll is handled by .ds-menu directly.
     box-sizing: border-box;
 
     .ds-menu {
       width: 100%;
       min-width: 0;
       max-width: none;
+      overflow-y: auto;
+      max-height: 256px;
     }
 
     &.is-open {
@@ -334,6 +336,8 @@
   // ── Option items ──────────────────────────────────────────────────────────
 
   .mat-mdc-option {
+    display: flex;
+    align-items: center;
     min-height: 40px;
     padding: 0 var(--spacing-lg);
     font-family: var(--ref-typeface-brand);

@@ -37,10 +37,10 @@
 
   &__label {
     font-family: var(--ref-typeface-brand);
-    font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typescale-label-medium-weight-prominent);
-    line-height: var(--ref-typescale-label-medium-line-height);
-    color: var(--color-text-secondary);
+    font-size: var(--ref-typescale-label-small-size);
+    font-weight: var(--ref-typescale-label-small-weight-prominent);
+    line-height: var(--ref-typescale-label-small-line-height);
+    color: var(--color-text-primary);
     user-select: none;
   }
 
@@ -102,6 +102,19 @@
     color: var(--color-text-secondary);
   }
 
+  // ── Arrow icon ────────────────────────────────────────────────────────────
+
+  &__arrow {
+    color: var(--color-icon-subtle);
+    flex-shrink: 0;
+    pointer-events: none;
+    transition: transform 0.15s ease;
+  }
+
+  &:focus-within:not(.is-error) &__arrow {
+    color: var(--color-icon-brand);
+  }
+
   // ── Error icon ────────────────────────────────────────────────────────────
 
   &__error-icon {
@@ -115,7 +128,8 @@
   &.is-error {
     .ds-autocomplete__field  { border-color: var(--color-border-input-error); }
     .ds-autocomplete__helper { color: var(--color-text-error); }
-    // NOTE: label color intentionally NOT set — label stays --color-text-secondary
+    .ds-autocomplete__arrow  { display: none; }
+    // NOTE: label color intentionally NOT set — label stays --color-text-primary
 
     &:focus-within .ds-autocomplete__field {
       border-color: var(--color-border-input-error);
@@ -134,6 +148,7 @@
     .ds-autocomplete__field   { background: var(--color-surface-input-disabled); border-color: var(--color-border-subtle); }
     .ds-autocomplete__label   { color: var(--color-text-disabled); }
     .ds-autocomplete__control { color: var(--color-text-disabled); }
+    .ds-autocomplete__arrow   { color: var(--color-icon-disabled); }
     .ds-autocomplete__helper  { color: var(--color-text-disabled); }
   }
 
@@ -194,6 +209,12 @@
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
+  // ── Arrow turns brand on focus (non-error) ───────────────────────────────
+
+  &:focus-within:not(.is-error) .ds-autocomplete__arrow {
+    color: var(--color-icon-brand);
+  }
+
   // ── Focus ring — keyboard only (composite wrapper pattern) ────────────────
 
   &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
@@ -218,7 +239,8 @@
     --mdc-outlined-text-field-disabled-outline-color:   var(--color-border-subtle);
     --mdc-outlined-text-field-disabled-outline-opacity: 1;
 
-    .mat-mdc-text-field-wrapper { background: var(--color-surface-input-disabled); }
+    .mat-mdc-text-field-wrapper   { background: var(--color-surface-input-disabled); }
+    .ds-autocomplete__arrow       { color: var(--color-icon-disabled); }
   }
 
   // ── Read-only state ───────────────────────────────────────────────────────
@@ -259,6 +281,8 @@
   // ── Option items ──────────────────────────────────────────────────────────
 
   .mat-mdc-option {
+    display: flex;
+    align-items: center;
     min-height: 40px;
     padding: 0 var(--spacing-lg);
     font-family: var(--ref-typeface-brand);

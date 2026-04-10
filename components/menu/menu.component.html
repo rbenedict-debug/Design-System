@@ -1,4 +1,6 @@
-<mat-menu #menu="matMenu" panelClass="ds-menu">
+<mat-menu #menu="matMenu" panelClass="ds-menu"
+          [xPosition]="xPosition"
+          [yPosition]="yPosition">
   <!-- Search bar — pinned above the scrollable item list.
        stopPropagation prevents mat-menu from closing on click and
        prevents arrow keys from triggering item navigation. -->
