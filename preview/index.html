@@ -6411,62 +6411,12 @@
   margin-top: 4px;
   z-index: 200;
   min-width: 220px;
-  max-width: 300px;
-  background: var(--color-surface-page);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-elevation-2), 0 2px 8px 0 rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
-.ds-top-nav__more-list {
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-  margin: 0;
-  padding: var(--spacing-xs) 0;
   max-height: 320px;
   overflow-y: auto;
-}
-.ds-top-nav__more-item {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  height: 36px;
-  padding: 0 var(--spacing-xs) 0 var(--spacing-md);
-  cursor: pointer;
-  position: relative;
-}
-.ds-top-nav__more-item::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: transparent;
-  pointer-events: none;
-}
-.ds-top-nav__more-item:hover::after {
-  background: var(--overlay-hovered);
-}
-.ds-top-nav__more-item:active::after {
-  background: var(--overlay-pressed);
-}
-.ds-top-nav__more-item:focus {
-  outline: none;
-}
-.ds-top-nav__more-item:focus-visible {
-  box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring);
-}
-.ds-top-nav__more-item.is-active .ds-top-nav__more-item-label {
-  color: var(--color-text-brand);
-  font-weight: var(--ref-typeface-weight-bold);
 }
 .ds-top-nav__more-item-label {
   flex: 1 0 0;
   min-width: 0;
-  font-family: var(--ref-typescale-body-small-font);
-  font-size: var(--ref-typescale-body-small-size);
-  font-weight: var(--ref-typescale-body-small-weight);
-  line-height: var(--ref-typescale-body-small-line-height);
-  color: var(--color-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -6484,8 +6434,6 @@
   cursor: pointer;
   border-radius: var(--radius-sm);
   color: var(--color-icon-subtle);
-  position: relative;
-  z-index: 1;
 }
 .ds-top-nav__more-item-close:hover {
   background: var(--overlay-hovered);
@@ -6499,48 +6447,6 @@
 }
 .ds-top-nav__more-item-close:focus-visible {
   box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring);
-}
-.ds-top-nav__more-footer {
-  border-top: 1px solid var(--color-border-subtle);
-  padding: var(--spacing-xs);
-}
-.ds-top-nav__more-close-all {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 32px;
-  padding: 0 var(--spacing-sm);
-  border: none;
-  background: transparent;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-family: var(--ref-typescale-label-small-font);
-  font-size: var(--ref-typescale-label-small-size);
-  font-weight: var(--ref-typescale-label-small-weight-prominent);
-  line-height: var(--ref-typescale-label-small-line-height);
-  color: var(--color-text-accent-red);
-  position: relative;
-}
-.ds-top-nav__more-close-all::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: transparent;
-  pointer-events: none;
-}
-.ds-top-nav__more-close-all:hover::after {
-  background: var(--overlay-accent-red-hovered);
-}
-.ds-top-nav__more-close-all:active::after {
-  background: var(--overlay-accent-red-pressed);
-}
-.ds-top-nav__more-close-all:focus {
-  outline: none;
-}
-.ds-top-nav__more-close-all:focus-visible {
-  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 .ds-top-nav__actions {
   display: flex;
@@ -15273,7 +15179,7 @@ function closeNavTab(closeBtn) {
     var overflow = tabs.slice(visCount);
 
     var items = overflow.map(function (tab) {
-      return '<li class="ds-top-nav__more-item' + (tab.active ? ' is-active' : '') + '"' +
+      return '<div class="ds-menu__item' + (tab.active ? ' ds-menu__item--selected' : '') + '"' +
         ' role="menuitem" tabindex="0"' +
         ' aria-label="' + esc(tab.label) + (tab.active ? ' \u2014 active' : '') + '"' +
         ' onclick="tnavActivate(' + tab.id + ')"' +
@@ -15283,17 +15189,19 @@ function closeNavTab(closeBtn) {
         ' onclick="event.stopPropagation();tnavClose(' + tab.id + ')">' +
         '<span class="ds-icon ds-icon--xs" aria-hidden="true">close_small</span>' +
         '</button>' +
-        '</li>';
+        '</div>';
     }).join('');
 
     var panelHTML =
-      '<div class="ds-top-nav__more-panel" id="tnav-panel" role="menu" aria-label="More tabs"' +
+      '<div class="ds-top-nav__more-panel ds-menu" id="tnav-panel" role="menu" aria-label="More tabs"' +
       ' style="left:' + panelLeft + 'px;"' +
       ' onkeydown="tnavPanelKey(event)">' +
-      '<ul class="ds-top-nav__more-list" role="none">' + items + '</ul>' +
-      '<div class="ds-top-nav__more-footer">' +
-      '<button class="ds-top-nav__more-close-all" type="button" onclick="tnavCloseAll()">Close all tabs</button>' +
-      '</div>' +
+      items +
+      '<hr class="ds-menu__divider" />' +
+      '<button class="ds-menu__item ds-menu__item--destructive" type="button" role="menuitem" onclick="tnavCloseAll()">' +
+      '<span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon" aria-hidden="true">close</span>' +
+      'Close all tabs' +
+      '</button>' +
       '</div>';
 
     header.insertAdjacentHTML('beforeend', panelHTML);
@@ -15306,7 +15214,7 @@ function closeNavTab(closeBtn) {
   window.tnavPanelKey = function (event) {
     var panel = document.getElementById('tnav-panel');
     if (!panel) return;
-    var items = Array.from(panel.querySelectorAll('.ds-top-nav__more-item'));
+    var items = Array.from(panel.querySelectorAll('.ds-menu__item[role="menuitem"][tabindex="0"]'));
     var idx   = items.indexOf(document.activeElement);
     if (event.key === 'ArrowDown') {
       event.preventDefault();

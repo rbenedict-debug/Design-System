@@ -20,49 +20,51 @@
 
   </div>
 
-  <!-- Overflow panel — sibling of __tabs so it escapes overflow:hidden -->
+  <!-- Overflow panel — sibling of __tabs so it escapes overflow:hidden.
+       Uses ds-menu for the correct shell (bg, border, shadow, radius, padding). -->
   @if (showMorePanel) {
     <div
-      class="ds-top-nav__more-panel"
+      class="ds-top-nav__more-panel ds-menu"
       role="menu"
       aria-label="More tabs"
       [style.left.px]="morePanelLeft"
       (keydown)="onPanelKeydown($event)"
     >
-      <ul class="ds-top-nav__more-list" role="none">
-        @for (tab of overflowTabs; track tab.id) {
-          <li
-            class="ds-top-nav__more-item"
-            [class.is-active]="tab.active"
-            role="menuitem"
-            tabindex="0"
-            [attr.aria-label]="tab.label + (tab.active ? ' — active' : '')"
-            (click)="onPanelTabActivate(tab)"
-            (keydown.enter)="onPanelTabActivate(tab)"
-            (keydown.space)="$event.preventDefault(); onPanelTabActivate(tab)"
-          >
-            <span class="ds-top-nav__more-item-label">{{ tab.label }}</span>
-            <button
-              class="ds-top-nav__more-item-close"
-              type="button"
-              [attr.aria-label]="'Close ' + tab.label + ' tab'"
-              (click)="onPanelTabClose(tab, $event)"
-            >
-              <span class="ds-icon ds-icon--xs" aria-hidden="true">close_small</span>
-            </button>
-          </li>
-        }
-      </ul>
-
-      <div class="ds-top-nav__more-footer">
-        <button
-          class="ds-top-nav__more-close-all"
-          type="button"
-          (click)="onCloseAll()"
+      @for (tab of overflowTabs; track tab.id) {
+        <div
+          class="ds-menu__item"
+          [class.ds-menu__item--selected]="tab.active"
+          role="menuitem"
+          tabindex="0"
+          [attr.aria-label]="tab.label + (tab.active ? ' — active' : '')"
+          (click)="onPanelTabActivate(tab)"
+          (keydown.enter)="onPanelTabActivate(tab)"
+          (keydown.space)="$event.preventDefault(); onPanelTabActivate(tab)"
         >
-          Close all tabs
-        </button>
-      </div>
+          <span class="ds-top-nav__more-item-label">{{ tab.label }}</span>
+          <button
+            class="ds-top-nav__more-item-close"
+            type="button"
+            [attr.aria-label]="'Close ' + tab.label + ' tab'"
+            (click)="onPanelTabClose(tab, $event)"
+          >
+            <span class="ds-icon ds-icon--xs" aria-hidden="true">close_small</span>
+          </button>
+        </div>
+      }
+
+      <hr class="ds-menu__divider" />
+
+      <!-- ds-menu__item--destructive: neutral by default, red only on interaction -->
+      <button
+        class="ds-menu__item ds-menu__item--destructive"
+        type="button"
+        role="menuitem"
+        (click)="onCloseAll()"
+      >
+        <span class="ds-icon ds-icon--sm ds-icon--filled ds-menu__item-icon" aria-hidden="true">close</span>
+        Close all tabs
+      </button>
     </div>
   }
 
