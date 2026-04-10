@@ -212,20 +212,22 @@ Or Angular component:
 
 ---
 
-## Token import in Angular projects
+## CSS import in Angular projects
+
+Two stylesheets must be included — tokens first, then components. Both are required.
 
 **In `angular.json` styles array:**
 ```json
 "styles": [
   "node_modules/@onflo/design-system/tokens/css/index.css",
+  "node_modules/@onflo/design-system/dist/components.css",
   "src/styles.scss"
 ]
 ```
 
-**Or in `src/styles.scss`:**
-```scss
-@use '@onflo/design-system/tokens/css/index.css';
-```
+`tokens/css/index.css` — design tokens (CSS custom properties)
+`dist/components.css` — global component CSS class API (`.ds-icon`, `.ds-button`, etc.)
+Both are required. The components CSS must come after tokens so it can reference them.
 
 **SCSS tokens in component stylesheets:**
 ```scss
