@@ -158,6 +158,34 @@ onToggleSubnav() {
 
 ---
 
+### Regular Page Content (`ds-page-content`)
+
+Every page uses this structure inside `<main class="ds-page-content">` — with or without a split layout. Both children are required: never omit or collapse `__heading` or `__main`.
+
+```html
+<main class="ds-page-content" role="main">
+
+  <!-- Required: heading row — title + optional tabs; never scrolls -->
+  <div class="ds-page-content__heading">
+    <h1 class="ds-page-content__title">Page Title</h1>
+    <!-- <ds-tabs> here if the page has section tabs -->
+  </div>
+
+  <!-- Required: content card — scroll boundary; provides bg, radius, shadow -->
+  <div class="ds-page-content__main">
+    <!-- page content -->
+  </div>
+
+  <!-- Optional: save bar — sibling of __main, never inside it -->
+  <!-- <ds-save-bar> -->
+
+</main>
+```
+
+When switching a page from split layout to a regular layout: replace the `ds-split-page` markup inside `__main` with the page content directly. Keep `__heading` and `__main` intact — neither is part of the split page pattern; both are required on every page.
+
+---
+
 ### Split Page Layout (`ds-split-page`)
 
 - **Purpose**: Two-panel content area for detail views — a list or context panel beside a primary content panel. Lives inside `ds-page-content__main`. The page title (`ds-page-content__heading` + `ds-page-content__title`) is a **sibling of `__main`** — it stays fixed above the panels and must never be placed inside them.
