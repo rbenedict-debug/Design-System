@@ -135,12 +135,17 @@ Save bar appears only when the form has unsaved changes. Use for settings-style 
       <ds-alert variant="error" size="sm">{{ serverError }}</ds-alert>
     }
 
-    <!-- Form fields -->
+    <!-- Section heading — always h2 (h1 is the page title) -->
+    <h2 class="ds-form-section-title">Personal Information</h2>
+
     <ds-input label="First name" [(value)]="form.firstName"
               [isError]="hasError('firstName')"
               [errorMessage]="getError('firstName')" />
 
     <ds-divider />
+
+    <!-- Next section -->
+    <h2 class="ds-form-section-title">Status</h2>
 
     <ds-select label="Status" [options]="statusOptions"
                [(value)]="form.status" />

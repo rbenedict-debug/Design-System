@@ -1,0 +1,50 @@
+// ============================================================
+// Onflo Design System — Breakpoints
+// ============================================================
+//
+// Desktop-only system. Mobile devices are redirected to the Onflo
+// mobile app. Minimum supported viewport: 1024px (landscape tablet).
+//
+// Usage in consuming project SCSS:
+//   @use '@onflo/design-system/tokens/scss/breakpoints' as ds;
+//
+//   .my-component {
+//     padding: var(--spacing-lg);
+//
+//     @include ds.respond-to('xl') {
+//       padding: var(--spacing-xl);
+//     }
+//   }
+//
+// Or use variables directly in @media:
+//   @media (min-width: ds.$breakpoint-lg) { ... }
+// ============================================================
+
+// ── Breakpoint scale ────────────────────────────────────────
+// md  — 1024px  landscape tablet / small laptop (minimum supported)
+// lg  — 1280px  standard laptop / desktop
+// xl  — 1440px  large desktop
+// 2xl — 1920px  ultrawide
+
+$breakpoint-md:  1024px;
+$breakpoint-lg:  1280px;
+$breakpoint-xl:  1440px;
+$breakpoint-2xl: 1920px;
+
+// ── respond-to mixin ────────────────────────────────────────
+// All breakpoints are min-width — styles apply at that width and up.
+// Mobile-first does not apply; this system has no mobile viewport.
+
+@mixin respond-to($bp) {
+  @if $bp == 'md' {
+    @media (min-width: #{$breakpoint-md}) { @content; }
+  } @else if $bp == 'lg' {
+    @media (min-width: #{$breakpoint-lg}) { @content; }
+  } @else if $bp == 'xl' {
+    @media (min-width: #{$breakpoint-xl}) { @content; }
+  } @else if $bp == '2xl' {
+    @media (min-width: #{$breakpoint-2xl}) { @content; }
+  } @else {
+    @warn 'Unknown breakpoint "#{$bp}". Valid values: md, lg, xl, 2xl.';
+  }
+}

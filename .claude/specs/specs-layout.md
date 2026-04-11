@@ -300,3 +300,43 @@ Every page requires `<h1 class="ds-page-content__title">` for ADA heading struct
 #### What NOT to do
 
 - Never omit the H1 on inbox/ticket pages — add it with `ds-sr-only` instead
+
+---
+
+### Form Section Title (`ds-form-section-title`)
+
+- **Purpose**: Heading for a named section within a page body or form. Always applied to an `<h2>` — the page `<h1>` is the page title; section titles are the next level down in the heading hierarchy.
+- **Source**: `components/utilities/_utilities.scss`
+- **Ships in**: `dist/components.css`
+- **Typography**: Title H3 scale (`--ref-typescale-title-h3-*`), `--color-text-primary`, `margin: 0`
+
+#### Usage
+
+```html
+<h2 class="ds-form-section-title">Personal Information</h2>
+```
+
+Use `ds-divider` between sections to visually separate field groups:
+
+```html
+<h2 class="ds-form-section-title">Personal Information</h2>
+<ds-input label="First name" ... />
+<ds-input label="Last name" ... />
+
+<ds-divider />
+
+<h2 class="ds-form-section-title">Account Settings</h2>
+<ds-select label="Role" ... />
+```
+
+#### CSS class API
+
+| Class | Purpose |
+|---|---|
+| `.ds-form-section-title` | Section heading — Title H3 typography, primary text colour |
+
+#### Rules
+
+- Always use on an `<h2>` — never `<h3>` or lower (unless the page has a deeper hierarchy and the context requires it)
+- Never skip heading levels — the page `<h1>` must exist (visibly or via `ds-sr-only`) before using `<h2>` section titles
+- Do not add extra `margin-top` — use `ds-divider` to create visual separation between sections

@@ -2,6 +2,26 @@
 // Onflo Design System — Utility Classes
 // ============================================================
 
+// ── Form section title ─────────────────────────────────────
+//
+// Heading for a named section within a page body or form.
+// Always an <h2> (page <h1> is the page title; section titles
+// are the next level down in the heading hierarchy).
+//
+// Usage:
+//   <h2 class="ds-form-section-title">Personal Information</h2>
+
+.ds-form-section-title {
+  font-family: var(--ref-typescale-title-h3-font);
+  font-size: var(--ref-typescale-title-h3-size);
+  font-weight: var(--ref-typescale-title-h3-weight);
+  line-height: var(--ref-typescale-title-h3-line-height);
+  letter-spacing: var(--ref-typescale-title-h3-tracking);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+
 // ── Screen-reader only ─────────────────────────────────────
 //
 // Visually hides an element while keeping it accessible to

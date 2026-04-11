@@ -15,6 +15,7 @@
     "./tokens/css/design-tokens.css": "./tokens/css/design-tokens.css",
     "./tokens/scss/variables": "./tokens/scss/_variables.scss",
     "./tokens/scss/mixins": "./tokens/scss/_mixins.scss",
+    "./tokens/scss/breakpoints": "./tokens/scss/_breakpoints.scss",
     "./package.json": {
       "default": "./package.json"
     }

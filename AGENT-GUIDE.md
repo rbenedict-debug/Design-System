@@ -193,6 +193,7 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 | Utility | Class | Use case |
 |---|---|---|
 | Screen reader only | `ds-sr-only` | Visually hides an element while keeping it accessible to screen readers |
+| Form section title | `ds-form-section-title` | `<h2>` heading for named sections within a page body or form — Title H3 typography |
 
 ---
 
@@ -343,6 +344,36 @@ Or Angular component:
 ```html
 <ds-icon name="search" />
 <ds-icon name="bookmark" [filled]="true" size="sm" />
+```
+
+---
+
+## Breakpoints
+
+This system is desktop-only — mobile devices are redirected to the Onflo mobile app.
+Minimum supported viewport: **1024px** (landscape tablet).
+
+| Name | Width | When to use |
+|---|---|---|
+| `md` | 1024px | Minimum — landscape tablet / small laptop |
+| `lg` | 1280px | Standard laptop / desktop |
+| `xl` | 1440px | Large desktop |
+| `2xl` | 1920px | Ultrawide |
+
+**In consuming project SCSS:**
+```scss
+@use '@onflo/design-system/tokens/scss/breakpoints' as ds;
+
+.my-component {
+  padding: var(--spacing-lg);
+
+  @include ds.respond-to('xl') {
+    padding: var(--spacing-xl);
+  }
+}
+
+// Or use the variable directly:
+@media (min-width: ds.$breakpoint-lg) { ... }
 ```
 
 ---

@@ -81,6 +81,30 @@ preview/
 | `--shadow-elevation-*` | Box shadows (1–3) |
 | `--ref-typescale-*` | Typography scale |
 
+### Breakpoints — SCSS only
+
+Breakpoints are SCSS variables (not CSS custom properties — `@media` queries can't use `var()`).
+
+| Variable | Value | Viewport |
+|---|---|---|
+| `$breakpoint-md` | 1024px | Landscape tablet / small laptop (minimum supported) |
+| `$breakpoint-lg` | 1280px | Standard laptop / desktop |
+| `$breakpoint-xl` | 1440px | Large desktop |
+| `$breakpoint-2xl` | 1920px | Ultrawide |
+
+Use the `respond-to()` mixin — never write raw `@media` values:
+
+```scss
+@use '@onflo/design-system/tokens/scss/breakpoints' as bp;
+
+.my-element {
+  width: 100%;
+  @include bp.respond-to('lg') { width: 50%; }
+}
+```
+
+No mobile breakpoints — the product redirects mobile devices to a native app.
+
 ---
 
 ## Icons — Material Symbols Rounded
