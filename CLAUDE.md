@@ -247,3 +247,4 @@ Per-component specs are in `.claude/specs/` — read the relevant file before ad
 - `specs-overlay.md` — Dialog, Alert, Tooltip, Hover Card
 - `specs-table.md` — Table Header Cell, Table Row Cell, AG Paginator, Table Toolbar
 - `specs-layout.md` — Agent Status, Page Layout, Split Page, Utilities (ds-sr-only)
+- `specs-compositions.md` — Component selection guide + page-level composition patterns (data table, form/detail, empty/loading states)

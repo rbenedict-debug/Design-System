@@ -388,6 +388,20 @@ The design system themes Material components globally — do not apply your own 
 3. Are all colors/spacing/typography using tokens? → Required.
 4. Is the focus ring keyboard-only via `:focus-visible`? → Required.
 5. Does the component exist in Angular Material (behavior only)? → Wrap it with Onflo styles, don't re-implement the behavior.
+6. Are you combining multiple components into a page section? → Read the composition patterns first.
+
+---
+
+## Composition patterns
+
+When building page sections that assemble multiple components together, consult
+`node_modules/@onflo/design-system/.claude/specs/specs-compositions.md` before writing code.
+
+It covers:
+- **Component selection** — which component to use when options overlap (dialog vs modal vs snackbar; label vs tag vs chip vs badge; skeleton vs spinner)
+- **Data table page** — toolbar + AG Grid + paginator assembly rules
+- **Form / detail page** — field layout, error handling, save-bar placement
+- **Empty and loading states** — skeleton vs spinner, aria-busy wiring, empty state structure
 
 ---
 

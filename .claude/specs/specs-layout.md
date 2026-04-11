@@ -106,10 +106,11 @@ These rules apply to every page in every Onflo application:
 | `ds-subnav-button` | Sub-nav leaf item | 32px button — selected: brand blue bg + white text; Angular: `<ds-subnav-button [label]="..." [selected]="..." />` |
 | `ds-subnav-subheader` | Sub-nav section group — **settings subnav only** | Expandable row with vertical accent line + child items; **always nested inside `ds-subnav-header`**; never used in general page navigation subnav panels; Angular: `<ds-subnav-subheader [text]="..." [(expanded)]="...">` |
 | `ds-subnav-header` | Sub-nav top header | Expandable top-level row with 12px icon + Label Small text; Angular: `<ds-subnav-header [text]="..." [icon]="..." [(expanded)]="...">` |
-| `.ds-page-content` | Main area | `flex: 1; display: flex; flex-direction: column` |
-| `.ds-page-content__heading` | Heading row | Title + optional tabs |
+| `.ds-page-content` | Main area | `flex: 1; display: flex; flex-direction: column; gap: --spacing-lg` |
+| `.ds-page-content__heading` | Heading row | `flex-shrink: 0` — title + optional tabs, never scrolls |
 | `.ds-page-content__title` | H1 | Title H1 typography (`--ref-typescale-title-h1-*`) |
-| `.ds-page-content__main` | Content card | `flex: 1; background: --color-surface-page; border-radius: --radius-lg; box-shadow: elevation-1` |
+| `.ds-page-content__main` | Content card | `flex: 1; overflow-y: auto` — scroll boundary; heading and save bar remain fixed above/below |
+| `<ds-save-bar>` (when used) | Save footer | Sibling of `.ds-page-content__main`, never inside it — stays below the card regardless of scroll |
 
 #### Angular wiring
 
@@ -191,8 +192,8 @@ onToggleSubnav() {
 
 | Class | Element | Purpose |
 |---|---|---|
-| `.ds-split-page` | Root | `display: flex; height: 100%; gap: 16px` |
-| `.ds-split-page__panel` | Panel | `flex: 1 1 0; background: --color-surface-page; border-radius: --radius-lg; overflow: hidden` |
+| `.ds-split-page` | Root | `display: flex; height: 100%; gap: --spacing-lg` |
+| `.ds-split-page__panel` | Panel | `flex: 1 1 0; overflow-y: auto` — each panel scrolls independently, same as `ds-page-content__main` |
 | `.ds-split-page__panel--left` | Left panel | Left content area |
 | `.ds-split-page__panel--right` | Right panel | Right content area |
 | `.ds-split-page__handle` | Drag handle | `width: 18px; flex-shrink: 0; cursor: col-resize` — visible only with `--resizable` modifier |
