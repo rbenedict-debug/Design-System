@@ -13684,7 +13684,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       <section class="section" id="split-page">
         <div class="section-header">
           <h2 class="section-title">Split Page</h2>
-          <span class="section-source">CSS pattern · preview/index.html · see .claude/component-specs.md §Split Page Layout</span>
+          <span class="section-source">CSS pattern · preview/index.html · see .claude/specs/specs-layout.md §Split Page Layout</span>
         </div>
         <p class="section-desc">Two-panel content area for detail views — a list or context panel beside a primary content panel. Used inside <code>ds-page-content__main</code>. Five fixed split ratios: 50/50, 70/30, 30/70, 75/25, and 25/75. Add <code>ds-split-page--resizable</code> and the <code>ds-split-page__handle</code> element for a drag handle. Angular: use <code>CdkDragModule</code> from <code>@angular/cdk/drag-drop</code> on the handle for production — fixed 50/50 is acceptable in hi-fi prototypes.</p>
 
@@ -14263,7 +14263,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       <section class="section" id="page-layout">
         <div class="section-header">
           <h2 class="section-title">Page Layout</h2>
-          <span class="section-source">CSS pattern · preview/index.html · see .claude/component-specs.md §Page Layouts</span>
+          <span class="section-source">CSS pattern · preview/index.html · see .claude/specs/specs-layout.md §Page Layouts</span>
         </div>
         <p class="section-desc">Full application shell — composes <code>ds-nav-sidebar</code>, <code>ds-top-nav</code>, an optional collapsible sub-navigation panel (<code>ds-subnav</code>), and a main content area (<code>ds-page-content</code>). The floating <code>ds-nav-expand</code> toggle sits at the right edge of the sub-nav and repositions when the panel collapses. Sub-nav open state is managed via <code>[open]</code> on <code>ds-nav-expand</code> and <code>.is-collapsed</code> on <code>.ds-subnav</code>. Click the toggle to try it. ADA: <code>role="navigation"</code> on sidebar and subnav; <code>aria-expanded</code> on the toggle tracks panel state.</p>
 
@@ -14419,9 +14419,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       <section class="section" id="split-page-layout">
         <div class="section-header">
           <h2 class="section-title">Split Page Layout</h2>
-          <span class="section-source">CSS pattern · preview/index.html · see .claude/component-specs.md §Page Layouts</span>
+          <span class="section-source">CSS pattern · preview/index.html · see .claude/specs/specs-layout.md §Page Layouts</span>
         </div>
-        <p class="section-desc">Split page layout demos — full application shell with split content area. See the <strong>Components</strong> tab → Split Page for ratio variants (50/50, 70/30, 30/70, 75/25, 25/75) and the fixed vs. resizable handle. Angular: use <code>CdkDragModule</code> from <code>@angular/cdk/drag-drop</code> on the handle for production. See <code>.claude/component-specs.md §Split Page Layout</code> for Angular wiring details.</p>
+        <p class="section-desc">Split page layout demos — full application shell with split content area. See the <strong>Components</strong> tab → Split Page for ratio variants (50/50, 70/30, 30/70, 75/25, 25/75) and the fixed vs. resizable handle. Angular: use <code>CdkDragModule</code> from <code>@angular/cdk/drag-drop</code> on the handle for production. See <code>.claude/specs/specs-layout.md §Split Page Layout</code> for Angular wiring details.</p>
 
         <!-- Resizable composition: full page shell with interactive drag handle -->
         <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
