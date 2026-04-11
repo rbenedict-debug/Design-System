@@ -10,6 +10,7 @@
       "default": "./dist/fesm2022/onflo-design-system.mjs"
     },
     "./dist/components.css": "./dist/components.css",
+    "./dist/layout.css": "./dist/layout.css",
     "./tokens/css/index.css": "./tokens/css/index.css",
     "./tokens/css/design-tokens.css": "./tokens/css/design-tokens.css",
     "./tokens/scss/variables": "./tokens/scss/_variables.scss",
@@ -29,7 +30,7 @@
   "scripts": {
     "generate-tokens": "node scripts/generate-tokens.js",
     "build-preview": "node scripts/build-preview.js",
-    "build": "ng-packagr -p ng-package.json && sass components/index.scss dist/components.css --load-path=components --style=compressed --no-source-map",
+    "build": "ng-packagr -p ng-package.json && sass components/index.scss dist/components.css --load-path=components --style=compressed --no-source-map && sass layout/index.scss dist/layout.css --style=compressed --no-source-map",
     "preview": "open preview/index.html"
   },
   "engines": {

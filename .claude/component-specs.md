@@ -410,7 +410,7 @@ Detailed per-component specs for the Onflo Design System. Referenced from root C
 
 ## Page Layouts
 
-CSS-only composition patterns. SCSS lives in `components/page-layout/` and `components/split-page/` and compiles into `dist/components.css`. The preview (`preview/index.html`) provides interactive demos — the preview wraps these in a 640px fixed-height frame for demo purposes; production apps use `height: 100%` on the app root. Reference the preview for canonical HTML structure.
+CSS-only composition patterns. SCSS lives in `layout/page-layout/` and `layout/split-page/` and compiles into `dist/layout.css` (separate from `dist/components.css`). Consuming projects add `"node_modules/@onflo/design-system/dist/layout.css"` to their `angular.json` styles array. The preview (`preview/index.html`) provides interactive demos — the preview wraps these in a 640px fixed-height frame; production apps use `height: 100%` on the app root. Reference the preview for canonical HTML structure.
 
 ---
 

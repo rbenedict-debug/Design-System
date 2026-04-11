@@ -81,7 +81,9 @@ components/
   modal/                   # ds-modal (full-featured modal — sticky header, scrollable body, optional tabs + actions footer)
   datepicker/              # ds-datepicker (single) + ds-date-range-picker (range)
   rich-text-editor/        # ds-rich-text-editor (CKEditor 5 — custom toolbar, resize handle, expand modal)
-  page-layout/             # ds-page-layout CSS — app shell (nav-sidebar + top-nav + subnav panel + page-content)
+layout/
+  index.scss               # Barrel: @use all layout patterns → dist/layout.css
+  page-layout/             # ds-page-layout CSS — app shell (nav-sidebar + top-nav + subnav + page-content)
   split-page/              # ds-split-page CSS — two-pane resizable layout (primary + detail panel)
 preview/
   index.html               # Self-contained visual token + component reference
@@ -224,8 +226,8 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |
-| `ds-page-layout` | Custom | No Material equivalent — CSS-only app shell pattern shipped in `dist/components.css` via `components/page-layout/`; composes `.ds-nav-sidebar`, `.ds-top-nav`, `.ds-subnav`, `.ds-page-content`; uses `--nav-sidebar-width`, `--subnav-width`, `--top-nav-height`, `--motion-duration-*` tokens |
-| `ds-split-page` | CdkDrag (CDK only) | No Material equivalent — CSS-only two-pane layout shipped in `dist/components.css` via `components/split-page/`; resize handle uses CDK drag for production, fixed 50/50 split acceptable in prototypes; replace with `CdkDragModule` in engineering handoff |
+| `ds-page-layout` | Custom | No Material equivalent — CSS-only app shell pattern; SCSS in `layout/page-layout/`, ships as `dist/layout.css`; composes `.ds-nav-sidebar`, `.ds-top-nav`, `.ds-subnav`, `.ds-page-content`; uses `--nav-sidebar-width`, `--subnav-width`, `--top-nav-height`, `--motion-duration-*` tokens |
+| `ds-split-page` | CdkDrag (CDK only) | No Material equivalent — CSS-only two-pane layout; SCSS in `layout/split-page/`, ships as `dist/layout.css`; resize handle uses CDK drag for production, fixed 50/50 split acceptable in prototypes; replace with `CdkDragModule` in engineering handoff |
 | `ds-rich-text-editor` | Custom (CKEditor 5) | No Angular Material equivalent — third-party CKEditor 5. Requires `@ckeditor/ckeditor5-angular` + `@ckeditor/ckeditor5-build-classic`. Custom toolbar calls `editor.execute()` commands; native CKEditor toolbar is suppressed via CSS. Inputs: `[label]`, `[placeholder]`, `[(value)]`, `[disabled]`, `[isError]`, `[showResize]`, `[showExpand]`. Resize = JS mousedown drag on host height. Expand = `position:fixed` overlay with a second editor instance that syncs back on close. |
 
 ---
@@ -263,6 +265,10 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 6. Add the component CSS inline to `preview/index.html` (second `<style>` block)
 7. Add sidebar nav link and demo section to `preview/index.html`
 8. Commit with message: `Add {Name} component (Step 2 — Nth component)`
+
+> **Layout patterns** (app shell compositions, not UI components) go in `layout/` instead —
+> SCSS in `layout/{name}/_{name}.scss`, added to `layout/index.scss`, ships as `dist/layout.css`.
+> No Angular component needed; CSS-only. Reference the Page Layouts section in component-specs.md.
 
 ---
 

@@ -1,0 +1,9 @@
+// Onflo Design System — Layout Patterns
+// Import all layout patterns at once:
+//   angular.json styles: "@onflo/design-system/dist/layout.css"
+//
+// Or import individually (SCSS):
+//   @use '@onflo/design-system/layout/page-layout/page-layout';
+
+@use 'page-layout/page-layout';
+@use 'split-page/split-page';
