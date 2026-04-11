@@ -1,0 +1,144 @@
+// ============================================================
+// Onflo Design System — Empty State
+// ============================================================
+//
+// Displays a branded illustration + message when a content
+// area has no data to show. Two sizes (sm / lg) and two
+// layouts (vertical / horizontal) allow use in contexts from
+// small dashboard cards to full-page empty views.
+//
+// Usage (HTML class API):
+//
+//   Small vertical (default):
+//   <div class="ds-empty-state">
+//     <div class="ds-empty-state__graphic" aria-hidden="true"><!-- svg --></div>
+//     <div class="ds-empty-state__body">
+//       <p class="ds-empty-state__heading">No data available</p>
+//     </div>
+//   </div>
+//
+//   Large vertical with description + action:
+//   <div class="ds-empty-state ds-empty-state--lg">
+//     <div class="ds-empty-state__graphic" aria-hidden="true"><!-- svg --></div>
+//     <div class="ds-empty-state__body">
+//       <p class="ds-empty-state__heading">No results found</p>
+//       <p class="ds-empty-state__description">Try adjusting your filters.</p>
+//       <div class="ds-empty-state__actions">
+//         <button class="ds-button ds-button--outlined ds-button--md">Clear filters</button>
+//       </div>
+//     </div>
+//   </div>
+//
+//   Small horizontal:
+//   <div class="ds-empty-state ds-empty-state--horizontal">...</div>
+//
+// Angular component:
+//   <ds-empty-state />
+//   <ds-empty-state size="lg" layout="vertical" heading="No results found"
+//     description="Try adjusting your filters.">
+//     <ds-button variant="outlined">Clear filters</ds-button>
+//   </ds-empty-state>
+//
+// Sizes:    sm (default) | lg
+// Layouts:  vertical (default) | horizontal
+// ============================================================
+
+.ds-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  text-align: center;
+
+  // ── Graphic container ─────────────────────────────────────
+
+  &__graphic {
+    flex-shrink: 0;
+    width: 48px;
+    color: var(--color-icon-disabled);
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  // ── Text + actions block ──────────────────────────────────
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  // ── Heading (primary message) ─────────────────────────────
+
+  &__heading {
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  // ── Description (optional supporting text) ────────────────
+
+  &__description {
+    font-family: var(--ref-typescale-body-small-font);
+    font-size: var(--ref-typescale-body-small-size);
+    font-weight: var(--ref-typescale-body-small-weight);
+    line-height: var(--ref-typescale-body-small-line-height);
+    letter-spacing: var(--ref-typescale-body-small-tracking);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  // ── Optional action buttons ───────────────────────────────
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+  }
+
+
+  // ══ Size modifier — large ════════════════════════════════════════════════════
+
+  &--lg {
+    gap: var(--spacing-sm);
+
+    .ds-empty-state__graphic {
+      width: 97px;
+    }
+
+    .ds-empty-state__body {
+      gap: var(--spacing-sm);
+    }
+
+    .ds-empty-state__heading {
+      font-family: var(--ref-typescale-label-large-font);
+      font-size: var(--ref-typescale-label-large-size);
+      font-weight: var(--ref-typescale-label-large-weight-prominent);
+      line-height: var(--ref-typescale-label-large-line-height);
+      letter-spacing: var(--ref-typescale-label-large-tracking);
+    }
+  }
+
+
+  // ══ Layout modifier — horizontal ═════════════════════════════════════════════
+
+  &--horizontal {
+    flex-direction: row;
+    text-align: left;
+
+    .ds-empty-state__body {
+      align-items: flex-start;
+    }
+  }
+}

@@ -141,6 +141,7 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 | Alert | `<ds-alert>` | `DsAlertComponent` |
 | Tooltip | `[dsTooltip]` directive | `DsTooltipDirective` |
 | Skeleton | `<ds-skeleton>` | `DsSkeletonComponent` |
+| Empty state | `<ds-empty-state>` | `DsEmptyStateComponent` |
 | Spinner | `<ds-spinner>` | `DsSpinnerComponent` |
 | Progress bar | `<ds-progress>` | `DsProgressComponent` |
 | Divider | `<ds-divider>` | `DsDividerComponent` |

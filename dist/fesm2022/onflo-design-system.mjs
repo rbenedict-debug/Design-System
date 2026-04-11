@@ -698,6 +698,64 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
             }] } });
 
 /**
+ * Onflo Design System — Empty State
+ *
+ * Branded illustration + message shown when a content area has no data.
+ * Use inside any container (table, card, full page) that may return zero results.
+ *
+ * Two sizes scale the graphic and typography:
+ *   sm — for compact containers such as dashboard cards and table empty states
+ *   lg — for full-page empty views
+ *
+ * Two layouts control graphic + text arrangement:
+ *   vertical   — graphic above text (default; works in most containers)
+ *   horizontal — graphic beside text (use when vertical space is constrained)
+ *
+ * Project optional action buttons into the default content slot.
+ *
+ * ADA: the graphic is aria-hidden (decorative); heading text conveys the state.
+ *
+ * @example
+ *   <!-- Basic -->
+ *   <ds-empty-state />
+ *
+ *   <!-- With custom message + action -->
+ *   <ds-empty-state
+ *     size="lg"
+ *     heading="No results found"
+ *     description="Try adjusting your search or filters.">
+ *     <ds-button variant="outlined" (click)="clearFilters()">Clear filters</ds-button>
+ *   </ds-empty-state>
+ *
+ *   <!-- Small horizontal — for constrained vertical space -->
+ *   <ds-empty-state size="sm" layout="horizontal" heading="No items" />
+ */
+class DsEmptyStateComponent {
+    /** Size variant. 'sm' for compact contexts; 'lg' for full-page empty states. Default: 'sm' */
+    size = 'sm';
+    /** Layout direction. 'vertical' stacks graphic above text; 'horizontal' places them side by side. Default: 'vertical' */
+    layout = 'vertical';
+    /** Primary message. Should describe what is empty, not just "No data". Default: 'No data available' */
+    heading = 'No data available';
+    /** Optional supporting text shown below the heading — use to suggest a next action or explain why. */
+    description = '';
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsEmptyStateComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.7", type: DsEmptyStateComponent, isStandalone: true, selector: "ds-empty-state", inputs: { size: "size", layout: "layout", heading: "heading", description: "description" }, ngImport: i0, template: "<div\n  class=\"ds-empty-state\"\n  [class.ds-empty-state--lg]=\"size === 'lg'\"\n  [class.ds-empty-state--horizontal]=\"layout === 'horizontal'\">\n\n  <!-- Illustration \u2014 decorative, aria-hidden -->\n  <div class=\"ds-empty-state__graphic\" aria-hidden=\"true\">\n    <svg viewBox=\"0 0 97 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <!-- Magnifying glass lens -->\n      <circle cx=\"44\" cy=\"44\" r=\"30\" stroke=\"currentColor\" stroke-width=\"6\"/>\n      <!-- Question mark \u2014 arc and stem -->\n      <path d=\"M37 40C37 28 51 24 51 36C51 42 44 44 44 52\"\n            stroke=\"currentColor\" stroke-width=\"4.5\" stroke-linecap=\"round\"/>\n      <!-- Question mark \u2014 dot -->\n      <circle cx=\"44\" cy=\"61\" r=\"3.5\" fill=\"currentColor\"/>\n      <!-- Handle -->\n      <path d=\"M65 65L84 86\" stroke=\"currentColor\" stroke-width=\"7\" stroke-linecap=\"round\"/>\n    </svg>\n  </div>\n\n  <div class=\"ds-empty-state__body\">\n    <p class=\"ds-empty-state__heading\">{{ heading }}</p>\n\n    @if (description) {\n      <p class=\"ds-empty-state__description\">{{ description }}</p>\n    }\n\n    <!-- Optional actions \u2014 project ds-button or any action element here -->\n    <ng-content />\n  </div>\n\n</div>\n", styles: [".ds-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--spacing-xs);text-align:center}.ds-empty-state__graphic{flex-shrink:0;width:48px;color:var(--color-icon-disabled)}.ds-empty-state__graphic svg{display:block;width:100%;height:auto}.ds-empty-state__body{display:flex;flex-direction:column;align-items:center;gap:var(--spacing-xs)}.ds-empty-state__heading{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-secondary);margin:0}.ds-empty-state__description{font-family:var(--ref-typescale-body-small-font);font-size:var(--ref-typescale-body-small-size);font-weight:var(--ref-typescale-body-small-weight);line-height:var(--ref-typescale-body-small-line-height);letter-spacing:var(--ref-typescale-body-small-tracking);color:var(--color-text-secondary);margin:0}.ds-empty-state__actions{display:flex;align-items:center;gap:var(--spacing-sm);margin-top:var(--spacing-xs)}.ds-empty-state--lg{gap:var(--spacing-sm)}.ds-empty-state--lg .ds-empty-state__graphic{width:97px}.ds-empty-state--lg .ds-empty-state__body{gap:var(--spacing-sm)}.ds-empty-state--lg .ds-empty-state__heading{font-family:var(--ref-typescale-label-large-font);font-size:var(--ref-typescale-label-large-size);font-weight:var(--ref-typescale-label-large-weight-prominent);line-height:var(--ref-typescale-label-large-line-height);letter-spacing:var(--ref-typescale-label-large-tracking)}.ds-empty-state--horizontal{flex-direction:row;text-align:left}.ds-empty-state--horizontal .ds-empty-state__body{align-items:flex-start}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsEmptyStateComponent, decorators: [{
+            type: Component,
+            args: [{ selector: 'ds-empty-state', standalone: true, imports: [CommonModule], changeDetection: ChangeDetectionStrategy.OnPush, template: "<div\n  class=\"ds-empty-state\"\n  [class.ds-empty-state--lg]=\"size === 'lg'\"\n  [class.ds-empty-state--horizontal]=\"layout === 'horizontal'\">\n\n  <!-- Illustration \u2014 decorative, aria-hidden -->\n  <div class=\"ds-empty-state__graphic\" aria-hidden=\"true\">\n    <svg viewBox=\"0 0 97 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n      <!-- Magnifying glass lens -->\n      <circle cx=\"44\" cy=\"44\" r=\"30\" stroke=\"currentColor\" stroke-width=\"6\"/>\n      <!-- Question mark \u2014 arc and stem -->\n      <path d=\"M37 40C37 28 51 24 51 36C51 42 44 44 44 52\"\n            stroke=\"currentColor\" stroke-width=\"4.5\" stroke-linecap=\"round\"/>\n      <!-- Question mark \u2014 dot -->\n      <circle cx=\"44\" cy=\"61\" r=\"3.5\" fill=\"currentColor\"/>\n      <!-- Handle -->\n      <path d=\"M65 65L84 86\" stroke=\"currentColor\" stroke-width=\"7\" stroke-linecap=\"round\"/>\n    </svg>\n  </div>\n\n  <div class=\"ds-empty-state__body\">\n    <p class=\"ds-empty-state__heading\">{{ heading }}</p>\n\n    @if (description) {\n      <p class=\"ds-empty-state__description\">{{ description }}</p>\n    }\n\n    <!-- Optional actions \u2014 project ds-button or any action element here -->\n    <ng-content />\n  </div>\n\n</div>\n", styles: [".ds-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--spacing-xs);text-align:center}.ds-empty-state__graphic{flex-shrink:0;width:48px;color:var(--color-icon-disabled)}.ds-empty-state__graphic svg{display:block;width:100%;height:auto}.ds-empty-state__body{display:flex;flex-direction:column;align-items:center;gap:var(--spacing-xs)}.ds-empty-state__heading{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-secondary);margin:0}.ds-empty-state__description{font-family:var(--ref-typescale-body-small-font);font-size:var(--ref-typescale-body-small-size);font-weight:var(--ref-typescale-body-small-weight);line-height:var(--ref-typescale-body-small-line-height);letter-spacing:var(--ref-typescale-body-small-tracking);color:var(--color-text-secondary);margin:0}.ds-empty-state__actions{display:flex;align-items:center;gap:var(--spacing-sm);margin-top:var(--spacing-xs)}.ds-empty-state--lg{gap:var(--spacing-sm)}.ds-empty-state--lg .ds-empty-state__graphic{width:97px}.ds-empty-state--lg .ds-empty-state__body{gap:var(--spacing-sm)}.ds-empty-state--lg .ds-empty-state__heading{font-family:var(--ref-typescale-label-large-font);font-size:var(--ref-typescale-label-large-size);font-weight:var(--ref-typescale-label-large-weight-prominent);line-height:var(--ref-typescale-label-large-line-height);letter-spacing:var(--ref-typescale-label-large-tracking)}.ds-empty-state--horizontal{flex-direction:row;text-align:left}.ds-empty-state--horizontal .ds-empty-state__body{align-items:flex-start}\n"] }]
+        }], propDecorators: { size: [{
+                type: Input
+            }], layout: [{
+                type: Input
+            }], heading: [{
+                type: Input
+            }], description: [{
+                type: Input
+            }] } });
+
+/**
  * Onflo Design System — Badge
  *
  * Notification indicator primitive. Two sizes matching Figma Large / Small:
@@ -4579,5 +4637,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
  * Generated bundle index. Do not edit.
  */
 
-export { AgentStatusComponent, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableHeaderCellComponent, DsTableRowCellComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent };
+export { AgentStatusComponent, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableHeaderCellComponent, DsTableRowCellComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent };
 //# sourceMappingURL=onflo-design-system.mjs.map

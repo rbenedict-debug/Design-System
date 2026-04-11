@@ -199,51 +199,76 @@ Save bar is always visible. Use for editor-style pages where the user works cont
 
 ### Loading
 
-Show `ds-skeleton` while content is fetching. Apply `aria-busy="true"` on the container being replaced — not on the skeleton elements themselves.
+Use `ds-skeleton` while content is fetching. Two patterns depending on context:
 
+**General content (single bar):**
 ```html
-<!-- Table loading — ds-skeleton uses content projection, not a [rows] input -->
 @if (loading) {
-  <ds-skeleton ariaLabel="Loading table data">
+  <ds-skeleton ariaLabel="Loading content">
     <div class="ds-skeleton__line"></div>
-    <div class="ds-skeleton__line"></div>
-    <div class="ds-skeleton__line ds-skeleton__line--sm"></div>
-    <!-- repeat to approximate the expected content shape -->
   </ds-skeleton>
 } @else {
   <!-- real content -->
 }
 ```
 
-**Rules:**
-- Never show skeleton and real content at the same time — swap atomically
-- `ds-skeleton` sets `aria-busy="true"` on itself automatically — do not add it again to the outer container
-- `ds-skeleton` has no `[rows]` input — populate it via content projection using `ds-skeleton__line` and `ds-skeleton__rect` elements
-- Use `ds-skeleton` when you know the content shape (table rows, card lists, form fields)
-- Use `ds-spinner` when shape is unknown or the wait is triggered by a user action (button click, form submit)
-- For in-button loading: put `ds-spinner` inside the button and disable the button — never show a full-page skeleton for a button action
-
-### Empty state
-
-Show when data has loaded but there are genuinely zero results — not a loading state, not an error.
-
+**Table rows (repeat lines to match expected row count):**
 ```html
-<div class="ds-page-content__main">
-  @if (rows.length === 0 && !loading) {
-    <div class="empty-state">
-      <span class="ds-icon ds-icon--lg" aria-hidden="true">inbox</span>
-      <p>No items yet.</p>
-      <ds-button variant="filled" (click)="onCreate()">Create your first item</ds-button>
-    </div>
-  } @else {
-    <!-- real content -->
-  }
-</div>
+@if (loading) {
+  <ds-skeleton ariaLabel="Loading table data">
+    <div class="ds-skeleton__line"></div>
+    <div class="ds-skeleton__line"></div>
+    <div class="ds-skeleton__line"></div>
+    <div class="ds-skeleton__line"></div>
+    <div class="ds-skeleton__line"></div>
+    <div class="ds-skeleton__line"></div>
+    <div class="ds-skeleton__line"></div>
+    <div class="ds-skeleton__line"></div>
+  </ds-skeleton>
+} @else {
+  <!-- ag-grid -->
+}
 ```
 
 **Rules:**
-- Always distinguish between loading (show skeleton) and empty (show empty state) — never show an empty state while data is still fetching
-- Empty state copy should state what is empty and offer a next action when one exists
-- Use a large icon (`ds-icon--lg`) as a visual anchor — not an illustration (no custom SVGs)
-- Never use `ds-skeleton` to represent an empty state — skeleton implies content is coming
-- For filtered-empty (search/filter returns zero results): show a different message than truly-empty ("No results for X" vs "No items yet") and include a clear-filters action
+- `ds-skeleton` sets `aria-busy="true"` on itself automatically — do not add it to the outer container
+- `ds-skeleton` has no `[rows]` input — project `ds-skeleton__line` and `ds-skeleton__rect` elements via `<ng-content>`
+- Never show skeleton and real content simultaneously — swap atomically
+- Use `ds-skeleton` when the content shape is known; use `ds-spinner` when unknown or when a user action triggered the wait
+- For in-button loading: `ds-spinner` inside the button + disable the button — never a full-page skeleton for a button action
+
+---
+
+### Empty state
+
+Use `ds-empty-state` when a content area has loaded but has no data to show. It displays a branded illustration and a message. Do not use a Material Symbol icon as a substitute — the empty state has its own dedicated illustration.
+
+```html
+<!-- Table empty state — sm vertical (default) -->
+<ds-empty-state heading="No data available" />
+
+<!-- Filtered empty — sm vertical with action -->
+<ds-empty-state
+  heading="No results found"
+  description="Try adjusting your search or clearing your filters.">
+  <ds-button variant="outlined" (click)="clearFilters()">Clear filters</ds-button>
+</ds-empty-state>
+
+<!-- Full-page empty — lg vertical -->
+<ds-empty-state
+  size="lg"
+  heading="Nothing here yet"
+  description="Create your first item to get started.">
+  <ds-button variant="filled" (click)="onCreate()">Create item</ds-button>
+</ds-empty-state>
+
+<!-- Compact horizontal — for constrained vertical space (dashboard cards) -->
+<ds-empty-state size="sm" layout="horizontal" heading="No data available" />
+```
+
+**Rules:**
+- Always distinguish loading (skeleton) from empty (empty state) — never show empty state while still fetching
+- Use `size="sm"` inside table rows, cards, and compact containers; `size="lg"` for full-page empty views
+- Write a specific `heading` — "No contacts found" is better than "No data available"
+- For filtered-empty (search/filter returned zero): use different copy than truly-empty ("No results for this search" vs "No contacts yet") and include a clear-filters action
+- Never use `ds-skeleton` to represent an empty state — skeleton signals content is still loading

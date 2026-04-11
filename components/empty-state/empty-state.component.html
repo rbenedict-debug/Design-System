@@ -1,0 +1,32 @@
+<div
+  class="ds-empty-state"
+  [class.ds-empty-state--lg]="size === 'lg'"
+  [class.ds-empty-state--horizontal]="layout === 'horizontal'">
+
+  <!-- Illustration — decorative, aria-hidden -->
+  <div class="ds-empty-state__graphic" aria-hidden="true">
+    <svg viewBox="0 0 97 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Magnifying glass lens -->
+      <circle cx="44" cy="44" r="30" stroke="currentColor" stroke-width="6"/>
+      <!-- Question mark — arc and stem -->
+      <path d="M37 40C37 28 51 24 51 36C51 42 44 44 44 52"
+            stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+      <!-- Question mark — dot -->
+      <circle cx="44" cy="61" r="3.5" fill="currentColor"/>
+      <!-- Handle -->
+      <path d="M65 65L84 86" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="ds-empty-state__body">
+    <p class="ds-empty-state__heading">{{ heading }}</p>
+
+    @if (description) {
+      <p class="ds-empty-state__description">{{ description }}</p>
+    }
+
+    <!-- Optional actions — project ds-button or any action element here -->
+    <ng-content />
+  </div>
+
+</div>

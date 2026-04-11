@@ -1,6 +1,6 @@
 # Component Specs — Display & Content
 
-Card, Card Item, Tabs, Badge, List, Label
+Card, Card Item, Tabs, Badge, List, Label, Empty State
 
 ---
 
@@ -104,3 +104,25 @@ Card, Card Item, Tabs, Badge, List, Label
   - Dot = 10px solid circle, colored via `--label-dot-color` CSS var (set per variant to `--color-border-accent-{color}`)
   - With dot: left padding reduces — MD/SM = `8px`, XS = `4px`
 - **Angular inputs**: `[pill]="true"` and `[dot]="true"` on `<ds-label>`; dot element rendered automatically when `pill && dot`
+
+---
+
+### Empty State (`ds-empty-state`)
+- **Purpose**: Branded illustration + message for content areas with no data. Use any time a list, table, card, or page body returns zero results.
+- **Sizes**: `sm` (default) | `lg`
+  - `sm` — 48px graphic, Label Medium typography — use inside tables, cards, compact containers
+  - `lg` — 97px graphic, Label Large typography — use for full-page empty views
+- **Layouts**: `vertical` (default) | `horizontal`
+  - `vertical` — graphic stacked above text; works in most containers
+  - `horizontal` — graphic beside text; use when vertical space is constrained (e.g. small dashboard card)
+- **Illustration**: inline SVG magnifying glass with question mark, `currentColor` — adapts to dark mode via `color: --color-icon-disabled` on `__graphic`
+- **Heading typography**:
+  - SM: `--ref-typescale-label-medium-*`, `weight-prominent` (600), `--color-text-secondary`
+  - LG: `--ref-typescale-label-large-*`, `weight-prominent` (600), `--color-text-secondary`
+- **Description typography**: `--ref-typescale-body-small-*`, regular weight, `--color-text-secondary` — optional
+- **Actions slot**: `<ng-content />` inside `__body` — project `ds-button` or any action element; optional
+- **Gap**: `--spacing-xs` (4px) between graphic and body for sm; `--spacing-sm` (8px) for lg
+- **ADA**: `__graphic` is `aria-hidden="true"` (decorative illustration); heading text conveys the state to screen readers; no `role` needed on root
+- **Inputs**: `[size]="'sm' | 'lg'"`, `[layout]="'vertical' | 'horizontal'"`, `[heading]="string"`, `[description]="string"`
+- **Default heading**: `'No data available'` — always override with a context-specific message in production
+- **No Angular Material base** — custom component

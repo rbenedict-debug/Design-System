@@ -8166,6 +8166,7 @@
       <a class="nav-link" href="#list" onclick="setActive(this)"><span class="nav-dot"></span>List Item</a>
       <a class="nav-link" href="#card" onclick="setActive(this)"><span class="nav-dot"></span>Card</a>
       <a class="nav-link" href="#card-item" onclick="setActive(this)"><span class="nav-dot"></span>Card Item</a>
+      <a class="nav-link" href="#empty-state" onclick="setActive(this)"><span class="nav-dot"></span>Empty State</a>
 
       <div class="nav-group-label">Navigation</div>
       <a class="nav-link" href="#nav-button" onclick="setActive(this)"><span class="nav-dot"></span>Nav Button</a>
@@ -12128,6 +12129,126 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           </div>
 
         </div><!-- /.component-demo -->
+      </section>
+
+      <section class="section" id="empty-state">
+        <div class="section-header">
+          <h2 class="section-title">Empty State</h2>
+          <p class="section-desc">Branded illustration + message for content areas with no data. Sizes: sm (default) | lg. Layouts: vertical (default) | horizontal. Optional description and action slot. Source: <code>components/empty-state/_empty-state.scss</code></p>
+        </div>
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">SM — vertical</div>
+            <div class="demo-row-items" style="gap:48px; align-items:flex-start;">
+              <div class="ds-empty-state">
+                <div class="ds-empty-state__graphic" aria-hidden="true">
+                  <svg viewBox="0 0 97 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="44" cy="44" r="30" stroke="currentColor" stroke-width="6"/>
+                    <path d="M37 40C37 28 51 24 51 36C51 42 44 44 44 52" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+                    <circle cx="44" cy="61" r="3.5" fill="currentColor"/>
+                    <path d="M65 65L84 86" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="ds-empty-state__body">
+                  <p class="ds-empty-state__heading">No data available</p>
+                </div>
+              </div>
+              <div class="ds-empty-state">
+                <div class="ds-empty-state__graphic" aria-hidden="true">
+                  <svg viewBox="0 0 97 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="44" cy="44" r="30" stroke="currentColor" stroke-width="6"/>
+                    <path d="M37 40C37 28 51 24 51 36C51 42 44 44 44 52" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+                    <circle cx="44" cy="61" r="3.5" fill="currentColor"/>
+                    <path d="M65 65L84 86" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="ds-empty-state__body">
+                  <p class="ds-empty-state__heading">No results found</p>
+                  <p class="ds-empty-state__description">Try adjusting your search.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">SM — horizontal</div>
+            <div class="demo-row-items" style="gap:48px; align-items:flex-start;">
+              <div class="ds-empty-state ds-empty-state--horizontal">
+                <div class="ds-empty-state__graphic" aria-hidden="true">
+                  <svg viewBox="0 0 97 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="44" cy="44" r="30" stroke="currentColor" stroke-width="6"/>
+                    <path d="M37 40C37 28 51 24 51 36C51 42 44 44 44 52" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+                    <circle cx="44" cy="61" r="3.5" fill="currentColor"/>
+                    <path d="M65 65L84 86" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="ds-empty-state__body">
+                  <p class="ds-empty-state__heading">No data available</p>
+                  <p class="ds-empty-state__description">No items to display.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">LG — vertical</div>
+            <div class="demo-row-items" style="gap:48px; align-items:flex-start;">
+              <div class="ds-empty-state ds-empty-state--lg">
+                <div class="ds-empty-state__graphic" aria-hidden="true">
+                  <svg viewBox="0 0 97 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="44" cy="44" r="30" stroke="currentColor" stroke-width="6"/>
+                    <path d="M37 40C37 28 51 24 51 36C51 42 44 44 44 52" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+                    <circle cx="44" cy="61" r="3.5" fill="currentColor"/>
+                    <path d="M65 65L84 86" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="ds-empty-state__body">
+                  <p class="ds-empty-state__heading">No data available</p>
+                  <p class="ds-empty-state__description">There's nothing here yet.</p>
+                </div>
+              </div>
+              <div class="ds-empty-state ds-empty-state--lg">
+                <div class="ds-empty-state__graphic" aria-hidden="true">
+                  <svg viewBox="0 0 97 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="44" cy="44" r="30" stroke="currentColor" stroke-width="6"/>
+                    <path d="M37 40C37 28 51 24 51 36C51 42 44 44 44 52" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+                    <circle cx="44" cy="61" r="3.5" fill="currentColor"/>
+                    <path d="M65 65L84 86" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="ds-empty-state__body">
+                  <p class="ds-empty-state__heading">No results found</p>
+                  <p class="ds-empty-state__description">Try adjusting your search or clearing your filters.</p>
+                  <div class="ds-empty-state__actions">
+                    <button class="ds-button ds-button--outlined ds-button--md" type="button">Clear filters</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">LG — horizontal</div>
+            <div class="demo-row-items" style="gap:48px; align-items:flex-start;">
+              <div class="ds-empty-state ds-empty-state--lg ds-empty-state--horizontal">
+                <div class="ds-empty-state__graphic" aria-hidden="true">
+                  <svg viewBox="0 0 97 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="44" cy="44" r="30" stroke="currentColor" stroke-width="6"/>
+                    <path d="M37 40C37 28 51 24 51 36C51 42 44 44 44 52" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+                    <circle cx="44" cy="61" r="3.5" fill="currentColor"/>
+                    <path d="M65 65L84 86" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="ds-empty-state__body">
+                  <p class="ds-empty-state__heading">No data available</p>
+                  <p class="ds-empty-state__description">There's nothing to show here yet.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </section>
 
       <section class="section" id="nav-button">

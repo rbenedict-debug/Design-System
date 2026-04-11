@@ -37,7 +37,7 @@ components/
   # One directory per component — selector matches ds-{name}:
   icon/ button/ icon-button/ input/ textarea/ select/ autocomplete/
   checkbox/ radio/ toggle/ datepicker/
-  badge/ alert/ tooltip/ avatar/ progress/ spinner/ snackbar/ skeleton/
+  badge/ alert/ tooltip/ avatar/ progress/ spinner/ snackbar/ skeleton/ empty-state/
   tabs/ card/ dialog/ menu/ accordion/ chip/ tag/ divider/ list/ paginator/
   label/ search/ table/ ag-paginator/ table-toolbar/ hover-card/ save-bar/ modal/
   nav-button/ agent-status/ nav-sidebar/ nav-tab/ top-nav/ nav-expand/
@@ -172,6 +172,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-snackbar` | `MatSnackBarModule` | MatSnackBar service |
 | `ds-label` | Custom | Display-only tag — no Material equivalent |
 | `ds-skeleton` | Custom | No Material equivalent — aria-busy pattern |
+| `ds-empty-state` | Custom | No Material equivalent — illustration + message for zero-data states; sizes: sm / lg; layouts: vertical / horizontal; content projection for optional actions |
 | `ds-search` | Custom | No Material equivalent — internal building block for ds-table-toolbar |
 | `ds-ag-paginator` | Custom | AG Grid custom pagination panel — no Material equivalent |
 | `ds-hover-card` | Custom | No Material equivalent — cursor-following floating card |

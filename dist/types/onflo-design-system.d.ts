@@ -342,6 +342,54 @@ declare class DsAvatarComponent implements OnInit {
     static ɵcmp: i0.ɵɵComponentDeclaration<DsAvatarComponent, "ds-avatar", never, { "src": { "alias": "src"; "required": false; }; "initials": { "alias": "initials"; "required": false; }; "alt": { "alias": "alt"; "required": false; }; "size": { "alias": "size"; "required": false; }; }, {}, never, never, true, never>;
 }
 
+type DsEmptyStateSize = 'sm' | 'lg';
+type DsEmptyStateLayout = 'vertical' | 'horizontal';
+/**
+ * Onflo Design System — Empty State
+ *
+ * Branded illustration + message shown when a content area has no data.
+ * Use inside any container (table, card, full page) that may return zero results.
+ *
+ * Two sizes scale the graphic and typography:
+ *   sm — for compact containers such as dashboard cards and table empty states
+ *   lg — for full-page empty views
+ *
+ * Two layouts control graphic + text arrangement:
+ *   vertical   — graphic above text (default; works in most containers)
+ *   horizontal — graphic beside text (use when vertical space is constrained)
+ *
+ * Project optional action buttons into the default content slot.
+ *
+ * ADA: the graphic is aria-hidden (decorative); heading text conveys the state.
+ *
+ * @example
+ *   <!-- Basic -->
+ *   <ds-empty-state />
+ *
+ *   <!-- With custom message + action -->
+ *   <ds-empty-state
+ *     size="lg"
+ *     heading="No results found"
+ *     description="Try adjusting your search or filters.">
+ *     <ds-button variant="outlined" (click)="clearFilters()">Clear filters</ds-button>
+ *   </ds-empty-state>
+ *
+ *   <!-- Small horizontal — for constrained vertical space -->
+ *   <ds-empty-state size="sm" layout="horizontal" heading="No items" />
+ */
+declare class DsEmptyStateComponent {
+    /** Size variant. 'sm' for compact contexts; 'lg' for full-page empty states. Default: 'sm' */
+    size: DsEmptyStateSize;
+    /** Layout direction. 'vertical' stacks graphic above text; 'horizontal' places them side by side. Default: 'vertical' */
+    layout: DsEmptyStateLayout;
+    /** Primary message. Should describe what is empty, not just "No data". Default: 'No data available' */
+    heading: string;
+    /** Optional supporting text shown below the heading — use to suggest a next action or explain why. */
+    description: string;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DsEmptyStateComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsEmptyStateComponent, "ds-empty-state", never, { "size": { "alias": "size"; "required": false; }; "layout": { "alias": "layout"; "required": false; }; "heading": { "alias": "heading"; "required": false; }; "description": { "alias": "description"; "required": false; }; }, {}, never, ["*"], true, never>;
+}
+
 /**
  * Onflo Design System — Badge
  *
@@ -2266,5 +2314,5 @@ declare class TopNavComponent implements AfterViewInit, OnDestroy {
     static ɵcmp: i0.ɵɵComponentDeclaration<TopNavComponent, "ds-top-nav", never, { "tabs": { "alias": "tabs"; "required": false; }; }, { "tabActivate": "tabActivate"; "tabClose": "tabClose"; "tabCloseAll": "tabCloseAll"; }, never, ["[top-nav-actions]"], true, never>;
 }
 
-export { AgentStatusComponent, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableHeaderCellComponent, DsTableRowCellComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent };
-export type { AgCellRendererParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgentStatusVariant, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsDateRange, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, TableCellAlign, TableCellState, TableHeaderAlign, TableSortDirection };
+export { AgentStatusComponent, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableHeaderCellComponent, DsTableRowCellComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent };
+export type { AgCellRendererParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgentStatusVariant, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, TableCellAlign, TableCellState, TableHeaderAlign, TableSortDirection };
