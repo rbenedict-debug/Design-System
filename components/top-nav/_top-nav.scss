@@ -175,7 +175,7 @@
     text-align: center;
 
     // Inline SVG icon (e.g. third-party app icon that can't use Material Symbols)
-    &-icon {
+    svg {
       width: 18px;
       height: 18px;
       flex-shrink: 0;
