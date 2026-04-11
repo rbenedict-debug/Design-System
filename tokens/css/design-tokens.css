@@ -151,6 +151,16 @@
   --color-icon-accent-purple: var(--ref-color-accent-purple-default);
   --color-icon-accent-pink: var(--ref-color-accent-pink-default);
 
+  /* ── Motion ────────────────────────────────────────── */
+  --motion-duration-short: var(--ref-motion-duration-short);
+  --motion-duration-medium: var(--ref-motion-duration-medium);
+  --motion-duration-long: var(--ref-motion-duration-long);
+
+  /* ── Layout ────────────────────────────────────────── */
+  --nav-sidebar-width: 80px;
+  --subnav-width: 195px;
+  --top-nav-height: 65px;
+
   /* ── table cell height ─────────────────────────────── */
   --color-table-cell-height-comfortable-height: var(--ref-table-cell-height-comfort-height);
   --color-table-cell-height-standard-height: var(--ref-table-cell-height-standard-height);

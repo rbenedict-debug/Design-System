@@ -174,6 +174,13 @@
     letter-spacing: var(--ref-typescale-title-h2-tracking);
     text-align: center;
 
+    // Inline SVG icon (e.g. third-party app icon that can't use Material Symbols)
+    &-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
     .ds-icon {
       font-size: 18px;
       color: currentColor;

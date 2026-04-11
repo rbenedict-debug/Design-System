@@ -1,0 +1,84 @@
+// ============================================================
+// Onflo Design System — Split Page Pattern
+// ============================================================
+//
+// Two-panel side-by-side layout for detail views. Sits inside
+// ds-page-content__main. Supports a fixed ratio split (use a
+// ratio modifier class) or a drag-resizable split (add
+// ds-split-page--resizable and the handle element; wire with
+// CdkDragModule in production).
+//
+// Usage (HTML class API): see CLAUDE.md → Page Layouts → Split Page Layout
+// ============================================================
+
+.ds-split-page {
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-lg);
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ds-split-page__panel {
+  flex: 1 1 0;
+  background: var(--color-surface-page);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 2px 0 var(--shadow-elevation-2),
+    0 2px 6px 2px var(--shadow-elevation-2);
+  min-width: 0;
+  overflow: hidden;
+}
+
+// ── Drag handle ────────────────────────────────────────────
+// Visible only with the --resizable modifier.
+// Wire with CdkDragModule in production.
+// 18px width and 2px line width are internal design decisions.
+
+.ds-split-page__handle {
+  flex-shrink: 0;
+  width: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-xl) 0;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+}
+
+.ds-split-page__handle-line {
+  flex: 1 0 0;
+  width: 2px;
+  background: var(--color-border-secondary);
+  border-radius: var(--radius-full);
+  min-height: 1px;
+}
+
+.ds-split-page__handle .ds-icon {
+  flex-shrink: 0;
+  color: var(--color-icon-subtle);
+}
+
+// --resizable closes the gap between panels to 4px (handle fills it)
+.ds-split-page--resizable { gap: 4px; }
+
+// During CdkDrag, lock cursor on the root and all descendants
+.ds-split-page.is-dragging,
+.ds-split-page.is-dragging * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+// ── Ratio modifiers ────────────────────────────────────────
+
+.ds-split-page--7030 .ds-split-page__panel--left  { flex: 7 1 0; }
+.ds-split-page--7030 .ds-split-page__panel--right { flex: 3 1 0; }
+.ds-split-page--3070 .ds-split-page__panel--left  { flex: 3 1 0; }
+.ds-split-page--3070 .ds-split-page__panel--right { flex: 7 1 0; }
+.ds-split-page--7525 .ds-split-page__panel--left  { flex: 3 1 0; }
+.ds-split-page--7525 .ds-split-page__panel--right { flex: 1 1 0; }
+.ds-split-page--2575 .ds-split-page__panel--left  { flex: 1 1 0; }
+.ds-split-page--2575 .ds-split-page__panel--right { flex: 3 1 0; }

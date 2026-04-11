@@ -157,6 +157,16 @@ $icon-accent-orange: var(--color-icon-accent-orange) !default;
 $icon-accent-purple: var(--color-icon-accent-purple) !default;
 $icon-accent-pink: var(--color-icon-accent-pink) !default;
 
+// ── Motion ──────────────────────────────────────────────
+$motion-duration-short: var(--motion-duration-short) !default;
+$motion-duration-medium: var(--motion-duration-medium) !default;
+$motion-duration-long: var(--motion-duration-long) !default;
+
+// ── Layout ──────────────────────────────────────────────
+$nav-sidebar-width: var(--nav-sidebar-width) !default;
+$subnav-width: var(--subnav-width) !default;
+$top-nav-height: var(--top-nav-height) !default;
+
 // ── table cell height ───────────────────────────────────
 $table-cell-height-comfortable-height: var(--color-table-cell-height-comfortable-height) !default;
 $table-cell-height-standard-height: var(--color-table-cell-height-standard-height) !default;

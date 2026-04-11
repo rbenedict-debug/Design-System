@@ -150,6 +150,11 @@
   --ref-overlay-yellow-focused: rgba(255, 191, 0, 0.12);
   --ref-overlay-yellow-dragged: rgba(255, 191, 0, 0.16);
 
+  /* ── Motion ───────────────────────────────────────── */
+  --ref-motion-duration-short: 0.15s;
+  --ref-motion-duration-medium: 0.2s;
+  --ref-motion-duration-long: 0.3s;
+
   /* ── table cell height ─────────────────────────────── */
   --ref-table-cell-height-comfort-height: 68px;
   --ref-table-cell-height-standard-height: 56px;

@@ -1,0 +1,127 @@
+// ============================================================
+// Onflo Design System — Page Layout Pattern
+// ============================================================
+//
+// CSS-only composition pattern for the standard full-viewport
+// app shell. Combines ds-nav-sidebar (left), ds-top-nav (top),
+// an optional collapsible ds-subnav panel, and a ds-page-content
+// main area.
+//
+// Usage (HTML class API): see CLAUDE.md → Page Layouts → Page Layout
+// Angular wiring: see CLAUDE.md → Page Layouts → Angular wiring
+// Preview demo: preview/index.html → #page-layout section
+//
+// Note on height: the preview wraps this in a fixed-height frame
+// (640px) for demo purposes. In production use height: 100% on
+// the parent (app shell fills the viewport via app-root).
+// ============================================================
+
+// ── App shell root ─────────────────────────────────────────
+
+.ds-page-layout {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: var(--color-surface-default);
+  overflow: hidden;
+}
+
+.ds-page-layout__content {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ds-page-layout__body {
+  flex: 1 1 0;
+  display: flex;
+  padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg) 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+// ── Sub-navigation panel ───────────────────────────────────
+
+.ds-subnav {
+  flex-shrink: 0;
+  width: var(--subnav-width);
+  height: 100%;
+  background: var(--color-surface-page);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  box-shadow:
+    0 0 2px 0 var(--shadow-elevation-2),
+    0 2px 6px 2px var(--shadow-elevation-2);
+  padding: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  overflow: hidden auto;
+  box-sizing: border-box;
+  transition:
+    width var(--motion-duration-medium) ease,
+    opacity var(--motion-duration-short) ease,
+    padding var(--motion-duration-medium) ease;
+
+  // Overlay scrollbar — hidden until hover, no content push.
+  // scrollbar-color is intentional here (not ::-webkit-scrollbar),
+  // which preserves macOS native overlay scrollbar behavior.
+  // Defining the WebKit API disables native overlay mode.
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &:hover {
+    scrollbar-color: var(--color-surface-scroll) transparent;
+  }
+
+  &.is-collapsed {
+    width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+// ── Page content area ──────────────────────────────────────
+
+.ds-page-content {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding-left: var(--spacing-lg);
+
+  // router-outlet is a real DOM node that becomes a flex item, adding an
+  // unwanted gap before the first piece of page content. Remove it from flow.
+  > router-outlet { display: none; }
+}
+
+.ds-page-content__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+.ds-page-content__title {
+  font-family: var(--ref-typescale-title-h1-font);
+  font-size: var(--ref-typescale-title-h1-size);
+  font-weight: var(--ref-typescale-title-h1-weight);
+  line-height: var(--ref-typescale-title-h1-line-height);
+  color: var(--color-text-primary);
+  margin: 0;
+  padding: var(--spacing-sm) 0 0 var(--spacing-lg);
+}
+
+.ds-page-content__main {
+  flex: 1 1 0;
+  background: var(--color-surface-page);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 2px 0 var(--shadow-elevation-2),
+    0 2px 6px 2px var(--shadow-elevation-2);
+  min-height: 0;
+}
