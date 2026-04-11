@@ -232,7 +232,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 
 > **Layout patterns** (app shell compositions, not UI components) go in `layout/` instead —
 > SCSS in `layout/{name}/_{name}.scss`, added to `layout/index.scss`, ships as `dist/layout.css`.
-> No Angular component needed; CSS-only. Reference the Page Layouts section in component-specs.md.
+> No Angular component needed; CSS-only. Reference the Page Layouts section in `.claude/specs/specs-layout.md`.
 
 ---
 
@@ -241,4 +241,9 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 @.claude/ada-standards.md
 @.claude/preview-rules.md
 
-Per-component specs are in `.claude/component-specs.md` — read this file before adding or modifying any component.
+Per-component specs are in `.claude/specs/` — read the relevant file before adding or modifying any component:
+- `specs-form.md` — Button, Icon Button, Input, Textarea, Select, Autocomplete, Checkbox, Toggle
+- `specs-display.md` — Card, Card Item, Tabs, Badge, List, Label
+- `specs-overlay.md` — Dialog, Alert, Tooltip, Hover Card
+- `specs-table.md` — Table Header Cell, Table Row Cell, AG Paginator, Table Toolbar
+- `specs-layout.md` — Agent Status, Page Layout, Split Page, Utilities (ds-sr-only)
