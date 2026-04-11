@@ -412,6 +412,15 @@ Detailed per-component specs for the Onflo Design System. Referenced from root C
 
 CSS-only composition patterns. SCSS lives in `layout/page-layout/` and `layout/split-page/` and compiles into `dist/layout.css` (separate from `dist/components.css`). Consuming projects add `"node_modules/@onflo/design-system/dist/layout.css"` to their `angular.json` styles array. The preview (`preview/index.html`) provides interactive demos — the preview wraps these in a 640px fixed-height frame; production apps use `height: 100%` on the app root. Reference the preview for canonical HTML structure.
 
+### Page title rules
+
+These rules apply to every page in every Onflo application:
+
+1. **Every page must have `<h1 class="ds-page-content__title">`** inside `ds-page-content__heading`. This is the single H1 per page — required for ADA heading structure and screen reader navigation.
+2. **Exception — Inbox and Ticket View**: These pages have no visible title by design. They must still include a hidden H1: `<h1 class="ds-page-content__title ds-sr-only">Inbox</h1>`. Never omit the H1 entirely.
+3. **Tabs under the title**: When a page has section tabs, `<ds-tabs>` goes inside `ds-page-content__heading` immediately after the `<h1>`.
+4. **Never write a raw `<h1>` with custom styles** — the typography is defined by `ds-page-content__title`. Always use the class.
+
 ---
 
 ### Page Layout (`ds-page-layout`)
@@ -624,3 +633,53 @@ onHandleDrag(event: CdkDragMove, container: HTMLElement) {
 | Split ratio | Hardcoded modifier class (e.g. `ds-split-page--7030`) | Dynamic `[style.flex]` bindings driven by drag state |
 | Handle ADA | `aria-hidden="true"` in prototype | `role="separator"`, `aria-orientation="vertical"`, `tabindex="0"`, keyboard arrow keys to resize |
 | Default ratio | 50/50 (no modifier) acceptable for prototypes | Product team specifies the starting ratio per view |
+
+---
+
+## Utilities
+
+Utility classes live in `components/utilities/_utilities.scss` and compile into `dist/components.css`. These are single-purpose CSS helpers — not components.
+
+---
+
+### Screen Reader Only (`ds-sr-only`)
+
+- **Purpose**: Visually hides an element while keeping it fully accessible to screen readers and other assistive technology. An element with `ds-sr-only` is removed from visual flow (`position: absolute; width/height: 1px`) but remains in the DOM and accessible tree.
+- **Source**: `components/utilities/_utilities.scss`
+- **Ships in**: `dist/components.css`
+
+#### When to use
+
+The primary use case in Onflo is the **page title exception**:
+
+Every page requires `<h1 class="ds-page-content__title">` for ADA heading structure. Two pages — **Inbox** and **Ticket View** — have no visible title by design, but the H1 must still exist for screen reader users. Apply `ds-sr-only` to hide it visually without removing it from the accessibility tree.
+
+```html
+<!-- Standard page — visible title -->
+<div class="ds-page-content__heading">
+  <h1 class="ds-page-content__title">Contacts</h1>
+</div>
+
+<!-- Inbox / Ticket View — hidden title -->
+<div class="ds-page-content__heading">
+  <h1 class="ds-page-content__title ds-sr-only">Inbox</h1>
+</div>
+```
+
+#### CSS class API
+
+| Class | Purpose |
+|---|---|
+| `.ds-sr-only` | Visually hidden, accessible to screen readers |
+
+#### Rules
+
+- Combine with the element's own class — do not replace it: `class="ds-page-content__title ds-sr-only"` not just `ds-sr-only`
+- Do not use `display: none` or `visibility: hidden` as an alternative — those hide content from screen readers too
+- Do not use `ds-sr-only` to hide interactive elements (buttons, links) — only use on non-interactive content
+- `ds-sr-only` uses both `clip` (legacy) and `clip-path: inset(50%)` (modern) for maximum browser compatibility
+
+#### What NOT to do
+
+- Never omit the H1 on inbox/ticket pages — add it with `ds-sr-only` instead
+- Never use `ds-sr-only` to suppress content that should exist for all users — it is not a general-purpose hide utility

@@ -8186,6 +8186,9 @@
 
       <div class="nav-group-label">Page Layouts</div>
       <a class="nav-link" href="#split-page" onclick="setActive(this)"><span class="nav-dot"></span>Split Page</a>
+
+      <div class="nav-group-label">Utilities</div>
+      <a class="nav-link" href="#sr-only" onclick="setActive(this)"><span class="nav-dot"></span>Screen Reader Only</a>
     </nav>
 
     <nav class="sidebar-nav" id="nav-examples" style="display:none">
@@ -13610,6 +13613,35 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           </div>
 
         </div><!-- /.component-demo -->
+      </section>
+
+      <section class="section" id="sr-only">
+        <div class="section-header">
+          <h2 class="section-title">Screen Reader Only</h2>
+          <span class="section-source">components/utilities/_utilities.scss</span>
+        </div>
+        <p class="section-desc">Visually hides an element while keeping it accessible to screen readers and assistive technology. Use <code>ds-sr-only</code> on any element that must exist in the DOM for ADA compliance but should not be visible. Primary use case: pages with no visible page title (Inbox, Ticket View) still require a hidden <code>&lt;h1&gt;</code> for screen reader heading navigation.</p>
+
+        <div class="component-demo">
+
+          <div class="demo-row">
+            <div class="demo-row-label">Hidden H1</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+              <code style="font-size: 12px; color: var(--color-text-secondary);">&lt;h1 class="ds-page-content__title ds-sr-only"&gt;Inbox&lt;/h1&gt;</code>
+              <span style="font-size: 12px; color: var(--color-text-tertiary);">No visible output — the H1 is present in the DOM for screen readers but invisible to sighted users.</span>
+              <h1 class="ds-page-content__title ds-sr-only">Inbox</h1>
+            </div>
+          </div>
+
+          <div class="demo-row">
+            <div class="demo-row-label">Visible comparison</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+              <code style="font-size: 12px; color: var(--color-text-secondary);">&lt;h1 class="ds-page-content__title"&gt;Contacts&lt;/h1&gt;</code>
+              <h1 class="ds-page-content__title" style="position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; clip-path: none; white-space: normal;">Contacts</h1>
+            </div>
+          </div>
+
+        </div>
       </section>
 
       <section class="section" id="dialog">

@@ -34,57 +34,20 @@ tokens/
     _variables.scss        # SCSS mirror of design-tokens.css
 components/
   index.scss               # Barrel: @use all components
-  icon/                    # ds-icon utility (Material Symbols Rounded)
-  button/                  # ds-button
-  icon-button/             # ds-icon-button + ds-icon-button-toggle
-  input/                   # ds-input
-  checkbox/                # ds-checkbox
-  radio/                   # ds-radio + ds-radio-group
-  toggle/                  # ds-toggle
-  badge/                   # ds-badge-indicator (notification count / dot)
-  alert/                   # ds-alert
-  tooltip/                 # ds-tooltip
-  select/                  # ds-select
-  autocomplete/            # ds-autocomplete (type-to-filter input + consumer-owned panel)
-  textarea/                # ds-textarea (no fixed height — resizable)
-  avatar/                  # ds-avatar
-  progress/                # ds-progress
-  tabs/                    # ds-tabs + ds-tab
-  card/                    # ds-card + ds-card-item
-  dialog/                  # ds-dialog
-  menu/                    # ds-menu
-  accordion/               # ds-accordion
-  chip/                    # ds-chip
-  tag/                     # ds-tag (navy pill — removable / more / add variants)
-  divider/                 # ds-divider
-  list/                    # ds-list
-  paginator/               # ds-paginator
-  spinner/                 # ds-spinner
-  snackbar/                # ds-snackbar
-  label/                   # ds-label (display-only tag)
-  skeleton/                # ds-skeleton
-  search/                  # ds-search
-  table/                   # ds-table-header-cell + ds-table-row-cell (AG Grid custom renderers)
-  ag-paginator/            # ds-ag-paginator (AG Grid custom pagination panel)
-  table-toolbar/           # ds-table-toolbar (toolbar above AG Grid — search, filter, actions)
-  hover-card/              # ds-hover-card (cursor-following floating info card)
-  nav-button/              # ds-nav-button (navigation rail button — primitive for nav-sidebar)
-  agent-status/            # ds-agent-status (support agent online/offline toggle — primitive for nav-sidebar)
-  nav-sidebar/             # ds-nav-sidebar (main left navigation sidebar composition)
-  nav-tab/                 # ds-nav-tab (browser-style document tab — primitive for top-nav)
-  top-nav/                 # ds-top-nav (main top navigation bar composition — tabs + action buttons)
-  nav-expand/              # ds-nav-expand (sub-nav panel expand/collapse toggle — primitive for page layout)
-  subnav-button/           # ds-subnav-button (leaf nav item in sub-nav panel — primitive for subnav)
-  subnav-subheader/        # ds-subnav-subheader (expandable section group — settings subnav only, always nested inside ds-subnav-header; never used in general page nav)
-  subnav-header/           # ds-subnav-header (top-level collapsible header in sub-nav panel — icon + label + expand arrow)
-  save-bar/                # ds-save-bar (unsaved changes bar — Cancel / Save Progress / Save and Exit)
-  modal/                   # ds-modal (full-featured modal — sticky header, scrollable body, optional tabs + actions footer)
-  datepicker/              # ds-datepicker (single) + ds-date-range-picker (range)
-  rich-text-editor/        # ds-rich-text-editor (CKEditor 5 — custom toolbar, resize handle, expand modal)
+  # One directory per component — selector matches ds-{name}:
+  icon/ button/ icon-button/ input/ textarea/ select/ autocomplete/
+  checkbox/ radio/ toggle/ datepicker/
+  badge/ alert/ tooltip/ avatar/ progress/ spinner/ snackbar/ skeleton/
+  tabs/ card/ dialog/ menu/ accordion/ chip/ tag/ divider/ list/ paginator/
+  label/ search/ table/ ag-paginator/ table-toolbar/ hover-card/ save-bar/ modal/
+  nav-button/ agent-status/ nav-sidebar/ nav-tab/ top-nav/ nav-expand/
+  subnav-button/ subnav-subheader/ subnav-header/  # subnav-subheader: settings subnav only
+  rich-text-editor/
+  utilities/                # Utility classes (ds-sr-only, etc.) — ships in dist/components.css
 layout/
   index.scss               # Barrel: @use all layout patterns → dist/layout.css
-  page-layout/             # ds-page-layout CSS — app shell (nav-sidebar + top-nav + subnav + page-content)
-  split-page/              # ds-split-page CSS — two-pane resizable layout (primary + detail panel)
+  page-layout/             # ds-page-layout — app shell (CSS-only, no Angular component)
+  split-page/              # ds-split-page — two-pane resizable layout (CSS-only)
 preview/
   index.html               # Self-contained visual token + component reference
 ```
@@ -183,7 +146,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-input` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput |
 | `ds-textarea` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput (textarea) |
 | `ds-select` | `MatSelectModule` | mat-select inside mat-form-field; `panelClass="ds-select__panel"` themes the dropdown |
-| `ds-autocomplete` | `MatAutocompleteModule` + `MatInputModule` | matInput + matAutocomplete; consumer owns `<mat-autocomplete>` panel and filtering; pass panel ref via `[panel]`; opt-in panel theme via `panelClass="ds-autocomplete__panel"` |
+| `ds-autocomplete` | `MatAutocompleteModule` + `MatInputModule` | matInput + matAutocomplete; consumer owns panel and filtering; pass panel ref via `[panel]` |
 | `ds-datepicker` | `MatDatepickerModule` + `MatNativeDateModule` | matInput `[matDatepicker]` + `mat-datepicker-toggle`; styled to match ds-input (42px, same label/helper/error tokens); calendar popup globally styled via `.mat-datepicker-content` |
 | `ds-date-range-picker` | `MatDatepickerModule` + `MatNativeDateModule` | `mat-date-range-input` with `matStartDate` / `matEndDate` inputs + `mat-date-range-picker`; same field appearance as ds-datepicker |
 | `ds-checkbox` | `MatCheckboxModule` | mat-checkbox |
@@ -196,9 +159,9 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-progress` | `MatProgressBarModule` | mat-progress-bar |
 | `ds-spinner` | `MatProgressSpinnerModule` | mat-progress-spinner |
 | `ds-tabs` | `MatTabsModule` | mat-tab-group + mat-tab |
-| `ds-card` | `MatCardModule` | Large vertical card — optional header (`[icon]`, `[title]`, `[subtitle]`, `[showClose]`), body slot (default), optional actions footer (`[card-actions]`); `(closeClick)` output; variants: `outlined` / `elevated` |
-| `ds-card-item` | Custom | Compact 56px horizontal card — `[primary]`, `[secondary]`, `[interactive]`, `[variant]`, `[disabled]`; `(cardClick)` output; content slots: `[leading]` icon, `[trailing]` icon, `[card-action]` button (click stops propagation to card); `--interactive` makes whole card clickable with hover/press overlay |
-| `ds-dialog` | `MatDialogModule` (optional) | Slot-based dialog panel — body slot (`[dialog-body]`) + actions slot (`[dialog-actions]`); left-aligned only; `[titleId]` wires `aria-labelledby`; `panelClass: 'ds-dialog-overlay'` when using MatDialog |
+| `ds-card` | `MatCardModule` | variants: `outlined` / `elevated` |
+| `ds-card-item` | Custom | Compact 56px horizontal card |
+| `ds-dialog` | `MatDialogModule` (optional) | slots: `[dialog-body]` + `[dialog-actions]`; left-aligned only; `panelClass: 'ds-dialog-overlay'` |
 | `ds-menu` | `MatMenuModule` | mat-menu |
 | `ds-accordion` | `MatExpansionModule` | mat-accordion + mat-expansion-panel |
 | `ds-chip` | `MatChipsModule` | mat-chip |
@@ -226,8 +189,8 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |
-| `ds-page-layout` | Custom | No Material equivalent — CSS-only app shell pattern; SCSS in `layout/page-layout/`, ships as `dist/layout.css`; composes `.ds-nav-sidebar`, `.ds-top-nav`, `.ds-subnav`, `.ds-page-content`; uses `--nav-sidebar-width`, `--subnav-width`, `--top-nav-height`, `--motion-duration-*` tokens |
-| `ds-split-page` | CdkDrag (CDK only) | No Material equivalent — CSS-only two-pane layout; SCSS in `layout/split-page/`, ships as `dist/layout.css`; resize handle uses CDK drag for production, fixed 50/50 split acceptable in prototypes; replace with `CdkDragModule` in engineering handoff |
+| `ds-page-layout` | Custom | CSS-only app shell; SCSS in `layout/page-layout/`, ships as `dist/layout.css` |
+| `ds-split-page` | CdkDrag (CDK only) | CSS-only two-pane layout; SCSS in `layout/split-page/`, ships as `dist/layout.css`; use `CdkDragModule` for production resize |
 | `ds-rich-text-editor` | Custom (CKEditor 5) | No Angular Material equivalent — third-party CKEditor 5. Requires `@ckeditor/ckeditor5-angular` + `@ckeditor/ckeditor5-build-classic`. Custom toolbar calls `editor.execute()` commands; native CKEditor toolbar is suppressed via CSS. Inputs: `[label]`, `[placeholder]`, `[(value)]`, `[disabled]`, `[isError]`, `[showResize]`, `[showExpand]`. Resize = JS mousedown drag on host height. Expand = `position:fixed` overlay with a second editor instance that syncs back on close. |
 
 ---
@@ -243,6 +206,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 - Never reference `--ref-*` tokens directly in component styles — go through semantic `--color-*` / `--spacing-*` etc.
 - Never apply `box-shadow` focus ring directly on `:focus-within` — always pair with `:not([data-mouse-focus])` guard or the ring will fire on mouse clicks
 - Never use `:focus` where `:focus-visible` is appropriate — `:focus-visible` is keyboard-only by design for simple elements
+- Never omit the `<h1 class="ds-page-content__title">` on any page — use `ds-sr-only` to hide it visually for pages with no visible title (inbox, ticket view); omitting it entirely breaks screen reader heading navigation
 
 ---
 
@@ -274,8 +238,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 
 ## Extended Reference Files
 
-Detailed specs are split into focused files — import these for deep work on specific areas:
-
-@.claude/component-specs.md
 @.claude/ada-standards.md
 @.claude/preview-rules.md
+
+Per-component specs are in `.claude/component-specs.md` — read this file before adding or modifying any component.

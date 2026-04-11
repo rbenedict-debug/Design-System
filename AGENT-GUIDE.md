@@ -188,11 +188,145 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 | Rich text editor | `<ds-rich-text-editor>` | `DsRichTextEditorComponent` |
 | Search | `<ds-search>` | `DsSearchComponent` |
 
-### Page layout patterns (CSS only — no Angular component)
-| Pattern | CSS class | Use case |
+### Utilities
+| Utility | Class | Use case |
 |---|---|---|
-| App shell | `.ds-page-layout` | Full layout: top-nav + sidebar + subnav + content |
-| Split page | `.ds-split-page` | Two-panel resizable layout |
+| Screen reader only | `ds-sr-only` | Visually hides an element while keeping it accessible to screen readers |
+
+---
+
+## Page layout patterns
+
+These are CSS-only patterns — no Angular component. Import `dist/layout.css` in `angular.json` (see CSS imports section above).
+
+### Rules — non-negotiable
+
+1. **Every page MUST have a page title** — `<h1 class="ds-page-content__title">` inside `ds-page-content__heading`. This is required for ADA heading structure; screen readers use H1 to identify the page.
+2. **Exception: Inbox and Ticket View** — these pages have no visible title by design. They must still include a hidden H1 using `ds-sr-only` so screen reader users retain heading navigation.
+3. **Never write a raw `<h1>` outside of `ds-page-content__title`** — the token-based typography and layout are embedded in this class.
+4. **Never skip `ds-page-content__main`** — all page body content goes inside this card shell. Never add `background`, `border-radius`, or `box-shadow` yourself; `ds-page-content__main` provides them.
+5. **Tabs under the title** — when a page has section tabs, place `<ds-tabs>` inside `ds-page-content__heading` immediately after the `<h1>`. Never place tabs outside the heading block.
+
+### App shell (`ds-page-layout`) — HTML skeleton
+
+```html
+<div class="ds-page-layout">
+
+  <!-- Left: main nav rail -->
+  <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+    <!-- ds-nav-button items; ds-agent-status at bottom -->
+  </nav>
+
+  <!-- Right column: top-nav stacked above body -->
+  <div class="ds-page-layout__content">
+
+    <header class="ds-top-nav" role="banner">
+      <!-- ds-nav-tab items, action icon buttons -->
+    </header>
+
+    <div class="ds-page-layout__body">
+
+      <!-- Optional collapsible sub-nav panel (CSS-only — no Angular component) -->
+      <nav class="ds-subnav" role="navigation" aria-label="Section navigation">
+        <!-- ds-subnav-header / ds-subnav-button items -->
+      </nav>
+
+      <!-- Main content area -->
+      <main class="ds-page-content" role="main">
+
+        <!-- Heading block: title + optional tabs -->
+        <div class="ds-page-content__heading">
+          <h1 class="ds-page-content__title">Page Title</h1>
+          <!-- <ds-tabs> goes here when page has section tabs -->
+        </div>
+
+        <!-- Content card: all page body content lives here -->
+        <div class="ds-page-content__main">
+          <!-- page content -->
+        </div>
+
+      </main>
+
+    </div><!-- /.ds-page-layout__body -->
+
+  </div><!-- /.ds-page-layout__content -->
+
+  <!-- Subnav expand/collapse toggle (absolutely positioned) -->
+  <button class="ds-nav-expand" type="button"
+          aria-label="Collapse sub navigation" aria-expanded="true">
+    <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+  </button>
+
+</div><!-- /.ds-page-layout -->
+```
+
+**Inbox / Ticket View exception** — hidden title, no heading block visible:
+```html
+<main class="ds-page-content" role="main">
+  <div class="ds-page-content__heading">
+    <h1 class="ds-page-content__title ds-sr-only">Inbox</h1>
+    <!-- no visible title — sr-only H1 preserves ADA heading structure -->
+  </div>
+  <div class="ds-page-content__main">
+    <!-- page content -->
+  </div>
+</main>
+```
+
+### Sub-nav collapse (Angular wiring)
+
+`ds-subnav` has no Angular component — manage `is-collapsed` via host state:
+
+```typescript
+subNavOpen = true;
+onToggleSubnav() { this.subNavOpen = !this.subNavOpen; }
+```
+
+```html
+<nav class="ds-subnav" [class.is-collapsed]="!subNavOpen" ...>
+<ds-nav-expand [open]="subNavOpen" (toggle)="onToggleSubnav()" />
+```
+
+### CSS class reference
+
+| Class | Purpose |
+|---|---|
+| `.ds-page-layout` | Root shell — `position: relative; display: flex` |
+| `.ds-page-layout__content` | Right column — top-nav stacked above body |
+| `.ds-page-layout__body` | Row — subnav beside page-content |
+| `.ds-subnav` | Collapsible sub-nav panel (`width: 195px` default) |
+| `.ds-subnav.is-collapsed` | Hidden state — `width: 0; opacity: 0; pointer-events: none` |
+| `.ds-page-content` | Main content area — flex column |
+| `.ds-page-content__heading` | Title + optional tabs row |
+| `.ds-page-content__title` | `<h1>` — Title H1 typography, required on every page |
+| `.ds-page-content__main` | Content card — background, radius, shadow |
+
+---
+
+### Split page (`ds-split-page`)
+
+Sits inside `ds-page-content__main`. Two panels side by side. Five split ratios available.
+
+```html
+<!-- Fixed ratio -->
+<div class="ds-split-page ds-split-page--7030">
+  <div class="ds-split-page__panel ds-split-page__panel--left"><!-- left content --></div>
+  <div class="ds-split-page__panel ds-split-page__panel--right"><!-- right content --></div>
+</div>
+
+<!-- Resizable (add CdkDragModule on the handle for production) -->
+<div class="ds-split-page ds-split-page--resizable">
+  <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+  <div class="ds-split-page__handle" aria-hidden="true">
+    <div class="ds-split-page__handle-line"></div>
+    <span class="ds-icon" aria-hidden="true">drag_indicator</span>
+    <div class="ds-split-page__handle-line"></div>
+  </div>
+  <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+</div>
+```
+
+Ratio modifiers: `ds-split-page--7030` · `ds-split-page--3070` · `ds-split-page--7525` · `ds-split-page--2575` · (no modifier = 50/50)
 
 ---
 
@@ -214,20 +348,22 @@ Or Angular component:
 
 ## CSS import in Angular projects
 
-Two stylesheets must be included — tokens first, then components. Both are required.
+Three stylesheets must be included — tokens first, then components, then layout (if using page layout patterns). All three are required for full-page applications.
 
 **In `angular.json` styles array:**
 ```json
 "styles": [
   "node_modules/@onflo/design-system/tokens/css/index.css",
   "node_modules/@onflo/design-system/dist/components.css",
+  "node_modules/@onflo/design-system/dist/layout.css",
   "src/styles.scss"
 ]
 ```
 
 `tokens/css/index.css` — design tokens (CSS custom properties)
-`dist/components.css` — global component CSS class API (`.ds-icon`, `.ds-button`, etc.)
-Both are required. The components CSS must come after tokens so it can reference them.
+`dist/components.css` — component CSS class API (`.ds-icon`, `.ds-button`, `ds-sr-only`, etc.)
+`dist/layout.css` — page layout patterns (`.ds-page-layout`, `.ds-split-page`)
+Order matters: tokens → components → layout → project styles.
 
 **SCSS tokens in component stylesheets:**
 ```scss

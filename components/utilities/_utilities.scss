@@ -1,0 +1,27 @@
+// ============================================================
+// Onflo Design System — Utility Classes
+// ============================================================
+
+// ── Screen-reader only ─────────────────────────────────────
+//
+// Visually hides an element while keeping it accessible to
+// screen readers and other assistive technology.
+//
+// Usage:
+//   <h1 class="ds-page-content__title ds-sr-only">Inbox</h1>
+//
+// Required for pages with no visible title (inbox, ticket view)
+// to preserve ADA heading structure without showing a redundant label.
+
+.ds-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);     // legacy browser support
+  clip-path: inset(50%);       // modern replacement for clip
+  white-space: nowrap;
+  border: 0;
+}
