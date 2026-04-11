@@ -307,24 +307,43 @@ onToggleSubnav() { this.subNavOpen = !this.subNavOpen; }
 
 ### Split page (`ds-split-page`)
 
-Sits inside `ds-page-content__main`. Two panels side by side. Five split ratios available.
+Two panels side by side inside `ds-page-content__main`. The page title (`ds-page-content__heading`) is a **sibling of `__main`, not inside it** — it sits above the panels and never moves.
+
+**Always use this full structure when a page uses a split layout:**
 
 ```html
-<!-- Fixed ratio -->
-<div class="ds-split-page ds-split-page--7030">
-  <div class="ds-split-page__panel ds-split-page__panel--left"><!-- left content --></div>
-  <div class="ds-split-page__panel ds-split-page__panel--right"><!-- right content --></div>
-</div>
+<main class="ds-page-content" role="main">
 
-<!-- Resizable (add CdkDragModule on the handle for production) -->
-<div class="ds-split-page ds-split-page--resizable">
-  <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-  <div class="ds-split-page__handle" aria-hidden="true">
-    <div class="ds-split-page__handle-line"></div>
-    <span class="ds-icon" aria-hidden="true">drag_indicator</span>
-    <div class="ds-split-page__handle-line"></div>
+  <!-- Title stays OUTSIDE __main — fixed above the panels, never inside them -->
+  <div class="ds-page-content__heading">
+    <h1 class="ds-page-content__title">Page Title</h1>
+    <!-- <ds-tabs> here if the page has section tabs -->
   </div>
-  <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+
+  <!-- Split page lives INSIDE __main -->
+  <div class="ds-page-content__main">
+    <div class="ds-split-page ds-split-page--7030">
+      <div class="ds-split-page__panel ds-split-page__panel--left"><!-- left content --></div>
+      <div class="ds-split-page__panel ds-split-page__panel--right"><!-- right content --></div>
+    </div>
+  </div>
+
+</main>
+```
+
+**Resizable variant** (add `CdkDragModule` on the handle for production):
+
+```html
+<div class="ds-page-content__main">
+  <div class="ds-split-page ds-split-page--resizable">
+    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+    <div class="ds-split-page__handle" aria-hidden="true">
+      <div class="ds-split-page__handle-line"></div>
+      <span class="ds-icon" aria-hidden="true">drag_indicator</span>
+      <div class="ds-split-page__handle-line"></div>
+    </div>
+    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+  </div>
 </div>
 ```
 
