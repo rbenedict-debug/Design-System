@@ -1824,8 +1824,9 @@ declare class SubnavSubheaderComponent {
  *   - Comfort/Compact density toggle
  *   - Column visibility toggle (checkbox per column, drag to reorder)
  *   - Pivot Mode toggle
- *   - Row Groups section with "Add Column" affordance
- *   - Values (aggregation) section with "Add Column" affordance
+ *   - Row Groups section — shows active groups as removable chips; "Add Column"
+ *     opens an inline picker menu listing all groupable columns
+ *   - Values (aggregation) section — "Add Column" opens same picker pattern
  *
  * AG Grid usage:
  *   gridOptions = {
@@ -1852,6 +1853,7 @@ declare class SubnavSubheaderComponent {
  *   Column checkboxes use role="checkbox" + aria-checked.
  *   Density buttons use aria-pressed.
  *   Pivot toggle is a native <input type="checkbox">.
+ *   Add Column buttons use aria-expanded to reflect menu state.
  */
 
 type TableDensity = 'comfort' | 'compact';
@@ -1881,8 +1883,10 @@ interface AgColumnPanelApi {
     setPivotMode(mode: boolean): void;
     getRowGroupColumns(): AgPanelColumn[];
     addRowGroupColumn(key: string): void;
+    removeRowGroupColumn(key: string): void;
     getValueColumns(): AgPanelColumn[];
     addValueColumn(key: string): void;
+    removeValueColumn(key: string): void;
     addEventListener(event: string, callback: () => void): void;
     removeEventListener(event: string, callback: () => void): void;
 }
@@ -1898,6 +1902,11 @@ interface AgPanelColumn {
 interface AgToolPanelParams {
     api: AgColumnPanelApi;
 }
+/** A column entry in the row-group or value picker menu. */
+interface ColumnPickerOption {
+    colId: string;
+    label: string;
+}
 declare class DsColumnPanelComponent implements OnDestroy {
     private readonly cdr;
     /** Column list — auto-populated when [api] is bound, otherwise set manually. */
@@ -1908,34 +1917,49 @@ declare class DsColumnPanelComponent implements OnDestroy {
     density: TableDensity;
     /** Whether pivot mode is enabled. */
     pivotMode: boolean;
+    /** Active row group columns shown as chips in the Row Groups section. */
+    activeRowGroups: ColumnPickerOption[];
+    /** Active value (aggregation) columns shown as chips in the Values section. */
+    activeValueColumns: ColumnPickerOption[];
+    /** Whether the row-group column picker menu is open. */
+    showRowGroupMenu: boolean;
+    /** Whether the value column picker menu is open. */
+    showValueMenu: boolean;
     densityChange: EventEmitter<TableDensity>;
     columnVisibilityChange: EventEmitter<ColumnVisibilityChange>;
     pivotModeChange: EventEmitter<boolean>;
-    addRowGroupColumn: EventEmitter<void>;
-    addValueColumn: EventEmitter<void>;
     private _api;
     private readonly _colChanged;
     private readonly _pivotChanged;
+    private readonly _groupChanged;
     constructor(cdr: ChangeDetectorRef);
     agInit(params: AgToolPanelParams): void;
     /** Called by AG Grid when the tool panel is refreshed. */
     refresh(): void;
     ngOnDestroy(): void;
+    onDocumentClick(): void;
     private _syncColumns;
     private _syncPivot;
+    private _syncGroups;
+    get rowGroupMenuOptions(): ColumnPickerOption[];
+    get valueMenuOptions(): ColumnPickerOption[];
     toggleColVisibility(): void;
     onDensityChange(value: TableDensity): void;
     toggleColumnVisibility(col: ColumnPanelItem): void;
     togglePivotMode(): void;
-    onAddRowGroupColumn(): void;
-    onAddValueColumn(): void;
+    toggleRowGroupMenu(event: Event): void;
+    selectRowGroupColumn(col: ColumnPickerOption, event: Event): void;
+    removeRowGroupColumn(colId: string): void;
+    toggleValueMenu(event: Event): void;
+    selectValueColumn(col: ColumnPickerOption, event: Event): void;
+    removeValueColumn(colId: string): void;
     onDragStart(event: DragEvent, index: number): void;
     onDrop(event: DragEvent, toIndex: number): void;
     onDragOver(event: DragEvent): void;
     checkboxIcon(col: ColumnPanelItem): string;
     checkboxClass(col: ColumnPanelItem): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsColumnPanelComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<DsColumnPanelComponent, "ds-column-panel", never, { "columns": { "alias": "columns"; "required": false; }; "density": { "alias": "density"; "required": false; }; "pivotMode": { "alias": "pivotMode"; "required": false; }; }, { "densityChange": "densityChange"; "columnVisibilityChange": "columnVisibilityChange"; "pivotModeChange": "pivotModeChange"; "addRowGroupColumn": "addRowGroupColumn"; "addValueColumn": "addValueColumn"; }, never, never, true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsColumnPanelComponent, "ds-column-panel", never, { "columns": { "alias": "columns"; "required": false; }; "density": { "alias": "density"; "required": false; }; "pivotMode": { "alias": "pivotMode"; "required": false; }; }, { "densityChange": "densityChange"; "columnVisibilityChange": "columnVisibilityChange"; "pivotModeChange": "pivotModeChange"; }, never, never, true, never>;
 }
 
 /**
@@ -2520,9 +2544,11 @@ declare class DsTableStatusBarComponent implements OnDestroy {
  * Onflo Design System — Table Row Groups Bar
  *
  * Displayed between the table toolbar and the column header row when row
- * grouping is active or available. Provides:
+ * grouping is active. Provides:
  *   - A drop zone for dragging columns to set row groups (AG Grid native DnD)
  *   - Chips showing the currently active row group columns (removable)
+ *
+ * The bar auto-hides when no row groups are active ([hidden] host binding).
  *
  * Standalone usage:
  *   <ds-table-row-groups-bar
@@ -2546,10 +2572,9 @@ declare class DsTableStatusBarComponent implements OnDestroy {
  *   </div>
  *
  * Figma: component/table-row-groups-bar
- * ADA: Density buttons use aria-pressed; remove buttons on chips have aria-label.
+ * ADA: Remove buttons on chips have aria-label.
  */
 
-type DsTableDensity = 'comfort' | 'compact';
 interface TableRowGroup {
     /** AG Grid column ID. */
     colId: string;
@@ -2577,13 +2602,6 @@ declare class DsTableRowGroupsBarComponent implements OnDestroy {
      * When [api] is bound this is handled automatically; still emitted for external listeners.
      */
     removeGroup: EventEmitter<string>;
-    /** Current row density selection. */
-    density: DsTableDensity;
-    /**
-     * Emits when the user clicks a density toggle button.
-     * Consumer must call api.resetRowHeights() and update the rowHeight grid option.
-     */
-    densityChange: EventEmitter<DsTableDensity>;
     private _api;
     private readonly _groupChanged;
     constructor(cdr: ChangeDetectorRef);
@@ -2593,9 +2611,8 @@ declare class DsTableRowGroupsBarComponent implements OnDestroy {
     private _detach;
     private _syncGroups;
     onRemoveGroup(colId: string): void;
-    onDensityChange(density: DsTableDensity): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsTableRowGroupsBarComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<DsTableRowGroupsBarComponent, "ds-table-row-groups-bar", never, { "rowGroups": { "alias": "rowGroups"; "required": false; }; "api": { "alias": "api"; "required": false; }; }, { "removeGroup": "removeGroup"; "densityChange": "densityChange"; }, never, never, true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsTableRowGroupsBarComponent, "ds-table-row-groups-bar", never, { "rowGroups": { "alias": "rowGroups"; "required": false; }; "api": { "alias": "api"; "required": false; }; }, { "removeGroup": "removeGroup"; }, never, never, true, never>;
 }
 
 /**
@@ -2923,4 +2940,4 @@ declare class TopNavComponent implements AfterViewInit, OnDestroy {
 }
 
 export { AgentStatusComponent, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent };
-export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTableDensity, DsTooltipPosition, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };
+export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };

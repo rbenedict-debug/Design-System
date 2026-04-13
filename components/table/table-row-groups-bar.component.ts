@@ -2,9 +2,11 @@
  * Onflo Design System — Table Row Groups Bar
  *
  * Displayed between the table toolbar and the column header row when row
- * grouping is active or available. Provides:
+ * grouping is active. Provides:
  *   - A drop zone for dragging columns to set row groups (AG Grid native DnD)
  *   - Chips showing the currently active row group columns (removable)
+ *
+ * The bar auto-hides when no row groups are active ([hidden] host binding).
  *
  * Standalone usage:
  *   <ds-table-row-groups-bar
@@ -28,7 +30,7 @@
  *   </div>
  *
  * Figma: component/table-row-groups-bar
- * ADA: Density buttons use aria-pressed; remove buttons on chips have aria-label.
+ * ADA: Remove buttons on chips have aria-label.
  */
 
 import {
@@ -36,8 +38,6 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export type DsTableDensity = 'comfort' | 'compact';
 
 export interface TableRowGroup {
   /** AG Grid column ID. */
@@ -61,6 +61,7 @@ export interface AgRowGroupsApi {
   templateUrl: './table-row-groups-bar.component.html',
   styleUrls: ['./table-row-groups-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[hidden]': 'rowGroups.length === 0' },
 })
 export class DsTableRowGroupsBarComponent implements OnDestroy {
 
@@ -72,15 +73,6 @@ export class DsTableRowGroupsBarComponent implements OnDestroy {
    * When [api] is bound this is handled automatically; still emitted for external listeners.
    */
   @Output() removeGroup = new EventEmitter<string>();
-
-  /** Current row density selection. */
-  density: DsTableDensity = 'comfort';
-
-  /**
-   * Emits when the user clicks a density toggle button.
-   * Consumer must call api.resetRowHeights() and update the rowHeight grid option.
-   */
-  @Output() densityChange = new EventEmitter<DsTableDensity>();
 
   private _api: AgRowGroupsApi | null = null;
   private readonly _groupChanged = (): void => this._syncGroups();
@@ -125,11 +117,6 @@ export class DsTableRowGroupsBarComponent implements OnDestroy {
       this.rowGroups = this.rowGroups.filter(g => g.colId !== colId);
     }
     this.removeGroup.emit(colId);
-  }
-
-  onDensityChange(density: DsTableDensity): void {
-    this.density = density;
-    this.densityChange.emit(density);
   }
 
 }

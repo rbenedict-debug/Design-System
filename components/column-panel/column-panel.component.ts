@@ -8,8 +8,9 @@
  *   - Comfort/Compact density toggle
  *   - Column visibility toggle (checkbox per column, drag to reorder)
  *   - Pivot Mode toggle
- *   - Row Groups section with "Add Column" affordance
- *   - Values (aggregation) section with "Add Column" affordance
+ *   - Row Groups section — shows active groups as removable chips; "Add Column"
+ *     opens an inline picker menu listing all groupable columns
+ *   - Values (aggregation) section — "Add Column" opens same picker pattern
  *
  * AG Grid usage:
  *   gridOptions = {
@@ -36,11 +37,12 @@
  *   Column checkboxes use role="checkbox" + aria-checked.
  *   Density buttons use aria-pressed.
  *   Pivot toggle is a native <input type="checkbox">.
+ *   Add Column buttons use aria-expanded to reflect menu state.
  */
 
 import {
   Component, Input, Output, EventEmitter, OnDestroy,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy, ChangeDetectorRef, HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -74,8 +76,10 @@ export interface AgColumnPanelApi {
   setPivotMode(mode: boolean): void;
   getRowGroupColumns(): AgPanelColumn[];
   addRowGroupColumn(key: string): void;
+  removeRowGroupColumn(key: string): void;
   getValueColumns(): AgPanelColumn[];
   addValueColumn(key: string): void;
+  removeValueColumn(key: string): void;
   addEventListener(event: string, callback: () => void): void;
   removeEventListener(event: string, callback: () => void): void;
 }
@@ -88,6 +92,12 @@ export interface AgPanelColumn {
 
 export interface AgToolPanelParams {
   api: AgColumnPanelApi;
+}
+
+/** A column entry in the row-group or value picker menu. */
+export interface ColumnPickerOption {
+  colId: string;
+  label: string;
 }
 
 @Component({
@@ -112,17 +122,28 @@ export class DsColumnPanelComponent implements OnDestroy {
   /** Whether pivot mode is enabled. */
   @Input() pivotMode = false;
 
+  /** Active row group columns shown as chips in the Row Groups section. */
+  activeRowGroups: ColumnPickerOption[] = [];
+
+  /** Active value (aggregation) columns shown as chips in the Values section. */
+  activeValueColumns: ColumnPickerOption[] = [];
+
+  /** Whether the row-group column picker menu is open. */
+  showRowGroupMenu = false;
+
+  /** Whether the value column picker menu is open. */
+  showValueMenu = false;
+
   // ── Outputs ───────────────────────────────────────────────────────────────
 
   @Output() densityChange = new EventEmitter<TableDensity>();
   @Output() columnVisibilityChange = new EventEmitter<ColumnVisibilityChange>();
   @Output() pivotModeChange = new EventEmitter<boolean>();
-  @Output() addRowGroupColumn = new EventEmitter<void>();
-  @Output() addValueColumn = new EventEmitter<void>();
 
   private _api: AgColumnPanelApi | null = null;
-  private readonly _colChanged  = (): void => this._syncColumns();
+  private readonly _colChanged   = (): void => this._syncColumns();
   private readonly _pivotChanged = (): void => this._syncPivot();
+  private readonly _groupChanged = (): void => this._syncGroups();
 
   constructor(private readonly cdr: ChangeDetectorRef) {}
 
@@ -130,23 +151,40 @@ export class DsColumnPanelComponent implements OnDestroy {
 
   agInit(params: AgToolPanelParams): void {
     this._api = params.api;
-    params.api.addEventListener('columnVisible', this._colChanged);
-    params.api.addEventListener('columnMoved', this._colChanged);
-    params.api.addEventListener('pivotModeChanged', this._pivotChanged);
+    params.api.addEventListener('columnVisible',        this._colChanged);
+    params.api.addEventListener('columnMoved',          this._colChanged);
+    params.api.addEventListener('pivotModeChanged',     this._pivotChanged);
+    params.api.addEventListener('columnRowGroupChanged', this._groupChanged);
+    params.api.addEventListener('columnValueChanged',   this._groupChanged);
     this._syncColumns();
     this._syncPivot();
+    this._syncGroups();
   }
 
   /** Called by AG Grid when the tool panel is refreshed. */
   refresh(): void {
     this._syncColumns();
     this._syncPivot();
+    this._syncGroups();
   }
 
   ngOnDestroy(): void {
-    this._api?.removeEventListener('columnVisible', this._colChanged);
-    this._api?.removeEventListener('columnMoved', this._colChanged);
-    this._api?.removeEventListener('pivotModeChanged', this._pivotChanged);
+    this._api?.removeEventListener('columnVisible',        this._colChanged);
+    this._api?.removeEventListener('columnMoved',          this._colChanged);
+    this._api?.removeEventListener('pivotModeChanged',     this._pivotChanged);
+    this._api?.removeEventListener('columnRowGroupChanged', this._groupChanged);
+    this._api?.removeEventListener('columnValueChanged',   this._groupChanged);
+  }
+
+  // ── Outside-click: close open menus ──────────────────────────────────────
+
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    if (this.showRowGroupMenu || this.showValueMenu) {
+      this.showRowGroupMenu = false;
+      this.showValueMenu    = false;
+      this.cdr.markForCheck();
+    }
   }
 
   // ── Sync helpers ──────────────────────────────────────────────────────────
@@ -154,10 +192,10 @@ export class DsColumnPanelComponent implements OnDestroy {
   private _syncColumns(): void {
     if (!this._api) { return; }
     this.columns = this._api.getAllGridColumns().map(col => ({
-      colId: col.getColId(),
-      label: col.getColDef().headerName ?? col.getColId(),
+      colId:   col.getColId(),
+      label:   col.getColDef().headerName ?? col.getColId(),
       visible: col.isVisible(),
-      system: col.getColDef().lockVisible === true,
+      system:  col.getColDef().lockVisible === true,
     }));
     this.cdr.markForCheck();
   }
@@ -166,6 +204,35 @@ export class DsColumnPanelComponent implements OnDestroy {
     if (!this._api) { return; }
     this.pivotMode = this._api.isPivotMode();
     this.cdr.markForCheck();
+  }
+
+  private _syncGroups(): void {
+    if (!this._api) { return; }
+    this.activeRowGroups = this._api.getRowGroupColumns().map(col => ({
+      colId: col.getColId(),
+      label: col.getColDef().headerName ?? col.getColId(),
+    }));
+    this.activeValueColumns = this._api.getValueColumns().map(col => ({
+      colId: col.getColId(),
+      label: col.getColDef().headerName ?? col.getColId(),
+    }));
+    this.cdr.markForCheck();
+  }
+
+  // ── Column picker options (excludes already-active columns + system cols) ─
+
+  get rowGroupMenuOptions(): ColumnPickerOption[] {
+    const activeIds = new Set(this.activeRowGroups.map(g => g.colId));
+    return this.columns
+      .filter(c => !c.system && !activeIds.has(c.colId))
+      .map(c => ({ colId: c.colId, label: c.label }));
+  }
+
+  get valueMenuOptions(): ColumnPickerOption[] {
+    const activeIds = new Set(this.activeValueColumns.map(v => v.colId));
+    return this.columns
+      .filter(c => !c.system && !activeIds.has(c.colId))
+      .map(c => ({ colId: c.colId, label: c.label }));
   }
 
   // ── User actions ──────────────────────────────────────────────────────────
@@ -193,12 +260,44 @@ export class DsColumnPanelComponent implements OnDestroy {
     this.pivotModeChange.emit(this.pivotMode);
   }
 
-  onAddRowGroupColumn(): void {
-    this.addRowGroupColumn.emit();
+  // ── Row Groups picker ─────────────────────────────────────────────────────
+
+  toggleRowGroupMenu(event: Event): void {
+    event.stopPropagation();
+    this.showRowGroupMenu = !this.showRowGroupMenu;
+    this.showValueMenu    = false;
   }
 
-  onAddValueColumn(): void {
-    this.addValueColumn.emit();
+  selectRowGroupColumn(col: ColumnPickerOption, event: Event): void {
+    event.stopPropagation();
+    this._api?.addRowGroupColumn(col.colId);
+    this.showRowGroupMenu = false;
+    this._syncGroups();
+  }
+
+  removeRowGroupColumn(colId: string): void {
+    this._api?.removeRowGroupColumn(colId);
+    this._syncGroups();
+  }
+
+  // ── Values picker ─────────────────────────────────────────────────────────
+
+  toggleValueMenu(event: Event): void {
+    event.stopPropagation();
+    this.showValueMenu    = !this.showValueMenu;
+    this.showRowGroupMenu = false;
+  }
+
+  selectValueColumn(col: ColumnPickerOption, event: Event): void {
+    event.stopPropagation();
+    this._api?.addValueColumn(col.colId);
+    this.showValueMenu = false;
+    this._syncGroups();
+  }
+
+  removeValueColumn(colId: string): void {
+    this._api?.removeValueColumn(colId);
+    this._syncGroups();
   }
 
   // ── Drag-to-reorder ───────────────────────────────────────────────────────

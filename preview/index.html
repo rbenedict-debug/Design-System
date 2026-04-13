@@ -14111,16 +14111,15 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         <h2 class="section-title">Table Row Groups Bar</h2>
         <p class="section-desc">
           Bar between the toolbar and the column header row. Provides a drag-drop target
-          for columns to set row grouping, shows active row groups as removable chips,
-          and a Comfort / Compact density toggle. Bind <code>[api]</code> to auto-sync
-          with AG Grid column state. Emits <code>(densityChange)</code> — consumer must
-          call <code>api.resetRowHeights()</code> and update <code>rowHeight</code>.
+          for columns to set row grouping and shows active row groups as removable chips.
+          Bind <code>[api]</code> to auto-sync with AG Grid column state. Auto-hides via
+          <code>[hidden]</code> host binding when no row groups are active.
         </p>
         <p class="section-source">components/table/table-row-groups-bar.component.ts</p>
 
         <div class="component-demo">
 
-          <!-- No active groups -->
+          <!-- No active groups (bar would be hidden by host binding; shown here for demo) -->
           <div class="demo-row">
             <div class="demo-label">No groups</div>
             <div class="demo-row-items" style="flex: 1;">
@@ -14128,10 +14127,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <div class="ds-table-row-groups-bar__drop-zone">
                   <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
                   <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
-                </div>
-                <div class="ds-density-toggle" role="group" aria-label="Row density">
-                  <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Comfort</button>
-                  <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Compact</button>
                 </div>
               </div>
             </div>
@@ -14158,34 +14153,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                       </button>
                     </span>
                   </div>
-                </div>
-                <div class="ds-density-toggle" role="group" aria-label="Row density">
-                  <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Comfort</button>
-                  <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Compact</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Compact density selected -->
-          <div class="demo-row">
-            <div class="demo-label">Compact selected</div>
-            <div class="demo-row-items" style="flex: 1;">
-              <div class="ds-table-row-groups-bar" style="width: 100%;">
-                <div class="ds-table-row-groups-bar__drop-zone">
-                  <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
-                  <div class="ds-table-row-groups-bar__chips">
-                    <span class="ds-tag ds-tag--sm">
-                      <span class="ds-tag__label">Department</span>
-                      <button type="button" class="ds-tag__remove" aria-label="Remove Department row group">
-                        <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
-                      </button>
-                    </span>
-                  </div>
-                </div>
-                <div class="ds-density-toggle" role="group" aria-label="Row density">
-                  <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Comfort</button>
-                  <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Compact</button>
                 </div>
               </div>
             </div>
@@ -16305,10 +16272,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">delete</span></span>
                               Delete
                             </button>
-                            <button id="pt-group-btn" class="ds-button ds-button--outlined ds-button--leading-icon" type="button" onclick="ptToggleGrouping(this)">
-                              <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">account_tree</span></span>
-                              Group by Dept
-                            </button>
                           </div>
                           <div class="ds-table-toolbar__right">
                             <div class="ds-input ds-search" role="search">
@@ -16343,23 +16306,11 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                           </div>
                         </div>
 
-                        <!-- Row Groups Bar (shown when grouping is active) -->
-                        <div class="ds-table-row-groups-bar" id="pt-row-groups-bar">
+                        <!-- Row Groups Bar (hidden until a grouping is active) -->
+                        <div class="ds-table-row-groups-bar" id="pt-row-groups-bar" hidden>
                           <div class="ds-table-row-groups-bar__drop-zone">
                             <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
-                            <div class="ds-table-row-groups-bar__chips" id="pt-rg-chips">
-                              <span class="ds-tag ds-tag--sm" id="pt-rg-dept-chip">
-                                <span class="ds-tag__label">Department</span>
-                                <button type="button" class="ds-tag__remove" aria-label="Remove Department row group" onclick="ptRemoveGrouping()">
-                                  <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
-                                </button>
-                              </span>
-                            </div>
-                            <span class="ds-table-row-groups-bar__placeholder" id="pt-rg-placeholder" style="display: none;">Drag here to set row groups</span>
-                          </div>
-                          <div class="ds-density-toggle" role="group" aria-label="Row density">
-                            <button type="button" class="ds-density-toggle__btn is-selected" id="pt-rg-comfort" aria-pressed="true" onclick="ptSetDensity('comfort', this)">Comfort</button>
-                            <button type="button" class="ds-density-toggle__btn" id="pt-rg-compact" aria-pressed="false" onclick="ptSetDensity('compact', this)">Compact</button>
+                            <div class="ds-table-row-groups-bar__chips" id="pt-rg-chips"></div>
                           </div>
                         </div>
 
@@ -17026,10 +16977,29 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                           <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">drag_indicator</span>
                           <span class="ds-column-panel__section-title">Row Groups</span>
                         </div>
-                        <button type="button" class="ds-column-panel__add-btn">
+                        <!-- Active row group chips (populated by ptSelectRowGroupColumn) -->
+                        <div class="ds-column-panel__group-chips" id="pt-cp-rg-chips" style="display: none;"></div>
+                        <!-- Add Column button -->
+                        <button type="button" class="ds-column-panel__add-btn" id="pt-rg-add-btn"
+                          aria-expanded="false"
+                          onclick="ptToggleRowGroupPicker(this); event.stopPropagation();">
                           <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
                           Add Column
                         </button>
+                        <!-- Inline picker menu -->
+                        <div class="ds-menu ds-column-panel__picker" id="pt-rg-picker" role="menu"
+                          style="display: none;" onclick="event.stopPropagation()">
+                          <button type="button" class="ds-menu__item" role="menuitem" id="pt-rg-opt-customer"
+                            onclick="ptSelectRowGroupColumn('customer', 'Customer')">Customer</button>
+                          <button type="button" class="ds-menu__item" role="menuitem" id="pt-rg-opt-email"
+                            onclick="ptSelectRowGroupColumn('email', 'Email')">Email</button>
+                          <button type="button" class="ds-menu__item" role="menuitem" id="pt-rg-opt-department"
+                            onclick="ptSelectRowGroupColumn('department', 'Department')">Department</button>
+                          <button type="button" class="ds-menu__item" role="menuitem" id="pt-rg-opt-status"
+                            onclick="ptSelectRowGroupColumn('status', 'Status')">Status</button>
+                          <button type="button" class="ds-menu__item" role="menuitem" id="pt-rg-opt-amount"
+                            onclick="ptSelectRowGroupColumn('amount', 'Amount')">Amount</button>
+                        </div>
 
                         <!-- Divider -->
                         <div class="ds-divider" role="separator" aria-hidden="true"></div>
@@ -17944,7 +17914,7 @@ function closeColumnPanelPT() {
   }
 }
 
-// ── Density toggle (column panel + row groups bar) ───────────────────────────
+// ── Density toggle (column panel only) ───────────────────────────────────────
 function ptSetDensity(mode, clickedBtn) {
   // Apply density token to row heights via data attribute
   var sim = document.getElementById('table-sim-pt');
@@ -17962,61 +17932,104 @@ function ptSetDensity(mode, clickedBtn) {
       colComfort.classList.remove('is-selected'); colComfort.setAttribute('aria-pressed', 'false');
     }
   }
+}
 
-  // Sync row groups bar toggle button states
-  var rgComfort = document.getElementById('pt-rg-comfort');
-  var rgCompact = document.getElementById('pt-rg-compact');
-  if (rgComfort && rgCompact) {
-    if (mode === 'comfort') {
-      rgComfort.classList.add('is-selected');    rgComfort.setAttribute('aria-pressed', 'true');
-      rgCompact.classList.remove('is-selected'); rgCompact.setAttribute('aria-pressed', 'false');
-    } else {
-      rgCompact.classList.add('is-selected');    rgCompact.setAttribute('aria-pressed', 'true');
-      rgComfort.classList.remove('is-selected'); rgComfort.setAttribute('aria-pressed', 'false');
-    }
+// ── Row group picker (column panel "Add Column") ──────────────────────────────
+function ptToggleRowGroupPicker(btn) {
+  var picker = document.getElementById('pt-rg-picker');
+  var isOpen = (picker.style.display !== 'none');
+  picker.style.display = isOpen ? 'none' : '';
+  btn.setAttribute('aria-expanded', String(!isOpen));
+}
+
+function ptSelectRowGroupColumn(colId, label) {
+  // Close picker
+  var picker = document.getElementById('pt-rg-picker');
+  picker.style.display = 'none';
+  var addBtn = document.getElementById('pt-rg-add-btn');
+  if (addBtn) { addBtn.setAttribute('aria-expanded', 'false'); }
+
+  // Add chip to column panel chips area
+  var cpChips = document.getElementById('pt-cp-rg-chips');
+  if (cpChips) {
+    cpChips.style.display = '';
+    var cpChip = document.createElement('span');
+    cpChip.className = 'ds-tag ds-tag--sm';
+    cpChip.id = 'pt-cp-rg-chip-' + colId;
+    cpChip.innerHTML =
+      '<span class="ds-tag__label">' + label + '</span>' +
+      '<button type="button" class="ds-tag__remove" aria-label="Remove ' + label + ' row group"' +
+      ' onclick="ptRemoveRowGroupColumn(\'' + colId + '\', \'' + label + '\')">' +
+      '<span class="ds-icon ds-icon--xs" aria-hidden="true">close</span></button>';
+    cpChips.appendChild(cpChip);
   }
-}
 
-// ── Row grouping toggle ───────────────────────────────────────────────────────
-function ptToggleGrouping(btn) {
-  var flatGrid    = document.getElementById('pt-data-grid');
-  var groupedGrid = document.getElementById('pt-grouped-grid');
-  var chip        = document.getElementById('pt-rg-dept-chip');
-  var placeholder = document.getElementById('pt-rg-placeholder');
-  var isGrouped   = (flatGrid.style.display === 'none');
-
-  if (isGrouped) {
-    // Switch to flat
-    flatGrid.style.display    = '';
-    groupedGrid.style.display = 'none';
-    chip.style.display        = 'none';
-    placeholder.style.display = '';
-    btn.classList.remove('is-selected');
-    btn.setAttribute('aria-pressed', 'true');
-  } else {
-    // Switch to grouped
-    flatGrid.style.display    = 'none';
-    groupedGrid.style.display = '';
-    chip.style.display        = '';
-    placeholder.style.display = 'none';
-    btn.classList.add('is-selected');
-    btn.setAttribute('aria-pressed', 'false');
+  // Add chip to row groups bar + show the bar
+  var bar = document.getElementById('pt-row-groups-bar');
+  var barChips = document.getElementById('pt-rg-chips');
+  if (bar && barChips) {
+    bar.removeAttribute('hidden');
+    var barChip = document.createElement('span');
+    barChip.className = 'ds-tag ds-tag--sm';
+    barChip.id = 'pt-rg-chip-' + colId;
+    barChip.innerHTML =
+      '<span class="ds-tag__label">' + label + '</span>' +
+      '<button type="button" class="ds-tag__remove" aria-label="Remove ' + label + ' row group"' +
+      ' onclick="ptRemoveRowGroupColumn(\'' + colId + '\', \'' + label + '\')">' +
+      '<span class="ds-icon ds-icon--xs" aria-hidden="true">close</span></button>';
+    barChips.appendChild(barChip);
   }
+
+  // If Department, show grouped grid
+  if (colId === 'department') {
+    var flatGrid    = document.getElementById('pt-data-grid');
+    var groupedGrid = document.getElementById('pt-grouped-grid');
+    if (flatGrid)    { flatGrid.style.display    = 'none'; }
+    if (groupedGrid) { groupedGrid.style.display = ''; }
+  }
+
+  // Hide this option from the picker
+  var opt = document.getElementById('pt-rg-opt-' + colId);
+  if (opt) { opt.style.display = 'none'; }
 }
 
-function ptRemoveGrouping() {
-  var flatGrid    = document.getElementById('pt-data-grid');
-  var groupedGrid = document.getElementById('pt-grouped-grid');
-  var chip        = document.getElementById('pt-rg-dept-chip');
-  var placeholder = document.getElementById('pt-rg-placeholder');
-  var groupBtn    = document.getElementById('pt-group-btn');
+function ptRemoveRowGroupColumn(colId, label) {
+  // Remove chip from column panel
+  var cpChip = document.getElementById('pt-cp-rg-chip-' + colId);
+  if (cpChip) { cpChip.remove(); }
+  var cpChips = document.getElementById('pt-cp-rg-chips');
+  if (cpChips && cpChips.children.length === 0) { cpChips.style.display = 'none'; }
 
-  flatGrid.style.display    = '';
-  groupedGrid.style.display = 'none';
-  chip.style.display        = 'none';
-  placeholder.style.display = '';
-  if (groupBtn) { groupBtn.classList.remove('is-selected'); }
+  // Remove chip from row groups bar
+  var barChip = document.getElementById('pt-rg-chip-' + colId);
+  if (barChip) { barChip.remove(); }
+  var barChips = document.getElementById('pt-rg-chips');
+  var bar      = document.getElementById('pt-row-groups-bar');
+  if (bar && barChips && barChips.children.length === 0) { bar.setAttribute('hidden', ''); }
+
+  // If Department, restore flat grid
+  if (colId === 'department') {
+    var flatGrid    = document.getElementById('pt-data-grid');
+    var groupedGrid = document.getElementById('pt-grouped-grid');
+    if (flatGrid)    { flatGrid.style.display    = ''; }
+    if (groupedGrid) { groupedGrid.style.display = 'none'; }
+  }
+
+  // Restore option in picker
+  var opt = document.getElementById('pt-rg-opt-' + colId);
+  if (opt) { opt.style.display = ''; }
 }
+
+// Close row group picker on outside click
+document.addEventListener('click', function (e) {
+  var picker = document.getElementById('pt-rg-picker');
+  var addBtn = document.getElementById('pt-rg-add-btn');
+  if (!picker || picker.style.display === 'none') { return; }
+  if (addBtn && addBtn.contains(e.target)) { return; }
+  if (picker.contains(e.target)) { return; }
+  picker.style.display = 'none';
+  if (addBtn) { addBtn.setAttribute('aria-expanded', 'false'); }
+});
 
 function ptToggleGroupRow(groupRow) {
   var name     = groupRow.getAttribute('data-group');

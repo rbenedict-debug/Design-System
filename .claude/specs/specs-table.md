@@ -86,15 +86,15 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 ---
 
 ### Table Row Groups Bar (`ds-table-row-groups-bar`)
-- **Purpose**: Bar between toolbar and column header row; provides a drop target for row groups and a density toggle.
+- **Purpose**: Bar between toolbar and column header row; provides a drop target for row groups and shows active groups as removable chips.
 - **Height**: 56px — fixed
 - **Background**: `--color-surface-subtle`; **border-bottom**: 1px `--color-border-secondary`
-- **Layout**: left `__drop-zone` (flex: 1 0 0) + right `__density` (flex-shrink: 0); `gap: var(--spacing-lg)` between
+- **Layout**: single `__drop-zone` fills full width
 - **Drop zone**: `drag_indicator` icon (sm, `--color-icon-subtle`) + `__placeholder` text ("Drag here to set row groups", label-medium weight-prominent, `--color-text-primary`) + `__chips` (row group chip tags); placeholder hidden when chips are present
 - **Chips**: use `ds-tag ds-tag--sm` with close button; emit `(removeGroup)` on close; automatically synced from AG Grid when `[api]` is bound
-- **Density toggle**: `ds-density-toggle` class — two separate buttons with `gap: var(--spacing-sm)`, each with its own `border: 1px solid var(--color-border-primary)` and `border-radius: var(--radius-sm)`; "Comfort" (56px row height) and "Compact" (40px row height); `is-selected` modifier: `--color-surface-accent-blue` bg, `--color-border-active` border, `--color-text-brand` text; label-large typography; `aria-pressed` on each button; `role="group" aria-label="Row density"` on the wrapper
-- **AG Grid integration**: bind `[api]` after grid ready to auto-sync row group columns; emits `(densityChange)` — consumer must call `api.resetRowHeights()` and update `rowHeight` grid option
-- **Visibility**: no auto-hide — the bar is always shown when rendered (the density toggle is always useful); consumer controls visibility via `*ngIf`
+- **AG Grid integration**: bind `[api]` after grid ready to auto-sync row group columns
+- **Visibility**: auto-hides via `[hidden]` host binding when `rowGroups.length === 0`; consumer controls when to render the element
+- **No density toggle** — density belongs in `ds-column-panel` only
 - **No Angular Material base** — custom component
 
 ---
@@ -131,20 +131,22 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 - **Width**: 300px — fixed; **background**: `--color-surface-subtle`; **border-left**: 1px `--color-border-secondary`
 - **Display**: `display: none` by default; shown via `[data-panel-open]` on the enclosing container OR via `display: flex` on the Angular component host
 - **Sections (top to bottom)**:
-  1. **Density toggle** — `ds-density-toggle` fills full panel width; same Comfort/Compact pattern as row groups bar
-  2. **Column Visibility** — section header (`visibility` icon + "Column Visibility"); scrollable list of `__col-row` items
+  1. **Density toggle** — `ds-density-toggle` fills full panel width; Comfort/Compact; `is-selected` + `aria-pressed` on each button
+  2. **Column Visibility** — collapsible section header (`<button aria-expanded>` + `visibility` icon + "Column Visibility"); col-list shown/hidden by adjacent-sibling CSS rule
   3. Divider
   4. **Pivot Mode** — single row with label + `ds-toggle` switch on the right
   5. Divider
-  6. **Row Groups** — section header (`drag_indicator` icon + "Row Groups"); `__add-btn` row below
+  6. **Row Groups** — section header (`drag_indicator` icon + "Row Groups"); active group chips (`__group-chips`, `ds-tag ds-tag--sm`); `__add-btn` with `aria-expanded`; inline `ds-column-panel__picker` menu
   7. Divider
-  8. **Values** — section header (`functions` icon + "Values"); `__add-btn` row below
+  8. **Values** — section header (`functions` icon + "Values"); active value chips; `__add-btn` with `aria-expanded`; inline picker menu
 - **Column row** (`__col-row`, 42px): `__col-checkbox` (42×42 touch target, icon-based checkbox) + `__col-drag` (drag_indicator sm, `--color-icon-subtle`) + `__col-name` (body-medium, fills remaining space); `--system` modifier suppresses interaction (opacity 0.4, no pointer events)
 - **Checkbox icon**: `check_box_outline_blank` (unchecked, `--color-border-input`) / `check_box` filled (checked, `--color-surface-brand-bold`); `role="checkbox"` + `aria-checked`
-- **Add button** (`__add-btn`): 42px height, full width, `add_circle_outline` icon + "Add Column" text, `--color-text-brand` / `--color-icon-brand`
+- **Active group chips** (`__group-chips`): flex-wrap container of `ds-tag ds-tag--sm` chips with remove buttons; hidden when empty; remove button calls `removeRowGroupColumn(colId)` / `removeValueColumn(colId)`
+- **Add button** (`__add-btn`): 42px height, full width, `add_circle_outline` icon + "Add Column" text, `--color-text-brand` / `--color-icon-brand`; `aria-expanded` reflects picker state
+- **Inline picker menu** (`ds-column-panel__picker`): `ds-menu` class + `__picker` modifier; renders in normal document flow (no absolute positioning — panel has `overflow-y: auto`); lists non-system, non-active columns as `ds-menu__item` buttons; outside-click closes via `@HostListener('document:click')` with `event.stopPropagation()` on button and menu clicks; empty state shows "All columns grouped"
 - **Drag to reorder**: HTML5 drag API — `dragstart` stores index, `dragover` + `drop` calls `api.moveColumn()`
 - **Pivot Mode toggle**: native `<input type="checkbox">` inside `ds-toggle`; calls `api.setPivotMode()`
-- **AG Grid integration**: implements IToolPanelAngularComp — `agInit(params)` + `refresh()`; subscribes to `columnVisible`, `columnMoved`, `pivotModeChanged` events
+- **AG Grid integration**: implements IToolPanelAngularComp — `agInit(params)` + `refresh()`; subscribes to `columnVisible`, `columnMoved`, `pivotModeChanged`, `columnRowGroupChanged`, `columnValueChanged` events
 - **No Angular Material base** — custom component
 
 ---

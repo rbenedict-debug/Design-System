@@ -253,6 +253,16 @@
     color: var(--color-text-primary);
   }
 
+  // ── 4 & 5. Active group / value chips ────────────────────────────────────
+
+  &__group-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    flex-shrink: 0;
+  }
+
   // ── 4 & 5. "Add Column" button row ────────────────────────────────────────
 
   &__add-btn {
@@ -367,6 +377,32 @@ button.ds-column-panel__section-hd[aria-expanded="false"] + .ds-column-panel__co
       color: var(--color-text-brand);
     }
   }
+}
+
+// ── Inline column picker menu ────────────────────────────────────────────────
+//
+// Overrides ds-menu positioning defaults for inline use inside the panel.
+// The panel is overflow-y: auto so the menu is in the normal scroll flow —
+// no absolute positioning needed.
+
+.ds-column-panel__picker {
+  border-radius: var(--radius-sm);
+  min-width: 0;
+  max-width: none;
+  width: calc(100% - var(--spacing-md) * 2);
+  margin: 0 var(--spacing-md) var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+.ds-column-panel__picker-empty {
+  display: block;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-family: var(--ref-typescale-body-medium-font);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typescale-body-medium-weight);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-secondary);
 }
 
 // ── Show mechanism — driven by parent data attribute ─────────────────────────
