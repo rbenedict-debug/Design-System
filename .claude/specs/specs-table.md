@@ -6,6 +6,122 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 
 ---
 
+## Column Configuration
+
+### defaultColDef
+
+Always set `DS_TABLE_DEFAULT_COL_DEF` as your `defaultColDef`. It wires `DsTableHeaderCellComponent` and `DsTableRowCellComponent` across every column automatically. Override per-column as needed.
+
+```typescript
+import { DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_COLUMN_TYPES } from '@onflo/design-system';
+
+gridOptions: GridOptions = {
+  defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
+  columnTypes: DS_TABLE_COLUMN_TYPES,
+};
+```
+
+`DS_TABLE_DEFAULT_COL_DEF` sets: `headerComponent`, `cellRenderer`, `sortable: true`, `resizable: true`, `minWidth: 80`. It does NOT set `filter` — add that yourself if you need a default filter across all columns:
+
+```typescript
+defaultColDef: {
+  ...DS_TABLE_DEFAULT_COL_DEF,
+  filter: 'agTextColumnFilter',  // or true for auto-detection
+}
+```
+
+### columnTypes — DS_TABLE_COLUMN_TYPES
+
+| Type | Purpose |
+|---|---|
+| `dsRightAligned` | Right-aligns header + cell text (no filter override) |
+| `dsNumeric` | Right-aligned + `agNumberColumnFilter` |
+| `dsGroupable` | Sets `enableRowGroup: true` — column appears in row groups picker |
+| `dsAggregatable` | Sets `enableValue: true` — column appears in values picker |
+| `dsDate` | `agDateColumnFilter` with ISO string comparator |
+| `dsCheckbox` | Fixed 56px, no label/sort/filter — for row selection columns |
+| `dsPinned` | Pinned right, not movable/resizable — for action columns |
+
+Multiple types can be composed: `type: ['dsGroupable', 'dsNumeric']`.
+
+### Column definition patterns
+
+**Flex + fixed width:**
+```typescript
+{ field: 'name',   flex: 1, minWidth: 120 }  // fills remaining space
+{ field: 'status', width: 120 }               // fixed width
+```
+
+**Right-aligned numeric with aggregation:**
+```typescript
+{
+  field: 'amount',
+  headerName: 'Amount',
+  type: ['dsNumeric', 'dsAggregatable'],
+  aggFunc: 'sum',
+}
+```
+
+**Groupable column (Enterprise):**
+```typescript
+{
+  field: 'department',
+  headerName: 'Department',
+  type: 'dsGroupable',
+}
+// Also required in gridOptions:
+//   groupDisplayType: 'groupRows'
+//   groupRowRenderer: DsTableGroupRowCellComponent
+//   enableRowGroup: true  (grid-level flag, separate from per-column flag)
+```
+
+**Initial hidden column (togglable via column panel):**
+```typescript
+{ field: 'notes', headerName: 'Notes', hide: true }
+// Do not use initialHide here — use hide for columns that start hidden.
+```
+
+**Pinned system column (locked, non-hideable):**
+```typescript
+{ field: 'actions', headerName: '', type: 'dsPinned', width: 56, lockVisible: true }
+// lockVisible: true marks the column as system in ds-column-panel (no checkbox).
+```
+
+**Checkbox selection column:**
+```typescript
+{ field: '', colId: 'select', type: 'dsCheckbox' }
+// Pair with:
+//   gridOptions.rowSelection = 'multiple'
+//   gridOptions.suppressRowClickSelection = true
+```
+
+**valueFormatter — always honoured:**
+```typescript
+{
+  field: 'amount',
+  type: 'dsNumeric',
+  valueFormatter: ({ value }) => `$${Number(value).toLocaleString()}`,
+}
+// DsTableRowCellComponent reads params.valueFormatted first, so formatters work.
+```
+
+### Column locking reference
+
+| Property | Effect |
+|---|---|
+| `pinned: 'left' \| 'right'` | Anchors column to a grid edge; user can still unpin via context menu |
+| `lockPosition: 'left' \| 'right'` | Locks position even via API — cannot be unpinned or reordered |
+| `suppressMovable: true` | Prevents drag-to-reorder; API can still move it |
+| `lockVisible: true` | Column panel shows the row at 40% opacity with no interaction; API can still hide it |
+
+### Key enableRowGroup / enableValue rules
+
+- `enableRowGroup: true` **must** be set on every column that should appear in the row groups picker (`ds-column-panel`) or the drop zone (`ds-table-row-groups-bar`). Without it the column is filtered out of both pickers.
+- `enableValue: true` **must** be set on every column that should appear in the values (aggregation) picker. Without it the column won't appear even if `aggFunc` is set.
+- `aggFunc` on a colDef is separate from `enableValue` — set both when you want a column to aggregate AND be user-configurable in the panel.
+
+---
+
 ### Full table composition order (top to bottom)
 
 1. `ds-table-toolbar` (74px) — always present

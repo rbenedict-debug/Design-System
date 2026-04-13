@@ -49,6 +49,7 @@ export interface TableRowGroup {
 /** Minimal AG Grid API surface needed by the row groups bar. */
 export interface AgRowGroupsApi {
   getRowGroupColumns(): { getColId(): string; getColDef(): { headerName?: string } }[];
+  addRowGroupColumn(key: string): void;
   removeRowGroupColumn(key: string): void;
   addEventListener(event: string, callback: () => void): void;
   removeEventListener(event: string, callback: () => void): void;

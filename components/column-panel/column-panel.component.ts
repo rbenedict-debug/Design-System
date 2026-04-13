@@ -86,7 +86,15 @@ export interface AgColumnPanelApi {
 
 export interface AgPanelColumn {
   getColId(): string;
-  getColDef(): { headerName?: string; lockVisible?: boolean; suppressMovable?: boolean };
+  getColDef(): {
+    headerName?: string;
+    lockVisible?: boolean;
+    suppressMovable?: boolean;
+    /** Set true on colDef to allow this column to appear in the row groups picker. */
+    enableRowGroup?: boolean;
+    /** Set true on colDef to allow this column to appear in the values (aggregation) picker. */
+    enableValue?: boolean;
+  };
   isVisible(): boolean;
 }
 
@@ -223,16 +231,34 @@ export class DsColumnPanelComponent implements OnDestroy {
 
   get rowGroupMenuOptions(): ColumnPickerOption[] {
     const activeIds = new Set(this.activeRowGroups.map(g => g.colId));
-    return this.columns
-      .filter(c => !c.system && !activeIds.has(c.colId))
-      .map(c => ({ colId: c.colId, label: c.label }));
+    if (!this._api) { return []; }
+    return this._api.getAllGridColumns()
+      .filter(col => {
+        const def = col.getColDef();
+        return def.enableRowGroup === true
+          && def.lockVisible !== true
+          && !activeIds.has(col.getColId());
+      })
+      .map(col => ({
+        colId: col.getColId(),
+        label: col.getColDef().headerName ?? col.getColId(),
+      }));
   }
 
   get valueMenuOptions(): ColumnPickerOption[] {
     const activeIds = new Set(this.activeValueColumns.map(v => v.colId));
-    return this.columns
-      .filter(c => !c.system && !activeIds.has(c.colId))
-      .map(c => ({ colId: c.colId, label: c.label }));
+    if (!this._api) { return []; }
+    return this._api.getAllGridColumns()
+      .filter(col => {
+        const def = col.getColDef();
+        return def.enableValue === true
+          && def.lockVisible !== true
+          && !activeIds.has(col.getColId());
+      })
+      .map(col => ({
+        colId: col.getColId(),
+        label: col.getColDef().headerName ?? col.getColId(),
+      }));
   }
 
   // ── User actions ──────────────────────────────────────────────────────────

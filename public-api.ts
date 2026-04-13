@@ -49,6 +49,7 @@ export * from './components/subnav-button/subnav-button.component';
 export * from './components/subnav-header/subnav-header.component';
 export * from './components/subnav-subheader/subnav-subheader.component';
 export * from './components/column-panel/column-panel.component';
+export * from './components/table/table-column-defs';
 export * from './components/table/table-group-expansion-store';
 export * from './components/table/table-group-row-cell.component';
 export * from './components/table/table-header-cell.component';

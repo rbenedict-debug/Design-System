@@ -33,8 +33,19 @@ export type TableCellState = 'default' | 'hover' | 'focus';
 
 /** Minimal interface for AG Grid cell renderer params. */
 export interface AgCellRendererParams {
+  /** Raw cell value (from field or valueGetter) — before valueFormatter is applied. */
   value: unknown;
+  /**
+   * Pre-formatted string produced by the column's valueFormatter, or null/undefined
+   * when no valueFormatter is defined. Always prefer this over String(value) when
+   * displaying text so that valueFormatter is honoured.
+   */
+  valueFormatted?: string | null;
   node: {
+    /** Full row data object — useful for reading sibling fields in custom renderers. */
+    data: unknown;
+    /** Row node ID (from getRowId() or AG Grid's internal counter). */
+    id?: string;
     isSelected(): boolean;
     addEventListener(event: string, listener: () => void): void;
     removeEventListener(event: string, listener: () => void): void;
@@ -144,7 +155,10 @@ export class DsTableRowCellComponent implements OnDestroy {
   }
 
   private applyParams(params: AgCellRendererParams): void {
-    this.value = params.value != null ? String(params.value) : null;
+    // Use valueFormatted when available so colDef.valueFormatter is honoured.
+    this.value = params.valueFormatted != null
+      ? params.valueFormatted
+      : (params.value != null ? String(params.value) : null);
     this.checked = params.node.isSelected();
     // Merge any extra params from colDef.cellRendererParams
     const extra = params.colDef?.cellRendererParams ?? {};
