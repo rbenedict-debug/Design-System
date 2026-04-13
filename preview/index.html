@@ -14531,6 +14531,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') dsCtxClose();
           });
+
+          // ── Expose for reuse by the main table sim ────────────────────────
+          window.dsCtxShow  = showMenu;
+          window.dsCtxToast = showToast;
         })();
         </script>
 
@@ -17571,6 +17575,62 @@ function ptTableSearchClear() {
   var input = document.getElementById('pt-search-input');
   if (input) { input.value = ''; ptTableSearch(input); input.focus(); }
 }
+
+// ── Context menu — main table sim ────────────────────────────────────────────
+(function() {
+  function ptCtxHeaderItems(colName) {
+    return [
+      { label: 'Sort Ascending',  icon: 'arrow_upward_alt',   action: function() { window.dsCtxToast('Sorted "' + colName + '" ascending'); } },
+      { label: 'Sort Descending', icon: 'arrow_downward_alt',  action: function() { window.dsCtxToast('Sorted "' + colName + '" descending'); } },
+      { label: 'Clear Sort',                                   action: function() { window.dsCtxToast('Sort cleared on "' + colName + '"'); } },
+      { separator: true },
+      { label: 'Pin Left',  icon: 'push_pin', action: function() { window.dsCtxToast('"' + colName + '" pinned left'); } },
+      { label: 'Pin Right', icon: 'push_pin', action: function() { window.dsCtxToast('"' + colName + '" pinned right'); } },
+      { label: 'Unpin',                       action: function() { window.dsCtxToast('"' + colName + '" unpinned'); } },
+      { separator: true },
+      { label: 'Auto Size Column', icon: 'fit_width',  action: function() { window.dsCtxToast('"' + colName + '" auto-sized'); } },
+      { label: 'Reset Columns',                         action: function() { window.dsCtxToast('All columns reset'); } },
+      { separator: true },
+      { label: 'Group by Column', icon: 'group_work', action: function() { window.dsCtxToast('Grouped by "' + colName + '"'); } },
+    ];
+  }
+
+  // Wire header cells — skip checkbox-only column (no data-col-key)
+  document.querySelectorAll('#pt-header-grid .ds-table-header-cell[data-col-key]').forEach(function(el) {
+    el.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      var key     = el.dataset.colKey || '';
+      var colName = key.charAt(0).toUpperCase() + key.slice(1);
+      window.dsCtxShow(e.clientX, e.clientY, ptCtxHeaderItems(colName));
+    });
+  });
+
+  // Wire data row cells — use the text value of the clicked cell
+  document.querySelectorAll('#pt-data-grid .sim-cell').forEach(function(el) {
+    el.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      var dataSpan = el.querySelector('.ds-table-row-cell__data');
+      var value    = dataSpan ? dataSpan.textContent.trim() : '';
+      if (!value) return; // checkbox and actions columns have no text value
+      window.dsCtxShow(e.clientX, e.clientY, [
+        {
+          label: 'Copy', icon: 'content_copy',
+          action: function() {
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(value).then(function() {
+                window.dsCtxToast('Copied "' + value + '"');
+              }).catch(function() {
+                window.dsCtxToast('Copy failed — clipboard not available');
+              });
+            } else {
+              window.dsCtxToast('Copied "' + value + '" (simulated)');
+            }
+          }
+        },
+      ]);
+    });
+  });
+})();
 </script>
 
 <!-- Nav tab interaction — activate and close -->
