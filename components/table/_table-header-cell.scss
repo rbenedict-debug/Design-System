@@ -147,6 +147,11 @@ $checkbox-only-width: 56px;
   &__menu-icon {
     color: var(--color-icon-default);
   }
+
+  // ── Filter icon — brand colour when a filter is active on this column ────────
+  &__filter-icon--active {
+    color: var(--color-icon-brand);
+  }
 }
 
 // ── Pinned column borders ─────────────────────────────────────────────────────

@@ -55,15 +55,20 @@
       </ds-icon-button>
     </div>
 
-    <!-- Filter button (filled icon) -->
-    <ds-icon-button
-      *ngIf="filtering"
-      size="sm"
-      variant="icon"
-      ariaLabel="Filter column"
-    >
-      <span class="ds-icon ds-icon--filled">filter_alt</span>
-    </ds-icon-button>
+    <!-- Filter button (filled icon) — active state when a filter is live -->
+    <div #filterBtnEl *ngIf="filtering">
+      <ds-icon-button
+        size="sm"
+        variant="icon"
+        [ariaLabel]="filterActive ? 'Filter active — click to edit' : 'Filter column'"
+        (clicked)="onFilterClick(filterBtnEl)"
+      >
+        <span
+          class="ds-icon ds-icon--filled"
+          [class.ds-table-header-cell__filter-icon--active]="filterActive"
+        >filter_alt</span>
+      </ds-icon-button>
+    </div>
 
     <!-- Right resize handle — draggable -->
     <div

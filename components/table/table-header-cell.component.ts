@@ -33,13 +33,34 @@ export type TableSortDirection = 'asc' | 'desc' | null;
 
 /** Minimal interface for AG Grid header params — avoids hard ag-grid-community dep. */
 export interface AgHeaderParams {
+  /** Column header display text (respects headerValueGetter). */
   displayName: string;
+  /** Whether sorting is enabled on this column (from colDef.sortable). */
   enableSorting: boolean;
+  /** Whether the column menu button should be shown (from colDef.suppressMenu). */
   enableMenu: boolean;
+  /**
+   * Whether a dedicated filter icon button should be shown (AG Grid v29+).
+   * Maps to the `filtering` input. Falls back to the custom `filtering`
+   * headerComponentParam when not provided by older AG Grid versions.
+   */
+  enableFilterButton?: boolean;
   column: {
-    getSort(): string | null | undefined;
+    /**
+     * Returns the current sort direction.
+     * AG Grid v28 and earlier — use getSortDef when available.
+     */
+    getSort?(): string | null | undefined;
+    /**
+     * Returns the sort definition object — preferred API (AG Grid v29+).
+     * `direction` is 'asc' | 'desc' | null; method returns null when column
+     * is not sortable.
+     */
+    getSortDef?(): { direction: 'asc' | 'desc' | null } | null;
     getActualWidth(): number;
     getColId(): string;
+    /** Whether a filter is currently active on this column. */
+    isFilterActive(): boolean;
     addEventListener(event: string, listener: () => void): void;
     removeEventListener(event: string, listener: () => void): void;
   };
@@ -64,8 +85,25 @@ export interface AgHeaderParams {
     /** Adds a column to the active row group set. */
     addRowGroupColumn(colId: string): void;
   };
+  /** Advance sort direction through the cycle: none → asc → desc → none. */
   progressSort(multiSort?: boolean): void;
+  /** Set an explicit sort direction. Use null to clear the sort. */
+  setSort(sort: 'asc' | 'desc' | null, multiSort?: boolean): void;
+  /** Show the column menu popup anchored to the supplied element. */
   showColumnMenu(source: HTMLElement): void;
+  /** Show the filter popup anchored to the supplied element (AG Grid v29+). */
+  showFilter(source: HTMLElement): void;
+  // ── Custom params from headerComponentParams — merged into params by AG Grid ──
+  /** Text alignment override passed via headerComponentParams. */
+  align?: TableHeaderAlign;
+  /** Explicit filter button visibility override via headerComponentParams. */
+  filtering?: boolean;
+  /** Show left resize pipe via headerComponentParams. */
+  pipeLeft?: boolean;
+  /** Show right resize pipe via headerComponentParams. */
+  pipeRight?: boolean;
+  /** Show select-all checkbox via headerComponentParams. */
+  checkbox?: boolean;
 }
 
 @Component({
@@ -125,8 +163,12 @@ export class DsTableHeaderCellComponent implements OnDestroy {
    */
   @Output() headerContextMenu = new EventEmitter<DsTableHeaderContextMenuEvent>();
 
+  /** Whether a filter is currently active on this column — drives the filter icon colour. */
+  filterActive = false;
+
   private agParams?: AgHeaderParams;
   private sortChangedListener?: () => void;
+  private filterChangedListener?: () => void;
 
   // Resize drag state
   private resizeStartX = 0;
@@ -159,32 +201,63 @@ export class DsTableHeaderCellComponent implements OnDestroy {
   /** Called by AG Grid when this component is the headerComponent. */
   agInit(params: AgHeaderParams): void {
     this.agParams = params;
-    this.label = params.displayName;
-    this.sorting = params.enableSorting;
-    this.menuControl = params.enableMenu;
+    this._applyAgParams(params);
 
+    // Sort state — try getSortDef (v29+) first, fall back to getSort (v28-)
     this.sortChangedListener = () => {
-      const raw = params.column.getSort();
-      this.sortDirection = (raw === 'asc' || raw === 'desc') ? raw : null;
+      const rawDir = params.column.getSortDef
+        ? params.column.getSortDef()?.direction ?? null
+        : params.column.getSort?.() ?? null;
+      this.sortDirection = (rawDir === 'asc' || rawDir === 'desc') ? rawDir : null;
       this.cdr.markForCheck();
     };
-
     params.column.addEventListener('sortChanged', this.sortChangedListener);
     this.sortChangedListener();
+
+    // Filter active state
+    this.filterChangedListener = () => {
+      this.filterActive = params.column.isFilterActive();
+      this.cdr.markForCheck();
+    };
+    params.column.addEventListener('filterChanged', this.filterChangedListener);
+    this.filterChangedListener();
   }
 
-  /** Called by AG Grid to refresh the header. */
+  /** Called by AG Grid to refresh the header when the column definition changes. */
   refresh(params: AgHeaderParams): boolean {
-    this.label = params.displayName;
+    this.agParams = params;
+    this._applyAgParams(params);
     this.cdr.markForCheck();
     return true;
   }
 
   ngOnDestroy(): void {
-    if (this.agParams && this.sortChangedListener) {
-      this.agParams.column.removeEventListener('sortChanged', this.sortChangedListener);
+    if (this.agParams) {
+      if (this.sortChangedListener) {
+        this.agParams.column.removeEventListener('sortChanged', this.sortChangedListener);
+      }
+      if (this.filterChangedListener) {
+        this.agParams.column.removeEventListener('filterChanged', this.filterChangedListener);
+      }
     }
     this._cleanupResizeListeners();
+  }
+
+  /**
+   * Reads standard AG Grid params and any custom headerComponentParams merged
+   * in by AG Grid. Called on agInit and refresh.
+   */
+  private _applyAgParams(params: AgHeaderParams): void {
+    this.label = params.displayName;
+    this.sorting = params.enableSorting;
+    this.menuControl = params.enableMenu;
+    // enableFilterButton (AG Grid v29+) takes precedence over custom filtering param.
+    this.filtering = params.enableFilterButton ?? params.filtering ?? false;
+    // Custom params from headerComponentParams — only override if explicitly provided.
+    if (params.align     !== undefined) this.align     = params.align;
+    if (params.pipeLeft  !== undefined) this.pipeLeft  = params.pipeLeft;
+    if (params.pipeRight !== undefined) this.pipeRight = params.pipeRight;
+    if (params.checkbox  !== undefined) this.checkbox  = params.checkbox;
   }
 
   // ── Sort ────────────────────────────────────────────────────
@@ -217,6 +290,12 @@ export class DsTableHeaderCellComponent implements OnDestroy {
   onMenuClick(triggerEl: HTMLElement): void {
     if (this.agParams) {
       this.agParams.showColumnMenu(triggerEl);
+    }
+  }
+
+  onFilterClick(triggerEl: HTMLElement): void {
+    if (this.agParams) {
+      this.agParams.showFilter(triggerEl);
     }
   }
 

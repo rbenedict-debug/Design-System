@@ -106,7 +106,8 @@ export interface DsTableHeaderContextMenuEvent {
     column: {
       getColId(): string;
       getActualWidth(): number;
-      getSort(): string | null | undefined;
+      getSort?(): string | null | undefined;
+      getSortDef?(): { direction: 'asc' | 'desc' | null } | null;
     };
     api: {
       setColumnWidth(colId: string, width: number, finished?: boolean): void;
