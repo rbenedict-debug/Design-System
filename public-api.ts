@@ -53,6 +53,7 @@ export * from './components/table/table-column-defs';
 export * from './components/table/table-group-expansion-store';
 export * from './components/table/table-group-row-cell.component';
 export * from './components/table/table-header-cell.component';
+export * from './components/table/table-header-group-cell.component';
 export * from './components/table/table-row-cell.component';
 export * from './components/table/table-status-bar.component';
 export * from './components/table/table-row-groups-bar.component';

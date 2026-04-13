@@ -1,0 +1,25 @@
+<div
+  class="ds-table-header-group-cell"
+  [class.ds-table-header-group-cell--expanded]="isExpanded"
+>
+
+  <!-- Group content: expand toggle + label -->
+  <div class="ds-table-header-group-cell__content">
+
+    <!-- Expand / collapse toggle — only rendered when group has expandable children -->
+    <ds-icon-button
+      *ngIf="isExpandable"
+      size="sm"
+      variant="icon"
+      [ariaLabel]="expandAriaLabel"
+      (clicked)="onExpandToggle()"
+    >
+      <span class="ds-icon ds-table-header-group-cell__chevron">chevron_right</span>
+    </ds-icon-button>
+
+    <!-- Group label -->
+    <span *ngIf="label" class="ds-table-header-group-cell__label">{{ label }}</span>
+
+  </div>
+
+</div>

@@ -23,7 +23,22 @@
  */
 
 import { DsTableHeaderCellComponent } from './table-header-cell.component';
+import { DsTableHeaderGroupCellComponent } from './table-header-group-cell.component';
 import { DsTableRowCellComponent } from './table-row-cell.component';
+
+/**
+ * Default column group definition — applies DsTableHeaderGroupCellComponent to
+ * every column group automatically. Set as defaultColGroupDef in gridOptions.
+ *
+ * Usage:
+ *   gridOptions = {
+ *     defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
+ *     defaultColGroupDef: DS_TABLE_DEFAULT_COL_GROUP_DEF,
+ *   }
+ */
+export const DS_TABLE_DEFAULT_COL_GROUP_DEF = {
+  headerGroupComponent: DsTableHeaderGroupCellComponent,
+};
 
 /**
  * Default column definition — applies Onflo header and cell renderers to every
@@ -149,12 +164,17 @@ export const DS_TABLE_COLUMN_TYPES: Record<string, object> = {
   },
 
   /**
-   * Pinned right column — fixed position at the trailing edge, not movable or resizable.
+   * Pinned right column — fixed position at the trailing edge, not movable or resizable,
+   * and locked so users cannot change the pin state via drag or the column menu.
    * Use for action buttons or icon-only columns that should always be visible.
    * Set an explicit width per-column (e.g. width: 56 for a single icon button).
+   *
+   * lockPinned: true prevents UI-based pin changes (drag-to-pin, column menu).
+   * The column can still be pinned/unpinned programmatically via the grid API.
    */
   dsPinned: {
     pinned: 'right',
+    lockPinned: true,
     resizable: false,
     suppressMovable: true,
     sortable: false,

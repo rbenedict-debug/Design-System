@@ -94,6 +94,12 @@ export interface AgPanelColumn {
     enableRowGroup?: boolean;
     /** Set true on colDef to allow this column to appear in the values (aggregation) picker. */
     enableValue?: boolean;
+    /**
+     * Set true to prevent UI-based pinning changes (drag-to-pin and column menu pin options).
+     * The column can still be pinned/unpinned via API. Use on system columns that should
+     * always remain pinned or always remain unpinned.
+     */
+    lockPinned?: boolean;
   };
   isVisible(): boolean;
 }

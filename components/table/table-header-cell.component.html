@@ -70,11 +70,12 @@
       </ds-icon-button>
     </div>
 
-    <!-- Right resize handle — draggable -->
+    <!-- Right resize handle — drag to resize, double-click to auto-size -->
     <div
       class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"
       [class.ds-table-header-cell__resize-handle--active]="showRightPipe"
       (mousedown)="onResizeStart($event)"
+      (dblclick)="onResizeDblClick($event)"
     >
       <span *ngIf="showRightPipe" class="ds-table-header-cell__resize-bar"></span>
     </div>

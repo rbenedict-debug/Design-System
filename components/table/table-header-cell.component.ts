@@ -326,6 +326,18 @@ export class DsTableHeaderCellComponent implements OnDestroy {
 
   // ── Resize drag ─────────────────────────────────────────────
 
+  /**
+   * Double-click the resize handle to auto-size the column to fit its content.
+   * Equivalent to double-clicking the built-in AG Grid resize grip.
+   */
+  onResizeDblClick(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.agParams) {
+      this.agParams.api.autoSizeColumn(this.agParams.column.getColId());
+    }
+  }
+
   onResizeStart(event: MouseEvent): void {
     if (this.isCheckboxOnly) return;
     event.preventDefault();

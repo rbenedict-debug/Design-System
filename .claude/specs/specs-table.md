@@ -55,6 +55,190 @@ Bind in the template: `(gridSizeChanged)="onGridSizeChanged($event)"`.
 
 ---
 
+## Column Groups (`DsTableHeaderGroupCellComponent`)
+
+Column groups nest related columns under a shared header row. The group header renders above the individual column headers.
+
+### Setup
+
+```typescript
+gridOptions = {
+  defaultColDef:      DS_TABLE_DEFAULT_COL_DEF,
+  defaultColGroupDef: DS_TABLE_DEFAULT_COL_GROUP_DEF,  // wires DsTableHeaderGroupCellComponent
+  columnDefs: [
+    {
+      headerName: 'Contact',
+      marryChildren: true,    // keeps columns adjacent when others are pinned/moved
+      children: [
+        { field: 'firstName', headerName: 'First name', flex: 1 },
+        { field: 'lastName',  headerName: 'Last name',  flex: 1 },
+      ],
+    },
+    { field: 'email', headerName: 'Email', flex: 1 },
+  ],
+};
+```
+
+### Expandable groups
+
+Mark some children with `columnGroupShow` to make the group collapsible. The chevron appears automatically when the group is expandable.
+
+```typescript
+{
+  headerName: 'Contact',
+  openByDefault: false,
+  children: [
+    { field: 'firstName', headerName: 'First name' },            // always visible
+    { field: 'lastName',  headerName: 'Last name',  columnGroupShow: 'open'   },  // open only
+    { field: 'phone',     headerName: 'Phone',       columnGroupShow: 'closed' },  // closed only
+  ],
+}
+```
+
+### Visual spec
+
+- **Height**: controlled by AG Grid group header row height — matches `headerHeight` (56px)
+- **Background**: `--color-surface-subtle`; **border-bottom**: 1px `--color-border-secondary`
+- **Label**: label-medium weight-prominent, truncated with ellipsis — same as `ds-table-header-cell`
+- **Chevron**: `chevron_right` (sm, `--color-icon-default`) — only rendered when group `isExpandable()`; rotates 90° with `--motion-duration-short` ease when expanded; turns `--color-icon-brand` when expanded
+- **No sort, filter, or menu buttons** — those belong on individual column headers
+- **No resize handle on the group** — individual child column headers have their own resize pipes; AG Grid handles group resize natively via its own resize grip if `resizable: true` on the group
+
+### `marryChildren: true`
+
+Keeps all columns in the group adjacent. Without it, users can drag columns out of the group, breaking the group boundary. Set on any group where the visual grouping must always be intact.
+
+### `suppressStickyLabel`
+
+By default the group label stays sticky as the user scrolls horizontally (so the label remains visible even when the leftmost child column has scrolled off-screen). Set `suppressStickyLabel: true` on the group def to disable this behaviour.
+
+---
+
+## Column Sizing
+
+### Resize pipe — drag and double-click
+
+The right resize pipe on `ds-table-header-cell` supports two gestures:
+
+| Gesture | Behaviour |
+|---|---|
+| **Drag** | `setColumnWidth(colId, newWidth, false)` during drag (real-time reflow of flex columns); `setColumnWidth(colId, finalWidth, true)` on release (finalizes state, fires `columnResized`) |
+| **Double-click** | `autoSizeColumn(colId)` — sizes the column to fit its content (considers only currently rendered rows, max ~50 rows with default buffer) |
+
+### flex vs fixed width
+
+```typescript
+{ field: 'name',   flex: 1, minWidth: 120 }  // fills remaining space
+{ field: 'status', width: 120 }               // fixed; flex columns absorb the delta
+```
+
+Once a user drags a flex column's resize pipe, AG Grid converts it to a fixed width. This is AG Grid behaviour — no special handling needed.
+
+### `autoSizeStrategy` (grid option)
+
+For initial column sizing on grid load:
+
+```typescript
+gridOptions = {
+  autoSizeStrategy: { type: 'fitGridWidth', defaultMinWidth: 80 },
+  // or:
+  autoSizeStrategy: { type: 'fitCellContents' },
+};
+```
+
+`fitGridWidth` — scales columns proportionally to fill the grid width (similar to `sizeColumnsToFit()`).
+`fitCellContents` — sizes each column to fit its rendered cell content on load.
+
+### `sizeColumnsToFit()` for responsive resize
+
+Call on `gridSizeChanged` to re-fit columns when the container is resized:
+
+```typescript
+onGridSizeChanged(e: GridSizeChangedEvent): void {
+  e.api.sizeColumnsToFit();
+}
+```
+
+Note: `suppressSizeToFit: true` on a colDef excludes that column from `sizeColumnsToFit()` — use this on fixed-width system columns (e.g. checkbox column) to prevent them from being stretched.
+
+### Shift-drag
+
+Holding ⇧ Shift while dragging a resize pipe takes space from the adjacent column, keeping the total grid width constant. This is handled natively by AG Grid when `colResizeDefault: 'shift'` is set on the grid options. Our custom resize drag does not implement shift-resize — if this behaviour is required, remove the custom resize pipe and rely on AG Grid's built-in resize grip instead.
+
+---
+
+## Column Moving
+
+Column reordering is handled natively by AG Grid via drag on the label area (the label has `cursor: grab`). No custom code is needed in the DS.
+
+### Key grid options
+
+| Option | Default | Purpose |
+|---|---|---|
+| `suppressColumnMoveAnimation` | false | Disable the slide animation during reorder — set true on slower platforms |
+| `suppressDragLeaveHidesColumns` | false | Prevent columns from being hidden when dragged outside the grid boundary |
+| `suppressMoveWhenColumnDragging` | false | Prevent real-time column movement during drag (columns snap to position on drop) |
+
+### Per-column locking
+
+| Property | Effect |
+|---|---|
+| `suppressMovable: true` | Blocks drag-to-reorder for this column; API can still move it |
+| `lockPosition: 'left' \| 'right'` | Fixes position permanently — even API calls cannot displace it; use for system columns that must always be first/last |
+
+Both are included in the `dsCheckbox` and `dsPinned` column types in `DS_TABLE_COLUMN_TYPES`.
+
+---
+
+## Column Pinning
+
+Pinning is set via `pinned: 'left' | 'right'` on a colDef, or by the user dragging a column to the grid edge and holding for ~1 second. The context menu actions "Pin Left", "Pin Right", and "Unpin" are included in `buildDefaultHeaderContextMenuItems`.
+
+### Pinned column borders
+
+AG Grid adds `.ag-pinned-left-header` and `.ag-pinned-right-header` to the pinned header containers. The DS SCSS adds the inner edge border automatically:
+
+```scss
+.ag-pinned-left-header  .ds-table-header-cell { border-right: 1px solid var(--color-border-secondary); }
+.ag-pinned-right-header .ds-table-header-cell { border-left:  1px solid var(--color-border-secondary); }
+// Same rule is in _table-header-group-cell.scss for group headers.
+```
+
+### `lockPinned`
+
+```typescript
+{ field: 'actions', type: 'dsPinned', width: 56 }
+// dsPinned includes: pinned: 'right', lockPinned: true, suppressMovable: true, resizable: false
+```
+
+`lockPinned: true` prevents the user from unpinning the column via drag or the column menu. The column can still be moved programmatically. Use on system action columns that must always be pinned.
+
+### Pinned section width constraint
+
+AG Grid enforces a minimum 50px center viewport — if pinned columns are too wide, AG Grid auto-unpins rightmost columns. Control which columns are auto-unpinned via the `processUnpinnedColumns` grid option.
+
+---
+
+## Column Spanning
+
+`colSpan` makes data cells span across multiple columns. It applies to row cells only — for spanning header cells, use column groups instead.
+
+```typescript
+{
+  field: 'category',
+  colSpan: (params) => params.data.isGroupHeader ? 4 : 1,
+}
+```
+
+`DsTableRowCellComponent` works transparently with `colSpan` — AG Grid controls the cell width and the component just renders within it.
+
+**Constraints:**
+- Spanning cannot cross pinned/unpinned boundaries — a cell can only span within its own region (left-pinned, center, or right-pinned)
+- Cell range selection does not work correctly with spanned cells
+- Best suited for read-only report layouts; avoid in interactive tables with sorting/reordering
+
+---
+
 ## Column Configuration
 
 ### defaultColDef
