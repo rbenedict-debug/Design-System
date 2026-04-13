@@ -73,9 +73,9 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 ### Table Status Bar (`ds-table-status-bar`)
 - **Purpose**: Pinned aggregate row displayed between the data rows and the paginator.
 - **Height**: 56px — fixed
-- **Background**: `--color-surface-subtle`; **border-top**: 1px `--color-border-secondary`
+- **Background**: `--color-surface-subtle`; **border-top**: 1px `--color-border-subtle`
 - **Layout**: left `__counts` region (row counts) and right `__aggregates` region (numeric aggregates); `justify-content: space-between`; padding `0 var(--spacing-lg)`
-- **Stat pair**: `__stat` contains `__stat-label` (body-small, `--color-text-secondary`) + `__stat-value` (body-small bold, `--color-text-primary`)
+- **Stat pair**: `__stat` contains `__stat-label` (label-medium regular, `--color-text-primary`) + `__stat-value` (label-medium weight-prominent, `--color-text-primary`)
 - **Gap between pairs**: `--spacing-xl` (24px) within each region
 - **Counts**: "Rows: X" and "Total Rows: X" — shown on left
 - **Aggregates**: "Average: X", "Count: X", "Min: X", "Max: X", "Sum: X" — shown on right; region has `aria-live="polite"` so screen readers announce changes
@@ -87,11 +87,11 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 ### Table Row Groups Bar (`ds-table-row-groups-bar`)
 - **Purpose**: Bar between toolbar and column header row; provides a drop target for row groups and a density toggle.
 - **Height**: 56px — fixed
-- **Background**: `--color-surface-page`; **border-bottom**: 1px `--color-border-subtle`
+- **Background**: `--color-surface-subtle`; **border-bottom**: 1px `--color-border-secondary`
 - **Layout**: left `__drop-zone` (flex: 1 0 0) + right `__density` (flex-shrink: 0); `gap: var(--spacing-lg)` between
-- **Drop zone**: `drag_indicator` icon (sm, `--color-icon-subtle`) + `__placeholder` text ("Drag here to set row groups", `--color-text-placeholder`) + `__chips` (row group chip tags); placeholder hidden when chips are present
+- **Drop zone**: `drag_indicator` icon (sm, `--color-icon-subtle`) + `__placeholder` text ("Drag here to set row groups", label-medium weight-prominent, `--color-text-primary`) + `__chips` (row group chip tags); placeholder hidden when chips are present
 - **Chips**: use `ds-tag ds-tag--sm` with close button; emit `(removeGroup)` on close; automatically synced from AG Grid when `[api]` is bound
-- **Density toggle**: `ds-density-toggle` class — two adjacent buttons in a shared border container; "Comfort" (56px row height) and "Compact" (40px row height); `is-selected` modifier on the active button; `aria-pressed` on each button; `role="group" aria-label="Row density"` on the wrapper
+- **Density toggle**: `ds-density-toggle` class — two separate buttons with `gap: var(--spacing-sm)`, each with its own `border: 1px solid var(--color-border-primary)` and `border-radius: var(--radius-sm)`; "Comfort" (56px row height) and "Compact" (40px row height); `is-selected` modifier: `--color-surface-accent-blue` bg, `--color-border-active` border, `--color-text-brand` text; label-large typography; `aria-pressed` on each button; `role="group" aria-label="Row density"` on the wrapper
 - **AG Grid integration**: bind `[api]` after grid ready to auto-sync row group columns; emits `(densityChange)` — consumer must call `api.resetRowHeights()` and update `rowHeight` grid option
 - **No Angular Material base** — custom component
 
@@ -99,7 +99,7 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 
 ### Column Panel (`ds-column-panel`)
 - **Purpose**: AG Grid custom tool panel for column configuration. Slides in from the right when the gear toolbar button is active.
-- **Width**: 300px — fixed; **border-left**: 1px `--color-border-subtle`
+- **Width**: 300px — fixed; **background**: `--color-surface-subtle`; **border-left**: 1px `--color-border-secondary`
 - **Display**: `display: none` by default; shown via `[data-panel-open]` on the enclosing container OR via `display: flex` on the Angular component host
 - **Sections (top to bottom)**:
   1. **Density toggle** — `ds-density-toggle` fills full panel width; same Comfort/Compact pattern as row groups bar

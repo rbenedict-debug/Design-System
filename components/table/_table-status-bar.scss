@@ -11,7 +11,7 @@
   height: 56px;
   padding: 0 var(--spacing-lg);
   background: var(--color-surface-subtle);
-  border-top: 1px solid var(--color-border-secondary);
+  border-top: 1px solid var(--color-border-subtle);
   box-sizing: border-box;
   flex-shrink: 0;
 
@@ -38,20 +38,20 @@
   }
 
   &__stat-label {
-    font-family: var(--ref-typescale-body-small-font);
-    font-size: var(--ref-typescale-body-small-size);
-    font-weight: var(--ref-typescale-body-small-weight);
-    line-height: var(--ref-typescale-body-small-line-height);
-    letter-spacing: var(--ref-typescale-body-small-tracking);
-    color: var(--color-text-secondary);
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-primary);
   }
 
   &__stat-value {
-    font-family: var(--ref-typescale-body-small-font);
-    font-size: var(--ref-typescale-body-small-size);
-    font-weight: var(--ref-typescale-label-small-weight-prominent);
-    line-height: var(--ref-typescale-body-small-line-height);
-    letter-spacing: var(--ref-typescale-body-small-tracking);
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
     color: var(--color-text-primary);
   }
 }

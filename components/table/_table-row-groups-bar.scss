@@ -11,8 +11,8 @@
   justify-content: space-between;
   height: 56px;
   padding: 0 var(--spacing-lg);
-  background: var(--color-surface-page);
-  border-bottom: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-subtle);
+  border-bottom: 1px solid var(--color-border-secondary);
   box-sizing: border-box;
   flex-shrink: 0;
   gap: var(--spacing-lg);
@@ -34,12 +34,12 @@
 
   // "Drag here to set row groups" placeholder text
   &__placeholder {
-    font-family: var(--ref-typescale-body-medium-font);
-    font-size: var(--ref-typescale-body-medium-size);
-    font-weight: var(--ref-typescale-body-medium-weight);
-    line-height: var(--ref-typescale-body-medium-line-height);
-    letter-spacing: var(--ref-typescale-body-medium-tracking);
-    color: var(--color-text-placeholder);
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-primary);
     white-space: nowrap;
     flex-shrink: 0;
 
@@ -74,45 +74,40 @@
 .ds-density-toggle {
   display: flex;
   align-items: center;
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
+  gap: var(--spacing-sm);
   flex-shrink: 0;
 
   &__btn {
     appearance: none;
     -webkit-appearance: none;
-    border: none;
-    background: transparent;
+    background: var(--color-surface-page);
+    border: 1px solid var(--color-border-primary);
+    border-radius: var(--radius-sm);
     padding: 0 var(--spacing-md);
     height: 42px;
     cursor: pointer;
-    font-family: var(--ref-typescale-label-medium-font);
-    font-size: var(--ref-typescale-label-medium-size);
-    font-weight: var(--ref-typescale-label-medium-weight-prominent);
-    line-height: var(--ref-typescale-label-medium-line-height);
-    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    font-family: var(--ref-typescale-label-large-font);
+    font-size: var(--ref-typescale-label-large-size);
+    font-weight: var(--ref-typescale-label-large-weight-prominent);
+    line-height: var(--ref-typescale-label-large-line-height);
+    letter-spacing: var(--ref-typescale-label-large-tracking);
     color: var(--color-text-primary);
     white-space: nowrap;
     position: relative;
-    transition: background 80ms ease, color 80ms ease;
-
-    // Divider between buttons — right border on all but the last
-    + .ds-density-toggle__btn {
-      border-left: 1px solid var(--color-border-primary);
-    }
+    transition: background 80ms ease, border-color 80ms ease, color 80ms ease;
 
     &:focus { outline: none; }
-    &:focus-visible { box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
 
     &:hover:not(.is-selected) {
       background: var(--overlay-hovered);
     }
 
-    // Selected state — brand filled
+    // Selected state — accent blue tint with active border
     &.is-selected {
-      background: var(--color-surface-brand-bold);
-      color: var(--color-text-on-brand);
+      background: var(--color-surface-accent-blue);
+      border-color: var(--color-border-active);
+      color: var(--color-text-brand);
     }
   }
 }
