@@ -23,7 +23,8 @@
 
 import {
   Component, Input, Output, EventEmitter, ChangeDetectionStrategy,
-  ChangeDetectorRef, HostBinding, HostListener, OnDestroy,
+  ChangeDetectorRef, HostBinding, HostListener, OnDestroy, AfterViewChecked,
+  ViewChild, ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DsTableRowContextMenuEvent } from './table-context-menu.component';
@@ -53,6 +54,23 @@ export interface AgCellRendererParams {
   colDef?: {
     cellRendererParams?: Partial<DsTableRowCellComponent>;
   };
+  /**
+   * Registers a DOM element as the row drag handle for this cell.
+   * Call in agInit (or after the handle element has rendered) when the column
+   * uses rowDrag: true and a custom drag handle element is needed.
+   *
+   * @param dragElement  The element to use as the drag handle.
+   * @param dragStartPixels  Pixels of movement before drag starts (default 4).
+   * @param value  Optional drag value override shown in the drag ghost.
+   * @param suppressVisibilityChange  When true, AG Grid won't auto-show/hide the
+   *   handle based on rowDrag visibility rules (rowDragManaged, etc.).
+   */
+  registerRowDragger?(
+    dragElement: HTMLElement,
+    dragStartPixels?: number,
+    value?: string,
+    suppressVisibilityChange?: boolean,
+  ): void;
 }
 
 @Component({
@@ -66,7 +84,7 @@ export interface AgCellRendererParams {
     'role': 'gridcell',
   },
 })
-export class DsTableRowCellComponent implements OnDestroy {
+export class DsTableRowCellComponent implements OnDestroy, AfterViewChecked {
 
   /** Cell value text. Overridden by agInit params.value. */
   @Input() value: string | null = null;
@@ -109,8 +127,13 @@ export class DsTableRowCellComponent implements OnDestroy {
   @HostBinding('class.is-focused')  get isFocused()  { return this.state === 'focus'; }
   @HostBinding('class.is-selected') get isSelected() { return this.checked; }
 
+  /** Template ref for the gripper button — used to register the AG Grid row dragger. */
+  @ViewChild('gripperEl') gripperEl?: ElementRef<HTMLElement>;
+
   private agParams?: AgCellRendererParams;
   private rowSelectedListener?: () => void;
+  /** Prevents re-registration on every change detection cycle once registered. */
+  private gripperRegistered = false;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -146,6 +169,24 @@ export class DsTableRowCellComponent implements OnDestroy {
       y: event.clientY,
       params: this.agParams,
     });
+  }
+
+  /**
+   * Registers the gripper element as the AG Grid row drag handle once it
+   * appears in the DOM. Runs after each change detection cycle but the
+   * `gripperRegistered` flag ensures it only registers once.
+   *
+   * We cannot register in agInit directly because agInit runs before the
+   * template has rendered the *ngIf="gripper" button — so the ElementRef
+   * is not yet available at that point.
+   */
+  ngAfterViewChecked(): void {
+    if (!this.gripperRegistered
+        && this.agParams?.registerRowDragger
+        && this.gripperEl?.nativeElement) {
+      this.agParams.registerRowDragger(this.gripperEl.nativeElement);
+      this.gripperRegistered = true;
+    }
   }
 
   ngOnDestroy(): void {

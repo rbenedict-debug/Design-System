@@ -36,7 +36,7 @@ $tier2-indent: 64px;
     border-bottom: none;
   }
 
-  // ── Interactive states ────────────────────────────────────────
+  // ── Interactive states (Angular-driven — standalone / preview use) ────────
   &.is-hovered {
     background: var(--overlay-hovered);
   }
@@ -145,6 +145,12 @@ $tier2-indent: 64px;
     border-left: 1px solid var(--color-border-secondary);
   }
 
+  // ── Pinned rows (pinnedTopRowData / pinnedBottomRowData) ─────
+  // Applied by the &--totals modifier on status bar rows; also needs to work
+  // when AG Grid's own row-pinning feature is in use via pinnedTopRowData.
+  // The --totals modifier covers the status bar case; .ag-row-pinned (below,
+  // outside this block) covers AG Grid's native pinned rows.
+
   // ── Cell data text ────────────────────────────────────────────
   &__data {
     font-family: var(--ref-typescale-body-medium-font);
@@ -164,4 +170,38 @@ $tier2-indent: 64px;
       flex: 0 1 auto;
     }
   }
+}
+
+// ── AG Grid row container state classes ───────────────────────────────────────
+// AG Grid applies these classes to `.ag-row` (the row wrapper that contains
+// all `.ag-cell` elements, which in turn contain our `ds-table-row-cell` host).
+// Because _table-row-cell.scss compiles to global CSS (not Angular encapsulated),
+// these ancestor selectors work correctly without ::ng-deep.
+//
+// These complement the Angular-driven .is-hovered / .is-selected classes that
+// are used in standalone / preview contexts. In AG Grid, the row wrapper manages
+// hover and selection state, not our component, so these rules are required.
+
+// Row hover — AG Grid adds .ag-row-hover to the .ag-row on mouseenter.
+// Exclude the totals modifier row (status bar pinned row) — it has its own bg.
+.ag-row-hover .ds-table-row-cell:not(.ds-table-row-cell--totals) {
+  background: var(--overlay-hovered);
+}
+
+// Row selected — AG Grid adds .ag-row-selected when the row is selected
+// (via rowSelection config). Belt-and-suspenders with .is-selected HostBinding.
+.ag-row-selected .ds-table-row-cell {
+  background: var(--overlay-focused);
+}
+
+// Selected + hovered — keep selection overlay (don't let hover override it).
+.ag-row-selected.ag-row-hover .ds-table-row-cell {
+  background: var(--overlay-focused);
+}
+
+// Pinned rows — AG Grid pinnedTopRowData / pinnedBottomRowData rows get
+// .ag-row-pinned. Apply the same subtle surface + no bottom border as --totals.
+.ag-row-pinned .ds-table-row-cell {
+  background: var(--color-surface-subtle);
+  border-bottom: none;
 }

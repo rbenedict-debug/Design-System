@@ -239,6 +239,253 @@ AG Grid enforces a minimum 50px center viewport — if pinned columns are too wi
 
 ---
 
+## Row Configuration
+
+### Row IDs (`getRowId`)
+
+Always define `getRowId` in gridOptions when rows have a stable identifier. AG Grid uses it to:
+- Maintain selection state across data updates (e.g. after `setRowData` or `applyTransaction`)
+- Preserve scroll position and focused cell after an update
+- Correctly diff row data in `rowModelType: 'clientSide'` transactions
+
+```typescript
+gridOptions = {
+  getRowId: (params) => String(params.data.id),
+};
+```
+
+Without `getRowId`, AG Grid generates internal IDs based on row index. These reset on any data change, causing selection loss and scroll jumps.
+
+**Immutability flag**: When using `getRowId`, also set `immutableData: true` (AG Grid v28) or use `applyTransaction` (v29+) for efficient data updates without full re-renders.
+
+---
+
+### Row Height and Density
+
+Row height is controlled by the `rowHeight` grid option. Tie it to the Onflo density toggle via a component property:
+
+```typescript
+readonly ROW_HEIGHT_COMFORT = 56;
+readonly ROW_HEIGHT_COMPACT = 40;
+
+density: TableDensity = 'comfort';
+
+get rowHeight(): number {
+  return this.density === 'comfort' ? this.ROW_HEIGHT_COMFORT : this.ROW_HEIGHT_COMPACT;
+}
+
+onDensityChange(value: TableDensity): void {
+  this.density = value;
+  // Tell AG Grid to re-measure all row heights — required when rowHeight is dynamic.
+  this.gridApi?.resetRowHeights();
+}
+```
+
+Bind in the template:
+
+```html
+<ag-grid-angular [rowHeight]="rowHeight" ...>
+<ds-column-panel [(density)]="density" (densityChange)="onDensityChange($event)" />
+```
+
+`resetRowHeights()` is required — AG Grid caches row heights and won't update the layout without it. `rowHeight` alone only takes effect on next grid init if you don't call `resetRowHeights()`.
+
+**Group row height**: For `groupDisplayType: 'groupRows'`, also set `groupRowHeight` to match:
+
+```typescript
+gridOptions = {
+  rowHeight: this.rowHeight,
+  groupRowHeight: this.rowHeight,
+};
+```
+
+---
+
+### Row Sorting
+
+Sorting is driven by the column header (`ds-table-header-cell`) — no extra grid config is required for basic sorting. Additional options:
+
+| Option | Default | Purpose |
+|---|---|---|
+| `sortingOrder` (grid or colDef) | `['asc', 'desc', null]` | Cycle order for sort states. Set `['asc', 'desc']` to prevent un-sorting. |
+| `multiSortKey` | `'ctrl'` | Hold Ctrl to add a secondary sort without clearing the first. |
+| `accentedSort` | `false` | Treat accented characters (é, ñ) as distinct from their unaccented equivalents. |
+| `suppressMultiSort` | `false` | Disable multi-column sort entirely — one sort at a time. |
+
+```typescript
+gridOptions = {
+  sortingOrder: ['asc', 'desc', null],
+  multiSortKey: 'ctrl',
+  accentedSort: true,
+};
+```
+
+**Server-side sort**: Set `sortModel` via `api.setSortModel()` and handle `sortChanged` event to fetch new data. The header cell's `setSort()` call still triggers the sort UI; you intercept it in `sortChanged`.
+
+---
+
+### Row Numbers
+
+AG Grid has no built-in row number column. Add a read-only `valueGetter` column:
+
+```typescript
+{
+  colId: 'rowNumber',
+  headerName: '#',
+  width: 56,
+  suppressMovable: true,
+  sortable: false,
+  filter: false,
+  resizable: false,
+  valueGetter: (params) => String((params.node?.rowIndex ?? 0) + 1),
+  cellRendererParams: { align: 'right', cellData: true },
+}
+```
+
+Note: `rowIndex` is the display index, not the data index. It changes with sorting and filtering, which is typically the correct behaviour for visible row numbers.
+
+---
+
+### Row Dragging
+
+Row dragging lets users reorder rows by dragging. It requires AG Grid Enterprise for `rowDragManaged: true` (automatic reorder); client-side unmanaged drag is available in Community.
+
+#### Basic setup (managed)
+
+```typescript
+gridOptions = {
+  rowDragManaged: true,       // AG Grid handles the reorder automatically
+  rowDragEntireRow: false,    // drag only from the drag handle column
+};
+```
+
+Add a column with `rowDrag: true` — AG Grid renders its own drag handle in that column by default:
+
+```typescript
+{ field: 'name', rowDrag: true, ... }
+```
+
+#### Custom gripper with DsTableRowCellComponent
+
+To use the Onflo gripper icon instead of AG Grid's default handle, set `cellRendererParams: { gripper: true }` on the column and omit AG Grid's default handle. AG Grid will call `registerRowDragger` on our component after `agInit`:
+
+```typescript
+{
+  field: 'name',
+  rowDrag: true,
+  cellRendererParams: { gripper: true },
+  // The DS cell renderer calls registerRowDragger(gripperEl) automatically
+  // in ngAfterViewChecked once the button has rendered.
+}
+```
+
+`DsTableRowCellComponent.agInit` stores the params; `ngAfterViewChecked` registers the gripper button with AG Grid via `params.registerRowDragger(gripperEl.nativeElement)` the first time the element is in the DOM.
+
+#### Unmanaged drag (custom reorder logic)
+
+Set `rowDragManaged: false` and listen to drag events to apply your own sort order:
+
+```typescript
+gridOptions = {
+  rowDragManaged: false,
+};
+
+onRowDragEnd(event: RowDragEndEvent): void {
+  // event.overNode is the row the dragged row was dropped onto
+  // Reorder your data array and call api.setRowData() or applyTransaction()
+}
+```
+
+#### Key drag options
+
+| Option | Purpose |
+|---|---|
+| `rowDragManaged: true` | AG Grid automatically reorders rows (Enterprise) |
+| `rowDragEntireRow: true` | Entire row is the drag handle (no column restriction) |
+| `rowDragMultiRow: true` | Drag multiple selected rows together |
+| `suppressRowDrag: true` | Disable drag entirely (e.g. during a sort) |
+
+---
+
+### Row Styles (AG Grid row container classes)
+
+AG Grid applies state classes to the `.ag-row` wrapper element, not to our cell renderer. The DS SCSS in `_table-row-cell.scss` targets these classes at the global scope to style our cells correctly:
+
+| Class on `.ag-row` | DS SCSS target | Background |
+|---|---|---|
+| `.ag-row-hover` | `.ag-row-hover .ds-table-row-cell` | `--overlay-hovered` |
+| `.ag-row-selected` | `.ag-row-selected .ds-table-row-cell` | `--overlay-focused` |
+| `.ag-row-selected.ag-row-hover` | both together | `--overlay-focused` (selection wins) |
+| `.ag-row-pinned` | `.ag-row-pinned .ds-table-row-cell` | `--color-surface-subtle`, no border-bottom |
+
+These are the only row state classes the DS needs to handle. Do not add `rowStyle` or `getRowStyle` to gridOptions — all state styling is handled via CSS.
+
+**Pinned vs totals bar**: `.ag-row-pinned` targets AG Grid's native row pinning (`pinnedTopRowData` / `pinnedBottomRowData`). The `ds-table-status-bar` is a separate component, not an AG Grid pinned row. Do not confuse the two.
+
+---
+
+### Row Pinning
+
+Pin a static row at the top or bottom of the grid (independent of sort/filter):
+
+```typescript
+gridOptions = {
+  pinnedTopRowData: [{ id: 'summary', label: 'Average', amount: 4200 }],
+  pinnedBottomRowData: [{ id: 'total', label: 'Total', amount: 84000 }],
+};
+```
+
+Pinned rows render with `.ag-row-pinned` and receive the subtle background + no border from the DS SCSS rules above.
+
+**Not to be confused with `ds-table-status-bar`** — the status bar is outside the AG Grid viewport, positioned between the grid and paginator. Use it for aggregate totals. Use `pinnedTopRowData`/`pinnedBottomRowData` when the pinned row must scroll horizontally with the grid columns (e.g. column-level averages).
+
+---
+
+### Row Pagination
+
+```typescript
+gridOptions = {
+  pagination: true,
+  paginationPageSize: 50,
+  suppressPaginationPanel: true,   // required — use ds-ag-paginator instead
+};
+```
+
+`paginationPageSize` sets the initial page size. The `ds-ag-paginator` component syncs via the pagination API and allows users to change the page size.
+
+| Option | Purpose |
+|---|---|
+| `paginationAutoPageSize` | Auto-calculates page size to fill the viewport — incompatible with fixed row height density toggle |
+| `paginateChildRows` | (Enterprise) Paginate expanded group rows rather than top-level groups |
+| `suppressPaginationPanel` | Required — always set to suppress AG Grid's built-in pagination UI |
+
+**`paginateChildRows`**: When `true` and row grouping is active, pagination counts individual child rows rather than group-level rows. This keeps the page size consistent but means users may see an incomplete group at the page boundary. Use only when consistency of count matters more than group integrity.
+
+---
+
+### Row Spanning
+
+`colSpan` makes a single cell span across multiple adjacent columns. This is a column-level callback — it runs per cell:
+
+```typescript
+{
+  field: 'category',
+  colSpan: (params) => params.data?.isHeader ? 4 : 1,
+}
+```
+
+`DsTableRowCellComponent` is transparent to `colSpan` — AG Grid sets the cell's DOM width and our component renders within it.
+
+**Constraints:**
+- Spanning cannot cross pinned/unpinned boundaries
+- Cell range selection breaks on spanned cells
+- Row virtualisation is less efficient with spanned cells (AG Grid disables partial-span buffering)
+- Best for read-only report layouts; avoid in interactive tables
+
+For spanning header cells, use column groups (see Column Groups section) instead.
+
+---
+
 ## Column Configuration
 
 ### defaultColDef
@@ -394,14 +641,14 @@ Multiple types can be composed: `type: ['dsGroupable', 'dsNumeric']`.
 - **Height: 56px — fixed**
 - **Padding**: `16px` horizontal (not resize handles — different from header cell)
 - **Border-bottom**: 1px `--color-border-subtle` (lighter than header's `--color-border-secondary`)
-- **States**: Default (transparent) | Hover (`.is-hovered` → `--overlay-hovered`) | Focus (`.is-focused` → `--overlay-focused`)
+- **States**: Default (transparent) | Hover (`--overlay-hovered`) | Focus/Selected (`--overlay-focused`) | Pinned (`--color-surface-subtle`, no border). In AG Grid, states are driven by AG Grid row container classes (`.ag-row-hover`, `.ag-row-selected`, `.ag-row-pinned`) targeting our cell via global SCSS — not by Angular `state` input. The `.is-hovered`/`.is-focused` inputs apply in standalone/preview only.
 - **Properties**: `align` (left/right), `cellData`, `gripper`, `checkbox`, `tier1Indent` (32px), `tier2Indent` (64px)
 - **Cell data typography**: `--ref-typescale-body-medium-*`, regular weight (400), 14px, 20px line-height, truncated with ellipsis
 - **Left align**: `__data` has `flex: 1 0 0` (fills space). **Right align**: `__data--right` + `__content--right` (justify-end + shrink)
-- **Gripper**: 32×32px ghost button, `drag_indicator` icon, cursor `grab` / `grabbing`
+- **Gripper**: 32×32px ghost button (`#gripperEl`), `drag_indicator` icon, cursor `grab` / `grabbing`. When `gripper: true` is set via `cellRendererParams`, the component registers the button with AG Grid's row drag API via `params.registerRowDragger(gripperEl.nativeElement)` in `ngAfterViewChecked` (deferred because `*ngIf` renders after `agInit`). Requires `rowDrag: true` on the colDef.
 - **Checkbox**: same icon pattern as header checkbox — `check_box_outline_blank` / `check_box` / `indeterminate_check_box`
 - **Tier indents**: `__indent--tier1` = 32px spacer, `__indent--tier2` = 64px spacer (for tree/grouped row hierarchy)
-- **AG Grid**: implements `ICellRendererAngularComp` — `agInit(params)`, `refresh(params)`, syncs `checked` via `rowSelected` event
+- **AG Grid**: implements `ICellRendererAngularComp` — `agInit(params)`, `refresh(params)`, syncs `checked` via `rowSelected` event; `AgCellRendererParams` includes `registerRowDragger?` for custom drag handle registration
 - **No Angular Material base** — custom component
 
 ---

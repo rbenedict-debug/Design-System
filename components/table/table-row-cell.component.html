@@ -12,8 +12,9 @@
     <span *ngIf="tier1Indent" class="ds-table-row-cell__indent--tier1" aria-hidden="true"></span>
     <span *ngIf="tier2Indent" class="ds-table-row-cell__indent--tier2" aria-hidden="true"></span>
 
-    <!-- Row drag gripper -->
+    <!-- Row drag gripper — #gripperEl passed to AG Grid registerRowDragger() -->
     <button
+      #gripperEl
       *ngIf="gripper"
       type="button"
       class="ds-table-row-cell__gripper"
