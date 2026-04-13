@@ -84,6 +84,30 @@ export interface AgHeaderParams {
     resetColumnState(): void;
     /** Adds a column to the active row group set. */
     addRowGroupColumn(colId: string): void;
+
+    // ── Selection API — used by the select-all checkbox header ────────────────
+    /**
+     * Selects all rows in the dataset, including filtered-out rows.
+     * Use selectAllFiltered when you only want to select visible rows.
+     */
+    selectAll?(): void;
+    /**
+     * Selects only rows that pass the currently active filters (preferred over
+     * selectAll for checkbox columns where "select all" means visible rows).
+     */
+    selectAllFiltered?(): void;
+    /** Deselects all selected rows. */
+    deselectAll?(): void;
+    /**
+     * Returns the currently selected row nodes. Used to calculate checked /
+     * indeterminate state on the select-all checkbox.
+     */
+    getSelectedNodes?(): unknown[];
+    /**
+     * Returns the number of rows currently displayed (after filters).
+     * Used alongside getSelectedNodes to determine indeterminate state.
+     */
+    getDisplayedRowCount?(): number;
   };
   /** Advance sort direction through the cycle: none → asc → desc → none. */
   progressSort(multiSort?: boolean): void;
@@ -169,6 +193,7 @@ export class DsTableHeaderCellComponent implements OnDestroy {
   private agParams?: AgHeaderParams;
   private sortChangedListener?: () => void;
   private filterChangedListener?: () => void;
+  private selectionChangedListener?: () => void;
 
   // Resize drag state
   private resizeStartX = 0;
@@ -221,6 +246,19 @@ export class DsTableHeaderCellComponent implements OnDestroy {
     };
     params.column.addEventListener('filterChanged', this.filterChangedListener);
     this.filterChangedListener();
+
+    // Select-all checkbox sync — only wired when this is a checkbox column
+    if (params.checkbox) {
+      this.selectionChangedListener = () => {
+        const selectedCount  = params.api.getSelectedNodes?.()?.length ?? 0;
+        const displayedCount = params.api.getDisplayedRowCount?.() ?? 0;
+        this.checked      = displayedCount > 0 && selectedCount >= displayedCount;
+        this.indeterminate = selectedCount > 0 && !this.checked;
+        this.cdr.markForCheck();
+      };
+      params.api.addEventListener('selectionChanged', this.selectionChangedListener);
+      this.selectionChangedListener(); // sync initial state
+    }
   }
 
   /** Called by AG Grid to refresh the header when the column definition changes. */
@@ -238,6 +276,9 @@ export class DsTableHeaderCellComponent implements OnDestroy {
       }
       if (this.filterChangedListener) {
         this.agParams.column.removeEventListener('filterChanged', this.filterChangedListener);
+      }
+      if (this.selectionChangedListener) {
+        this.agParams.api.removeEventListener('selectionChanged', this.selectionChangedListener);
       }
     }
     this._cleanupResizeListeners();
@@ -283,6 +324,29 @@ export class DsTableHeaderCellComponent implements OnDestroy {
     if (this.sortDirection === 'asc')  return 'ascending';
     if (this.sortDirection === 'desc') return 'descending';
     return 'none';
+  }
+
+  // ── Select-all checkbox ─────────────────────────────────────
+
+  /**
+   * Toggle select-all / deselect-all.
+   * Checked or indeterminate → deselect all.
+   * Unchecked → select all displayed rows (respects active filters).
+   */
+  onCheckboxClick(): void {
+    if (!this.agParams) { return; }
+    const api = this.agParams.api;
+    if (this.checked || this.indeterminate) {
+      api.deselectAll?.();
+    } else {
+      // selectAllFiltered selects only rows passing active filters — preferred
+      // behaviour for a checkbox column with filtering enabled.
+      if (api.selectAllFiltered) {
+        api.selectAllFiltered();
+      } else {
+        api.selectAll?.();
+      }
+    }
   }
 
   // ── Menu / Filter ───────────────────────────────────────────

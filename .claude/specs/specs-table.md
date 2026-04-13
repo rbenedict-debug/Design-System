@@ -1266,7 +1266,7 @@ Recommended approach for very large datasets: use **pagination** (`pagination: t
 - **Sort button**: `arrow_upward_alt` icon — only shown when column IS sorted. Sort state class on the icon span: `__sort-icon--asc` (brand), `__sort-icon--desc` (brand + rotate 180°). **When unsorted (`sortDirection === null`), do NOT render the sort button at all — no arrow shown.**
 - **Filter button**: `<span class="ds-icon ds-icon--filled">filter_alt</span>` — always filled icon; default ghost colour (`--color-icon-default`)
 - **Menu button**: icon uses `__menu-icon` class — `--color-icon-default` (grey ghost, turns brand on hover via ghost button styles); passes wrapper `div#menuBtnEl` to `onMenuClick()` as AG Grid positioning anchor
-- **Checkbox** (select-all): `check_box_outline_blank` | `check_box` (filled, brand) | `indeterminate_check_box` (filled, brand)
+- **Checkbox** (select-all): `check_box_outline_blank` | `check_box` (filled, brand) | `indeterminate_check_box` (filled, brand). In AG Grid, `agInit` subscribes to `selectionChanged` to sync `checked`/`indeterminate` from `api.getSelectedNodes().length` vs `api.getDisplayedRowCount()`. Click (or Enter/Space) calls `api.selectAllFiltered()` (falls back to `api.selectAll()`) when unchecked; calls `api.deselectAll()` when checked or indeterminate. The checkbox div has `role="checkbox"`, `aria-checked="true|false|mixed"`, `tabindex="0"`. These APIs must be included in the `AgHeaderParams.api` duck-type — see `AgHeaderParams` in `table-header-cell.component.ts`.
 - **Checkbox-only column**: auto-detected when `checkbox === true && !label` — applies `--checkbox-only` modifier (56px fixed width, both resize handles hidden); use with no `label` input
 - **Right align**: `ds-table-header-cell__content--right` applies `justify-content: flex-end`
 - **AG Grid**: implements `IHeaderAngularComp` — receives `agInit(params)`, `refresh(params)`, cleans up `sortChanged` listener and resize drag listeners in `ngOnDestroy`
@@ -1287,6 +1287,39 @@ Recommended approach for very large datasets: use **pagination** (`pagination: t
 - **Checkbox**: same icon pattern as header checkbox — `check_box_outline_blank` / `check_box` / `indeterminate_check_box`
 - **Tier indents**: `__indent--tier1` = 32px spacer, `__indent--tier2` = 64px spacer (for tree/grouped row hierarchy)
 - **AG Grid**: implements `ICellRendererAngularComp` — `agInit(params)`, `refresh(params)`, syncs `checked` via `rowSelected` event; `AgCellRendererParams` includes `registerRowDragger?` for custom drag handle registration
+- **No Angular Material base** — custom component
+
+---
+
+### Table Header Group Cell (`ds-table-header-group-cell`)
+- **Purpose**: AG Grid custom group header renderer — displays the shared column group header above a set of child column headers. Wire via `DS_TABLE_DEFAULT_COL_GROUP_DEF` as `defaultColGroupDef` in gridOptions.
+- **Height**: Controlled by AG Grid `groupHeaderHeight` option — defaults to `headerHeight` (56px)
+- **Background**: `--color-surface-subtle`; **border-bottom**: 1px `--color-border-secondary` — same as `ds-table-header-cell`
+- **Label typography**: `--ref-typescale-label-medium-*`, weight-prominent, truncated with ellipsis
+- **Chevron** (`chevron_right`, sm): rendered only when `columnGroup.isExpandable()` returns true (i.e. some children have `columnGroupShow`); rotates 90° with `--motion-duration-short` ease when expanded; `--color-icon-brand` when expanded, `--color-icon-default` when collapsed
+- **Expand/collapse**: `onExpandToggle()` calls `params.setExpanded(!isExpanded)`; subscribes to `expandedChanged` event on `columnGroup` to sync state; cleaned up in `ngOnDestroy`
+- **ADA**: host has `role="columnheader"`; `[attr.aria-expanded]` is set only when `isExpandable` is true (null when not expandable); chevron button has `aria-label` = "Expand/Collapse column group"
+- **Pinned column borders**: `.ag-pinned-left-header .ds-table-header-group-cell` and `.ag-pinned-right-header .ds-table-header-group-cell` add the inner edge border matching `ds-table-header-cell`
+- **No sort, filter, or menu buttons** — those are per individual column headers
+- **AG Grid**: implements `IHeaderGroupAngularComp` — `agInit(params)`, `refresh(params)`, cleans up `expandedChanged` listener in `ngOnDestroy`; `AgHeaderGroupParams` interface exposes `columnGroup.isExpandable()`, `columnGroup.isExpanded()`, `columnGroup.getDisplayedLeafColumns()`, `setExpanded()`
+- **No Angular Material base** — custom component
+
+---
+
+### Table Context Menu (`ds-table-context-menu`)
+- **Purpose**: `position: fixed` right-click overlay for AG Grid column headers and row cells. Uses the `ds-menu` CSS class API — same visual language as `ds-menu`, no new styling introduced.
+- **Required grid options**: `suppressContextMenu: true` + `suppressHeaderContextMenu: true` — disables AG Grid's built-in menus so the DS menu can take over
+- **Inputs**: `[items]` (`DsContextMenuItem[]`), `[x]` (clientX), `[y]` (clientY), `[visible]` (boolean)
+- **Output**: `(closed)` — emit when the menu should close; set `[visible]="false"` in handler
+- **Wiring**: `DsTableHeaderCellComponent` emits `(headerContextMenu)` on right-click; `DsTableRowCellComponent` emits `(rowContextMenu)` on right-click; both expose event types `DsTableHeaderContextMenuEvent` and `DsTableRowContextMenuEvent`
+- **Default builders**:
+  - `buildDefaultHeaderContextMenuItems(colId, api)` → Sort Ascending/Descending/Clear, Pin Left/Right/Unpin, Auto Size/Reset Columns, Group by Column
+  - `buildDefaultRowContextMenuItems(value)` → Copy (clipboard API with textarea fallback for non-secure contexts)
+- **`DsContextMenuItem`**: `{ label?, icon?, separator?, disabled?, destructive?, action? }` — spread/extend the defaults per page
+- **Viewport flip**: menu flips above/left when it would overflow the viewport edge; `adjustPosition()` runs after each open via `setTimeout(0)` to let the panel render before measuring
+- **Focus**: panel receives focus on open for keyboard accessibility
+- **ADA**: `role="menu"` on panel; `role="menuitem"` on each item; `aria-disabled` on disabled items; Escape closes via `@HostListener('document:keydown.escape')`
+- **One instance per page/layout** — place `<ds-table-context-menu>` once; reuse across header and row events by updating `[items]`, `[x]`, `[y]`, `[visible]`
 - **No Angular Material base** — custom component
 
 ---
@@ -1328,6 +1361,7 @@ Recommended approach for very large datasets: use **pagination** (`pagination: t
 - **Chips**: use `ds-tag ds-tag--sm` with close button; emit `(removeGroup)` on close; automatically synced from AG Grid when `[api]` is bound
 - **AG Grid integration**: bind `[api]` after grid ready to auto-sync row group columns
 - **Visibility**: auto-hides via `[hidden]` host binding when `rowGroups.length === 0`; consumer controls when to render the element
+- **Drop zone is visual only**: the "Drag here to set row groups" placeholder and `drag_indicator` icon are decorative — the bar does not implement drag event handlers. Actual grouping is driven programmatically via `ds-column-panel` (Add Column picker calls `api.addRowGroupColumn()`). AG Grid's native column-header drag-to-group targets the built-in row group panel (`rowGroupPanelShow`), not our custom bar.
 - **No density toggle** — density belongs in `ds-column-panel` only
 - **No Angular Material base** — custom component
 

@@ -19,6 +19,12 @@
       *ngIf="checkbox"
       class="ds-table-header-cell__checkbox"
       [class]="checkboxClass"
+      role="checkbox"
+      [attr.aria-checked]="indeterminate ? 'mixed' : checked"
+      tabindex="0"
+      (click)="onCheckboxClick()"
+      (keydown.enter)="onCheckboxClick()"
+      (keydown.space)="$event.preventDefault(); onCheckboxClick()"
     >
       <span class="ds-icon" [class.ds-icon--filled]="checked || indeterminate">
         {{ checkboxIcon }}
