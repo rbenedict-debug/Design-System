@@ -1,0 +1,162 @@
+// Onflo Design System — Table Group Row Cell
+// Figma: primitive/table-group-row-cell
+// Full-width AG Grid group row renderer for groupDisplayType: 'groupRows'.
+// Height is driven by AG Grid (rowHeight / groupRowHeight) — uses height: 100%
+// to fill whatever the grid sets. min-height: 40px covers compact mode.
+
+$toggle-size: 32px;
+
+.ds-table-group-row-cell {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 40px;
+  padding: 0 var(--spacing-lg);
+  background: var(--color-surface-subtle);
+  border-bottom: 1px solid var(--color-border-secondary);
+  box-sizing: border-box;
+  overflow: hidden;
+  gap: var(--spacing-sm);
+
+  // ── Indent spacer (width set by inline style: level × 24px) ──────────────
+  &__indent {
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  // ── Expand / collapse toggle button ──────────────────────────────────────
+  &__toggle {
+    appearance: none;
+    -webkit-appearance: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $toggle-size;
+    height: $toggle-size;
+    padding: 0;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-sm);
+      background: var(--overlay-hovered);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 80ms ease;
+    }
+
+    &:hover::after  { opacity: 1; }
+    &:active::after { background: var(--overlay-pressed); opacity: 1; }
+  }
+
+  // ── Chevron icon — rotates 90° when expanded ──────────────────────────────
+  &__chevron {
+    display: block;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--color-icon-default);
+    transition: transform 150ms ease, color 150ms ease;
+    transform: rotate(0deg);
+
+    &--open {
+      transform: rotate(90deg);
+      color: var(--color-icon-brand);
+    }
+  }
+
+  // ── Group label ("FieldName: Value") ──────────────────────────────────────
+  &__label {
+    display: flex;
+    align-items: baseline;
+    min-width: 0;
+    flex-shrink: 1;
+    overflow: hidden;
+  }
+
+  &__field {
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  &__value {
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ── Child row count "(N)" ─────────────────────────────────────────────────
+  &__count {
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  // ── Spacer — fills remaining space, pushes aggregates right ──────────────
+  &__spacer {
+    flex: 1 0 0;
+  }
+
+  // ── Aggregated values region ──────────────────────────────────────────────
+  &__aggregates {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  &__stat {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  &__stat-label {
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+
+  &__stat-value {
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+}

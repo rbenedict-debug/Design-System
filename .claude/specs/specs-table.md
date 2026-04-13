@@ -94,7 +94,35 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 - **Chips**: use `ds-tag ds-tag--sm` with close button; emit `(removeGroup)` on close; automatically synced from AG Grid when `[api]` is bound
 - **Density toggle**: `ds-density-toggle` class — two separate buttons with `gap: var(--spacing-sm)`, each with its own `border: 1px solid var(--color-border-primary)` and `border-radius: var(--radius-sm)`; "Comfort" (56px row height) and "Compact" (40px row height); `is-selected` modifier: `--color-surface-accent-blue` bg, `--color-border-active` border, `--color-text-brand` text; label-large typography; `aria-pressed` on each button; `role="group" aria-label="Row density"` on the wrapper
 - **AG Grid integration**: bind `[api]` after grid ready to auto-sync row group columns; emits `(densityChange)` — consumer must call `api.resetRowHeights()` and update `rowHeight` grid option
+- **Visibility**: no auto-hide — the bar is always shown when rendered (the density toggle is always useful); consumer controls visibility via `*ngIf`
 - **No Angular Material base** — custom component
+
+---
+
+### Table Group Row Cell (`ds-table-group-row-cell`)
+- **Purpose**: AG Grid custom renderer for full-width group rows. Set as `groupRowRenderer` in gridOptions when using `groupDisplayType: 'groupRows'`.
+- **Height**: fills AG Grid row height (controlled by `rowHeight` / `groupRowHeight` grid options); `min-height: 40px` ensures compact mode renders correctly
+- **Background**: `--color-surface-subtle`; **border-bottom**: 1px `--color-border-secondary`
+- **Layout (left to right)**: indent spacer + toggle button + label ("FieldName: Value") + count "(N)" + flex spacer + aggregates region
+- **Indent spacer**: `24px × level` — 4 levels supported (0 = no indent, 1 = 24px, 2 = 48px, 3 = 72px); width set via inline style from `params.node.level`
+- **Toggle button**: 32×32px, `border-radius: var(--radius-sm)`, transparent background, hover/active overlay via `::after`; focus ring keyboard-only via `:focus-visible`; `aria-expanded` reflects expansion state; `aria-label` = "[Expand/Collapse] FieldName: Value"
+- **Chevron**: `chevron_right` icon (20px), `--color-icon-default`; rotates 90° with 150ms ease when expanded; expanded state sets `--color-icon-brand`
+- **Field label** (`__field`): label-medium regular, `--color-text-secondary`; e.g. "Department: "
+- **Group value** (`__value`): label-medium weight-prominent, `--color-text-primary`; truncated with ellipsis
+- **Count** (`__count`): label-medium regular, `--color-text-secondary`; e.g. "(4)"
+- **Aggregates region** (`__aggregates`): right-aligned; `gap: var(--spacing-xl)` between stat pairs; each `__stat` has `__stat-label` (label-medium regular, `--color-text-secondary`) + `__stat-value` (label-medium weight-prominent, `--color-text-primary`); populated from `params.node.aggData` when `aggFunc` is set on column definitions; `aria-hidden="true"` (announced via status bar)
+- **Column header lookup**: uses `params.api.getColumn(field)?.getColDef()?.headerName` for display label; falls back to capitalised field name
+- **AG Grid integration**: implements `ICellRendererAngularComp` — `agInit(params)`, `refresh(params)`, listens to `expandedChanged` node event; cleans up in `ngOnDestroy`; host element `display: block; width: 100%; height: 100%` to fill full-width AG Grid cell
+- **No Angular Material base** — custom component
+
+### Table Group Expansion Store (`DsTableGroupExpansionStore`)
+- **Purpose**: Plain TypeScript class (no Angular DI) for persisting row group expand/collapse state to `localStorage` across page navigations.
+- **Constructor**: `new DsTableGroupExpansionStore(storageKey: string)` — `storageKey` must be unique per grid instance
+- **`isGroupOpenByDefault(params)`**: pass as `isGroupOpenByDefault` in AG Grid gridOptions; returns `true` for previously-opened groups; default is collapsed
+- **`onRowGroupOpened(event)`**: pass as `onRowGroupOpened` in AG Grid gridOptions; stores open state, removes closed state
+- **`clear()`**: removes all stored expansion state for this grid
+- **Key format**: full ancestor path joined with `→` (e.g. `country:USA→department:Engineering`) — survives column reordering, is stable across navigations
+- **Storage errors** (quota exceeded): silently ignored — state loss on quota overflow is acceptable
 
 ---
 

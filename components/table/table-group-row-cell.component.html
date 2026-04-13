@@ -1,0 +1,57 @@
+<div class="ds-table-group-row-cell">
+
+  <!-- Indent spacer: 24px per nesting level (levels 1–3) -->
+  <span
+    *ngIf="indentWidth > 0"
+    class="ds-table-group-row-cell__indent"
+    [style.width.px]="indentWidth"
+    aria-hidden="true"
+  ></span>
+
+  <!-- Expand / collapse toggle -->
+  <button
+    type="button"
+    class="ds-table-group-row-cell__toggle"
+    [attr.aria-expanded]="expanded"
+    [attr.aria-label]="(expanded ? 'Collapse ' : 'Expand ') + fieldLabel + ': ' + value"
+    (click)="onToggle($event)"
+  >
+    <span
+      class="ds-icon ds-table-group-row-cell__chevron"
+      [class.ds-table-group-row-cell__chevron--open]="expanded"
+      aria-hidden="true"
+    >chevron_right</span>
+  </button>
+
+  <!-- "FieldName: Value" label -->
+  <span class="ds-table-group-row-cell__label">
+    <span *ngIf="fieldLabel" class="ds-table-group-row-cell__field">{{ fieldLabel }}:&nbsp;</span>
+    <span class="ds-table-group-row-cell__value">{{ value }}</span>
+  </span>
+
+  <!-- Child row count -->
+  <span
+    *ngIf="childCount !== null"
+    class="ds-table-group-row-cell__count"
+    aria-hidden="true"
+  >({{ childCount }})</span>
+
+  <!-- Flex spacer — pushes aggregates to the right -->
+  <span class="ds-table-group-row-cell__spacer" aria-hidden="true"></span>
+
+  <!-- Aggregated column values (right-aligned) -->
+  <div
+    *ngIf="aggregates.length > 0"
+    class="ds-table-group-row-cell__aggregates"
+    aria-hidden="true"
+  >
+    <span
+      *ngFor="let stat of aggregates"
+      class="ds-table-group-row-cell__stat"
+    >
+      <span class="ds-table-group-row-cell__stat-label">{{ stat.label }}:</span>
+      <span class="ds-table-group-row-cell__stat-value">{{ stat.value }}</span>
+    </span>
+  </div>
+
+</div>

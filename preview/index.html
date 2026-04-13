@@ -8165,6 +8165,12 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 #table-sim-pt[data-density="compact"] .ds-table-row-cell {
   height: var(--color-table-cell-height-compact-height);
 }
+#table-sim-pt[data-density="comfort"] .ds-table-group-row-cell {
+  min-height: var(--color-table-cell-height-comfortable-height);
+}
+#table-sim-pt[data-density="compact"] .ds-table-group-row-cell {
+  min-height: var(--color-table-cell-height-compact-height);
+}
 /* Pinned right column needs a solid background so it occludes scrolled cells.
    Using surface-default matches the table's container background. */
 #table-sim-pt .ds-table-row-cell.ds-table-pinned-right {
@@ -8625,6 +8631,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
       <a class="nav-link" href="#table-row-cell" onclick="setActive(this)"><span class="nav-dot"></span>Row Cell</a>
       <a class="nav-link" href="#table-status-bar" onclick="setActive(this)"><span class="nav-dot"></span>Status Bar</a>
       <a class="nav-link" href="#table-row-groups-bar" onclick="setActive(this)"><span class="nav-dot"></span>Row Groups Bar</a>
+      <a class="nav-link" href="#table-group-row-cell" onclick="setActive(this)"><span class="nav-dot"></span>Group Row Cell</a>
       <a class="nav-link" href="#ag-paginator" onclick="setActive(this)"><span class="nav-dot"></span>AG Grid Paginator</a>
       <a class="nav-link" href="#table-toolbar" onclick="setActive(this)"><span class="nav-dot"></span>Toolbar</a>
       <a class="nav-link" href="#column-panel" onclick="setActive(this)"><span class="nav-dot"></span>Column Panel</a>
@@ -14104,8 +14111,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         <h2 class="section-title">Table Row Groups Bar</h2>
         <p class="section-desc">
           Bar between the toolbar and the column header row. Provides a drag-drop target
-          for columns to set row grouping and shows active row groups as removable chips.
-          Bind <code>[api]</code> to auto-sync with AG Grid column state.
+          for columns to set row grouping, shows active row groups as removable chips,
+          and a Comfort / Compact density toggle. Bind <code>[api]</code> to auto-sync
+          with AG Grid column state. Emits <code>(densityChange)</code> — consumer must
+          call <code>api.resetRowHeights()</code> and update <code>rowHeight</code>.
         </p>
         <p class="section-source">components/table/table-row-groups-bar.component.ts</p>
 
@@ -14119,6 +14128,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <div class="ds-table-row-groups-bar__drop-zone">
                   <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
                   <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
+                </div>
+                <div class="ds-density-toggle" role="group" aria-label="Row density">
+                  <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Comfort</button>
+                  <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Compact</button>
                 </div>
               </div>
             </div>
@@ -14143,6 +14156,199 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                       <button type="button" class="ds-tag__remove" aria-label="Remove Status row group">
                         <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
                       </button>
+                    </span>
+                  </div>
+                </div>
+                <div class="ds-density-toggle" role="group" aria-label="Row density">
+                  <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Comfort</button>
+                  <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Compact</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact density selected -->
+          <div class="demo-row">
+            <div class="demo-label">Compact selected</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div class="ds-table-row-groups-bar" style="width: 100%;">
+                <div class="ds-table-row-groups-bar__drop-zone">
+                  <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
+                  <div class="ds-table-row-groups-bar__chips">
+                    <span class="ds-tag ds-tag--sm">
+                      <span class="ds-tag__label">Department</span>
+                      <button type="button" class="ds-tag__remove" aria-label="Remove Department row group">
+                        <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+                <div class="ds-density-toggle" role="group" aria-label="Row density">
+                  <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Comfort</button>
+                  <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Compact</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ──────────────────────────────────────────────────────────────── -->
+      <!-- TABLE GROUP ROW CELL                                           -->
+      <!-- ──────────────────────────────────────────────────────────────── -->
+      <section class="section" id="table-group-row-cell">
+        <h2 class="section-title">Table Group Row Cell</h2>
+        <p class="section-desc">
+          AG Grid custom renderer for full-width group rows. Used when
+          <code>groupDisplayType: 'groupRows'</code> is set. Shows an animated
+          expand/collapse chevron, the grouped field label and value, a child count,
+          and optional aggregated column values on the right. Supports 4 nesting levels
+          (24px indent per level). Pair with <code>DsTableGroupExpansionStore</code>
+          to persist open/closed state across page navigations via localStorage.
+        </p>
+        <p class="section-source">components/table/table-group-row-cell.component.ts</p>
+
+        <div class="component-demo">
+
+          <!-- Level 0 — collapsed -->
+          <div class="demo-row">
+            <div class="demo-label">Level 0 — collapsed</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div style="width: 100%;">
+                <div class="ds-table-group-row-cell">
+                  <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="false" aria-label="Expand Department: Engineering">
+                    <span class="ds-icon ds-table-group-row-cell__chevron" aria-hidden="true">chevron_right</span>
+                  </button>
+                  <span class="ds-table-group-row-cell__label">
+                    <span class="ds-table-group-row-cell__field">Department:&nbsp;</span>
+                    <span class="ds-table-group-row-cell__value">Engineering</span>
+                  </span>
+                  <span class="ds-table-group-row-cell__count">(4)</span>
+                  <span class="ds-table-group-row-cell__spacer"></span>
+                  <div class="ds-table-group-row-cell__aggregates">
+                    <span class="ds-table-group-row-cell__stat">
+                      <span class="ds-table-group-row-cell__stat-label">Amount:</span>
+                      <span class="ds-table-group-row-cell__stat-value">$149,300.00</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Level 0 — expanded -->
+          <div class="demo-row">
+            <div class="demo-label">Level 0 — expanded</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div style="width: 100%;">
+                <div class="ds-table-group-row-cell">
+                  <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="true" aria-label="Collapse Department: Sales">
+                    <span class="ds-icon ds-table-group-row-cell__chevron ds-table-group-row-cell__chevron--open" aria-hidden="true">chevron_right</span>
+                  </button>
+                  <span class="ds-table-group-row-cell__label">
+                    <span class="ds-table-group-row-cell__field">Department:&nbsp;</span>
+                    <span class="ds-table-group-row-cell__value">Sales</span>
+                  </span>
+                  <span class="ds-table-group-row-cell__count">(3)</span>
+                  <span class="ds-table-group-row-cell__spacer"></span>
+                  <div class="ds-table-group-row-cell__aggregates">
+                    <span class="ds-table-group-row-cell__stat">
+                      <span class="ds-table-group-row-cell__stat-label">Amount:</span>
+                      <span class="ds-table-group-row-cell__stat-value">$91,200.00</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Level 1 — nested group -->
+          <div class="demo-row">
+            <div class="demo-label">Level 1 — nested</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div style="width: 100%;">
+                <div class="ds-table-group-row-cell">
+                  <span class="ds-table-group-row-cell__indent" style="width: 24px;" aria-hidden="true"></span>
+                  <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="false" aria-label="Expand Status: Active">
+                    <span class="ds-icon ds-table-group-row-cell__chevron" aria-hidden="true">chevron_right</span>
+                  </button>
+                  <span class="ds-table-group-row-cell__label">
+                    <span class="ds-table-group-row-cell__field">Status:&nbsp;</span>
+                    <span class="ds-table-group-row-cell__value">Active</span>
+                  </span>
+                  <span class="ds-table-group-row-cell__count">(2)</span>
+                  <span class="ds-table-group-row-cell__spacer"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Level 2 — deeper nested -->
+          <div class="demo-row">
+            <div class="demo-label">Level 2 — deeper</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div style="width: 100%;">
+                <div class="ds-table-group-row-cell">
+                  <span class="ds-table-group-row-cell__indent" style="width: 48px;" aria-hidden="true"></span>
+                  <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="true" aria-label="Collapse Region: West">
+                    <span class="ds-icon ds-table-group-row-cell__chevron ds-table-group-row-cell__chevron--open" aria-hidden="true">chevron_right</span>
+                  </button>
+                  <span class="ds-table-group-row-cell__label">
+                    <span class="ds-table-group-row-cell__field">Region:&nbsp;</span>
+                    <span class="ds-table-group-row-cell__value">West</span>
+                  </span>
+                  <span class="ds-table-group-row-cell__count">(1)</span>
+                  <span class="ds-table-group-row-cell__spacer"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Level 3 — deepest nested -->
+          <div class="demo-row">
+            <div class="demo-label">Level 3 — deepest</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div style="width: 100%;">
+                <div class="ds-table-group-row-cell">
+                  <span class="ds-table-group-row-cell__indent" style="width: 72px;" aria-hidden="true"></span>
+                  <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="false" aria-label="Expand Quarter: Q1">
+                    <span class="ds-icon ds-table-group-row-cell__chevron" aria-hidden="true">chevron_right</span>
+                  </button>
+                  <span class="ds-table-group-row-cell__label">
+                    <span class="ds-table-group-row-cell__field">Quarter:&nbsp;</span>
+                    <span class="ds-table-group-row-cell__value">Q1</span>
+                  </span>
+                  <span class="ds-table-group-row-cell__count">(1)</span>
+                  <span class="ds-table-group-row-cell__spacer"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- With multiple aggregates -->
+          <div class="demo-row">
+            <div class="demo-label">Multiple aggregates</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div style="width: 100%;">
+                <div class="ds-table-group-row-cell">
+                  <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="true" aria-label="Collapse Department: Finance">
+                    <span class="ds-icon ds-table-group-row-cell__chevron ds-table-group-row-cell__chevron--open" aria-hidden="true">chevron_right</span>
+                  </button>
+                  <span class="ds-table-group-row-cell__label">
+                    <span class="ds-table-group-row-cell__field">Department:&nbsp;</span>
+                    <span class="ds-table-group-row-cell__value">Finance</span>
+                  </span>
+                  <span class="ds-table-group-row-cell__count">(3)</span>
+                  <span class="ds-table-group-row-cell__spacer"></span>
+                  <div class="ds-table-group-row-cell__aggregates">
+                    <span class="ds-table-group-row-cell__stat">
+                      <span class="ds-table-group-row-cell__stat-label">Amount:</span>
+                      <span class="ds-table-group-row-cell__stat-value">$57,300.00</span>
+                    </span>
+                    <span class="ds-table-group-row-cell__stat">
+                      <span class="ds-table-group-row-cell__stat-label">Avg:</span>
+                      <span class="ds-table-group-row-cell__stat-value">$19,100.00</span>
                     </span>
                   </div>
                 </div>
@@ -16099,6 +16305,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">delete</span></span>
                               Delete
                             </button>
+                            <button id="pt-group-btn" class="ds-button ds-button--outlined ds-button--leading-icon" type="button" onclick="ptToggleGrouping(this)">
+                              <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">account_tree</span></span>
+                              Group by Dept
+                            </button>
                           </div>
                           <div class="ds-table-toolbar__right">
                             <div class="ds-input ds-search" role="search">
@@ -16130,6 +16340,26 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                           <div class="ds-alert__header">
                             <p class="ds-alert__message" id="pt-search-results-text" style="flex: 1;"></p>
                             <button class="ds-button ds-button--text ds-button--xs" type="button" onclick="ptTableSearchClear()">Clear Search</button>
+                          </div>
+                        </div>
+
+                        <!-- Row Groups Bar (shown when grouping is active) -->
+                        <div class="ds-table-row-groups-bar" id="pt-row-groups-bar">
+                          <div class="ds-table-row-groups-bar__drop-zone">
+                            <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
+                            <div class="ds-table-row-groups-bar__chips" id="pt-rg-chips">
+                              <span class="ds-tag ds-tag--sm" id="pt-rg-dept-chip">
+                                <span class="ds-tag__label">Department</span>
+                                <button type="button" class="ds-tag__remove" aria-label="Remove Department row group" onclick="ptRemoveGrouping()">
+                                  <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+                                </button>
+                              </span>
+                            </div>
+                            <span class="ds-table-row-groups-bar__placeholder" id="pt-rg-placeholder" style="display: none;">Drag here to set row groups</span>
+                          </div>
+                          <div class="ds-density-toggle" role="group" aria-label="Row density">
+                            <button type="button" class="ds-density-toggle__btn is-selected" id="pt-rg-comfort" aria-pressed="true" onclick="ptSetDensity('comfort', this)">Comfort</button>
+                            <button type="button" class="ds-density-toggle__btn" id="pt-rg-compact" aria-pressed="false" onclick="ptSetDensity('compact', this)">Compact</button>
                           </div>
                         </div>
 
@@ -16358,6 +16588,252 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r15"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Westfield Holdings"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Westfield Holdings"><span class="ds-icon">delete</span></button></div></div>
 
                             </div><!-- /data rows grid -->
+
+                            <!-- Grouped data grid — shown when "Group by Dept" is active -->
+                            <div id="pt-grouped-grid" style="display: none; width: 100%; min-width: 1006px; position: relative;">
+
+                              <!-- Engineering group (expanded) -->
+                              <div class="ds-table-group-row-cell" style="grid-column: 1 / -1;" data-group="Engineering" onclick="ptToggleGroupRow(this)">
+                                <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="true" aria-label="Collapse Department: Engineering" onclick="event.stopPropagation(); ptToggleGroupRow(this.closest('.ds-table-group-row-cell'))">
+                                  <span class="ds-icon ds-table-group-row-cell__chevron ds-table-group-row-cell__chevron--open" aria-hidden="true">chevron_right</span>
+                                </button>
+                                <span class="ds-table-group-row-cell__label">
+                                  <span class="ds-table-group-row-cell__field">Department:&nbsp;</span>
+                                  <span class="ds-table-group-row-cell__value">Engineering</span>
+                                </span>
+                                <span class="ds-table-group-row-cell__count">(4)</span>
+                                <span class="ds-table-group-row-cell__spacer"></span>
+                                <div class="ds-table-group-row-cell__aggregates">
+                                  <span class="ds-table-group-row-cell__stat">
+                                    <span class="ds-table-group-row-cell__stat-label">Amount:</span>
+                                    <span class="ds-table-group-row-cell__stat-value">$149,300.00</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <!-- Engineering child rows -->
+                              <div style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px;" data-group-children="Engineering">
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Acme Corporation"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Acme Corporation</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">info@acmecorp.com</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Acme Corporation"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Acme Corporation"><span class="ds-icon">delete</span></button></div></div>
+
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Echo Ventures Group"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Echo Ventures Group</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">team@echoventures.co</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$57,800.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Echo Ventures Group"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Echo Ventures Group"><span class="ds-icon">delete</span></button></div></div>
+
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Orbit Analytics"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Orbit Analytics</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">hi@orbitanalytics.io</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$43,100.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Orbit Analytics"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Orbit Analytics"><span class="ds-icon">delete</span></button></div></div>
+
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Titanium Works"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Titanium Works</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">info@titaniumworks.com</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$34,200.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Titanium Works"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Titanium Works"><span class="ds-icon">delete</span></button></div></div>
+                              </div>
+
+                              <!-- Finance group (collapsed) -->
+                              <div class="ds-table-group-row-cell" style="grid-column: 1 / -1;" data-group="Finance" onclick="ptToggleGroupRow(this)">
+                                <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="false" aria-label="Expand Department: Finance" onclick="event.stopPropagation(); ptToggleGroupRow(this.closest('.ds-table-group-row-cell'))">
+                                  <span class="ds-icon ds-table-group-row-cell__chevron" aria-hidden="true">chevron_right</span>
+                                </button>
+                                <span class="ds-table-group-row-cell__label">
+                                  <span class="ds-table-group-row-cell__field">Department:&nbsp;</span>
+                                  <span class="ds-table-group-row-cell__value">Finance</span>
+                                </span>
+                                <span class="ds-table-group-row-cell__count">(3)</span>
+                                <span class="ds-table-group-row-cell__spacer"></span>
+                                <div class="ds-table-group-row-cell__aggregates">
+                                  <span class="ds-table-group-row-cell__stat">
+                                    <span class="ds-table-group-row-cell__stat-label">Amount:</span>
+                                    <span class="ds-table-group-row-cell__stat-value">$57,300.00</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div style="display: none; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px;" data-group-children="Finance">
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Meridian Partners"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Meridian Partners</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">ops@meridian.co</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Finance</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$8,750.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Meridian Partners"><span class="ds-icon">open_in_new</span></button></div></div>
+
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Pinnacle Group"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pinnacle Group</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">hello@pinnaclegroup.co</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Finance</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$19,650.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Pinnacle Group"><span class="ds-icon">open_in_new</span></button></div></div>
+
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Westfield Holdings"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Westfield Holdings</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">legal@westfieldhold.com</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Finance</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$28,900.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Westfield Holdings"><span class="ds-icon">open_in_new</span></button></div></div>
+                              </div>
+
+                              <!-- Marketing group (collapsed) -->
+                              <div class="ds-table-group-row-cell" style="grid-column: 1 / -1;" data-group="Marketing" onclick="ptToggleGroupRow(this)">
+                                <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="false" aria-label="Expand Department: Marketing" onclick="event.stopPropagation(); ptToggleGroupRow(this.closest('.ds-table-group-row-cell'))">
+                                  <span class="ds-icon ds-table-group-row-cell__chevron" aria-hidden="true">chevron_right</span>
+                                </button>
+                                <span class="ds-table-group-row-cell__label">
+                                  <span class="ds-table-group-row-cell__field">Department:&nbsp;</span>
+                                  <span class="ds-table-group-row-cell__value">Marketing</span>
+                                </span>
+                                <span class="ds-table-group-row-cell__count">(1)</span>
+                                <span class="ds-table-group-row-cell__spacer"></span>
+                                <div class="ds-table-group-row-cell__aggregates">
+                                  <span class="ds-table-group-row-cell__stat">
+                                    <span class="ds-table-group-row-cell__stat-label">Amount:</span>
+                                    <span class="ds-table-group-row-cell__stat-value">$5,480.00</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div style="display: none; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px;" data-group-children="Marketing">
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Silverline Media"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Silverline Media</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">press@silverlinemedia.com</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Marketing</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Inactive</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$5,480.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Silverline Media"><span class="ds-icon">open_in_new</span></button></div></div>
+                              </div>
+
+                              <!-- Operations group (collapsed) -->
+                              <div class="ds-table-group-row-cell" style="grid-column: 1 / -1;" data-group="Operations" onclick="ptToggleGroupRow(this)">
+                                <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="false" aria-label="Expand Department: Operations" onclick="event.stopPropagation(); ptToggleGroupRow(this.closest('.ds-table-group-row-cell'))">
+                                  <span class="ds-icon ds-table-group-row-cell__chevron" aria-hidden="true">chevron_right</span>
+                                </button>
+                                <span class="ds-table-group-row-cell__label">
+                                  <span class="ds-table-group-row-cell__field">Department:&nbsp;</span>
+                                  <span class="ds-table-group-row-cell__value">Operations</span>
+                                </span>
+                                <span class="ds-table-group-row-cell__count">(2)</span>
+                                <span class="ds-table-group-row-cell__spacer"></span>
+                                <div class="ds-table-group-row-cell__aggregates">
+                                  <span class="ds-table-group-row-cell__stat">
+                                    <span class="ds-table-group-row-cell__stat-label">Amount:</span>
+                                    <span class="ds-table-group-row-cell__stat-value">$86,520.00</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div style="display: none; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px;" data-group-children="Operations">
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Quantum Logistics"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Quantum Logistics</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">ops@quantumlogistics.io</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Operations</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$77,400.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Quantum Logistics"><span class="ds-icon">open_in_new</span></button></div></div>
+
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Unified Data Co"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Unified Data Co</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">team@unifieddata.co</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Operations</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$9,120.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Unified Data Co"><span class="ds-icon">open_in_new</span></button></div></div>
+                              </div>
+
+                              <!-- Product group (collapsed) -->
+                              <div class="ds-table-group-row-cell" style="grid-column: 1 / -1;" data-group="Product" onclick="ptToggleGroupRow(this)">
+                                <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="false" aria-label="Expand Department: Product" onclick="event.stopPropagation(); ptToggleGroupRow(this.closest('.ds-table-group-row-cell'))">
+                                  <span class="ds-icon ds-table-group-row-cell__chevron" aria-hidden="true">chevron_right</span>
+                                </button>
+                                <span class="ds-table-group-row-cell__label">
+                                  <span class="ds-table-group-row-cell__field">Department:&nbsp;</span>
+                                  <span class="ds-table-group-row-cell__value">Product</span>
+                                </span>
+                                <span class="ds-table-group-row-cell__count">(2)</span>
+                                <span class="ds-table-group-row-cell__spacer"></span>
+                                <div class="ds-table-group-row-cell__aggregates">
+                                  <span class="ds-table-group-row-cell__stat">
+                                    <span class="ds-table-group-row-cell__stat-label">Amount:</span>
+                                    <span class="ds-table-group-row-cell__stat-value">$42,900.00</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div style="display: none; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px;" data-group-children="Product">
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Cloud Systems Inc"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Cloud Systems Inc</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">hello@cloudsys.io</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Product</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Cloud Systems Inc"><span class="ds-icon">open_in_new</span></button></div></div>
+
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Redwood Technologies"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Redwood Technologies</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">dev@redwoodtech.io</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Product</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$11,900.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Redwood Technologies"><span class="ds-icon">open_in_new</span></button></div></div>
+                              </div>
+
+                              <!-- Sales group (collapsed) -->
+                              <div class="ds-table-group-row-cell" style="grid-column: 1 / -1;" data-group="Sales" onclick="ptToggleGroupRow(this)">
+                                <button type="button" class="ds-table-group-row-cell__toggle" aria-expanded="false" aria-label="Expand Department: Sales" onclick="event.stopPropagation(); ptToggleGroupRow(this.closest('.ds-table-group-row-cell'))">
+                                  <span class="ds-icon ds-table-group-row-cell__chevron" aria-hidden="true">chevron_right</span>
+                                </button>
+                                <span class="ds-table-group-row-cell__label">
+                                  <span class="ds-table-group-row-cell__field">Department:&nbsp;</span>
+                                  <span class="ds-table-group-row-cell__value">Sales</span>
+                                </span>
+                                <span class="ds-table-group-row-cell__count">(3)</span>
+                                <span class="ds-table-group-row-cell__spacer"></span>
+                                <div class="ds-table-group-row-cell__aggregates">
+                                  <span class="ds-table-group-row-cell__stat">
+                                    <span class="ds-table-group-row-cell__stat-label">Amount:</span>
+                                    <span class="ds-table-group-row-cell__stat-value">$91,200.00</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div style="display: none; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px;" data-group-children="Sales">
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Frontier Corp"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Frontier Corp</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">contact@frontierco.com</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$22,400.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Frontier Corp"><span class="ds-icon">open_in_new</span></button></div></div>
+
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Northgate Solutions"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Northgate Solutions</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">hello@northgate.io</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Inactive</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$6,300.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Northgate Solutions"><span class="ds-icon">open_in_new</span></button></div></div>
+
+                                <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Vantage Software"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Vantage Software</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">info@vantagesoftware.com</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                                <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$62,500.00</span></div></div>
+                                <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Vantage Software"><span class="ds-icon">open_in_new</span></button></div></div>
+                              </div>
+
+                            </div><!-- /grouped data grid -->
 
                             <!-- No-results state -->
                             <div id="pt-table-no-results" role="status" aria-live="polite"
@@ -17468,21 +17944,97 @@ function closeColumnPanelPT() {
   }
 }
 
-// ── Density toggle (column panel) ────────────────────────────────────────────
+// ── Density toggle (column panel + row groups bar) ───────────────────────────
 function ptSetDensity(mode, clickedBtn) {
   // Apply density token to row heights via data attribute
   var sim = document.getElementById('table-sim-pt');
   sim.setAttribute('data-density', mode);
 
   // Sync column panel toggle button states
-  var comfortBtn = document.getElementById('pt-col-comfort');
-  var compactBtn = document.getElementById('pt-col-compact');
-  if (mode === 'comfort') {
-    comfortBtn.classList.add('is-selected');    comfortBtn.setAttribute('aria-pressed', 'true');
-    compactBtn.classList.remove('is-selected'); compactBtn.setAttribute('aria-pressed', 'false');
+  var colComfort = document.getElementById('pt-col-comfort');
+  var colCompact = document.getElementById('pt-col-compact');
+  if (colComfort && colCompact) {
+    if (mode === 'comfort') {
+      colComfort.classList.add('is-selected');    colComfort.setAttribute('aria-pressed', 'true');
+      colCompact.classList.remove('is-selected'); colCompact.setAttribute('aria-pressed', 'false');
+    } else {
+      colCompact.classList.add('is-selected');    colCompact.setAttribute('aria-pressed', 'true');
+      colComfort.classList.remove('is-selected'); colComfort.setAttribute('aria-pressed', 'false');
+    }
+  }
+
+  // Sync row groups bar toggle button states
+  var rgComfort = document.getElementById('pt-rg-comfort');
+  var rgCompact = document.getElementById('pt-rg-compact');
+  if (rgComfort && rgCompact) {
+    if (mode === 'comfort') {
+      rgComfort.classList.add('is-selected');    rgComfort.setAttribute('aria-pressed', 'true');
+      rgCompact.classList.remove('is-selected'); rgCompact.setAttribute('aria-pressed', 'false');
+    } else {
+      rgCompact.classList.add('is-selected');    rgCompact.setAttribute('aria-pressed', 'true');
+      rgComfort.classList.remove('is-selected'); rgComfort.setAttribute('aria-pressed', 'false');
+    }
+  }
+}
+
+// ── Row grouping toggle ───────────────────────────────────────────────────────
+function ptToggleGrouping(btn) {
+  var flatGrid    = document.getElementById('pt-data-grid');
+  var groupedGrid = document.getElementById('pt-grouped-grid');
+  var chip        = document.getElementById('pt-rg-dept-chip');
+  var placeholder = document.getElementById('pt-rg-placeholder');
+  var isGrouped   = (flatGrid.style.display === 'none');
+
+  if (isGrouped) {
+    // Switch to flat
+    flatGrid.style.display    = '';
+    groupedGrid.style.display = 'none';
+    chip.style.display        = 'none';
+    placeholder.style.display = '';
+    btn.classList.remove('is-selected');
+    btn.setAttribute('aria-pressed', 'true');
   } else {
-    compactBtn.classList.add('is-selected');    compactBtn.setAttribute('aria-pressed', 'true');
-    comfortBtn.classList.remove('is-selected'); comfortBtn.setAttribute('aria-pressed', 'false');
+    // Switch to grouped
+    flatGrid.style.display    = 'none';
+    groupedGrid.style.display = '';
+    chip.style.display        = '';
+    placeholder.style.display = 'none';
+    btn.classList.add('is-selected');
+    btn.setAttribute('aria-pressed', 'false');
+  }
+}
+
+function ptRemoveGrouping() {
+  var flatGrid    = document.getElementById('pt-data-grid');
+  var groupedGrid = document.getElementById('pt-grouped-grid');
+  var chip        = document.getElementById('pt-rg-dept-chip');
+  var placeholder = document.getElementById('pt-rg-placeholder');
+  var groupBtn    = document.getElementById('pt-group-btn');
+
+  flatGrid.style.display    = '';
+  groupedGrid.style.display = 'none';
+  chip.style.display        = 'none';
+  placeholder.style.display = '';
+  if (groupBtn) { groupBtn.classList.remove('is-selected'); }
+}
+
+function ptToggleGroupRow(groupRow) {
+  var name     = groupRow.getAttribute('data-group');
+  var children = document.querySelector('[data-group-children="' + name + '"]');
+  var chevron  = groupRow.querySelector('.ds-table-group-row-cell__chevron');
+  var btn      = groupRow.querySelector('.ds-table-group-row-cell__toggle');
+  if (!children) { return; }
+  var expanded = children.style.display !== 'none';
+  if (expanded) {
+    children.style.display = 'none';
+    chevron.classList.remove('ds-table-group-row-cell__chevron--open');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Expand Department: ' + name);
+  } else {
+    children.style.display = 'grid';
+    chevron.classList.add('ds-table-group-row-cell__chevron--open');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-label', 'Collapse Department: ' + name);
   }
 }
 

@@ -3741,6 +3741,223 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
             }] } });
 
 /**
+ * Onflo Design System — Table Group Expansion Store
+ *
+ * Persists AG Grid row group expansion state to localStorage so the user's
+ * expanded/collapsed choices survive page navigations and browser refreshes.
+ *
+ * Usage (in your AG Grid host component):
+ *
+ *   import { DsTableGroupExpansionStore } from '@onflo/design-system';
+ *
+ *   private expansionStore = new DsTableGroupExpansionStore('my-table-groups');
+ *
+ *   gridOptions: GridOptions = {
+ *     isGroupOpenByDefault: (params) =>
+ *       this.expansionStore.isGroupOpenByDefault(params),
+ *     onRowGroupOpened: (event) =>
+ *       this.expansionStore.onRowGroupOpened(event),
+ *   };
+ *
+ * The storageKey should be unique per grid/page so multiple grids on different
+ * pages don't share expansion state.
+ *
+ * Groups default to collapsed. Only explicitly opened groups are stored.
+ * Removing a group column clears its stored key automatically on next open/close
+ * because the key is derived from the full ancestor path.
+ */
+class DsTableGroupExpansionStore {
+    _storageKey;
+    constructor(storageKey) {
+        this._storageKey = storageKey;
+    }
+    /**
+     * Pass as `isGroupOpenByDefault` in AG Grid gridOptions.
+     * Returns true for any group the user previously expanded.
+     */
+    isGroupOpenByDefault(params) {
+        const store = this._read();
+        return store[this._nodeKey(params.rowNode)] === true;
+    }
+    /**
+     * Pass as `onRowGroupOpened` in AG Grid gridOptions.
+     * Saves or clears the expanded state for the toggled group.
+     */
+    onRowGroupOpened(event) {
+        const store = this._read();
+        const key = this._nodeKey(event.node);
+        if (event.node.expanded) {
+            store[key] = true;
+        }
+        else {
+            delete store[key];
+        }
+        try {
+            localStorage.setItem(this._storageKey, JSON.stringify(store));
+        }
+        catch {
+            // Storage quota exceeded — silently ignore
+        }
+    }
+    /** Removes all stored expansion state for this grid instance. */
+    clear() {
+        try {
+            localStorage.removeItem(this._storageKey);
+        }
+        catch {
+            // Silently ignore
+        }
+    }
+    // ── Private helpers ────────────────────────────────────────────────────────
+    /**
+     * Derives a stable key from the full ancestor path of the group node.
+     * Example: "country:USA→department:Engineering"
+     * Using → (U+2192) as separator to avoid collisions with common value chars.
+     */
+    _nodeKey(node) {
+        const parts = [];
+        let current = node;
+        while (current && current.field != null) {
+            parts.unshift(`${current.field}:${current.key ?? ''}`);
+            current = current.parent;
+        }
+        return parts.join('\u2192');
+    }
+    _read() {
+        try {
+            return JSON.parse(localStorage.getItem(this._storageKey) ?? '{}');
+        }
+        catch {
+            return {};
+        }
+    }
+}
+
+/**
+ * Onflo Design System — Table Group Row Cell
+ *
+ * AG Grid custom renderer for full-width group rows.
+ * Set as `groupRowRenderer` in gridOptions when using groupDisplayType: 'groupRows'.
+ *
+ * AG Grid usage:
+ *   gridOptions = {
+ *     groupDisplayType: 'groupRows',
+ *     groupRowRenderer: DsTableGroupRowCellComponent,
+ *   };
+ *
+ * Features:
+ *   - 4 nesting levels with 24px indent per level
+ *   - Animated chevron expand/collapse toggle
+ *   - "FieldName: Value" label with child row count
+ *   - Aggregated column values shown on the right (requires aggFunc on colDefs)
+ *
+ * Expansion state persistence (across page navigations):
+ *   import { DsTableGroupExpansionStore } from '@onflo/design-system';
+ *   const store = new DsTableGroupExpansionStore('my-grid-groups');
+ *   gridOptions = {
+ *     ...,
+ *     isGroupOpenByDefault: (params) => store.isGroupOpenByDefault(params),
+ *     onRowGroupOpened:     (event)  => store.onRowGroupOpened(event),
+ *   };
+ *
+ * Figma: primitive/table-group-row-cell
+ * ADA: expand/collapse toggle button has aria-expanded and aria-label;
+ *      aggregate region is aria-hidden (decorative — announced via status bar).
+ * No Angular Material base — custom component.
+ */
+class DsTableGroupRowCellComponent {
+    cdr;
+    value = '';
+    fieldLabel = '';
+    /** Clamped to 0–3 (4 levels). */
+    level = 0;
+    expanded = false;
+    childCount = null;
+    aggregates = [];
+    _params;
+    // Arrow fn so we don't lose `this` when passed to addEventListener.
+    _expandedListener = () => {
+        if (this._params) {
+            this.expanded = this._params.node.expanded;
+            this.cdr.markForCheck();
+        }
+    };
+    constructor(cdr) {
+        this.cdr = cdr;
+    }
+    // ── AG Grid ICellRendererAngularComp ─────────────────────────────────────
+    agInit(params) {
+        this._params = params;
+        this._apply(params);
+        params.node.addEventListener('expandedChanged', this._expandedListener);
+    }
+    refresh(params) {
+        this._params = params;
+        this._apply(params);
+        this.cdr.markForCheck();
+        return true;
+    }
+    ngOnDestroy() {
+        this._params?.node.removeEventListener('expandedChanged', this._expandedListener);
+    }
+    // ── Template helpers ─────────────────────────────────────────────────────
+    /** Left indent width in px — 24px per nesting level. */
+    get indentWidth() {
+        return this.level * 24;
+    }
+    onToggle(event) {
+        event.stopPropagation();
+        this._params?.node.setExpanded(!this.expanded);
+    }
+    // ── Private ──────────────────────────────────────────────────────────────
+    _apply(params) {
+        this.value = params.node.key ?? '';
+        this.level = Math.min(params.node.level, 3);
+        this.expanded = params.node.expanded;
+        this.childCount = params.node.allChildrenCount;
+        this.fieldLabel = this._resolveFieldLabel(params);
+        this.aggregates = this._resolveAggregates(params);
+    }
+    _resolveFieldLabel(params) {
+        const field = params.node.field;
+        if (!field) {
+            return '';
+        }
+        const headerName = params.api.getColumn(field)?.getColDef()?.headerName;
+        if (headerName) {
+            return headerName;
+        }
+        // Fallback: capitalise first letter of the raw field name.
+        return field.charAt(0).toUpperCase() + field.slice(1);
+    }
+    _resolveAggregates(params) {
+        const aggData = params.node.aggData;
+        if (!aggData) {
+            return [];
+        }
+        return Object.entries(aggData)
+            .filter(([, val]) => val != null)
+            .map(([field, val]) => {
+            const headerName = params.api.getColumn(field)?.getColDef()?.headerName;
+            const label = headerName ?? (field.charAt(0).toUpperCase() + field.slice(1));
+            const value = typeof val === 'number'
+                ? val.toLocaleString()
+                : String(val);
+            return { label, value };
+        });
+    }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsTableGroupRowCellComponent, deps: [{ token: i0.ChangeDetectorRef }], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "21.2.7", type: DsTableGroupRowCellComponent, isStandalone: true, selector: "ds-table-group-row-cell", host: { styleAttribute: "display: block; width: 100%; height: 100%;" }, ngImport: i0, template: "<div class=\"ds-table-group-row-cell\">\n\n  <!-- Indent spacer: 24px per nesting level (levels 1\u20133) -->\n  <span\n    *ngIf=\"indentWidth > 0\"\n    class=\"ds-table-group-row-cell__indent\"\n    [style.width.px]=\"indentWidth\"\n    aria-hidden=\"true\"\n  ></span>\n\n  <!-- Expand / collapse toggle -->\n  <button\n    type=\"button\"\n    class=\"ds-table-group-row-cell__toggle\"\n    [attr.aria-expanded]=\"expanded\"\n    [attr.aria-label]=\"(expanded ? 'Collapse ' : 'Expand ') + fieldLabel + ': ' + value\"\n    (click)=\"onToggle($event)\"\n  >\n    <span\n      class=\"ds-icon ds-table-group-row-cell__chevron\"\n      [class.ds-table-group-row-cell__chevron--open]=\"expanded\"\n      aria-hidden=\"true\"\n    >chevron_right</span>\n  </button>\n\n  <!-- \"FieldName: Value\" label -->\n  <span class=\"ds-table-group-row-cell__label\">\n    <span *ngIf=\"fieldLabel\" class=\"ds-table-group-row-cell__field\">{{ fieldLabel }}:&nbsp;</span>\n    <span class=\"ds-table-group-row-cell__value\">{{ value }}</span>\n  </span>\n\n  <!-- Child row count -->\n  <span\n    *ngIf=\"childCount !== null\"\n    class=\"ds-table-group-row-cell__count\"\n    aria-hidden=\"true\"\n  >({{ childCount }})</span>\n\n  <!-- Flex spacer \u2014 pushes aggregates to the right -->\n  <span class=\"ds-table-group-row-cell__spacer\" aria-hidden=\"true\"></span>\n\n  <!-- Aggregated column values (right-aligned) -->\n  <div\n    *ngIf=\"aggregates.length > 0\"\n    class=\"ds-table-group-row-cell__aggregates\"\n    aria-hidden=\"true\"\n  >\n    <span\n      *ngFor=\"let stat of aggregates\"\n      class=\"ds-table-group-row-cell__stat\"\n    >\n      <span class=\"ds-table-group-row-cell__stat-label\">{{ stat.label }}:</span>\n      <span class=\"ds-table-group-row-cell__stat-value\">{{ stat.value }}</span>\n    </span>\n  </div>\n\n</div>\n", styles: [".ds-table-group-row-cell{display:flex;align-items:center;width:100%;height:100%;min-height:40px;padding:0 var(--spacing-lg);background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-secondary);box-sizing:border-box;overflow:hidden;gap:var(--spacing-sm)}.ds-table-group-row-cell__indent{display:inline-block;flex-shrink:0}.ds-table-group-row-cell__toggle{appearance:none;-webkit-appearance:none;display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:none;background:transparent;border-radius:var(--radius-sm);cursor:pointer;flex-shrink:0;position:relative}.ds-table-group-row-cell__toggle:focus{outline:none}.ds-table-group-row-cell__toggle:focus-visible{box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-table-group-row-cell__toggle:after{content:\"\";position:absolute;inset:0;border-radius:var(--radius-sm);background:var(--overlay-hovered);opacity:0;pointer-events:none;transition:opacity 80ms ease}.ds-table-group-row-cell__toggle:hover:after{opacity:1}.ds-table-group-row-cell__toggle:active:after{background:var(--overlay-pressed);opacity:1}.ds-table-group-row-cell__chevron{display:block;font-size:20px;width:20px;height:20px;color:var(--color-icon-default);transition:transform .15s ease,color .15s ease;transform:rotate(0)}.ds-table-group-row-cell__chevron--open{transform:rotate(90deg);color:var(--color-icon-brand)}.ds-table-group-row-cell__label{display:flex;align-items:baseline;min-width:0;flex-shrink:1;overflow:hidden}.ds-table-group-row-cell__field{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-secondary);white-space:nowrap;flex-shrink:0}.ds-table-group-row-cell__value{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ds-table-group-row-cell__count{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-secondary);white-space:nowrap;flex-shrink:0}.ds-table-group-row-cell__spacer{flex:1 0 0}.ds-table-group-row-cell__aggregates{display:flex;align-items:center;gap:var(--spacing-xl);flex-shrink:0;overflow:hidden}.ds-table-group-row-cell__stat{display:flex;align-items:center;gap:var(--spacing-xs)}.ds-table-group-row-cell__stat-label{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-secondary);white-space:nowrap}.ds-table-group-row-cell__stat-value{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-primary);white-space:nowrap}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1.NgForOf, selector: "[ngFor][ngForOf]", inputs: ["ngForOf", "ngForTrackBy", "ngForTemplate"] }, { kind: "directive", type: i1.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsTableGroupRowCellComponent, decorators: [{
+            type: Component,
+            args: [{ selector: 'ds-table-group-row-cell', standalone: true, imports: [CommonModule], changeDetection: ChangeDetectionStrategy.OnPush, host: {
+                        // Fill the full-width AG Grid group row cell.
+                        'style': 'display: block; width: 100%; height: 100%;',
+                    }, template: "<div class=\"ds-table-group-row-cell\">\n\n  <!-- Indent spacer: 24px per nesting level (levels 1\u20133) -->\n  <span\n    *ngIf=\"indentWidth > 0\"\n    class=\"ds-table-group-row-cell__indent\"\n    [style.width.px]=\"indentWidth\"\n    aria-hidden=\"true\"\n  ></span>\n\n  <!-- Expand / collapse toggle -->\n  <button\n    type=\"button\"\n    class=\"ds-table-group-row-cell__toggle\"\n    [attr.aria-expanded]=\"expanded\"\n    [attr.aria-label]=\"(expanded ? 'Collapse ' : 'Expand ') + fieldLabel + ': ' + value\"\n    (click)=\"onToggle($event)\"\n  >\n    <span\n      class=\"ds-icon ds-table-group-row-cell__chevron\"\n      [class.ds-table-group-row-cell__chevron--open]=\"expanded\"\n      aria-hidden=\"true\"\n    >chevron_right</span>\n  </button>\n\n  <!-- \"FieldName: Value\" label -->\n  <span class=\"ds-table-group-row-cell__label\">\n    <span *ngIf=\"fieldLabel\" class=\"ds-table-group-row-cell__field\">{{ fieldLabel }}:&nbsp;</span>\n    <span class=\"ds-table-group-row-cell__value\">{{ value }}</span>\n  </span>\n\n  <!-- Child row count -->\n  <span\n    *ngIf=\"childCount !== null\"\n    class=\"ds-table-group-row-cell__count\"\n    aria-hidden=\"true\"\n  >({{ childCount }})</span>\n\n  <!-- Flex spacer \u2014 pushes aggregates to the right -->\n  <span class=\"ds-table-group-row-cell__spacer\" aria-hidden=\"true\"></span>\n\n  <!-- Aggregated column values (right-aligned) -->\n  <div\n    *ngIf=\"aggregates.length > 0\"\n    class=\"ds-table-group-row-cell__aggregates\"\n    aria-hidden=\"true\"\n  >\n    <span\n      *ngFor=\"let stat of aggregates\"\n      class=\"ds-table-group-row-cell__stat\"\n    >\n      <span class=\"ds-table-group-row-cell__stat-label\">{{ stat.label }}:</span>\n      <span class=\"ds-table-group-row-cell__stat-value\">{{ stat.value }}</span>\n    </span>\n  </div>\n\n</div>\n", styles: [".ds-table-group-row-cell{display:flex;align-items:center;width:100%;height:100%;min-height:40px;padding:0 var(--spacing-lg);background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-secondary);box-sizing:border-box;overflow:hidden;gap:var(--spacing-sm)}.ds-table-group-row-cell__indent{display:inline-block;flex-shrink:0}.ds-table-group-row-cell__toggle{appearance:none;-webkit-appearance:none;display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:none;background:transparent;border-radius:var(--radius-sm);cursor:pointer;flex-shrink:0;position:relative}.ds-table-group-row-cell__toggle:focus{outline:none}.ds-table-group-row-cell__toggle:focus-visible{box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-table-group-row-cell__toggle:after{content:\"\";position:absolute;inset:0;border-radius:var(--radius-sm);background:var(--overlay-hovered);opacity:0;pointer-events:none;transition:opacity 80ms ease}.ds-table-group-row-cell__toggle:hover:after{opacity:1}.ds-table-group-row-cell__toggle:active:after{background:var(--overlay-pressed);opacity:1}.ds-table-group-row-cell__chevron{display:block;font-size:20px;width:20px;height:20px;color:var(--color-icon-default);transition:transform .15s ease,color .15s ease;transform:rotate(0)}.ds-table-group-row-cell__chevron--open{transform:rotate(90deg);color:var(--color-icon-brand)}.ds-table-group-row-cell__label{display:flex;align-items:baseline;min-width:0;flex-shrink:1;overflow:hidden}.ds-table-group-row-cell__field{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-secondary);white-space:nowrap;flex-shrink:0}.ds-table-group-row-cell__value{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ds-table-group-row-cell__count{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-secondary);white-space:nowrap;flex-shrink:0}.ds-table-group-row-cell__spacer{flex:1 0 0}.ds-table-group-row-cell__aggregates{display:flex;align-items:center;gap:var(--spacing-xl);flex-shrink:0;overflow:hidden}.ds-table-group-row-cell__stat{display:flex;align-items:center;gap:var(--spacing-xs)}.ds-table-group-row-cell__stat-label{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-secondary);white-space:nowrap}.ds-table-group-row-cell__stat-value{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-primary);white-space:nowrap}\n"] }]
+        }], ctorParameters: () => [{ type: i0.ChangeDetectorRef }] });
+
+/**
  * Onflo Design System — Table Header Cell
  *
  * AG Grid custom header renderer for the Onflo table system.
@@ -3787,6 +4004,12 @@ class DsTableHeaderCellComponent {
     indeterminate = false;
     /** Emits the new column width in px when the user drags the resize handle. */
     widthChange = new EventEmitter();
+    /**
+     * Emits on right-click (contextmenu) when this component is used inside AG Grid.
+     * Use with suppressHeaderContextMenu: true in grid options to disable AG Grid's
+     * built-in header menu, then show <ds-table-context-menu> at the emitted coords.
+     */
+    headerContextMenu = new EventEmitter();
     agParams;
     sortChangedListener;
     // Resize drag state
@@ -3871,6 +4094,17 @@ class DsTableHeaderCellComponent {
             this.agParams.showColumnMenu(triggerEl);
         }
     }
+    onContextMenu(event) {
+        if (!this.agParams)
+            return;
+        event.preventDefault();
+        event.stopPropagation();
+        this.headerContextMenu.emit({
+            x: event.clientX,
+            y: event.clientY,
+            params: this.agParams,
+        });
+    }
     // ── Checkbox ────────────────────────────────────────────────
     get checkboxIcon() {
         if (this.indeterminate)
@@ -3921,7 +4155,7 @@ class DsTableHeaderCellComponent {
         }
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsTableHeaderCellComponent, deps: [{ token: i0.ChangeDetectorRef }], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "21.2.7", type: DsTableHeaderCellComponent, isStandalone: true, selector: "ds-table-header-cell", inputs: { label: "label", align: "align", sorting: "sorting", filtering: "filtering", menuControl: "menuControl", checkbox: "checkbox", pipeLeft: "pipeLeft", pipeRight: "pipeRight", sortDirection: "sortDirection", checked: "checked", indeterminate: "indeterminate" }, outputs: { widthChange: "widthChange" }, host: { attributes: { "role": "columnheader" }, properties: { "attr.aria-sort": "ariaSortValue" } }, ngImport: i0, template: "<div\n  class=\"ds-table-header-cell\"\n  [class.ds-table-header-cell--right]=\"align === 'right'\"\n  [class.ds-table-header-cell--checkbox-only]=\"isCheckboxOnly\"\n>\n\n  <!-- Left resize handle -->\n  <div class=\"ds-table-header-cell__resize-handle\">\n    <span *ngIf=\"showLeftPipe\" class=\"ds-table-header-cell__resize-bar\"></span>\n  </div>\n\n  <!-- Content: checkbox \u00B7 label \u00B7 sort button -->\n  <div\n    class=\"ds-table-header-cell__content\"\n    [class.ds-table-header-cell__content--right]=\"align === 'right'\"\n  >\n    <!-- Select-all checkbox -->\n    <div\n      *ngIf=\"checkbox\"\n      class=\"ds-table-header-cell__checkbox\"\n      [class]=\"checkboxClass\"\n    >\n      <span class=\"ds-icon\" [class.ds-icon--filled]=\"checked || indeterminate\">\n        {{ checkboxIcon }}\n      </span>\n    </div>\n\n    <!-- Column label -->\n    <span *ngIf=\"label\" class=\"ds-table-header-cell__label\">{{ label }}</span>\n\n    <!-- Sort button \u2014 only rendered when column IS sorted (asc or desc) -->\n    <ds-icon-button\n      *ngIf=\"sorting && sortDirection !== null\"\n      size=\"sm\"\n      variant=\"icon\"\n      [ariaLabel]=\"sortDirection === 'asc' ? 'Sorted ascending' : 'Sorted descending'\"\n      (clicked)=\"onSortClick($event)\"\n    >\n      <span class=\"ds-icon\" [ngClass]=\"sortIconClass\">arrow_upward_alt</span>\n    </ds-icon-button>\n  </div>\n\n  <!-- Trailing actions: menu \u00B7 filter \u00B7 right resize handle -->\n  <div class=\"ds-table-header-cell__actions\">\n\n    <!-- Column menu button -->\n    <div #menuBtnEl *ngIf=\"menuControl\">\n      <ds-icon-button\n        size=\"sm\"\n        variant=\"icon\"\n        ariaLabel=\"Column options\"\n        (clicked)=\"onMenuClick(menuBtnEl)\"\n      >\n        <span class=\"ds-icon ds-table-header-cell__menu-icon\">more_vert</span>\n      </ds-icon-button>\n    </div>\n\n    <!-- Filter button (filled icon) -->\n    <ds-icon-button\n      *ngIf=\"filtering\"\n      size=\"sm\"\n      variant=\"icon\"\n      ariaLabel=\"Filter column\"\n    >\n      <span class=\"ds-icon ds-icon--filled\">filter_alt</span>\n    </ds-icon-button>\n\n    <!-- Right resize handle \u2014 draggable -->\n    <div\n      class=\"ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing\"\n      [class.ds-table-header-cell__resize-handle--active]=\"showRightPipe\"\n      (mousedown)=\"onResizeStart($event)\"\n    >\n      <span *ngIf=\"showRightPipe\" class=\"ds-table-header-cell__resize-bar\"></span>\n    </div>\n\n  </div>\n\n</div>\n", styles: [".ds-table-header-cell{display:flex;align-items:center;height:56px;width:100%;background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-secondary);box-sizing:border-box;overflow:hidden;position:relative}.ds-table-header-cell--checkbox-only{width:56px;flex-shrink:0}.ds-table-header-cell--checkbox-only .ds-table-header-cell__resize-handle{display:none}.ds-table-header-cell--dragging{background:var(--overlay-hovered);outline:2px solid var(--color-border-brand);outline-offset:-2px;cursor:grabbing}.ds-table-header-cell__resize-handle{display:flex;flex-direction:column;align-items:center;justify-content:center;width:16px;height:100%;flex-shrink:0}.ds-table-header-cell__resize-handle--trailing{justify-content:center;align-items:flex-end}.ds-table-header-cell__resize-handle--active{cursor:col-resize}.ds-table-header-cell__resize-bar{width:2px;height:14px;background:var(--color-border-primary);border-radius:1px}.ds-table-header-cell__content{display:flex;align-items:center;gap:var(--spacing-sm);flex:1 0 0;min-width:0;height:100%}.ds-table-header-cell__content--right{justify-content:flex-end}.ds-table-header-cell__label{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:1}.ds-table-header-cell__checkbox{display:flex;align-items:center;justify-content:center;width:42px;height:42px;flex-shrink:0;cursor:pointer}.ds-table-header-cell__checkbox .ds-icon{color:var(--color-border-input)}.ds-table-header-cell__checkbox--checked .ds-icon,.ds-table-header-cell__checkbox--indeterminate .ds-icon{color:var(--color-surface-brand-bold)}.ds-table-header-cell:not(.ds-table-header-cell--checkbox-only) .ds-table-header-cell__label{cursor:grab}.ds-table-header-cell__actions{display:flex;align-items:center;justify-content:flex-end;min-width:16px;height:100%;flex-shrink:0}.ds-table-header-cell__sort-icon--asc{color:var(--color-icon-brand)}.ds-table-header-cell__sort-icon--desc{color:var(--color-icon-brand);transform:rotate(180deg);display:inline-block}.ds-table-header-cell__menu-icon{color:var(--color-icon-default)}.ds-table-header-cell.ds-table-pinned-left,.ag-pinned-left-header .ds-table-header-cell{border-right:1px solid var(--color-border-secondary)}.ds-table-header-cell.ds-table-pinned-right,.ag-pinned-right-header .ds-table-header-cell{border-left:1px solid var(--color-border-secondary)}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1.NgClass, selector: "[ngClass]", inputs: ["class", "ngClass"] }, { kind: "directive", type: i1.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "component", type: DsIconButtonComponent, selector: "ds-icon-button", inputs: ["variant", "size", "ariaLabel", "isError", "disabled", "type"], outputs: ["clicked"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "21.2.7", type: DsTableHeaderCellComponent, isStandalone: true, selector: "ds-table-header-cell", inputs: { label: "label", align: "align", sorting: "sorting", filtering: "filtering", menuControl: "menuControl", checkbox: "checkbox", pipeLeft: "pipeLeft", pipeRight: "pipeRight", sortDirection: "sortDirection", checked: "checked", indeterminate: "indeterminate" }, outputs: { widthChange: "widthChange", headerContextMenu: "headerContextMenu" }, host: { attributes: { "role": "columnheader" }, listeners: { "contextmenu": "onContextMenu($event)" }, properties: { "attr.aria-sort": "ariaSortValue" } }, ngImport: i0, template: "<div\n  class=\"ds-table-header-cell\"\n  [class.ds-table-header-cell--right]=\"align === 'right'\"\n  [class.ds-table-header-cell--checkbox-only]=\"isCheckboxOnly\"\n>\n\n  <!-- Left resize handle -->\n  <div class=\"ds-table-header-cell__resize-handle\">\n    <span *ngIf=\"showLeftPipe\" class=\"ds-table-header-cell__resize-bar\"></span>\n  </div>\n\n  <!-- Content: checkbox \u00B7 label \u00B7 sort button -->\n  <div\n    class=\"ds-table-header-cell__content\"\n    [class.ds-table-header-cell__content--right]=\"align === 'right'\"\n  >\n    <!-- Select-all checkbox -->\n    <div\n      *ngIf=\"checkbox\"\n      class=\"ds-table-header-cell__checkbox\"\n      [class]=\"checkboxClass\"\n    >\n      <span class=\"ds-icon\" [class.ds-icon--filled]=\"checked || indeterminate\">\n        {{ checkboxIcon }}\n      </span>\n    </div>\n\n    <!-- Column label -->\n    <span *ngIf=\"label\" class=\"ds-table-header-cell__label\">{{ label }}</span>\n\n    <!-- Sort button \u2014 only rendered when column IS sorted (asc or desc) -->\n    <ds-icon-button\n      *ngIf=\"sorting && sortDirection !== null\"\n      size=\"sm\"\n      variant=\"icon\"\n      [ariaLabel]=\"sortDirection === 'asc' ? 'Sorted ascending' : 'Sorted descending'\"\n      (clicked)=\"onSortClick($event)\"\n    >\n      <span class=\"ds-icon\" [ngClass]=\"sortIconClass\">arrow_upward_alt</span>\n    </ds-icon-button>\n  </div>\n\n  <!-- Trailing actions: menu \u00B7 filter \u00B7 right resize handle -->\n  <div class=\"ds-table-header-cell__actions\">\n\n    <!-- Column menu button -->\n    <div #menuBtnEl *ngIf=\"menuControl\">\n      <ds-icon-button\n        size=\"sm\"\n        variant=\"icon\"\n        ariaLabel=\"Column options\"\n        (clicked)=\"onMenuClick(menuBtnEl)\"\n      >\n        <span class=\"ds-icon ds-table-header-cell__menu-icon\">more_vert</span>\n      </ds-icon-button>\n    </div>\n\n    <!-- Filter button (filled icon) -->\n    <ds-icon-button\n      *ngIf=\"filtering\"\n      size=\"sm\"\n      variant=\"icon\"\n      ariaLabel=\"Filter column\"\n    >\n      <span class=\"ds-icon ds-icon--filled\">filter_alt</span>\n    </ds-icon-button>\n\n    <!-- Right resize handle \u2014 draggable -->\n    <div\n      class=\"ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing\"\n      [class.ds-table-header-cell__resize-handle--active]=\"showRightPipe\"\n      (mousedown)=\"onResizeStart($event)\"\n    >\n      <span *ngIf=\"showRightPipe\" class=\"ds-table-header-cell__resize-bar\"></span>\n    </div>\n\n  </div>\n\n</div>\n", styles: [".ds-table-header-cell{display:flex;align-items:center;height:56px;width:100%;background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-secondary);box-sizing:border-box;overflow:hidden;position:relative}.ds-table-header-cell--checkbox-only{width:56px;flex-shrink:0}.ds-table-header-cell--checkbox-only .ds-table-header-cell__resize-handle{display:none}.ds-table-header-cell--dragging{background:var(--overlay-hovered);outline:2px solid var(--color-border-brand);outline-offset:-2px;cursor:grabbing}.ds-table-header-cell__resize-handle{display:flex;flex-direction:column;align-items:center;justify-content:center;width:16px;height:100%;flex-shrink:0}.ds-table-header-cell__resize-handle--trailing{justify-content:center;align-items:flex-end}.ds-table-header-cell__resize-handle--active{cursor:col-resize}.ds-table-header-cell__resize-bar{width:2px;height:14px;background:var(--color-border-primary);border-radius:1px}.ds-table-header-cell__content{display:flex;align-items:center;gap:var(--spacing-sm);flex:1 0 0;min-width:0;height:100%}.ds-table-header-cell__content--right{justify-content:flex-end}.ds-table-header-cell__label{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:1}.ds-table-header-cell__checkbox{display:flex;align-items:center;justify-content:center;width:42px;height:42px;flex-shrink:0;cursor:pointer}.ds-table-header-cell__checkbox .ds-icon{color:var(--color-border-input)}.ds-table-header-cell__checkbox--checked .ds-icon,.ds-table-header-cell__checkbox--indeterminate .ds-icon{color:var(--color-surface-brand-bold)}.ds-table-header-cell:not(.ds-table-header-cell--checkbox-only) .ds-table-header-cell__label{cursor:grab}.ds-table-header-cell__actions{display:flex;align-items:center;justify-content:flex-end;min-width:16px;height:100%;flex-shrink:0}.ds-table-header-cell__sort-icon--asc{color:var(--color-icon-brand)}.ds-table-header-cell__sort-icon--desc{color:var(--color-icon-brand);transform:rotate(180deg);display:inline-block}.ds-table-header-cell__menu-icon{color:var(--color-icon-default)}.ds-table-header-cell.ds-table-pinned-left,.ag-pinned-left-header .ds-table-header-cell{border-right:1px solid var(--color-border-secondary)}.ds-table-header-cell.ds-table-pinned-right,.ag-pinned-right-header .ds-table-header-cell{border-left:1px solid var(--color-border-secondary)}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1.NgClass, selector: "[ngClass]", inputs: ["class", "ngClass"] }, { kind: "directive", type: i1.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "component", type: DsIconButtonComponent, selector: "ds-icon-button", inputs: ["variant", "size", "ariaLabel", "isError", "disabled", "type"], outputs: ["clicked"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsTableHeaderCellComponent, decorators: [{
             type: Component,
@@ -3953,6 +4187,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
                 type: Input
             }], widthChange: [{
                 type: Output
+            }], headerContextMenu: [{
+                type: Output
+            }], onContextMenu: [{
+                type: HostListener,
+                args: ['contextmenu', ['$event']]
             }] } });
 
 /**
@@ -3999,6 +4238,12 @@ class DsTableRowCellComponent {
     tier2Indent = false;
     /** Visual interaction state — typically driven by AG Grid row events. */
     state = 'default';
+    /**
+     * Emits on right-click (contextmenu) when this component is used inside AG Grid.
+     * Use with suppressContextMenu: true in grid options to disable AG Grid's built-in
+     * context menu, then show <ds-table-context-menu> at the emitted coords.
+     */
+    rowContextMenu = new EventEmitter();
     get isHovered() { return this.state === 'hover'; }
     get isFocused() { return this.state === 'focus'; }
     get isSelected() { return this.checked; }
@@ -4024,6 +4269,17 @@ class DsTableRowCellComponent {
         this.applyParams(params);
         this.cdr.markForCheck();
         return true;
+    }
+    onContextMenu(event) {
+        if (!this.agParams)
+            return;
+        event.preventDefault();
+        event.stopPropagation();
+        this.rowContextMenu.emit({
+            x: event.clientX,
+            y: event.clientY,
+            params: this.agParams,
+        });
     }
     ngOnDestroy() {
         if (this.agParams && this.rowSelectedListener) {
@@ -4064,7 +4320,7 @@ class DsTableRowCellComponent {
         return this.value ?? '';
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsTableRowCellComponent, deps: [{ token: i0.ChangeDetectorRef }], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "21.2.7", type: DsTableRowCellComponent, isStandalone: true, selector: "ds-table-row-cell", inputs: { value: "value", align: "align", cellData: "cellData", gripper: "gripper", checkbox: "checkbox", checked: "checked", indeterminate: "indeterminate", tier1Indent: "tier1Indent", tier2Indent: "tier2Indent", state: "state" }, host: { attributes: { "role": "gridcell" }, properties: { "class.is-hovered": "this.isHovered", "class.is-focused": "this.isFocused", "class.is-selected": "this.isSelected" } }, ngImport: i0, template: "<div\n  class=\"ds-table-row-cell\"\n  [class.is-hovered]=\"state === 'hover'\"\n  [class.is-focused]=\"state === 'focus'\"\n  [class.is-selected]=\"checked\"\n>\n  <div\n    class=\"ds-table-row-cell__content\"\n    [class.ds-table-row-cell__content--right]=\"align === 'right'\"\n  >\n    <!-- Tier indent spacers (tree / grouped rows) -->\n    <span *ngIf=\"tier1Indent\" class=\"ds-table-row-cell__indent--tier1\" aria-hidden=\"true\"></span>\n    <span *ngIf=\"tier2Indent\" class=\"ds-table-row-cell__indent--tier2\" aria-hidden=\"true\"></span>\n\n    <!-- Row drag gripper -->\n    <button\n      *ngIf=\"gripper\"\n      type=\"button\"\n      class=\"ds-table-row-cell__gripper\"\n      aria-label=\"Drag to reorder row\"\n    >\n      <span class=\"ds-icon\">drag_indicator</span>\n    </button>\n\n    <!-- Row selection checkbox -->\n    <div\n      *ngIf=\"checkbox\"\n      class=\"ds-table-row-cell__checkbox\"\n      [class]=\"checkboxClass\"\n    >\n      <span\n        class=\"ds-icon\"\n        [class.ds-icon--filled]=\"checked || indeterminate\"\n      >{{ checkboxIcon }}</span>\n    </div>\n\n    <!-- Cell data text -->\n    <span\n      *ngIf=\"cellData\"\n      class=\"ds-table-row-cell__data\"\n      [class.ds-table-row-cell__data--right]=\"align === 'right'\"\n    >{{ displayValue }}</span>\n\n  </div>\n</div>\n", styles: [".ds-table-row-cell{display:flex;align-items:center;height:56px;width:100%;padding:0 var(--spacing-lg);border-bottom:1px solid var(--color-border-subtle);box-sizing:border-box;overflow:hidden;position:relative;background:transparent;transition:background 80ms ease}.ds-table-row-cell--checkbox-only{width:56px;flex-shrink:0;padding:0}.ds-table-row-cell--totals{background:var(--color-surface-subtle);border-bottom:none}.ds-table-row-cell.is-hovered{background:var(--overlay-hovered)}.ds-table-row-cell.is-focused,.ds-table-row-cell.is-selected{background:var(--overlay-focused)}.ds-table-row-cell__content{display:flex;align-items:center;gap:var(--spacing-sm);flex:1 0 0;min-width:0;height:100%}.ds-table-row-cell__content--right{justify-content:flex-end}.ds-table-row-cell__indent--tier1{width:32px;flex-shrink:0}.ds-table-row-cell__indent--tier2{width:64px;flex-shrink:0}.ds-table-row-cell__gripper{position:relative;display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:var(--spacing-xs);border:none;background:transparent;border-radius:var(--radius-sm);cursor:grab;flex-shrink:0;color:var(--color-icon-subtle)}.ds-table-row-cell__gripper:active{cursor:grabbing}.ds-table-row-cell__gripper:focus{outline:none}.ds-table-row-cell__gripper:focus-visible{box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-table-row-cell__gripper:after{content:\"\";position:absolute;inset:0;border-radius:var(--radius-sm);pointer-events:none;opacity:0;background:var(--overlay-hovered);transition:opacity .12s ease}.ds-table-row-cell__gripper:hover:after{opacity:1}.ds-table-row-cell__gripper:active:after{background:var(--overlay-pressed);opacity:1}.ds-table-row-cell__gripper .ds-icon{font-size:20px;width:20px;height:20px}.ds-table-row-cell__checkbox{display:flex;align-items:center;justify-content:center;width:42px;height:42px;flex-shrink:0;cursor:pointer}.ds-table-row-cell__checkbox .ds-icon{color:var(--color-border-input)}.ds-table-row-cell__checkbox--checked .ds-icon,.ds-table-row-cell__checkbox--indeterminate .ds-icon{color:var(--color-surface-brand-bold)}.ds-table-row-cell.ds-table-pinned-left{border-right:1px solid var(--color-border-secondary)}.ds-table-row-cell.ds-table-pinned-right{border-left:1px solid var(--color-border-secondary)}.ds-table-row-cell__data{font-family:var(--ref-typescale-body-medium-font);font-size:var(--ref-typescale-body-medium-size);font-weight:var(--ref-typescale-body-medium-weight);line-height:var(--ref-typescale-body-medium-line-height);letter-spacing:var(--ref-typescale-body-medium-tracking);color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1 0 0;min-width:0}.ds-table-row-cell__data--right{flex:0 1 auto}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "21.2.7", type: DsTableRowCellComponent, isStandalone: true, selector: "ds-table-row-cell", inputs: { value: "value", align: "align", cellData: "cellData", gripper: "gripper", checkbox: "checkbox", checked: "checked", indeterminate: "indeterminate", tier1Indent: "tier1Indent", tier2Indent: "tier2Indent", state: "state" }, outputs: { rowContextMenu: "rowContextMenu" }, host: { attributes: { "role": "gridcell" }, listeners: { "contextmenu": "onContextMenu($event)" }, properties: { "class.is-hovered": "this.isHovered", "class.is-focused": "this.isFocused", "class.is-selected": "this.isSelected" } }, ngImport: i0, template: "<div\n  class=\"ds-table-row-cell\"\n  [class.is-hovered]=\"state === 'hover'\"\n  [class.is-focused]=\"state === 'focus'\"\n  [class.is-selected]=\"checked\"\n>\n  <div\n    class=\"ds-table-row-cell__content\"\n    [class.ds-table-row-cell__content--right]=\"align === 'right'\"\n  >\n    <!-- Tier indent spacers (tree / grouped rows) -->\n    <span *ngIf=\"tier1Indent\" class=\"ds-table-row-cell__indent--tier1\" aria-hidden=\"true\"></span>\n    <span *ngIf=\"tier2Indent\" class=\"ds-table-row-cell__indent--tier2\" aria-hidden=\"true\"></span>\n\n    <!-- Row drag gripper -->\n    <button\n      *ngIf=\"gripper\"\n      type=\"button\"\n      class=\"ds-table-row-cell__gripper\"\n      aria-label=\"Drag to reorder row\"\n    >\n      <span class=\"ds-icon\">drag_indicator</span>\n    </button>\n\n    <!-- Row selection checkbox -->\n    <div\n      *ngIf=\"checkbox\"\n      class=\"ds-table-row-cell__checkbox\"\n      [class]=\"checkboxClass\"\n    >\n      <span\n        class=\"ds-icon\"\n        [class.ds-icon--filled]=\"checked || indeterminate\"\n      >{{ checkboxIcon }}</span>\n    </div>\n\n    <!-- Cell data text -->\n    <span\n      *ngIf=\"cellData\"\n      class=\"ds-table-row-cell__data\"\n      [class.ds-table-row-cell__data--right]=\"align === 'right'\"\n    >{{ displayValue }}</span>\n\n  </div>\n</div>\n", styles: [".ds-table-row-cell{display:flex;align-items:center;height:56px;width:100%;padding:0 var(--spacing-lg);border-bottom:1px solid var(--color-border-subtle);box-sizing:border-box;overflow:hidden;position:relative;background:transparent;transition:background 80ms ease}.ds-table-row-cell--checkbox-only{width:56px;flex-shrink:0;padding:0}.ds-table-row-cell--totals{background:var(--color-surface-subtle);border-bottom:none}.ds-table-row-cell.is-hovered{background:var(--overlay-hovered)}.ds-table-row-cell.is-focused,.ds-table-row-cell.is-selected{background:var(--overlay-focused)}.ds-table-row-cell__content{display:flex;align-items:center;gap:var(--spacing-sm);flex:1 0 0;min-width:0;height:100%}.ds-table-row-cell__content--right{justify-content:flex-end}.ds-table-row-cell__indent--tier1{width:32px;flex-shrink:0}.ds-table-row-cell__indent--tier2{width:64px;flex-shrink:0}.ds-table-row-cell__gripper{position:relative;display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:var(--spacing-xs);border:none;background:transparent;border-radius:var(--radius-sm);cursor:grab;flex-shrink:0;color:var(--color-icon-subtle)}.ds-table-row-cell__gripper:active{cursor:grabbing}.ds-table-row-cell__gripper:focus{outline:none}.ds-table-row-cell__gripper:focus-visible{box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-table-row-cell__gripper:after{content:\"\";position:absolute;inset:0;border-radius:var(--radius-sm);pointer-events:none;opacity:0;background:var(--overlay-hovered);transition:opacity .12s ease}.ds-table-row-cell__gripper:hover:after{opacity:1}.ds-table-row-cell__gripper:active:after{background:var(--overlay-pressed);opacity:1}.ds-table-row-cell__gripper .ds-icon{font-size:20px;width:20px;height:20px}.ds-table-row-cell__checkbox{display:flex;align-items:center;justify-content:center;width:42px;height:42px;flex-shrink:0;cursor:pointer}.ds-table-row-cell__checkbox .ds-icon{color:var(--color-border-input)}.ds-table-row-cell__checkbox--checked .ds-icon,.ds-table-row-cell__checkbox--indeterminate .ds-icon{color:var(--color-surface-brand-bold)}.ds-table-row-cell.ds-table-pinned-left{border-right:1px solid var(--color-border-secondary)}.ds-table-row-cell.ds-table-pinned-right{border-left:1px solid var(--color-border-secondary)}.ds-table-row-cell__data{font-family:var(--ref-typescale-body-medium-font);font-size:var(--ref-typescale-body-medium-size);font-weight:var(--ref-typescale-body-medium-weight);line-height:var(--ref-typescale-body-medium-line-height);letter-spacing:var(--ref-typescale-body-medium-tracking);color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1 0 0;min-width:0}.ds-table-row-cell__data--right{flex:0 1 auto}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsTableRowCellComponent, decorators: [{
             type: Component,
@@ -4091,6 +4347,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
                 type: Input
             }], state: [{
                 type: Input
+            }], rowContextMenu: [{
+                type: Output
             }], isHovered: [{
                 type: HostBinding,
                 args: ['class.is-hovered']
@@ -4100,6 +4358,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
             }], isSelected: [{
                 type: HostBinding,
                 args: ['class.is-selected']
+            }], onContextMenu: [{
+                type: HostListener,
+                args: ['contextmenu', ['$event']]
             }] } });
 
 /**
@@ -4264,6 +4525,13 @@ class DsTableRowGroupsBarComponent {
      * When [api] is bound this is handled automatically; still emitted for external listeners.
      */
     removeGroup = new EventEmitter();
+    /** Current row density selection. */
+    density = 'comfort';
+    /**
+     * Emits when the user clicks a density toggle button.
+     * Consumer must call api.resetRowHeights() and update the rowHeight grid option.
+     */
+    densityChange = new EventEmitter();
     _api = null;
     _groupChanged = () => this._syncGroups();
     constructor(cdr) {
@@ -4304,15 +4572,21 @@ class DsTableRowGroupsBarComponent {
         }
         this.removeGroup.emit(colId);
     }
+    onDensityChange(density) {
+        this.density = density;
+        this.densityChange.emit(density);
+    }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsTableRowGroupsBarComponent, deps: [{ token: i0.ChangeDetectorRef }], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "21.2.7", type: DsTableRowGroupsBarComponent, isStandalone: true, selector: "ds-table-row-groups-bar", inputs: { rowGroups: "rowGroups", api: "api" }, outputs: { removeGroup: "removeGroup" }, host: { properties: { "hidden": "rowGroups.length === 0" } }, ngImport: i0, template: "<div class=\"ds-table-row-groups-bar\">\n\n  <!-- Left \u2014 drag target + active row group chips -->\n  <div class=\"ds-table-row-groups-bar__drop-zone\">\n    <span class=\"ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon\" aria-hidden=\"true\">\n      drag_indicator\n    </span>\n\n    <!-- Chips for active row groups -->\n    <div\n      *ngIf=\"rowGroups.length > 0\"\n      class=\"ds-table-row-groups-bar__chips\"\n    >\n      <span\n        *ngFor=\"let group of rowGroups\"\n        class=\"ds-tag ds-tag--sm\"\n      >\n        <span class=\"ds-tag__label\">{{ group.label }}</span>\n        <button\n          type=\"button\"\n          class=\"ds-tag__remove\"\n          [attr.aria-label]=\"'Remove ' + group.label + ' row group'\"\n          (click)=\"onRemoveGroup(group.colId)\"\n        >\n          <span class=\"ds-icon ds-icon--xs\" aria-hidden=\"true\">close</span>\n        </button>\n      </span>\n    </div>\n\n    <!-- Placeholder shown when no groups are active -->\n    <span\n      *ngIf=\"rowGroups.length === 0\"\n      class=\"ds-table-row-groups-bar__placeholder\"\n      aria-hidden=\"true\"\n    >\n      Drag here to set row groups\n    </span>\n  </div>\n\n\n</div>\n", styles: [".ds-table-row-groups-bar{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 var(--spacing-lg);background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-secondary);box-sizing:border-box;flex-shrink:0;gap:var(--spacing-lg)}.ds-table-row-groups-bar__drop-zone{display:flex;align-items:center;gap:var(--spacing-sm);flex:1 0 0;min-width:0;overflow:hidden}.ds-table-row-groups-bar__drag-icon{color:var(--color-icon-subtle);flex-shrink:0}.ds-table-row-groups-bar__placeholder{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-primary);white-space:nowrap;flex-shrink:0}.ds-table-row-groups-bar__placeholder:not(:last-child){display:none}.ds-table-row-groups-bar__chips{display:flex;align-items:center;gap:var(--spacing-xs);flex-wrap:nowrap;overflow:hidden}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1.NgForOf, selector: "[ngFor][ngForOf]", inputs: ["ngForOf", "ngForTrackBy", "ngForTemplate"] }, { kind: "directive", type: i1.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "21.2.7", type: DsTableRowGroupsBarComponent, isStandalone: true, selector: "ds-table-row-groups-bar", inputs: { rowGroups: "rowGroups", api: "api" }, outputs: { removeGroup: "removeGroup", densityChange: "densityChange" }, ngImport: i0, template: "<div class=\"ds-table-row-groups-bar\">\n\n  <!-- Left \u2014 drag target + active row group chips -->\n  <div class=\"ds-table-row-groups-bar__drop-zone\">\n    <span class=\"ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon\" aria-hidden=\"true\">\n      drag_indicator\n    </span>\n\n    <!-- Chips for active row groups -->\n    <div\n      *ngIf=\"rowGroups.length > 0\"\n      class=\"ds-table-row-groups-bar__chips\"\n    >\n      <span\n        *ngFor=\"let group of rowGroups\"\n        class=\"ds-tag ds-tag--sm\"\n      >\n        <span class=\"ds-tag__label\">{{ group.label }}</span>\n        <button\n          type=\"button\"\n          class=\"ds-tag__remove\"\n          [attr.aria-label]=\"'Remove ' + group.label + ' row group'\"\n          (click)=\"onRemoveGroup(group.colId)\"\n        >\n          <span class=\"ds-icon ds-icon--xs\" aria-hidden=\"true\">close</span>\n        </button>\n      </span>\n    </div>\n\n    <!-- Placeholder shown when no groups are active -->\n    <span\n      *ngIf=\"rowGroups.length === 0\"\n      class=\"ds-table-row-groups-bar__placeholder\"\n      aria-hidden=\"true\"\n    >\n      Drag here to set row groups\n    </span>\n  </div>\n\n  <!-- Right \u2014 row density toggle -->\n  <div class=\"ds-density-toggle\" role=\"group\" aria-label=\"Row density\">\n    <button\n      type=\"button\"\n      class=\"ds-density-toggle__btn\"\n      [class.is-selected]=\"density === 'comfort'\"\n      [attr.aria-pressed]=\"density === 'comfort'\"\n      (click)=\"onDensityChange('comfort')\"\n    >Comfort</button>\n    <button\n      type=\"button\"\n      class=\"ds-density-toggle__btn\"\n      [class.is-selected]=\"density === 'compact'\"\n      [attr.aria-pressed]=\"density === 'compact'\"\n      (click)=\"onDensityChange('compact')\"\n    >Compact</button>\n  </div>\n\n</div>\n", styles: [".ds-table-row-groups-bar{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 var(--spacing-lg);background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-secondary);box-sizing:border-box;flex-shrink:0;gap:var(--spacing-lg)}.ds-table-row-groups-bar__drop-zone{display:flex;align-items:center;gap:var(--spacing-sm);flex:1 0 0;min-width:0;overflow:hidden}.ds-table-row-groups-bar__drag-icon{color:var(--color-icon-subtle);flex-shrink:0}.ds-table-row-groups-bar__placeholder{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-primary);white-space:nowrap;flex-shrink:0}.ds-table-row-groups-bar__placeholder:not(:last-child){display:none}.ds-table-row-groups-bar__chips{display:flex;align-items:center;gap:var(--spacing-xs);flex-wrap:nowrap;overflow:hidden}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1.NgForOf, selector: "[ngFor][ngForOf]", inputs: ["ngForOf", "ngForTrackBy", "ngForTemplate"] }, { kind: "directive", type: i1.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsTableRowGroupsBarComponent, decorators: [{
             type: Component,
-            args: [{ selector: 'ds-table-row-groups-bar', standalone: true, imports: [CommonModule], changeDetection: ChangeDetectionStrategy.OnPush, host: { '[hidden]': 'rowGroups.length === 0' }, template: "<div class=\"ds-table-row-groups-bar\">\n\n  <!-- Left \u2014 drag target + active row group chips -->\n  <div class=\"ds-table-row-groups-bar__drop-zone\">\n    <span class=\"ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon\" aria-hidden=\"true\">\n      drag_indicator\n    </span>\n\n    <!-- Chips for active row groups -->\n    <div\n      *ngIf=\"rowGroups.length > 0\"\n      class=\"ds-table-row-groups-bar__chips\"\n    >\n      <span\n        *ngFor=\"let group of rowGroups\"\n        class=\"ds-tag ds-tag--sm\"\n      >\n        <span class=\"ds-tag__label\">{{ group.label }}</span>\n        <button\n          type=\"button\"\n          class=\"ds-tag__remove\"\n          [attr.aria-label]=\"'Remove ' + group.label + ' row group'\"\n          (click)=\"onRemoveGroup(group.colId)\"\n        >\n          <span class=\"ds-icon ds-icon--xs\" aria-hidden=\"true\">close</span>\n        </button>\n      </span>\n    </div>\n\n    <!-- Placeholder shown when no groups are active -->\n    <span\n      *ngIf=\"rowGroups.length === 0\"\n      class=\"ds-table-row-groups-bar__placeholder\"\n      aria-hidden=\"true\"\n    >\n      Drag here to set row groups\n    </span>\n  </div>\n\n\n</div>\n", styles: [".ds-table-row-groups-bar{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 var(--spacing-lg);background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-secondary);box-sizing:border-box;flex-shrink:0;gap:var(--spacing-lg)}.ds-table-row-groups-bar__drop-zone{display:flex;align-items:center;gap:var(--spacing-sm);flex:1 0 0;min-width:0;overflow:hidden}.ds-table-row-groups-bar__drag-icon{color:var(--color-icon-subtle);flex-shrink:0}.ds-table-row-groups-bar__placeholder{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-primary);white-space:nowrap;flex-shrink:0}.ds-table-row-groups-bar__placeholder:not(:last-child){display:none}.ds-table-row-groups-bar__chips{display:flex;align-items:center;gap:var(--spacing-xs);flex-wrap:nowrap;overflow:hidden}\n"] }]
+            args: [{ selector: 'ds-table-row-groups-bar', standalone: true, imports: [CommonModule], changeDetection: ChangeDetectionStrategy.OnPush, template: "<div class=\"ds-table-row-groups-bar\">\n\n  <!-- Left \u2014 drag target + active row group chips -->\n  <div class=\"ds-table-row-groups-bar__drop-zone\">\n    <span class=\"ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon\" aria-hidden=\"true\">\n      drag_indicator\n    </span>\n\n    <!-- Chips for active row groups -->\n    <div\n      *ngIf=\"rowGroups.length > 0\"\n      class=\"ds-table-row-groups-bar__chips\"\n    >\n      <span\n        *ngFor=\"let group of rowGroups\"\n        class=\"ds-tag ds-tag--sm\"\n      >\n        <span class=\"ds-tag__label\">{{ group.label }}</span>\n        <button\n          type=\"button\"\n          class=\"ds-tag__remove\"\n          [attr.aria-label]=\"'Remove ' + group.label + ' row group'\"\n          (click)=\"onRemoveGroup(group.colId)\"\n        >\n          <span class=\"ds-icon ds-icon--xs\" aria-hidden=\"true\">close</span>\n        </button>\n      </span>\n    </div>\n\n    <!-- Placeholder shown when no groups are active -->\n    <span\n      *ngIf=\"rowGroups.length === 0\"\n      class=\"ds-table-row-groups-bar__placeholder\"\n      aria-hidden=\"true\"\n    >\n      Drag here to set row groups\n    </span>\n  </div>\n\n  <!-- Right \u2014 row density toggle -->\n  <div class=\"ds-density-toggle\" role=\"group\" aria-label=\"Row density\">\n    <button\n      type=\"button\"\n      class=\"ds-density-toggle__btn\"\n      [class.is-selected]=\"density === 'comfort'\"\n      [attr.aria-pressed]=\"density === 'comfort'\"\n      (click)=\"onDensityChange('comfort')\"\n    >Comfort</button>\n    <button\n      type=\"button\"\n      class=\"ds-density-toggle__btn\"\n      [class.is-selected]=\"density === 'compact'\"\n      [attr.aria-pressed]=\"density === 'compact'\"\n      (click)=\"onDensityChange('compact')\"\n    >Compact</button>\n  </div>\n\n</div>\n", styles: [".ds-table-row-groups-bar{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 var(--spacing-lg);background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-secondary);box-sizing:border-box;flex-shrink:0;gap:var(--spacing-lg)}.ds-table-row-groups-bar__drop-zone{display:flex;align-items:center;gap:var(--spacing-sm);flex:1 0 0;min-width:0;overflow:hidden}.ds-table-row-groups-bar__drag-icon{color:var(--color-icon-subtle);flex-shrink:0}.ds-table-row-groups-bar__placeholder{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight-prominent);line-height:var(--ref-typescale-label-medium-line-height);letter-spacing:var(--ref-typescale-label-medium-tracking);color:var(--color-text-primary);white-space:nowrap;flex-shrink:0}.ds-table-row-groups-bar__placeholder:not(:last-child){display:none}.ds-table-row-groups-bar__chips{display:flex;align-items:center;gap:var(--spacing-xs);flex-wrap:nowrap;overflow:hidden}\n"] }]
         }], ctorParameters: () => [{ type: i0.ChangeDetectorRef }], propDecorators: { rowGroups: [{
                 type: Input
             }], removeGroup: [{
+                type: Output
+            }], densityChange: [{
                 type: Output
             }], api: [{
                 type: Input
@@ -5041,5 +5315,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
  * Generated bundle index. Do not edit.
  */
 
-export { AgentStatusComponent, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableHeaderCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent };
+export { AgentStatusComponent, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent };
 //# sourceMappingURL=onflo-design-system.mjs.map
