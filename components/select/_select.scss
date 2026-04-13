@@ -215,6 +215,14 @@
     &.is-open {
       display: block;
     }
+
+    // Flip above the trigger when the menu would overflow the viewport bottom
+    &.is-open--above {
+      top: auto;
+      bottom: 100%;
+      margin-top: 0;
+      margin-bottom: 4px;
+    }
   }
 }
 

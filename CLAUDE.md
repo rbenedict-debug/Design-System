@@ -214,8 +214,8 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
 | `ds-table-status-bar` | Custom | No Material equivalent — aggregate values row pinned above paginator (Rows, Total Rows, Average, Count, Min, Max, Sum); implements minimal AG Grid status panel API |
-| `ds-table-row-groups-bar` | Custom | No Material equivalent — bar between toolbar and header; drag target for row group columns + removable chips + Comfort/Compact density toggle (`ds-density-toggle`); bind `[api]` to auto-sync |
-| `ds-column-panel` | Custom | No Material equivalent — AG Grid custom tool panel; sections: density toggle, column visibility (checkbox+drag), pivot mode, row groups, values; width 300px; shown via `[data-panel-open]` on container |
+| `ds-table-row-groups-bar` | Custom | No Material equivalent — bar between toolbar and header; drag target for row group columns + removable chips; bind `[api]` to auto-sync |
+| `ds-column-panel` | Custom | No Material equivalent — AG Grid custom tool panel; sections: density toggle, Column Visibility (collapsible — `<button aria-expanded>` header, no internal scroll), pivot mode, row groups, values; width 300px; shown via `[data-panel-open]` on container; whole panel scrolls via `overflow-y: auto` |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |
 | `ds-page-layout` | Custom | CSS-only app shell; SCSS in `layout/page-layout/`, ships as `dist/layout.css` |
 | `ds-split-page` | CdkDrag (CDK only) | CSS-only two-pane layout; SCSS in `layout/split-page/`, ships as `dist/layout.css`; use `CdkDragModule` for production resize |

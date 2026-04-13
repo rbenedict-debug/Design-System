@@ -5,11 +5,9 @@
  * grouping is active or available. Provides:
  *   - A drop zone for dragging columns to set row groups (AG Grid native DnD)
  *   - Chips showing the currently active row group columns (removable)
- *   - A Comfort / Compact density toggle
  *
  * Standalone usage:
  *   <ds-table-row-groups-bar
- *     [(density)]="rowDensity"
  *     [rowGroups]="activeGroups"
  *     (removeGroup)="onRemoveGroup($event)"
  *   />
@@ -17,7 +15,6 @@
  * AG Grid integration:
  *   Bind [api] after the grid is ready. The component will subscribe to
  *   columnRowGroupChanged events and keep the chip list in sync automatically.
- *   Emit densityChange to update grid rowHeight via api.resetRowHeights().
  *
  * HTML class API:
  *   <div class="ds-table-row-groups-bar">
@@ -26,12 +23,6 @@
  *       <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
  *       <div class="ds-table-row-groups-bar__chips">
  *         <!-- ds-tag chips here -->
- *       </div>
- *     </div>
- *     <div class="ds-table-row-groups-bar__density">
- *       <div class="ds-density-toggle">
- *         <button class="ds-density-toggle__btn is-selected">Comfort</button>
- *         <button class="ds-density-toggle__btn">Compact</button>
  *       </div>
  *     </div>
  *   </div>
@@ -45,8 +36,6 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export type TableDensity = 'comfort' | 'compact';
 
 export interface TableRowGroup {
   /** AG Grid column ID. */
@@ -70,17 +59,12 @@ export interface AgRowGroupsApi {
   templateUrl: './table-row-groups-bar.component.html',
   styleUrls: ['./table-row-groups-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[hidden]': 'rowGroups.length === 0' },
 })
 export class DsTableRowGroupsBarComponent implements OnDestroy {
 
   /** Active row group columns shown as chips. Ignored when [api] is bound. */
   @Input() rowGroups: TableRowGroup[] = [];
-
-  /** Current density. Use [(density)] for two-way binding. */
-  @Input() density: TableDensity = 'comfort';
-
-  /** Emits the new density when the toggle changes. */
-  @Output() densityChange = new EventEmitter<TableDensity>();
 
   /**
    * Emits the colId of the row group the user wants to remove.
@@ -133,8 +117,4 @@ export class DsTableRowGroupsBarComponent implements OnDestroy {
     this.removeGroup.emit(colId);
   }
 
-  onDensityChange(value: TableDensity): void {
-    this.density = value;
-    this.densityChange.emit(value);
-  }
 }

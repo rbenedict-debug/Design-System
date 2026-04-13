@@ -1815,94 +1815,6 @@ declare class SubnavSubheaderComponent {
 }
 
 /**
- * Onflo Design System — Table Row Groups Bar
- *
- * Displayed between the table toolbar and the column header row when row
- * grouping is active or available. Provides:
- *   - A drop zone for dragging columns to set row groups (AG Grid native DnD)
- *   - Chips showing the currently active row group columns (removable)
- *   - A Comfort / Compact density toggle
- *
- * Standalone usage:
- *   <ds-table-row-groups-bar
- *     [(density)]="rowDensity"
- *     [rowGroups]="activeGroups"
- *     (removeGroup)="onRemoveGroup($event)"
- *   />
- *
- * AG Grid integration:
- *   Bind [api] after the grid is ready. The component will subscribe to
- *   columnRowGroupChanged events and keep the chip list in sync automatically.
- *   Emit densityChange to update grid rowHeight via api.resetRowHeights().
- *
- * HTML class API:
- *   <div class="ds-table-row-groups-bar">
- *     <div class="ds-table-row-groups-bar__drop-zone">
- *       <span class="ds-icon ds-table-row-groups-bar__drag-icon">drag_indicator</span>
- *       <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
- *       <div class="ds-table-row-groups-bar__chips">
- *         <!-- ds-tag chips here -->
- *       </div>
- *     </div>
- *     <div class="ds-table-row-groups-bar__density">
- *       <div class="ds-density-toggle">
- *         <button class="ds-density-toggle__btn is-selected">Comfort</button>
- *         <button class="ds-density-toggle__btn">Compact</button>
- *       </div>
- *     </div>
- *   </div>
- *
- * Figma: component/table-row-groups-bar
- * ADA: Density buttons use aria-pressed; remove buttons on chips have aria-label.
- */
-
-type TableDensity = 'comfort' | 'compact';
-interface TableRowGroup {
-    /** AG Grid column ID. */
-    colId: string;
-    /** Display label for the chip. */
-    label: string;
-}
-/** Minimal AG Grid API surface needed by the row groups bar. */
-interface AgRowGroupsApi {
-    getRowGroupColumns(): {
-        getColId(): string;
-        getColDef(): {
-            headerName?: string;
-        };
-    }[];
-    removeRowGroupColumn(key: string): void;
-    addEventListener(event: string, callback: () => void): void;
-    removeEventListener(event: string, callback: () => void): void;
-}
-declare class DsTableRowGroupsBarComponent implements OnDestroy {
-    private readonly cdr;
-    /** Active row group columns shown as chips. Ignored when [api] is bound. */
-    rowGroups: TableRowGroup[];
-    /** Current density. Use [(density)] for two-way binding. */
-    density: TableDensity;
-    /** Emits the new density when the toggle changes. */
-    densityChange: EventEmitter<TableDensity>;
-    /**
-     * Emits the colId of the row group the user wants to remove.
-     * When [api] is bound this is handled automatically; still emitted for external listeners.
-     */
-    removeGroup: EventEmitter<string>;
-    private _api;
-    private readonly _groupChanged;
-    constructor(cdr: ChangeDetectorRef);
-    /** Bind after the grid is ready to enable automatic sync with column state. */
-    set api(value: AgRowGroupsApi | null);
-    ngOnDestroy(): void;
-    private _detach;
-    private _syncGroups;
-    onRemoveGroup(colId: string): void;
-    onDensityChange(value: TableDensity): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<DsTableRowGroupsBarComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<DsTableRowGroupsBarComponent, "ds-table-row-groups-bar", never, { "rowGroups": { "alias": "rowGroups"; "required": false; }; "density": { "alias": "density"; "required": false; }; "api": { "alias": "api"; "required": false; }; }, { "densityChange": "densityChange"; "removeGroup": "removeGroup"; }, never, never, true, never>;
-}
-
-/**
  * Onflo Design System — Column Panel
  *
  * AG Grid custom tool panel for column configuration.
@@ -1942,6 +1854,7 @@ declare class DsTableRowGroupsBarComponent implements OnDestroy {
  *   Pivot toggle is a native <input type="checkbox">.
  */
 
+type TableDensity = 'comfort' | 'compact';
 interface ColumnPanelItem {
     /** AG Grid column ID. */
     colId: string;
@@ -1989,6 +1902,8 @@ declare class DsColumnPanelComponent implements OnDestroy {
     private readonly cdr;
     /** Column list — auto-populated when [api] is bound, otherwise set manually. */
     columns: ColumnPanelItem[];
+    /** Whether the Column Visibility section is expanded (controls the collapse toggle). */
+    colVisibilityExpanded: boolean;
     /** Current row density. Use [(density)] for two-way binding. */
     density: TableDensity;
     /** Whether pivot mode is enabled. */
@@ -2008,6 +1923,7 @@ declare class DsColumnPanelComponent implements OnDestroy {
     ngOnDestroy(): void;
     private _syncColumns;
     private _syncPivot;
+    toggleColVisibility(): void;
     onDensityChange(value: TableDensity): void;
     toggleColumnVisibility(col: ColumnPanelItem): void;
     togglePivotMode(): void;
@@ -2059,7 +1975,12 @@ interface AgHeaderParams {
         removeEventListener(event: string, listener: () => void): void;
     };
     api: {
-        setColumnWidth(key: string, newWidth: number): void;
+        /**
+         * finished: false during drag (flex columns reflow in real-time),
+         * finished: true on release (AG Grid finalizes state and fires columnResized).
+         * Columns with flex: 1 in their colDef automatically fill remaining space.
+         */
+        setColumnWidth(key: string, newWidth: number, finished?: boolean): void;
     };
     progressSort(multiSort?: boolean): void;
     showColumnMenu(source: HTMLElement): void;
@@ -2094,6 +2015,7 @@ declare class DsTableHeaderCellComponent implements OnDestroy {
     private sortChangedListener?;
     private resizeStartX;
     private resizeStartWidth;
+    private resizeCurrentWidth;
     private boundMouseMove?;
     private boundMouseUp?;
     constructor(cdr: ChangeDetectorRef);
@@ -2288,6 +2210,79 @@ declare class DsTableStatusBarComponent implements OnDestroy {
     formatNumber(value: number): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsTableStatusBarComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<DsTableStatusBarComponent, "ds-table-status-bar", never, { "rowCount": { "alias": "rowCount"; "required": false; }; "totalRowCount": { "alias": "totalRowCount"; "required": false; }; "average": { "alias": "average"; "required": false; }; "count": { "alias": "count"; "required": false; }; "min": { "alias": "min"; "required": false; }; "max": { "alias": "max"; "required": false; }; "sum": { "alias": "sum"; "required": false; }; }, {}, never, never, true, never>;
+}
+
+/**
+ * Onflo Design System — Table Row Groups Bar
+ *
+ * Displayed between the table toolbar and the column header row when row
+ * grouping is active or available. Provides:
+ *   - A drop zone for dragging columns to set row groups (AG Grid native DnD)
+ *   - Chips showing the currently active row group columns (removable)
+ *
+ * Standalone usage:
+ *   <ds-table-row-groups-bar
+ *     [rowGroups]="activeGroups"
+ *     (removeGroup)="onRemoveGroup($event)"
+ *   />
+ *
+ * AG Grid integration:
+ *   Bind [api] after the grid is ready. The component will subscribe to
+ *   columnRowGroupChanged events and keep the chip list in sync automatically.
+ *
+ * HTML class API:
+ *   <div class="ds-table-row-groups-bar">
+ *     <div class="ds-table-row-groups-bar__drop-zone">
+ *       <span class="ds-icon ds-table-row-groups-bar__drag-icon">drag_indicator</span>
+ *       <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
+ *       <div class="ds-table-row-groups-bar__chips">
+ *         <!-- ds-tag chips here -->
+ *       </div>
+ *     </div>
+ *   </div>
+ *
+ * Figma: component/table-row-groups-bar
+ * ADA: Density buttons use aria-pressed; remove buttons on chips have aria-label.
+ */
+
+interface TableRowGroup {
+    /** AG Grid column ID. */
+    colId: string;
+    /** Display label for the chip. */
+    label: string;
+}
+/** Minimal AG Grid API surface needed by the row groups bar. */
+interface AgRowGroupsApi {
+    getRowGroupColumns(): {
+        getColId(): string;
+        getColDef(): {
+            headerName?: string;
+        };
+    }[];
+    removeRowGroupColumn(key: string): void;
+    addEventListener(event: string, callback: () => void): void;
+    removeEventListener(event: string, callback: () => void): void;
+}
+declare class DsTableRowGroupsBarComponent implements OnDestroy {
+    private readonly cdr;
+    /** Active row group columns shown as chips. Ignored when [api] is bound. */
+    rowGroups: TableRowGroup[];
+    /**
+     * Emits the colId of the row group the user wants to remove.
+     * When [api] is bound this is handled automatically; still emitted for external listeners.
+     */
+    removeGroup: EventEmitter<string>;
+    private _api;
+    private readonly _groupChanged;
+    constructor(cdr: ChangeDetectorRef);
+    /** Bind after the grid is ready to enable automatic sync with column state. */
+    set api(value: AgRowGroupsApi | null);
+    ngOnDestroy(): void;
+    private _detach;
+    private _syncGroups;
+    onRemoveGroup(colId: string): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DsTableRowGroupsBarComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsTableRowGroupsBarComponent, "ds-table-row-groups-bar", never, { "rowGroups": { "alias": "rowGroups"; "required": false; }; "api": { "alias": "api"; "required": false; }; }, { "removeGroup": "removeGroup"; }, never, never, true, never>;
 }
 
 /**

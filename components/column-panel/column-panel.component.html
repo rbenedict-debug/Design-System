@@ -25,10 +25,16 @@
   </div>
 
   <!-- ── 2. Column Visibility ─────────────────────────────────────── -->
-  <div class="ds-column-panel__section-hd">
+  <button
+    type="button"
+    class="ds-column-panel__section-hd"
+    [attr.aria-expanded]="colVisibilityExpanded"
+    (click)="toggleColVisibility()"
+  >
     <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">visibility</span>
     <span class="ds-column-panel__section-title">Column Visibility</span>
-  </div>
+    <span class="ds-icon ds-icon--sm ds-column-panel__expand-icon" aria-hidden="true">arrow_drop_down</span>
+  </button>
 
   <div class="ds-column-panel__col-list">
     <div

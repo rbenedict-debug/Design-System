@@ -1,8 +1,7 @@
 // Onflo Design System — Table Row Groups Bar
 // Figma: component/table-row-groups-bar
 // Appears between the toolbar and the column header row when AG Grid row grouping
-// is available. Provides a drag target for row group columns (shown as chips)
-// and a Comfort/Compact density toggle.
+// is available. Provides a drag target for row group columns (shown as chips).
 // Height: 56px — matches AG Grid header height.
 
 .ds-table-row-groups-bar {
@@ -58,56 +57,4 @@
     overflow: hidden;
   }
 
-  // ── Right zone — density toggle ───────────────────────────────────────────
-  &__density {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-  }
-}
-
-// ── Density toggle — Comfort / Compact segmented button ──────────────────────
-//
-// Two adjacent outlined buttons acting as a single-select toggle group.
-// Used in both the row groups bar and the column panel.
-
-.ds-density-toggle {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  flex-shrink: 0;
-
-  &__btn {
-    appearance: none;
-    -webkit-appearance: none;
-    background: var(--color-surface-page);
-    border: 1px solid var(--color-border-primary);
-    border-radius: var(--radius-sm);
-    padding: 0 var(--spacing-md);
-    height: 42px;
-    cursor: pointer;
-    font-family: var(--ref-typescale-label-large-font);
-    font-size: var(--ref-typescale-label-large-size);
-    font-weight: var(--ref-typescale-label-large-weight-prominent);
-    line-height: var(--ref-typescale-label-large-line-height);
-    letter-spacing: var(--ref-typescale-label-large-tracking);
-    color: var(--color-text-primary);
-    white-space: nowrap;
-    position: relative;
-    transition: background 80ms ease, border-color 80ms ease, color 80ms ease;
-
-    &:focus { outline: none; }
-    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
-
-    &:hover:not(.is-selected) {
-      background: var(--overlay-hovered);
-    }
-
-    // Selected state — accent blue tint with active border
-    &.is-selected {
-      background: var(--color-surface-accent-blue);
-      border-color: var(--color-border-active);
-      color: var(--color-text-brand);
-    }
-  }
 }

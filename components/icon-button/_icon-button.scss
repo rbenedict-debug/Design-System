@@ -114,6 +114,12 @@
     > svg,
     .ds-icon-button__icon { width: 20px; height: 20px; }
     .ds-icon-button__label { font-size: 12px; }
+
+    .ds-icon {
+      font-size: 20px;
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      &.ds-icon--filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+    }
   }
 
 

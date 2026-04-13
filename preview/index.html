@@ -654,6 +654,14 @@
       margin-left: -48px;
     }
 
+    /* Table keyword-search highlight */
+    mark.ds-table-highlight {
+      background: #FFF176;
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
     /* ── Sections ────────────────────────────────────────────────────────────── */
 
     .section { margin-bottom: 80px; scroll-margin-top: 80px; }
@@ -1391,6 +1399,13 @@
 }
 .ds-icon-button--sm .ds-icon-button__label {
   font-size: 12px;
+}
+.ds-icon-button--sm .ds-icon {
+  font-size: 20px;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+}
+.ds-icon-button--sm .ds-icon.ds-icon--filled {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 20;
 }
 .ds-icon-button--icon {
   background: transparent;
@@ -2942,6 +2957,12 @@
 }
 .ds-select__dropdown.is-open {
   display: block;
+}
+.ds-select__dropdown.is-open--above {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 4px;
 }
 
 .ds-select .mat-mdc-form-field {
@@ -5844,6 +5865,9 @@
 .ds-table-header-cell__checkbox--checked .ds-icon, .ds-table-header-cell__checkbox--indeterminate .ds-icon {
   color: var(--color-surface-brand-bold);
 }
+.ds-table-header-cell:not(.ds-table-header-cell--checkbox-only) .ds-table-header-cell__label {
+  cursor: grab;
+}
 .ds-table-header-cell__actions {
   display: flex;
   align-items: center;
@@ -5866,14 +5890,12 @@
 
 .ds-table-header-cell.ds-table-pinned-left,
 .ag-pinned-left-header .ds-table-header-cell {
-  box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.08);
-  clip-path: inset(0 -12px 0 0);
+  border-right: 1px solid var(--color-border-secondary);
 }
 
 .ds-table-header-cell.ds-table-pinned-right,
 .ag-pinned-right-header .ds-table-header-cell {
-  box-shadow: -4px 0 8px -2px rgba(0, 0, 0, 0.08);
-  clip-path: inset(0 0 0 -12px);
+  border-left: 1px solid var(--color-border-secondary);
 }
 
 .ds-table-row-cell {
@@ -5905,7 +5927,7 @@
   background: var(--overlay-focused);
 }
 .ds-table-row-cell.is-selected {
-  background: var(--overlay-selected);
+  background: var(--overlay-focused);
 }
 .ds-table-row-cell__content {
   display: flex;
@@ -5988,12 +6010,10 @@
   color: var(--color-surface-brand-bold);
 }
 .ds-table-row-cell.ds-table-pinned-left {
-  box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.08);
-  clip-path: inset(0 -12px 0 0);
+  border-right: 1px solid var(--color-border-secondary);
 }
 .ds-table-row-cell.ds-table-pinned-right {
-  box-shadow: -4px 0 8px -2px rgba(0, 0, 0, 0.08);
-  clip-path: inset(0 0 0 -12px);
+  border-left: 1px solid var(--color-border-secondary);
 }
 .ds-table-row-cell__data {
   font-family: var(--ref-typescale-body-medium-font);
@@ -6100,51 +6120,6 @@
   flex-wrap: nowrap;
   overflow: hidden;
 }
-.ds-table-row-groups-bar__density {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.ds-density-toggle {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  flex-shrink: 0;
-}
-.ds-density-toggle__btn {
-  appearance: none;
-  -webkit-appearance: none;
-  background: var(--color-surface-page);
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--radius-sm);
-  padding: 0 var(--spacing-md);
-  height: 42px;
-  cursor: pointer;
-  font-family: var(--ref-typescale-label-large-font);
-  font-size: var(--ref-typescale-label-large-size);
-  font-weight: var(--ref-typescale-label-large-weight-prominent);
-  line-height: var(--ref-typescale-label-large-line-height);
-  letter-spacing: var(--ref-typescale-label-large-tracking);
-  color: var(--color-text-primary);
-  white-space: nowrap;
-  position: relative;
-  transition: background 80ms ease, border-color 80ms ease, color 80ms ease;
-}
-.ds-density-toggle__btn:focus {
-  outline: none;
-}
-.ds-density-toggle__btn:focus-visible {
-  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-}
-.ds-density-toggle__btn:hover:not(.is-selected) {
-  background: var(--overlay-hovered);
-}
-.ds-density-toggle__btn.is-selected {
-  background: var(--color-surface-accent-blue);
-  border-color: var(--color-border-active);
-  color: var(--color-text-brand);
-}
 
 .ds-ag-paginator {
   display: flex;
@@ -6155,7 +6130,7 @@
   padding: 0 var(--spacing-lg);
   background: var(--color-surface-subtle);
   border-top: 1px solid var(--color-border-subtle);
-  overflow: hidden;
+  overflow: visible;
 }
 .ds-ag-paginator__inner {
   display: flex;
@@ -6311,7 +6286,7 @@
   flex-shrink: 0;
   border-left: 1px solid var(--color-border-secondary);
   background: var(--color-surface-subtle);
-  overflow: hidden;
+  overflow-y: auto;
 }
 .ds-column-panel__density {
   display: flex;
@@ -6328,9 +6303,9 @@
 .ds-column-panel__col-list {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  flex: 1 0 0;
-  min-height: 0;
+}
+.ds-column-panel__col-list.is-collapsed {
+  display: none;
 }
 .ds-column-panel__section-hd {
   display: flex;
@@ -6473,6 +6448,77 @@
 .ds-column-panel__add-btn .ds-icon {
   color: var(--color-icon-brand);
   flex-shrink: 0;
+}
+
+button.ds-column-panel__section-hd {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+}
+button.ds-column-panel__section-hd:focus {
+  outline: none;
+}
+button.ds-column-panel__section-hd:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring);
+}
+button.ds-column-panel__section-hd:hover {
+  background: var(--overlay-hovered);
+}
+button.ds-column-panel__section-hd .ds-column-panel__expand-icon {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--color-icon-subtle);
+  transition: transform 80ms ease;
+}
+button.ds-column-panel__section-hd[aria-expanded=false] .ds-column-panel__expand-icon {
+  transform: rotate(-90deg);
+}
+
+button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-list {
+  display: none;
+}
+
+.ds-density-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+.ds-density-toggle__btn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--spacing-md);
+  height: 42px;
+  cursor: pointer;
+  font-family: var(--ref-typescale-label-large-font);
+  font-size: var(--ref-typescale-label-large-size);
+  font-weight: var(--ref-typescale-label-large-weight-prominent);
+  line-height: var(--ref-typescale-label-large-line-height);
+  letter-spacing: var(--ref-typescale-label-large-tracking);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  position: relative;
+  transition: background 80ms ease, border-color 80ms ease, color 80ms ease;
+}
+.ds-density-toggle__btn:focus {
+  outline: none;
+}
+.ds-density-toggle__btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-density-toggle__btn:hover:not(.is-selected) {
+  background: var(--overlay-hovered);
+}
+.ds-density-toggle__btn.is-selected {
+  background: var(--color-surface-accent-blue);
+  border-color: var(--color-border-active);
+  color: var(--color-text-brand);
 }
 
 [data-panel-open] .ds-column-panel {
@@ -8111,6 +8157,20 @@
 </style><!-- ONFLO-COMPONENTS:END -->
 
 <style>
+/* ── Page template density toggle ───────────────────────────────────────── */
+/* Overrides the fixed SCSS row height using the semantic density tokens.    */
+#table-sim-pt[data-density="comfort"] .ds-table-row-cell {
+  height: var(--color-table-cell-height-comfortable-height);
+}
+#table-sim-pt[data-density="compact"] .ds-table-row-cell {
+  height: var(--color-table-cell-height-compact-height);
+}
+/* Pinned right column needs a solid background so it occludes scrolled cells.
+   Using surface-default matches the table's container background. */
+#table-sim-pt .ds-table-row-cell.ds-table-pinned-right {
+  background: var(--color-surface-default);
+}
+
 /* ── Date Picker calendar mockup ─────────────────────────────────────────── */
 
 .ds-datepicker-cal-mock {
@@ -14043,9 +14103,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         <h2 class="section-title">Table Row Groups Bar</h2>
         <p class="section-desc">
           Bar between the toolbar and the column header row. Provides a drag-drop target
-          for columns to set row grouping, shows active row groups as removable chips,
-          and includes the Comfort/Compact density toggle. Bind <code>[api]</code> to
-          auto-sync with AG Grid column state.
+          for columns to set row grouping and shows active row groups as removable chips.
+          Bind <code>[api]</code> to auto-sync with AG Grid column state.
         </p>
         <p class="section-source">components/table/table-row-groups-bar.component.ts</p>
 
@@ -14059,12 +14118,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <div class="ds-table-row-groups-bar__drop-zone">
                   <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
                   <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
-                </div>
-                <div class="ds-table-row-groups-bar__density">
-                  <div class="ds-density-toggle" role="group" aria-label="Row density">
-                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Comfort</button>
-                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Compact</button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -14092,31 +14145,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                     </span>
                   </div>
                 </div>
-                <div class="ds-table-row-groups-bar__density">
-                  <div class="ds-density-toggle" role="group" aria-label="Row density">
-                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Comfort</button>
-                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Compact</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Compact density selected -->
-          <div class="demo-row">
-            <div class="demo-label">Compact density</div>
-            <div class="demo-row-items" style="flex: 1;">
-              <div class="ds-table-row-groups-bar" style="width: 100%;">
-                <div class="ds-table-row-groups-bar__drop-zone">
-                  <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
-                  <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
-                </div>
-                <div class="ds-table-row-groups-bar__density">
-                  <div class="ds-density-toggle" role="group" aria-label="Row density">
-                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Comfort</button>
-                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Compact</button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -14142,7 +14170,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div class="demo-label" style="padding-top: 12px;">Default</div>
             <div class="demo-row-items">
               <!-- Shown inline at natural height for preview -->
-              <div class="ds-column-panel" style="display: flex; height: 500px; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); overflow: hidden;">
+              <div class="ds-column-panel" style="display: flex; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm);">
 
                 <!-- 1. Density -->
                 <div class="ds-column-panel__density">
@@ -14153,11 +14181,12 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 </div>
 
                 <!-- 2. Column Visibility -->
-                <div class="ds-column-panel__section-hd">
+                <button type="button" class="ds-column-panel__section-hd" aria-expanded="true" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true' ? 'false' : 'true')">
                   <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">visibility</span>
                   <span class="ds-column-panel__section-title">Column Visibility</span>
-                </div>
-                <div class="ds-column-panel__col-list" style="flex: none; overflow: visible;">
+                  <span class="ds-icon ds-icon--sm ds-column-panel__expand-icon" aria-hidden="true">arrow_drop_down</span>
+                </button>
+                <div class="ds-column-panel__col-list">
 
                   <div class="ds-column-panel__col-row ds-column-panel__col-row--system" data-col-key="checkbox">
                     <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Checkbox visibility" tabindex="-1">
@@ -15722,10 +15751,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <!-- Content card: table fills it entirely -->
                   <div class="ds-page-content__main" style="overflow: hidden; display: flex; flex-direction: column;">
 
-                    <div id="table-sim-pt" style="display: flex; flex: 1; min-height: 0; min-width: 0;">
-
-                      <!-- ── Main table content ──────────────────────────── -->
-                      <div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column;">
+                    <div id="table-sim-pt" data-density="comfort" style="display: flex; flex-direction: column; flex: 1; min-height: 0; min-width: 0;">
 
                         <!-- Toolbar -->
                         <div class="ds-table-toolbar" id="pt-toolbar">
@@ -15747,7 +15773,12 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                             <div class="ds-input ds-search" role="search">
                               <div class="ds-input__field">
                                 <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
-                                <input class="ds-input__control" type="search" placeholder="Search customers" aria-label="Search customers" />
+                                <input class="ds-input__control" type="search" placeholder="Search customers" aria-label="Search customers"
+                                  id="pt-search-input" oninput="ptTableSearch(this)" />
+                                <button class="ds-input__action" type="button" aria-label="Clear search" id="pt-search-clear" style="display:none;"
+                                  onclick="document.getElementById('pt-search-input').value=''; ptTableSearch(document.getElementById('pt-search-input')); document.getElementById('pt-search-input').focus();">
+                                  <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+                                </button>
                               </div>
                             </div>
                             <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Toggle filters" onclick="togglePressed(this)">
@@ -15762,26 +15793,25 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                           </div>
                         </div>
 
-                        <!-- Row groups bar -->
-                        <div class="ds-table-row-groups-bar">
-                          <div class="ds-table-row-groups-bar__drop-zone">
-                            <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
-                            <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
-                          </div>
-                          <div class="ds-table-row-groups-bar__density">
-                            <div class="ds-density-toggle" role="group" aria-label="Row density">
-                              <button type="button" class="ds-density-toggle__btn is-selected" id="pt-comfort-btn" aria-pressed="true" onclick="ptSetDensity('comfort', this)">Comfort</button>
-                              <button type="button" class="ds-density-toggle__btn" id="pt-compact-btn" aria-pressed="false" onclick="ptSetDensity('compact', this)">Compact</button>
-                            </div>
+                        <!-- Search results alert — visible when keyword search is active -->
+                        <div class="ds-alert ds-alert--info" role="status" aria-live="polite" aria-atomic="true"
+                             id="pt-search-results-alert" style="display:none; margin: 0 16px 16px;">
+                          <div class="ds-alert__header">
+                            <p class="ds-alert__message" id="pt-search-results-text" style="flex: 1;"></p>
+                            <button class="ds-button ds-button--text ds-button--xs" type="button" onclick="ptTableSearchClear()">Clear Search</button>
                           </div>
                         </div>
+
+                        <!-- Grid body: scrollable data + column panel side by side -->
+                        <div style="display: flex; flex: 1; min-height: 0; min-width: 0;">
+                        <div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column;">
 
                         <!-- Scroll container: sticky header + data rows -->
                         <div id="table-scroll-pt" style="flex: 1; overflow: auto; min-height: 0; min-width: 0;">
                           <div style="width: 100%; min-width: 1006px; position: relative;">
 
                             <!-- Header row (sticky) -->
-                            <div style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px; position: sticky; top: 0; z-index: 3;">
+                            <div id="pt-header-grid" style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px; position: sticky; top: 0; z-index: 3;">
                               <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
                                 <div class="ds-table-header-cell__content" style="justify-content: center;">
                                   <label class="ds-checkbox" aria-label="Select all rows">
@@ -15790,7 +15820,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                                   </label>
                                 </div>
                               </div>
-                              <div class="ds-table-header-cell">
+                              <div class="ds-table-header-cell" data-col-key="customer">
                                 <div class="ds-table-header-cell__resize-handle"></div>
                                 <div class="ds-table-header-cell__content">
                                   <span class="ds-table-header-cell__label">Customer</span>
@@ -15799,34 +15829,34 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                                   <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Customer">
                                     <span class="ds-icon ds-icon--filled">filter_alt</span>
                                   </button>
-                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="customer">
                                     <span class="ds-table-header-cell__resize-bar"></span>
                                   </div>
                                 </div>
                               </div>
-                              <div class="ds-table-header-cell">
+                              <div class="ds-table-header-cell" data-col-key="email">
                                 <div class="ds-table-header-cell__resize-handle"></div>
                                 <div class="ds-table-header-cell__content">
                                   <span class="ds-table-header-cell__label">Email</span>
                                 </div>
                                 <div class="ds-table-header-cell__actions">
-                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="email">
                                     <span class="ds-table-header-cell__resize-bar"></span>
                                   </div>
                                 </div>
                               </div>
-                              <div class="ds-table-header-cell">
+                              <div class="ds-table-header-cell" data-col-key="department">
                                 <div class="ds-table-header-cell__resize-handle"></div>
                                 <div class="ds-table-header-cell__content">
                                   <span class="ds-table-header-cell__label">Department</span>
                                 </div>
                                 <div class="ds-table-header-cell__actions">
-                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="department">
                                     <span class="ds-table-header-cell__resize-bar"></span>
                                   </div>
                                 </div>
                               </div>
-                              <div class="ds-table-header-cell">
+                              <div class="ds-table-header-cell" data-col-key="status">
                                 <div class="ds-table-header-cell__resize-handle"></div>
                                 <div class="ds-table-header-cell__content">
                                   <span class="ds-table-header-cell__label">Status</span>
@@ -15835,23 +15865,23 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                                   <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter Status">
                                     <span class="ds-icon ds-icon--filled">filter_alt</span>
                                   </button>
-                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="status">
                                     <span class="ds-table-header-cell__resize-bar"></span>
                                   </div>
                                 </div>
                               </div>
-                              <div class="ds-table-header-cell">
+                              <div class="ds-table-header-cell" data-col-key="amount">
                                 <div class="ds-table-header-cell__resize-handle"></div>
                                 <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
                                   <span class="ds-table-header-cell__label">Amount</span>
                                 </div>
                                 <div class="ds-table-header-cell__actions">
-                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active" data-resize-col="amount">
                                     <span class="ds-table-header-cell__resize-bar"></span>
                                   </div>
                                 </div>
                               </div>
-                              <div class="ds-table-header-cell ds-table-pinned-right">
+                              <div class="ds-table-header-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;">
                                 <div class="ds-table-header-cell__content" style="justify-content: center;">
                                   <span class="ds-table-header-cell__label">Actions</span>
                                 </div>
@@ -15859,7 +15889,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                             </div><!-- /header row -->
 
                             <!-- Data rows -->
-                            <div style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px; position: relative;">
+                            <div id="pt-data-grid" style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px; position: relative;">
 
                               <!-- Row 1: Acme Corporation -->
                               <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Acme Corporation"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
@@ -15868,7 +15898,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-row="pt-r1"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Acme Corporation"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Acme Corporation"><span class="ds-icon">delete</span></button></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r1"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Acme Corporation"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Acme Corporation"><span class="ds-icon">delete</span></button></div></div>
 
                               <!-- Row 2: Cloud Systems Inc -->
                               <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Cloud Systems Inc"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
@@ -15877,7 +15907,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Product</span></div></div>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-row="pt-r2"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Cloud Systems Inc"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Cloud Systems Inc"><span class="ds-icon">delete</span></button></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r2"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Cloud Systems Inc"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Cloud Systems Inc"><span class="ds-icon">delete</span></button></div></div>
 
                               <!-- Row 3: Echo Ventures Group -->
                               <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Echo Ventures Group"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
@@ -15886,7 +15916,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$57,800.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-row="pt-r3"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Echo Ventures Group"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Echo Ventures Group"><span class="ds-icon">delete</span></button></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r3"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Echo Ventures Group"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Echo Ventures Group"><span class="ds-icon">delete</span></button></div></div>
 
                               <!-- Row 4: Frontier Corp -->
                               <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Frontier Corp"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
@@ -15895,7 +15925,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$22,400.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-row="pt-r4"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Frontier Corp"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Frontier Corp"><span class="ds-icon">delete</span></button></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r4"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Frontier Corp"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Frontier Corp"><span class="ds-icon">delete</span></button></div></div>
 
                               <!-- Row 5: Meridian Partners -->
                               <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Meridian Partners"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
@@ -15904,15 +15934,111 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Finance</span></div></div>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
                               <div class="ds-table-row-cell sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$8,750.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" data-row="pt-r5"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Meridian Partners"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Meridian Partners"><span class="ds-icon">delete</span></button></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r5"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Meridian Partners"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Meridian Partners"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 6: Northgate Solutions -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r6"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Northgate Solutions"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r6"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Northgate Solutions</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r6"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">hello@northgate.io</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r6"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r6"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Inactive</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r6"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$6,300.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r6"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Northgate Solutions"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Northgate Solutions"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 7: Orbit Analytics -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r7"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Orbit Analytics"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r7"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Orbit Analytics</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r7"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">data@orbitanalytics.com</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r7"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r7"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r7"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$43,100.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r7"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Orbit Analytics"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Orbit Analytics"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 8: Pinnacle Group -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r8"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Pinnacle Group"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r8"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pinnacle Group</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r8"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">info@pinnaclegroup.net</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r8"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Finance</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r8"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r8"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$19,650.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r8"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Pinnacle Group"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Pinnacle Group"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 9: Quantum Logistics -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r9"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Quantum Logistics"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r9"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Quantum Logistics</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r9"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">ops@quantumlogistics.com</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r9"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Operations</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r9"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r9"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$77,400.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r9"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Quantum Logistics"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Quantum Logistics"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 10: Redwood Technologies -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r10"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Redwood Technologies"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r10"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Redwood Technologies</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r10"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">support@redwoodtech.com</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r10"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Product</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r10"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r10"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$11,900.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r10"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Redwood Technologies"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Redwood Technologies"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 11: Silverline Media -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r11"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Silverline Media"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r11"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Silverline Media</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r11"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">press@silverlinemedia.com</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r11"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Marketing</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r11"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r11"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$5,480.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r11"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Silverline Media"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Silverline Media"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 12: Titanium Works -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r12"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Titanium Works"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r12"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Titanium Works</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r12"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">build@titaniumworks.io</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r12"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r12"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Inactive</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r12"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$34,200.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r12"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Titanium Works"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Titanium Works"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 13: Unified Data Co -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r13"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Unified Data Co"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r13"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Unified Data Co</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r13"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">admin@unifieddata.co</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r13"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Operations</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r13"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r13"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$9,120.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r13"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Unified Data Co"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Unified Data Co"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 14: Vantage Software -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r14"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Vantage Software"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r14"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Vantage Software</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r14"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">sales@vantagesoft.com</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r14"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r14"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r14"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$62,500.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r14"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Vantage Software"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Vantage Software"><span class="ds-icon">delete</span></button></div></div>
+
+                              <!-- Row 15: Westfield Holdings -->
+                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only sim-cell" data-row="pt-r15"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select Westfield Holdings"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r15"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Westfield Holdings</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r15"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">legal@westfieldhold.com</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r15"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Finance</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r15"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
+                              <div class="ds-table-row-cell sim-cell" data-row="pt-r15"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$28,900.00</span></div></div>
+                              <div class="ds-table-row-cell ds-table-pinned-right sim-cell" style="position: sticky; right: 0; z-index: 1;" data-row="pt-r15"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Westfield Holdings"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Westfield Holdings"><span class="ds-icon">delete</span></button></div></div>
 
                             </div><!-- /data rows grid -->
+
+                            <!-- No-results state -->
+                            <div id="pt-table-no-results" role="status" aria-live="polite"
+                              style="display:none; padding: 48px 24px; text-align: center; color: var(--color-text-subtle); font-size: 14px;">
+                              No customers match your search.
+                            </div>
 
                           </div><!-- /min-width wrapper -->
                         </div><!-- /table-scroll-pt -->
 
-                        <!-- Status bar (values row) -->
-                        <div class="ds-table-status-bar" style="width: 100%;">
+                        <!-- Status bar (values row) — hidden: no values selected in column panel -->
+                        <div class="ds-table-status-bar" style="width: 100%; display: none;">
                           <div class="ds-table-status-bar__counts">
                             <span class="ds-table-status-bar__stat">
                               <span class="ds-table-status-bar__stat-label">Rows:</span>
@@ -15996,7 +16122,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                           </div>
                         </div>
 
-                      </div><!-- /main table content -->
+                        </div><!-- /grid data column -->
 
                       <!-- ── Column panel ───────────────────────────────── -->
                       <div class="ds-column-panel" id="table-column-panel-pt">
@@ -16010,10 +16136,11 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                         </div>
 
                         <!-- 2. Column Visibility -->
-                        <div class="ds-column-panel__section-hd">
+                        <button type="button" class="ds-column-panel__section-hd" aria-expanded="true" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true' ? 'false' : 'true')">
                           <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">visibility</span>
                           <span class="ds-column-panel__section-title">Column Visibility</span>
-                        </div>
+                          <span class="ds-icon ds-icon--sm ds-column-panel__expand-icon" aria-hidden="true">arrow_drop_down</span>
+                        </button>
                         <div class="ds-column-panel__col-list" id="column-panel-list-pt">
 
                           <div class="ds-column-panel__col-row ds-column-panel__col-row--system" data-col-key="checkbox">
@@ -16111,6 +16238,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                         </button>
 
                       </div><!-- /ds-column-panel -->
+
+                        </div><!-- /grid body row -->
 
                     </div><!-- /table-sim-pt -->
                   </div><!-- /ds-page-content__main -->
@@ -16562,24 +16691,25 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     });
   })();
 
-  // Table sim — column resize via drag handles
-  // Track explicit px widths; email stays 1fr unless manually resized
+  // Table sim — column resize + drag to reorder
+  // Track explicit px widths per column key; email stays 1fr unless manually resized
   var colWidths = { customer: 200, email: null, department: 160, status: 140, amount: 130 };
+  // Current visual order of draggable columns (excludes fixed checkbox + actions)
+  var colOrder = ['customer', 'email', 'department', 'status', 'amount'];
 
   function buildTableTemplate() {
-    return '56px ' +
-      colWidths.customer + 'px ' +
-      (colWidths.email !== null ? colWidths.email + 'px' : '1fr') + ' ' +
-      colWidths.department + 'px ' +
-      colWidths.status + 'px ' +
-      colWidths.amount + 'px ' +
-      '100px';
+    var parts = ['56px']; // fixed checkbox
+    colOrder.forEach(function(col) {
+      parts.push(colWidths[col] !== null ? colWidths[col] + 'px' : '1fr');
+    });
+    parts.push('100px'); // fixed pinned-right actions
+    return parts.join(' ');
   }
 
   function applyTableTemplate() {
     var t = buildTableTemplate();
-    var hdr = document.getElementById('table-header-grid');
-    var data = document.getElementById('table-data-grid');
+    var hdr = document.getElementById('pt-header-grid');
+    var data = document.getElementById('pt-data-grid');
     if (hdr) hdr.style.gridTemplateColumns = t;
     if (data) data.style.gridTemplateColumns = t;
   }
@@ -16589,6 +16719,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       e.preventDefault();
       var colName = handle.getAttribute('data-resize-col');
       if (!(colName in colWidths)) return;
+
       var headerCell = handle.closest('.ds-table-header-cell');
       var startX = e.clientX;
       var startWidth = headerCell.offsetWidth;
@@ -16606,6 +16737,175 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       document.addEventListener('mouseup', onUp);
     });
   });
+
+  // Table sim — column drag to reorder
+  // Drag from the label area of any header cell (not resize handles or buttons).
+  // Shows a floating ghost + drop-position indicator. On release, reorders the
+  // header cells and all data-row cells together, then rebuilds the grid template.
+  (function() {
+    var NUM_COLS = 7; // checkbox + 5 data + actions (pinned right)
+    var hdrGrid = document.getElementById('pt-header-grid');
+    var datGrid = document.getElementById('pt-data-grid');
+    if (!hdrGrid || !datGrid) return;
+
+    var dragState = null;
+
+    // Floating ghost label that follows the cursor during drag
+    var ghost = document.createElement('div');
+    ghost.style.cssText =
+      'position:fixed;pointer-events:none;z-index:9999;display:none;align-items:center;' +
+      'background:var(--color-surface-default);border:2px solid var(--color-border-brand);' +
+      'border-radius:var(--radius-sm);padding:0 12px;height:32px;' +
+      'font-family:var(--ref-typescale-label-medium-font);' +
+      'font-size:var(--ref-typescale-label-medium-size);' +
+      'font-weight:var(--ref-typescale-label-medium-weight-prominent);' +
+      'color:var(--color-text-primary);white-space:nowrap;box-shadow:var(--shadow-elevation-2);';
+    document.body.appendChild(ghost);
+
+    // Vertical line showing the drop insertion point
+    var dropIndicator = document.createElement('div');
+    dropIndicator.style.cssText =
+      'position:fixed;pointer-events:none;z-index:9998;display:none;' +
+      'width:3px;background:var(--color-border-brand);border-radius:2px;';
+    document.body.appendChild(dropIndicator);
+
+    // Returns the 5 draggable header cells in current DOM (= visual) order
+    function getDraggableHeaders() {
+      return Array.from(hdrGrid.children).slice(1, NUM_COLS - 1);
+    }
+
+    // Which column key should the dragged column be inserted before?
+    // Returns null → insert at end.
+    function findInsertBeforeKey(mouseX) {
+      var dragged = dragState.colKey;
+      var headers = getDraggableHeaders();
+      for (var i = 0; i < headers.length; i++) {
+        var k = headers[i].getAttribute('data-col-key');
+        if (!k || k === dragged) continue;
+        var r = headers[i].getBoundingClientRect();
+        if (mouseX < r.left + r.width / 2) return k;
+      }
+      return null;
+    }
+
+    // Returns the fixed x-coordinate (viewport) where the drop indicator should sit
+    function getDropX(mouseX) {
+      var dragged = dragState.colKey;
+      var headers = getDraggableHeaders();
+      for (var i = 0; i < headers.length; i++) {
+        var k = headers[i].getAttribute('data-col-key');
+        if (!k || k === dragged) continue;
+        var r = headers[i].getBoundingClientRect();
+        if (mouseX < r.left + r.width / 2) return r.left;
+      }
+      // After last non-dragged col → right edge
+      for (var j = headers.length - 1; j >= 0; j--) {
+        var kk = headers[j].getAttribute('data-col-key');
+        if (kk && kk !== dragged) return headers[j].getBoundingClientRect().right;
+      }
+      return null;
+    }
+
+    // Execute the column reorder: update colOrder, reorder DOM children, rebuild template
+    function performDrop(mouseX) {
+      var dragged   = dragState.colKey;
+      var fromIdx   = colOrder.indexOf(dragged);        // 0-based in colOrder
+      var insertBefore = findInsertBeforeKey(mouseX);
+
+      var newOrder = colOrder.filter(function(k) { return k !== dragged; });
+      if (insertBefore === null) {
+        newOrder.push(dragged);
+      } else {
+        newOrder.splice(newOrder.indexOf(insertBefore), 0, dragged);
+      }
+      var toIdx = newOrder.indexOf(dragged);            // 0-based in newOrder
+
+      if (fromIdx === toIdx) return; // nothing moved
+
+      // ── Reorder header children (fromIdx+1 → toIdx+1, skipping checkbox at 0) ──
+      var hdrKids = Array.from(hdrGrid.children);
+      var movedHdr = hdrKids.splice(fromIdx + 1, 1)[0];
+      hdrKids.splice(toIdx + 1, 0, movedHdr);
+      var hf = document.createDocumentFragment();
+      hdrKids.forEach(function(el) { hf.appendChild(el); });
+      hdrGrid.appendChild(hf);
+
+      // ── Reorder data cells: each row is NUM_COLS flat siblings ───────────────
+      var allCells = Array.from(datGrid.children);
+      var numRows  = Math.round(allCells.length / NUM_COLS);
+      var newCells = [];
+      for (var row = 0; row < numRows; row++) {
+        var rowCells  = allCells.slice(row * NUM_COLS, (row + 1) * NUM_COLS);
+        var movedCell = rowCells.splice(fromIdx + 1, 1)[0];
+        rowCells.splice(toIdx + 1, 0, movedCell);
+        newCells = newCells.concat(rowCells);
+      }
+      var df = document.createDocumentFragment();
+      newCells.forEach(function(el) { df.appendChild(el); });
+      datGrid.appendChild(df);
+
+      colOrder = newOrder;
+      applyTableTemplate();
+    }
+
+    // Initiate drag on mousedown over the label / content area
+    hdrGrid.addEventListener('mousedown', function(e) {
+      var cell = e.target.closest('[data-col-key]');
+      if (!cell) return;
+      // Let resize handles and action buttons handle their own events
+      if (e.target.closest('.ds-table-header-cell__resize-handle') ||
+          e.target.closest('button')) return;
+
+      var colKey  = cell.getAttribute('data-col-key');
+      var labelEl = cell.querySelector('.ds-table-header-cell__label');
+      e.preventDefault();
+
+      dragState = { colKey: colKey, started: false, startX: e.clientX, startY: e.clientY };
+      ghost.textContent = labelEl ? labelEl.textContent.trim() : colKey;
+      cell.classList.add('ds-table-header-cell--dragging');
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!dragState) return;
+      // Require 4px movement before starting the drag visual
+      if (!dragState.started) {
+        if (Math.abs(e.clientX - dragState.startX) < 4 &&
+            Math.abs(e.clientY - dragState.startY) < 4) return;
+        dragState.started = true;
+        ghost.style.display = 'flex';
+      }
+
+      ghost.style.left = (e.clientX + 16) + 'px';
+      ghost.style.top  = (e.clientY - 16) + 'px';
+
+      var hdrRect = hdrGrid.getBoundingClientRect();
+      var dropX   = getDropX(e.clientX);
+      if (dropX !== null) {
+        dropIndicator.style.display = 'block';
+        dropIndicator.style.left   = (dropX - 1.5) + 'px';
+        dropIndicator.style.top    = hdrRect.top + 'px';
+        dropIndicator.style.height = hdrRect.height + 'px';
+      } else {
+        dropIndicator.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('mouseup', function(e) {
+      if (!dragState) return;
+      var wasStarted = dragState.started;
+
+      hdrGrid.querySelectorAll('.ds-table-header-cell--dragging').forEach(function(el) {
+        el.classList.remove('ds-table-header-cell--dragging');
+      });
+      ghost.style.display        = 'none';
+      dropIndicator.style.display = 'none';
+      document.body.style.userSelect = '';
+
+      if (wasStarted) performDrop(e.clientX);
+      dragState = null;
+    });
+  })();
 
   // Table sim — row hover: highlight all cells in the same row
   document.querySelectorAll('.sim-cell').forEach(function(cell) {
@@ -16837,25 +17137,22 @@ function closeColumnPanelPT() {
   }
 }
 
-// ── Density toggle (row groups bar + column panel) ───────────────────────────
+// ── Density toggle (column panel) ────────────────────────────────────────────
 function ptSetDensity(mode, clickedBtn) {
-  // Update both the row groups bar buttons and column panel buttons in sync
-  var allGroups = [
-    ['pt-comfort-btn', 'pt-compact-btn'],
-    ['pt-col-comfort',  'pt-col-compact'],
-  ];
-  allGroups.forEach(function(pair) {
-    var comfortBtn = document.getElementById(pair[0]);
-    var compactBtn = document.getElementById(pair[1]);
-    if (!comfortBtn || !compactBtn) { return; }
-    if (mode === 'comfort') {
-      comfortBtn.classList.add('is-selected');    comfortBtn.setAttribute('aria-pressed', 'true');
-      compactBtn.classList.remove('is-selected'); compactBtn.setAttribute('aria-pressed', 'false');
-    } else {
-      compactBtn.classList.add('is-selected');    compactBtn.setAttribute('aria-pressed', 'true');
-      comfortBtn.classList.remove('is-selected'); comfortBtn.setAttribute('aria-pressed', 'false');
-    }
-  });
+  // Apply density token to row heights via data attribute
+  var sim = document.getElementById('table-sim-pt');
+  sim.setAttribute('data-density', mode);
+
+  // Sync column panel toggle button states
+  var comfortBtn = document.getElementById('pt-col-comfort');
+  var compactBtn = document.getElementById('pt-col-compact');
+  if (mode === 'comfort') {
+    comfortBtn.classList.add('is-selected');    comfortBtn.setAttribute('aria-pressed', 'true');
+    compactBtn.classList.remove('is-selected'); compactBtn.setAttribute('aria-pressed', 'false');
+  } else {
+    compactBtn.classList.add('is-selected');    compactBtn.setAttribute('aria-pressed', 'true');
+    comfortBtn.classList.remove('is-selected'); comfortBtn.setAttribute('aria-pressed', 'false');
+  }
 }
 
 // ── Column visibility toggle (column panel) ──────────────────────────────────
@@ -16873,6 +17170,84 @@ function dsToggleColVisPT(checkbox) {
     icon.classList.remove('ds-icon--filled');
     icon.textContent = 'check_box_outline_blank';
   }
+}
+
+// ── Table keyword search with highlight ─────────────────────────────────────
+function ptEscHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function ptHighlight(text, query) {
+  var safe = ptEscHtml(text);
+  var reQ  = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return safe.replace(new RegExp('(' + reQ + ')', 'gi'),
+    '<mark class="ds-table-highlight">$1</mark>');
+}
+
+function ptTableSearch(input) {
+  var query    = input.value.trim();
+  var clearBtn = document.getElementById('pt-search-clear');
+  var alert    = document.getElementById('pt-search-results-alert');
+  var alertTxt = document.getElementById('pt-search-results-text');
+  if (clearBtn) clearBtn.style.display = query ? '' : 'none';
+
+  // Collect all data spans — store originals on first pass
+  var allSpans = document.querySelectorAll('#table-scroll-pt .ds-table-row-cell__data');
+  allSpans.forEach(function(span) {
+    if (!span.hasAttribute('data-orig')) span.setAttribute('data-orig', span.textContent);
+    span.innerHTML = ptEscHtml(span.getAttribute('data-orig'));
+  });
+
+  // Gather unique row IDs in document order
+  var allCells = document.querySelectorAll('#table-scroll-pt .sim-cell[data-row]');
+  var rowIds = [], seen = {};
+  allCells.forEach(function(c) {
+    if (!seen[c.dataset.row]) { seen[c.dataset.row] = true; rowIds.push(c.dataset.row); }
+  });
+
+  var noResults = document.getElementById('pt-table-no-results');
+
+  if (!query) {
+    allCells.forEach(function(c) { c.style.display = ''; });
+    if (noResults) noResults.style.display = 'none';
+    if (alert) alert.style.display = 'none';
+    return;
+  }
+
+  var lowerQ = query.toLowerCase();
+  var matchCount = 0;
+
+  rowIds.forEach(function(id) {
+    var cells = document.querySelectorAll('#table-scroll-pt .sim-cell[data-row="' + id + '"]');
+    var spans = document.querySelectorAll('#table-scroll-pt .sim-cell[data-row="' + id + '"] .ds-table-row-cell__data');
+    var match = false;
+    spans.forEach(function(s) {
+      if (s.getAttribute('data-orig').toLowerCase().includes(lowerQ)) match = true;
+    });
+    if (match) {
+      matchCount++;
+      cells.forEach(function(c) { c.style.display = ''; });
+      spans.forEach(function(s) {
+        s.innerHTML = ptHighlight(s.getAttribute('data-orig'), query);
+      });
+    } else {
+      cells.forEach(function(c) { c.style.display = 'none'; });
+    }
+  });
+
+  if (noResults) noResults.style.display = matchCount ? 'none' : '';
+
+  if (alert && alertTxt) {
+    var label = matchCount === 1 ? 'match' : 'matches';
+    alertTxt.textContent = 'Found ' + matchCount + ' ' + label + ' for \u201c' + query + '\u201d';
+    alert.style.display = '';
+  }
+}
+
+function ptTableSearchClear() {
+  var input = document.getElementById('pt-search-input');
+  if (input) { input.value = ''; ptTableSearch(input); input.focus(); }
 }
 </script>
 
@@ -17130,6 +17505,7 @@ function closeNavTab(closeBtn) {
       var id = menu.getAttribute('aria-labelledby');
       if (id === exceptId) return;
       menu.classList.remove('is-open');
+      menu.classList.remove('is-open--above');
       var inp = getInput(id);
       if (inp) {
         inp.setAttribute('aria-expanded', 'false');
@@ -17169,8 +17545,15 @@ function closeNavTab(closeBtn) {
     // Show all items (reset any previous filter)
     menu.querySelectorAll('.ds-menu__item').forEach(function (b) { b.style.display = ''; });
 
+    menu.classList.remove('is-open--above');
     menu.classList.add('is-open');
     inp.setAttribute('aria-expanded', 'true');
+
+    // Flip above if the menu bottom would exceed the viewport
+    var menuRect = menu.getBoundingClientRect();
+    if (menuRect.bottom > (window.innerHeight || document.documentElement.clientHeight)) {
+      menu.classList.add('is-open--above');
+    }
   };
 
   window.dsSelectFilter = function (inputId, query) {
@@ -17192,6 +17575,7 @@ function closeNavTab(closeBtn) {
       if (menu.contains(document.activeElement)) return;
       var inp = getInput(inputId);
       menu.classList.remove('is-open');
+      menu.classList.remove('is-open--above');
       if (inp) {
         inp.setAttribute('aria-expanded', 'false');
         var s = state[inputId] || {};
@@ -17234,6 +17618,7 @@ function closeNavTab(closeBtn) {
 
     // Close and return focus
     menu.classList.remove('is-open');
+    menu.classList.remove('is-open--above');
     inp.setAttribute('aria-expanded', 'false');
     inp.focus();
   };
@@ -17250,6 +17635,7 @@ function closeNavTab(closeBtn) {
       var id = menu.getAttribute('aria-labelledby');
       var inp = getInput(id);
       menu.classList.remove('is-open');
+      menu.classList.remove('is-open--above');
       if (inp) {
         inp.setAttribute('aria-expanded', 'false');
         var s = state[id] || {};

@@ -43,7 +43,12 @@ export interface AgHeaderParams {
     removeEventListener(event: string, listener: () => void): void;
   };
   api: {
-    setColumnWidth(key: string, newWidth: number): void;
+    /**
+     * finished: false during drag (flex columns reflow in real-time),
+     * finished: true on release (AG Grid finalizes state and fires columnResized).
+     * Columns with flex: 1 in their colDef automatically fill remaining space.
+     */
+    setColumnWidth(key: string, newWidth: number, finished?: boolean): void;
   };
   progressSort(multiSort?: boolean): void;
   showColumnMenu(source: HTMLElement): void;
@@ -105,6 +110,7 @@ export class DsTableHeaderCellComponent implements OnDestroy {
   // Resize drag state
   private resizeStartX = 0;
   private resizeStartWidth = 0;
+  private resizeCurrentWidth = 0;
   private boundMouseMove?: (e: MouseEvent) => void;
   private boundMouseUp?: () => void;
 
@@ -215,15 +221,31 @@ export class DsTableHeaderCellComponent implements OnDestroy {
 
     this.resizeStartX = event.clientX;
     this.resizeStartWidth = this.agParams?.column.getActualWidth() ?? 200;
+    this.resizeCurrentWidth = this.resizeStartWidth;
 
     this.boundMouseMove = (e: MouseEvent) => {
       const delta = e.clientX - this.resizeStartX;
-      const newWidth = Math.max(50, this.resizeStartWidth + delta);
-      this.agParams?.api?.setColumnWidth(this.agParams.column.getColId(), newWidth);
-      this.widthChange.emit(newWidth);
+      this.resizeCurrentWidth = Math.max(50, this.resizeStartWidth + delta);
+      // finished: false — AG Grid keeps the resize in progress so flex columns
+      // redistribute their space in real-time as the user drags.
+      this.agParams?.api?.setColumnWidth(
+        this.agParams.column.getColId(),
+        this.resizeCurrentWidth,
+        false,
+      );
+      this.widthChange.emit(this.resizeCurrentWidth);
     };
 
-    this.boundMouseUp = () => this._cleanupResizeListeners();
+    this.boundMouseUp = () => {
+      // finished: true — AG Grid finalizes column state, fires columnResized,
+      // and flex columns settle to their final widths.
+      this.agParams?.api?.setColumnWidth(
+        this.agParams!.column.getColId(),
+        this.resizeCurrentWidth,
+        true,
+      );
+      this._cleanupResizeListeners();
+    };
 
     document.addEventListener('mousemove', this.boundMouseMove);
     document.addEventListener('mouseup', this.boundMouseUp);

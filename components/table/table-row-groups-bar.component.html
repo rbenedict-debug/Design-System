@@ -37,28 +37,5 @@
     </span>
   </div>
 
-  <!-- Right — density toggle -->
-  <div class="ds-table-row-groups-bar__density">
-    <div class="ds-density-toggle" role="group" aria-label="Row density">
-      <button
-        type="button"
-        class="ds-density-toggle__btn"
-        [class.is-selected]="density === 'comfort'"
-        [attr.aria-pressed]="density === 'comfort'"
-        (click)="onDensityChange('comfort')"
-      >
-        Comfort
-      </button>
-      <button
-        type="button"
-        class="ds-density-toggle__btn"
-        [class.is-selected]="density === 'compact'"
-        [attr.aria-pressed]="density === 'compact'"
-        (click)="onDensityChange('compact')"
-      >
-        Compact
-      </button>
-    </div>
-  </div>
 
 </div>

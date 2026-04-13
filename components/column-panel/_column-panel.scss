@@ -22,11 +22,12 @@
 //       </div>
 //     </div>
 //
-//     <!-- 2. Column Visibility -->
-//     <div class="ds-column-panel__section-hd">
+//     <!-- 2. Column Visibility (collapsible — <button> toggles aria-expanded) -->
+//     <button type="button" class="ds-column-panel__section-hd" aria-expanded="true">
 //       <span class="ds-icon ds-column-panel__section-icon">visibility</span>
 //       <span class="ds-column-panel__section-title">Column Visibility</span>
-//     </div>
+//       <span class="ds-icon ds-icon--sm ds-column-panel__expand-icon">arrow_drop_down</span>
+//     </button>
 //     <div class="ds-column-panel__col-list">
 //       <div class="ds-column-panel__col-row" draggable="true">
 //         <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked"
@@ -93,7 +94,7 @@
   flex-shrink: 0;
   border-left: 1px solid var(--color-border-secondary);
   background: var(--color-surface-subtle);
-  overflow: hidden;
+  overflow-y: auto;
 
   // ── 1. Density toggle ─────────────────────────────────────────────────────
 
@@ -113,15 +114,19 @@
     }
   }
 
-  // ── 2. Column list (scrollable) ───────────────────────────────────────────
+  // ── 2. Column list — natural height, no internal scroll ──────────────────
 
   &__col-list {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    flex: 1 0 0;
-    min-height: 0;
+
+    // Hidden when the Column Visibility section is collapsed.
+    // Driven by aria-expanded on the adjacent section header button.
+    &.is-collapsed {
+      display: none;
+    }
   }
+
 
   // ── Section header (Visibility / Row Groups / Values) ─────────────────────
 
@@ -279,6 +284,87 @@
     .ds-icon {
       color: var(--color-icon-brand);
       flex-shrink: 0;
+    }
+  }
+}
+
+// ── Collapsible Column Visibility section header ─────────────────────────────
+//
+// When the section header is a <button>, it toggles aria-expanded to
+// collapse/expand the adjacent column list. The expand icon rotates 90° when
+// collapsed. The CSS adjacent-sibling rule hides the col-list without JS.
+
+button.ds-column-panel__section-hd {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+
+  &:focus         { outline: none; }
+  &:focus-visible { box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
+  &:hover         { background: var(--overlay-hovered); }
+
+  .ds-column-panel__expand-icon {
+    margin-left: auto;
+    flex-shrink: 0;
+    color: var(--color-icon-subtle);
+    transition: transform 80ms ease;
+  }
+
+  &[aria-expanded="false"] .ds-column-panel__expand-icon {
+    transform: rotate(-90deg);
+  }
+}
+
+// Hide col-list when section header is collapsed (CSS-driven, no JS needed).
+button.ds-column-panel__section-hd[aria-expanded="false"] + .ds-column-panel__col-list {
+  display: none;
+}
+
+// ── Density toggle — Comfort / Compact segmented button ──────────────────────
+//
+// Two adjacent outlined buttons acting as a single-select toggle group.
+// Lives exclusively in the column panel density slot.
+
+.ds-density-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+
+  &__btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--color-surface-page);
+    border: 1px solid var(--color-border-primary);
+    border-radius: var(--radius-sm);
+    padding: 0 var(--spacing-md);
+    height: 42px;
+    cursor: pointer;
+    font-family: var(--ref-typescale-label-large-font);
+    font-size: var(--ref-typescale-label-large-size);
+    font-weight: var(--ref-typescale-label-large-weight-prominent);
+    line-height: var(--ref-typescale-label-large-line-height);
+    letter-spacing: var(--ref-typescale-label-large-tracking);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    position: relative;
+    transition: background 80ms ease, border-color 80ms ease, color 80ms ease;
+
+    &:focus { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+    &:hover:not(.is-selected) {
+      background: var(--overlay-hovered);
+    }
+
+    // Selected state — accent blue tint with active border
+    &.is-selected {
+      background: var(--color-surface-accent-blue);
+      border-color: var(--color-border-active);
+      color: var(--color-text-brand);
     }
   }
 }

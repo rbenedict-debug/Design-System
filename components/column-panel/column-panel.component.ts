@@ -43,7 +43,8 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { type TableDensity } from '../table/table-row-groups-bar.component';
+
+export type TableDensity = 'comfort' | 'compact';
 
 export interface ColumnPanelItem {
   /** AG Grid column ID. */
@@ -101,6 +102,9 @@ export class DsColumnPanelComponent implements OnDestroy {
 
   /** Column list — auto-populated when [api] is bound, otherwise set manually. */
   @Input() columns: ColumnPanelItem[] = [];
+
+  /** Whether the Column Visibility section is expanded (controls the collapse toggle). */
+  colVisibilityExpanded = true;
 
   /** Current row density. Use [(density)] for two-way binding. */
   @Input() density: TableDensity = 'comfort';
@@ -165,6 +169,10 @@ export class DsColumnPanelComponent implements OnDestroy {
   }
 
   // ── User actions ──────────────────────────────────────────────────────────
+
+  toggleColVisibility(): void {
+    this.colVisibilityExpanded = !this.colVisibilityExpanded;
+  }
 
   onDensityChange(value: TableDensity): void {
     this.density = value;
