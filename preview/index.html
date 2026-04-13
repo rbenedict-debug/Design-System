@@ -8628,6 +8628,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 
       <div class="nav-group-label">Table Primitives</div>
       <a class="nav-link" href="#table-header-cell" onclick="setActive(this)"><span class="nav-dot"></span>Header Cell</a>
+      <a class="nav-link" href="#table-header-group-cell" onclick="setActive(this)"><span class="nav-dot"></span>Header Group Cell</a>
       <a class="nav-link" href="#table-row-cell" onclick="setActive(this)"><span class="nav-dot"></span>Row Cell</a>
       <a class="nav-link" href="#table-status-bar" onclick="setActive(this)"><span class="nav-dot"></span>Status Bar</a>
       <a class="nav-link" href="#table-row-groups-bar" onclick="setActive(this)"><span class="nav-dot"></span>Row Groups Bar</a>
@@ -13446,6 +13447,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         <div class="demo-row">
           <div class="demo-row-label">Filter + menu</div>
           <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
+            <!-- Filter inactive -->
             <div class="ds-table-header-cell">
               <div class="ds-table-header-cell__resize-handle"></div>
               <div class="ds-table-header-cell__content">
@@ -13457,6 +13459,24 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 </button>
                 <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter column">
                   <span class="ds-icon ds-icon--filled">filter_alt</span>
+                </button>
+                <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                  <span class="ds-table-header-cell__resize-bar"></span>
+                </div>
+              </div>
+            </div>
+            <!-- Filter active — icon turns brand blue via __filter-icon--active -->
+            <div class="ds-table-header-cell">
+              <div class="ds-table-header-cell__resize-handle"></div>
+              <div class="ds-table-header-cell__content">
+                <span class="ds-table-header-cell__label">Invoice #</span>
+              </div>
+              <div class="ds-table-header-cell__actions">
+                <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Column options">
+                  <span class="ds-icon ds-table-header-cell__menu-icon">more_vert</span>
+                </button>
+                <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter active — click to edit">
+                  <span class="ds-icon ds-icon--filled ds-table-header-cell__filter-icon--active">filter_alt</span>
                 </button>
                 <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
                   <span class="ds-table-header-cell__resize-bar"></span>
@@ -13566,6 +13586,60 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
         </div> <!-- /component-demo -->
       </section>
+
+      <section class="section" id="table-header-group-cell">
+        <div class="section-header">
+          <h2 class="section-title">Table Header Group Cell</h2>
+          <p class="section-desc">AG Grid custom group header renderer. Sits above a set of child column headers. Matches the visual style of Header Cell — same height, background, and label typography. When the group has expandable children (<code>columnGroupShow: 'open'</code> on some children), a chevron appears and rotates on expand. Source: <code>components/table/table-header-group-cell.component.ts</code></p>
+        </div>
+
+        <div class="component-demo">
+
+        <!-- Non-expandable group — label only, no chevron -->
+        <div class="demo-row">
+          <div class="demo-row-label">Non-expandable</div>
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
+            <div class="ds-table-header-group-cell">
+              <div class="ds-table-header-group-cell__content">
+                <span class="ds-table-header-group-cell__label">Contact</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expandable, collapsed — chevron points right -->
+        <div class="demo-row">
+          <div class="demo-row-label">Expandable — collapsed</div>
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
+            <div class="ds-table-header-group-cell">
+              <div class="ds-table-header-group-cell__content">
+                <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Expand column group" aria-expanded="false">
+                  <span class="ds-icon ds-table-header-group-cell__chevron">chevron_right</span>
+                </button>
+                <span class="ds-table-header-group-cell__label">Contact</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expandable, expanded — chevron rotates 90° + brand blue -->
+        <div class="demo-row">
+          <div class="demo-row-label">Expandable — expanded</div>
+          <div class="demo-row-items" style="flex-direction:column; align-items:stretch; gap:0; width:480px;">
+            <div class="ds-table-header-group-cell ds-table-header-group-cell--expanded">
+              <div class="ds-table-header-group-cell__content">
+                <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Collapse column group" aria-expanded="true">
+                  <span class="ds-icon ds-table-header-group-cell__chevron">chevron_right</span>
+                </button>
+                <span class="ds-table-header-group-cell__label">Contact</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div> <!-- /component-demo -->
+      </section>
+
       <section class="section" id="table-row-cell">
         <div class="section-header">
           <h2 class="section-title">Table Row Cell</h2>
