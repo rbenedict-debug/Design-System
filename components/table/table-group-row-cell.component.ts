@@ -66,6 +66,26 @@ export interface AgGroupRowCellParams {
     /** Look up a column to resolve its display header name. */
     getColumn(key: string): { getColDef(): { headerName?: string } } | null;
   };
+
+  // ── groupRowRendererParams — merged onto params by AG Grid ────────────────
+  // Set via gridOptions.groupRowRendererParams: { suppressCount: true, ... }
+
+  /**
+   * When true, hides the "(N)" child count badge next to the group value.
+   * Useful when row counts are shown in the aggregates region or via the status bar.
+   * Default: false (count shown).
+   */
+  suppressCount?: boolean;
+  /**
+   * When true, disables expand/collapse on double-click on the row.
+   * Default: false (double-click expands/collapses).
+   */
+  suppressDoubleClickExpand?: boolean;
+  /**
+   * When true, disables expand/collapse on Enter key press.
+   * Default: false (Enter expands/collapses).
+   */
+  suppressEnterExpand?: boolean;
 }
 
 /** A single aggregated stat shown on the right of the group row. */
@@ -95,6 +115,8 @@ export class DsTableGroupRowCellComponent implements OnDestroy {
   expanded    = false;
   childCount: number | null = null;
   aggregates: DsGroupAggStat[] = [];
+  /** When true, hides the "(N)" child count badge. Set via groupRowRendererParams. */
+  suppressCount = false;
 
   private _params?: AgGroupRowCellParams;
 
@@ -142,12 +164,13 @@ export class DsTableGroupRowCellComponent implements OnDestroy {
   // ── Private ──────────────────────────────────────────────────────────────
 
   private _apply(params: AgGroupRowCellParams): void {
-    this.value      = params.node.key ?? '';
-    this.level      = Math.min(params.node.level, 3);
-    this.expanded   = params.node.expanded;
-    this.childCount = params.node.allChildrenCount;
-    this.fieldLabel = this._resolveFieldLabel(params);
-    this.aggregates = this._resolveAggregates(params);
+    this.value         = params.node.key ?? '';
+    this.level         = Math.min(params.node.level, 3);
+    this.expanded      = params.node.expanded;
+    this.childCount    = params.node.allChildrenCount;
+    this.fieldLabel    = this._resolveFieldLabel(params);
+    this.aggregates    = this._resolveAggregates(params);
+    this.suppressCount = params.suppressCount ?? false;
   }
 
   private _resolveFieldLabel(params: AgGroupRowCellParams): string {

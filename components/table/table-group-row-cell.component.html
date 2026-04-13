@@ -29,9 +29,9 @@
     <span class="ds-table-group-row-cell__value">{{ value }}</span>
   </span>
 
-  <!-- Child row count -->
+  <!-- Child row count — hidden when suppressCount is set via groupRowRendererParams -->
   <span
-    *ngIf="childCount !== null"
+    *ngIf="!suppressCount && childCount !== null"
     class="ds-table-group-row-cell__count"
     aria-hidden="true"
   >({{ childCount }})</span>

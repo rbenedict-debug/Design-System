@@ -103,10 +103,19 @@ export const DS_TABLE_COLUMN_TYPES: Record<string, object> = {
   },
 
   /**
-   * Groupable column — enables drag-to-group via ds-column-panel row groups picker
-   * and ds-table-row-groups-bar. Requires AG Grid Enterprise.
-   * Also set groupDisplayType: 'groupRows' and groupRowRenderer: DsTableGroupRowCellComponent
-   * in gridOptions to use the Onflo group row renderer.
+   * Groupable column — sets enableRowGroup: true so the column appears in the
+   * ds-column-panel row groups picker and ds-table-row-groups-bar drop zone,
+   * allowing users to drag it into an active group at runtime.
+   *
+   * NOTE — enableRowGroup vs rowGroup:
+   *   enableRowGroup: true  → column CAN be grouped (appears in picker/drop zone).
+   *                           Set this via dsGroupable type.
+   *   rowGroup: true        → column IS grouped on grid init (default active group).
+   *                           Set this directly on the colDef, not via a type.
+   *
+   * Requires AG Grid Enterprise. Also set in gridOptions:
+   *   groupDisplayType: 'groupRows'
+   *   groupRowRenderer: DsTableGroupRowCellComponent
    */
   dsGroupable: {
     enableRowGroup: true,

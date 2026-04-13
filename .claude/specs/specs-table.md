@@ -239,6 +239,246 @@ AG Grid enforces a minimum 50px center viewport — if pinned columns are too wi
 
 ---
 
+## Row Grouping (Enterprise)
+
+Row grouping is an **AG Grid Enterprise** feature. It requires the `RowGroupingModule` and an Enterprise license. All four grouping modes work with the DS component system but the DS provides a native renderer only for `groupRows` mode.
+
+---
+
+### `rowGroup: true` vs `enableRowGroup: true`
+
+These are completely different properties that are frequently confused:
+
+| Property | Effect | Where to set |
+|---|---|---|
+| `rowGroup: true` on a colDef | The column is **grouped by default on grid init** | Directly on the colDef |
+| `enableRowGroup: true` on a colDef | The column **can be dragged into a group** by the user (appears in ds-column-panel and ds-table-row-groups-bar) | Via `type: 'dsGroupable'` or directly |
+
+`DS_TABLE_COLUMN_TYPES.dsGroupable` sets `enableRowGroup: true` only — it does not activate grouping on load. To group on load, also add `rowGroup: true` to the colDef:
+
+```typescript
+{ field: 'department', headerName: 'Department', type: 'dsGroupable', rowGroup: true }
+// This column appears in the picker AND is grouped by default.
+```
+
+---
+
+### `groupDisplayType` — four modes
+
+| Mode | Description | DS native renderer? |
+|---|---|---|
+| `'singleColumn'` *(default)* | One auto-generated group column; all hierarchy levels nested within it | No — AG Grid's `agGroupCellRenderer` |
+| `'multipleColumns'` | One auto-generated group column per hierarchy level | No — AG Grid's `agGroupCellRenderer` |
+| `'groupRows'` | Full-width group rows replace the group column | **Yes** — `DsTableGroupRowCellComponent` |
+| `'custom'` | Developer provides entirely custom group columns | Consumer-supplied |
+
+**Use `groupRows` for all Onflo tables.** It integrates with `DsTableGroupRowCellComponent`, `DsTableGroupExpansionStore`, and the aggregates pattern.
+
+`singleColumn` and `multipleColumns` use AG Grid's built-in `agGroupCellRenderer` for the group cell content. The auto group column header still uses `DsTableHeaderCellComponent` (inherited from `defaultColDef`), but the cell content is AG Grid's own renderer and will not automatically match DS visual styling.
+
+---
+
+### `groupRows` mode — complete setup
+
+```typescript
+import {
+  DsTableGroupRowCellComponent,
+  DsTableGroupExpansionStore,
+  DS_TABLE_DEFAULT_COL_DEF,
+  DS_TABLE_COLUMN_TYPES,
+} from '@onflo/design-system';
+
+const store = new DsTableGroupExpansionStore('my-page-grid');
+
+gridOptions: GridOptions = {
+  // Required for groupRows mode
+  groupDisplayType: 'groupRows',
+  groupRowRenderer: DsTableGroupRowCellComponent,
+
+  // Optional — hide child count badge in the group row
+  groupRowRendererParams: { suppressCount: false },
+
+  // Column config
+  defaultColDef:   DS_TABLE_DEFAULT_COL_DEF,
+  columnTypes:     DS_TABLE_COLUMN_TYPES,
+  columnDefs: [
+    { field: 'department', headerName: 'Department', type: 'dsGroupable', rowGroup: true },
+    { field: 'name',       headerName: 'Name',       flex: 1 },
+    { field: 'amount',     headerName: 'Amount',     type: ['dsNumeric', 'dsAggregatable'], aggFunc: 'sum' },
+  ],
+
+  // Expansion persistence
+  getRowId:             (p) => String(p.data.id),
+  isGroupOpenByDefault: (p) => store.isGroupOpenByDefault(p),
+  onRowGroupOpened:     (e) => store.onRowGroupOpened(e),
+
+  // Expand all groups on load (-1) or N levels (0 = all collapsed)
+  groupDefaultExpanded: 0,
+
+  // Keep group rows sticky at top during scroll (default: true — set false to disable)
+  suppressGroupRowsSticky: false,
+};
+```
+
+### `groupRowRendererParams` options for `DsTableGroupRowCellComponent`
+
+| Option | Type | Default | Purpose |
+|---|---|---|---|
+| `suppressCount` | boolean | `false` | Hide the "(N)" child count badge — useful when row counts appear in the status bar |
+| `suppressDoubleClickExpand` | boolean | `false` | Disable expand/collapse on double-click |
+| `suppressEnterExpand` | boolean | `false` | Disable expand/collapse on Enter key |
+
+---
+
+### `singleColumn` / `multipleColumns` mode — autoGroupColumnDef
+
+When not using `groupRows`, configure the auto-generated group column(s) via `autoGroupColumnDef`. This is merged with `defaultColDef` but AG Grid always uses `agGroupCellRenderer` for the cell — your `defaultColDef.cellRenderer` is ignored on the auto group column.
+
+```typescript
+gridOptions = {
+  groupDisplayType: 'singleColumn',   // or 'multipleColumns'
+  defaultColGroupDef: DS_TABLE_DEFAULT_COL_GROUP_DEF,
+  defaultColDef:      DS_TABLE_DEFAULT_COL_DEF,
+
+  autoGroupColumnDef: {
+    headerName: 'Group',
+    minWidth: 220,
+    // AG Grid's agGroupCellRenderer handles the chevron + count;
+    // innerRenderer controls the text content within the cell.
+    cellRendererParams: {
+      suppressCount: true,    // hide "(N)" count
+      innerRenderer: null,    // null = show the group value text directly
+    },
+  },
+};
+```
+
+`checkboxLocation: 'autoGroupColumn'` embeds selection checkboxes in the group column instead of a dedicated checkbox column:
+
+```typescript
+rowSelection: {
+  mode: 'multiRow',
+  checkboxLocation: 'autoGroupColumn',
+}
+```
+
+---
+
+### Group expansion
+
+| Option | Type | Default | Purpose |
+|---|---|---|---|
+| `groupDefaultExpanded` | number | `0` | Levels expanded on grid init; `-1` = all open |
+| `isGroupOpenByDefault` | callback | — | Per-group open/closed decision; use with `DsTableGroupExpansionStore` |
+| `suppressGroupRowsSticky` | boolean | `false` | Prevents group rows from sticking at the top during scroll |
+| `groupHideOpenParents` | boolean | `false` | Hides a group row when it is expanded (only child rows visible) |
+| `groupHideParentOfSingleChild` | boolean / `'leafGroupsOnly'` | `false` | Removes group row wrappers when a group has only one child |
+
+---
+
+### Column visibility when grouping
+
+By default, AG Grid hides the original data column when it becomes a row group (the data is already shown in the group row label). Control this with:
+
+```typescript
+// Prevent AG Grid from auto-hiding/showing columns when they're grouped/ungrouped
+suppressGroupChangesColumnVisibility: true,
+```
+
+When `suppressGroupChangesColumnVisibility: false` (default), consumers can still show the original column manually via `ds-column-panel`.
+
+---
+
+### Group row selection
+
+Requires `rowSelection.mode: 'multiRow'`. The `groupSelects` option controls how selecting a group row affects its descendants:
+
+| `groupSelects` value | Behaviour |
+|---|---|
+| `'self'` | Group selection has no effect on children |
+| `'descendants'` | Selecting the group selects all descendants |
+| `'filteredDescendants'` | Selecting the group selects only filtered-in descendants |
+
+```typescript
+rowSelection: {
+  mode: 'multiRow',
+  groupSelects: 'descendants',
+  checkboxLocation: 'autoGroupColumn',  // show checkbox in group row
+}
+```
+
+**Important**: When using `'descendants'` or `'filteredDescendants'`, `api.getSelectedNodes()` and `api.getSelectedRows()` return only **leaf rows**, not group nodes.
+
+---
+
+### Group sorting
+
+Groups inherit the sort order of their grouped column by default. To set a custom group order:
+
+**`initialGroupOrderComparator`** — sets the initial order of groups before any user sort:
+
+```typescript
+gridOptions = {
+  initialGroupOrderComparator: (params) =>
+    params.nodeA.allLeafChildren.length - params.nodeB.allLeafChildren.length,
+  // Sorts groups largest-first on load.
+  // Note: runs before aggregation — cannot use aggData here.
+};
+```
+
+**`autoGroupColumnDef.comparator`** — custom sort when the user clicks the group column header (decoupled from the underlying grouped column's comparator):
+
+```typescript
+autoGroupColumnDef: {
+  comparator: (valueA, valueB, nodeA, nodeB) =>
+    nodeA.allLeafChildren.length - nodeB.allLeafChildren.length,
+}
+```
+
+**Mixed sort indicator**: In `singleColumn` mode, if the grouped columns have conflicting sort directions, the group column header shows a "mixed sort" icon. This is AG Grid behaviour — no DS handling required.
+
+**`groupMaintainOrder: true`** — prevents groups from reordering when non-group columns are sorted (maintains the visual group position while sorting data within groups).
+
+---
+
+### Group row dragging
+
+#### Managed drag (Enterprise, client-side only)
+
+AG Grid automatically updates group membership when a row is dragged to a new group:
+
+```typescript
+gridOptions = {
+  rowDragManaged:             true,  // AG Grid manages reorder
+  refreshAfterGroupEdit:      true,  // re-evaluate grouping after drag changes a value
+  suppressMoveWhenRowDragging: true, // show drop target only (better performance)
+  getRowId: (p) => String(p.data.id),  // required for managed drag
+};
+```
+
+`refreshAfterGroupEdit: true` is required — without it, the grid does not re-evaluate group membership after the dragged row's column value changes.
+
+`rowDragManaged` only works with the **client-side row model**. Do not set it with server-side or infinite row models.
+
+#### Unmanaged drag (any row model)
+
+Handle group membership updates in application code via drag events:
+
+```typescript
+gridOptions = {
+  rowDragManaged: false,
+  // rowDrag on colDef can be a callback to restrict dragging to leaf rows:
+  // rowDrag: (params) => !params.node.group,
+};
+
+onRowDragMove(event: RowDragMoveEvent): void {
+  // Update the group column value on the dragged row's data, then:
+  this.gridApi.applyTransaction({ update: [updatedRow] });
+}
+```
+
+---
+
 ## Row Configuration
 
 ### Row IDs (`getRowId`)
@@ -697,7 +937,7 @@ Multiple types can be composed: `type: ['dsGroupable', 'dsNumeric']`.
 
 ### Table Group Row Cell (`ds-table-group-row-cell`)
 - **Purpose**: AG Grid custom renderer for full-width group rows. Set as `groupRowRenderer` in gridOptions when using `groupDisplayType: 'groupRows'`. **Requires AG Grid Enterprise license** — `groupRows` is an Enterprise-only feature.
-- **`enableRowGroup: true`** must be set on any colDef that consumers can add to a row group (via `ds-column-panel` or `ds-table-row-groups-bar`). Without it, those columns will not group correctly when added programmatically.
+- **`enableRowGroup: true`** must be set on any colDef that consumers can add to a row group (via `ds-column-panel` or `ds-table-row-groups-bar`). Without it, those columns will not group correctly when added programmatically. This is separate from `rowGroup: true` which activates grouping on grid init — see Row Grouping section.
 - **Height**: fills AG Grid row height (controlled by `rowHeight` / `groupRowHeight` grid options); `min-height: 40px` ensures compact mode renders correctly
 - **Background**: `--color-surface-subtle`; **border-bottom**: 1px `--color-border-secondary`
 - **Layout (left to right)**: indent spacer + toggle button + label ("FieldName: Value") + count "(N)" + flex spacer + aggregates region
@@ -709,6 +949,7 @@ Multiple types can be composed: `type: ['dsGroupable', 'dsNumeric']`.
 - **Count** (`__count`): label-medium regular, `--color-text-secondary`; e.g. "(4)"
 - **Aggregates region** (`__aggregates`): right-aligned; `gap: var(--spacing-xl)` between stat pairs; each `__stat` has `__stat-label` (label-medium regular, `--color-text-secondary`) + `__stat-value` (label-medium weight-prominent, `--color-text-primary`); populated from `params.node.aggData` when `aggFunc` is set on column definitions; `aria-hidden="true"` (announced via status bar)
 - **Column header lookup**: uses `params.api.getColumn(field)?.getColDef()?.headerName` for display label; falls back to capitalised field name
+- **`groupRowRendererParams`**: AG Grid merges these onto `params` before calling `agInit`. Supported: `suppressCount` (hide the "(N)" count badge), `suppressDoubleClickExpand`, `suppressEnterExpand`. Set in `gridOptions.groupRowRendererParams`.
 - **AG Grid integration**: duck-types `ICellRendererAngularComp` (no hard ag-grid import) — `agInit(params)`, `refresh(params)`, listens to `expandedChanged` node event; cleans up in `ngOnDestroy`; host element `display: block; width: 100%; height: 100%` to fill full-width AG Grid cell
 - **No Angular Material base** — custom component
 
