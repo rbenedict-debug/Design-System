@@ -14404,6 +14404,11 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           var toast    = document.getElementById('ds-ctx-toast');
           var toastTimer;
 
+          // Move overlay elements to document.body so they are never trapped inside
+          // a hidden page tab div (display:none on a parent clips fixed children).
+          document.body.appendChild(backdrop);
+          document.body.appendChild(panel);
+
           // ── Close ────────────────────────────────────────────────────────
           window.dsCtxClose = function() {
             backdrop.style.display = 'none';
