@@ -1403,20 +1403,40 @@ Recommended approach for very large datasets: use **pagination** (`pagination: t
 - **Sections (top to bottom)**:
   1. **Density toggle** — `ds-density-toggle` fills full panel width; Comfort/Compact; `is-selected` + `aria-pressed` on each button
   2. **Column Visibility** — collapsible section header (`<button aria-expanded>` + `visibility` icon + "Column Visibility"); col-list shown/hidden by adjacent-sibling CSS rule
-  3. Divider
-  4. **Pivot Mode** — single row with label + `ds-toggle` switch on the right
-  5. Divider
-  6. **Row Groups** — section header (`drag_indicator` icon + "Row Groups"); active group chips (`__group-chips`, `ds-tag ds-tag--sm`); `__add-btn` with `aria-expanded`; inline `ds-column-panel__picker` menu
-  7. Divider
-  8. **Values** — section header (`functions` icon + "Values"); active value chips; `__add-btn` with `aria-expanded`; inline picker menu
+  3. Divider + **Pivot Mode** — single row with label + `ds-toggle` switch on the right _(hidden by `suppressPivotMode`)_
+  4. Divider + **Row Groups** — section header (`drag_indicator` icon + "Row Groups"); active group chips (`__group-chips`, `ds-tag ds-tag--sm`); `__add-btn` with `aria-expanded`; inline `ds-column-panel__picker` menu _(hidden by `suppressRowGroups`)_
+  5. Divider + **Values** — section header (`functions` icon + "Values"); active value chips; `__add-btn` with `aria-expanded`; inline picker menu _(hidden by `suppressValues`)_
 - **Column row** (`__col-row`, 42px): `__col-checkbox` (42×42 touch target, icon-based checkbox) + `__col-drag` (drag_indicator sm, `--color-icon-subtle`) + `__col-name` (body-medium, fills remaining space); `--system` modifier suppresses interaction (opacity 0.4, no pointer events)
 - **Checkbox icon**: `check_box_outline_blank` (unchecked, `--color-border-input`) / `check_box` filled (checked, `--color-surface-brand-bold`); `role="checkbox"` + `aria-checked`
 - **Active group chips** (`__group-chips`): flex-wrap container of `ds-tag ds-tag--sm` chips with remove buttons; hidden when empty; remove button calls `removeRowGroupColumn(colId)` / `removeValueColumn(colId)`
 - **Add button** (`__add-btn`): 42px height, full width, `add_circle_outline` icon + "Add Column" text, `--color-text-brand` / `--color-icon-brand`; `aria-expanded` reflects picker state
-- **Inline picker menu** (`ds-column-panel__picker`): `ds-menu` class + `__picker` modifier; renders in normal document flow (no absolute positioning — panel has `overflow-y: auto`); lists non-system, non-active columns as `ds-menu__item` buttons; outside-click closes via `@HostListener('document:click')` with `event.stopPropagation()` on button and menu clicks; empty state shows "All columns grouped"
+- **Inline picker menu** (`ds-column-panel__picker`): `ds-menu` class + `__picker` modifier; renders in normal document flow (no absolute positioning — panel has `overflow-y: auto`); lists columns filtered by `enableRowGroup`/`enableValue` and not already active; outside-click closes via `@HostListener('document:click')` with `event.stopPropagation()` on button and menu clicks; empty state shows "All columns grouped" / "All columns added"
 - **Drag to reorder**: HTML5 drag API — `dragstart` stores index, `dragover` + `drop` calls `api.moveColumn()`
 - **Pivot Mode toggle**: native `<input type="checkbox">` inside `ds-toggle`; calls `api.setPivotMode()`
-- **AG Grid integration**: implements IToolPanelAngularComp — `agInit(params)` + `refresh()`; subscribes to `columnVisible`, `columnMoved`, `pivotModeChanged`, `columnRowGroupChanged`, `columnValueChanged` events
+- **AG Grid integration**: implements IToolPanelAngularComp — `agInit(params)` + `refresh()` + `getState()`; subscribes to `columnVisible`, `columnMoved`, `pivotModeChanged`, `columnRowGroupChanged`, `columnValueChanged` events
+- **Grid state save/restore**: `getState()` returns `{ density, colVisibilityExpanded }`; `agInit` restores from `params.initialState`; density and col-visibility collapse changes call `params.onStateUpdated()` so AG Grid knows state has changed. Wire via standard `IToolPanelParams` — AG Grid passes these automatically.
+- **`suppressColumnsToolPanel: true` on colDef**: hides that column from the Column Visibility list entirely (column still exists in the grid). Use for internal system columns (e.g. checkbox col, actions col) that consumers should never toggle. Columns with `lockVisible: true` still appear but are rendered with `--system` modifier (non-interactive).
+- **toolPanelParams** (set via `sideBar.toolPanels[n].toolPanelParams` in gridOptions):
+  - `suppressPivotMode: true` — hides Pivot Mode row and its divider
+  - `suppressRowGroups: true` — hides Row Groups section and its divider
+  - `suppressValues: true` — hides Values section and its divider
+- **sideBar registration**:
+  ```typescript
+  sideBar: {
+    toolPanels: [{
+      id: 'columns',
+      labelDefault: 'Columns',
+      labelKey: 'columns',
+      iconKey: 'columns',
+      toolPanel: DsColumnPanelComponent,
+      toolPanelParams: {
+        suppressPivotMode: true,   // optional
+        suppressRowGroups: false,  // optional
+        suppressValues: false,     // optional
+      },
+    }],
+  }
+  ```
 - **No Angular Material base** — custom component
 
 ---

@@ -77,143 +77,143 @@
     </div>
   </div>
 
-  <!-- ── Divider ────────────────────────────────────────────────── -->
-  <div class="ds-divider" role="separator" aria-hidden="true"></div>
+  <!-- ── 3. Pivot Mode (optional — hidden by suppressPivotMode) ──────── -->
+  <ng-container *ngIf="!suppressPivotMode">
+    <div class="ds-divider" role="separator" aria-hidden="true"></div>
+    <div class="ds-column-panel__pivot-row">
+      <span class="ds-column-panel__pivot-label">Pivot Mode</span>
+      <label class="ds-toggle" aria-label="Enable pivot mode">
+        <input
+          type="checkbox"
+          class="ds-toggle__control"
+          [checked]="pivotMode"
+          (change)="togglePivotMode()"
+        />
+        <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+      </label>
+    </div>
+  </ng-container>
 
-  <!-- ── 3. Pivot Mode ────────────────────────────────────────────── -->
-  <div class="ds-column-panel__pivot-row">
-    <span class="ds-column-panel__pivot-label">Pivot Mode</span>
-    <label class="ds-toggle" aria-label="Enable pivot mode">
-      <input
-        type="checkbox"
-        class="ds-toggle__control"
-        [checked]="pivotMode"
-        (change)="togglePivotMode()"
-      />
-      <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-    </label>
-  </div>
+  <!-- ── 4. Row Groups (optional — hidden by suppressRowGroups) ──────── -->
+  <ng-container *ngIf="!suppressRowGroups">
+    <div class="ds-divider" role="separator" aria-hidden="true"></div>
+    <div class="ds-column-panel__section-hd">
+      <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">drag_indicator</span>
+      <span class="ds-column-panel__section-title">Row Groups</span>
+    </div>
 
-  <!-- ── Divider ────────────────────────────────────────────────── -->
-  <div class="ds-divider" role="separator" aria-hidden="true"></div>
-
-  <!-- ── 4. Row Groups ────────────────────────────────────────────── -->
-  <div class="ds-column-panel__section-hd">
-    <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">drag_indicator</span>
-    <span class="ds-column-panel__section-title">Row Groups</span>
-  </div>
-
-  <!-- Active row group chips -->
-  <div
-    *ngIf="activeRowGroups.length > 0"
-    class="ds-column-panel__group-chips"
-  >
-    <span
-      *ngFor="let group of activeRowGroups"
-      class="ds-tag ds-tag--sm"
+    <!-- Active row group chips -->
+    <div
+      *ngIf="activeRowGroups.length > 0"
+      class="ds-column-panel__group-chips"
     >
-      <span class="ds-tag__label">{{ group.label }}</span>
-      <button
-        type="button"
-        class="ds-tag__remove"
-        [attr.aria-label]="'Remove ' + group.label + ' row group'"
-        (click)="removeRowGroupColumn(group.colId)"
+      <span
+        *ngFor="let group of activeRowGroups"
+        class="ds-tag ds-tag--sm"
       >
-        <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
-      </button>
-    </span>
-  </div>
+        <span class="ds-tag__label">{{ group.label }}</span>
+        <button
+          type="button"
+          class="ds-tag__remove"
+          [attr.aria-label]="'Remove ' + group.label + ' row group'"
+          (click)="removeRowGroupColumn(group.colId)"
+        >
+          <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+        </button>
+      </span>
+    </div>
 
-  <!-- Add Column button + inline picker -->
-  <button
-    type="button"
-    class="ds-column-panel__add-btn"
-    [attr.aria-expanded]="showRowGroupMenu"
-    (click)="toggleRowGroupMenu($event)"
-  >
-    <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
-    Add Column
-  </button>
-
-  <div
-    *ngIf="showRowGroupMenu"
-    class="ds-menu ds-column-panel__picker"
-    role="menu"
-    (click)="$event.stopPropagation()"
-  >
-    <ng-container *ngIf="rowGroupMenuOptions.length > 0; else noRowGroupCols">
-      <button
-        *ngFor="let opt of rowGroupMenuOptions"
-        type="button"
-        class="ds-menu__item"
-        role="menuitem"
-        (click)="selectRowGroupColumn(opt, $event)"
-      >{{ opt.label }}</button>
-    </ng-container>
-    <ng-template #noRowGroupCols>
-      <span class="ds-column-panel__picker-empty">All columns grouped</span>
-    </ng-template>
-  </div>
-
-  <!-- ── Divider ────────────────────────────────────────────────── -->
-  <div class="ds-divider" role="separator" aria-hidden="true"></div>
-
-  <!-- ── 5. Values ───────────────────────────────────────────────── -->
-  <div class="ds-column-panel__section-hd">
-    <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">functions</span>
-    <span class="ds-column-panel__section-title">Values</span>
-  </div>
-
-  <!-- Active value chips -->
-  <div
-    *ngIf="activeValueColumns.length > 0"
-    class="ds-column-panel__group-chips"
-  >
-    <span
-      *ngFor="let val of activeValueColumns"
-      class="ds-tag ds-tag--sm"
+    <!-- Add Column button + inline picker -->
+    <button
+      type="button"
+      class="ds-column-panel__add-btn"
+      [attr.aria-expanded]="showRowGroupMenu"
+      (click)="toggleRowGroupMenu($event)"
     >
-      <span class="ds-tag__label">{{ val.label }}</span>
-      <button
-        type="button"
-        class="ds-tag__remove"
-        [attr.aria-label]="'Remove ' + val.label + ' value column'"
-        (click)="removeValueColumn(val.colId)"
+      <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
+      Add Column
+    </button>
+
+    <div
+      *ngIf="showRowGroupMenu"
+      class="ds-menu ds-column-panel__picker"
+      role="menu"
+      (click)="$event.stopPropagation()"
+    >
+      <ng-container *ngIf="rowGroupMenuOptions.length > 0; else noRowGroupCols">
+        <button
+          *ngFor="let opt of rowGroupMenuOptions"
+          type="button"
+          class="ds-menu__item"
+          role="menuitem"
+          (click)="selectRowGroupColumn(opt, $event)"
+        >{{ opt.label }}</button>
+      </ng-container>
+      <ng-template #noRowGroupCols>
+        <span class="ds-column-panel__picker-empty">All columns grouped</span>
+      </ng-template>
+    </div>
+  </ng-container>
+
+  <!-- ── 5. Values (optional — hidden by suppressValues) ─────────────── -->
+  <ng-container *ngIf="!suppressValues">
+    <div class="ds-divider" role="separator" aria-hidden="true"></div>
+    <div class="ds-column-panel__section-hd">
+      <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">functions</span>
+      <span class="ds-column-panel__section-title">Values</span>
+    </div>
+
+    <!-- Active value chips -->
+    <div
+      *ngIf="activeValueColumns.length > 0"
+      class="ds-column-panel__group-chips"
+    >
+      <span
+        *ngFor="let val of activeValueColumns"
+        class="ds-tag ds-tag--sm"
       >
-        <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
-      </button>
-    </span>
-  </div>
+        <span class="ds-tag__label">{{ val.label }}</span>
+        <button
+          type="button"
+          class="ds-tag__remove"
+          [attr.aria-label]="'Remove ' + val.label + ' value column'"
+          (click)="removeValueColumn(val.colId)"
+        >
+          <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+        </button>
+      </span>
+    </div>
 
-  <!-- Add Column button + inline picker -->
-  <button
-    type="button"
-    class="ds-column-panel__add-btn"
-    [attr.aria-expanded]="showValueMenu"
-    (click)="toggleValueMenu($event)"
-  >
-    <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
-    Add Column
-  </button>
+    <!-- Add Column button + inline picker -->
+    <button
+      type="button"
+      class="ds-column-panel__add-btn"
+      [attr.aria-expanded]="showValueMenu"
+      (click)="toggleValueMenu($event)"
+    >
+      <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
+      Add Column
+    </button>
 
-  <div
-    *ngIf="showValueMenu"
-    class="ds-menu ds-column-panel__picker"
-    role="menu"
-    (click)="$event.stopPropagation()"
-  >
-    <ng-container *ngIf="valueMenuOptions.length > 0; else noValueCols">
-      <button
-        *ngFor="let opt of valueMenuOptions"
-        type="button"
-        class="ds-menu__item"
-        role="menuitem"
-        (click)="selectValueColumn(opt, $event)"
-      >{{ opt.label }}</button>
-    </ng-container>
-    <ng-template #noValueCols>
-      <span class="ds-column-panel__picker-empty">All columns added</span>
-    </ng-template>
-  </div>
+    <div
+      *ngIf="showValueMenu"
+      class="ds-menu ds-column-panel__picker"
+      role="menu"
+      (click)="$event.stopPropagation()"
+    >
+      <ng-container *ngIf="valueMenuOptions.length > 0; else noValueCols">
+        <button
+          *ngFor="let opt of valueMenuOptions"
+          type="button"
+          class="ds-menu__item"
+          role="menuitem"
+          (click)="selectValueColumn(opt, $event)"
+        >{{ opt.label }}</button>
+      </ng-container>
+      <ng-template #noValueCols>
+        <span class="ds-column-panel__picker-empty">All columns added</span>
+      </ng-template>
+    </div>
+  </ng-container>
 
 </div>

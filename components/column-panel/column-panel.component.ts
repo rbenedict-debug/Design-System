@@ -100,12 +100,52 @@ export interface AgPanelColumn {
      * always remain pinned or always remain unpinned.
      */
     lockPinned?: boolean;
+    /**
+     * Set true on colDef to hide this column from the tool panel column list entirely.
+     * The column still exists in the grid — it is just not shown in ds-column-panel.
+     * Use for internal system columns that consumers should never toggle or reorder.
+     */
+    suppressColumnsToolPanel?: boolean;
   };
   isVisible(): boolean;
 }
 
+/**
+ * State persisted by the tool panel — returned from getState() and restored via
+ * initialState in agInit. Integrates with AG Grid's grid state save/restore system.
+ */
+export interface DsColumnPanelState {
+  /** Which density is currently active. */
+  density?: TableDensity;
+  /** Whether the Column Visibility section is expanded. */
+  colVisibilityExpanded?: boolean;
+}
+
 export interface AgToolPanelParams {
   api: AgColumnPanelApi;
+
+  // ── Standard IToolPanelParams ─────────────────────────────────────────────
+  /**
+   * Call this whenever internal panel state changes so AG Grid's grid state
+   * save/restore system knows the state has updated. Pass as `onStateUpdated`
+   * from IToolPanelParams.
+   */
+  onStateUpdated?: () => void;
+  /**
+   * Previously saved panel state to restore on init. Populated by AG Grid when
+   * grid state is restored. Contains whatever getState() returned last time.
+   */
+  initialState?: DsColumnPanelState;
+
+  // ── toolPanelParams — merged onto params by AG Grid ───────────────────────
+  // Set via sideBar.toolPanels[n].toolPanelParams in gridOptions.
+
+  /** Hide the Pivot Mode toggle row. Default: false (shown). */
+  suppressPivotMode?: boolean;
+  /** Hide the Row Groups section (header, chips, Add Column picker). Default: false (shown). */
+  suppressRowGroups?: boolean;
+  /** Hide the Values (aggregation) section. Default: false (shown). */
+  suppressValues?: boolean;
 }
 
 /** A column entry in the row-group or value picker menu. */
@@ -148,6 +188,15 @@ export class DsColumnPanelComponent implements OnDestroy {
   /** Whether the value column picker menu is open. */
   showValueMenu = false;
 
+  /** Whether the Pivot Mode row is hidden (set via suppressPivotMode toolPanelParam). */
+  suppressPivotMode = false;
+
+  /** Whether the Row Groups section is hidden (set via suppressRowGroups toolPanelParam). */
+  suppressRowGroups = false;
+
+  /** Whether the Values section is hidden (set via suppressValues toolPanelParam). */
+  suppressValues = false;
+
   // ── Outputs ───────────────────────────────────────────────────────────────
 
   @Output() densityChange = new EventEmitter<TableDensity>();
@@ -155,6 +204,7 @@ export class DsColumnPanelComponent implements OnDestroy {
   @Output() pivotModeChange = new EventEmitter<boolean>();
 
   private _api: AgColumnPanelApi | null = null;
+  private _onStateUpdated?: () => void;
   private readonly _colChanged   = (): void => this._syncColumns();
   private readonly _pivotChanged = (): void => this._syncPivot();
   private readonly _groupChanged = (): void => this._syncGroups();
@@ -165,6 +215,23 @@ export class DsColumnPanelComponent implements OnDestroy {
 
   agInit(params: AgToolPanelParams): void {
     this._api = params.api;
+    this._onStateUpdated = params.onStateUpdated;
+
+    // Restore previously saved panel state (AG Grid grid state save/restore).
+    if (params.initialState) {
+      if (params.initialState.density !== undefined) {
+        this.density = params.initialState.density;
+      }
+      if (params.initialState.colVisibilityExpanded !== undefined) {
+        this.colVisibilityExpanded = params.initialState.colVisibilityExpanded;
+      }
+    }
+
+    // toolPanelParams — hide sections as configured by the consumer.
+    this.suppressPivotMode  = params.suppressPivotMode  ?? false;
+    this.suppressRowGroups  = params.suppressRowGroups  ?? false;
+    this.suppressValues     = params.suppressValues     ?? false;
+
     params.api.addEventListener('columnVisible',        this._colChanged);
     params.api.addEventListener('columnMoved',          this._colChanged);
     params.api.addEventListener('pivotModeChanged',     this._pivotChanged);
@@ -173,6 +240,17 @@ export class DsColumnPanelComponent implements OnDestroy {
     this._syncColumns();
     this._syncPivot();
     this._syncGroups();
+  }
+
+  /**
+   * Returns current panel state for AG Grid's grid state save/restore system.
+   * AG Grid calls this when saving grid state (e.g. before page navigation).
+   */
+  getState(): DsColumnPanelState {
+    return {
+      density: this.density,
+      colVisibilityExpanded: this.colVisibilityExpanded,
+    };
   }
 
   /** Called by AG Grid when the tool panel is refreshed. */
@@ -205,12 +283,14 @@ export class DsColumnPanelComponent implements OnDestroy {
 
   private _syncColumns(): void {
     if (!this._api) { return; }
-    this.columns = this._api.getAllGridColumns().map(col => ({
-      colId:   col.getColId(),
-      label:   col.getColDef().headerName ?? col.getColId(),
-      visible: col.isVisible(),
-      system:  col.getColDef().lockVisible === true,
-    }));
+    this.columns = this._api.getAllGridColumns()
+      .filter(col => col.getColDef().suppressColumnsToolPanel !== true)
+      .map(col => ({
+        colId:   col.getColId(),
+        label:   col.getColDef().headerName ?? col.getColId(),
+        visible: col.isVisible(),
+        system:  col.getColDef().lockVisible === true,
+      }));
     this.cdr.markForCheck();
   }
 
@@ -271,11 +351,13 @@ export class DsColumnPanelComponent implements OnDestroy {
 
   toggleColVisibility(): void {
     this.colVisibilityExpanded = !this.colVisibilityExpanded;
+    this._onStateUpdated?.();
   }
 
   onDensityChange(value: TableDensity): void {
     this.density = value;
     this.densityChange.emit(value);
+    this._onStateUpdated?.();
   }
 
   toggleColumnVisibility(col: ColumnPanelItem): void {
