@@ -100,7 +100,8 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 ---
 
 ### Table Group Row Cell (`ds-table-group-row-cell`)
-- **Purpose**: AG Grid custom renderer for full-width group rows. Set as `groupRowRenderer` in gridOptions when using `groupDisplayType: 'groupRows'`.
+- **Purpose**: AG Grid custom renderer for full-width group rows. Set as `groupRowRenderer` in gridOptions when using `groupDisplayType: 'groupRows'`. **Requires AG Grid Enterprise license** — `groupRows` is an Enterprise-only feature.
+- **`enableRowGroup: true`** must be set on any colDef that consumers can add to a row group (via `ds-column-panel` or `ds-table-row-groups-bar`). Without it, those columns will not group correctly when added programmatically.
 - **Height**: fills AG Grid row height (controlled by `rowHeight` / `groupRowHeight` grid options); `min-height: 40px` ensures compact mode renders correctly
 - **Background**: `--color-surface-subtle`; **border-bottom**: 1px `--color-border-secondary`
 - **Layout (left to right)**: indent spacer + toggle button + label ("FieldName: Value") + count "(N)" + flex spacer + aggregates region
@@ -112,7 +113,7 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 - **Count** (`__count`): label-medium regular, `--color-text-secondary`; e.g. "(4)"
 - **Aggregates region** (`__aggregates`): right-aligned; `gap: var(--spacing-xl)` between stat pairs; each `__stat` has `__stat-label` (label-medium regular, `--color-text-secondary`) + `__stat-value` (label-medium weight-prominent, `--color-text-primary`); populated from `params.node.aggData` when `aggFunc` is set on column definitions; `aria-hidden="true"` (announced via status bar)
 - **Column header lookup**: uses `params.api.getColumn(field)?.getColDef()?.headerName` for display label; falls back to capitalised field name
-- **AG Grid integration**: implements `ICellRendererAngularComp` — `agInit(params)`, `refresh(params)`, listens to `expandedChanged` node event; cleans up in `ngOnDestroy`; host element `display: block; width: 100%; height: 100%` to fill full-width AG Grid cell
+- **AG Grid integration**: duck-types `ICellRendererAngularComp` (no hard ag-grid import) — `agInit(params)`, `refresh(params)`, listens to `expandedChanged` node event; cleans up in `ngOnDestroy`; host element `display: block; width: 100%; height: 100%` to fill full-width AG Grid cell
 - **No Angular Material base** — custom component
 
 ### Table Group Expansion Store (`DsTableGroupExpansionStore`)

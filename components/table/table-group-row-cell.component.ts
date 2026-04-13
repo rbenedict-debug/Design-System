@@ -4,11 +4,17 @@
  * AG Grid custom renderer for full-width group rows.
  * Set as `groupRowRenderer` in gridOptions when using groupDisplayType: 'groupRows'.
  *
- * AG Grid usage:
+ * AG Grid usage (requires AG Grid Enterprise):
  *   gridOptions = {
- *     groupDisplayType: 'groupRows',
+ *     groupDisplayType: 'groupRows',      // Enterprise feature
  *     groupRowRenderer: DsTableGroupRowCellComponent,
  *   };
+ *
+ * Column definitions must include enableRowGroup: true for columns that consumers
+ * can add to a row group (via ds-column-panel or ds-table-row-groups-bar):
+ *   columnDefs = [
+ *     { field: 'department', enableRowGroup: true },
+ *   ];
  *
  * Features:
  *   - 4 nesting levels with 24px indent per level
@@ -102,7 +108,7 @@ export class DsTableGroupRowCellComponent implements OnDestroy {
 
   constructor(private readonly cdr: ChangeDetectorRef) {}
 
-  // ── AG Grid ICellRendererAngularComp ─────────────────────────────────────
+  // ── AG Grid ICellRendererAngularComp (duck-typed — no hard ag-grid dep) ──
 
   agInit(params: AgGroupRowCellParams): void {
     this._params = params;
