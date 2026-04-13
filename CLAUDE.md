@@ -40,6 +40,7 @@ components/
   badge/ alert/ tooltip/ avatar/ progress/ spinner/ snackbar/ skeleton/ empty-state/
   tabs/ card/ dialog/ menu/ accordion/ chip/ tag/ divider/ list/ paginator/
   label/ search/ table/ ag-paginator/ table-toolbar/ column-panel/ hover-card/ save-bar/ modal/
+  # table/ also contains: table-context-menu (right-click overlay for header + row cells)
   nav-button/ agent-status/ nav-sidebar/ nav-tab/ top-nav/ nav-expand/
   subnav-button/ subnav-subheader/ subnav-header/  # subnav-subheader: settings subnav only
   rich-text-editor/
@@ -217,6 +218,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-table-row-groups-bar` | Custom | No Material equivalent — bar between toolbar and header; drag target for row group columns + removable chips; bind `[api]` to auto-sync |
 | `ds-column-panel` | Custom | No Material equivalent — AG Grid custom tool panel; sections: density toggle, Column Visibility (collapsible — `<button aria-expanded>` header, no internal scroll), pivot mode, row groups, values; width 300px; shown via `[data-panel-open]` on container; whole panel scrolls via `overflow-y: auto` |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |
+| `ds-table-context-menu` | Custom | No Material equivalent — right-click context menu for AG Grid header cells and row cells; uses `.ds-menu` CSS class API exactly (same visual as `ds-menu`); `position: fixed` overlay with backdrop; viewport boundary flip; `[items]`, `[x]`, `[y]`, `[visible]`, `(closed)`; default builders: `buildDefaultHeaderContextMenuItems(colId, api)` (sort/pin/auto-size/reset/group) and `buildDefaultRowContextMenuItems(value)` (copy); requires `suppressContextMenu: true` + `suppressHeaderContextMenu: true` in grid options; `(headerContextMenu)` output on `ds-table-header-cell`, `(rowContextMenu)` output on `ds-table-row-cell` |
 | `ds-page-layout` | Custom | CSS-only app shell; SCSS in `layout/page-layout/`, ships as `dist/layout.css` |
 | `ds-split-page` | CdkDrag (CDK only) | CSS-only two-pane layout; SCSS in `layout/split-page/`, ships as `dist/layout.css`; use `CdkDragModule` for production resize |
 | `ds-rich-text-editor` | Custom (CKEditor 5) | No Angular Material equivalent — third-party CKEditor 5. Requires `@ckeditor/ckeditor5-angular` + `@ckeditor/ckeditor5-build-classic`. Custom toolbar calls `editor.execute()` commands; native CKEditor toolbar is suppressed via CSS. Inputs: `[label]`, `[placeholder]`, `[(value)]`, `[disabled]`, `[isError]`, `[showResize]`, `[showExpand]`. Resize = JS mousedown drag on host height. Expand = `position:fixed` overlay with a second editor instance that syncs back on close. |
