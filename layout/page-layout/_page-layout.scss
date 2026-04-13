@@ -125,4 +125,49 @@
     0 2px 6px 2px var(--shadow-elevation-2);
   min-height: 0;
   overflow-y: auto;
+
+  // ── Table page variant ──────────────────────────────────────────────────────
+  //
+  // Apply to ds-page-content__main when the page contains an AG Grid table.
+  // Overrides the default scroll-boundary behaviour so AG Grid can manage its
+  // own scroll viewport via row virtualisation.
+  //
+  // Without this modifier the outer container scrolls everything as one tall
+  // document, completely bypassing AG Grid's row virtualisation model and
+  // causing the grid to render at an indeterminate height.
+  //
+  // Usage:
+  //   <div class="ds-page-content__main ds-page-content__main--table">
+  //     <ds-table-toolbar ... />
+  //     <ag-grid-angular class="ds-ag-grid ag-theme-quartz" ... />
+  //     <ds-ag-paginator ... />
+  //   </div>
+  &--table {
+    overflow: hidden;      // AG Grid owns the scroll — outer container must not scroll
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// ── AG Grid container sizing ──────────────────────────────────────────────────
+//
+// Apply as a class on the <ag-grid-angular> element (or any grid host div).
+// flex: 1 1 0 fills the remaining height inside ds-page-content__main--table.
+// min-height: 0 is required — without it a flex child cannot shrink below its
+// content height and the grid will overflow the parent on small viewports.
+//
+// Always pair with an AG Grid theme class on the same element:
+//   <ag-grid-angular class="ds-ag-grid ag-theme-quartz" ...>
+//
+// To use the minimal structural-only theme (AG Grid v31+, no built-in colours):
+//   <ag-grid-angular class="ds-ag-grid ag-theme-base" ...>
+//
+// Do NOT set domLayout="autoHeight" on a paginated table — autoHeight renders
+// all rows at once, disabling row virtualisation and blocking the browser on
+// datasets larger than ~500 rows.
+.ds-ag-grid {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  display: block;
 }

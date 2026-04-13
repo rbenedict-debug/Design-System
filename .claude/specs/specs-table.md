@@ -6,6 +6,55 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 
 ---
 
+## Grid Layout and Sizing
+
+### Container requirements
+
+AG Grid requires an explicit height on its host element. The correct approach for Onflo data table pages uses two CSS classes shipped in `dist/layout.css`:
+
+**`ds-page-content__main--table`** — Add this modifier to `ds-page-content__main` on any page that contains a table. It changes the container to `overflow: hidden; display: flex; flex-direction: column`, handing scroll control to AG Grid's own viewport.
+
+**`ds-ag-grid`** — Add this class to the `ag-grid-angular` element. Sets `flex: 1 1 0; min-height: 0; width: 100%`. The `min-height: 0` is non-negotiable — without it, a flex child cannot shrink below its intrinsic content height and the grid overflows the parent on smaller viewports.
+
+### domLayout
+
+| Mode | When to use | Notes |
+|---|---|---|
+| *(default — normal)* | Always, for paginated tables | AG Grid scrolls internally; row virtualisation active; correct for all Onflo use |
+| `autoHeight` | Never on paginated tables | Renders all rows into the DOM simultaneously, disabling virtualisation; blocks browser past ~500 rows |
+| `print` | Print/export only | No scrollbars; renders all content; only use when generating a print view |
+
+Never set `domLayout="autoHeight"` on a production table. If a page designer requests a full-height grid with no scrollbar, the correct answer is to size the grid container correctly so the grid fills the viewport — not to disable virtualisation.
+
+### AG Grid theme class
+
+AG Grid requires a theme class on the container for its structural CSS (viewport sizing, column lines, pinned column shadows, horizontal scrollbar). Without it the grid has no visible structure.
+
+Add the theme class to the same element as `ds-ag-grid`:
+- `ag-theme-quartz` — recommended for AG Grid v29–v30
+- `ag-theme-base` — recommended for AG Grid v31+ (structural only, no built-in colours)
+
+```html
+<ag-grid-angular class="ds-ag-grid ag-theme-quartz" ...>
+```
+
+The Onflo DS does not import AG Grid theme CSS — consuming projects must add it to their `angular.json` styles array (or equivalent) from `ag-grid-community/styles/`.
+
+### Responsive sizing
+
+AG Grid fires `gridSizeChanged` when its container is resized. Use this to auto-size columns or hide/show columns based on available width:
+
+```typescript
+onGridSizeChanged(event: GridSizeChangedEvent): void {
+  // Auto-size all columns to fit the new container width
+  event.api.sizeColumnsToFit();
+}
+```
+
+Bind in the template: `(gridSizeChanged)="onGridSizeChanged($event)"`.
+
+---
+
 ## Column Configuration
 
 ### defaultColDef

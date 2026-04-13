@@ -110,6 +110,8 @@ These rules apply to every page in every Onflo application:
 | `.ds-page-content__heading` | Heading row | `flex-shrink: 0` — title + optional tabs, never scrolls |
 | `.ds-page-content__title` | H1 | Title H1 typography (`--ref-typescale-title-h1-*`) |
 | `.ds-page-content__main` | Content card | `flex: 1; overflow-y: auto` — scroll boundary; heading and save bar remain fixed above/below |
+| `.ds-page-content__main--table` | Content card (table pages) | Adds `overflow: hidden; display: flex; flex-direction: column` — use instead of plain `__main` on any page containing an AG Grid; hands scroll control to the grid's own viewport |
+| `.ds-ag-grid` | AG Grid host element | `flex: 1 1 0; min-height: 0; width: 100%` — apply on `ag-grid-angular` inside `__main--table` to fill remaining height correctly |
 | `<ds-save-bar>` (when used) | Save footer | Sibling of `.ds-page-content__main`, never inside it — stays below the card regardless of scroll |
 
 #### Angular wiring

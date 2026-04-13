@@ -51,48 +51,157 @@ Never put critical actions or required information behind a tooltip or hover car
 
 Use when the primary content of a page is an AG Grid table.
 
+### Grid sizing — read this first
+
+AG Grid requires its host element to have an explicit height. Without one the grid renders at 0 height or forces the outer container to scroll everything as one tall document, bypassing AG Grid's row virtualization entirely.
+
+The correct pattern uses two purpose-built CSS classes:
+
+| Class | Where | What it does |
+|---|---|---|
+| `ds-page-content__main--table` | On `ds-page-content__main` | Changes the outer container to `overflow: hidden; display: flex; flex-direction: column` so the grid can own its scroll viewport |
+| `ds-ag-grid` | On `ag-grid-angular` | Sets `flex: 1 1 0; min-height: 0; width: 100%` — fills remaining height; `min-height: 0` prevents flex overflow on small viewports |
+
+**Never use `domLayout="autoHeight"` on a paginated table.** Auto-height renders every row into the DOM at once, disabling row virtualization. The grid becomes unresponsive past ~500 rows. Normal mode (the default — no `domLayout` attribute) is always correct for Onflo tables.
+
+### AG Grid theme class
+
+AG Grid requires a theme class on the grid element for its structural CSS to apply (viewport sizing, column borders, horizontal scrollbar, pinned column shadows). Without it the grid renders as a collapsed box with no visible structure.
+
+Add the theme class alongside `ds-ag-grid` on the same element:
+- **AG Grid v31+ (recommended):** `ag-theme-base` — structural CSS only, no built-in colours; our DS tokens handle all visual styling
+- **AG Grid v28–v30:** `ag-theme-alpine` — override colours and fonts via CSS variables
+
+### Full composition
+
 ```html
-<div class="ds-page-content__main">
+<main class="ds-page-content" role="main">
 
-  <!-- Toolbar always sits directly above the grid -->
-  <ds-table-toolbar
-    [searchPlaceholder]="'Search...'"
-    [showActions]="true"
-    (searchValueChange)="onSearch($event)"
-    (filterActiveChange)="onFilterToggle($event)"
-    (settingsActiveChange)="onSettingsToggle($event)">
+  <div class="ds-page-content__heading">
+    <h1 class="ds-page-content__title">Contacts</h1>
+  </div>
 
-    <!-- Left: primary actions -->
-    <ng-container toolbar-actions>
-      <ds-button variant="filled">New Item</ds-button>
-    </ng-container>
+  <!-- Add --table modifier — changes overflow and enables flex column layout -->
+  <div class="ds-page-content__main ds-page-content__main--table">
 
-    <!-- Right: extras between search and filter/settings buttons -->
-    <!-- Use toolbar-extra for date filters, dropdown filters, etc. -->
+    <!-- 74px fixed — always outermost, directly above the grid -->
+    <ds-table-toolbar
+      [searchPlaceholder]="'Search contacts'"
+      [showActions]="true"
+      (searchValueChange)="onSearch($event)"
+      (filterActiveChange)="onFilterToggle($event)"
+      (settingsActiveChange)="onSettingsToggle($event)">
 
-  </ds-table-toolbar>
+      <ng-container toolbar-actions>
+        <ds-button variant="filled">New Contact</ds-button>
+      </ng-container>
 
-  <!-- AG Grid — fills remaining height -->
-  <ag-grid-angular
-    [columnDefs]="columnDefs"
-    [rowData]="rowData"
-    [suppressPaginationPanel]="true">
-  </ag-grid-angular>
+    </ds-table-toolbar>
 
-  <!-- Paginator replaces AG Grid's built-in — always use this, never the AG Grid default -->
+    <!-- 56px fixed — auto-hides when no row groups are active -->
+    <ds-table-row-groups-bar [api]="gridApi" />
+
+    <!-- AG Grid — ds-ag-grid fills remaining height; theme class required -->
+    <ag-grid-angular
+      class="ds-ag-grid ag-theme-quartz"
+      [defaultColDef]="defaultColDef"
+      [columnTypes]="columnTypes"
+      [columnDefs]="columnDefs"
+      [rowData]="rowData"
+      [rowHeight]="56"
+      [headerHeight]="56"
+      [groupRowHeight]="56"
+      [pagination]="true"
+      [suppressPaginationPanel]="true"
+      [suppressContextMenu]="true"
+      [suppressHeaderContextMenu]="true"
+      (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+
+    <!-- 56px fixed — replaces AG Grid's built-in paginator entirely -->
+    <ds-ag-paginator [api]="gridApi" />
+
+  </div>
+
+</main>
+```
+
+### Column panel placement
+
+The column panel slides in from the right edge of `ds-page-content__main`. Bind `[data-panel-open]` on `ds-page-content__main--table` when the settings toolbar button is active, and include `ds-column-panel` as a sibling of the grid (not inside it):
+
+```html
+<div class="ds-page-content__main ds-page-content__main--table"
+     [attr.data-panel-open]="settingsActive || null">
+
+  <ds-table-toolbar ... (settingsActiveChange)="settingsActive = $event" />
+  <ds-table-row-groups-bar [api]="gridApi" />
+  <ag-grid-angular class="ds-ag-grid ag-theme-quartz" ... />
   <ds-ag-paginator [api]="gridApi" />
+
+  <!-- Column panel — 300px, slides in from right when data-panel-open is set -->
+  <ds-column-panel [api]="gridApi" [(density)]="density" />
 
 </div>
 ```
 
+### Angular component wiring
+
+```typescript
+import {
+  DS_TABLE_DEFAULT_COL_DEF,
+  DS_TABLE_COLUMN_TYPES,
+  DsTableGroupRowCellComponent,
+  DsTableGroupExpansionStore,
+  DsAgPaginatorComponent,
+  DsTableStatusBarComponent,
+} from '@onflo/design-system';
+
+export class ContactsTableComponent {
+  readonly defaultColDef = DS_TABLE_DEFAULT_COL_DEF;
+  readonly columnTypes = DS_TABLE_COLUMN_TYPES;
+
+  gridApi: GridApi | null = null;
+  settingsActive = false;
+  density: TableDensity = 'comfort';
+
+  private expansionStore = new DsTableGroupExpansionStore('contacts-table');
+
+  columnDefs: ColDef[] = [
+    { field: 'name',   headerName: 'Name',   flex: 1,   minWidth: 150 },
+    { field: 'email',  headerName: 'Email',  flex: 1,   minWidth: 150 },
+    { field: 'status', headerName: 'Status', width: 120, type: 'dsGroupable' },
+  ];
+
+  gridOptions: GridOptions = {
+    groupDisplayType: 'groupRows',             // Enterprise — requires license
+    groupRowRenderer: DsTableGroupRowCellComponent,
+    isGroupOpenByDefault: (p) => this.expansionStore.isGroupOpenByDefault(p),
+    onRowGroupOpened: (e) => this.expansionStore.onRowGroupOpened(e),
+    statusBar: {
+      statusPanels: [
+        { statusPanel: DsTableStatusBarComponent, align: 'full-width' },
+        { statusPanel: DsAgPaginatorComponent,    align: 'right' },
+      ],
+    },
+  };
+
+  onGridReady(event: GridReadyEvent): void {
+    this.gridApi = event.api;
+  }
+}
+```
+
 **Rules:**
-- `ds-table-toolbar` always sits outside the AG Grid instance, directly before it inside `ds-page-content__main`
-- Always set `suppressPaginationPanel: true` on the grid — `ds-ag-paginator` replaces it entirely
-- Page-level tabs (if the page has sections) go in `ds-page-content__heading`, never inside `ds-page-content__main`
-- Column panel and filter panels are positioned relative to the toolbar buttons — they are not part of the grid DOM
-- `ds-table-toolbar` `[showActions]="false"` collapses the left panel; the right panel (search + controls) fills the full width — use this for read-only / view-only table pages
-- Left toolbar slot is for primary actions only (New, Import, Export) — secondary/destructive actions go in a `ds-menu` triggered from an icon button in `[toolbar-trailing]`
-- Never put pagination controls inside the toolbar
+- Always use `ds-page-content__main--table` on the outer container — never use the default `__main` for table pages
+- Always add a theme class (`ag-theme-quartz` or `ag-theme-base`) on `ag-grid-angular` alongside `ds-ag-grid`
+- Always set `suppressPaginationPanel: true` — `ds-ag-paginator` replaces the built-in paginator
+- Always set `suppressContextMenu: true` and `suppressHeaderContextMenu: true` — DS context menus replace the built-in ones
+- Never use `domLayout="autoHeight"` on a paginated table
+- `ds-table-toolbar` always sits directly above `ag-grid-angular` inside `__main--table` — it must be outside the AG Grid DOM
+- `ds-table-row-groups-bar` sits between the toolbar and the grid — auto-hides when no groups are active; bind `[api]="gridApi"` to auto-sync
+- Page-level tabs go in `ds-page-content__heading`, never inside `__main--table`
+- Left toolbar slot is for primary actions only (New, Import, Export) — secondary/destructive actions go in a `ds-menu` inside `[toolbar-trailing]`
 
 ---
 
