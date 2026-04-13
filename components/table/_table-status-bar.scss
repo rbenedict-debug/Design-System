@@ -1,0 +1,57 @@
+// Onflo Design System — Table Status Bar
+// Figma: primitive/table-status-bar
+// Pinned aggregate row displayed between data rows and the paginator.
+// Shows row counts on the left and aggregate values (avg/count/min/max/sum) on the right.
+// Height: 56px — matches AG Grid row/header height.
+
+.ds-table-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 var(--spacing-lg);
+  background: var(--color-surface-subtle);
+  border-top: 1px solid var(--color-border-secondary);
+  box-sizing: border-box;
+  flex-shrink: 0;
+
+  // ── Left side — row counts ────────────────────────────────────
+  &__counts {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl); // 24px between count pairs
+  }
+
+  // ── Right side — aggregate values ────────────────────────────
+  &__aggregates {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl); // 24px between aggregate pairs
+  }
+
+  // ── Individual stat pair (label + value) ─────────────────────
+  &__stat {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-xs); // 4px between label and value
+    white-space: nowrap;
+  }
+
+  &__stat-label {
+    font-family: var(--ref-typescale-body-small-font);
+    font-size: var(--ref-typescale-body-small-size);
+    font-weight: var(--ref-typescale-body-small-weight);
+    line-height: var(--ref-typescale-body-small-line-height);
+    letter-spacing: var(--ref-typescale-body-small-tracking);
+    color: var(--color-text-secondary);
+  }
+
+  &__stat-value {
+    font-family: var(--ref-typescale-body-small-font);
+    font-size: var(--ref-typescale-body-small-size);
+    font-weight: var(--ref-typescale-label-small-weight-prominent);
+    line-height: var(--ref-typescale-body-small-line-height);
+    letter-spacing: var(--ref-typescale-body-small-tracking);
+    color: var(--color-text-primary);
+  }
+}

@@ -28,12 +28,12 @@
     <!-- Column label -->
     <span *ngIf="label" class="ds-table-header-cell__label">{{ label }}</span>
 
-    <!-- Sort button -->
+    <!-- Sort button — only rendered when column IS sorted (asc or desc) -->
     <ds-icon-button
-      *ngIf="sorting"
+      *ngIf="sorting && sortDirection !== null"
       size="sm"
       variant="icon"
-      [ariaLabel]="'Sort: ' + (sortDirection ?? 'none')"
+      [ariaLabel]="sortDirection === 'asc' ? 'Sorted ascending' : 'Sorted descending'"
       (clicked)="onSortClick($event)"
     >
       <span class="ds-icon" [ngClass]="sortIconClass">arrow_upward_alt</span>

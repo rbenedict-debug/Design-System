@@ -1,0 +1,64 @@
+<div class="ds-table-row-groups-bar">
+
+  <!-- Left — drag target + active row group chips -->
+  <div class="ds-table-row-groups-bar__drop-zone">
+    <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">
+      drag_indicator
+    </span>
+
+    <!-- Chips for active row groups -->
+    <div
+      *ngIf="rowGroups.length > 0"
+      class="ds-table-row-groups-bar__chips"
+    >
+      <span
+        *ngFor="let group of rowGroups"
+        class="ds-tag ds-tag--sm"
+      >
+        <span class="ds-tag__label">{{ group.label }}</span>
+        <button
+          type="button"
+          class="ds-tag__remove"
+          [attr.aria-label]="'Remove ' + group.label + ' row group'"
+          (click)="onRemoveGroup(group.colId)"
+        >
+          <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+        </button>
+      </span>
+    </div>
+
+    <!-- Placeholder shown when no groups are active -->
+    <span
+      *ngIf="rowGroups.length === 0"
+      class="ds-table-row-groups-bar__placeholder"
+      aria-hidden="true"
+    >
+      Drag here to set row groups
+    </span>
+  </div>
+
+  <!-- Right — density toggle -->
+  <div class="ds-table-row-groups-bar__density">
+    <div class="ds-density-toggle" role="group" aria-label="Row density">
+      <button
+        type="button"
+        class="ds-density-toggle__btn"
+        [class.is-selected]="density === 'comfort'"
+        [attr.aria-pressed]="density === 'comfort'"
+        (click)="onDensityChange('comfort')"
+      >
+        Comfort
+      </button>
+      <button
+        type="button"
+        class="ds-density-toggle__btn"
+        [class.is-selected]="density === 'compact'"
+        [attr.aria-pressed]="density === 'compact'"
+        (click)="onDensityChange('compact')"
+      >
+        Compact
+      </button>
+    </div>
+  </div>
+
+</div>

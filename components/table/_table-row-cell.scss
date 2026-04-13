@@ -136,6 +136,17 @@ $tier2-indent: 64px;
     }
   }
 
+  // ── Pinned columns — same shadow as header cells ─────────────
+  &.ds-table-pinned-left {
+    box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.08);
+    clip-path: inset(0 -12px 0 0);
+  }
+
+  &.ds-table-pinned-right {
+    box-shadow: -4px 0 8px -2px rgba(0, 0, 0, 0.08);
+    clip-path: inset(0 0 0 -12px);
+  }
+
   // ── Cell data text ────────────────────────────────────────────
   &__data {
     font-family: var(--ref-typescale-body-medium-font);

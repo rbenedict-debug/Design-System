@@ -1,8 +1,21 @@
 # Component Specs — Table Components
 
-Table Header Cell, Table Row Cell, AG Grid Paginator, Table Toolbar
+Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Grid Paginator, Table Toolbar, Column Panel
 
-> See preview-rules.md for the shared `#table` sim rule — individual component sections show isolated variants only; the shared table section shows the composed toolbar → header → rows → paginator view.
+> See preview-rules.md for the shared `#table` sim rule — individual component sections show isolated variants only; the shared table section shows the composed toolbar → row-groups-bar → header → rows → status-bar → paginator view.
+
+---
+
+### Full table composition order (top to bottom)
+
+1. `ds-table-toolbar` (74px) — always present
+2. `ds-table-row-groups-bar` (56px) — present when row grouping is available
+3. AG Grid header row with `ds-table-header-cell` (56px)
+4. AG Grid data rows with `ds-table-row-cell` (56px each)
+5. Horizontal scrollbar (styled via `.ag-hscroll`)
+6. `ds-table-status-bar` (56px) — present when aggregate values should be shown
+7. `ds-ag-paginator` (56px)
+8. `ds-column-panel` (300px, right side) — slides in/out via `[data-panel-open]` on container
 
 ---
 
@@ -53,6 +66,56 @@ Table Header Cell, Table Row Cell, AG Grid Paginator, Table Toolbar
 - **Nav buttons**: 4 ghost buttons — `first_page`, `keyboard_arrow_left`, `keyboard_arrow_right`, `last_page`; 42×42px; `--radius-sm` (not `--radius-full`); disabled when at first/last page
 - **Layout**: outer `gap: var(--spacing-lg)` (16px) between counter and pagination groups; inner groups `gap: var(--spacing-xs)` (4px)
 - **ADA**: All nav buttons have `aria-label`; range label is `aria-live="polite"`
+- **No Angular Material base** — custom component
+
+---
+
+### Table Status Bar (`ds-table-status-bar`)
+- **Purpose**: Pinned aggregate row displayed between the data rows and the paginator.
+- **Height**: 56px — fixed
+- **Background**: `--color-surface-subtle`; **border-top**: 1px `--color-border-secondary`
+- **Layout**: left `__counts` region (row counts) and right `__aggregates` region (numeric aggregates); `justify-content: space-between`; padding `0 var(--spacing-lg)`
+- **Stat pair**: `__stat` contains `__stat-label` (body-small, `--color-text-secondary`) + `__stat-value` (body-small bold, `--color-text-primary`)
+- **Gap between pairs**: `--spacing-xl` (24px) within each region
+- **Counts**: "Rows: X" and "Total Rows: X" — shown on left
+- **Aggregates**: "Average: X", "Count: X", "Min: X", "Max: X", "Sum: X" — shown on right; region has `aria-live="polite"` so screen readers announce changes
+- **AG Grid integration**: implements minimal status panel API — subscribe to `modelUpdated` and `filterChanged` events to keep row counts in sync; aggregate values driven by range selection (bound externally)
+- **No Angular Material base** — custom component
+
+---
+
+### Table Row Groups Bar (`ds-table-row-groups-bar`)
+- **Purpose**: Bar between toolbar and column header row; provides a drop target for row groups and a density toggle.
+- **Height**: 56px — fixed
+- **Background**: `--color-surface-page`; **border-bottom**: 1px `--color-border-subtle`
+- **Layout**: left `__drop-zone` (flex: 1 0 0) + right `__density` (flex-shrink: 0); `gap: var(--spacing-lg)` between
+- **Drop zone**: `drag_indicator` icon (sm, `--color-icon-subtle`) + `__placeholder` text ("Drag here to set row groups", `--color-text-placeholder`) + `__chips` (row group chip tags); placeholder hidden when chips are present
+- **Chips**: use `ds-tag ds-tag--sm` with close button; emit `(removeGroup)` on close; automatically synced from AG Grid when `[api]` is bound
+- **Density toggle**: `ds-density-toggle` class — two adjacent buttons in a shared border container; "Comfort" (56px row height) and "Compact" (40px row height); `is-selected` modifier on the active button; `aria-pressed` on each button; `role="group" aria-label="Row density"` on the wrapper
+- **AG Grid integration**: bind `[api]` after grid ready to auto-sync row group columns; emits `(densityChange)` — consumer must call `api.resetRowHeights()` and update `rowHeight` grid option
+- **No Angular Material base** — custom component
+
+---
+
+### Column Panel (`ds-column-panel`)
+- **Purpose**: AG Grid custom tool panel for column configuration. Slides in from the right when the gear toolbar button is active.
+- **Width**: 300px — fixed; **border-left**: 1px `--color-border-subtle`
+- **Display**: `display: none` by default; shown via `[data-panel-open]` on the enclosing container OR via `display: flex` on the Angular component host
+- **Sections (top to bottom)**:
+  1. **Density toggle** — `ds-density-toggle` fills full panel width; same Comfort/Compact pattern as row groups bar
+  2. **Column Visibility** — section header (`visibility` icon + "Column Visibility"); scrollable list of `__col-row` items
+  3. Divider
+  4. **Pivot Mode** — single row with label + `ds-toggle` switch on the right
+  5. Divider
+  6. **Row Groups** — section header (`drag_indicator` icon + "Row Groups"); `__add-btn` row below
+  7. Divider
+  8. **Values** — section header (`functions` icon + "Values"); `__add-btn` row below
+- **Column row** (`__col-row`, 42px): `__col-checkbox` (42×42 touch target, icon-based checkbox) + `__col-drag` (drag_indicator sm, `--color-icon-subtle`) + `__col-name` (body-medium, fills remaining space); `--system` modifier suppresses interaction (opacity 0.4, no pointer events)
+- **Checkbox icon**: `check_box_outline_blank` (unchecked, `--color-border-input`) / `check_box` filled (checked, `--color-surface-brand-bold`); `role="checkbox"` + `aria-checked`
+- **Add button** (`__add-btn`): 42px height, full width, `add_circle_outline` icon + "Add Column" text, `--color-text-brand` / `--color-icon-brand`
+- **Drag to reorder**: HTML5 drag API — `dragstart` stores index, `dragover` + `drop` calls `api.moveColumn()`
+- **Pivot Mode toggle**: native `<input type="checkbox">` inside `ds-toggle`; calls `api.setPivotMode()`
+- **AG Grid integration**: implements IToolPanelAngularComp — `agInit(params)` + `refresh()`; subscribes to `columnVisible`, `columnMoved`, `pivotModeChanged` events
 - **No Angular Material base** — custom component
 
 ---

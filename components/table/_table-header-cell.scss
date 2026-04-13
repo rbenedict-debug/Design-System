@@ -125,6 +125,7 @@ $checkbox-only-width: 56px;
   }
 
   // ── Sort icon states (projected into ds-icon-button) ──────────
+  // Sort icon — only rendered when actively sorted (asc or desc)
   &__sort-icon--asc {
     color: var(--color-icon-brand);
   }
@@ -135,13 +136,26 @@ $checkbox-only-width: 56px;
     display: inline-block;
   }
 
-  &__sort-icon--none {
-    color: var(--color-icon-subtle);
-    opacity: 0.5;
-  }
-
   // ── Menu icon — default icon colour (turns brand on hover via ghost button) ─
   &__menu-icon {
     color: var(--color-icon-default);
   }
+}
+
+// ── Pinned column shadows ─────────────────────────────────────────────────────
+//
+// AG Grid adds these classes to cells in pinned column containers.
+// The shadow appears on the inner edge (right edge for left-pinned, left edge
+// for right-pinned) to visually separate the fixed columns from the scrollable area.
+
+.ds-table-header-cell.ds-table-pinned-left,
+.ag-pinned-left-header .ds-table-header-cell {
+  box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.08);
+  clip-path: inset(0 -12px 0 0); // let right shadow spill out
+}
+
+.ds-table-header-cell.ds-table-pinned-right,
+.ag-pinned-right-header .ds-table-header-cell {
+  box-shadow: -4px 0 8px -2px rgba(0, 0, 0, 0.08);
+  clip-path: inset(0 0 0 -12px); // let left shadow spill out
 }

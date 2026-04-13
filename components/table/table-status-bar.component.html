@@ -1,0 +1,44 @@
+<div class="ds-table-status-bar">
+
+  <!-- Left — row counts -->
+  <div class="ds-table-status-bar__counts">
+    <span *ngIf="rowCount !== null" class="ds-table-status-bar__stat">
+      <span class="ds-table-status-bar__stat-label">Rows:</span>
+      <span class="ds-table-status-bar__stat-value">{{ formatNumber(rowCount) }}</span>
+    </span>
+    <span *ngIf="totalRowCount !== null" class="ds-table-status-bar__stat">
+      <span class="ds-table-status-bar__stat-label">Total Rows:</span>
+      <span class="ds-table-status-bar__stat-value">{{ formatNumber(totalRowCount) }}</span>
+    </span>
+  </div>
+
+  <!-- Right — aggregate values (shown when any aggregate is provided) -->
+  <div
+    *ngIf="hasAggregates()"
+    class="ds-table-status-bar__aggregates"
+    aria-live="polite"
+    aria-atomic="true"
+  >
+    <span *ngIf="average !== null" class="ds-table-status-bar__stat">
+      <span class="ds-table-status-bar__stat-label">Average:</span>
+      <span class="ds-table-status-bar__stat-value">{{ formatNumber(average) }}</span>
+    </span>
+    <span *ngIf="count !== null" class="ds-table-status-bar__stat">
+      <span class="ds-table-status-bar__stat-label">Count:</span>
+      <span class="ds-table-status-bar__stat-value">{{ formatNumber(count) }}</span>
+    </span>
+    <span *ngIf="min !== null" class="ds-table-status-bar__stat">
+      <span class="ds-table-status-bar__stat-label">Min:</span>
+      <span class="ds-table-status-bar__stat-value">{{ formatNumber(min) }}</span>
+    </span>
+    <span *ngIf="max !== null" class="ds-table-status-bar__stat">
+      <span class="ds-table-status-bar__stat-label">Max:</span>
+      <span class="ds-table-status-bar__stat-value">{{ formatNumber(max) }}</span>
+    </span>
+    <span *ngIf="sum !== null" class="ds-table-status-bar__stat">
+      <span class="ds-table-status-bar__stat-label">Sum:</span>
+      <span class="ds-table-status-bar__stat-value">{{ formatNumber(sum) }}</span>
+    </span>
+  </div>
+
+</div>

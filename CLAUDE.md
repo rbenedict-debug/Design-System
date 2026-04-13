@@ -39,7 +39,7 @@ components/
   checkbox/ radio/ toggle/ datepicker/
   badge/ alert/ tooltip/ avatar/ progress/ spinner/ snackbar/ skeleton/ empty-state/
   tabs/ card/ dialog/ menu/ accordion/ chip/ tag/ divider/ list/ paginator/
-  label/ search/ table/ ag-paginator/ table-toolbar/ hover-card/ save-bar/ modal/
+  label/ search/ table/ ag-paginator/ table-toolbar/ column-panel/ hover-card/ save-bar/ modal/
   nav-button/ agent-status/ nav-sidebar/ nav-tab/ top-nav/ nav-expand/
   subnav-button/ subnav-subheader/ subnav-header/  # subnav-subheader: settings subnav only
   rich-text-editor/
@@ -213,6 +213,9 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-modal` | `MatDialogModule` (optional) | Full-featured modal — sticky header, scrollable body, optional tabs slot (`[modal-tabs]`), optional actions footer (`[modal-actions]`); variants: `close` (×) / `collapse` (minimize); sizes: `fixed` (500px) / `full` (fills backdrop); `(dismissClick)` output; panelClass: `'ds-modal-overlay'` when using MatDialog |
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
+| `ds-table-status-bar` | Custom | No Material equivalent — aggregate values row pinned above paginator (Rows, Total Rows, Average, Count, Min, Max, Sum); implements minimal AG Grid status panel API |
+| `ds-table-row-groups-bar` | Custom | No Material equivalent — bar between toolbar and header; drag target for row group columns + removable chips + Comfort/Compact density toggle (`ds-density-toggle`); bind `[api]` to auto-sync |
+| `ds-column-panel` | Custom | No Material equivalent — AG Grid custom tool panel; sections: density toggle, column visibility (checkbox+drag), pivot mode, row groups, values; width 300px; shown via `[data-panel-open]` on container |
 | `ds-table-toolbar` | Custom | No Material equivalent — AG Grid table toolbar |
 | `ds-page-layout` | Custom | CSS-only app shell; SCSS in `layout/page-layout/`, ships as `dist/layout.css` |
 | `ds-split-page` | CdkDrag (CDK only) | CSS-only two-pane layout; SCSS in `layout/split-page/`, ships as `dist/layout.css`; use `CdkDragModule` for production resize |

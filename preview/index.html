@@ -5859,10 +5859,6 @@
   transform: rotate(180deg);
   display: inline-block;
 }
-.ds-table-header-cell__sort-icon--none {
-  color: var(--color-icon-subtle);
-  opacity: 0.5;
-}
 .ds-table-header-cell__menu-icon {
   color: var(--color-icon-default);
 }
@@ -6152,56 +6148,283 @@
   cursor: not-allowed;
 }
 
-.ds-column-panel {
-  display: none;
-  flex-direction: column;
-  width: 260px;
-  flex-shrink: 0;
-  border-left: 1px solid var(--color-border-subtle);
-  background: var(--color-surface-page);
-}
-.ds-column-panel__header {
+/* ── Table Status Bar ───────────────────────────────────────────────────── */
+.ds-table-status-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-bottom: 1px solid var(--color-border-subtle);
+  height: 56px;
+  padding: 0 var(--spacing-lg);
+  background: var(--color-surface-subtle);
+  border-top: 1px solid var(--color-border-secondary);
+  box-sizing: border-box;
   flex-shrink: 0;
 }
-.ds-column-panel__title {
-  font-family: var(--ref-typescale-label-large-font);
-  font-size: var(--ref-typescale-label-large-size);
-  font-weight: var(--ref-typescale-label-large-weight-prominent);
-  line-height: var(--ref-typescale-label-large-line-height);
-  letter-spacing: var(--ref-typescale-label-large-tracking);
-  color: var(--color-text-primary);
-}
-.ds-column-panel__list {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  flex: 1 0 0;
-}
-.ds-column-panel__row {
+.ds-table-status-bar__counts,
+.ds-table-status-bar__aggregates {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-sm) var(--spacing-lg);
-  min-height: 48px;
+  gap: var(--spacing-xl);
 }
-.ds-column-panel__row--system {
-  opacity: 0.5;
-  pointer-events: none;
+.ds-table-status-bar__stat {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-xs);
+  white-space: nowrap;
 }
-.ds-column-panel__name {
+.ds-table-status-bar__stat-label {
+  font-family: var(--ref-typescale-body-small-font);
+  font-size: var(--ref-typescale-body-small-size);
+  font-weight: var(--ref-typescale-body-small-weight);
+  line-height: var(--ref-typescale-body-small-line-height);
+  letter-spacing: var(--ref-typescale-body-small-tracking);
+  color: var(--color-text-secondary);
+}
+.ds-table-status-bar__stat-value {
+  font-family: var(--ref-typescale-body-small-font);
+  font-size: var(--ref-typescale-body-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-body-small-line-height);
+  letter-spacing: var(--ref-typescale-body-small-tracking);
+  color: var(--color-text-primary);
+}
+
+/* ── Density Toggle ─────────────────────────────────────────────────────── */
+.ds-density-toggle {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.ds-density-toggle__btn {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0 var(--spacing-md);
+  height: 42px;
+  cursor: pointer;
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  transition: background 80ms ease, color 80ms ease;
+}
+.ds-density-toggle__btn + .ds-density-toggle__btn {
+  border-left: 1px solid var(--color-border-primary);
+}
+.ds-density-toggle__btn:focus { outline: none; }
+.ds-density-toggle__btn:focus-visible { box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
+.ds-density-toggle__btn:hover:not(.is-selected) { background: var(--overlay-hovered); }
+.ds-density-toggle__btn.is-selected {
+  background: var(--color-surface-brand-bold);
+  color: var(--color-text-on-brand);
+}
+
+/* ── Table Row Groups Bar ────────────────────────────────────────────────── */
+.ds-table-row-groups-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 var(--spacing-lg);
+  background: var(--color-surface-page);
+  border-bottom: 1px solid var(--color-border-subtle);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  gap: var(--spacing-lg);
+}
+.ds-table-row-groups-bar__drop-zone {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1 0 0;
+  min-width: 0;
+  overflow: hidden;
+}
+.ds-table-row-groups-bar__drag-icon {
+  color: var(--color-icon-subtle);
+  flex-shrink: 0;
+}
+.ds-table-row-groups-bar__placeholder {
   font-family: var(--ref-typescale-body-medium-font);
   font-size: var(--ref-typescale-body-medium-size);
   font-weight: var(--ref-typescale-body-medium-weight);
   line-height: var(--ref-typescale-body-medium-line-height);
-  color: var(--color-text-primary);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-placeholder);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ds-table-row-groups-bar__chips {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+.ds-table-row-groups-bar__density {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-#table-sim[data-panel-open] .ds-column-panel {
+/* ── Pinned columns ─────────────────────────────────────────────────────── */
+.ds-table-header-cell.ds-table-pinned-right,
+.ag-pinned-right-header .ds-table-header-cell {
+  box-shadow: -4px 0 8px -2px rgba(0,0,0,0.08);
+  clip-path: inset(0 0 0 -12px);
+}
+.ds-table-header-cell.ds-table-pinned-left,
+.ag-pinned-left-header .ds-table-header-cell {
+  box-shadow: 4px 0 8px -2px rgba(0,0,0,0.08);
+  clip-path: inset(0 -12px 0 0);
+}
+.ds-table-row-cell.ds-table-pinned-right,
+.ag-pinned-right-cols-container .ds-table-row-cell {
+  box-shadow: -4px 0 8px -2px rgba(0,0,0,0.08);
+  clip-path: inset(0 0 0 -12px);
+}
+.ds-table-row-cell.ds-table-pinned-left,
+.ag-pinned-left-cols-container .ds-table-row-cell {
+  box-shadow: 4px 0 8px -2px rgba(0,0,0,0.08);
+  clip-path: inset(0 -12px 0 0);
+}
+
+/* ── Column Panel ───────────────────────────────────────────────────────── */
+.ds-column-panel {
+  display: none;
+  flex-direction: column;
+  width: 300px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-page);
+  overflow: hidden;
+}
+.ds-column-panel__density {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border-subtle);
+  flex-shrink: 0;
+}
+.ds-column-panel__density .ds-density-toggle { width: 100%; }
+.ds-column-panel__density .ds-density-toggle__btn { flex: 1 0 0; }
+.ds-column-panel__col-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex: 1 0 0;
+  min-height: 0;
+}
+.ds-column-panel__section-hd {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 0 var(--spacing-md);
+  height: 42px;
+  flex-shrink: 0;
+}
+.ds-column-panel__section-icon { color: var(--color-icon-subtle); flex-shrink: 0; }
+.ds-column-panel__section-title {
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  color: var(--color-text-primary);
+  flex: 1 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-column-panel__col-row {
+  display: flex;
+  align-items: center;
+  height: 42px;
+  padding: 0 var(--spacing-sm);
+  gap: var(--spacing-xs);
+}
+.ds-column-panel__col-row:hover { background: var(--overlay-hovered); }
+.ds-column-panel__col-row--system { opacity: 0.4; pointer-events: none; }
+.ds-column-panel__col-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.ds-column-panel__col-checkbox:focus { outline: none; }
+.ds-column-panel__col-checkbox:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+.ds-column-panel__col-checkbox .ds-icon { font-size: 20px; width: 20px; height: 20px; color: var(--color-border-input); }
+.ds-column-panel__col-checkbox--checked .ds-icon { color: var(--color-surface-brand-bold); }
+.ds-column-panel__col-drag { color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0; }
+.ds-column-panel__col-drag:active { cursor: grabbing; }
+.ds-column-panel__col-name {
+  font-family: var(--ref-typescale-body-medium-font);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typescale-body-medium-weight);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-primary);
+  flex: 1 0 0;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-column-panel__pivot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 42px;
+  padding: 0 var(--spacing-md);
+  flex-shrink: 0;
+}
+.ds-column-panel__pivot-label {
+  font-family: var(--ref-typescale-body-medium-font);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typescale-body-medium-weight);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-primary);
+}
+.ds-column-panel__add-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  height: 42px;
+  padding: 0 var(--spacing-md);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  color: var(--color-text-brand);
+  flex-shrink: 0;
+  text-align: left;
+}
+.ds-column-panel__add-btn:focus { outline: none; }
+.ds-column-panel__add-btn:focus-visible { box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
+.ds-column-panel__add-btn:hover { background: var(--overlay-hovered); }
+.ds-column-panel__add-btn:active { background: var(--overlay-pressed); }
+.ds-column-panel__add-btn .ds-icon { color: var(--color-icon-brand); flex-shrink: 0; }
+
+[data-panel-open] .ds-column-panel {
   display: flex;
 }
 
@@ -8289,8 +8512,11 @@
       <div class="nav-group-label">Table Primitives</div>
       <a class="nav-link" href="#table-header-cell" onclick="setActive(this)"><span class="nav-dot"></span>Header Cell</a>
       <a class="nav-link" href="#table-row-cell" onclick="setActive(this)"><span class="nav-dot"></span>Row Cell</a>
+      <a class="nav-link" href="#table-status-bar" onclick="setActive(this)"><span class="nav-dot"></span>Status Bar</a>
+      <a class="nav-link" href="#table-row-groups-bar" onclick="setActive(this)"><span class="nav-dot"></span>Row Groups Bar</a>
       <a class="nav-link" href="#ag-paginator" onclick="setActive(this)"><span class="nav-dot"></span>AG Grid Paginator</a>
       <a class="nav-link" href="#table-toolbar" onclick="setActive(this)"><span class="nav-dot"></span>Toolbar</a>
+      <a class="nav-link" href="#column-panel" onclick="setActive(this)"><span class="nav-dot"></span>Column Panel</a>
 
       <div class="nav-group-label">Page Layouts</div>
       <a class="nav-link" href="#split-page" onclick="setActive(this)"><span class="nav-dot"></span>Split Page</a>
@@ -13681,6 +13907,299 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
       </section>
 
+      <!-- ──────────────────────────────────────────────────────────── -->
+      <!-- STATUS BAR                                                   -->
+      <!-- ──────────────────────────────────────────────────────────── -->
+      <section class="section" id="table-status-bar">
+        <h2 class="section-title">Table Status Bar</h2>
+        <p class="section-desc">
+          Pinned aggregate row displayed between the data rows and the paginator.
+          Left side shows row counts; right side shows numeric aggregates (average, count, min, max, sum)
+          driven by range selection. Registers as an AG Grid status panel via <code>agInit(params)</code>.
+        </p>
+        <p class="section-source">components/table/table-status-bar.component.ts</p>
+
+        <div class="component-demo">
+
+          <!-- Full bar: counts + all aggregates -->
+          <div class="demo-row">
+            <div class="demo-label">All values</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div class="ds-table-status-bar" style="width: 100%;">
+                <div class="ds-table-status-bar__counts">
+                  <span class="ds-table-status-bar__stat">
+                    <span class="ds-table-status-bar__stat-label">Rows:</span>
+                    <span class="ds-table-status-bar__stat-value">100</span>
+                  </span>
+                  <span class="ds-table-status-bar__stat">
+                    <span class="ds-table-status-bar__stat-label">Total Rows:</span>
+                    <span class="ds-table-status-bar__stat-value">200</span>
+                  </span>
+                </div>
+                <div class="ds-table-status-bar__aggregates" aria-live="polite">
+                  <span class="ds-table-status-bar__stat">
+                    <span class="ds-table-status-bar__stat-label">Average:</span>
+                    <span class="ds-table-status-bar__stat-value">4,250.00</span>
+                  </span>
+                  <span class="ds-table-status-bar__stat">
+                    <span class="ds-table-status-bar__stat-label">Count:</span>
+                    <span class="ds-table-status-bar__stat-value">100</span>
+                  </span>
+                  <span class="ds-table-status-bar__stat">
+                    <span class="ds-table-status-bar__stat-label">Min:</span>
+                    <span class="ds-table-status-bar__stat-value">1,200.00</span>
+                  </span>
+                  <span class="ds-table-status-bar__stat">
+                    <span class="ds-table-status-bar__stat-label">Max:</span>
+                    <span class="ds-table-status-bar__stat-value">57,800.00</span>
+                  </span>
+                  <span class="ds-table-status-bar__stat">
+                    <span class="ds-table-status-bar__stat-label">Sum:</span>
+                    <span class="ds-table-status-bar__stat-value">425,000.00</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Counts only (no selection) -->
+          <div class="demo-row">
+            <div class="demo-label">Counts only</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div class="ds-table-status-bar" style="width: 100%;">
+                <div class="ds-table-status-bar__counts">
+                  <span class="ds-table-status-bar__stat">
+                    <span class="ds-table-status-bar__stat-label">Rows:</span>
+                    <span class="ds-table-status-bar__stat-value">3,842</span>
+                  </span>
+                  <span class="ds-table-status-bar__stat">
+                    <span class="ds-table-status-bar__stat-label">Total Rows:</span>
+                    <span class="ds-table-status-bar__stat-value">3,842</span>
+                  </span>
+                </div>
+                <div class="ds-table-status-bar__aggregates"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ──────────────────────────────────────────────────────────── -->
+      <!-- ROW GROUPS BAR                                               -->
+      <!-- ──────────────────────────────────────────────────────────── -->
+      <section class="section" id="table-row-groups-bar">
+        <h2 class="section-title">Table Row Groups Bar</h2>
+        <p class="section-desc">
+          Bar between the toolbar and the column header row. Provides a drag-drop target
+          for columns to set row grouping, shows active row groups as removable chips,
+          and includes the Comfort/Compact density toggle. Bind <code>[api]</code> to
+          auto-sync with AG Grid column state.
+        </p>
+        <p class="section-source">components/table/table-row-groups-bar.component.ts</p>
+
+        <div class="component-demo">
+
+          <!-- No active groups -->
+          <div class="demo-row">
+            <div class="demo-label">No groups</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div class="ds-table-row-groups-bar" style="width: 100%;">
+                <div class="ds-table-row-groups-bar__drop-zone">
+                  <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
+                  <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
+                </div>
+                <div class="ds-table-row-groups-bar__density">
+                  <div class="ds-density-toggle" role="group" aria-label="Row density">
+                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Comfort</button>
+                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false" onclick="dsToggleDensity(this)">Compact</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- With active row group chips -->
+          <div class="demo-row">
+            <div class="demo-label">With groups</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div class="ds-table-row-groups-bar" style="width: 100%;">
+                <div class="ds-table-row-groups-bar__drop-zone">
+                  <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
+                  <div class="ds-table-row-groups-bar__chips">
+                    <span class="ds-tag ds-tag--sm">
+                      <span class="ds-tag__label">Department</span>
+                      <button type="button" class="ds-tag__remove" aria-label="Remove Department row group">
+                        <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+                      </button>
+                    </span>
+                    <span class="ds-tag ds-tag--sm">
+                      <span class="ds-tag__label">Status</span>
+                      <button type="button" class="ds-tag__remove" aria-label="Remove Status row group">
+                        <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+                <div class="ds-table-row-groups-bar__density">
+                  <div class="ds-density-toggle" role="group" aria-label="Row density">
+                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Comfort</button>
+                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Compact</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact density selected -->
+          <div class="demo-row">
+            <div class="demo-label">Compact density</div>
+            <div class="demo-row-items" style="flex: 1;">
+              <div class="ds-table-row-groups-bar" style="width: 100%;">
+                <div class="ds-table-row-groups-bar__drop-zone">
+                  <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
+                  <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
+                </div>
+                <div class="ds-table-row-groups-bar__density">
+                  <div class="ds-density-toggle" role="group" aria-label="Row density">
+                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false">Comfort</button>
+                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true">Compact</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ──────────────────────────────────────────────────────────── -->
+      <!-- COLUMN PANEL                                                 -->
+      <!-- ──────────────────────────────────────────────────────────── -->
+      <section class="section" id="column-panel">
+        <h2 class="section-title">Column Panel</h2>
+        <p class="section-desc">
+          Side panel that opens when the gear toolbar button is toggled. Provides density toggle,
+          column visibility (checkbox + drag to reorder), pivot mode switch, row groups, and values
+          sections. Registers as an AG Grid tool panel via <code>agInit(params)</code>. Width is
+          fixed at 300px; shown via <code>[data-panel-open]</code> on the enclosing table container.
+        </p>
+        <p class="section-source">components/column-panel/column-panel.component.ts</p>
+
+        <div class="component-demo">
+          <div class="demo-row" style="align-items: flex-start;">
+            <div class="demo-label" style="padding-top: 12px;">Default</div>
+            <div class="demo-row-items">
+              <!-- Shown inline at natural height for preview -->
+              <div class="ds-column-panel" style="display: flex; height: 500px; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); overflow: hidden;">
+
+                <!-- 1. Density -->
+                <div class="ds-column-panel__density">
+                  <div class="ds-density-toggle" role="group" aria-label="Row density" style="width: 100%;">
+                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true" style="flex: 1 0 0;">Comfort</button>
+                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false" style="flex: 1 0 0;">Compact</button>
+                  </div>
+                </div>
+
+                <!-- 2. Column Visibility -->
+                <div class="ds-column-panel__section-hd">
+                  <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">visibility</span>
+                  <span class="ds-column-panel__section-title">Column Visibility</span>
+                </div>
+                <div class="ds-column-panel__col-list" style="flex: none; overflow: visible;">
+
+                  <div class="ds-column-panel__col-row ds-column-panel__col-row--system" data-col-key="checkbox">
+                    <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Checkbox visibility" tabindex="-1">
+                      <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                    </div>
+                    <span class="ds-column-panel__col-name">Checkbox</span>
+                  </div>
+
+                  <div class="ds-column-panel__col-row" draggable="true" data-col-key="customer">
+                    <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Customer visibility" tabindex="0">
+                      <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                    </div>
+                    <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+                    <span class="ds-column-panel__col-name">Customer</span>
+                  </div>
+
+                  <div class="ds-column-panel__col-row" draggable="true" data-col-key="email">
+                    <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Email visibility" tabindex="0">
+                      <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                    </div>
+                    <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+                    <span class="ds-column-panel__col-name">Email</span>
+                  </div>
+
+                  <div class="ds-column-panel__col-row" draggable="true" data-col-key="department">
+                    <div class="ds-column-panel__col-checkbox" role="checkbox" aria-checked="false" aria-label="Toggle Department visibility" tabindex="0" onclick="dsToggleColVisibility(this)">
+                      <span class="ds-icon ds-icon--sm" aria-hidden="true">check_box_outline_blank</span>
+                    </div>
+                    <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+                    <span class="ds-column-panel__col-name">Department</span>
+                  </div>
+
+                  <div class="ds-column-panel__col-row" draggable="true" data-col-key="status">
+                    <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Status visibility" tabindex="0">
+                      <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                    </div>
+                    <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+                    <span class="ds-column-panel__col-name">Status</span>
+                  </div>
+
+                  <div class="ds-column-panel__col-row ds-column-panel__col-row--system" data-col-key="actions">
+                    <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Actions visibility" tabindex="-1">
+                      <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                    </div>
+                    <span class="ds-column-panel__col-name">Actions</span>
+                  </div>
+
+                </div>
+
+                <!-- Divider -->
+                <div class="ds-divider" role="separator" aria-hidden="true"></div>
+
+                <!-- 3. Pivot Mode -->
+                <div class="ds-column-panel__pivot-row">
+                  <span class="ds-column-panel__pivot-label">Pivot Mode</span>
+                  <label class="ds-toggle" aria-label="Enable pivot mode">
+                    <input type="checkbox" class="ds-toggle__control" />
+                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                  </label>
+                </div>
+
+                <!-- Divider -->
+                <div class="ds-divider" role="separator" aria-hidden="true"></div>
+
+                <!-- 4. Row Groups -->
+                <div class="ds-column-panel__section-hd">
+                  <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">drag_indicator</span>
+                  <span class="ds-column-panel__section-title">Row Groups</span>
+                </div>
+                <button type="button" class="ds-column-panel__add-btn">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
+                  Add Column
+                </button>
+
+                <!-- Divider -->
+                <div class="ds-divider" role="separator" aria-hidden="true"></div>
+
+                <!-- 5. Values -->
+                <div class="ds-column-panel__section-hd">
+                  <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">functions</span>
+                  <span class="ds-column-panel__section-title">Values</span>
+                </div>
+                <button type="button" class="ds-column-panel__add-btn">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
+                  Add Column
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="split-page">
         <div class="section-header">
           <h2 class="section-title">Split Page</h2>
@@ -15158,7 +15677,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                       <div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column;">
 
                         <!-- Toolbar -->
-                        <div class="ds-table-toolbar">
+                        <div class="ds-table-toolbar" id="pt-toolbar">
                           <div class="ds-table-toolbar__left">
                             <button class="ds-button ds-button--filled ds-button--leading-icon" type="button">
                               <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">add</span></span>
@@ -15189,6 +15708,20 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                             <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Download">
                               <span class="ds-icon">download</span>
                             </button>
+                          </div>
+                        </div>
+
+                        <!-- Row groups bar -->
+                        <div class="ds-table-row-groups-bar">
+                          <div class="ds-table-row-groups-bar__drop-zone">
+                            <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
+                            <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
+                          </div>
+                          <div class="ds-table-row-groups-bar__density">
+                            <div class="ds-density-toggle" role="group" aria-label="Row density">
+                              <button type="button" class="ds-density-toggle__btn is-selected" id="pt-comfort-btn" aria-pressed="true" onclick="ptSetDensity('comfort', this)">Comfort</button>
+                              <button type="button" class="ds-density-toggle__btn" id="pt-compact-btn" aria-pressed="false" onclick="ptSetDensity('compact', this)">Compact</button>
+                            </div>
                           </div>
                         </div>
 
@@ -15327,8 +15860,44 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                           </div><!-- /min-width wrapper -->
                         </div><!-- /table-scroll-pt -->
 
+                        <!-- Status bar (values row) -->
+                        <div class="ds-table-status-bar" style="width: 100%;">
+                          <div class="ds-table-status-bar__counts">
+                            <span class="ds-table-status-bar__stat">
+                              <span class="ds-table-status-bar__stat-label">Rows:</span>
+                              <span class="ds-table-status-bar__stat-value">5</span>
+                            </span>
+                            <span class="ds-table-status-bar__stat">
+                              <span class="ds-table-status-bar__stat-label">Total Rows:</span>
+                              <span class="ds-table-status-bar__stat-value">3,842</span>
+                            </span>
+                          </div>
+                          <div class="ds-table-status-bar__aggregates" aria-live="polite">
+                            <span class="ds-table-status-bar__stat">
+                              <span class="ds-table-status-bar__stat-label">Average:</span>
+                              <span class="ds-table-status-bar__stat-value">26,630.00</span>
+                            </span>
+                            <span class="ds-table-status-bar__stat">
+                              <span class="ds-table-status-bar__stat-label">Count:</span>
+                              <span class="ds-table-status-bar__stat-value">5</span>
+                            </span>
+                            <span class="ds-table-status-bar__stat">
+                              <span class="ds-table-status-bar__stat-label">Min:</span>
+                              <span class="ds-table-status-bar__stat-value">8,750.00</span>
+                            </span>
+                            <span class="ds-table-status-bar__stat">
+                              <span class="ds-table-status-bar__stat-label">Max:</span>
+                              <span class="ds-table-status-bar__stat-value">57,800.00</span>
+                            </span>
+                            <span class="ds-table-status-bar__stat">
+                              <span class="ds-table-status-bar__stat-label">Sum:</span>
+                              <span class="ds-table-status-bar__stat-value">133,150.00</span>
+                            </span>
+                          </div>
+                        </div>
+
                         <!-- Paginator -->
-                        <div class="ds-ag-paginator" style="width: 100%; border-top: 1px solid var(--color-border-subtle);">
+                        <div class="ds-ag-paginator" style="width: 100%;">
                           <div class="ds-ag-paginator__inner">
                             <div class="ds-ag-paginator__counter">
                               <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
@@ -15378,71 +15947,119 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                       </div><!-- /main table content -->
 
-                      <!-- ── Column tool panel ──────────────────────────── -->
+                      <!-- ── Column panel ───────────────────────────────── -->
                       <div class="ds-column-panel" id="table-column-panel-pt">
-                        <div class="ds-column-panel__header">
-                          <span class="ds-column-panel__title">Columns</span>
-                          <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Close columns panel" onclick="closeColumnPanelPT()">
-                            <span class="ds-icon">close</span>
-                          </button>
-                        </div>
-                        <div class="ds-column-panel__list" id="column-panel-list-pt">
-                          <div class="ds-column-panel__row ds-column-panel__row--system" data-col-key="checkbox">
-                            <label class="ds-toggle" aria-label="Toggle Checkbox column visibility">
-                              <input type="checkbox" class="ds-toggle__control" checked />
-                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                            </label>
-                            <span class="ds-column-panel__name">Checkbox</span>
-                          </div>
-                          <div class="ds-column-panel__row" draggable="true" data-col-key="customer">
-                            <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
-                            <label class="ds-toggle" aria-label="Toggle Customer column visibility">
-                              <input type="checkbox" class="ds-toggle__control" checked />
-                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                            </label>
-                            <span class="ds-column-panel__name">Customer</span>
-                          </div>
-                          <div class="ds-column-panel__row" draggable="true" data-col-key="email">
-                            <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
-                            <label class="ds-toggle" aria-label="Toggle Email column visibility">
-                              <input type="checkbox" class="ds-toggle__control" checked />
-                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                            </label>
-                            <span class="ds-column-panel__name">Email</span>
-                          </div>
-                          <div class="ds-column-panel__row" draggable="true" data-col-key="department">
-                            <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
-                            <label class="ds-toggle" aria-label="Toggle Department column visibility">
-                              <input type="checkbox" class="ds-toggle__control" checked />
-                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                            </label>
-                            <span class="ds-column-panel__name">Department</span>
-                          </div>
-                          <div class="ds-column-panel__row" draggable="true" data-col-key="status">
-                            <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
-                            <label class="ds-toggle" aria-label="Toggle Status column visibility">
-                              <input type="checkbox" class="ds-toggle__control" checked />
-                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                            </label>
-                            <span class="ds-column-panel__name">Status</span>
-                          </div>
-                          <div class="ds-column-panel__row" draggable="true" data-col-key="amount">
-                            <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-subtle); cursor: grab; flex-shrink: 0;">drag_indicator</span>
-                            <label class="ds-toggle" aria-label="Toggle Amount column visibility">
-                              <input type="checkbox" class="ds-toggle__control" checked />
-                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                            </label>
-                            <span class="ds-column-panel__name">Amount</span>
-                          </div>
-                          <div class="ds-column-panel__row ds-column-panel__row--system" data-col-key="actions">
-                            <label class="ds-toggle" aria-label="Toggle Actions column visibility">
-                              <input type="checkbox" class="ds-toggle__control" checked />
-                              <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
-                            </label>
-                            <span class="ds-column-panel__name">Actions</span>
+
+                        <!-- 1. Density -->
+                        <div class="ds-column-panel__density">
+                          <div class="ds-density-toggle" role="group" aria-label="Row density" style="width: 100%;">
+                            <button type="button" class="ds-density-toggle__btn is-selected" id="pt-col-comfort" aria-pressed="true" style="flex: 1 0 0;" onclick="ptSetDensity('comfort', this)">Comfort</button>
+                            <button type="button" class="ds-density-toggle__btn" id="pt-col-compact" aria-pressed="false" style="flex: 1 0 0;" onclick="ptSetDensity('compact', this)">Compact</button>
                           </div>
                         </div>
-                      </div><!-- /column-panel-pt -->
+
+                        <!-- 2. Column Visibility -->
+                        <div class="ds-column-panel__section-hd">
+                          <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">visibility</span>
+                          <span class="ds-column-panel__section-title">Column Visibility</span>
+                        </div>
+                        <div class="ds-column-panel__col-list" id="column-panel-list-pt">
+
+                          <div class="ds-column-panel__col-row ds-column-panel__col-row--system" data-col-key="checkbox">
+                            <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Checkbox visibility" tabindex="-1">
+                              <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                            </div>
+                            <span class="ds-column-panel__col-name">Checkbox</span>
+                          </div>
+
+                          <div class="ds-column-panel__col-row" draggable="true" data-col-key="customer">
+                            <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Customer visibility" tabindex="0" onclick="dsToggleColVisPT(this)">
+                              <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                            </div>
+                            <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+                            <span class="ds-column-panel__col-name">Customer</span>
+                          </div>
+
+                          <div class="ds-column-panel__col-row" draggable="true" data-col-key="email">
+                            <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Email visibility" tabindex="0" onclick="dsToggleColVisPT(this)">
+                              <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                            </div>
+                            <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+                            <span class="ds-column-panel__col-name">Email</span>
+                          </div>
+
+                          <div class="ds-column-panel__col-row" draggable="true" data-col-key="department">
+                            <div class="ds-column-panel__col-checkbox" role="checkbox" aria-checked="false" aria-label="Toggle Department visibility" tabindex="0" onclick="dsToggleColVisPT(this)">
+                              <span class="ds-icon ds-icon--sm" aria-hidden="true">check_box_outline_blank</span>
+                            </div>
+                            <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+                            <span class="ds-column-panel__col-name">Department</span>
+                          </div>
+
+                          <div class="ds-column-panel__col-row" draggable="true" data-col-key="status">
+                            <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Status visibility" tabindex="0" onclick="dsToggleColVisPT(this)">
+                              <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                            </div>
+                            <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+                            <span class="ds-column-panel__col-name">Status</span>
+                          </div>
+
+                          <div class="ds-column-panel__col-row" draggable="true" data-col-key="amount">
+                            <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Amount visibility" tabindex="0" onclick="dsToggleColVisPT(this)">
+                              <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                            </div>
+                            <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+                            <span class="ds-column-panel__col-name">Amount</span>
+                          </div>
+
+                          <div class="ds-column-panel__col-row ds-column-panel__col-row--system" data-col-key="actions">
+                            <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked" role="checkbox" aria-checked="true" aria-label="Toggle Actions visibility" tabindex="-1">
+                              <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
+                            </div>
+                            <span class="ds-column-panel__col-name">Actions</span>
+                          </div>
+
+                        </div><!-- /col-list -->
+
+                        <!-- Divider -->
+                        <div class="ds-divider" role="separator" aria-hidden="true"></div>
+
+                        <!-- 3. Pivot Mode -->
+                        <div class="ds-column-panel__pivot-row">
+                          <span class="ds-column-panel__pivot-label">Pivot Mode</span>
+                          <label class="ds-toggle" aria-label="Enable pivot mode">
+                            <input type="checkbox" class="ds-toggle__control" />
+                            <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                          </label>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="ds-divider" role="separator" aria-hidden="true"></div>
+
+                        <!-- 4. Row Groups -->
+                        <div class="ds-column-panel__section-hd">
+                          <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">drag_indicator</span>
+                          <span class="ds-column-panel__section-title">Row Groups</span>
+                        </div>
+                        <button type="button" class="ds-column-panel__add-btn">
+                          <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
+                          Add Column
+                        </button>
+
+                        <!-- Divider -->
+                        <div class="ds-divider" role="separator" aria-hidden="true"></div>
+
+                        <!-- 5. Values -->
+                        <div class="ds-column-panel__section-hd">
+                          <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">functions</span>
+                          <span class="ds-column-panel__section-title">Values</span>
+                        </div>
+                        <button type="button" class="ds-column-panel__add-btn">
+                          <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
+                          Add Column
+                        </button>
+
+                      </div><!-- /ds-column-panel -->
 
                     </div><!-- /table-sim-pt -->
                   </div><!-- /ds-page-content__main -->
@@ -16166,6 +16783,44 @@ function closeColumnPanelPT() {
   if (btn) {
     btn.setAttribute('aria-pressed', 'false');
     btn.classList.remove('is-selected');
+  }
+}
+
+// ── Density toggle (row groups bar + column panel) ───────────────────────────
+function ptSetDensity(mode, clickedBtn) {
+  // Update both the row groups bar buttons and column panel buttons in sync
+  var allGroups = [
+    ['pt-comfort-btn', 'pt-compact-btn'],
+    ['pt-col-comfort',  'pt-col-compact'],
+  ];
+  allGroups.forEach(function(pair) {
+    var comfortBtn = document.getElementById(pair[0]);
+    var compactBtn = document.getElementById(pair[1]);
+    if (!comfortBtn || !compactBtn) { return; }
+    if (mode === 'comfort') {
+      comfortBtn.classList.add('is-selected');    comfortBtn.setAttribute('aria-pressed', 'true');
+      compactBtn.classList.remove('is-selected'); compactBtn.setAttribute('aria-pressed', 'false');
+    } else {
+      compactBtn.classList.add('is-selected');    compactBtn.setAttribute('aria-pressed', 'true');
+      comfortBtn.classList.remove('is-selected'); comfortBtn.setAttribute('aria-pressed', 'false');
+    }
+  });
+}
+
+// ── Column visibility toggle (column panel) ──────────────────────────────────
+function dsToggleColVisPT(checkbox) {
+  var checked = checkbox.getAttribute('aria-checked') === 'true';
+  var newChecked = !checked;
+  var icon = checkbox.querySelector('.ds-icon');
+  checkbox.setAttribute('aria-checked', String(newChecked));
+  if (newChecked) {
+    checkbox.classList.add('ds-column-panel__col-checkbox--checked');
+    icon.classList.add('ds-icon--filled');
+    icon.textContent = 'check_box';
+  } else {
+    checkbox.classList.remove('ds-column-panel__col-checkbox--checked');
+    icon.classList.remove('ds-icon--filled');
+    icon.textContent = 'check_box_outline_blank';
   }
 }
 </script>

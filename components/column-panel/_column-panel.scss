@@ -1,67 +1,293 @@
-// Onflo Design System — Column Tool Panel
-// AG Grid reskinned column visibility panel
-// Shown as a flex sibling of the main grid when data-panel-open is present on #table-sim
+// ============================================================
+// Onflo Design System — Column Panel
+// ============================================================
+//
+// Side panel that slides in when the settings (gear) toggle is active.
+// AG Grid custom tool panel — register via toolPanelDef in gridOptions.
+//
+// Sections (top to bottom):
+//   1. Density toggle  — Comfort / Compact segmented button
+//   2. Column Visibility — checkbox + drag per column, reorderable
+//   3. Pivot Mode        — label + toggle switch
+//   4. Row Groups        — section header + "Add Column" button
+//   5. Values            — section header + "Add Column" button
+//
+// HTML class API:
+//   <div class="ds-column-panel">
+//     <!-- 1. Density -->
+//     <div class="ds-column-panel__density">
+//       <div class="ds-density-toggle">
+//         <button class="ds-density-toggle__btn is-selected">Comfort</button>
+//         <button class="ds-density-toggle__btn">Compact</button>
+//       </div>
+//     </div>
+//
+//     <!-- 2. Column Visibility -->
+//     <div class="ds-column-panel__section-hd">
+//       <span class="ds-icon ds-column-panel__section-icon">visibility</span>
+//       <span class="ds-column-panel__section-title">Column Visibility</span>
+//     </div>
+//     <div class="ds-column-panel__col-list">
+//       <div class="ds-column-panel__col-row" draggable="true">
+//         <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked"
+//              role="checkbox" aria-checked="true" aria-label="Toggle Customer visibility">
+//           <span class="ds-icon ds-icon--filled">check_box</span>
+//         </div>
+//         <span class="ds-icon ds-icon--sm ds-column-panel__col-drag">drag_indicator</span>
+//         <span class="ds-column-panel__col-name">Customer</span>
+//       </div>
+//       <!-- Repeat per column; add ds-column-panel__col-row--system for non-configurable -->
+//     </div>
+//
+//     <!-- Divider -->
+//     <div class="ds-divider" role="separator" aria-hidden="true"></div>
+//
+//     <!-- 3. Pivot Mode -->
+//     <div class="ds-column-panel__pivot-row">
+//       <span class="ds-column-panel__pivot-label">Pivot Mode</span>
+//       <label class="ds-toggle" aria-label="Enable pivot mode">
+//         <input type="checkbox" class="ds-toggle__control" />
+//         <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+//       </label>
+//     </div>
+//
+//     <!-- Divider -->
+//     <div class="ds-divider" role="separator" aria-hidden="true"></div>
+//
+//     <!-- 4. Row Groups -->
+//     <div class="ds-column-panel__section-hd">
+//       <span class="ds-icon ds-column-panel__section-icon">drag_indicator</span>
+//       <span class="ds-column-panel__section-title">Row Groups</span>
+//     </div>
+//     <button type="button" class="ds-column-panel__add-btn">
+//       <span class="ds-icon ds-icon--sm">add_circle_outline</span>
+//       Add Column
+//     </button>
+//
+//     <!-- Divider -->
+//     <div class="ds-divider" role="separator" aria-hidden="true"></div>
+//
+//     <!-- 5. Values -->
+//     <div class="ds-column-panel__section-hd">
+//       <span class="ds-icon ds-column-panel__section-icon">functions</span>
+//       <span class="ds-column-panel__section-title">Values</span>
+//     </div>
+//     <button type="button" class="ds-column-panel__add-btn">
+//       <span class="ds-icon ds-icon--sm">add_circle_outline</span>
+//       Add Column
+//     </button>
+//   </div>
+//
+// Angular component:
+//   <ds-column-panel
+//     [(density)]="density"
+//     (densityChange)="onDensityChange($event)"
+//   />
+//   When [api] is bound the component self-populates from the grid.
+// ============================================================
 
 .ds-column-panel {
-  display: none; // revealed by #table-sim[data-panel-open]
+  display: none; // Shown via parent data attribute or *ngIf
   flex-direction: column;
-  width: 260px;
+  width: 300px;
   flex-shrink: 0;
   border-left: 1px solid var(--color-border-subtle);
   background: var(--color-surface-page);
+  overflow: hidden;
 
-  // ── Header: "Columns" title + close button ─────────────────────
-  &__header {
+  // ── 1. Density toggle ─────────────────────────────────────────────────────
+
+  &__density {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: var(--spacing-sm);
     border-bottom: 1px solid var(--color-border-subtle);
     flex-shrink: 0;
+
+    // The ds-density-toggle component fills the full width of the density slot
+    .ds-density-toggle {
+      width: 100%;
+
+      .ds-density-toggle__btn {
+        flex: 1 0 0;
+      }
+    }
   }
 
-  &__title {
-    font-family: var(--ref-typescale-label-large-font);
-    font-size: var(--ref-typescale-label-large-size);
-    font-weight: var(--ref-typescale-label-large-weight-prominent);
-    line-height: var(--ref-typescale-label-large-line-height);
-    letter-spacing: var(--ref-typescale-label-large-tracking);
-    color: var(--color-text-primary);
-  }
+  // ── 2. Column list (scrollable) ───────────────────────────────────────────
 
-  // ── Scrollable column list ──────────────────────────────────────
-  &__list {
+  &__col-list {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
     flex: 1 0 0;
+    min-height: 0;
   }
 
-  // ── Single toggle row ───────────────────────────────────────────
-  &__row {
+  // ── Section header (Visibility / Row Groups / Values) ─────────────────────
+
+  &__section-hd {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    min-height: 48px;
+    gap: var(--spacing-sm);
+    padding: 0 var(--spacing-md);
+    height: 42px;
+    flex-shrink: 0;
+  }
 
-    // System columns (Checkbox, Actions) are non-configurable
+  &__section-icon {
+    color: var(--color-icon-subtle);
+    flex-shrink: 0;
+  }
+
+  &__section-title {
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight-prominent);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-primary);
+    flex: 1 0 0;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ── Column visibility row ─────────────────────────────────────────────────
+
+  &__col-row {
+    display: flex;
+    align-items: center;
+    height: 42px;
+    padding: 0 var(--spacing-sm);
+    gap: var(--spacing-xs);
+    cursor: default;
+
+    &:hover {
+      background: var(--overlay-hovered);
+    }
+
+    // System columns (checkbox, actions) are non-configurable
     &--system {
-      opacity: 0.5;
+      opacity: 0.4;
       pointer-events: none;
+    }
+
+    &[draggable="true"] {
+      cursor: default; // drag cursor applied on handle only
     }
   }
 
-  &__name {
+  // Checkbox toggle — icon-based (check_box / check_box_outline_blank)
+  &__col-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+    .ds-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: var(--color-border-input);
+    }
+
+    &--checked .ds-icon {
+      color: var(--color-surface-brand-bold);
+    }
+  }
+
+  // Drag handle
+  &__col-drag {
+    color: var(--color-icon-subtle);
+    cursor: grab;
+    flex-shrink: 0;
+
+    &:active { cursor: grabbing; }
+  }
+
+  // Column name label
+  &__col-name {
     font-family: var(--ref-typescale-body-medium-font);
     font-size: var(--ref-typescale-body-medium-size);
     font-weight: var(--ref-typescale-body-medium-weight);
     line-height: var(--ref-typescale-body-medium-line-height);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
     color: var(--color-text-primary);
+    flex: 1 0 0;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ── 3. Pivot mode row ─────────────────────────────────────────────────────
+
+  &__pivot-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 42px;
+    padding: 0 var(--spacing-md);
+    flex-shrink: 0;
+  }
+
+  &__pivot-label {
+    font-family: var(--ref-typescale-body-medium-font);
+    font-size: var(--ref-typescale-body-medium-size);
+    font-weight: var(--ref-typescale-body-medium-weight);
+    line-height: var(--ref-typescale-body-medium-line-height);
+    letter-spacing: var(--ref-typescale-body-medium-tracking);
+    color: var(--color-text-primary);
+  }
+
+  // ── 4 & 5. "Add Column" button row ────────────────────────────────────────
+
+  &__add-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    width: 100%;
+    height: 42px;
+    padding: 0 var(--spacing-md);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: var(--ref-typescale-label-medium-font);
+    font-size: var(--ref-typescale-label-medium-size);
+    font-weight: var(--ref-typescale-label-medium-weight);
+    line-height: var(--ref-typescale-label-medium-line-height);
+    letter-spacing: var(--ref-typescale-label-medium-tracking);
+    color: var(--color-text-brand);
+    flex-shrink: 0;
+    text-align: left;
+
+    &:focus         { outline: none; }
+    &:focus-visible { box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
+    &:hover { background: var(--overlay-hovered); }
+    &:active { background: var(--overlay-pressed); }
+
+    .ds-icon {
+      color: var(--color-icon-brand);
+      flex-shrink: 0;
+    }
   }
 }
 
-// Production toggle mechanism (reference for Angular integration)
-#table-sim[data-panel-open] .ds-column-panel {
+// ── Show mechanism — driven by parent data attribute ─────────────────────────
+// Toggle this with [data-panel-open] on the enclosing table container.
+// Example: <div id="table-sim" data-panel-open> ... </div>
+
+[data-panel-open] .ds-column-panel {
   display: flex;
 }
