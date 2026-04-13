@@ -14303,7 +14303,239 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <code>buildDefaultRowContextMenuItems(value)</code> — spread and extend per project.
         </p>
 
-        <!-- Header context menu demo -->
+        <!-- ── Interactive sim ── -->
+        <p class="section-desc" style="color: var(--color-text-secondary); font-style: italic; margin-bottom: 8px;">
+          Right-click any column header or data row to try it.
+        </p>
+
+        <div style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); overflow: hidden; max-width: 700px; user-select: none;">
+
+          <!-- Header row -->
+          <div style="display: flex; background: var(--color-surface-subtle); border-bottom: 1px solid var(--color-border-secondary);">
+            <div class="ds-ctx-preview-header" data-col="Customer"
+                 style="flex: 2 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; cursor: context-menu; gap: 8px; box-sizing: border-box;">
+              <span style="font-family: var(--ref-typescale-label-medium-font); font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typescale-label-medium-weight-prominent); color: var(--color-text-primary);">Customer</span>
+            </div>
+            <div class="ds-ctx-preview-header" data-col="Email"
+                 style="flex: 2 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; cursor: context-menu; gap: 8px; box-sizing: border-box; border-left: 1px solid var(--color-border-subtle);">
+              <span style="font-family: var(--ref-typescale-label-medium-font); font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typescale-label-medium-weight-prominent); color: var(--color-text-primary);">Email</span>
+            </div>
+            <div class="ds-ctx-preview-header" data-col="Status"
+                 style="flex: 1 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; cursor: context-menu; gap: 8px; box-sizing: border-box; border-left: 1px solid var(--color-border-subtle);">
+              <span style="font-family: var(--ref-typescale-label-medium-font); font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typescale-label-medium-weight-prominent); color: var(--color-text-primary);">Status</span>
+            </div>
+            <div class="ds-ctx-preview-header" data-col="Revenue"
+                 style="flex: 1 0 0; height: 56px; display: flex; align-items: center; justify-content: flex-end; padding: 0 16px; cursor: context-menu; box-sizing: border-box; border-left: 1px solid var(--color-border-subtle);">
+              <span style="font-family: var(--ref-typescale-label-medium-font); font-size: var(--ref-typescale-label-medium-size); font-weight: var(--ref-typescale-label-medium-weight-prominent); color: var(--color-text-primary);">Revenue</span>
+            </div>
+          </div>
+
+          <!-- Data rows -->
+          <div class="ds-ctx-preview-row" data-row="0"
+               style="display: flex; border-bottom: 1px solid var(--color-border-subtle); cursor: context-menu; transition: background 0.1s;">
+            <div style="flex: 2 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">Acme Corporation</span>
+            </div>
+            <div style="flex: 2 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; border-left: 1px solid var(--color-border-subtle); pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">contact@acme.com</span>
+            </div>
+            <div style="flex: 1 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; border-left: 1px solid var(--color-border-subtle); pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">Active</span>
+            </div>
+            <div style="flex: 1 0 0; height: 56px; display: flex; align-items: center; justify-content: flex-end; padding: 0 16px; border-left: 1px solid var(--color-border-subtle); pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">$48,200</span>
+            </div>
+          </div>
+          <div class="ds-ctx-preview-row" data-row="1"
+               style="display: flex; border-bottom: 1px solid var(--color-border-subtle); cursor: context-menu; transition: background 0.1s;">
+            <div style="flex: 2 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">Globex Industries</span>
+            </div>
+            <div style="flex: 2 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; border-left: 1px solid var(--color-border-subtle); pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">hello@globex.io</span>
+            </div>
+            <div style="flex: 1 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; border-left: 1px solid var(--color-border-subtle); pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">Pending</span>
+            </div>
+            <div style="flex: 1 0 0; height: 56px; display: flex; align-items: center; justify-content: flex-end; padding: 0 16px; border-left: 1px solid var(--color-border-subtle); pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">$12,750</span>
+            </div>
+          </div>
+          <div class="ds-ctx-preview-row" data-row="2"
+               style="display: flex; cursor: context-menu; transition: background 0.1s;">
+            <div style="flex: 2 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">Initech LLC</span>
+            </div>
+            <div style="flex: 2 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; border-left: 1px solid var(--color-border-subtle); pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">support@initech.com</span>
+            </div>
+            <div style="flex: 1 0 0; height: 56px; display: flex; align-items: center; padding: 0 16px; border-left: 1px solid var(--color-border-subtle); pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">Inactive</span>
+            </div>
+            <div style="flex: 1 0 0; height: 56px; display: flex; align-items: center; justify-content: flex-end; padding: 0 16px; border-left: 1px solid var(--color-border-subtle); pointer-events: none;">
+              <span style="font-family: var(--ref-typescale-body-medium-font); font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-primary);">$3,100</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Feedback toast shown after a menu action -->
+        <div id="ds-ctx-toast"
+             style="display:none; margin-top: 8px; font-size: 12px; color: var(--color-text-secondary); font-style: italic;"></div>
+
+        <!-- ── The context menu overlay (shared between header + row) ── -->
+        <!-- Backdrop -->
+        <div id="ds-ctx-backdrop"
+             style="display:none; position:fixed; inset:0; z-index:1000;"
+             onclick="dsCtxClose()"></div>
+        <!-- Panel -->
+        <div id="ds-ctx-panel"
+             class="ds-menu ds-table-context-menu__panel"
+             role="menu"
+             tabindex="-1"
+             style="display:none;"
+             onkeydown="if(event.key==='Escape')dsCtxClose()">
+        </div>
+
+        <script>
+        (function() {
+          var backdrop = document.getElementById('ds-ctx-backdrop');
+          var panel    = document.getElementById('ds-ctx-panel');
+          var toast    = document.getElementById('ds-ctx-toast');
+          var toastTimer;
+
+          // ── Close ────────────────────────────────────────────────────────
+          window.dsCtxClose = function() {
+            backdrop.style.display = 'none';
+            panel.style.display    = 'none';
+            panel.innerHTML        = '';
+          };
+
+          // ── Toast ────────────────────────────────────────────────────────
+          function showToast(msg) {
+            clearTimeout(toastTimer);
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            toastTimer = setTimeout(function() { toast.style.display = 'none'; }, 2000);
+          }
+
+          // ── Build and show a menu ─────────────────────────────────────────
+          function showMenu(x, y, items) {
+            panel.innerHTML = '';
+            items.forEach(function(item) {
+              if (item.separator) {
+                var hr = document.createElement('hr');
+                hr.className = 'ds-menu__divider';
+                hr.setAttribute('aria-hidden', 'true');
+                panel.appendChild(hr);
+                return;
+              }
+              var btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'ds-menu__item' +
+                (item.disabled    ? ' is-disabled'              : '') +
+                (item.destructive ? ' ds-menu__item--destructive' : '');
+              btn.setAttribute('role', 'menuitem');
+              if (item.disabled) {
+                btn.setAttribute('aria-disabled', 'true');
+                btn.disabled = true;
+              }
+              if (item.icon) {
+                var ic = document.createElement('span');
+                ic.className = 'ds-icon ds-icon--sm ds-menu__item-icon';
+                ic.textContent = item.icon;
+                btn.appendChild(ic);
+              }
+              btn.appendChild(document.createTextNode(item.label));
+              if (!item.disabled && item.action) {
+                btn.addEventListener('click', function() {
+                  dsCtxClose();
+                  item.action();
+                });
+              }
+              panel.appendChild(btn);
+            });
+
+            // Position at cursor, flip if near viewport edge
+            panel.style.display = 'block';
+            var pw = panel.offsetWidth  || 200;
+            var ph = panel.offsetHeight || 300;
+            var fx = (x + pw > window.innerWidth)  ? Math.max(0, x - pw) : x;
+            var fy = (y + ph > window.innerHeight) ? Math.max(0, y - ph) : y;
+            panel.style.left = fx + 'px';
+            panel.style.top  = fy + 'px';
+
+            backdrop.style.display = 'block';
+            panel.focus();
+          }
+
+          // ── Header items ──────────────────────────────────────────────────
+          function headerItems(colName) {
+            return [
+              { label: 'Sort Ascending',  icon: 'arrow_upward_alt',   action: function() { showToast('Sorted "' + colName + '" ascending'); } },
+              { label: 'Sort Descending', icon: 'arrow_downward_alt',  action: function() { showToast('Sorted "' + colName + '" descending'); } },
+              { label: 'Clear Sort',                                   action: function() { showToast('Sort cleared on "' + colName + '"'); } },
+              { separator: true },
+              { label: 'Pin Left',  icon: 'push_pin', action: function() { showToast('"' + colName + '" pinned left'); } },
+              { label: 'Pin Right', icon: 'push_pin', action: function() { showToast('"' + colName + '" pinned right'); } },
+              { label: 'Unpin',                       action: function() { showToast('"' + colName + '" unpinned'); } },
+              { separator: true },
+              { label: 'Auto Size Column', icon: 'fit_width',  action: function() { showToast('"' + colName + '" auto-sized'); } },
+              { label: 'Reset Columns',                         action: function() { showToast('All columns reset'); } },
+              { separator: true },
+              { label: 'Group by Column', icon: 'group_work', action: function() { showToast('Grouped by "' + colName + '"'); } },
+            ];
+          }
+
+          // ── Row items ─────────────────────────────────────────────────────
+          function rowItems(rowIndex) {
+            var cells = document.querySelectorAll('.ds-ctx-preview-row[data-row="' + rowIndex + '"] span');
+            var value = cells.length ? cells[0].textContent.trim() : '';
+            return [
+              {
+                label: 'Copy', icon: 'content_copy',
+                action: function() {
+                  if (navigator.clipboard) {
+                    navigator.clipboard.writeText(value).then(function() {
+                      showToast('Copied "' + value + '" to clipboard');
+                    }).catch(function() {
+                      showToast('Copy failed — clipboard not available');
+                    });
+                  } else {
+                    showToast('Copied "' + value + '" (simulated)');
+                  }
+                }
+              },
+            ];
+          }
+
+          // ── Wire contextmenu on header cells ──────────────────────────────
+          document.querySelectorAll('.ds-ctx-preview-header').forEach(function(el) {
+            el.addEventListener('contextmenu', function(e) {
+              e.preventDefault();
+              showMenu(e.clientX, e.clientY, headerItems(el.dataset.col));
+            });
+          });
+
+          // ── Wire contextmenu on data rows ─────────────────────────────────
+          document.querySelectorAll('.ds-ctx-preview-row').forEach(function(el) {
+            el.addEventListener('mouseenter', function() { el.style.background = 'var(--overlay-hovered)'; });
+            el.addEventListener('mouseleave', function() { el.style.background = ''; });
+            el.addEventListener('contextmenu', function(e) {
+              e.preventDefault();
+              showMenu(e.clientX, e.clientY, rowItems(el.dataset.row));
+            });
+          });
+
+          // ── Global Escape ─────────────────────────────────────────────────
+          document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') dsCtxClose();
+          });
+        })();
+        </script>
+
+        <!-- ── Static reference ── -->
+        <p class="section-desc" style="margin-top: 32px; margin-bottom: 8px;"><strong>Static reference — all item states</strong></p>
         <div class="demo-row" style="align-items: flex-start; gap: 48px;">
           <div>
             <div class="demo-label" style="margin-bottom: 8px;">Header column (default items)</div>
@@ -14316,9 +14548,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <span class="ds-icon ds-icon--sm ds-menu__item-icon">arrow_downward_alt</span>
                 Sort Descending
               </button>
-              <button type="button" class="ds-menu__item" role="menuitem">
-                Clear Sort
-              </button>
+              <button type="button" class="ds-menu__item" role="menuitem">Clear Sort</button>
               <hr class="ds-menu__divider" aria-hidden="true" />
               <button type="button" class="ds-menu__item" role="menuitem">
                 <span class="ds-icon ds-icon--sm ds-menu__item-icon">push_pin</span>
@@ -14328,17 +14558,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <span class="ds-icon ds-icon--sm ds-menu__item-icon">push_pin</span>
                 Pin Right
               </button>
-              <button type="button" class="ds-menu__item" role="menuitem">
-                Unpin
-              </button>
+              <button type="button" class="ds-menu__item" role="menuitem">Unpin</button>
               <hr class="ds-menu__divider" aria-hidden="true" />
               <button type="button" class="ds-menu__item" role="menuitem">
                 <span class="ds-icon ds-icon--sm ds-menu__item-icon">fit_width</span>
                 Auto Size Column
               </button>
-              <button type="button" class="ds-menu__item" role="menuitem">
-                Reset Columns
-              </button>
+              <button type="button" class="ds-menu__item" role="menuitem">Reset Columns</button>
               <hr class="ds-menu__divider" aria-hidden="true" />
               <button type="button" class="ds-menu__item" role="menuitem">
                 <span class="ds-icon ds-icon--sm ds-menu__item-icon">group_work</span>
@@ -14346,8 +14572,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               </button>
             </div>
           </div>
-
-          <!-- Row cell context menu demo -->
           <div>
             <div class="demo-label" style="margin-bottom: 8px;">Row cell (default items)</div>
             <div class="ds-menu" role="menu" style="position: relative; min-width: 160px;">
@@ -14357,8 +14581,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               </button>
             </div>
           </div>
-
-          <!-- Disabled item state -->
           <div>
             <div class="demo-label" style="margin-bottom: 8px;">With disabled + destructive</div>
             <div class="ds-menu" role="menu" style="position: relative; min-width: 200px;">
