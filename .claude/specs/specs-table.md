@@ -842,6 +842,404 @@ Multiple types can be composed: `type: ['dsGroupable', 'dsNumeric']`.
 
 ---
 
+---
+
+## Tree Data (Enterprise)
+
+Tree data renders a parent-child hierarchy where each row can have children — unlike row grouping (which aggregates flat data by a shared field value). Both require AG Grid Enterprise.
+
+| Feature | Row Grouping | Tree Data |
+|---|---|---|
+| Data shape | Flat array; AG Grid groups by field values | Hierarchical paths or nested records |
+| Child count | Aggregated count of leaf rows in the group | Count of all descendants including groups |
+| Display type | `groupDisplayType` (groupRows, singleColumn, etc.) | `treeDataDisplayType: 'auto' | 'custom'` |
+| Configuration | `rowGroup: true` on colDef | `treeData: true` + path/children callback |
+
+### Enabling tree data
+
+```typescript
+gridOptions = {
+  treeData: true,
+  getDataPath: (data) => data.orgHierarchy,  // returns string[] path e.g. ['Erica', 'Malcolm']
+  getRowId: (params) => params.data.id,       // required for transactions and managed drag
+};
+```
+
+### Three data supply methods
+
+**Path-based** (`getDataPath`): flat array where each row has a path array:
+```typescript
+rowData = [
+  { id: '1', name: 'Erica',   orgHierarchy: ['Erica'] },
+  { id: '2', name: 'Malcolm', orgHierarchy: ['Erica', 'Malcolm'] },
+];
+getDataPath: (data) => data.orgHierarchy,
+```
+
+**Nested records** (`treeDataChildrenField`): rows contain a children array:
+```typescript
+rowData = [{ name: 'Erica', children: [{ name: 'Malcolm' }] }];
+gridOptions = {
+  treeData: true,
+  treeDataChildrenField: 'children',
+};
+// Constraint: transactions (applyTransaction) are not supported with treeDataChildrenField.
+```
+
+**Self-referential** (`treeDataParentIdField`): each row references its parent by ID:
+```typescript
+rowData = [
+  { id: '1', name: 'Erica',   parentId: null },
+  { id: '2', name: 'Malcolm', parentId: '1' },
+];
+gridOptions = {
+  treeData: true,
+  treeDataParentIdField: 'parentId',
+  getRowId: (p) => p.data.id,  // required
+};
+```
+
+### Group column for tree data
+
+Like row grouping, tree data uses `agGroupCellRenderer` in an auto-generated group column. Configure via `autoGroupColumnDef`:
+
+```typescript
+autoGroupColumnDef: {
+  headerName: 'Organisation',
+  minWidth: 260,
+  field: 'name',               // display this field inside the group cell
+  cellRendererParams: {
+    suppressCount: true,       // hide descendant count (all descendants, including groups)
+    suppressDoubleClickExpand: false,
+  },
+};
+```
+
+**Important**: The auto group column cell uses AG Grid's `agGroupCellRenderer`, not `DsTableRowCellComponent`. The data columns (non-group) use our renderer. The `tier1Indent`/`tier2Indent` inputs on `DsTableRowCellComponent` are for standalone/preview use only — AG Grid tree data handles indentation automatically inside the group column.
+
+### Tree data selection
+
+Same API as row grouping selection:
+
+```typescript
+rowSelection: {
+  mode: 'multiRow',
+  groupSelects: 'descendants',       // 'self' | 'descendants' | 'filteredDescendants'
+  checkboxLocation: 'autoGroupColumn',
+  headerCheckbox: false,
+}
+```
+
+### Tree data row dragging
+
+Managed drag requires `treeDataParentIdField`:
+
+```typescript
+gridOptions = {
+  treeData: true,
+  treeDataParentIdField: 'parentId',
+  getRowId:                    (p) => p.data.id,
+  rowDragManaged:              true,
+  suppressMoveWhenRowDragging: true,
+  rowDragInsertDelay:          500,    // ms delay before expanding a parent on hover
+};
+autoGroupColumnDef = {
+  rowDrag: true,   // show drag handle in the group column
+};
+```
+
+Managed drag prevents cyclic parent-child relationships automatically. Use `isRowValidDropPosition` callback to restrict drops (e.g. prevent files being dropped onto other files).
+
+---
+
+## Master-Detail (Enterprise)
+
+Master-detail displays a detail panel below an expanded master row. The detail panel can contain any content — typically a nested AG Grid. Requires AG Grid Enterprise (`MasterDetailModule`).
+
+### Required setup
+
+```typescript
+gridOptions = {
+  masterDetail: true,
+  detailCellRendererParams: {
+    // The detail grid's full configuration
+    detailGridOptions: {
+      columnDefs: [
+        { field: 'callId',     headerName: 'Call ID' },
+        { field: 'direction',  headerName: 'Direction' },
+        { field: 'duration',   headerName: 'Duration', type: 'dsNumeric' },
+      ],
+      defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
+    },
+
+    // Supply row data to each detail grid instance
+    getDetailRowData: (params) => {
+      params.successCallback(params.data.callRecords);
+    },
+
+    // Refresh strategy when master row data updates
+    refreshStrategy: 'rows',   // 'rows' | 'everything' | 'nothing'
+  },
+
+  // Optional: which rows show the expand control
+  isRowMaster: (data) => data.callRecords?.length > 0,
+
+  // Fixed or auto height for the detail panel
+  detailRowHeight: 300,        // fixed px; use detailRowAutoHeight: true for dynamic
+  keepDetailRows: true,        // preserve detail grids when collapsed (default: false)
+  keepDetailRowsCount: 10,     // max cached detail grids (default: 10)
+};
+```
+
+### `isRowMaster` — controlling which rows can expand
+
+```typescript
+isRowMaster: (data) => Boolean(data.children?.length),
+```
+
+After a transaction update, `isRowMaster` is re-evaluated. Rows that lose their detail data can be programmatically collapsed before the transaction:
+
+```typescript
+if (rowNode.expanded && !data.children?.length) {
+  rowNode.setExpanded(false);
+}
+this.gridApi.applyTransaction({ update: [data] });
+```
+
+### Refresh strategies
+
+| Strategy | Behaviour | Use when |
+|---|---|---|
+| `'rows'` *(default)* | Calls `getDetailRowData` and updates detail grid rows via `setRowData` | Detail data changes; want to preserve grid state (scroll, selection, column state) |
+| `'everything'` | Destroys and recreates the entire detail panel | Template changes; need a completely fresh grid instance |
+| `'nothing'` | No automatic refresh | Application manages detail refresh manually |
+
+With `'rows'`: also set `getRowId` on the detail grid options to enable efficient individual row updates rather than full replacement.
+
+### Accessing detail grid APIs
+
+```typescript
+// Access a specific detail grid by row ID
+const info = this.gridApi.getDetailGridInfo(`detail_${rowId}`);
+info?.api?.sizeColumnsToFit();
+
+// Iterate all active detail grids
+this.gridApi.forEachDetailGridInfo((info) => {
+  info.api?.sizeColumnsToFit();
+});
+```
+
+### Custom detail cell renderer
+
+Replace the default detail panel with any content (forms, charts, custom grids):
+
+```typescript
+gridOptions = {
+  masterDetail: true,
+  detailCellRenderer: MyCustomDetailComponent,
+  detailCellRendererParams: { /* passed to agInit(params) */ },
+};
+```
+
+The custom component receives `params.node` (master row node) and `params.data` (master row data). Implement `refresh(params): boolean` — return `true` if the component updates itself; `false` forces recreation.
+
+If the custom detail contains a nested AG Grid, register it with the master:
+```typescript
+agInit(params): void {
+  const id = params.node.id;
+  params.api.addDetailGridInfo(id, { id, api: this.detailGridApi });
+}
+ngOnDestroy(): void {
+  this.masterApi.removeDetailGridInfo(this.rowId);
+}
+```
+
+### Nested master-detail
+
+Configure a detail grid to also be a master grid — just set `masterDetail: true` inside `detailGridOptions`. No special API is needed for the nesting.
+
+```typescript
+detailCellRendererParams: {
+  detailGridOptions: {
+    masterDetail: true,                  // level 2 is also a master
+    detailRowAutoHeight: true,           // recommended for nested levels
+    detailCellRendererParams: { ... },   // level 3 config
+    getDetailRowData: (p) => p.successCallback(p.data.children),
+  },
+  getDetailRowData: (p) => p.successCallback(p.data.items),
+}
+```
+
+Set `detailRowAutoHeight: true` on inner levels to remove per-level scrollbars — only the top-level master grid scrolls.
+
+---
+
+## Overlays
+
+AG Grid shows built-in overlays for loading, no-rows, and no-matching-rows states. These sit inside the grid viewport (not above the toolbar or paginator).
+
+### Built-in overlays
+
+| Overlay | Condition | Suppress with |
+|---|---|---|
+| Loading | `loading: true` on grid options, or while data fetch is pending | `suppressOverlays: ['agLoadingOverlay']` |
+| No rows | Grid has no row data | `suppressOverlays: ['agNoRowsOverlay']` |
+| No matching rows | Data exists but active filters exclude all rows | `suppressOverlays: ['agNoMatchingRowsOverlay']` |
+| Exporting | CSV/Excel export in progress | `suppressOverlays: ['agExportingOverlay']` |
+
+Customise built-in overlay text (no custom component needed):
+
+```typescript
+overlayComponentParams: {
+  loading: { overlayText: 'Fetching data…' },
+  noRows:  { overlayText: 'No records found' },
+}
+```
+
+### Manual overlay control
+
+```typescript
+// Show loading overlay programmatically
+this.gridApi.showLoadingOverlay();
+
+// Show no-rows overlay
+this.gridApi.showNoRowsOverlay();
+
+// Hide all overlays
+this.gridApi.hideOverlay();
+```
+
+Or use the `activeOverlay` grid option to show a specific overlay regardless of grid state:
+
+```typescript
+// In your component
+this.gridOptions.activeOverlay = 'agLoadingOverlay';
+// Set to undefined to clear
+```
+
+### Custom overlay with DS components
+
+Use `loadingOverlayComponent` / `noRowsOverlayComponent` to provide DS-styled overlays. The component must implement `agInit(params)` (AG Grid Angular overlay interface):
+
+```typescript
+@Component({
+  selector: 'app-table-loading-overlay',
+  standalone: true,
+  imports: [DsSpinnerComponent],
+  template: `
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;gap:12px">
+      <ds-spinner diameter="32" />
+      <span style="font:var(--ref-typescale-body-medium-size)/1 var(--ref-typescale-body-medium-font);
+                   color:var(--color-text-secondary)">Loading…</span>
+    </div>
+  `,
+})
+export class TableLoadingOverlayComponent {
+  agInit(_params: unknown): void {}
+}
+
+// No-rows overlay using ds-empty-state
+@Component({
+  selector: 'app-table-no-rows-overlay',
+  standalone: true,
+  imports: [DsEmptyStateComponent],
+  template: `<ds-empty-state size="sm" title="No results" />`,
+})
+export class TableNoRowsOverlayComponent {
+  agInit(_params: unknown): void {}
+}
+```
+
+Register in gridOptions:
+
+```typescript
+gridOptions = {
+  loadingOverlayComponent:  TableLoadingOverlayComponent,
+  noRowsOverlayComponent:   TableNoRowsOverlayComponent,
+};
+```
+
+---
+
+## Performance
+
+### Row and column virtualisation
+
+AG Grid only renders rows and columns visible in the viewport (plus a small buffer). This is on by default and critical for performance. Never disable it for production tables.
+
+| Option | Default | Effect |
+|---|---|---|
+| `rowBuffer` | `10` | Extra rows rendered outside the viewport; increase for smoother scroll at the cost of initial render time |
+| `suppressRowVirtualisation` | `false` | Renders **all rows** into the DOM — never enable on large datasets |
+| `suppressColumnVirtualisation` | `false` | Renders **all columns** into the DOM — avoid on wide tables |
+
+### Row animation
+
+`animateRows: true` is the default. Animations fire on filter, sort, and group expand/collapse. Disable for tables with frequent programmatic updates or very large datasets:
+
+```typescript
+gridOptions = {
+  animateRows: false,   // eliminates DOM transition overhead on data changes
+};
+```
+
+### Row hover highlighting
+
+The DS SCSS adds a hover overlay via `.ag-row-hover .ds-table-row-cell`. AG Grid adds `.ag-row-hover` on every `mouseenter` event, which forces a CSS class recalculation per row. Disable if scroll performance is poor:
+
+```typescript
+gridOptions = {
+  suppressRowHoverHighlight: true,
+  // Note: disabling this means .ag-row-hover CSS rules in _table-row-cell.scss
+  // will never fire. The hover background will not appear while this is set.
+};
+```
+
+Only set this if profiling confirms hover highlight is a bottleneck. Most tables do not need it.
+
+### Vertical scroll debouncing
+
+```typescript
+gridOptions = {
+  debounceVerticalScrollbar: true,
+  // Defers scroll processing until the user pauses, reducing per-frame work.
+  // Trade-off: slight lag before new rows appear. Use for tables with heavy cell renderers.
+};
+```
+
+### Deferred cell renderer
+
+For expensive cell renderers, use `deferRender: true` on `cellRendererParams`. AG Grid shows a skeleton cell during fast scrolling and renders the real component when the user pauses:
+
+```typescript
+defaultColDef: {
+  ...DS_TABLE_DEFAULT_COL_DEF,
+  cellRendererParams: {
+    ...DS_TABLE_DEFAULT_COL_DEF.cellRendererParams,
+    deferRender: true,
+  },
+}
+```
+
+### Key performance anti-patterns
+
+| Anti-pattern | Fix |
+|---|---|
+| `domLayout: 'autoHeight'` on paginated table | Use `normal` (default) — keeps virtualisation active |
+| `suppressRowVirtualisation: true` | Remove — never disable virtualisation for production data |
+| `rowDragManaged` on server-side model | Use unmanaged drag instead |
+| `detailRowAutoHeight` on a table with 1000+ master rows | Renders all detail DOM — use fixed `detailRowHeight` instead |
+| `animateRows: true` on frequently refreshed data | Set `animateRows: false` |
+| Many columns with `width: 100%` / `flex` and no min-width | Set `minWidth: 80` via `DS_TABLE_DEFAULT_COL_DEF` (already set) |
+
+### Massive row counts
+
+AG Grid uses a "stretching" technique to work around browser max-div-height limits (Chrome: ~32M px). For datasets beyond ~500,000 rows, scroll speed appears faster than normal because the grid applies a position offset proportional to scroll percentage.
+
+Recommended approach for very large datasets: use **pagination** (`pagination: true`, `paginationPageSize: 100–500`) rather than virtualised infinite scroll. Pagination keeps DOM and memory usage bounded regardless of total row count.
+
+---
+
 ### Full table composition order (top to bottom)
 
 1. `ds-table-toolbar` (74px) — always present
