@@ -1,0 +1,42 @@
+<ng-container *ngIf="visible">
+
+  <!-- Full-screen backdrop — captures click-outside to close -->
+  <div
+    class="ds-table-context-menu__backdrop"
+    (click)="close()"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Panel: uses ds-menu CSS class API for all visual styling -->
+  <div
+    #panel
+    class="ds-menu ds-table-context-menu__panel"
+    role="menu"
+    [style.left.px]="adjustedX"
+    [style.top.px]="adjustedY"
+    (keydown.escape)="close()"
+    tabindex="-1"
+  >
+    <ng-container *ngFor="let item of items">
+
+      <hr *ngIf="item.separator" class="ds-menu__divider" aria-hidden="true" />
+
+      <button
+        *ngIf="!item.separator"
+        type="button"
+        class="ds-menu__item"
+        [class.is-disabled]="item.disabled"
+        [class.ds-menu__item--destructive]="item.destructive"
+        role="menuitem"
+        [attr.aria-disabled]="item.disabled || null"
+        [disabled]="item.disabled || null"
+        (click)="onItemClick(item)"
+      >
+        <span *ngIf="item.icon" class="ds-icon ds-icon--sm ds-menu__item-icon">{{ item.icon }}</span>
+        {{ item.label }}
+      </button>
+
+    </ng-container>
+  </div>
+
+</ng-container>

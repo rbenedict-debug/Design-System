@@ -22,10 +22,11 @@
  */
 
 import {
-  Component, Input, ChangeDetectionStrategy,
-  ChangeDetectorRef, HostBinding, OnDestroy,
+  Component, Input, Output, EventEmitter, ChangeDetectionStrategy,
+  ChangeDetectorRef, HostBinding, HostListener, OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DsTableRowContextMenuEvent } from './table-context-menu.component';
 
 export type TableCellAlign = 'left' | 'right';
 export type TableCellState = 'default' | 'hover' | 'focus';
@@ -86,6 +87,13 @@ export class DsTableRowCellComponent implements OnDestroy {
   /** Visual interaction state — typically driven by AG Grid row events. */
   @Input() state: TableCellState = 'default';
 
+  /**
+   * Emits on right-click (contextmenu) when this component is used inside AG Grid.
+   * Use with suppressContextMenu: true in grid options to disable AG Grid's built-in
+   * context menu, then show <ds-table-context-menu> at the emitted coords.
+   */
+  @Output() rowContextMenu = new EventEmitter<DsTableRowContextMenuEvent>();
+
   @HostBinding('class.is-hovered')  get isHovered()  { return this.state === 'hover'; }
   @HostBinding('class.is-focused')  get isFocused()  { return this.state === 'focus'; }
   @HostBinding('class.is-selected') get isSelected() { return this.checked; }
@@ -115,6 +123,18 @@ export class DsTableRowCellComponent implements OnDestroy {
     this.applyParams(params);
     this.cdr.markForCheck();
     return true;
+  }
+
+  @HostListener('contextmenu', ['$event'])
+  onContextMenu(event: MouseEvent): void {
+    if (!this.agParams) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.rowContextMenu.emit({
+      x: event.clientX,
+      y: event.clientY,
+      params: this.agParams,
+    });
   }
 
   ngOnDestroy(): void {

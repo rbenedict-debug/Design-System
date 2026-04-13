@@ -8628,6 +8628,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
       <a class="nav-link" href="#ag-paginator" onclick="setActive(this)"><span class="nav-dot"></span>AG Grid Paginator</a>
       <a class="nav-link" href="#table-toolbar" onclick="setActive(this)"><span class="nav-dot"></span>Toolbar</a>
       <a class="nav-link" href="#column-panel" onclick="setActive(this)"><span class="nav-dot"></span>Column Panel</a>
+      <a class="nav-link" href="#table-context-menu" onclick="setActive(this)"><span class="nav-dot"></span>Context Menu</a>
 
       <div class="nav-group-label">Page Layouts</div>
       <a class="nav-link" href="#split-page" onclick="setActive(this)"><span class="nav-dot"></span>Split Page</a>
@@ -14275,6 +14276,105 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 </button>
 
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ──────────────────────────────────────────────────────────────────── -->
+      <!-- TABLE CONTEXT MENU                                                   -->
+      <!-- ──────────────────────────────────────────────────────────────────── -->
+      <section class="section" id="table-context-menu">
+        <div class="section-header">
+          <h2 class="section-title">Table Context Menu</h2>
+          <span class="section-source">components/table/_table-context-menu.scss · table-context-menu.component.ts</span>
+        </div>
+        <p class="section-desc">
+          Right-click context menu for AG Grid column headers and data row cells.
+          Uses the <code>ds-menu</code> CSS class API exactly — same background, shadow, typography, and item states.
+          The visual is a <code>position: fixed</code> overlay with a transparent backdrop; no AG Grid popup classes are involved.
+        </p>
+        <p class="section-desc">
+          <strong>Grid options required:</strong> <code>suppressContextMenu: true</code> (row cells) and
+          <code>suppressHeaderContextMenu: true</code> (column headers).<br>
+          <strong>Outputs:</strong> <code>(headerContextMenu)</code> on <code>ds-table-header-cell</code> —
+          <code>(rowContextMenu)</code> on <code>ds-table-row-cell</code>. Both emit <code>{ x, y, params }</code>.<br>
+          <strong>Default builders:</strong> <code>buildDefaultHeaderContextMenuItems(colId, api)</code> and
+          <code>buildDefaultRowContextMenuItems(value)</code> — spread and extend per project.
+        </p>
+
+        <!-- Header context menu demo -->
+        <div class="demo-row" style="align-items: flex-start; gap: 48px;">
+          <div>
+            <div class="demo-label" style="margin-bottom: 8px;">Header column (default items)</div>
+            <div class="ds-menu" role="menu" style="position: relative; min-width: 200px;">
+              <button type="button" class="ds-menu__item" role="menuitem">
+                <span class="ds-icon ds-icon--sm ds-menu__item-icon">arrow_upward_alt</span>
+                Sort Ascending
+              </button>
+              <button type="button" class="ds-menu__item" role="menuitem">
+                <span class="ds-icon ds-icon--sm ds-menu__item-icon">arrow_downward_alt</span>
+                Sort Descending
+              </button>
+              <button type="button" class="ds-menu__item" role="menuitem">
+                Clear Sort
+              </button>
+              <hr class="ds-menu__divider" aria-hidden="true" />
+              <button type="button" class="ds-menu__item" role="menuitem">
+                <span class="ds-icon ds-icon--sm ds-menu__item-icon">push_pin</span>
+                Pin Left
+              </button>
+              <button type="button" class="ds-menu__item" role="menuitem">
+                <span class="ds-icon ds-icon--sm ds-menu__item-icon">push_pin</span>
+                Pin Right
+              </button>
+              <button type="button" class="ds-menu__item" role="menuitem">
+                Unpin
+              </button>
+              <hr class="ds-menu__divider" aria-hidden="true" />
+              <button type="button" class="ds-menu__item" role="menuitem">
+                <span class="ds-icon ds-icon--sm ds-menu__item-icon">fit_width</span>
+                Auto Size Column
+              </button>
+              <button type="button" class="ds-menu__item" role="menuitem">
+                Reset Columns
+              </button>
+              <hr class="ds-menu__divider" aria-hidden="true" />
+              <button type="button" class="ds-menu__item" role="menuitem">
+                <span class="ds-icon ds-icon--sm ds-menu__item-icon">group_work</span>
+                Group by Column
+              </button>
+            </div>
+          </div>
+
+          <!-- Row cell context menu demo -->
+          <div>
+            <div class="demo-label" style="margin-bottom: 8px;">Row cell (default items)</div>
+            <div class="ds-menu" role="menu" style="position: relative; min-width: 160px;">
+              <button type="button" class="ds-menu__item" role="menuitem">
+                <span class="ds-icon ds-icon--sm ds-menu__item-icon">content_copy</span>
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <!-- Disabled item state -->
+          <div>
+            <div class="demo-label" style="margin-bottom: 8px;">With disabled + destructive</div>
+            <div class="ds-menu" role="menu" style="position: relative; min-width: 200px;">
+              <button type="button" class="ds-menu__item" role="menuitem">
+                <span class="ds-icon ds-icon--sm ds-menu__item-icon">content_copy</span>
+                Copy
+              </button>
+              <button type="button" class="ds-menu__item is-disabled" role="menuitem" aria-disabled="true" disabled>
+                <span class="ds-icon ds-icon--sm ds-menu__item-icon">edit</span>
+                Edit (disabled)
+              </button>
+              <hr class="ds-menu__divider" aria-hidden="true" />
+              <button type="button" class="ds-menu__item ds-menu__item--destructive" role="menuitem">
+                <span class="ds-icon ds-icon--sm ds-menu__item-icon">delete</span>
+                Delete Row
+              </button>
             </div>
           </div>
         </div>

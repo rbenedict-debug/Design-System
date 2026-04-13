@@ -22,10 +22,11 @@
 
 import {
   Component, Input, Output, EventEmitter,
-  ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy,
+  ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DsIconButtonComponent } from '../icon-button/icon-button.component';
+import { DsTableHeaderContextMenuEvent } from './table-context-menu.component';
 
 export type TableHeaderAlign = 'left' | 'right';
 export type TableSortDirection = 'asc' | 'desc' | null;
@@ -49,6 +50,19 @@ export interface AgHeaderParams {
      * Columns with flex: 1 in their colDef automatically fill remaining space.
      */
     setColumnWidth(key: string, newWidth: number, finished?: boolean): void;
+    /** Sets a specific sort state on one or more columns. Used by the context menu sort actions. */
+    applyColumnState(params: {
+      state: Array<{ colId: string; sort?: 'asc' | 'desc' | null }>;
+      defaultState?: { sort?: null };
+    }): void;
+    /** Pins or unpins a column. Pass null to unpin. */
+    setColumnPinned(colId: string, pinned: 'left' | 'right' | null): void;
+    /** Auto-sizes a column to fit its content. */
+    autoSizeColumn(colId: string, skipHeader?: boolean): void;
+    /** Resets all column state (widths, visibility, order, pin, sort) to defaults. */
+    resetColumnState(): void;
+    /** Adds a column to the active row group set. */
+    addRowGroupColumn(colId: string): void;
   };
   progressSort(multiSort?: boolean): void;
   showColumnMenu(source: HTMLElement): void;
@@ -103,6 +117,13 @@ export class DsTableHeaderCellComponent implements OnDestroy {
 
   /** Emits the new column width in px when the user drags the resize handle. */
   @Output() widthChange = new EventEmitter<number>();
+
+  /**
+   * Emits on right-click (contextmenu) when this component is used inside AG Grid.
+   * Use with suppressHeaderContextMenu: true in grid options to disable AG Grid's
+   * built-in header menu, then show <ds-table-context-menu> at the emitted coords.
+   */
+  @Output() headerContextMenu = new EventEmitter<DsTableHeaderContextMenuEvent>();
 
   private agParams?: AgHeaderParams;
   private sortChangedListener?: () => void;
@@ -197,6 +218,18 @@ export class DsTableHeaderCellComponent implements OnDestroy {
     if (this.agParams) {
       this.agParams.showColumnMenu(triggerEl);
     }
+  }
+
+  @HostListener('contextmenu', ['$event'])
+  onContextMenu(event: MouseEvent): void {
+    if (!this.agParams) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.headerContextMenu.emit({
+      x: event.clientX,
+      y: event.clientY,
+      params: this.agParams,
+    });
   }
 
   // ── Checkbox ────────────────────────────────────────────────

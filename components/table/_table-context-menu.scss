@@ -1,0 +1,39 @@
+// Onflo Design System — Table Context Menu
+// Source: components/table/_table-context-menu.scss
+//
+// Positioning overlay for the right-click table context menu.
+// All visual styles (colours, shadow, typography, item states) come from
+// components/menu/_menu.scss via the .ds-menu and .ds-menu__item class API.
+// This file handles only the fixed positioning and backdrop.
+//
+// Usage in grid options:
+//   suppressContextMenu: true        — disables AG Grid's own row-cell context menu
+//   suppressHeaderContextMenu: true  — disables AG Grid's own header context menu
+//
+// Then wire the component:
+//   <ds-table-context-menu
+//     [visible]="ctxVisible"
+//     [x]="ctxX" [y]="ctxY"
+//     [items]="ctxItems"
+//     (closed)="ctxVisible = false"
+//   />
+
+.ds-table-context-menu {
+
+  // Full-screen transparent backdrop — closes the menu on click-outside.
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    cursor: default;
+  }
+
+  // Floating panel positioned via [style.left] / [style.top] in the component.
+  // Visual styling (background, border, shadow, radius, typography) is fully
+  // provided by the .ds-menu class from components/menu/_menu.scss.
+  &__panel {
+    position: fixed;
+    z-index: 1001;
+    outline: none;
+  }
+}
