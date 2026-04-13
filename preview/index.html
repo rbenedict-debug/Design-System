@@ -16999,6 +16999,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                             onclick="ptSelectRowGroupColumn('status', 'Status')">Status</button>
                           <button type="button" class="ds-menu__item" role="menuitem" id="pt-rg-opt-amount"
                             onclick="ptSelectRowGroupColumn('amount', 'Amount')">Amount</button>
+                          <!-- Empty state: shown when all columns are grouped -->
+                          <div id="pt-rg-picker-empty" style="display: none; padding: 8px 16px; font-size: var(--ref-typescale-body-medium-size); color: var(--color-text-subtle); pointer-events: none;">All columns grouped</div>
                         </div>
 
                         <!-- Divider -->
@@ -17988,9 +17990,12 @@ function ptSelectRowGroupColumn(colId, label) {
     if (groupedGrid) { groupedGrid.style.display = ''; }
   }
 
-  // Hide this option from the picker
+  // Hide this option from the picker; show empty state when no options remain
   var opt = document.getElementById('pt-rg-opt-' + colId);
   if (opt) { opt.style.display = 'none'; }
+  var emptyState   = document.getElementById('pt-rg-picker-empty');
+  var visibleOpts  = picker.querySelectorAll('.ds-menu__item:not([style*="display: none"])');
+  if (emptyState) { emptyState.style.display = visibleOpts.length === 0 ? '' : 'none'; }
 }
 
 function ptRemoveRowGroupColumn(colId, label) {
@@ -18015,9 +18020,11 @@ function ptRemoveRowGroupColumn(colId, label) {
     if (groupedGrid) { groupedGrid.style.display = 'none'; }
   }
 
-  // Restore option in picker
+  // Restore option in picker; hide empty state now that options exist
   var opt = document.getElementById('pt-rg-opt-' + colId);
   if (opt) { opt.style.display = ''; }
+  var emptyState = document.getElementById('pt-rg-picker-empty');
+  if (emptyState) { emptyState.style.display = 'none'; }
 }
 
 // Close row group picker on outside click
@@ -18037,17 +18044,22 @@ function ptToggleGroupRow(groupRow) {
   var chevron  = groupRow.querySelector('.ds-table-group-row-cell__chevron');
   var btn      = groupRow.querySelector('.ds-table-group-row-cell__toggle');
   if (!children) { return; }
+  // Read the field label dynamically so aria-label is correct for any group column.
+  var fieldSpan  = groupRow.querySelector('.ds-table-group-row-cell__field');
+  var fieldLabel = fieldSpan
+    ? fieldSpan.textContent.replace(/:\u00a0$/, '').replace(/:$/, '').trim()
+    : 'Group';
   var expanded = children.style.display !== 'none';
   if (expanded) {
     children.style.display = 'none';
     chevron.classList.remove('ds-table-group-row-cell__chevron--open');
     btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-label', 'Expand Department: ' + name);
+    btn.setAttribute('aria-label', 'Expand ' + fieldLabel + ': ' + name);
   } else {
     children.style.display = 'grid';
     chevron.classList.add('ds-table-group-row-cell__chevron--open');
     btn.setAttribute('aria-expanded', 'true');
-    btn.setAttribute('aria-label', 'Collapse Department: ' + name);
+    btn.setAttribute('aria-label', 'Collapse ' + fieldLabel + ': ' + name);
   }
 }
 
