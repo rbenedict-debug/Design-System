@@ -180,6 +180,36 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 | Table toolbar | `<ds-table-toolbar>` | `DsTableToolbarComponent` |
 | AG Grid paginator | `<ds-ag-paginator>` | `DsAgPaginatorComponent` |
 
+#### AG Grid wiring — always use this pattern
+
+Any time you create or modify an AG Grid table in a consuming project, ALWAYS use the pre-built exports from the design system. Do not set `headerComponent` or `cellRenderer` manually — use `DS_TABLE_DEFAULT_COL_DEF` which does this for you.
+
+**Minimum required setup:**
+```typescript
+import {
+  onfloTheme,
+  DS_TABLE_DEFAULT_COL_DEF,
+  DS_TABLE_COLUMN_TYPES,
+} from '@onflo/design-system';
+
+// In gridOptions:
+theme: onfloTheme,
+defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
+columnTypes: DS_TABLE_COLUMN_TYPES,
+suppressPaginationPanel: true,
+suppressContextMenu: true,
+suppressHeaderContextMenu: true,
+```
+
+**Column type shortcuts** (`type: 'dsCheckbox'` etc.):
+- `dsCheckbox` — 56px fixed checkbox column; pair with `rowSelection: 'multiple'`
+- `dsNumeric` — right-aligned + number filter; add `aggFunc: 'sum'` per-column for totals
+- `dsDate` — date filter with ISO string comparator
+- `dsGroupable` — enables the column in the row groups picker (Enterprise)
+- `dsPinned` — pins right, locked, no resize; use for action button columns
+
+Full integration pattern with template, component class, and all options is in `.claude/specs/specs-table.md` → "Angular Integration — Canonical Wiring Pattern".
+
 ### Content
 | Component | Selector | Import |
 |---|---|---|

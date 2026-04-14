@@ -6,6 +6,148 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 
 ---
 
+## Angular Integration — Canonical Wiring Pattern
+
+This is the complete, correct way to wire the Onflo table system into an Angular component using AG Grid Enterprise. Claude Code agents in consuming projects MUST use this pattern as-is.
+
+### Imports
+
+```typescript
+import {
+  onfloTheme,
+  DS_TABLE_DEFAULT_COL_DEF,
+  DS_TABLE_DEFAULT_COL_GROUP_DEF,
+  DS_TABLE_COLUMN_TYPES,
+} from '@onflo/design-system';
+```
+
+### Grid options object
+
+```typescript
+import { GridOptions } from 'ag-grid-community';
+
+gridOptions: GridOptions = {
+  // ── Layer 1: Programmatic theme (sets row/header height, icon size, borders off) ──
+  theme: onfloTheme,
+
+  // ── Layer 2: DS Angular components as AG Grid renderers ─────────────────────────
+  defaultColDef:      DS_TABLE_DEFAULT_COL_DEF,       // wires DsTableHeaderCellComponent + DsTableRowCellComponent
+  defaultColGroupDef: DS_TABLE_DEFAULT_COL_GROUP_DEF, // wires DsTableHeaderGroupCellComponent (Enterprise)
+  columnTypes:        DS_TABLE_COLUMN_TYPES,           // dsCheckbox, dsNumeric, dsDate, dsGroupable, dsPinned
+
+  // ── Layer 3: AG Grid structural CSS (already in _table-ag-theme.scss via dist) ──
+  // No action needed — consumed automatically when @onflo/design-system CSS is imported.
+
+  // ── Required settings ────────────────────────────────────────────────────────────
+  suppressPaginationPanel:      true,   // DS ag-paginator takes over
+  suppressContextMenu:          true,   // use ds-table-context-menu instead
+  suppressHeaderContextMenu:    true,   // use ds-table-context-menu instead
+
+  // ── Column definitions ────────────────────────────────────────────────────────────
+  columnDefs: [
+    { field: 'name',   headerName: 'Name',   flex: 1, minWidth: 120 },
+    { field: 'amount', headerName: 'Amount', type: 'dsNumeric', aggFunc: 'sum' },
+    { field: 'dept',   headerName: 'Dept',   type: 'dsGroupable' },
+    { colId: '_sel',   headerName: '', type: 'dsCheckbox', pinned: 'left' },
+  ],
+};
+```
+
+### Template
+
+```html
+<ds-table-toolbar [title]="'My Table'" />
+<ds-table-row-groups-bar [api]="gridApi" />
+<ag-grid-angular
+  class="ds-ag-grid ag-theme-quartz"
+  [gridOptions]="gridOptions"
+  (gridReady)="onGridReady($event)"
+  (gridSizeChanged)="onGridSizeChanged($event)"
+/>
+<ds-ag-paginator [api]="gridApi" />
+```
+
+### Component class
+
+```typescript
+import { Component } from '@angular/core';
+import { GridApi, GridReadyEvent, GridSizeChangedEvent } from 'ag-grid-community';
+import { AgGridAngular } from 'ag-grid-angular';
+import {
+  onfloTheme,
+  DS_TABLE_DEFAULT_COL_DEF,
+  DS_TABLE_DEFAULT_COL_GROUP_DEF,
+  DS_TABLE_COLUMN_TYPES,
+  DsTableToolbarComponent,
+  DsTableRowGroupsBarComponent,
+  DsAgPaginatorComponent,
+} from '@onflo/design-system';
+
+@Component({
+  standalone: true,
+  imports: [AgGridAngular, DsTableToolbarComponent, DsTableRowGroupsBarComponent, DsAgPaginatorComponent],
+  templateUrl: './my-page.component.html',
+})
+export class MyPageComponent {
+  gridApi?: GridApi;
+
+  gridOptions = {
+    theme: onfloTheme,
+    defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
+    defaultColGroupDef: DS_TABLE_DEFAULT_COL_GROUP_DEF,
+    columnTypes: DS_TABLE_COLUMN_TYPES,
+    suppressPaginationPanel: true,
+    suppressContextMenu: true,
+    suppressHeaderContextMenu: true,
+    columnDefs: [
+      { field: 'name',   headerName: 'Name',   flex: 1, minWidth: 120 },
+      { field: 'amount', headerName: 'Amount', type: 'dsNumeric', aggFunc: 'sum' },
+      { colId: '_sel',   headerName: '', type: 'dsCheckbox', pinned: 'left' },
+    ],
+  };
+
+  onGridReady(event: GridReadyEvent): void {
+    this.gridApi = event.api;
+  }
+
+  onGridSizeChanged(event: GridSizeChangedEvent): void {
+    event.api.sizeColumnsToFit();
+  }
+}
+```
+
+### What each layer does
+
+| Layer | What it sets | How it's applied |
+|---|---|---|
+| `onfloTheme` | rowHeight/headerHeight (56px), iconSize (20px), spacing (8px), all native borders off | JS object passed to `theme:` in gridOptions |
+| `DS_TABLE_DEFAULT_COL_DEF` | `headerComponent: DsTableHeaderCellComponent`, `cellRenderer: DsTableRowCellComponent` | Applied to every column automatically via `defaultColDef` |
+| `DS_TABLE_COLUMN_TYPES` | Pre-configured column type presets (dsCheckbox, dsNumeric, etc.) | Applied per-column via `type: 'dsNumeric'` etc. |
+| `_table-ag-theme.scss` | Colors, fonts, filter menus, overlays, sidebar chrome | Ships in `dist/components.css` — applied via `.ag-root-wrapper` CSS overrides |
+
+### Custom cell content
+
+For columns that need badge/chip/icon content instead of plain text, use a custom Angular component as `cellRenderer` for that column:
+
+```typescript
+// In your column def — overrides the defaultColDef cellRenderer for this column only
+{ field: 'status', headerName: 'Status', cellRenderer: StatusBadgeCellComponent }
+```
+
+The custom component must implement `agInit(params)` and `refresh(params)` — see `DsTableRowCellComponent` source for reference.
+
+### Enterprise row grouping
+
+```typescript
+gridOptions = {
+  // ...standard setup above...
+  groupDisplayType: 'groupRows',
+  groupRowRenderer: DsTableGroupRowCellComponent,   // import from '@onflo/design-system'
+};
+```
+
+---
+
 ## Grid Layout and Sizing
 
 ### Container requirements
