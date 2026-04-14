@@ -16405,10 +16405,16 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <h2 class="section-title">Page Layout + Table</h2>
           <span class="section-source">CSS pattern · preview/index.html</span>
         </div>
-        <p class="section-desc">Full application shell with a data table filling the main content area. Combines <code>ds-page-layout</code>, the collapsible <code>ds-subnav</code> panel, and the full table composition — toolbar, group header row, sticky column headers, scrollable rows, and paginator.</p>
+        <p class="section-desc">
+          Full application shell with a data table filling the main content area.
+          Combines <code>ds-page-layout</code>, the collapsible <code>ds-subnav</code> panel, and the complete
+          table composition: toolbar → row-groups bar → group header row → column header row →
+          data rows (normal / hover / selected) → status bar → paginator.
+          Click the toggle arrow to collapse or expand the sub-nav.
+        </p>
 
         <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
-          <div class="ds-page-layout" id="page-layout-table-demo" style="height: 760px;">
+          <div class="ds-page-layout" id="page-layout-table-demo" style="height: 780px;">
 
             <!-- ── Left nav sidebar ───────────────────────────────────────── -->
             <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
@@ -16433,7 +16439,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <span class="ds-nav-button__label">Analytics</span>
                 </button>
                 <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
+                  <span class="ds-icon" aria-hidden="true">settings</span>
                   <span class="ds-nav-button__label">Settings</span>
                 </button>
               </div>
@@ -16448,20 +16454,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   </div>
                   <span class="ds-agent-status__indicator" aria-hidden="true"></span>
                 </button>
-                <button class="ds-agent-status is-offline" type="button" aria-pressed="false" aria-label="Live agent status: Offline">
-                  <div class="ds-agent-status__icon">
-                    <span class="ds-icon" aria-hidden="true">forum</span>
-                  </div>
-                  <div class="ds-agent-status__status">
-                    <span>Offline</span>
-                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                  </div>
-                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                </button>
               </div>
             </nav>
 
-            <!-- ── Right side: top-nav + body ────────────────────────────── -->
+            <!-- ── Right: top-nav + body ─────────────────────────────────── -->
             <div class="ds-page-layout__content">
 
               <!-- Top nav -->
@@ -16476,27 +16472,25 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                       </button>
                     </div>
                   </div>
+                  <div class="ds-nav-tab" role="button" tabindex="0"
+                       aria-pressed="false" aria-label="Tickets tab">
+                    <div class="ds-nav-tab__content">
+                      <span class="ds-nav-tab__label">Tickets</span>
+                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tickets tab">
+                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <div class="ds-top-nav__actions">
-                  <button class="ds-top-nav__action-btn" type="button" aria-label="Chatsy">
-                    <svg aria-hidden="true" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;flex-shrink:0;">
-                      <path d="M16.6419 8.93096V11.2075C16.6434 11.8671 16.5159 12.5209 16.2662 13.1342C16.7456 13.071 17.1851 12.8411 17.5036 12.4871C17.8221 12.133 17.9979 11.6788 17.9986 11.2085V10.7708C17.9956 10.3651 17.8633 9.97022 17.62 9.64062C17.3767 9.31101 17.0343 9.06285 16.6399 8.9303" fill="currentColor"/>
-                      <path d="M1.6434 12.8987C1.6194 12.8306 1.59675 12.7617 1.57547 12.6919C1.56901 12.6721 1.56358 12.6516 1.55814 12.6318C1.54252 12.5763 1.52689 12.5224 1.51296 12.4666C1.50436 12.432 1.49643 12.3971 1.48919 12.3619C1.479 12.318 1.46881 12.2724 1.45963 12.2298C1.45046 12.1872 1.44299 12.1403 1.43484 12.0911C1.42668 12.0418 1.42193 12.0194 1.41649 11.9827C1.40732 11.9289 1.40189 11.8754 1.39543 11.8215C1.39543 11.7911 1.38728 11.7598 1.38456 11.732C1.37811 11.6712 1.37369 11.6101 1.36996 11.5484C1.3709 11.5228 1.36907 11.4972 1.36452 11.4721C1.36452 11.3825 1.35807 11.293 1.35807 11.2098V8.93328C0.964056 9.06555 0.621864 9.31327 0.378551 9.64238C0.135237 9.97149 0.00275433 10.3658 -0.000679157 10.7711V11.2088C-0.000193948 11.6792 0.175587 12.1335 0.494109 12.4876C0.812631 12.8417 1.25231 13.0715 1.73172 13.1345C1.70138 13.0594 1.67284 12.9833 1.64612 12.9063C1.64631 12.9039 1.64631 12.9014 1.64612 12.899" fill="currentColor"/>
-                      <path d="M11.0571 6.58443H6.97411C6.09783 6.58539 5.25773 6.92431 4.63811 7.52683C4.01848 8.12935 3.66995 8.94627 3.66896 9.79836V10.8144C3.66995 11.6665 4.01848 12.4834 4.63811 13.0859C5.25773 13.6885 6.09783 14.0274 6.97411 14.0283H11.0571C11.9334 14.0274 12.7735 13.6885 13.3931 13.0859C14.0128 12.4834 14.3613 11.6665 14.3623 10.8144V9.79836C14.3613 8.94627 14.0128 8.12935 13.3931 7.52683C12.7735 6.92431 11.9334 6.58539 11.0571 6.58443ZM5.46148 9.45979C5.46148 9.29301 5.51235 9.12997 5.60764 8.99129C5.70293 8.85261 5.83837 8.74453 5.99683 8.6807C6.1553 8.61687 6.32967 8.60017 6.49789 8.63271C6.66611 8.66525 6.82064 8.74557 6.94192 8.8635C7.0632 8.98144 7.1458 9.1317 7.17926 9.29528C7.21272 9.45886 7.19555 9.62841 7.12991 9.7825C7.06427 9.93659 6.95312 10.0683 6.81051 10.161C6.66789 10.2536 6.50023 10.3031 6.32871 10.3031C6.0987 10.3031 5.87812 10.2142 5.71549 10.0561C5.55285 9.89794 5.46148 9.68345 5.46148 9.45979ZM9.14403 12.4785C8.20061 12.4664 7.27635 12.2179 6.4605 11.7571L6.71085 11.3667C7.4117 11.7689 8.21064 11.9811 9.02446 11.9811C9.83828 11.9811 10.6372 11.7689 11.3381 11.3667L11.5996 11.7498C10.8746 12.2259 10.0192 12.479 9.14437 12.4765M11.6631 10.3011C11.4916 10.3011 11.324 10.2516 11.1813 10.159C11.0387 10.0663 10.9276 9.93461 10.8619 9.78052C10.7963 9.62643 10.7791 9.45688 10.8126 9.2933C10.846 9.12971 10.9286 8.97946 11.0499 8.86152C11.1712 8.74359 11.3257 8.66327 11.494 8.63073C11.6622 8.59819 11.8366 8.61489 11.995 8.67872C12.1535 8.74255 12.2889 8.85063 12.3842 8.98931C12.4795 9.12799 12.5304 9.29103 12.5304 9.45781C12.5304 9.68146 12.439 9.89596 12.2764 10.0541C12.1137 10.2122 11.8931 10.3011 11.6631 10.3011Z" fill="currentColor"/>
-                      <path d="M11.1913 4.2445H9.34342V3.39164C9.70111 3.31393 10.0164 3.10985 10.2281 2.81895C10.4399 2.52805 10.533 2.17107 10.4895 1.8172C10.4459 1.46333 10.2688 1.13779 9.99246 0.903685C9.71612 0.669579 9.36022 0.543586 8.99378 0.550132C8.62733 0.556677 8.27644 0.695295 8.00912 0.939113C7.7418 1.18293 7.57711 1.51458 7.54696 1.86976C7.51681 2.22495 7.62336 2.57837 7.84594 2.8615C8.06853 3.14464 8.39131 3.33733 8.75169 3.40221V4.24417H6.84333C5.6332 4.24659 4.46648 4.68283 3.56644 5.46942C2.6664 6.25601 2.09625 7.33771 1.96509 8.50751L1.95592 8.6066C1.94958 8.67729 1.94493 8.74533 1.94199 8.81073C1.93927 8.87679 1.93655 8.94946 1.93655 9.0185V11.2002C1.93655 11.2773 1.93871 11.3534 1.94301 11.4285V11.4526C1.94301 11.5252 1.9532 11.5976 1.96033 11.6702V11.7016C1.96848 11.7713 1.97698 11.8413 1.98785 11.91L1.9943 11.9467C2.00551 12.0148 2.0174 12.0811 2.03099 12.1472L2.04118 12.1948C2.05205 12.243 2.06326 12.2916 2.07515 12.3388C2.08704 12.386 2.09824 12.4283 2.11115 12.4709L2.13323 12.5489C2.2119 12.804 2.31234 13.0522 2.43352 13.2911L2.50145 13.4262C2.91877 14.1943 3.54355 14.8372 4.30859 15.2858C5.07362 15.7344 5.94996 15.9717 6.84333 15.9722H10.0897H10.0985L12.2535 17.6981C12.2831 17.7224 12.3193 17.738 12.3577 17.7431C12.3962 17.7481 12.4353 17.7424 12.4705 17.7266C12.5057 17.7107 12.5355 17.6855 12.5564 17.6538C12.5774 17.6221 12.5886 17.5852 12.5888 17.5475L12.6177 15.7701L12.7834 15.7152C13.7513 15.3922 14.5915 14.7837 15.1869 13.9745C15.7823 13.1653 16.1033 12.1956 16.1052 11.2005V9.02048C16.1041 7.75373 15.586 6.53921 14.6646 5.6437C13.7433 4.74819 12.494 4.24494 11.1913 4.2445ZM14.9391 10.8058C14.938 11.7971 14.5326 12.7474 13.8119 13.4484C13.0911 14.1494 12.1139 14.5437 11.0945 14.5449H7.01113C5.99176 14.5437 5.0145 14.1494 4.29376 13.4484C3.57302 12.7474 3.16764 11.7971 3.16656 10.8058V9.78845C3.16809 8.7975 3.57366 7.84757 4.29436 7.14695C5.01505 6.44633 5.99205 6.0522 7.01113 6.05098H11.0942C12.1133 6.05211 13.0904 6.44621 13.8112 7.14683C14.5319 7.84746 14.9376 8.79744 14.9391 9.78845V10.8058Z" fill="currentColor"/>
-                    </svg>
-                  </button>
                   <div class="ds-top-nav__action-badge">
-                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 5 new">
                       <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
                     </button>
-                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
+                    <div class="ds-badge-indicator" aria-hidden="true">5</div>
                   </div>
                   <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
                     <span class="ds-icon" aria-hidden="true">add_2</span>
-                  </button>
-                  <button class="ds-top-nav__action-btn" type="button" aria-label="Help">
-                    <span class="ds-icon ds-icon--filled" aria-hidden="true">person_raised_hand</span>
                   </button>
                   <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
                     R
@@ -16537,279 +16531,427 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                     </div>
                   </div>
 
-                  <!-- Content card: table fills it entirely -->
+                  <!-- Table fills the content card entirely -->
                   <div class="ds-page-content__main" style="overflow: hidden; display: flex; flex-direction: column;">
 
                     <div id="table-sim-pt" data-density="comfort" style="display: flex; flex-direction: column; flex: 1; min-height: 0; min-width: 0;">
 
-                        <!-- Toolbar -->
-                        <div class="ds-table-toolbar">
-                          <div class="ds-table-toolbar__left">
-                            <button class="ds-button ds-button--filled ds-button--leading-icon" type="button">
-                              <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">add</span></span>
-                              New Customer
-                            </button>
-                            <button class="ds-button ds-button--outlined ds-button--trailing-icon" type="button">
-                              Bulk Actions
-                              <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon">arrow_drop_down</span></span>
-                            </button>
-                          </div>
-                          <div class="ds-table-toolbar__right">
-                            <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Filter columns">
-                              <span class="ds-icon ds-icon--filled">filter_alt</span>
-                            </button>
-                            <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Download">
-                              <span class="ds-icon">download</span>
-                            </button>
-                          </div>
+                      <!-- ── Toolbar ── -->
+                      <div class="ds-table-toolbar">
+                        <div class="ds-table-toolbar__left">
+                          <button class="ds-button ds-button--filled ds-button--leading-icon" type="button">
+                            <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">add</span></span>
+                            New Customer
+                          </button>
+                          <button class="ds-button ds-button--outlined ds-button--trailing-icon" type="button">
+                            Bulk Actions
+                            <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon">arrow_drop_down</span></span>
+                          </button>
                         </div>
+                        <div class="ds-table-toolbar__right">
+                          <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Column visibility">
+                            <span class="ds-icon">view_column</span>
+                          </button>
+                          <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Filter">
+                            <span class="ds-icon ds-icon--filled">filter_alt</span>
+                          </button>
+                          <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Download">
+                            <span class="ds-icon">download</span>
+                          </button>
+                        </div>
+                      </div>
 
-                        <!-- Scroll container: sticky header + data rows -->
-                        <div id="table-scroll-pt" style="flex: 1; overflow: auto; min-height: 0; min-width: 0;">
-                          <div style="width: 100%; min-width: 1006px; position: relative;">
+                      <!-- ── Row groups bar (no active groups — placeholder shown) ── -->
+                      <div class="ds-table-row-groups-bar">
+                        <div class="ds-table-row-groups-bar__drop-zone">
+                          <span class="ds-icon ds-icon--sm ds-table-row-groups-bar__drag-icon" aria-hidden="true">drag_indicator</span>
+                          <span class="ds-table-row-groups-bar__placeholder" aria-hidden="true">Drag here to set row groups</span>
+                        </div>
+                      </div>
 
-                            <!-- Sticky header block: group header row + column header row -->
-                            <div style="position: sticky; top: 0; z-index: 3;">
+                      <!-- ── Scroll container (sticky header + data rows) ── -->
+                      <div style="flex: 1; overflow: auto; min-height: 0; min-width: 0;">
+                        <div style="width: 100%; min-width: 660px; position: relative;">
 
-                              <!-- Group header row (column group labels) -->
-                              <div id="pt-group-header-grid" style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px;">
-                                <!-- Checkbox: no group -->
-                                <div class="ds-table-header-group-cell"></div>
-                                <!-- Contact Info group: spans Customer + Email, non-expandable -->
-                                <div class="ds-table-header-group-cell" style="grid-column: span 2;">
-                                  <div class="ds-table-header-group-cell__content">
-                                    <span class="ds-table-header-group-cell__label">Contact Info</span>
+                          <!-- Sticky header block -->
+                          <div style="position: sticky; top: 0; z-index: 3;">
+
+                            <!-- Group header row -->
+                            <!-- Columns: [56px checkbox] [200px customer] [1fr email] [120px status] [130px revenue] -->
+                            <div style="display: grid; grid-template-columns: 56px 200px 1fr 120px 130px; background: var(--color-surface-subtle); border-bottom: 1px solid var(--color-border-secondary);">
+
+                              <!-- No group for checkbox column -->
+                              <div class="ds-table-header-group-cell"></div>
+
+                              <!-- "Contact Info" group spans Customer + Email -->
+                              <div class="ds-table-header-group-cell" style="grid-column: span 2;">
+                                <div class="ds-table-header-group-cell__content">
+                                  <span class="ds-table-header-group-cell__label">Contact Info</span>
+                                </div>
+                              </div>
+
+                              <!-- No group for Status -->
+                              <div class="ds-table-header-group-cell"></div>
+
+                              <!-- No group for Revenue -->
+                              <div class="ds-table-header-group-cell"></div>
+
+                            </div>
+
+                            <!-- Column header row -->
+                            <div style="display: grid; grid-template-columns: 56px 200px 1fr 120px 130px; background: var(--color-surface-subtle); border-bottom: 1px solid var(--color-border-secondary);">
+
+                              <!-- Checkbox-only header -->
+                              <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
+                                <div class="ds-table-header-cell__resize-handle"></div>
+                                <div class="ds-table-header-cell__content">
+                                  <div class="ds-table-header-cell__checkbox"
+                                       role="checkbox" aria-checked="false" tabindex="0"
+                                       aria-label="Select all rows">
+                                    <span class="ds-icon">check_box_outline_blank</span>
                                   </div>
                                 </div>
-                                <!-- Account group: spans Department + Status + Amount, expandable -->
-                                <div class="ds-table-header-group-cell" id="pt-account-group-hd" style="grid-column: span 3;" onclick="ptToggleHeaderGroup(this)">
-                                  <div class="ds-table-header-group-cell__content">
-                                    <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Expand Account group" aria-expanded="false" onclick="event.stopPropagation(); ptToggleHeaderGroup(this.closest('.ds-table-header-group-cell'))">
-                                      <span class="ds-icon ds-table-header-group-cell__chevron">arrow_drop_down</span>
-                                    </button>
-                                    <span class="ds-table-header-group-cell__label">Account</span>
-                                  </div>
+                                <div class="ds-table-header-cell__actions">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"></div>
                                 </div>
-                                <!-- Actions: no group, pinned right -->
-                                <div class="ds-table-header-group-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"></div>
-                              </div><!-- /group header row -->
+                              </div>
 
-                              <!-- Column header row -->
-                              <div id="pt-header-grid" style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px;">
-                                <!-- Checkbox (select-all, icon pattern) -->
-                                <div class="ds-table-header-cell ds-table-header-cell--checkbox-only">
-                                  <div class="ds-table-header-cell__content" style="justify-content: center;">
-                                    <div class="ds-table-header-cell__checkbox" role="checkbox" aria-label="Select all rows" aria-checked="false" tabindex="0">
-                                      <span class="ds-icon">check_box_outline_blank</span>
-                                    </div>
-                                  </div>
+                              <!-- Customer — sorted ascending, filter active -->
+                              <div class="ds-table-header-cell">
+                                <div class="ds-table-header-cell__resize-handle"></div>
+                                <div class="ds-table-header-cell__content">
+                                  <span class="ds-table-header-cell__label">Customer</span>
+                                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm"
+                                          aria-label="Sorted ascending — click to sort descending">
+                                    <span class="ds-icon ds-table-header-cell__sort-icon--asc">arrow_upward_alt</span>
+                                  </button>
                                 </div>
-                                <!-- Customer (filter inactive) -->
-                                <div class="ds-table-header-cell" data-col-key="customer">
-                                  <div class="ds-table-header-cell__resize-handle"></div>
-                                  <div class="ds-table-header-cell__content">
-                                    <span class="ds-table-header-cell__label">Customer</span>
-                                  </div>
-                                  <div class="ds-table-header-cell__actions">
-                                    <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter column">
-                                      <span class="ds-icon ds-icon--filled">filter_alt</span>
-                                    </button>
-                                    <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
-                                      <span class="ds-table-header-cell__resize-bar"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!-- Email -->
-                                <div class="ds-table-header-cell" data-col-key="email">
-                                  <div class="ds-table-header-cell__resize-handle"></div>
-                                  <div class="ds-table-header-cell__content">
-                                    <span class="ds-table-header-cell__label">Email</span>
-                                  </div>
-                                  <div class="ds-table-header-cell__actions">
-                                    <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
-                                      <span class="ds-table-header-cell__resize-bar"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!-- Department -->
-                                <div class="ds-table-header-cell" data-col-key="department">
-                                  <div class="ds-table-header-cell__resize-handle"></div>
-                                  <div class="ds-table-header-cell__content">
-                                    <span class="ds-table-header-cell__label">Department</span>
-                                  </div>
-                                  <div class="ds-table-header-cell__actions">
-                                    <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
-                                      <span class="ds-table-header-cell__resize-bar"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!-- Status (filter active — brand blue) -->
-                                <div class="ds-table-header-cell" data-col-key="status">
-                                  <div class="ds-table-header-cell__resize-handle"></div>
-                                  <div class="ds-table-header-cell__content">
-                                    <span class="ds-table-header-cell__label">Status</span>
-                                  </div>
-                                  <div class="ds-table-header-cell__actions">
-                                    <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Filter active — click to edit">
-                                      <span class="ds-icon ds-icon--filled ds-table-header-cell__filter-icon--active">filter_alt</span>
-                                    </button>
-                                    <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
-                                      <span class="ds-table-header-cell__resize-bar"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!-- Amount (right-aligned, sorted ascending) -->
-                                <div class="ds-table-header-cell" data-col-key="amount">
-                                  <div class="ds-table-header-cell__resize-handle"></div>
-                                  <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
-                                    <span class="ds-table-header-cell__label">Amount</span>
-                                    <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sorted ascending">
-                                      <span class="ds-icon ds-table-header-cell__sort-icon--asc">arrow_upward_alt</span>
-                                    </button>
-                                  </div>
-                                  <div class="ds-table-header-cell__actions">
-                                    <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
-                                      <span class="ds-table-header-cell__resize-bar"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!-- Actions (pinned right) -->
-                                <div class="ds-table-header-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;">
-                                  <div class="ds-table-header-cell__content" style="justify-content: center;">
-                                    <span class="ds-table-header-cell__label">Actions</span>
-                                  </div>
-                                </div>
-                              </div><!-- /column header row -->
-                            </div><!-- /sticky header block -->
-
-                            <!-- Data rows -->
-                            <div id="pt-data-grid" style="display: grid; grid-template-columns: 56px 200px 1fr 160px 140px 130px 100px; position: relative;">
-
-                              <!-- Row 1: Acme Corporation -->
-                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><div class="ds-table-row-cell__checkbox" role="checkbox" aria-label="Select Acme Corporation" aria-checked="false" tabindex="0"><span class="ds-icon">check_box_outline_blank</span></div></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Acme Corporation</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">info@acmecorp.com</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$14,200.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Acme Corporation"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Acme Corporation"><span class="ds-icon">delete</span></button></div></div>
-
-                              <!-- Row 2: Cloud Systems Inc -->
-                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><div class="ds-table-row-cell__checkbox" role="checkbox" aria-label="Select Cloud Systems Inc" aria-checked="false" tabindex="0"><span class="ds-icon">check_box_outline_blank</span></div></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Cloud Systems Inc</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">hello@cloudsys.io</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Product</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$31,000.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Cloud Systems Inc"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Cloud Systems Inc"><span class="ds-icon">delete</span></button></div></div>
-
-                              <!-- Row 3: Echo Ventures Group -->
-                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><div class="ds-table-row-cell__checkbox" role="checkbox" aria-label="Select Echo Ventures Group" aria-checked="false" tabindex="0"><span class="ds-icon">check_box_outline_blank</span></div></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Echo Ventures Group</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">team@echoventures.co</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$57,800.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Echo Ventures Group"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Echo Ventures Group"><span class="ds-icon">delete</span></button></div></div>
-
-                              <!-- Row 4: Frontier Corp -->
-                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><div class="ds-table-row-cell__checkbox" role="checkbox" aria-label="Select Frontier Corp" aria-checked="false" tabindex="0"><span class="ds-icon">check_box_outline_blank</span></div></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Frontier Corp</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">contact@frontierco.com</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$22,400.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Frontier Corp"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Frontier Corp"><span class="ds-icon">delete</span></button></div></div>
-
-                              <!-- Row 5: Meridian Partners -->
-                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><div class="ds-table-row-cell__checkbox" role="checkbox" aria-label="Select Meridian Partners" aria-checked="false" tabindex="0"><span class="ds-icon">check_box_outline_blank</span></div></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Meridian Partners</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">ops@meridian.co</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Finance</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$8,750.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Meridian Partners"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Meridian Partners"><span class="ds-icon">delete</span></button></div></div>
-
-                              <!-- Row 6: Northgate Solutions -->
-                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><div class="ds-table-row-cell__checkbox" role="checkbox" aria-label="Select Northgate Solutions" aria-checked="false" tabindex="0"><span class="ds-icon">check_box_outline_blank</span></div></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Northgate Solutions</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">hello@northgate.io</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sales</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Inactive</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$6,300.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Northgate Solutions"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Northgate Solutions"><span class="ds-icon">delete</span></button></div></div>
-
-                              <!-- Row 7: Orbit Analytics -->
-                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><div class="ds-table-row-cell__checkbox" role="checkbox" aria-label="Select Orbit Analytics" aria-checked="false" tabindex="0"><span class="ds-icon">check_box_outline_blank</span></div></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Orbit Analytics</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">data@orbitanalytics.com</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Engineering</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Active</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$43,100.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Orbit Analytics"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Orbit Analytics"><span class="ds-icon">delete</span></button></div></div>
-
-                              <!-- Row 8: Pinnacle Group -->
-                              <div class="ds-table-row-cell ds-table-row-cell--checkbox-only"><div class="ds-table-row-cell__content" style="justify-content:center;"><div class="ds-table-row-cell__checkbox" role="checkbox" aria-label="Select Pinnacle Group" aria-checked="false" tabindex="0"><span class="ds-icon">check_box_outline_blank</span></div></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pinnacle Group</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">info@pinnaclegroup.net</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Finance</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Pending</span></div></div>
-                              <div class="ds-table-row-cell"><div class="ds-table-row-cell__content ds-table-row-cell__content--right"><span class="ds-table-row-cell__data ds-table-row-cell__data--right">$19,650.00</span></div></div>
-                              <div class="ds-table-row-cell ds-table-pinned-right" style="position: sticky; right: 0; z-index: 1;"><div class="ds-table-row-cell__content" style="justify-content:center; gap: var(--spacing-xs);"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="View Pinnacle Group"><span class="ds-icon">open_in_new</span></button><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" type="button" aria-label="Delete Pinnacle Group"><span class="ds-icon">delete</span></button></div></div>
-
-                            </div><!-- /data rows grid -->
-
-                          </div><!-- /min-width wrapper -->
-                        </div><!-- /table-scroll-pt -->
-
-                        <!-- Paginator -->
-                        <div class="ds-ag-paginator" style="width: 100%;">
-                          <div class="ds-ag-paginator__inner">
-                            <div class="ds-ag-paginator__counter">
-                              <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
-                              <div class="ds-select ds-ag-paginator__size-select">
-                                <div class="ds-select__field-row">
-                                  <div class="ds-select__field" onclick="document.getElementById('pag-size-layout').focus()">
-                                    <input type="text" id="pag-size-layout" class="ds-select__control"
-                                           value="100" data-default-placeholder=""
-                                           autocomplete="off" spellcheck="false"
-                                           role="combobox" aria-haspopup="listbox" aria-expanded="false"
-                                           aria-controls="pag-size-layout-menu" aria-label="Items per page"
-                                           onfocus="dsSelectOpen('pag-size-layout')"
-                                           oninput="dsSelectFilter('pag-size-layout', this.value)"
-                                           onblur="dsSelectBlur('pag-size-layout', event)">
-                                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
-                                  </div>
-                                  <div class="ds-select__dropdown" id="pag-size-layout-menu" role="listbox" aria-label="Items per page">
-                                    <div class="ds-menu">
-                                      <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="100" onclick="dsSelectOption('pag-size-layout', this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>100</button>
-                                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="250" onclick="dsSelectOption('pag-size-layout', this)">250</button>
-                                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="500" onclick="dsSelectOption('pag-size-layout', this)">500</button>
-                                      <button class="ds-menu__item" role="option" aria-selected="false" data-label="1000" onclick="dsSelectOption('pag-size-layout', this)">1000</button>
-                                    </div>
+                                <div class="ds-table-header-cell__actions">
+                                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm"
+                                          aria-label="Filter active — click to edit">
+                                    <span class="ds-icon ds-icon--filled ds-table-header-cell__filter-icon--active">filter_alt</span>
+                                  </button>
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                    <span class="ds-table-header-cell__resize-bar"></span>
                                   </div>
                                 </div>
                               </div>
+
+                              <!-- Email — sortable, unsorted -->
+                              <div class="ds-table-header-cell">
+                                <div class="ds-table-header-cell__resize-handle">
+                                  <span class="ds-table-header-cell__resize-bar"></span>
+                                </div>
+                                <div class="ds-table-header-cell__content">
+                                  <span class="ds-table-header-cell__label">Email</span>
+                                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm"
+                                          aria-label="Sort column">
+                                    <span class="ds-icon ds-table-header-cell__sort-icon--none">arrow_upward_alt</span>
+                                  </button>
+                                </div>
+                                <div class="ds-table-header-cell__actions">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                    <span class="ds-table-header-cell__resize-bar"></span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Status — sortable, unsorted -->
+                              <div class="ds-table-header-cell">
+                                <div class="ds-table-header-cell__resize-handle">
+                                  <span class="ds-table-header-cell__resize-bar"></span>
+                                </div>
+                                <div class="ds-table-header-cell__content">
+                                  <span class="ds-table-header-cell__label">Status</span>
+                                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm"
+                                          aria-label="Sort column">
+                                    <span class="ds-icon ds-table-header-cell__sort-icon--none">arrow_upward_alt</span>
+                                  </button>
+                                </div>
+                                <div class="ds-table-header-cell__actions">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
+                                    <span class="ds-table-header-cell__resize-bar"></span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Revenue — sortable, right-aligned -->
+                              <div class="ds-table-header-cell ds-table-header-cell--right">
+                                <div class="ds-table-header-cell__resize-handle">
+                                  <span class="ds-table-header-cell__resize-bar"></span>
+                                </div>
+                                <div class="ds-table-header-cell__content ds-table-header-cell__content--right">
+                                  <span class="ds-table-header-cell__label">Revenue</span>
+                                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm"
+                                          aria-label="Sort column">
+                                    <span class="ds-icon ds-table-header-cell__sort-icon--none">arrow_upward_alt</span>
+                                  </button>
+                                </div>
+                                <div class="ds-table-header-cell__actions">
+                                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing"></div>
+                                </div>
+                              </div>
+
                             </div>
-                            <div class="ds-ag-paginator__pagination">
-                              <span class="ds-ag-paginator__range" aria-live="polite">1 - 100 of 3842</span>
-                              <div class="ds-ag-paginator__nav">
-                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="First page" disabled>
-                                  <span class="ds-icon">first_page</span>
-                                </button>
-                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Previous page" disabled>
-                                  <span class="ds-icon">keyboard_arrow_left</span>
-                                </button>
-                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Next page">
-                                  <span class="ds-icon">keyboard_arrow_right</span>
-                                </button>
-                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Last page">
-                                  <span class="ds-icon">last_page</span>
-                                </button>
+                          </div><!-- /sticky header -->
+
+                          <!-- ── Data rows ── -->
+
+                          <!-- Row 1: Acme Corporation — default -->
+                          <div style="display: grid; grid-template-columns: 56px 200px 1fr 120px 130px; border-bottom: 1px solid var(--color-border-subtle);">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
+                              <div class="ds-table-row-cell__content">
+                                <div class="ds-table-row-cell__checkbox"
+                                     role="checkbox" aria-checked="false" tabindex="0">
+                                  <span class="ds-icon">check_box_outline_blank</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Acme Corporation</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">contact@acme.com</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Active</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
+                                <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$48,200</span>
                               </div>
                             </div>
                           </div>
+
+                          <!-- Row 2: Globex Industries — hovered -->
+                          <div style="display: grid; grid-template-columns: 56px 200px 1fr 120px 130px; border-bottom: 1px solid var(--color-border-subtle);" class="ag-row-hover">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
+                              <div class="ds-table-row-cell__content">
+                                <div class="ds-table-row-cell__checkbox"
+                                     role="checkbox" aria-checked="false" tabindex="0">
+                                  <span class="ds-icon">check_box_outline_blank</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Globex Industries</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">hello@globex.io</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Pending</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
+                                <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$12,750</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Row 3: Initech LLC — selected -->
+                          <div style="display: grid; grid-template-columns: 56px 200px 1fr 120px 130px; border-bottom: 1px solid var(--color-border-subtle);" class="ag-row-selected">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
+                              <div class="ds-table-row-cell__content">
+                                <div class="ds-table-row-cell__checkbox ds-table-row-cell__checkbox--checked"
+                                     role="checkbox" aria-checked="true" tabindex="0">
+                                  <span class="ds-icon ds-icon--filled">check_box</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell is-selected">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Initech LLC</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell is-selected">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">support@initech.com</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell is-selected">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Inactive</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell is-selected">
+                              <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
+                                <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$3,100</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Row 4: Umbrella Corp — default -->
+                          <div style="display: grid; grid-template-columns: 56px 200px 1fr 120px 130px; border-bottom: 1px solid var(--color-border-subtle);">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
+                              <div class="ds-table-row-cell__content">
+                                <div class="ds-table-row-cell__checkbox"
+                                     role="checkbox" aria-checked="false" tabindex="0">
+                                  <span class="ds-icon">check_box_outline_blank</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Umbrella Corp</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">info@umbrella.co</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Active</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
+                                <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$91,400</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Row 5: Stark Enterprises — default -->
+                          <div style="display: grid; grid-template-columns: 56px 200px 1fr 120px 130px; border-bottom: 1px solid var(--color-border-subtle);">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
+                              <div class="ds-table-row-cell__content">
+                                <div class="ds-table-row-cell__checkbox"
+                                     role="checkbox" aria-checked="false" tabindex="0">
+                                  <span class="ds-icon">check_box_outline_blank</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Stark Enterprises</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">admin@stark.io</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Active</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
+                                <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$67,850</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Row 6: Wayne Corp — default -->
+                          <div style="display: grid; grid-template-columns: 56px 200px 1fr 120px 130px; border-bottom: 1px solid var(--color-border-subtle);">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only">
+                              <div class="ds-table-row-cell__content">
+                                <div class="ds-table-row-cell__checkbox"
+                                     role="checkbox" aria-checked="false" tabindex="0">
+                                  <span class="ds-icon">check_box_outline_blank</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Wayne Corp</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">hello@wayneenterprise.com</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content">
+                                <span class="ds-table-row-cell__data">Active</span>
+                              </div>
+                            </div>
+                            <div class="ds-table-row-cell">
+                              <div class="ds-table-row-cell__content ds-table-row-cell__content--right">
+                                <span class="ds-table-row-cell__data ds-table-row-cell__data--right">$22,300</span>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div><!-- /min-width wrapper -->
+                      </div><!-- /scroll container -->
+
+                      <!-- ── Status bar ── -->
+                      <div class="ds-table-status-bar">
+                        <div class="ds-table-status-bar__counts">
+                          <span class="ds-table-status-bar__stat">
+                            <span class="ds-table-status-bar__stat-label">Rows:</span>
+                            <span class="ds-table-status-bar__stat-value">6</span>
+                          </span>
+                          <span class="ds-table-status-bar__stat">
+                            <span class="ds-table-status-bar__stat-label">Total Rows:</span>
+                            <span class="ds-table-status-bar__stat-value">248</span>
+                          </span>
                         </div>
+                        <div class="ds-table-status-bar__aggregates" aria-live="polite" aria-atomic="true">
+                          <span class="ds-table-status-bar__stat">
+                            <span class="ds-table-status-bar__stat-label">Sum:</span>
+                            <span class="ds-table-status-bar__stat-value">$245,600</span>
+                          </span>
+                          <span class="ds-table-status-bar__stat">
+                            <span class="ds-table-status-bar__stat-label">Average:</span>
+                            <span class="ds-table-status-bar__stat-value">$40,933</span>
+                          </span>
+                        </div>
+                      </div>
+
+                      <!-- ── Paginator ── -->
+                      <div class="ds-ag-paginator">
+                        <div class="ds-ag-paginator__inner">
+                          <div class="ds-ag-paginator__counter">
+                            <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
+                            <div class="ds-select ds-ag-paginator__size-select">
+                              <div class="ds-select__field-row">
+                                <div class="ds-select__field">
+                                  <input type="text" class="ds-select__control"
+                                         value="100" autocomplete="off" spellcheck="false"
+                                         role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                                         aria-label="Items per page" readonly>
+                                  <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="ds-ag-paginator__pagination">
+                            <span class="ds-ag-paginator__range" aria-live="polite">1 - 100 of 248</span>
+                            <div class="ds-ag-paginator__nav">
+                              <button class="ds-ag-paginator__btn" type="button" aria-label="First page" disabled>
+                                <span class="ds-icon">first_page</span>
+                              </button>
+                              <button class="ds-ag-paginator__btn" type="button" aria-label="Previous page" disabled>
+                                <span class="ds-icon">keyboard_arrow_left</span>
+                              </button>
+                              <button class="ds-ag-paginator__btn" type="button" aria-label="Next page">
+                                <span class="ds-icon">keyboard_arrow_right</span>
+                              </button>
+                              <button class="ds-ag-paginator__btn" type="button" aria-label="Last page">
+                                <span class="ds-icon">last_page</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
                     </div><!-- /table-sim-pt -->
                   </div><!-- /ds-page-content__main -->
@@ -16818,7 +16960,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               </div><!-- /.ds-page-layout__body -->
             </div><!-- /.ds-page-layout__content -->
 
-            <!-- Floating expand/collapse toggle (absolutely positioned) -->
+            <!-- Floating sub-nav expand/collapse toggle -->
             <button class="ds-nav-expand" id="nav-expand-btn-table"
                     type="button"
                     aria-label="Collapse sub navigation"
