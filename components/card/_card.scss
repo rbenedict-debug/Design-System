@@ -137,9 +137,11 @@
 // ── ds-card-item (compact horizontal card) ────────────────────────────────────
 //
 // Layout: leading/trailing slots are flush to the card edge (overflow hidden +
-// border-radius clips image corners). The outer card has no horizontal padding —
-// instead, modifier classes add --spacing-lg (16px) padding on whichever side has
-// no slot. The body always carries 8px (--spacing-sm) horizontal padding.
+// border-radius clips image corners). The outer card has no padding by default —
+// modifier classes add --spacing-lg (16px) on whichever side has no slot, and
+// --no-slots adds 16px top/bottom when no slots exist at all. The gap between
+// slots and the body is provided by the flex gap (--spacing-sm = 8px); the body
+// carries no horizontal padding of its own.
 //
 // Interaction (outlined): hover shifts border to --color-border-hover and lifts
 // the card with elevation shadow; active shifts border to --color-border-active.
@@ -148,6 +150,7 @@
 .ds-card-item {
   display: flex;
   align-items: center;
+  gap: var(--spacing-sm);
   min-height: 56px;
   background: var(--color-surface-page);
   border: 1px solid var(--color-border-subtle);
@@ -167,6 +170,12 @@
   // Applied by Angular when hasTrailing and hasAction are both false.
 
   &--no-trailing { padding-right: var(--spacing-lg); }
+
+  // ── Padding when no slots at all (text-only) ───────────────────────────────
+  // Applied by Angular when hasLeading, hasTrailing, and hasAction are all false.
+  // Adds 16px vertical padding to match the Figma state-layer padding spec.
+
+  &--no-slots { padding-top: var(--spacing-lg); padding-bottom: var(--spacing-lg); }
 
   // ── Elevated variant ───────────────────────────────────────────────────────
 
@@ -243,7 +252,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 var(--spacing-sm);
     position: relative;
     z-index: 1;
   }
