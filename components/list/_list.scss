@@ -49,13 +49,10 @@
   gap: var(--spacing-md);
   padding: var(--spacing-md) var(--spacing-lg);
   background: transparent;
-  border-bottom: 1px solid var(--color-border-subtle);
   position: relative;
   min-height: 48px;
   cursor: default;
   transition: background 0.12s ease;
-
-  &:last-child { border-bottom: none; }
 
   // Interactive list item (nav list, menu-style)
   &--interactive {
@@ -132,7 +129,18 @@
     color: var(--color-text-secondary);
   }
 
-  // 3-line variant: secondary wraps to 2 lines
+  // 2-line variant: secondary truncated to 1 line
+  &--2-lines &__secondary {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // 3-line variant: secondary wraps to 2 lines; leading/trailing slots top-aligned
+  &--3-lines {
+    align-items: flex-start;
+  }
+
   &--3-lines &__secondary {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -156,6 +164,15 @@
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
     }
   }
+}
+
+// ── Divided variant ────────────────────────────────────────────────────────────
+// Adds separator lines between items — use in menus and dense data lists only.
+
+.ds-list--divided .ds-list-item {
+  border-bottom: 1px solid var(--color-border-subtle);
+
+  &:last-child { border-bottom: none; }
 }
 
 // ── Angular Material overrides ────────────────────────────────────────────────

@@ -1,6 +1,7 @@
 <mat-list-item
   class="ds-list-item"
   [class.ds-list-item--interactive]="interactive"
+  [class.ds-list-item--2-lines]="variant === '2-lines'"
   [class.ds-list-item--3-lines]="variant === '3-lines'"
   [class.is-disabled]="disabled"
   [attr.tabindex]="interactive ? 0 : null"
