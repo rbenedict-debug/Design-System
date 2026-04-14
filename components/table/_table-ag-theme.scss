@@ -92,6 +92,25 @@
   --ag-side-button-selected-background-color: var(--color-surface-default);
   --ag-side-button-selected-underline-color: var(--color-border-brand);
 
+  // ── Cell and header height — dynamic density support ─────────────────────
+  // ds-table-row-cell and ds-table-header-cell have height: 56px in their own
+  // SCSS (the static default). Inside AG Grid, they must fill the AG Grid cell
+  // height dynamically so that density changes (compact 42px / comfort 68px)
+  // take effect. The Angular host elements also need height: 100% so the inner
+  // template div's 100% resolves correctly.
+  //
+  // Vanilla JS (preview): the renderer's div is directly inside .ag-cell.
+  // Angular: the host <ds-table-row-cell> is inside .ag-cell; the template div
+  //   is inside the host — both need 100% for the chain to resolve.
+  .ag-cell {
+    ds-table-row-cell { display: block; height: 100%; }
+    .ds-table-row-cell { height: 100%; }
+  }
+  .ag-header-cell {
+    ds-table-header-cell { display: block; height: 100%; }
+    .ds-table-header-cell { height: 100%; }
+  }
+
   // ── Typography ────────────────────────────────────────────────────────────
   // Proxima Nova — applies to AG Grid's native UI (filter panels, overlays,
   // column panel native elements). Our custom renderers set their own font

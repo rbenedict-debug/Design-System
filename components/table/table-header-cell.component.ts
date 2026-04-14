@@ -144,6 +144,10 @@ export interface AgHeaderParams {
   host: {
     '[attr.aria-sort]': 'ariaSortValue',
     'role': 'columnheader',
+    // Fill AG Grid's header cell container for density support — same reasoning
+    // as ds-table-row-cell's host: inner div.ds-table-header-cell needs a parent
+    // with an explicit height for height:100% to resolve to the AG Grid row height.
+    'style': 'display: block; height: 100%;',
   },
 })
 export class DsTableHeaderCellComponent implements OnDestroy {

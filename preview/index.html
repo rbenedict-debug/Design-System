@@ -15677,17 +15677,23 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             --ag-font-size: var(--ref-typescale-body-medium-size);
             --ag-header-font-size: var(--ref-typescale-label-medium-size);
             --ag-header-font-weight: var(--ref-typeface-weight-bold);
-            /* Custom renderers own all internal padding — Quartz default is 24px per side */
+            /* Custom renderers own all internal padding */
             --ag-cell-horizontal-padding: 0;
-            /* Toolbar/header separator — wrapperBorder:false removes all sides */
+            /* Toolbar/header separator */
             border-top: 1px solid var(--color-border-subtle);
           }
+          /* Cells fill AG Grid's row height for density switching */
+          #bsim-grid .ag-cell .ds-table-row-cell,
+          #bsim-grid .ag-header-cell .ds-table-header-cell { height: 100%; }
+          /* Row borders: --color-border-secondary (#CACACA) is visible on #F6F6F6 bg;
+             --color-border-subtle (#E9E9E9) is nearly invisible on this background */
+          #bsim-grid .ds-table-row-cell { border-bottom-color: var(--color-border-secondary); }
           /* Grid + column panel sit in a flex row */
           #bsim-body { display: flex; overflow: hidden; }
           #bsim-grid { flex: 1; min-width: 0; }
-          /* Context menu overlay — position:fixed, not clipped by overflow:hidden card */
-          #bsim-ctx { position: fixed; z-index: 9999; display: none; min-width: 180px; }
-          #bsim-ctx.is-open { display: block; }
+          /* Row/header context menu overlays — position:fixed, not clipped by overflow:hidden */
+          #bsim-ctx, #bsim-hctx { position: fixed; z-index: 9999; display: none; min-width: 180px; }
+          #bsim-ctx.is-open, #bsim-hctx.is-open { display: block; }
         </style>
 
         <h2 class="section-title">Basic Table — Functional (test)</h2>
@@ -15765,7 +15771,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                   <div class="ds-column-panel__col-list">
                     <!-- Name -->
-                    <div class="ds-column-panel__col-row" draggable="true">
+                    <div class="ds-column-panel__col-row" draggable="true" data-col-id="name"
+                         ondragstart="bsimPanelDragStart(event,'name')"
+                         ondragover="bsimPanelDragOver(event)"
+                         ondrop="bsimPanelDrop(event,'name')">
                       <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked"
                            role="checkbox" aria-checked="true" aria-label="Toggle Name visibility" tabindex="0"
                            onclick="bsimToggleCol('name',this)"
@@ -15776,7 +15785,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                       <span class="ds-column-panel__col-name">Name</span>
                     </div>
                     <!-- Email -->
-                    <div class="ds-column-panel__col-row" draggable="true">
+                    <div class="ds-column-panel__col-row" draggable="true" data-col-id="email"
+                         ondragstart="bsimPanelDragStart(event,'email')"
+                         ondragover="bsimPanelDragOver(event)"
+                         ondrop="bsimPanelDrop(event,'email')">
                       <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked"
                            role="checkbox" aria-checked="true" aria-label="Toggle Email visibility" tabindex="0"
                            onclick="bsimToggleCol('email',this)"
@@ -15787,7 +15799,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                       <span class="ds-column-panel__col-name">Email</span>
                     </div>
                     <!-- Status -->
-                    <div class="ds-column-panel__col-row" draggable="true">
+                    <div class="ds-column-panel__col-row" draggable="true" data-col-id="status"
+                         ondragstart="bsimPanelDragStart(event,'status')"
+                         ondragover="bsimPanelDragOver(event)"
+                         ondrop="bsimPanelDrop(event,'status')">
                       <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked"
                            role="checkbox" aria-checked="true" aria-label="Toggle Status visibility" tabindex="0"
                            onclick="bsimToggleCol('status',this)"
@@ -15798,7 +15813,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                       <span class="ds-column-panel__col-name">Status</span>
                     </div>
                     <!-- Amount -->
-                    <div class="ds-column-panel__col-row" draggable="true">
+                    <div class="ds-column-panel__col-row" draggable="true" data-col-id="amount"
+                         ondragstart="bsimPanelDragStart(event,'amount')"
+                         ondragover="bsimPanelDragOver(event)"
+                         ondrop="bsimPanelDrop(event,'amount')">
                       <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked"
                            role="checkbox" aria-checked="true" aria-label="Toggle Amount visibility" tabindex="0"
                            onclick="bsimToggleCol('amount',this)"
@@ -15878,7 +15896,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           </div>
         </div>
 
-        <!-- Context menu overlay — position:fixed so it isn't clipped by the card's overflow:hidden -->
+        <!-- Row cell context menu -->
         <div id="bsim-ctx" class="ds-menu" role="menu">
           <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimCtxCopy()">
             <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">content_copy</span>
@@ -15895,6 +15913,36 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           </button>
         </div>
 
+        <!-- Header cell context menu -->
+        <div id="bsim-hctx" class="ds-menu" role="menu">
+          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxSort('asc')">
+            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">arrow_upward</span>
+            Sort ascending
+          </button>
+          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxSort('desc')">
+            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">arrow_downward</span>
+            Sort descending
+          </button>
+          <div class="ds-divider ds-menu__divider" role="separator" aria-hidden="true"></div>
+          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxPin('left')">
+            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">push_pin</span>
+            Pin left
+          </button>
+          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxPin('right')">
+            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">push_pin</span>
+            Pin right
+          </button>
+          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxPin(null)">
+            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">close</span>
+            No pin
+          </button>
+          <div class="ds-divider ds-menu__divider" role="separator" aria-hidden="true"></div>
+          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxAutoSize()">
+            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">fit_width</span>
+            Auto-size column
+          </button>
+        </div>
+
         <script>
         (function () {
           if (typeof agGrid === 'undefined') { console.warn('AG Grid not loaded'); return; }
@@ -15903,7 +15951,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           // ── Theme — mirrors onfloTheme params ──────────────────────────────────
           const previewTheme = themeQuartz.withParams({
             rowHeight: 56, headerHeight: 56, iconSize: 20, spacing: 8,
-            cellHorizontalPadding: 0,  // custom renderers own all internal padding
+            cellHorizontalPadding: 0,
             rowBorder: false, columnBorder: false,
             headerRowBorder: false, headerColumnBorder: false, wrapperBorder: false,
           });
@@ -15915,14 +15963,19 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             btn.setAttribute('aria-pressed', pressed ? 'false' : 'true');
             if (pressed) wrapper.removeAttribute('data-panel-open');
             else         wrapper.setAttribute('data-panel-open', '');
-            // Re-fit columns after the panel opens/closes
             setTimeout(() => window._bsimApi?.sizeColumnsToFit(), 0);
           }
           window.bsimTogglePanel = bsimTogglePanel;
 
           // ── Density toggle ─────────────────────────────────────────────────────
+          // Use CSS custom properties + updateGridOptions together:
+          // CSS vars set the visual row height; updateGridOptions updates AG Grid's
+          // virtual DOM height calculation (used for row positioning and scroll height).
           function bsimSetDensity(mode, btn) {
             const h = mode === 'compact' ? 42 : 68;
+            const grid = document.getElementById('bsim-grid');
+            grid.style.setProperty('--ag-row-height', h + 'px');
+            grid.style.setProperty('--ag-header-height', h + 'px');
             window._bsimApi?.updateGridOptions({ rowHeight: h, headerHeight: h });
             btn.closest('.ds-density-toggle').querySelectorAll('.ds-density-toggle__btn').forEach(b => {
               b.classList.toggle('is-selected', b === btn);
@@ -15932,10 +15985,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           window.bsimSetDensity = bsimSetDensity;
 
           // ── Column visibility toggle ───────────────────────────────────────────
+          // Use getColumnState() for reliable visibility reading — getColumn()?.isVisible()
+          // can be stale in some AG Grid 35 rendering contexts.
           function bsimToggleCol(colId, el) {
             const api = window._bsimApi;
             if (!api) return;
-            const isVisible = api.getColumn(colId)?.isVisible() ?? true;
+            const state = api.getColumnState().find(s => s.colId === colId);
+            const isVisible = !state?.hide;  // hide:true = hidden; undefined/false = visible
             api.setColumnVisible(colId, !isVisible);
             const icon = el.querySelector('.ds-icon');
             if (isVisible) {
@@ -15953,30 +16009,59 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           }
           window.bsimToggleCol = bsimToggleCol;
 
-          // ── Context menu ───────────────────────────────────────────────────────
-          let _ctxVal = null;
-          let _ctxColId = null;
+          // ── Column panel drag reorder ──────────────────────────────────────────
+          let _panelDragColId = null;
+
+          function bsimPanelDragStart(e, colId) {
+            _panelDragColId = colId;
+            e.dataTransfer.effectAllowed = 'move';
+          }
+          function bsimPanelDragOver(e) {
+            if (!_panelDragColId) return;
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+          }
+          function bsimPanelDrop(e, targetColId) {
+            e.preventDefault();
+            const api = window._bsimApi;
+            if (!_panelDragColId || !api || _panelDragColId === targetColId) {
+              _panelDragColId = null; return;
+            }
+            // Find the target's absolute grid index (+1 because 'sel' checkbox is at 0)
+            const movable = api.getColumnState().filter(s => s.colId !== 'sel').map(s => s.colId);
+            const toGridIdx = movable.indexOf(targetColId) + 1;
+            api.moveColumn(_panelDragColId, toGridIdx);
+            // Reorder panel DOM rows to reflect the new grid column order
+            const list = document.querySelector('#bsim-wrapper .ds-column-panel__col-list');
+            const rows = Array.from(list.querySelectorAll('[data-col-id]'));
+            api.getColumnState().filter(s => s.colId !== 'sel').forEach(s => {
+              const row = rows.find(r => r.dataset.colId === s.colId);
+              if (row) list.appendChild(row);
+            });
+            _panelDragColId = null;
+          }
+          window.bsimPanelDragStart = bsimPanelDragStart;
+          window.bsimPanelDragOver  = bsimPanelDragOver;
+          window.bsimPanelDrop      = bsimPanelDrop;
+
+          // ── Row context menu ───────────────────────────────────────────────────
+          let _ctxVal = null, _ctxColId = null;
 
           function bsimShowCtx(x, y, val, colId) {
-            _ctxVal  = val;
-            _ctxColId = colId;
+            _ctxVal = val; _ctxColId = colId;
             const m = document.getElementById('bsim-ctx');
-            m.style.left = x + 'px';
-            m.style.top  = y + 'px';
+            m.style.left = x + 'px'; m.style.top = y + 'px';
             m.classList.add('is-open');
-            // Flip if it overflows the viewport
             requestAnimationFrame(() => {
               const r = m.getBoundingClientRect();
               if (r.right  > window.innerWidth)  m.style.left = (x - r.width)  + 'px';
               if (r.bottom > window.innerHeight)  m.style.top  = (y - r.height) + 'px';
             });
           }
-
           function bsimHideCtx() {
             document.getElementById('bsim-ctx').classList.remove('is-open');
             _ctxVal = null; _ctxColId = null;
           }
-
           function bsimCtxCopy() {
             if (_ctxVal != null) navigator.clipboard?.writeText(String(_ctxVal)).catch(() => {});
             bsimHideCtx();
@@ -15990,10 +16075,54 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           window.bsimCtxCopy = bsimCtxCopy;
           window.bsimCtxSort = bsimCtxSort;
 
-          // Close context menu on any left-click outside it
-          document.addEventListener('click', (e) => {
-            const m = document.getElementById('bsim-ctx');
-            if (m && !m.contains(e.target)) bsimHideCtx();
+          // ── Header context menu ────────────────────────────────────────────────
+          let _hdrCtxParams = null;
+
+          function bsimShowHeaderCtx(x, y, p) {
+            _hdrCtxParams = p;
+            const m = document.getElementById('bsim-hctx');
+            m.style.left = x + 'px'; m.style.top = y + 'px';
+            m.classList.add('is-open');
+            requestAnimationFrame(() => {
+              const r = m.getBoundingClientRect();
+              if (r.right  > window.innerWidth)  m.style.left = (x - r.width)  + 'px';
+              if (r.bottom > window.innerHeight)  m.style.top  = (y - r.height) + 'px';
+            });
+          }
+          function bsimHideHeaderCtx() {
+            document.getElementById('bsim-hctx').classList.remove('is-open');
+            _hdrCtxParams = null;
+          }
+          function bsimHCtxSort(dir) {
+            if (!_hdrCtxParams) return;
+            window._bsimApi?.applyColumnState({
+              state: [{ colId: _hdrCtxParams.column.getColId(), sort: dir }],
+              defaultState: { sort: null },
+            });
+            bsimHideHeaderCtx();
+          }
+          function bsimHCtxPin(pinned) {
+            if (!_hdrCtxParams) return;
+            window._bsimApi?.applyColumnState({
+              state: [{ colId: _hdrCtxParams.column.getColId(), pinned }],
+            });
+            bsimHideHeaderCtx();
+          }
+          function bsimHCtxAutoSize() {
+            if (!_hdrCtxParams) return;
+            window._bsimApi?.autoSizeColumns([_hdrCtxParams.column.getColId()]);
+            bsimHideHeaderCtx();
+          }
+          window.bsimHCtxSort     = bsimHCtxSort;
+          window.bsimHCtxPin      = bsimHCtxPin;
+          window.bsimHCtxAutoSize = bsimHCtxAutoSize;
+
+          // Close both menus on outside left-click
+          document.addEventListener('click', e => {
+            const ctx  = document.getElementById('bsim-ctx');
+            const hctx = document.getElementById('bsim-hctx');
+            if (ctx  && !ctx.contains(e.target))  bsimHideCtx();
+            if (hctx && !hctx.contains(e.target)) bsimHideHeaderCtx();
           });
 
           // ── Custom header cell ─────────────────────────────────────────────────
@@ -16005,11 +16134,19 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               this._draw();
               this._onSort = () => this._refreshSort();
               p.column.addEventListener('sortChanged', this._onSort);
-              // Single click listener added here — _draw() does NOT add one to avoid duplicates
-              if (p.enableSorting) {
-                this.el.querySelector('.ds-table-header-cell__label')
-                  .addEventListener('click', e => p.progressSort(e.shiftKey));
-              }
+              // Sort: click anywhere on the header cell except resize handles.
+              // This covers both label clicks and sort-icon button clicks (which
+              // bubble up from __actions) without needing separate listeners.
+              this.el.addEventListener('click', e => {
+                if (e.target.closest('.ds-table-header-cell__resize-handle')) return;
+                if (typeof p.progressSort === 'function') p.progressSort(e.shiftKey);
+              });
+              // Header right-click context menu
+              this.el.addEventListener('contextmenu', e => {
+                e.preventDefault();
+                e.stopPropagation();
+                bsimShowHeaderCtx(e.clientX, e.clientY, p);
+              });
             }
             _sort() { const s = this.p.column.getSort(); return s || 'none'; }
             _draw() {
@@ -16019,15 +16156,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               this.el.innerHTML = `
                 <div class="ds-table-header-cell__resize-handle"></div>
                 <div class="ds-table-header-cell__content">
-                  <span class="ds-table-header-cell__label" style="${this.p.enableSorting ? 'cursor:pointer' : ''}">${this.p.displayName}</span>
+                  <span class="ds-table-header-cell__label" style="cursor:pointer">${this.p.displayName}</span>
                 </div>
                 <div class="ds-table-header-cell__actions">
-                  ${this.p.enableSorting ? `<button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sort" tabindex="-1"><span class="ds-icon ds-icon--sm ${cls}">${glyph}</span></button>` : ''}
+                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sort" tabindex="-1">
+                    <span class="ds-icon ds-icon--sm ${cls}">${glyph}</span>
+                  </button>
                   <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
                     <span class="ds-table-header-cell__resize-bar"></span>
                   </div>
                 </div>`;
-              // NOTE: no click listener here — init() adds it once after _draw() completes
+              // No click listener here — init() adds it after _draw() to avoid duplicates
             }
             _refreshSort() {
               const s = this._sort();
@@ -16083,18 +16222,12 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               this.el.className = 'ds-table-row-cell';
               this.el.innerHTML = `<div class="ds-table-row-cell__content${right ? ' ds-table-row-cell__content--right' : ''}"><span class="ds-table-row-cell__data${right ? ' ds-table-row-cell__data--right' : ''}">${p.valueFormatted ?? p.value ?? ''}</span></div>`;
               this._d = this.el.querySelector('.ds-table-row-cell__data');
-              // Right-click context menu
               this.el.addEventListener('contextmenu', e => {
-                e.preventDefault();
-                e.stopPropagation();
+                e.preventDefault(); e.stopPropagation();
                 bsimShowCtx(e.clientX, e.clientY, p.valueFormatted ?? p.value, p.column.getColId());
               });
             }
-            refresh(p) {
-              this.p = p;
-              if (this._d) this._d.textContent = p.valueFormatted ?? p.value ?? '';
-              return true;
-            }
+            refresh(p) { this.p = p; if (this._d) this._d.textContent = p.valueFormatted ?? p.value ?? ''; return true; }
             getGui() { return this.el; }
             destroy() {}
           }
@@ -16180,7 +16313,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             defaultColDef: { suppressHeaderMenuButton: true, resizable: true, sortable: true },
             onPaginationChanged: () => { if (api) syncPaginator(api); },
             onFirstDataRendered: () => { syncPaginator(api); api.sizeColumnsToFit(); },
-            onGridSizeChanged: () => { api?.sizeColumnsToFit(); },
+            onGridSizeChanged:   () => { api?.sizeColumnsToFit(); },
           });
 
           // Search → quick filter

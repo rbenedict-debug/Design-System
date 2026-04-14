@@ -88,6 +88,11 @@ export interface AgCellRendererParams {
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'role': 'gridcell',
+    // Fill AG Grid's cell container so density changes (compact/comfort rowHeight)
+    // propagate correctly. height: 100% resolves to the .ag-cell height, which
+    // AG Grid sets to the current rowHeight. Without this the inner
+    // div.ds-table-row-cell's height:100% resolves to 0 (no explicit parent height).
+    'style': 'display: block; height: 100%;',
   },
 })
 export class DsTableRowCellComponent implements OnDestroy, AfterViewChecked {
