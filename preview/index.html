@@ -4006,12 +4006,6 @@
 .ds-card-item--interactive:focus-visible::after {
   background: var(--overlay-focused);
 }
-.ds-card-item--elevated.ds-card-item--interactive:hover {
-  border-color: transparent;
-}
-.ds-card-item--elevated.ds-card-item--interactive:active {
-  border-color: transparent;
-}
 .ds-card-item.is-disabled {
   pointer-events: none;
   cursor: default;
@@ -12769,7 +12763,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <h2 class="section-title">Card Item</h2>
           <span class="section-source">components/card/_card.scss</span>
         </div>
-        <p class="section-desc">Compact horizontal card with flexible leading and trailing slots. Leading/trailing content is flush to the card edge — images fill edge-to-edge, icons sit flush left or right. <code>--no-leading</code> / <code>--no-trailing</code> add 16px outer padding when the slot is absent (Angular sets these automatically). Use <code>--interactive</code> for hoverable/clickable cards: outlined variant gains a hover border + elevation lift; elevated keeps its shadow and suppresses border change. Angular component: <code>&lt;ds-card-item&gt;</code> with <code>[primary]</code>, <code>[secondary]</code>, <code>[interactive]</code>, <code>[variant]</code>, <code>[disabled]</code> inputs, <code>(cardClick)</code> output, and content slots <code>[leading]</code>, <code>[trailing]</code>, <code>[card-action]</code>.</p>
+        <p class="section-desc">Compact horizontal card with flexible leading and trailing slots. Leading/trailing content is flush to the card edge — images fill edge-to-edge, icons sit flush left or right. <code>--no-leading</code> / <code>--no-trailing</code> add 16px outer padding when the slot is absent (Angular sets these automatically). Use <code>--interactive</code> for hoverable/clickable cards: both variants gain a hover border + overlay on interaction; elevated also carries its shadow at rest. Angular component: <code>&lt;ds-card-item&gt;</code> with <code>[primary]</code>, <code>[secondary]</code>, <code>[interactive]</code>, <code>[variant]</code>, <code>[disabled]</code> inputs, <code>(cardClick)</code> output, and content slots <code>[leading]</code>, <code>[trailing]</code>, <code>[card-action]</code>.</p>
 
         <div class="component-demo">
 
@@ -12916,7 +12910,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <div class="ds-card-item ds-card-item--elevated ds-card-item--interactive ds-card-item--no-leading ds-card-item--no-trailing" tabindex="0" role="button" onclick="alert('Card clicked')">
                 <div class="ds-card-item__body">
                   <span class="ds-card-item__primary">Elevated + interactive</span>
-                  <span class="ds-card-item__secondary">Overlay only — border stays transparent</span>
+                  <span class="ds-card-item__secondary">Shadow at rest, border + overlay on hover</span>
                 </div>
               </div>
               <div class="ds-card-item ds-card-item--elevated ds-card-item--interactive ds-card-item--no-leading" tabindex="0" role="button" onclick="alert('Card clicked')">

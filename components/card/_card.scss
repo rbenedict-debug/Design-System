@@ -209,13 +209,6 @@
     }
   }
 
-  // ── Elevated + interactive: keep border transparent on hover/active ────────
-
-  &--elevated#{&}--interactive {
-    &:hover  { border-color: transparent; }
-    &:active { border-color: transparent; }
-  }
-
   // ── Disabled ───────────────────────────────────────────────────────────────
 
   &.is-disabled {
