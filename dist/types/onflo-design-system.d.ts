@@ -2574,9 +2574,6 @@ declare class DsTableRowCellComponent implements OnDestroy, AfterViewChecked {
      * context menu, then show <ds-table-context-menu> at the emitted coords.
      */
     rowContextMenu: EventEmitter<DsTableRowContextMenuEvent>;
-    get isHovered(): boolean;
-    get isFocused(): boolean;
-    get isSelected(): boolean;
     /** Template ref for the gripper button — used to register the AG Grid row dragger. */
     gripperEl?: ElementRef<HTMLElement>;
     private agParams?;

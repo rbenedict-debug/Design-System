@@ -149,6 +149,8 @@
   --ref-overlay-yellow-pressed: rgba(255, 208, 77, 0.12);
   --ref-overlay-yellow-focused: rgba(255, 208, 77, 0.12);
   --ref-overlay-yellow-dragged: rgba(255, 208, 77, 0.16);
+  --ref-overlay-inverse-hover: rgba(255, 255, 255, 0.12);
+  --ref-overlay-inverse-pressed: rgba(255, 255, 255, 0.18);
 
   /* ── table cell height ─────────────────────────────── */
   --ref-table-cell-height-comfort-height: 68px;

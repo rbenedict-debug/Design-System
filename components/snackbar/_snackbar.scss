@@ -145,8 +145,8 @@
       pointer-events: none;
     }
 
-    &:hover::after  { background: rgba(255, 255, 255, 0.12); }
-    &:active::after { background: rgba(255, 255, 255, 0.18); }
+    &:hover::after  { background: var(--overlay-inverse-hovered); }
+    &:active::after { background: var(--overlay-inverse-pressed); }
     &:focus         { outline: none; }
     &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
   }

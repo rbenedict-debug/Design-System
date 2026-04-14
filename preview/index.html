@@ -139,6 +139,8 @@
       --ref-overlay-yellow-pressed: rgba(255, 191, 0, 0.12);
       --ref-overlay-yellow-focused: rgba(255, 191, 0, 0.12);
       --ref-overlay-yellow-dragged: rgba(255, 191, 0, 0.16);
+      --ref-overlay-inverse-hover: rgba(255, 255, 255, 0.12);
+      --ref-overlay-inverse-pressed: rgba(255, 255, 255, 0.18);
       --ref-spacing-none: 0px;
       --ref-spacing-xs: 4px;
       --ref-spacing-sm: 8px;
@@ -280,6 +282,8 @@
       --overlay-accent-yellow-pressed: var(--ref-overlay-yellow-pressed);
       --overlay-accent-yellow-focused: var(--ref-overlay-yellow-focused);
       --overlay-accent-yellow-dragged: var(--ref-overlay-yellow-dragged);
+      --overlay-inverse-hovered: var(--ref-overlay-inverse-hover);
+      --overlay-inverse-pressed: var(--ref-overlay-inverse-pressed);
       --color-table-cell-height-comfortable-height: var(--ref-table-cell-height-comfort-height);
       --color-table-cell-height-standard-height: var(--ref-table-cell-height-standard-height);
       --color-table-cell-height-compact-height: var(--ref-table-cell-height-compact-height);
@@ -424,6 +428,10 @@
       --overlay-yellow-focused: rgba(255, 208, 77, 0.12);
       --ref-overlay-yellow-dragged: rgba(255, 208, 77, 0.16);
       --overlay-yellow-dragged: rgba(255, 208, 77, 0.16);
+      --ref-overlay-inverse-hover: rgba(255, 255, 255, 0.12);
+      --ref-overlay-inverse-pressed: rgba(255, 255, 255, 0.18);
+      --overlay-inverse-hovered: rgba(255, 255, 255, 0.12);
+      --overlay-inverse-pressed: rgba(255, 255, 255, 0.18);
       --ref-spacing-none: 0px;
       --ref-spacing-xs: 4px;
       --ref-spacing-sm: 8px;
@@ -5451,10 +5459,10 @@
   pointer-events: none;
 }
 .ds-snackbar__close:hover::after {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--overlay-inverse-hovered);
 }
 .ds-snackbar__close:active::after {
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--overlay-inverse-pressed);
 }
 .ds-snackbar__close:focus {
   outline: none;
@@ -5783,6 +5791,65 @@
   display: none;
 }
 
+.ag-root-wrapper {
+  border-top: 1px solid var(--color-border-subtle);
+  --ag-background-color: var(--color-surface-default);
+  --ag-foreground-color: var(--color-text-primary);
+  --ag-accent-color: var(--color-surface-brand-bold);
+  --ag-border-color: var(--color-border-primary);
+  --ag-secondary-foreground-color: var(--color-text-secondary);
+  --ag-disabled-foreground-color: var(--color-text-disabled);
+  --ag-header-background-color: var(--color-surface-subtle);
+  --ag-header-foreground-color: var(--color-text-primary);
+  --ag-header-cell-hover-background-color: transparent;
+  --ag-header-cell-moving-background-color: transparent;
+  --ag-row-hover-color: transparent;
+  --ag-selected-row-background-color: transparent;
+  --ag-range-selection-border-color: var(--color-border-brand);
+  --ag-range-selection-background-color: var(--overlay-focused);
+  --ag-range-selection-highlight-color: var(--overlay-pressed);
+  --ag-input-border-color: var(--color-border-input);
+  --ag-input-focus-border-color: var(--color-border-input-active);
+  --ag-input-placeholder-text-color: var(--color-text-placeholder);
+  --ag-checkbox-background-color: transparent;
+  --ag-checkbox-unchecked-border-color: var(--color-border-input);
+  --ag-checkbox-checked-background-color: var(--color-surface-brand-bold);
+  --ag-checkbox-checked-border-color: var(--color-surface-brand-bold);
+  --ag-checkbox-checked-shape-color: var(--color-text-on-brand);
+  --ag-checkbox-indeterminate-background-color: var(--color-surface-brand-bold);
+  --ag-checkbox-indeterminate-border-color: var(--color-surface-brand-bold);
+  --ag-menu-background-color: var(--color-surface-overlay);
+  --ag-menu-border-color: var(--color-border-primary);
+  --ag-menu-separator-color: var(--color-border-subtle);
+  --ag-menu-text-color: var(--color-text-primary);
+  --ag-card-shadow: 0 2px 8px var(--shadow-elevation-1);
+  --ag-popup-shadow: 0 4px 16px var(--shadow-elevation-2);
+  --ag-side-bar-panel-width: 300px;
+  --ag-side-button-bar-background-color: var(--color-surface-subtle);
+  --ag-side-button-selected-background-color: var(--color-surface-default);
+  --ag-side-button-selected-underline-color: var(--color-border-brand);
+}
+.ag-root-wrapper .ag-cell ds-table-row-cell {
+  display: block;
+  height: 100%;
+}
+.ag-root-wrapper .ag-cell .ds-table-row-cell {
+  height: 100%;
+}
+.ag-root-wrapper .ag-header-cell ds-table-header-cell {
+  display: block;
+  height: 100%;
+}
+.ag-root-wrapper .ag-header-cell .ds-table-header-cell {
+  height: 100%;
+}
+.ag-root-wrapper {
+  --ag-font-family: var(--ref-typeface-brand), sans-serif;
+  --ag-font-size: var(--ref-typescale-body-medium-size);
+  --ag-header-font-size: var(--ref-typescale-label-medium-size);
+  --ag-header-font-weight: var(--ref-typeface-weight-bold);
+}
+
 .ds-table-header-cell {
   display: flex;
   align-items: center;
@@ -5886,6 +5953,14 @@
   transform: rotate(180deg);
   display: inline-block;
 }
+.ds-table-header-cell__sort-icon--none {
+  color: var(--color-icon-subtle);
+  opacity: 0;
+  transition: opacity var(--motion-duration-short) ease;
+}
+.ds-table-header-cell:hover .ds-table-header-cell__sort-icon--none, .ds-table-header-cell:focus-within .ds-table-header-cell__sort-icon--none {
+  opacity: 1;
+}
 .ds-table-header-cell__menu-icon {
   color: var(--color-icon-default);
 }
@@ -5956,7 +6031,7 @@
   height: 56px;
   width: 100%;
   padding: 0 var(--spacing-lg);
-  border-bottom: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-secondary);
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
@@ -6041,11 +6116,6 @@
   background: var(--overlay-pressed);
   opacity: 1;
 }
-.ds-table-row-cell__gripper .ds-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
 .ds-table-row-cell__checkbox {
   display: flex;
   align-items: center;
@@ -6122,7 +6192,7 @@
   flex-shrink: 0;
 }
 .ds-table-group-row-cell__chevron {
-  transition: transform 150ms ease, color 150ms ease;
+  transition: transform var(--motion-duration-short) ease, color var(--motion-duration-short) ease;
   transform: rotate(-90deg);
 }
 .ds-table-group-row-cell__chevron--open {

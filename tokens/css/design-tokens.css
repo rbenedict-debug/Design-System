@@ -127,6 +127,8 @@
   --overlay-accent-yellow-pressed: var(--ref-overlay-yellow-pressed);
   --overlay-accent-yellow-focused: var(--ref-overlay-yellow-focused);
   --overlay-accent-yellow-dragged: var(--ref-overlay-yellow-dragged);
+  --overlay-inverse-hovered: var(--ref-overlay-inverse-hover);
+  --overlay-inverse-pressed: var(--ref-overlay-inverse-pressed);
 
   /* ── icon ──────────────────────────────────────────── */
   --color-icon-default: var(--ref-color-neutral-text-default);
