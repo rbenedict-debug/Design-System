@@ -74,7 +74,10 @@ Card, Card Item, Tabs, Badge, List, Label, Empty State
 - **Container** (`ds-list`): `<ul role="list">` wrapper — `border-radius: --radius-md`, 1px `--color-border-subtle` border, `overflow: hidden`
 - **Item** (`ds-list-item`): flex row, `gap: --spacing-md`, `padding: --spacing-md --spacing-lg`, `min-height: 48px`
 - **Text inputs**: `primary` (required), `secondary` (optional), `overline` (optional — uppercase label-small, letter-spacing token with 0.06em fallback)
-- **Variants**: `1-line` (default) | `2-lines` | `3-lines` — set via `[variant]` input; `--3-lines` modifier clamps secondary to 2 lines via `-webkit-line-clamp: 2`
+- **Variants**: `1-line` (default) | `2-lines` | `3-lines` — set via `[variant]` input
+  - `--2-lines` modifier: secondary text truncated to 1 line with ellipsis (`white-space: nowrap; overflow: hidden; text-overflow: ellipsis`)
+  - `--3-lines` modifier: secondary wraps to 2 lines via `-webkit-line-clamp: 2`; leading/trailing slots shift to `align-items: flex-start` (top-aligned)
+- **Divided variant**: `ds-list--divided` on the `<ul>` adds `border-bottom: 1px solid --color-border-subtle` between items. **Off by default** — use only for menus and dense data lists where separators aid scanability.
 - **Leading slot**: `<ng-content select="[leading]">` — place `[leading]` attribute on projected content (`<span leading class="ds-icon">`, `<ds-checkbox leading />`, etc.)
 - **Trailing slot**: `<ng-content select="[trailing]">` — same pattern; use `ds-icon--sm` for trailing chevrons
 - **Slot guards**: `@ContentChild('[leading]', { static: false })` + `@ContentChild('[trailing]', { static: false })` with `ngAfterContentInit` + `markForCheck()` — wrapper divs only render when content is projected (prevents phantom flex gaps in OnPush)
@@ -99,10 +102,10 @@ Card, Card Item, Tabs, Badge, List, Label, Empty State
 
 #### Pill style (`ds-label--pill`)
 - **Modifier**: `ds-label--pill` — overrides `border-radius` to `var(--radius-full)` (fully rounded); adjusts padding
-- **Pill padding**: MD = `0 12px`, SM = `0 12px`, XS = `0 8px` (tighter than rectangular)
+- **Pill padding**: MD = `0 16px`, SM = `0 12px`, XS = `0 8px` (symmetrical when no dot)
 - **Dot indicator**: optional status dot — add `ds-label--has-dot` + `<span class="ds-label__dot" aria-hidden="true"></span>` as first child
   - Dot = 10px solid circle, colored via `--label-dot-color` CSS var (set per variant to `--color-border-accent-{color}`)
-  - With dot: left padding reduces — MD/SM = `8px`, XS = `4px`
+  - With dot: left padding reduces (right stays same) — MD = `12px`, SM = `8px`, XS = `4px`
 - **Angular inputs**: `[pill]="true"` and `[dot]="true"` on `<ds-label>`; dot element rendered automatically when `pill && dot`
 
 ---

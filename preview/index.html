@@ -5006,14 +5006,10 @@
   gap: var(--spacing-md);
   padding: var(--spacing-md) var(--spacing-lg);
   background: transparent;
-  border-bottom: 1px solid var(--color-border-subtle);
   position: relative;
   min-height: 48px;
   cursor: default;
   transition: background 0.12s ease;
-}
-.ds-list-item:last-child {
-  border-bottom: none;
 }
 .ds-list-item--interactive {
   cursor: pointer;
@@ -5084,6 +5080,14 @@
   line-height: var(--ref-typescale-label-small-line-height);
   color: var(--color-text-secondary);
 }
+.ds-list-item--2-lines .ds-list-item__secondary {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-list-item--3-lines {
+  align-items: flex-start;
+}
 .ds-list-item--3-lines .ds-list-item__secondary {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -5102,6 +5106,13 @@
 .ds-list-item__trailing > .ds-icon {
   color: var(--color-icon-subtle);
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+}
+
+.ds-list--divided .ds-list-item {
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.ds-list--divided .ds-list-item:last-child {
+  border-bottom: none;
 }
 
 .mat-mdc-list {
@@ -5654,15 +5665,18 @@
 }
 .ds-label--pill {
   border-radius: var(--radius-full);
-  padding: 0 12px;
+  padding: 0 var(--spacing-lg);
 }
 .ds-label--pill.ds-label--sm {
-  padding: 0 12px;
+  padding: 0 var(--spacing-md);
 }
 .ds-label--pill.ds-label--xs {
-  padding: 0 8px;
+  padding: 0 var(--spacing-sm);
 }
 .ds-label--pill.ds-label--has-dot {
+  padding-left: var(--spacing-md);
+}
+.ds-label--pill.ds-label--has-dot.ds-label--sm {
   padding-left: var(--spacing-sm);
 }
 .ds-label--pill.ds-label--has-dot.ds-label--xs {
@@ -12441,39 +12455,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         <p class="section-desc">A structured list of items. Supports leading/trailing content slots (icon, checkbox, avatar), optional overline, primary text, and supporting text. Add <code>.ds-list-item--interactive</code> for hover/focus/pressed states (used inside menus and nav lists). Checkbox-only lists omit the interactive modifier.</p>
         <div class="component-demo">
 
-          <!-- HTML class API: trailing icon example (fulfills CSS API requirement) -->
-          <div class="demo-row">
-            <div class="demo-row-label">HTML class API</div>
-            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 360px;">
-              <ul class="ds-list" role="list">
-                <li class="ds-list-item" role="listitem">
-                  <div class="ds-list-item__leading">
-                    <span class="ds-icon">person</span>
-                  </div>
-                  <div class="ds-list-item__content">
-                    <span class="ds-list-item__primary">Alice Johnson</span>
-                    <span class="ds-list-item__secondary">alice@company.com</span>
-                  </div>
-                  <div class="ds-list-item__trailing">
-                    <span class="ds-icon ds-icon--sm">chevron_right</span>
-                  </div>
-                </li>
-                <li class="ds-list-item" role="listitem">
-                  <div class="ds-list-item__leading">
-                    <span class="ds-icon">person</span>
-                  </div>
-                  <div class="ds-list-item__content">
-                    <span class="ds-list-item__primary">Bob Smith</span>
-                    <span class="ds-list-item__secondary">bob@company.com</span>
-                  </div>
-                  <div class="ds-list-item__trailing">
-                    <span class="ds-icon ds-icon--sm">chevron_right</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-
           <!-- 1-line: icon leading -->
           <div class="demo-row">
             <div class="demo-row-label">1-line</div>
@@ -12507,14 +12488,85 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div>
           </div>
 
-          <!-- 2-line: icon leading + secondary text -->
+          <!-- 2-lines: icon leading + secondary text (truncated to 1 line) -->
           <div class="demo-row">
-            <div class="demo-row-label">2-line</div>
+            <div class="demo-row-label">2-lines</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 360px;">
+              <ul class="ds-list" role="list">
+                <li class="ds-list-item ds-list-item--2-lines" role="listitem">
+                  <div class="ds-list-item__leading">
+                    <span class="ds-icon">person</span>
+                  </div>
+                  <div class="ds-list-item__content">
+                    <span class="ds-list-item__primary">Alice Johnson</span>
+                    <span class="ds-list-item__secondary">Product designer working on the Onflo design system and component library</span>
+                  </div>
+                  <div class="ds-list-item__trailing">
+                    <span class="ds-icon ds-icon--sm">chevron_right</span>
+                  </div>
+                </li>
+                <li class="ds-list-item ds-list-item--2-lines" role="listitem">
+                  <div class="ds-list-item__leading">
+                    <span class="ds-icon">person</span>
+                  </div>
+                  <div class="ds-list-item__content">
+                    <span class="ds-list-item__primary">Bob Smith</span>
+                    <span class="ds-list-item__secondary">Senior frontend engineer focused on Angular architecture and design systems</span>
+                  </div>
+                  <div class="ds-list-item__trailing">
+                    <span class="ds-icon ds-icon--sm">chevron_right</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 3-lines: overline + primary + 2-line secondary, top-aligned leading -->
+          <div class="demo-row">
+            <div class="demo-row-label">3-lines + overline</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 360px;">
+              <ul class="ds-list" role="list">
+                <li class="ds-list-item ds-list-item--3-lines" role="listitem">
+                  <div class="ds-list-item__leading">
+                    <span class="ds-icon">person</span>
+                  </div>
+                  <div class="ds-list-item__content">
+                    <span class="ds-list-item__overline">Team</span>
+                    <span class="ds-list-item__primary">Alice Johnson</span>
+                    <span class="ds-list-item__secondary">Product designer working on the Onflo design system and component library.</span>
+                  </div>
+                  <div class="ds-list-item__trailing">
+                    <span class="ds-icon ds-icon--sm">chevron_right</span>
+                  </div>
+                </li>
+                <li class="ds-list-item ds-list-item--3-lines" role="listitem">
+                  <div class="ds-list-item__leading">
+                    <span class="ds-icon">person</span>
+                  </div>
+                  <div class="ds-list-item__content">
+                    <span class="ds-list-item__overline">Team</span>
+                    <span class="ds-list-item__primary">Bob Smith</span>
+                    <span class="ds-list-item__secondary">Senior frontend engineer focused on Angular architecture and design systems.</span>
+                  </div>
+                  <div class="ds-list-item__trailing">
+                    <span class="ds-icon ds-icon--sm">chevron_right</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Selection list: checkbox leading -->
+          <div class="demo-row">
+            <div class="demo-row-label">Selection list (checkbox)</div>
             <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 360px;">
               <ul class="ds-list" role="list">
                 <li class="ds-list-item" role="listitem">
                   <div class="ds-list-item__leading">
-                    <span class="ds-icon">person</span>
+                    <label class="ds-checkbox" style="margin: 0;">
+                      <input type="checkbox" class="ds-checkbox__control" aria-label="Select Alice Johnson" />
+                      <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
+                    </label>
                   </div>
                   <div class="ds-list-item__content">
                     <span class="ds-list-item__primary">Alice Johnson</span>
@@ -12523,46 +12575,14 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 </li>
                 <li class="ds-list-item" role="listitem">
                   <div class="ds-list-item__leading">
-                    <span class="ds-icon">person</span>
+                    <label class="ds-checkbox" style="margin: 0;">
+                      <input type="checkbox" class="ds-checkbox__control" aria-label="Select Bob Smith" checked />
+                      <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
+                    </label>
                   </div>
                   <div class="ds-list-item__content">
                     <span class="ds-list-item__primary">Bob Smith</span>
                     <span class="ds-list-item__secondary">bob@company.com</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- 3-line with overline: checkbox leading — matches Figma -->
-          <div class="demo-row">
-            <div class="demo-row-label">3-line + overline (checkbox)</div>
-            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 360px;">
-              <ul class="ds-list" role="list">
-                <li class="ds-list-item ds-list-item--3-lines" role="listitem">
-                  <div class="ds-list-item__leading">
-                    <label class="ds-checkbox" style="margin: 0;">
-                      <input type="checkbox" class="ds-checkbox__input" aria-label="Select Alice Johnson" />
-                      <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
-                    </label>
-                  </div>
-                  <div class="ds-list-item__content">
-                    <span class="ds-list-item__overline">Team</span>
-                    <span class="ds-list-item__primary">Alice Johnson</span>
-                    <span class="ds-list-item__secondary">Product designer working on the Onflo design system and component library.</span>
-                  </div>
-                </li>
-                <li class="ds-list-item ds-list-item--3-lines" role="listitem">
-                  <div class="ds-list-item__leading">
-                    <label class="ds-checkbox" style="margin: 0;">
-                      <input type="checkbox" class="ds-checkbox__input" aria-label="Select Bob Smith" checked />
-                      <span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span>
-                    </label>
-                  </div>
-                  <div class="ds-list-item__content">
-                    <span class="ds-list-item__overline">Team</span>
-                    <span class="ds-list-item__primary">Bob Smith</span>
-                    <span class="ds-list-item__secondary">Senior frontend engineer focused on Angular architecture and design systems.</span>
                   </div>
                 </li>
               </ul>
@@ -12596,6 +12616,48 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   </div>
                   <div class="ds-list-item__content">
                     <span class="ds-list-item__primary">Trash</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Divided: ds-list--divided adds separator lines between items -->
+          <div class="demo-row">
+            <div class="demo-row-label">Divided</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 360px;">
+              <ul class="ds-list ds-list--divided" role="list">
+                <li class="ds-list-item" role="listitem">
+                  <div class="ds-list-item__leading">
+                    <span class="ds-icon">settings</span>
+                  </div>
+                  <div class="ds-list-item__content">
+                    <span class="ds-list-item__primary">Settings</span>
+                  </div>
+                  <div class="ds-list-item__trailing">
+                    <span class="ds-icon ds-icon--sm">chevron_right</span>
+                  </div>
+                </li>
+                <li class="ds-list-item" role="listitem">
+                  <div class="ds-list-item__leading">
+                    <span class="ds-icon">notifications</span>
+                  </div>
+                  <div class="ds-list-item__content">
+                    <span class="ds-list-item__primary">Notifications</span>
+                  </div>
+                  <div class="ds-list-item__trailing">
+                    <span class="ds-icon ds-icon--sm">chevron_right</span>
+                  </div>
+                </li>
+                <li class="ds-list-item" role="listitem">
+                  <div class="ds-list-item__leading">
+                    <span class="ds-icon">person</span>
+                  </div>
+                  <div class="ds-list-item__content">
+                    <span class="ds-list-item__primary">Profile</span>
+                  </div>
+                  <div class="ds-list-item__trailing">
+                    <span class="ds-icon ds-icon--sm">chevron_right</span>
                   </div>
                 </li>
               </ul>

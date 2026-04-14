@@ -143,22 +143,27 @@
 
   &--pill {
     border-radius: var(--radius-full);
-    padding: 0 12px;  // MD: 12px (vs 16px for rectangular)
+    padding: 0 var(--spacing-lg);   // MD: 16px (symmetric, no dot)
 
     &.ds-label--sm {
-      padding: 0 12px;  // SM: same as rectangular
+      padding: 0 var(--spacing-md); // SM: 12px
     }
 
     &.ds-label--xs {
-      padding: 0 8px;   // XS: 8px (vs 10px for rectangular)
+      padding: 0 var(--spacing-sm); // XS: 8px
     }
 
     // When dot is present: reduce left padding to tighten against the dot
+    // Right padding stays the same as the no-dot value for each size.
     &.ds-label--has-dot {
-      padding-left: var(--spacing-sm);
+      padding-left: var(--spacing-md);  // MD: 12px left
+
+      &.ds-label--sm {
+        padding-left: var(--spacing-sm); // SM: 8px left
+      }
 
       &.ds-label--xs {
-        padding-left: var(--spacing-xs);
+        padding-left: var(--spacing-xs); // XS: 4px left
       }
     }
   }
