@@ -23,7 +23,7 @@
 
 import {
   Component, Input, Output, EventEmitter, ChangeDetectionStrategy,
-  ChangeDetectorRef, HostBinding, HostListener, OnDestroy, AfterViewChecked,
+  ChangeDetectorRef, HostListener, OnDestroy, AfterViewChecked,
   ViewChild, ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -128,10 +128,6 @@ export class DsTableRowCellComponent implements OnDestroy, AfterViewChecked {
    * context menu, then show <ds-table-context-menu> at the emitted coords.
    */
   @Output() rowContextMenu = new EventEmitter<DsTableRowContextMenuEvent>();
-
-  @HostBinding('class.is-hovered')  get isHovered()  { return this.state === 'hover'; }
-  @HostBinding('class.is-focused')  get isFocused()  { return this.state === 'focus'; }
-  @HostBinding('class.is-selected') get isSelected() { return this.checked; }
 
   /** Template ref for the gripper button — used to register the AG Grid row dragger. */
   @ViewChild('gripperEl') gripperEl?: ElementRef<HTMLElement>;

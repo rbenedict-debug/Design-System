@@ -1253,6 +1253,133 @@ Recommended approach for very large datasets: use **pagination** (`pagination: t
 
 ---
 
+### Required wiring checklist — every table must include all of these
+
+These are non-negotiable. Omitting any of them produces visual or behavioural defects.
+
+#### Theme and default column def
+
+```typescript
+import { onfloTheme, DS_TABLE_DEFAULT_COL_DEF } from '@onflo/design-system';
+
+gridOptions = {
+  theme: onfloTheme,                      // REQUIRED — sets cell padding, heights, borders, icon set
+  defaultColDef: DS_TABLE_DEFAULT_COL_DEF, // REQUIRED — wires DsTableHeaderCellComponent + DsTableRowCellComponent to every column
+};
+```
+
+`onfloTheme` sets `cellHorizontalPadding: 0` — if this is missing, AG Grid's Quartz base injects 24px padding per cell side, creating a visible gap between columns and a dead-space gap after the last column. **Never bypass `onfloTheme` or override `cellHorizontalPadding` back to a non-zero value.**
+
+#### Paginator
+
+```typescript
+gridOptions = {
+  pagination: true,
+  suppressPaginationPanel: true,   // REQUIRED — ds-ag-paginator replaces AG Grid's built-in panel
+};
+```
+
+```html
+<!-- Always include ds-ag-paginator immediately below ag-grid-angular -->
+<ds-ag-paginator [api]="gridApi" />
+```
+
+#### Context menus
+
+```typescript
+gridOptions = {
+  suppressContextMenu: true,         // REQUIRED — disables AG Grid's built-in row right-click menu
+  suppressHeaderContextMenu: true,   // REQUIRED — disables AG Grid's built-in header right-click menu
+};
+```
+
+```html
+<!-- Include ds-table-context-menu once, outside the grid -->
+<ds-table-context-menu
+  [items]="ctxItems"
+  [x]="ctxX" [y]="ctxY"
+  [visible]="ctxVisible"
+  (closed)="ctxVisible = false" />
+```
+
+Wire both header and row contextmenu events:
+
+```typescript
+// In column defs — header context menu
+defaultColDef = {
+  ...DS_TABLE_DEFAULT_COL_DEF,
+};
+// DsTableHeaderCellComponent emits (headerContextMenu) — use DS_TABLE_DEFAULT_COL_GROUP_DEF
+// for header group cells. Bind at the column level or via a wrapper component.
+
+// Row context menu wired via DsTableRowCellComponent's (rowContextMenu) output.
+// See ds-table-context-menu spec for buildDefaultHeaderContextMenuItems() and
+// buildDefaultRowContextMenuItems() helper functions.
+```
+
+#### Column panel
+
+```html
+<!-- Outer container receives data-panel-open to reveal the column panel -->
+<div class="ds-page-content__main ds-page-content__main--table"
+     [attr.data-panel-open]="settingsActive || null">
+
+  <ds-table-toolbar (settingsActiveChange)="settingsActive = $event" ... />
+  <ag-grid-angular ... />
+  <ds-ag-paginator [api]="gridApi" />
+
+  <!-- 300px side panel — display:none by default, shown when ancestor has data-panel-open -->
+  <ds-column-panel [api]="gridApi" [(density)]="density" />
+
+</div>
+```
+
+The `settingsActive` value comes from `ds-table-toolbar`'s `(settingsActiveChange)` output — the toolbar's settings toggle button drives this automatically.
+
+#### Layout class — never use the wrong main class for tables
+
+```html
+<!-- Table pages: always use --table modifier -->
+<main class="ds-page-content__main ds-page-content__main--table">
+
+<!-- Non-table pages: use default -->
+<main class="ds-page-content__main">
+```
+
+#### domLayout
+
+**Never use `domLayout: 'autoHeight'` on a paginated table.** `autoHeight` expands the grid to show all rows, ignoring pagination — the visible row count becomes meaningless. Use a fixed-height container with `height: 100%` on `ag-grid-angular` instead.
+
+```html
+<!-- WRONG — do not do this for paginated tables -->
+<ag-grid-angular [domLayout]="'autoHeight'" />
+
+<!-- CORRECT — fixed height container, grid fills it -->
+<div style="flex: 1; overflow: hidden;">
+  <ag-grid-angular style="height: 100%;" />
+</div>
+```
+
+#### sizeColumnsToFit for responsive containers
+
+Call `api.sizeColumnsToFit()` when the grid is inside a container whose width changes (e.g. the page layout resizes when the column panel opens). Wire it via `onGridReady` and `onColumnPanelVisibleChanged`:
+
+```typescript
+onGridReady(event: GridReadyEvent): void {
+  this.gridApi = event.api;
+  // Let AG Grid do its initial sizing pass first, then fit columns
+  setTimeout(() => this.gridApi?.sizeColumnsToFit(), 0);
+}
+
+// Re-fit when the column panel opens/closes (container width changes)
+onSettingsToggle(active: boolean): void {
+  this.settingsActive = active;
+  setTimeout(() => this.gridApi?.sizeColumnsToFit(), 300); // after CSS transition
+}
+```
+
+---
+
 ### Table Header Cell (`ds-table-header-cell`)
 - **Primitive** — internal component used inside `component/table-header-row`. AG Grid custom header renderer.
 - **Height: 56px — fixed**
@@ -1442,17 +1569,73 @@ Recommended approach for very large datasets: use **pagination** (`pagination: t
 ---
 
 ### Table Toolbar (`ds-table-toolbar`)
-- **Purpose**: Toolbar above an AG Grid table — holds search, filter, settings, and action controls.
+
+#### Rules — follow these every time a table is created
+
+1. **The toolbar is always present.** Every table has a `ds-table-toolbar`. There is no table without one.
+2. **Search is always present.** The search bar (`ds-search`) is always included in the right panel. It is never optional.
+3. **Search spans full width when there are no actions.** If the table has no primary actions, omit `__left` entirely — the right panel fills the full toolbar width and search expands to fill it.
+4. **Primary actions go on the left, search + controls go on the right.** Never mix action buttons into the right panel or icon buttons into the left panel.
+5. **Right panel slot order is fixed:** search → `[toolbar-extra]` (optional chips/dropdowns) → filter toggle → settings toggle → download (or `[toolbar-trailing]`). Do not reorder.
+
+#### What counts as a primary action (left panel)
+
+Use filled or outlined `ds-button` — never icon-only buttons — for:
+- **Add / Create** — e.g. "Add Contact", "New Ticket" → `variant="filled"`
+- **Bulk actions** — e.g. "Bulk Edit", "Assign" — only visible when rows are selected → `variant="outlined"`
+- **Destructive** — e.g. "Delete" — only visible when rows are selected → `variant="outlined"` (destructive pairing rules apply)
+- **More options** — overflow menu for secondary actions → `variant="outlined"` with `more_vert` icon
+
+If a table is read-only (no adds, no edits, no deletes), omit `__left` entirely — do not render an empty left panel.
+
+#### Structure reference
+
+```html
+<!-- With actions -->
+<div class="ds-table-toolbar">
+  <div class="ds-table-toolbar__left">
+    <button class="ds-button ds-button--filled" type="button">Add Contact</button>
+    <button class="ds-button ds-button--outlined" type="button">Bulk Edit</button>
+  </div>
+  <div class="ds-table-toolbar__right">
+    <div class="ds-search ...">...</div>          <!-- always present, flex-fills -->
+    <!-- [toolbar-extra] chips/dropdowns here if needed -->
+    <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle"
+            type="button" aria-pressed="false" aria-label="Toggle filters">
+      <span class="ds-icon">filter_alt</span>
+    </button>
+    <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle"
+            type="button" aria-pressed="false" aria-label="Column settings">
+      <span class="ds-icon">settings</span>
+    </button>
+    <button class="ds-table-toolbar__btn" type="button" aria-label="Download">
+      <span class="ds-icon">download</span>
+    </button>
+  </div>
+</div>
+
+<!-- Search-only (no actions) — __left omitted, right fills full width -->
+<div class="ds-table-toolbar">
+  <div class="ds-table-toolbar__right">
+    <div class="ds-search ...">...</div>
+    <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" ...>...</button>
+    <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle" ...>...</button>
+    <button class="ds-table-toolbar__btn" ...>...</button>
+  </div>
+</div>
+```
+
+#### Component details
 - **Height**: 74px — fixed
-- **Layout**: two `flex: 1 0 0` panels side-by-side with `gap: var(--spacing-xl)` (24px); padding `0 var(--spacing-lg)` (16px)
-- **Left panel** (`__left`): action buttons slot — `flex: 1 0 0`, `gap: var(--spacing-sm)`. Omit the `__left` div (or `[showActions]="false"`) for search-only mode; right panel fills full width.
-- **Right panel** (`__right`): `flex: 1 0 0`, `gap: var(--spacing-sm)`. Contains: search (flex-fills remaining space), optional `[toolbar-extra]` content, filter toggle, settings toggle, optional download / `[toolbar-trailing]` content.
-- **Icon buttons**: The Angular component uses `ds-icon-button-toggle` (variant="outlined") for filter and settings, and `ds-icon-button` (variant="outlined") for download. The `__btn` CSS class is preserved for the HTML class API and projected `[toolbar-trailing]` slot content only — it mirrors `ds-icon-button--outlined` behavior.
-- **Content projection slots**:
+- **Layout**: two `flex: 1 0 0` panels side-by-side; `gap: var(--spacing-xl)` (24px) between panels; padding `0 var(--spacing-lg)` (16px)
+- **Left panel** (`__left`): `flex: 1 0 0`, `gap: var(--spacing-sm)`. Omit entirely (or `[showActions]="false"` in Angular) when no primary actions exist.
+- **Right panel** (`__right`): `flex: 1 0 0`, `gap: var(--spacing-sm)`. Search inside always has `flex: 1 0 0` — fills all remaining space.
+- **Icon buttons**: Angular component uses `ds-icon-button-toggle` (variant="outlined") for filter and settings; `ds-icon-button` (variant="outlined") for download. `__btn` CSS class is for the HTML class API and `[toolbar-trailing]` slot only.
+- **Angular content projection slots**:
   - `[toolbar-actions]` — left-side action buttons
   - `[toolbar-extra]` — right-side extras between search and fixed icon buttons (filter/date chips, dropdowns)
   - `[toolbar-trailing]` — right-side trailing buttons after settings (replaces or supplements download)
-- **Inputs**: `showActions` (bool, default true), `searchPlaceholder`, `searchAriaLabel`, `searchValue`, `filterActive`, `settingsActive`, `showDownload` (bool, default true)
-- **Outputs**: `searchValueChange`, `search`, `filterActiveChange`, `settingsActiveChange`, `downloadClick`
-- **ADA**: Filter/settings buttons expose `aria-pressed`; all icon buttons have `aria-label`
+- **Angular inputs**: `showActions` (bool, default true), `searchPlaceholder`, `searchAriaLabel`, `searchValue`, `filterActive`, `settingsActive`, `showDownload` (bool, default true)
+- **Angular outputs**: `searchValueChange`, `search`, `filterActiveChange`, `settingsActiveChange`, `downloadClick`
+- **ADA**: Filter/settings buttons expose `aria-pressed`; all icon buttons require `aria-label`
 - **No Angular Material base** — custom component

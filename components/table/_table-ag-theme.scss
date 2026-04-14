@@ -17,6 +17,13 @@
 
 .ag-root-wrapper {
 
+  // ── Top border ────────────────────────────────────────────────────────────
+  // onfloTheme sets wrapperBorder: false (no borders on any side).
+  // The top border separates the toolbar from the header row — it must be
+  // added back explicitly because the toolbar's surface color may match the
+  // page background and leave the boundary visually ambiguous.
+  border-top: 1px solid var(--color-border-subtle);
+
   // ── Core colours ──────────────────────────────────────────────────────────
   --ag-background-color: var(--color-surface-default);
   --ag-foreground-color: var(--color-text-primary);

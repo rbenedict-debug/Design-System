@@ -2,17 +2,31 @@
 // Onflo Design System — Table Toolbar Component
 // ============================================================
 //
-// The toolbar displayed above an AG Grid table — contains
-// search, filter, and action controls.
+// RULES — apply every time a table is built:
 //
-// Usage (HTML class API):
+//   1. Always present — every table has a toolbar. No exceptions.
+//   2. Search is always present — ds-search is never optional.
+//   3. Search spans full width when there are no actions.
+//      Omit __left entirely; the right panel fills the toolbar.
+//   4. Actions on the left, search + icon controls on the right.
+//      Never mix action buttons into the right panel.
+//   5. Right panel order is fixed:
+//      search → [extra] → filter toggle → settings toggle → download
+//
+// Left panel action types (ds-button only — never icon-only here):
+//   - Add / Create  → variant="filled"  (e.g. "Add Contact")
+//   - Bulk actions  → variant="outlined" (visible only when rows are selected)
+//   - Delete        → variant="outlined" (visible only when rows are selected)
+//   - More options  → variant="outlined" + more_vert icon
+//   If the table is read-only with no actions, omit __left entirely.
+//
+// Usage (HTML class API — with actions):
 //   <div class="ds-table-toolbar">
 //     <div class="ds-table-toolbar__left">
-//       <!-- action buttons go here -->
+//       <button class="ds-button ds-button--filled" type="button">Add Contact</button>
 //     </div>
 //     <div class="ds-table-toolbar__right">
-//       <div class="ds-search ...">...</div>
-//       <!-- optional extra controls -->
+//       <div class="ds-search ...">...</div>  <!-- always here, flex-fills -->
 //       <button class="ds-table-toolbar__btn ds-table-toolbar__btn--toggle"
 //               type="button" aria-pressed="false" aria-label="Toggle filters">
 //         <span class="ds-icon">filter_alt</span>
@@ -27,22 +41,25 @@
 //     </div>
 //   </div>
 //
-//   <!-- Search-only (no action panel): omit __left entirely -->
+// Usage (HTML class API — no actions, search spans full width):
 //   <div class="ds-table-toolbar">
-//     <div class="ds-table-toolbar__right">...</div>
+//     <div class="ds-table-toolbar__right">
+//       <div class="ds-search ...">...</div>
+//       <!-- icon buttons as above -->
+//     </div>
 //   </div>
 //
 // Angular component:
 //   <ds-table-toolbar>
 //     <ng-container toolbar-actions>
-//       <button ds-button variant="filled">Add Row</button>
+//       <button ds-button variant="filled">Add Contact</button>
 //     </ng-container>
 //   </ds-table-toolbar>
 //
-//   <!-- Search-only -->
+//   <!-- Search-only (no actions) -->
 //   <ds-table-toolbar [showActions]="false" />
 //
-//   <!-- Custom trailing buttons instead of download -->
+//   <!-- Custom trailing buttons instead of / after download -->
 //   <ds-table-toolbar [showDownload]="false">
 //     <ng-container toolbar-trailing>
 //       <button class="ds-table-toolbar__btn" type="button" aria-label="Export">

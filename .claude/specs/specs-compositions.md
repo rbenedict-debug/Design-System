@@ -188,8 +188,76 @@ export class ContactsTableComponent {
 
   onGridReady(event: GridReadyEvent): void {
     this.gridApi = event.api;
+    // Fit columns after first render — required when any column uses flex: 1
+    setTimeout(() => this.gridApi?.sizeColumnsToFit(), 0);
+  }
+
+  onSettingsToggle(active: boolean): void {
+    this.settingsActive = active;
+    // Re-fit columns after the column panel opens/closes (container width changes)
+    setTimeout(() => this.gridApi?.sizeColumnsToFit(), 300);
+  }
+
+  // ── Context menu ──────────────────────────────────────────────────────────
+  ctxItems: DsContextMenuItem[] = [];
+  ctxX = 0; ctxY = 0; ctxVisible = false;
+
+  onHeaderContextMenu(e: DsTableRowContextMenuEvent): void {
+    this.ctxItems   = buildDefaultHeaderContextMenuItems(e.params.column.getColId(), this.gridApi!);
+    this.ctxX       = e.x;
+    this.ctxY       = e.y;
+    this.ctxVisible = true;
+  }
+
+  onRowContextMenu(e: DsTableRowContextMenuEvent): void {
+    this.ctxItems   = buildDefaultRowContextMenuItems(e.params.value);
+    this.ctxX       = e.x;
+    this.ctxY       = e.y;
+    this.ctxVisible = true;
   }
 }
+```
+
+And include the context menu element in the template:
+
+```html
+<div class="ds-page-content__main ds-page-content__main--table"
+     [attr.data-panel-open]="settingsActive || null">
+
+  <ds-table-toolbar
+    (settingsActiveChange)="onSettingsToggle($event)"
+    ... />
+
+  <ag-grid-angular
+    ...
+    [suppressContextMenu]="true"
+    [suppressHeaderContextMenu]="true"
+    (gridReady)="onGridReady($event)" />
+
+  <ds-ag-paginator [api]="gridApi" />
+  <ds-column-panel [api]="gridApi" [(density)]="density" />
+
+</div>
+
+<!-- Context menu — one instance, outside the grid DOM -->
+<ds-table-context-menu
+  [items]="ctxItems"
+  [x]="ctxX" [y]="ctxY"
+  [visible]="ctxVisible"
+  (closed)="ctxVisible = false" />
+```
+
+Wire `(headerContextMenu)` on `ds-table-header-cell` and `(rowContextMenu)` on `ds-table-row-cell` via column defs:
+
+```typescript
+columnDefs: ColDef[] = [
+  {
+    field: 'name',
+    headerName: 'Name',
+    headerComponentParams: { headerContextMenu: this.onHeaderContextMenu.bind(this) },
+    cellRendererParams:    { rowContextMenu:    this.onRowContextMenu.bind(this)    },
+  },
+];
 ```
 
 **Rules:**
@@ -197,6 +265,9 @@ export class ContactsTableComponent {
 - Always add a theme class (`ag-theme-quartz` or `ag-theme-base`) on `ag-grid-angular` alongside `ds-ag-grid`
 - Always set `suppressPaginationPanel: true` — `ds-ag-paginator` replaces the built-in paginator
 - Always set `suppressContextMenu: true` and `suppressHeaderContextMenu: true` — DS context menus replace the built-in ones
+- Always include `<ds-column-panel [api]="gridApi">` and wire `settingsActiveChange` to `[attr.data-panel-open]` — column panel is part of every table
+- Always include `<ds-table-context-menu>` and wire `(headerContextMenu)` / `(rowContextMenu)` — context menu is part of every table
+- Always call `sizeColumnsToFit()` in `onGridReady` when any column uses `flex: 1`, and again when the column panel opens/closes
 - Never use `domLayout="autoHeight"` on a paginated table
 - `ds-table-toolbar` always sits directly above `ag-grid-angular` inside `__main--table` — it must be outside the AG Grid DOM
 - `ds-table-row-groups-bar` sits between the toolbar and the grid — auto-hides when no groups are active; bind `[api]="gridApi"` to auto-sync

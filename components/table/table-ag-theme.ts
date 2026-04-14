@@ -52,6 +52,15 @@ export const onfloTheme: Theme = themeQuartz
     iconSize: 20,         // matches ds-icon--sm (20px / opsz 20)
     spacing: 8,           // matches --spacing-sm — base unit for AG Grid internal spacing
 
+    // ── Cell padding — zeroed; custom renderers own all internal layout ────
+    // The Quartz base theme injects --ag-cell-horizontal-padding:
+    // calc(var(--ag-grid-size) * 3) = 24px per side when spacing is 8.
+    // ds-table-header-cell and ds-table-row-cell fill 100% of the AG Grid
+    // cell container and manage their own internal padding via Onflo tokens.
+    // Leaving the Quartz default in place creates 48px of dead space per
+    // column and causes the gap-between-columns and last-column-width issues.
+    cellHorizontalPadding: 0,
+
     // ── Borders — disabled; our custom renderers own all border rendering ───
     // ds-table-header-cell and ds-table-row-cell each apply their own
     // border-bottom via Onflo tokens. Disabling AG Grid's borders prevents
