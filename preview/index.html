@@ -454,7 +454,7 @@
     :root {
       --preview-font: 'DM Sans', sans-serif;
       --preview-mono: 'DM Mono', monospace;
-      --sidebar-width: 220px;
+      --sidebar-width: 260px;
       --header-height: 56px;
     }
 
@@ -491,31 +491,53 @@
       height: var(--header-height);
       display: flex;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 16px;
       border-bottom: 1px solid var(--color-border-subtle);
       gap: 10px;
       flex-shrink: 0;
     }
 
+    .sidebar-brand__mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--color-surface-nav-active);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.03em;
+      font-family: var(--preview-font);
+    }
+
     .brand-name {
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--color-text-primary);
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
+      line-height: 1;
     }
 
     .brand-tag {
-      font-size: 10px;
+      font-size: 9.5px;
       color: var(--color-text-secondary);
-      font-weight: 400;
-      letter-spacing: 0.04em;
+      font-weight: 500;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      margin-top: 1px;
+      margin-top: 2px;
+      opacity: 0.8;
+    }
+
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
     .sidebar-nav {
-      flex: 1;
-      overflow-y: auto;
       padding: 12px 0;
     }
 
@@ -532,48 +554,274 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 7px 20px;
-      font-size: 13px;
+      padding: 6px 20px 6px 18px;
+      font-size: 12.5px;
       font-weight: 450;
       color: var(--color-text-secondary);
       text-decoration: none;
       border-radius: 0;
-      transition: background 0.12s, color 0.12s;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
       cursor: pointer;
       border: none;
+      border-left: 2px solid transparent;
       background: none;
       width: 100%;
       text-align: left;
     }
 
     .nav-link:hover { background: var(--color-border-subtle); color: var(--color-text-primary); }
-    .nav-link.active { background: var(--color-border-accordion); color: var(--color-surface-nav-active); font-weight: 600; }
+    .nav-link.active {
+      background: var(--color-surface-brand);
+      color: var(--color-surface-nav-active);
+      font-weight: 600;
+      border-left-color: var(--color-surface-nav-active);
+    }
 
     .nav-dot {
-      width: 6px; height: 6px;
+      width: 5px; height: 5px;
       border-radius: 50%;
       background: currentColor;
-      opacity: 0.5;
+      opacity: 0.4;
       flex-shrink: 0;
+      transition: opacity 0.12s;
     }
 
     .nav-link.active .nav-dot { opacity: 1; }
 
-    .nav-group-label {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+    .nav-text { flex: 1; min-width: 0; }
+
+    .nav-link mark {
+      background: transparent;
+      color: var(--color-surface-nav-active);
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-color: var(--color-border-accordion);
+    }
+
+    /* ── Sidebar search ─────────────────────────────────────────────────────── */
+
+    .sidebar-search {
+      padding: 10px 12px 2px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-search__wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .sidebar-search__icon {
+      position: absolute;
+      left: 9px;
+      font-family: 'Material Symbols Rounded';
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 16px;
+      line-height: 1;
       color: var(--color-text-secondary);
       opacity: 0.6;
-      padding: 10px 20px 2px 28px;
+      pointer-events: none;
+    }
+
+    .sidebar-search__input {
+      width: 100%;
+      height: 30px;
+      padding: 0 52px 0 30px;
+      background: var(--color-surface-page);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: var(--preview-font);
+      color: var(--color-text-primary);
+      outline: none;
+      transition: border-color 0.12s, box-shadow 0.12s;
+    }
+
+    .sidebar-search__input::placeholder { color: var(--color-text-placeholder); font-size: 12px; }
+
+    .sidebar-search__input:focus {
+      border-color: var(--color-border-brand);
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+    }
+
+    .sidebar-search__kbd {
+      position: absolute;
+      right: 8px;
+      font-size: 10px;
+      font-family: var(--preview-mono);
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      background: var(--color-surface-default);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 3px;
+      padding: 1px 5px;
+      pointer-events: none;
+      opacity: 0.7;
+      transition: opacity 0.12s;
+    }
+
+    .sidebar-search__input:focus ~ .sidebar-search__kbd { opacity: 0; pointer-events: none; }
+    .sidebar-search.has-value .sidebar-search__kbd { display: none; }
+
+    .sidebar-search__clear {
+      position: absolute;
+      right: 7px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: none;
+      background: var(--color-text-secondary);
+      color: var(--color-surface-page);
+      cursor: pointer;
+      font-family: 'Material Symbols Rounded';
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 13px;
+      line-height: 1;
+      opacity: 0.6;
+      transition: opacity 0.12s;
+    }
+
+    .sidebar-search__clear:hover { opacity: 1; }
+    .sidebar-search.has-value .sidebar-search__clear { display: flex; }
+
+    /* ── Collapsible group headers ─────────────────────────────────────────── */
+
+    .nav-group-header {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 14px 3px 18px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      transition: opacity 0.12s;
+    }
+
+    .nav-group-header:hover { opacity: 1; }
+
+    .nav-group-label-text {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      opacity: 0.65;
+      flex: 1;
+    }
+
+    .nav-group-count {
+      font-size: 10px;
+      font-weight: 500;
+      font-family: var(--preview-mono);
+      color: var(--color-text-secondary);
+      opacity: 0.4;
+    }
+
+    .nav-group-chevron {
+      font-family: 'Material Symbols Rounded';
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 15px;
+      line-height: 1;
+      color: var(--color-text-secondary);
+      opacity: 0.35;
+      transition: transform 0.18s ease, opacity 0.12s;
+      flex-shrink: 0;
+    }
+
+    .nav-group-header.is-collapsed .nav-group-chevron { transform: rotate(-90deg); }
+    .nav-group-header:hover .nav-group-chevron { opacity: 0.65; }
+
+    .nav-group-items {
+      overflow: hidden;
+      transition: max-height 0.2s ease;
+      max-height: 2000px;
+    }
+
+    .nav-group-items.is-collapsed { max-height: 0; }
+
+    /* ── Sidebar no-results + footer ─────────────────────────────────────────── */
+
+    .sidebar-no-results {
+      padding: 20px 20px 12px;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      text-align: center;
+      display: none;
+      opacity: 0.7;
     }
 
     .sidebar-footer {
-      padding: 16px 20px;
+      padding: 14px 20px;
       border-top: 1px solid var(--color-border-subtle);
       font-size: 11px;
       color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-footer__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-surface-nav-active);
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+
+    /* ── Section source pill ─────────────────────────────────────────────────── */
+
+    .section-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--preview-mono);
+      font-size: 11px;
+      color: var(--color-text-brand);
+      background: var(--color-surface-brand);
+      border: 1px solid var(--color-border-accordion);
+      border-radius: 4px;
+      padding: 3px 8px;
+      margin-top: 8px;
+    }
+
+    .section-source::before {
+      content: 'folder';
+      font-family: 'Material Symbols Rounded';
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    /* ── Section header layout ───────────────────────────────────────────────── */
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      letter-spacing: -0.025em;
+      margin-bottom: 0;
+    }
+
+    .section-desc {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      max-width: 620px;
+      margin-top: 4px;
     }
 
     /* Main content */
@@ -702,24 +950,7 @@
 
     /* ── Sections ────────────────────────────────────────────────────────────── */
 
-    .section { margin-bottom: 80px; scroll-margin-top: 80px; }
-
-    .section-header { margin-bottom: 32px; }
-
-    .section-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--color-text-primary);
-      letter-spacing: -0.02em;
-      margin-bottom: 6px;
-    }
-
-    .section-desc {
-      font-size: 13px;
-      color: var(--color-text-secondary);
-      line-height: 1.6;
-      max-width: 600px;
-    }
+    .section { margin-bottom: 80px; scroll-margin-top: 72px; }
 
     .subsection { margin-bottom: 40px; }
 
@@ -8899,104 +9130,173 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   <!-- ── Sidebar ───────────────────────────────────────────────────────────── -->
   <aside class="sidebar">
     <div class="sidebar-brand">
+      <div class="sidebar-brand__mark" aria-hidden="true">O</div>
       <div>
         <div class="brand-name">Onflo</div>
         <div class="brand-tag">Design System</div>
       </div>
     </div>
 
+    <!-- Search -->
+    <div class="sidebar-search" id="sidebarSearch">
+      <div class="sidebar-search__wrap">
+        <span class="sidebar-search__icon" aria-hidden="true">search</span>
+        <input
+          type="search"
+          id="navSearchInput"
+          class="sidebar-search__input"
+          placeholder="Search components…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search components"
+          oninput="filterNav(this.value)"
+        />
+        <button class="sidebar-search__clear" id="navSearchClear" onclick="clearNavSearch()" aria-label="Clear search" tabindex="-1">close</button>
+        <span class="sidebar-search__kbd" aria-hidden="true">/</span>
+      </div>
+    </div>
+
+    <div class="sidebar-content">
     <nav class="sidebar-nav" id="nav-foundations">
       <div class="nav-section-label">Foundations</div>
-      <a class="nav-link active" href="#colours" onclick="setActive(this)"><span class="nav-dot"></span>Colours</a>
-      <a class="nav-link" href="#typography" onclick="setActive(this)"><span class="nav-dot"></span>Typography</a>
-      <a class="nav-link" href="#spacing" onclick="setActive(this)"><span class="nav-dot"></span>Spacing</a>
-      <a class="nav-link" href="#radius" onclick="setActive(this)"><span class="nav-dot"></span>Border Radius</a>
-      <a class="nav-link" href="#shadows" onclick="setActive(this)"><span class="nav-dot"></span>Shadows</a>
-      <a class="nav-link" href="#overlays" onclick="setActive(this)"><span class="nav-dot"></span>Overlays</a>
-      <a class="nav-link" href="#icons" onclick="setActive(this)"><span class="nav-dot"></span>Icons</a>
+      <a class="nav-link active" href="#colours" data-nav data-page="foundations"><span class="nav-dot"></span><span class="nav-text">Colours</span></a>
+      <a class="nav-link" href="#typography" data-nav data-page="foundations"><span class="nav-dot"></span><span class="nav-text">Typography</span></a>
+      <a class="nav-link" href="#spacing" data-nav data-page="foundations"><span class="nav-dot"></span><span class="nav-text">Spacing</span></a>
+      <a class="nav-link" href="#radius" data-nav data-page="foundations"><span class="nav-dot"></span><span class="nav-text">Border Radius</span></a>
+      <a class="nav-link" href="#shadows" data-nav data-page="foundations"><span class="nav-dot"></span><span class="nav-text">Shadows</span></a>
+      <a class="nav-link" href="#overlays" data-nav data-page="foundations"><span class="nav-dot"></span><span class="nav-text">Overlays</span></a>
+      <a class="nav-link" href="#icons" data-nav data-page="foundations"><span class="nav-dot"></span><span class="nav-text">Icons</span></a>
     </nav>
 
     <nav class="sidebar-nav" id="nav-components" style="display:none">
-      <div class="nav-group-label">Form Controls</div>
-      <a class="nav-link" href="#input" onclick="setActive(this)"><span class="nav-dot"></span>Input Field</a>
-      <a class="nav-link" href="#search" onclick="setActive(this)"><span class="nav-dot"></span>Search Field</a>
-      <a class="nav-link" href="#select" onclick="setActive(this)"><span class="nav-dot"></span>Select</a>
-      <a class="nav-link" href="#autocomplete" onclick="setActive(this)"><span class="nav-dot"></span>Autocomplete</a>
-      <a class="nav-link" href="#textarea" onclick="setActive(this)"><span class="nav-dot"></span>Textarea</a>
-      <a class="nav-link" href="#datepicker" onclick="setActive(this)"><span class="nav-dot"></span>Date Picker</a>
-      <a class="nav-link" href="#rich-text-editor" onclick="setActive(this)"><span class="nav-dot"></span>Rich Text Editor</a>
-      <a class="nav-link" href="#checkbox" onclick="setActive(this)"><span class="nav-dot"></span>Checkbox</a>
-      <a class="nav-link" href="#radio" onclick="setActive(this)"><span class="nav-dot"></span>Radio Button</a>
-      <a class="nav-link" href="#toggle" onclick="setActive(this)"><span class="nav-dot"></span>Toggle</a>
+      <div class="nav-section-label">Components</div>
 
-      <div class="nav-group-label">Actions</div>
-      <a class="nav-link" href="#button" onclick="setActive(this)"><span class="nav-dot"></span>Button</a>
-      <a class="nav-link" href="#icon-button" onclick="setActive(this)"><span class="nav-dot"></span>Icon Button</a>
-      <a class="nav-link" href="#menu" onclick="setActive(this)"><span class="nav-dot"></span>Menu</a>
+      <button class="nav-group-header" data-group="form-controls" onclick="toggleGroup('form-controls')" aria-expanded="true">
+        <span class="nav-group-label-text">Form Controls</span>
+        <span class="nav-group-count">10</span>
+        <span class="nav-group-chevron" aria-hidden="true">expand_more</span>
+      </button>
+      <div class="nav-group-items" id="group-form-controls">
+        <a class="nav-link" href="#input" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Input Field</span></a>
+        <a class="nav-link" href="#search" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Search Field</span></a>
+        <a class="nav-link" href="#select" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Select</span></a>
+        <a class="nav-link" href="#autocomplete" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Autocomplete</span></a>
+        <a class="nav-link" href="#textarea" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Textarea</span></a>
+        <a class="nav-link" href="#datepicker" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Date Picker</span></a>
+        <a class="nav-link" href="#rich-text-editor" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Rich Text Editor</span></a>
+        <a class="nav-link" href="#checkbox" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Checkbox</span></a>
+        <a class="nav-link" href="#radio" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Radio Button</span></a>
+        <a class="nav-link" href="#toggle" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Toggle</span></a>
+      </div>
 
-      <div class="nav-group-label">Feedback &amp; Status</div>
-      <a class="nav-link" href="#snackbar" onclick="setActive(this)"><span class="nav-dot"></span>Snackbar</a>
-      <a class="nav-link" href="#alert" onclick="setActive(this)"><span class="nav-dot"></span>Alert</a>
-      <a class="nav-link" href="#badge" onclick="setActive(this)"><span class="nav-dot"></span>Badge</a>
-      <a class="nav-link" href="#tooltip" onclick="setActive(this)"><span class="nav-dot"></span>Tooltip</a>
-      <a class="nav-link" href="#progress" onclick="setActive(this)"><span class="nav-dot"></span>Progress</a>
-      <a class="nav-link" href="#hover-card" onclick="setActive(this)"><span class="nav-dot"></span>Hover Card</a>
-      <a class="nav-link" href="#dialog" onclick="setActive(this)"><span class="nav-dot"></span>Dialog</a>
-      <a class="nav-link" href="#save-bar" onclick="setActive(this)"><span class="nav-dot"></span>Save Bar</a>
-      <a class="nav-link" href="#modal" onclick="setActive(this)"><span class="nav-dot"></span>Modal</a>
+      <button class="nav-group-header" data-group="actions" onclick="toggleGroup('actions')" aria-expanded="true">
+        <span class="nav-group-label-text">Actions</span>
+        <span class="nav-group-count">3</span>
+        <span class="nav-group-chevron" aria-hidden="true">expand_more</span>
+      </button>
+      <div class="nav-group-items" id="group-actions">
+        <a class="nav-link" href="#button" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Button</span></a>
+        <a class="nav-link" href="#icon-button" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Icon Button</span></a>
+        <a class="nav-link" href="#menu" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Menu</span></a>
+      </div>
 
-      <div class="nav-group-label">Display</div>
-      <a class="nav-link" href="#avatar" onclick="setActive(this)"><span class="nav-dot"></span>Avatar</a>
-      <a class="nav-link" href="#label" onclick="setActive(this)"><span class="nav-dot"></span>Label</a>
-      <a class="nav-link" href="#chip" onclick="setActive(this)"><span class="nav-dot"></span>Chip</a>
-      <a class="nav-link" href="#tag" onclick="setActive(this)"><span class="nav-dot"></span>Tag</a>
-      <a class="nav-link" href="#tabs" onclick="setActive(this)"><span class="nav-dot"></span>Tabs</a>
-      <a class="nav-link" href="#list" onclick="setActive(this)"><span class="nav-dot"></span>List Item</a>
-      <a class="nav-link" href="#card" onclick="setActive(this)"><span class="nav-dot"></span>Card</a>
-      <a class="nav-link" href="#card-item" onclick="setActive(this)"><span class="nav-dot"></span>Card Item</a>
-      <a class="nav-link" href="#empty-state" onclick="setActive(this)"><span class="nav-dot"></span>Empty State</a>
+      <button class="nav-group-header" data-group="feedback" onclick="toggleGroup('feedback')" aria-expanded="true">
+        <span class="nav-group-label-text">Feedback &amp; Status</span>
+        <span class="nav-group-count">9</span>
+        <span class="nav-group-chevron" aria-hidden="true">expand_more</span>
+      </button>
+      <div class="nav-group-items" id="group-feedback">
+        <a class="nav-link" href="#snackbar" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Snackbar</span></a>
+        <a class="nav-link" href="#alert" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Alert</span></a>
+        <a class="nav-link" href="#badge" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Badge</span></a>
+        <a class="nav-link" href="#tooltip" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Tooltip</span></a>
+        <a class="nav-link" href="#progress" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Progress</span></a>
+        <a class="nav-link" href="#hover-card" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Hover Card</span></a>
+        <a class="nav-link" href="#dialog" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Dialog</span></a>
+        <a class="nav-link" href="#save-bar" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Save Bar</span></a>
+        <a class="nav-link" href="#modal" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Modal</span></a>
+      </div>
 
-      <div class="nav-group-label">Navigation</div>
-      <a class="nav-link" href="#nav-button" onclick="setActive(this)"><span class="nav-dot"></span>Nav Button</a>
-      <a class="nav-link" href="#subnav-button" onclick="setActive(this)"><span class="nav-dot"></span>Subnav Button</a>
-      <a class="nav-link" href="#subnav-subheader" onclick="setActive(this)"><span class="nav-dot"></span>Subnav Subheader</a>
-      <a class="nav-link" href="#subnav-header" onclick="setActive(this)"><span class="nav-dot"></span>Subnav Header</a>
-      <a class="nav-link" href="#agent-status" onclick="setActive(this)"><span class="nav-dot"></span>Agent Status</a>
-      <a class="nav-link" href="#nav-sidebar" onclick="setActive(this)"><span class="nav-dot"></span>Nav Sidebar</a>
-      <a class="nav-link" href="#nav-tab" onclick="setActive(this)"><span class="nav-dot"></span>Nav Tab</a>
-      <a class="nav-link" href="#top-nav" onclick="setActive(this)"><span class="nav-dot"></span>Top Nav</a>
-      <a class="nav-link" href="#nav-expand" onclick="setActive(this)"><span class="nav-dot"></span>Nav Expand</a>
+      <button class="nav-group-header" data-group="display" onclick="toggleGroup('display')" aria-expanded="true">
+        <span class="nav-group-label-text">Display</span>
+        <span class="nav-group-count">9</span>
+        <span class="nav-group-chevron" aria-hidden="true">expand_more</span>
+      </button>
+      <div class="nav-group-items" id="group-display">
+        <a class="nav-link" href="#avatar" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Avatar</span></a>
+        <a class="nav-link" href="#label" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Label</span></a>
+        <a class="nav-link" href="#chip" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Chip</span></a>
+        <a class="nav-link" href="#tag" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Tag</span></a>
+        <a class="nav-link" href="#tabs" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Tabs</span></a>
+        <a class="nav-link" href="#list" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">List Item</span></a>
+        <a class="nav-link" href="#card" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Card</span></a>
+        <a class="nav-link" href="#card-item" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Card Item</span></a>
+        <a class="nav-link" href="#empty-state" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Empty State</span></a>
+      </div>
 
-      <div class="nav-group-label">Page Layouts</div>
-      <a class="nav-link" href="#split-page" onclick="setActive(this)"><span class="nav-dot"></span>Split Page</a>
+      <button class="nav-group-header" data-group="navigation" onclick="toggleGroup('navigation')" aria-expanded="true">
+        <span class="nav-group-label-text">Navigation</span>
+        <span class="nav-group-count">9</span>
+        <span class="nav-group-chevron" aria-hidden="true">expand_more</span>
+      </button>
+      <div class="nav-group-items" id="group-navigation">
+        <a class="nav-link" href="#nav-button" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Nav Button</span></a>
+        <a class="nav-link" href="#subnav-button" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Subnav Button</span></a>
+        <a class="nav-link" href="#subnav-subheader" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Subnav Subheader</span></a>
+        <a class="nav-link" href="#subnav-header" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Subnav Header</span></a>
+        <a class="nav-link" href="#agent-status" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Agent Status</span></a>
+        <a class="nav-link" href="#nav-sidebar" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Nav Sidebar</span></a>
+        <a class="nav-link" href="#nav-tab" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Nav Tab</span></a>
+        <a class="nav-link" href="#top-nav" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Top Nav</span></a>
+        <a class="nav-link" href="#nav-expand" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Nav Expand</span></a>
+      </div>
 
-      <div class="nav-group-label">Utilities</div>
-      <a class="nav-link" href="#form-section-title" onclick="setActive(this)"><span class="nav-dot"></span>Form Section Title</a>
-      <a class="nav-link" href="#sr-only" onclick="setActive(this)"><span class="nav-dot"></span>Screen Reader Only</a>
+      <button class="nav-group-header" data-group="page-layouts" onclick="toggleGroup('page-layouts')" aria-expanded="true">
+        <span class="nav-group-label-text">Page Layouts</span>
+        <span class="nav-group-count">1</span>
+        <span class="nav-group-chevron" aria-hidden="true">expand_more</span>
+      </button>
+      <div class="nav-group-items" id="group-page-layouts">
+        <a class="nav-link" href="#split-page" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Split Page</span></a>
+      </div>
+
+      <button class="nav-group-header" data-group="utilities" onclick="toggleGroup('utilities')" aria-expanded="true">
+        <span class="nav-group-label-text">Utilities</span>
+        <span class="nav-group-count">2</span>
+        <span class="nav-group-chevron" aria-hidden="true">expand_more</span>
+      </button>
+      <div class="nav-group-items" id="group-utilities">
+        <a class="nav-link" href="#form-section-title" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Form Section Title</span></a>
+        <a class="nav-link" href="#sr-only" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Screen Reader Only</span></a>
+      </div>
     </nav>
 
     <nav class="sidebar-nav" id="nav-table-components" style="display:none">
       <div class="nav-section-label">Table Components</div>
-      <a class="nav-link" href="#table-header-cell" onclick="setActive(this)"><span class="nav-dot"></span>Header Cell</a>
-      <a class="nav-link" href="#table-header-group-cell" onclick="setActive(this)"><span class="nav-dot"></span>Header Group Cell</a>
-      <a class="nav-link" href="#table-row-cell" onclick="setActive(this)"><span class="nav-dot"></span>Row Cell</a>
-      <a class="nav-link" href="#table-status-bar" onclick="setActive(this)"><span class="nav-dot"></span>Status Bar</a>
-      <a class="nav-link" href="#table-row-groups-bar" onclick="setActive(this)"><span class="nav-dot"></span>Row Groups Bar</a>
-      <a class="nav-link" href="#table-group-row-cell" onclick="setActive(this)"><span class="nav-dot"></span>Group Row Cell</a>
-      <a class="nav-link" href="#ag-paginator" onclick="setActive(this)"><span class="nav-dot"></span>AG Grid Paginator</a>
-      <a class="nav-link" href="#table-toolbar" onclick="setActive(this)"><span class="nav-dot"></span>Toolbar</a>
-      <a class="nav-link" href="#column-panel" onclick="setActive(this)"><span class="nav-dot"></span>Column Panel</a>
-      <a class="nav-link" href="#table-context-menu" onclick="setActive(this)"><span class="nav-dot"></span>Context Menu</a>
-      <a class="nav-link" href="#ag-grid-sim" onclick="setActive(this)"><span class="nav-dot"></span>AG Grid Sim</a>
+      <a class="nav-link" href="#table-header-cell" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">Header Cell</span></a>
+      <a class="nav-link" href="#table-header-group-cell" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">Header Group Cell</span></a>
+      <a class="nav-link" href="#table-row-cell" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">Row Cell</span></a>
+      <a class="nav-link" href="#table-status-bar" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">Status Bar</span></a>
+      <a class="nav-link" href="#table-row-groups-bar" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">Row Groups Bar</span></a>
+      <a class="nav-link" href="#table-group-row-cell" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">Group Row Cell</span></a>
+      <a class="nav-link" href="#ag-paginator" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">AG Grid Paginator</span></a>
+      <a class="nav-link" href="#table-toolbar" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">Toolbar</span></a>
+      <a class="nav-link" href="#column-panel" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">Column Panel</span></a>
+      <a class="nav-link" href="#table-context-menu" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">Context Menu</span></a>
+      <a class="nav-link" href="#ag-grid-sim" data-nav data-page="table-components"><span class="nav-dot"></span><span class="nav-text">AG Grid Sim</span></a>
     </nav>
 
     <nav class="sidebar-nav" id="nav-examples" style="display:none">
       <div class="nav-section-label">Pages</div>
-      <a class="nav-link" href="#page-layout" onclick="setActive(this)"><span class="nav-dot"></span>Page Layout</a>
-      <a class="nav-link" href="#split-page-layout" onclick="setActive(this)"><span class="nav-dot"></span>Split Page</a>
+      <a class="nav-link" href="#page-layout" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Page Layout</span></a>
+      <a class="nav-link" href="#split-page-layout" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Split Page</span></a>
     </nav>
 
+    <div class="sidebar-no-results" id="sidebarNoResults">No components found</div>
+    </div><!-- /.sidebar-content -->
+
     <div class="sidebar-footer">
+      <span class="sidebar-footer__dot"></span>
       v0.3.0 · Angular + .NET Core
     </div>
   </aside>
@@ -17905,6 +18205,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
   }
 
   function switchPage(page) {
+    if (typeof clearNavSearch === 'function') clearNavSearch();
     ['foundations', 'components', 'table-components', 'examples'].forEach(function(p) {
       var pageEl = document.getElementById('page-' + p);
       var navEl  = document.getElementById('nav-' + p);
@@ -17922,13 +18223,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     window.scrollTo(0, 0);
   }
 
-  function setActive(el) {
-    var parentNav = el.closest('nav');
-    if (parentNav) {
-      parentNav.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
-    }
-    el.classList.add('active');
-  }
+  // setActive is now handled by IntersectionObserver — kept as no-op for any
+  // legacy onclick refs that may remain in component demo HTML
+  function setActive(el) {}
 
   function copySwatch(el, value) {
     navigator.clipboard?.writeText(value).catch(() => {});
@@ -19078,6 +19375,202 @@ function closeNavTab(closeBtn) {
     leftPanel.style.flex  = newLeft + ' 1 0px';
     rightPanel.style.flex = (totalPanelWidth - newLeft) + ' 1 0px';
   });
+})();
+</script>
+
+<!-- ── Enhanced Navigation: Search · IntersectionObserver · Collapsible Groups ── -->
+<script>
+(function () {
+  'use strict';
+
+  // ── 1. Collapsible sidebar groups ─────────────────────────────────────────
+  window.toggleGroup = function (groupId) {
+    var header = document.querySelector('[data-group="' + groupId + '"]');
+    var items  = document.getElementById('group-' + groupId);
+    if (!header || !items) return;
+    var isCollapsed = header.classList.toggle('is-collapsed');
+    items.classList.toggle('is-collapsed', isCollapsed);
+    header.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
+  };
+
+  // ── 2. IntersectionObserver — sync active nav link with scroll position ───
+  var _activeSection = null;
+  var _scrollLock = false;
+
+  function setActiveNav(id) {
+    document.querySelectorAll('.nav-link[data-nav]').forEach(function (link) {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      if (_scrollLock) return;
+      // Find the topmost visible section
+      var topEntry = null;
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          if (!topEntry || entry.boundingClientRect.top < topEntry.boundingClientRect.top) {
+            topEntry = entry;
+          }
+        }
+      });
+      if (topEntry && topEntry.target.id !== _activeSection) {
+        _activeSection = topEntry.target.id;
+        setActiveNav(_activeSection);
+      }
+    }, {
+      rootMargin: '-15% 0px -70% 0px',
+      threshold: 0
+    });
+
+    document.querySelectorAll('.section[id]').forEach(function (s) {
+      observer.observe(s);
+    });
+  }
+
+  // Briefly suppress observer on anchor-link clicks so the click wins
+  document.querySelectorAll('.nav-link[data-nav]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      _scrollLock = true;
+      var id = (link.getAttribute('href') || '').replace('#', '');
+      _activeSection = id;
+      setActiveNav(id);
+
+      // Auto-switch to the correct page tab if the link belongs to a different page
+      var targetPage = link.getAttribute('data-page');
+      if (targetPage) {
+        var activeTab = document.querySelector('.page-tab.active');
+        if (!activeTab || activeTab.getAttribute('data-page') !== targetPage) {
+          switchPage(targetPage);
+          // After switchPage, scroll to the section since it was just shown
+          setTimeout(function () {
+            var el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 50);
+        }
+      }
+
+      setTimeout(function () { _scrollLock = false; }, 1200);
+    });
+  });
+
+  // ── 3. Sidebar search ─────────────────────────────────────────────────────
+  var _allNavLinks = null;
+
+  function getAllNavLinks() {
+    if (!_allNavLinks) {
+      _allNavLinks = Array.from(document.querySelectorAll('.nav-link[data-nav]'));
+    }
+    return _allNavLinks;
+  }
+
+  window.filterNav = function (query) {
+    var q = (query || '').trim().toLowerCase();
+    var searchEl = document.getElementById('sidebarSearch');
+    var noResults = document.getElementById('sidebarNoResults');
+
+    if (q) {
+      searchEl.classList.add('has-value');
+    } else {
+      searchEl.classList.remove('has-value');
+    }
+
+    if (!q) {
+      // Restore normal state
+      getAllNavLinks().forEach(function (link) {
+        link.style.display = '';
+        var textEl = link.querySelector('.nav-text');
+        if (textEl) textEl.textContent = textEl.textContent; // strip any <mark>
+      });
+      document.querySelectorAll('.nav-group-header').forEach(function (h) { h.style.display = ''; });
+      document.querySelectorAll('.nav-group-items').forEach(function (g) {
+        g.style.display = '';
+        // Re-apply collapse state
+        var groupId = g.id.replace('group-', '');
+        var header = document.querySelector('[data-group="' + groupId + '"]');
+        if (header && header.classList.contains('is-collapsed')) {
+          g.classList.add('is-collapsed');
+        }
+      });
+      document.querySelectorAll('.nav-section-label').forEach(function (l) { l.style.display = ''; });
+      document.querySelectorAll('.sidebar-nav').forEach(function (nav) {
+        // Restore to original visibility (only the active page nav is shown)
+        var page = nav.id.replace('nav-', '');
+        var activeTab = document.querySelector('.page-tab.active');
+        var activePage = activeTab ? activeTab.getAttribute('data-page') : 'foundations';
+        nav.style.display = (page === activePage) ? '' : 'none';
+      });
+      if (noResults) noResults.style.display = 'none';
+      return;
+    }
+
+    // During search: show all navs, hide group structure, show only matching links
+    document.querySelectorAll('.sidebar-nav').forEach(function (nav) { nav.style.display = ''; });
+    document.querySelectorAll('.nav-section-label').forEach(function (l) { l.style.display = 'none'; });
+    document.querySelectorAll('.nav-group-header').forEach(function (h) { h.style.display = 'none'; });
+    document.querySelectorAll('.nav-group-items').forEach(function (g) {
+      g.style.display = '';
+      g.classList.remove('is-collapsed');
+    });
+
+    var anyVisible = false;
+
+    getAllNavLinks().forEach(function (link) {
+      var textEl = link.querySelector('.nav-text');
+      if (!textEl) return;
+      var rawText = textEl.textContent || textEl.innerText || '';
+      var lower = rawText.toLowerCase();
+      var idx = lower.indexOf(q);
+      if (idx !== -1) {
+        link.style.display = '';
+        var before = rawText.slice(0, idx);
+        var match  = rawText.slice(idx, idx + q.length);
+        var after  = rawText.slice(idx + q.length);
+        textEl.innerHTML = escHtml(before) + '<mark>' + escHtml(match) + '</mark>' + escHtml(after);
+        anyVisible = true;
+      } else {
+        link.style.display = 'none';
+        textEl.textContent = rawText;
+      }
+    });
+
+    if (noResults) noResults.style.display = anyVisible ? 'none' : 'block';
+  };
+
+  window.clearNavSearch = function () {
+    var input = document.getElementById('navSearchInput');
+    if (input) {
+      input.value = '';
+      window.filterNav('');
+    }
+  };
+
+  function escHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // ── 4. Keyboard shortcut: / to focus search ───────────────────────────────
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+    var target = document.activeElement;
+    if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return;
+    e.preventDefault();
+    var input = document.getElementById('navSearchInput');
+    if (input) { input.focus(); input.select(); }
+  });
+
+  // Escape in search input clears and blurs
+  var searchInput = document.getElementById('navSearchInput');
+  if (searchInput) {
+    searchInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        window.clearNavSearch();
+        searchInput.blur();
+      }
+    });
+  }
+
 })();
 </script>
 </body>
