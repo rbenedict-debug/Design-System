@@ -33,7 +33,8 @@
     "@angular/common": ">=21.0.0",
     "@angular/core": ">=21.0.0",
     "@angular/forms": ">=21.0.0",
-    "@angular/material": ">=21.0.0"
+    "@angular/material": ">=21.0.0",
+    "ag-grid-community": ">=33.0.0"
   },
   "engines": {
     "node": ">=18"

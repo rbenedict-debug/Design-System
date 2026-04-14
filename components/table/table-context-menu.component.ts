@@ -315,6 +315,60 @@ export class DsTableContextMenuComponent implements OnChanges, AfterViewInit {
     this.close();
   }
 
+  /**
+   * Full WCAG keyboard handling for role="menu":
+   *   Escape     — close
+   *   ArrowDown  — move focus to next item (wraps)
+   *   ArrowUp    — move focus to previous item (wraps)
+   *   Home       — move focus to first item
+   *   End        — move focus to last item
+   */
+  onPanelKeydown(event: KeyboardEvent): void {
+    switch (event.key) {
+      case 'Escape':
+        this.close();
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        this._moveFocus(1);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        this._moveFocus(-1);
+        break;
+      case 'Home':
+        event.preventDefault();
+        this._focusItem(0);
+        break;
+      case 'End':
+        event.preventDefault();
+        this._focusItem('last');
+        break;
+    }
+  }
+
+  private _getMenuItems(): HTMLButtonElement[] {
+    return Array.from(
+      this.panelRef?.nativeElement.querySelectorAll<HTMLButtonElement>(
+        'button[role="menuitem"]:not([disabled])'
+      ) ?? []
+    );
+  }
+
+  private _moveFocus(direction: 1 | -1): void {
+    const items = this._getMenuItems();
+    if (!items.length) return;
+    const idx = items.indexOf(document.activeElement as HTMLButtonElement);
+    items[(idx + direction + items.length) % items.length]?.focus();
+  }
+
+  private _focusItem(position: number | 'last'): void {
+    const items = this._getMenuItems();
+    if (!items.length) return;
+    const target = position === 'last' ? items[items.length - 1] : items[position];
+    target?.focus();
+  }
+
   /** Flips the panel above/left when it would overflow the viewport. */
   private adjustPosition(): void {
     const el = this.panelRef?.nativeElement;

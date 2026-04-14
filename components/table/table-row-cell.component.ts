@@ -48,6 +48,12 @@ export interface AgCellRendererParams {
     /** Row node ID (from getRowId() or AG Grid's internal counter). */
     id?: string;
     isSelected(): boolean;
+    /**
+     * Programmatically select or deselect this row.
+     * Used by the checkbox keyboard/click handler to toggle selection when
+     * suppressRowClickSelection is true in gridOptions.
+     */
+    setSelected?(selected: boolean, clearSelection?: boolean): void;
     addEventListener(event: string, listener: () => void): void;
     removeEventListener(event: string, listener: () => void): void;
   };
@@ -211,6 +217,16 @@ export class DsTableRowCellComponent implements OnDestroy, AfterViewChecked {
   }
 
   // ── Checkbox helpers ─────────────────────────────────────────
+
+  /**
+   * Toggle row selection when the checkbox is activated via click or keyboard.
+   * Calls node.setSelected() so AG Grid's selection state stays in sync — this
+   * correctly handles suppressRowClickSelection: true in gridOptions, where
+   * clicking the row itself does not select it and the checkbox is the only trigger.
+   */
+  onCheckboxClick(): void {
+    this.agParams?.node.setSelected?.(!this.checked);
+  }
 
   get checkboxIcon(): string {
     if (this.indeterminate) return 'indeterminate_check_box';

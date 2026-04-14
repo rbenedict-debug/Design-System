@@ -11,7 +11,7 @@
   <!-- Expand / collapse toggle -->
   <button
     type="button"
-    class="ds-table-group-row-cell__toggle"
+    class="ds-icon-button ds-icon-button--icon ds-icon-button--sm ds-table-group-row-cell__toggle"
     [attr.aria-expanded]="expanded"
     [attr.aria-label]="(expanded ? 'Collapse ' : 'Expand ') + fieldLabel + ': ' + value"
     (click)="onToggle($event)"
@@ -20,7 +20,7 @@
       class="ds-icon ds-table-group-row-cell__chevron"
       [class.ds-table-group-row-cell__chevron--open]="expanded"
       aria-hidden="true"
-    >chevron_right</span>
+    >arrow_drop_down</span>
   </button>
 
   <!-- "FieldName: Value" label -->

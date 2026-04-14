@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { OnInit, ElementRef, EventEmitter, OnDestroy, ChangeDetectorRef, OnChanges, SimpleChanges, AfterContentInit, AfterViewInit, Renderer2, NgZone, TemplateRef, QueryList } from '@angular/core';
+import { OnInit, ElementRef, EventEmitter, OnDestroy, ChangeDetectorRef, OnChanges, SimpleChanges, AfterContentInit, AfterViewInit, Renderer2, NgZone, AfterViewChecked, TemplateRef, QueryList } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatCheckboxChange } from '@angular/material/checkbox';
@@ -8,6 +8,7 @@ import { MatMenu, MenuPositionX, MenuPositionY } from '@angular/material/menu';
 import { PageEvent } from '@angular/material/paginator';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
+import { Theme } from 'ag-grid-community';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import * as i1 from '@angular/material/tooltip';
 
@@ -1896,11 +1897,54 @@ interface AgPanelColumn {
         headerName?: string;
         lockVisible?: boolean;
         suppressMovable?: boolean;
+        /** Set true on colDef to allow this column to appear in the row groups picker. */
+        enableRowGroup?: boolean;
+        /** Set true on colDef to allow this column to appear in the values (aggregation) picker. */
+        enableValue?: boolean;
+        /**
+         * Set true to prevent UI-based pinning changes (drag-to-pin and column menu pin options).
+         * The column can still be pinned/unpinned via API. Use on system columns that should
+         * always remain pinned or always remain unpinned.
+         */
+        lockPinned?: boolean;
+        /**
+         * Set true on colDef to hide this column from the tool panel column list entirely.
+         * The column still exists in the grid — it is just not shown in ds-column-panel.
+         * Use for internal system columns that consumers should never toggle or reorder.
+         */
+        suppressColumnsToolPanel?: boolean;
     };
     isVisible(): boolean;
 }
+/**
+ * State persisted by the tool panel — returned from getState() and restored via
+ * initialState in agInit. Integrates with AG Grid's grid state save/restore system.
+ */
+interface DsColumnPanelState {
+    /** Which density is currently active. */
+    density?: TableDensity;
+    /** Whether the Column Visibility section is expanded. */
+    colVisibilityExpanded?: boolean;
+}
 interface AgToolPanelParams {
     api: AgColumnPanelApi;
+    /**
+     * Call this whenever internal panel state changes so AG Grid's grid state
+     * save/restore system knows the state has updated. Pass as `onStateUpdated`
+     * from IToolPanelParams.
+     */
+    onStateUpdated?: () => void;
+    /**
+     * Previously saved panel state to restore on init. Populated by AG Grid when
+     * grid state is restored. Contains whatever getState() returned last time.
+     */
+    initialState?: DsColumnPanelState;
+    /** Hide the Pivot Mode toggle row. Default: false (shown). */
+    suppressPivotMode?: boolean;
+    /** Hide the Row Groups section (header, chips, Add Column picker). Default: false (shown). */
+    suppressRowGroups?: boolean;
+    /** Hide the Values (aggregation) section. Default: false (shown). */
+    suppressValues?: boolean;
 }
 /** A column entry in the row-group or value picker menu. */
 interface ColumnPickerOption {
@@ -1925,15 +1969,27 @@ declare class DsColumnPanelComponent implements OnDestroy {
     showRowGroupMenu: boolean;
     /** Whether the value column picker menu is open. */
     showValueMenu: boolean;
+    /** Whether the Pivot Mode row is hidden (set via suppressPivotMode toolPanelParam). */
+    suppressPivotMode: boolean;
+    /** Whether the Row Groups section is hidden (set via suppressRowGroups toolPanelParam). */
+    suppressRowGroups: boolean;
+    /** Whether the Values section is hidden (set via suppressValues toolPanelParam). */
+    suppressValues: boolean;
     densityChange: EventEmitter<TableDensity>;
     columnVisibilityChange: EventEmitter<ColumnVisibilityChange>;
     pivotModeChange: EventEmitter<boolean>;
     private _api;
+    private _onStateUpdated?;
     private readonly _colChanged;
     private readonly _pivotChanged;
     private readonly _groupChanged;
     constructor(cdr: ChangeDetectorRef);
     agInit(params: AgToolPanelParams): void;
+    /**
+     * Returns current panel state for AG Grid's grid state save/restore system.
+     * AG Grid calls this when saving grid state (e.g. before page navigation).
+     */
+    getState(): DsColumnPanelState;
     /** Called by AG Grid when the tool panel is refreshed. */
     refresh(): void;
     ngOnDestroy(): void;
@@ -1963,161 +2019,45 @@ declare class DsColumnPanelComponent implements OnDestroy {
 }
 
 /**
- * Onflo Design System — Table Group Expansion Store
+ * Onflo Design System — AG Grid Theme
  *
- * Persists AG Grid row group expansion state to localStorage so the user's
- * expanded/collapsed choices survive page navigations and browser refreshes.
+ * Pre-configured AG Grid theme for use with all Onflo tables.
+ * Built on Quartz (AG Grid's modern default) with:
+ *   - Material icon set — matches Onflo's Material Symbols Rounded usage
+ *   - Standard density row/header height (56px)
+ *   - Onflo spacing base unit (8px)
+ *   - AG Grid's native borders disabled — ds-table-header-cell and
+ *     ds-table-row-cell manage their own borders via Onflo tokens
  *
- * Usage (in your AG Grid host component):
+ * Color, typography, and surface tokens are applied separately via CSS custom
+ * properties in _table-ag-theme.scss — they cannot be set programmatically
+ * because they reference CSS variables that resolve at runtime.
  *
- *   import { DsTableGroupExpansionStore } from '@onflo/design-system';
- *
- *   private expansionStore = new DsTableGroupExpansionStore('my-table-groups');
+ * Usage:
+ *   import { onfloTheme } from '@onflo/design-system';
  *
  *   gridOptions: GridOptions = {
- *     isGroupOpenByDefault: (params) =>
- *       this.expansionStore.isGroupOpenByDefault(params),
- *     onRowGroupOpened: (event) =>
- *       this.expansionStore.onRowGroupOpened(event),
+ *     theme: onfloTheme,
+ *     defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
+ *     // ...
  *   };
  *
- * The storageKey should be unique per grid/page so multiple grids on different
- * pages don't share expansion state.
+ * Density variants:
+ *   The default density is 56px (standard). To switch density, set
+ *   --ag-row-height and --ag-header-height on the grid's host element.
+ *   These CSS custom properties override the withParams() defaults:
  *
- * Groups default to collapsed. Only explicitly opened groups are stored.
- * Removing a group column clears its stored key automatically on next open/close
- * because the key is derived from the full ancestor path.
- */
-/** Minimal row node surface needed for building a stable storage key. */
-interface DsGroupNode {
-    /** The field (column) being grouped on at this level. */
-    field: string | null;
-    /** The grouped value at this level. */
-    key: string | null;
-    /** Parent node — used to build the full ancestor path key. */
-    parent?: DsGroupNode | null;
-}
-declare class DsTableGroupExpansionStore {
-    private readonly _storageKey;
-    constructor(storageKey: string);
-    /**
-     * Pass as `isGroupOpenByDefault` in AG Grid gridOptions.
-     * Returns true for any group the user previously expanded.
-     */
-    isGroupOpenByDefault(params: {
-        rowNode: DsGroupNode;
-    }): boolean;
-    /**
-     * Pass as `onRowGroupOpened` in AG Grid gridOptions.
-     * Saves or clears the expanded state for the toggled group.
-     */
-    onRowGroupOpened(event: {
-        node: DsGroupNode & {
-            expanded: boolean;
-        };
-    }): void;
-    /** Removes all stored expansion state for this grid instance. */
-    clear(): void;
-    /**
-     * Derives a stable key from the full ancestor path of the group node.
-     * Example: "country:USA→department:Engineering"
-     * Using → (U+2192) as separator to avoid collisions with common value chars.
-     */
-    private _nodeKey;
-    private _read;
-}
-
-/**
- * Onflo Design System — Table Group Row Cell
+ *   Comfortable (68px):
+ *     .your-grid-host { --ag-row-height: 68px; --ag-header-height: 68px; }
  *
- * AG Grid custom renderer for full-width group rows.
- * Set as `groupRowRenderer` in gridOptions when using groupDisplayType: 'groupRows'.
+ *   Compact (42px):
+ *     .your-grid-host { --ag-row-height: 42px; --ag-header-height: 42px; }
  *
- * AG Grid usage:
- *   gridOptions = {
- *     groupDisplayType: 'groupRows',
- *     groupRowRenderer: DsTableGroupRowCellComponent,
- *   };
- *
- * Features:
- *   - 4 nesting levels with 24px indent per level
- *   - Animated chevron expand/collapse toggle
- *   - "FieldName: Value" label with child row count
- *   - Aggregated column values shown on the right (requires aggFunc on colDefs)
- *
- * Expansion state persistence (across page navigations):
- *   import { DsTableGroupExpansionStore } from '@onflo/design-system';
- *   const store = new DsTableGroupExpansionStore('my-grid-groups');
- *   gridOptions = {
- *     ...,
- *     isGroupOpenByDefault: (params) => store.isGroupOpenByDefault(params),
- *     onRowGroupOpened:     (event)  => store.onRowGroupOpened(event),
- *   };
- *
- * Figma: primitive/table-group-row-cell
- * ADA: expand/collapse toggle button has aria-expanded and aria-label;
- *      aggregate region is aria-hidden (decorative — announced via status bar).
- * No Angular Material base — custom component.
+ *   Note: also update ds-table-header-cell and ds-table-row-cell host heights
+ *   to match — those components manage their own cell height independently.
  */
 
-/** Minimal AG Grid params surface for a group row cell renderer. */
-interface AgGroupRowCellParams {
-    node: {
-        /** The grouped value at this level (e.g. "Engineering"). */
-        key: string | null;
-        /** The field (column) being grouped (e.g. "department"). */
-        field: string | null;
-        /** Nesting depth — 0 = outermost group. */
-        level: number;
-        /** Whether this group is currently expanded. */
-        expanded: boolean;
-        /** Total count of leaf rows under this group node (or null). */
-        allChildrenCount: number | null;
-        /** Aggregated values keyed by field — populated when aggFunc is set on colDefs. */
-        aggData: Record<string, unknown> | null;
-        /** Expand or collapse this group node. */
-        setExpanded(expanded: boolean): void;
-        addEventListener(event: string, cb: () => void): void;
-        removeEventListener(event: string, cb: () => void): void;
-    };
-    api: {
-        /** Look up a column to resolve its display header name. */
-        getColumn(key: string): {
-            getColDef(): {
-                headerName?: string;
-            };
-        } | null;
-    };
-}
-/** A single aggregated stat shown on the right of the group row. */
-interface DsGroupAggStat {
-    label: string;
-    value: string;
-}
-declare class DsTableGroupRowCellComponent implements OnDestroy {
-    private readonly cdr;
-    value: string;
-    fieldLabel: string;
-    /** Clamped to 0–3 (4 levels). */
-    level: number;
-    expanded: boolean;
-    childCount: number | null;
-    aggregates: DsGroupAggStat[];
-    private _params?;
-    private readonly _expandedListener;
-    constructor(cdr: ChangeDetectorRef);
-    agInit(params: AgGroupRowCellParams): void;
-    refresh(params: AgGroupRowCellParams): boolean;
-    ngOnDestroy(): void;
-    /** Left indent width in px — 24px per nesting level. */
-    get indentWidth(): number;
-    onToggle(event: Event): void;
-    private _apply;
-    private _resolveFieldLabel;
-    private _resolveAggregates;
-    static ɵfac: i0.ɵɵFactoryDeclaration<DsTableGroupRowCellComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<DsTableGroupRowCellComponent, "ds-table-group-row-cell", never, {}, {}, never, never, true, never>;
-}
+declare const onfloTheme: Theme;
 
 /**
  * Onflo Design System — Table Context Menu
@@ -2200,7 +2140,10 @@ interface DsTableHeaderContextMenuEvent {
         column: {
             getColId(): string;
             getActualWidth(): number;
-            getSort(): string | null | undefined;
+            getSort?(): string | null | undefined;
+            getSortDef?(): {
+                direction: 'asc' | 'desc' | null;
+            } | null;
         };
         api: {
             setColumnWidth(colId: string, width: number, finished?: boolean): void;
@@ -2260,13 +2203,36 @@ type TableHeaderAlign = 'left' | 'right';
 type TableSortDirection = 'asc' | 'desc' | null;
 /** Minimal interface for AG Grid header params — avoids hard ag-grid-community dep. */
 interface AgHeaderParams {
+    /** Column header display text (respects headerValueGetter). */
     displayName: string;
+    /** Whether sorting is enabled on this column (from colDef.sortable). */
     enableSorting: boolean;
+    /** Whether the column menu button should be shown (from colDef.suppressMenu). */
     enableMenu: boolean;
+    /**
+     * Whether a dedicated filter icon button should be shown (AG Grid v29+).
+     * Maps to the `filtering` input. Falls back to the custom `filtering`
+     * headerComponentParam when not provided by older AG Grid versions.
+     */
+    enableFilterButton?: boolean;
     column: {
-        getSort(): string | null | undefined;
+        /**
+         * Returns the current sort direction.
+         * AG Grid v28 and earlier — use getSortDef when available.
+         */
+        getSort?(): string | null | undefined;
+        /**
+         * Returns the sort definition object — preferred API (AG Grid v29+).
+         * `direction` is 'asc' | 'desc' | null; method returns null when column
+         * is not sortable.
+         */
+        getSortDef?(): {
+            direction: 'asc' | 'desc' | null;
+        } | null;
         getActualWidth(): number;
         getColId(): string;
+        /** Whether a filter is currently active on this column. */
+        isFilterActive(): boolean;
         addEventListener(event: string, listener: () => void): void;
         removeEventListener(event: string, listener: () => void): void;
     };
@@ -2295,9 +2261,51 @@ interface AgHeaderParams {
         resetColumnState(): void;
         /** Adds a column to the active row group set. */
         addRowGroupColumn(colId: string): void;
+        /**
+         * Selects all rows in the dataset, including filtered-out rows.
+         * Use selectAllFiltered when you only want to select visible rows.
+         */
+        selectAll?(): void;
+        /**
+         * Selects only rows that pass the currently active filters (preferred over
+         * selectAll for checkbox columns where "select all" means visible rows).
+         */
+        selectAllFiltered?(): void;
+        /** Deselects all selected rows. */
+        deselectAll?(): void;
+        /**
+         * Returns the currently selected row nodes. Used to calculate checked /
+         * indeterminate state on the select-all checkbox.
+         */
+        getSelectedNodes?(): unknown[];
+        /**
+         * Returns the number of rows currently displayed (after filters).
+         * Used alongside getSelectedNodes to determine indeterminate state.
+         */
+        getDisplayedRowCount?(): number;
+        /** Subscribe to grid-level events (e.g. 'selectionChanged'). */
+        addEventListener(event: string, listener: () => void): void;
+        /** Unsubscribe from grid-level events. */
+        removeEventListener(event: string, listener: () => void): void;
     };
+    /** Advance sort direction through the cycle: none → asc → desc → none. */
     progressSort(multiSort?: boolean): void;
+    /** Set an explicit sort direction. Use null to clear the sort. */
+    setSort(sort: 'asc' | 'desc' | null, multiSort?: boolean): void;
+    /** Show the column menu popup anchored to the supplied element. */
     showColumnMenu(source: HTMLElement): void;
+    /** Show the filter popup anchored to the supplied element (AG Grid v29+). */
+    showFilter(source: HTMLElement): void;
+    /** Text alignment override passed via headerComponentParams. */
+    align?: TableHeaderAlign;
+    /** Explicit filter button visibility override via headerComponentParams. */
+    filtering?: boolean;
+    /** Show left resize pipe via headerComponentParams. */
+    pipeLeft?: boolean;
+    /** Show right resize pipe via headerComponentParams. */
+    pipeRight?: boolean;
+    /** Show select-all checkbox via headerComponentParams. */
+    checkbox?: boolean;
 }
 declare class DsTableHeaderCellComponent implements OnDestroy {
     private cdr;
@@ -2331,8 +2339,12 @@ declare class DsTableHeaderCellComponent implements OnDestroy {
      * built-in header menu, then show <ds-table-context-menu> at the emitted coords.
      */
     headerContextMenu: EventEmitter<DsTableHeaderContextMenuEvent>;
+    /** Whether a filter is currently active on this column — drives the filter icon colour. */
+    filterActive: boolean;
     private agParams?;
     private sortChangedListener?;
+    private filterChangedListener?;
+    private selectionChangedListener?;
     private resizeStartX;
     private resizeStartWidth;
     private resizeCurrentWidth;
@@ -2347,20 +2359,125 @@ declare class DsTableHeaderCellComponent implements OnDestroy {
     get showRightPipe(): boolean;
     /** Called by AG Grid when this component is the headerComponent. */
     agInit(params: AgHeaderParams): void;
-    /** Called by AG Grid to refresh the header. */
+    /** Called by AG Grid to refresh the header when the column definition changes. */
     refresh(params: AgHeaderParams): boolean;
     ngOnDestroy(): void;
+    /**
+     * Reads standard AG Grid params and any custom headerComponentParams merged
+     * in by AG Grid. Called on agInit and refresh.
+     */
+    private _applyAgParams;
     onSortClick(event: MouseEvent): void;
     get sortIconClass(): string;
+    get sortAriaLabel(): string;
     get ariaSortValue(): string | null;
+    /**
+     * Toggle select-all / deselect-all.
+     * Checked or indeterminate → deselect all.
+     * Unchecked → select all displayed rows (respects active filters).
+     */
+    onCheckboxClick(): void;
     onMenuClick(triggerEl: HTMLElement): void;
+    onFilterClick(triggerEl: HTMLElement): void;
     onContextMenu(event: MouseEvent): void;
     get checkboxIcon(): string;
     get checkboxClass(): string;
+    /**
+     * Double-click the resize handle to auto-size the column to fit its content.
+     * Equivalent to double-clicking the built-in AG Grid resize grip.
+     */
+    onResizeDblClick(event: MouseEvent): void;
     onResizeStart(event: MouseEvent): void;
     private _cleanupResizeListeners;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsTableHeaderCellComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<DsTableHeaderCellComponent, "ds-table-header-cell", never, { "label": { "alias": "label"; "required": false; }; "align": { "alias": "align"; "required": false; }; "sorting": { "alias": "sorting"; "required": false; }; "filtering": { "alias": "filtering"; "required": false; }; "menuControl": { "alias": "menuControl"; "required": false; }; "checkbox": { "alias": "checkbox"; "required": false; }; "pipeLeft": { "alias": "pipeLeft"; "required": false; }; "pipeRight": { "alias": "pipeRight"; "required": false; }; "sortDirection": { "alias": "sortDirection"; "required": false; }; "checked": { "alias": "checked"; "required": false; }; "indeterminate": { "alias": "indeterminate"; "required": false; }; }, { "widthChange": "widthChange"; "headerContextMenu": "headerContextMenu"; }, never, never, true, never>;
+}
+
+/**
+ * Onflo Design System — Table Header Group Cell
+ *
+ * AG Grid custom group header renderer for the Onflo table system.
+ * Matches the visual language of DsTableHeaderCellComponent — same height,
+ * background, border, and label typography.
+ *
+ * AG Grid usage (in your gridOptions):
+ *   gridOptions = {
+ *     defaultColGroupDef: DS_TABLE_DEFAULT_COL_GROUP_DEF,
+ *     columnDefs: [
+ *       {
+ *         headerName: 'Contact',
+ *         headerGroupComponent: DsTableHeaderGroupCellComponent, // or via defaultColGroupDef
+ *         openByDefault: false,
+ *         marryChildren: true,
+ *         children: [
+ *           { field: 'firstName', headerName: 'First name' },
+ *           { field: 'lastName',  headerName: 'Last name'  },
+ *         ],
+ *       },
+ *     ],
+ *   };
+ *
+ * Expandable groups:
+ *   Mark some children with columnGroupShow: 'open' so the group
+ *   has columns that only appear when expanded. This makes the group
+ *   expandable and shows the expand/collapse chevron automatically.
+ *
+ * Figma: primitive/table-header-group-cell
+ * ADA: expand button has aria-label + aria-expanded; role="columnheader" on host.
+ */
+
+/** Minimal interface for AG Grid group header params — avoids hard ag-grid dep. */
+interface AgHeaderGroupParams {
+    /** Group display text (respects headerValueGetter on the group def). */
+    displayName: string;
+    columnGroup: {
+        /** Whether the group has columns that can be shown/hidden by expanding/collapsing. */
+        isExpandable(): boolean;
+        /** Whether the group is currently in an expanded state. */
+        isExpanded(): boolean;
+        /** The column group definition (headerName, marryChildren, etc.). */
+        getColGroupDef(): {
+            headerName?: string;
+            marryChildren?: boolean;
+        } | null;
+        /**
+         * Currently visible leaf columns in this group — useful when implementing
+         * group-level resize (resize each leaf proportionally).
+         */
+        getDisplayedLeafColumns(): Array<{
+            getColId(): string;
+            getActualWidth(): number;
+        }>;
+        addEventListener(event: string, listener: () => void): void;
+        removeEventListener(event: string, listener: () => void): void;
+    };
+    /** Call to programmatically expand or collapse the group. */
+    setExpanded(expanded: boolean): void;
+    /** Show the column group menu (Enterprise). Optional — not all group headers expose this. */
+    showColumnMenu?(source: HTMLElement): void;
+    /** Set a dynamic tooltip on the group header cell. */
+    setTooltip?(value: string, shouldDisplayTooltip?: () => boolean): void;
+}
+declare class DsTableHeaderGroupCellComponent implements OnDestroy {
+    private readonly cdr;
+    /** Group display name — set by agInit. */
+    label: string;
+    /** Whether the group has expandable/collapsible children. */
+    isExpandable: boolean;
+    /** Whether the group is currently expanded. */
+    isExpanded: boolean;
+    private agParams?;
+    private expandedListener?;
+    constructor(cdr: ChangeDetectorRef);
+    /** Called by AG Grid when this component is the headerGroupComponent. */
+    agInit(params: AgHeaderGroupParams): void;
+    /** Called by AG Grid when the column group definition changes. */
+    refresh(params: AgHeaderGroupParams): boolean;
+    ngOnDestroy(): void;
+    onExpandToggle(): void;
+    get expandAriaLabel(): string;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DsTableHeaderGroupCellComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsTableHeaderGroupCellComponent, "ds-table-header-group-cell", never, {}, {}, never, never, true, never>;
 }
 
 /**
@@ -2390,17 +2507,46 @@ type TableCellAlign = 'left' | 'right';
 type TableCellState = 'default' | 'hover' | 'focus';
 /** Minimal interface for AG Grid cell renderer params. */
 interface AgCellRendererParams {
+    /** Raw cell value (from field or valueGetter) — before valueFormatter is applied. */
     value: unknown;
+    /**
+     * Pre-formatted string produced by the column's valueFormatter, or null/undefined
+     * when no valueFormatter is defined. Always prefer this over String(value) when
+     * displaying text so that valueFormatter is honoured.
+     */
+    valueFormatted?: string | null;
     node: {
+        /** Full row data object — useful for reading sibling fields in custom renderers. */
+        data: unknown;
+        /** Row node ID (from getRowId() or AG Grid's internal counter). */
+        id?: string;
         isSelected(): boolean;
+        /**
+         * Programmatically select or deselect this row.
+         * Used by the checkbox keyboard/click handler to toggle selection when
+         * suppressRowClickSelection is true in gridOptions.
+         */
+        setSelected?(selected: boolean, clearSelection?: boolean): void;
         addEventListener(event: string, listener: () => void): void;
         removeEventListener(event: string, listener: () => void): void;
     };
     colDef?: {
         cellRendererParams?: Partial<DsTableRowCellComponent>;
     };
+    /**
+     * Registers a DOM element as the row drag handle for this cell.
+     * Call in agInit (or after the handle element has rendered) when the column
+     * uses rowDrag: true and a custom drag handle element is needed.
+     *
+     * @param dragElement  The element to use as the drag handle.
+     * @param dragStartPixels  Pixels of movement before drag starts (default 4).
+     * @param value  Optional drag value override shown in the drag ghost.
+     * @param suppressVisibilityChange  When true, AG Grid won't auto-show/hide the
+     *   handle based on rowDrag visibility rules (rowDragManaged, etc.).
+     */
+    registerRowDragger?(dragElement: HTMLElement, dragStartPixels?: number, value?: string, suppressVisibilityChange?: boolean): void;
 }
-declare class DsTableRowCellComponent implements OnDestroy {
+declare class DsTableRowCellComponent implements OnDestroy, AfterViewChecked {
     private cdr;
     /** Cell value text. Overridden by agInit params.value. */
     value: string | null;
@@ -2431,21 +2577,303 @@ declare class DsTableRowCellComponent implements OnDestroy {
     get isHovered(): boolean;
     get isFocused(): boolean;
     get isSelected(): boolean;
+    /** Template ref for the gripper button — used to register the AG Grid row dragger. */
+    gripperEl?: ElementRef<HTMLElement>;
     private agParams?;
     private rowSelectedListener?;
+    /** Prevents re-registration on every change detection cycle once registered. */
+    private gripperRegistered;
     constructor(cdr: ChangeDetectorRef);
     /** Called by AG Grid when this component is the cellRenderer. */
     agInit(params: AgCellRendererParams): void;
     /** Called by AG Grid when the cell value changes. */
     refresh(params: AgCellRendererParams): boolean;
     onContextMenu(event: MouseEvent): void;
+    /**
+     * Registers the gripper element as the AG Grid row drag handle once it
+     * appears in the DOM. Runs after each change detection cycle but the
+     * `gripperRegistered` flag ensures it only registers once.
+     *
+     * We cannot register in agInit directly because agInit runs before the
+     * template has rendered the *ngIf="gripper" button — so the ElementRef
+     * is not yet available at that point.
+     */
+    ngAfterViewChecked(): void;
     ngOnDestroy(): void;
     private applyParams;
+    /**
+     * Toggle row selection when the checkbox is activated via click or keyboard.
+     * Calls node.setSelected() so AG Grid's selection state stays in sync — this
+     * correctly handles suppressRowClickSelection: true in gridOptions, where
+     * clicking the row itself does not select it and the checkbox is the only trigger.
+     */
+    onCheckboxClick(): void;
     get checkboxIcon(): string;
     get checkboxClass(): string;
     get displayValue(): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsTableRowCellComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<DsTableRowCellComponent, "ds-table-row-cell", never, { "value": { "alias": "value"; "required": false; }; "align": { "alias": "align"; "required": false; }; "cellData": { "alias": "cellData"; "required": false; }; "gripper": { "alias": "gripper"; "required": false; }; "checkbox": { "alias": "checkbox"; "required": false; }; "checked": { "alias": "checked"; "required": false; }; "indeterminate": { "alias": "indeterminate"; "required": false; }; "tier1Indent": { "alias": "tier1Indent"; "required": false; }; "tier2Indent": { "alias": "tier2Indent"; "required": false; }; "state": { "alias": "state"; "required": false; }; }, { "rowContextMenu": "rowContextMenu"; }, never, never, true, never>;
+}
+
+/**
+ * Onflo Design System — Table Column Definition Utilities
+ *
+ * Pre-built defaultColDef and columnTypes for AG Grid + Onflo Design System.
+ *
+ * Quick start in your component:
+ *
+ *   import {
+ *     DS_TABLE_DEFAULT_COL_DEF,
+ *     DS_TABLE_COLUMN_TYPES,
+ *   } from '@onflo/design-system';
+ *
+ *   gridOptions: GridOptions = {
+ *     defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
+ *     columnTypes: DS_TABLE_COLUMN_TYPES,
+ *     columnDefs: [
+ *       { field: 'name',   headerName: 'Name',   flex: 1, minWidth: 120 },
+ *       { field: 'amount', headerName: 'Amount',  type: 'dsNumeric', aggFunc: 'sum' },
+ *       { field: 'dept',   headerName: 'Dept',    type: 'dsGroupable' },
+ *       { field: 'sel',    headerName: '',        type: 'dsCheckbox' },
+ *     ],
+ *   };
+ */
+
+/**
+ * Default column group definition — applies DsTableHeaderGroupCellComponent to
+ * every column group automatically. Set as defaultColGroupDef in gridOptions.
+ *
+ * Usage:
+ *   gridOptions = {
+ *     defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
+ *     defaultColGroupDef: DS_TABLE_DEFAULT_COL_GROUP_DEF,
+ *   }
+ */
+declare const DS_TABLE_DEFAULT_COL_GROUP_DEF: {
+    headerGroupComponent: typeof DsTableHeaderGroupCellComponent;
+};
+/**
+ * Default column definition — applies Onflo header and cell renderers to every
+ * column automatically. Override any property on individual colDefs as needed.
+ *
+ * Sets:
+ *   - headerComponent → DsTableHeaderCellComponent
+ *   - cellRenderer → DsTableRowCellComponent
+ *   - sortable: true
+ *   - resizable: true
+ *   - minWidth: 80
+ *
+ * Does NOT set filter — add that yourself in defaultColDef or per-column via columnTypes.
+ *
+ * Usage:
+ *   gridOptions = { defaultColDef: DS_TABLE_DEFAULT_COL_DEF }
+ */
+declare const DS_TABLE_DEFAULT_COL_DEF: {
+    headerComponent: typeof DsTableHeaderCellComponent;
+    cellRenderer: typeof DsTableRowCellComponent;
+    sortable: boolean;
+    resizable: boolean;
+    minWidth: number;
+};
+/**
+ * Column type definitions for common Onflo table patterns.
+ * Register via columnTypes in gridOptions; apply per-column via type: 'dsNumeric' etc.
+ * Multiple types can be combined: type: ['dsGroupable', 'dsNumeric'].
+ *
+ * Usage:
+ *   gridOptions = { columnTypes: DS_TABLE_COLUMN_TYPES }
+ *
+ * Types:
+ *   dsRightAligned — right-aligns both header label and cell text (no filter override)
+ *   dsNumeric      — right-aligned + agNumberColumnFilter; use with aggFunc for aggregation
+ *   dsGroupable    — sets enableRowGroup: true so the column appears in the row groups picker
+ *   dsAggregatable — sets enableValue: true so the column appears in the values picker
+ *   dsDate         — agDateColumnFilter with ISO-string comparator
+ *   dsCheckbox     — fixed 56px checkbox-only column (no label, no resize, no sort/filter)
+ *                    Pair with rowSelection + onRowSelected in gridOptions for actual selection.
+ *   dsPinned       — pinned to the right, not movable or resizable; for action columns
+ */
+declare const DS_TABLE_COLUMN_TYPES: Record<string, object>;
+
+/**
+ * Onflo Design System — Table Group Expansion Store
+ *
+ * Persists AG Grid row group expansion state to localStorage so the user's
+ * expanded/collapsed choices survive page navigations and browser refreshes.
+ *
+ * Usage (in your AG Grid host component):
+ *
+ *   import { DsTableGroupExpansionStore } from '@onflo/design-system';
+ *
+ *   private expansionStore = new DsTableGroupExpansionStore('my-table-groups');
+ *
+ *   gridOptions: GridOptions = {
+ *     isGroupOpenByDefault: (params) =>
+ *       this.expansionStore.isGroupOpenByDefault(params),
+ *     onRowGroupOpened: (event) =>
+ *       this.expansionStore.onRowGroupOpened(event),
+ *   };
+ *
+ * The storageKey should be unique per grid/page so multiple grids on different
+ * pages don't share expansion state.
+ *
+ * Groups default to collapsed. Only explicitly opened groups are stored.
+ * Removing a group column clears its stored key automatically on next open/close
+ * because the key is derived from the full ancestor path.
+ */
+/** Minimal row node surface needed for building a stable storage key. */
+interface DsGroupNode {
+    /** The field (column) being grouped on at this level. */
+    field: string | null;
+    /** The grouped value at this level. */
+    key: string | null;
+    /** Parent node — used to build the full ancestor path key. */
+    parent?: DsGroupNode | null;
+}
+declare class DsTableGroupExpansionStore {
+    private readonly _storageKey;
+    constructor(storageKey: string);
+    /**
+     * Pass as `isGroupOpenByDefault` in AG Grid gridOptions.
+     * Returns true for any group the user previously expanded.
+     */
+    isGroupOpenByDefault(params: {
+        rowNode: DsGroupNode;
+    }): boolean;
+    /**
+     * Pass as `onRowGroupOpened` in AG Grid gridOptions.
+     * Saves or clears the expanded state for the toggled group.
+     */
+    onRowGroupOpened(event: {
+        node: DsGroupNode & {
+            expanded: boolean;
+        };
+    }): void;
+    /** Removes all stored expansion state for this grid instance. */
+    clear(): void;
+    /**
+     * Derives a stable key from the full ancestor path of the group node.
+     * Example: "country:USA→department:Engineering"
+     * Using → (U+2192) as separator to avoid collisions with common value chars.
+     */
+    private _nodeKey;
+    private _read;
+}
+
+/**
+ * Onflo Design System — Table Group Row Cell
+ *
+ * AG Grid custom renderer for full-width group rows.
+ * Set as `groupRowRenderer` in gridOptions when using groupDisplayType: 'groupRows'.
+ *
+ * AG Grid usage (requires AG Grid Enterprise):
+ *   gridOptions = {
+ *     groupDisplayType: 'groupRows',      // Enterprise feature
+ *     groupRowRenderer: DsTableGroupRowCellComponent,
+ *   };
+ *
+ * Column definitions must include enableRowGroup: true for columns that consumers
+ * can add to a row group (via ds-column-panel or ds-table-row-groups-bar):
+ *   columnDefs = [
+ *     { field: 'department', enableRowGroup: true },
+ *   ];
+ *
+ * Features:
+ *   - 4 nesting levels with 24px indent per level
+ *   - Animated chevron expand/collapse toggle
+ *   - "FieldName: Value" label with child row count
+ *   - Aggregated column values shown on the right (requires aggFunc on colDefs)
+ *
+ * Expansion state persistence (across page navigations):
+ *   import { DsTableGroupExpansionStore } from '@onflo/design-system';
+ *   const store = new DsTableGroupExpansionStore('my-grid-groups');
+ *   gridOptions = {
+ *     ...,
+ *     isGroupOpenByDefault: (params) => store.isGroupOpenByDefault(params),
+ *     onRowGroupOpened:     (event)  => store.onRowGroupOpened(event),
+ *   };
+ *
+ * Figma: primitive/table-group-row-cell
+ * ADA: expand/collapse toggle button has aria-expanded and aria-label;
+ *      aggregate region is aria-hidden (decorative — announced via status bar).
+ * No Angular Material base — custom component.
+ */
+
+/** Minimal AG Grid params surface for a group row cell renderer. */
+interface AgGroupRowCellParams {
+    node: {
+        /** The grouped value at this level (e.g. "Engineering"). */
+        key: string | null;
+        /** The field (column) being grouped (e.g. "department"). */
+        field: string | null;
+        /** Nesting depth — 0 = outermost group. */
+        level: number;
+        /** Whether this group is currently expanded. */
+        expanded: boolean;
+        /** Total count of leaf rows under this group node (or null). */
+        allChildrenCount: number | null;
+        /** Aggregated values keyed by field — populated when aggFunc is set on colDefs. */
+        aggData: Record<string, unknown> | null;
+        /** Expand or collapse this group node. */
+        setExpanded(expanded: boolean): void;
+        addEventListener(event: string, cb: () => void): void;
+        removeEventListener(event: string, cb: () => void): void;
+    };
+    api: {
+        /** Look up a column to resolve its display header name. */
+        getColumn(key: string): {
+            getColDef(): {
+                headerName?: string;
+            };
+        } | null;
+    };
+    /**
+     * When true, hides the "(N)" child count badge next to the group value.
+     * Useful when row counts are shown in the aggregates region or via the status bar.
+     * Default: false (count shown).
+     */
+    suppressCount?: boolean;
+    /**
+     * When true, disables expand/collapse on double-click on the row.
+     * Default: false (double-click expands/collapses).
+     */
+    suppressDoubleClickExpand?: boolean;
+    /**
+     * When true, disables expand/collapse on Enter key press.
+     * Default: false (Enter expands/collapses).
+     */
+    suppressEnterExpand?: boolean;
+}
+/** A single aggregated stat shown on the right of the group row. */
+interface DsGroupAggStat {
+    label: string;
+    value: string;
+}
+declare class DsTableGroupRowCellComponent implements OnDestroy {
+    private readonly cdr;
+    value: string;
+    fieldLabel: string;
+    /** Clamped to 0–3 (4 levels). */
+    level: number;
+    expanded: boolean;
+    childCount: number | null;
+    aggregates: DsGroupAggStat[];
+    /** When true, hides the "(N)" child count badge. Set via groupRowRendererParams. */
+    suppressCount: boolean;
+    private _params?;
+    private readonly _expandedListener;
+    constructor(cdr: ChangeDetectorRef);
+    agInit(params: AgGroupRowCellParams): void;
+    refresh(params: AgGroupRowCellParams): boolean;
+    ngOnDestroy(): void;
+    /** Left indent width in px — 24px per nesting level. */
+    get indentWidth(): number;
+    onToggle(event: Event): void;
+    private _apply;
+    private _resolveFieldLabel;
+    private _resolveAggregates;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DsTableGroupRowCellComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsTableGroupRowCellComponent, "ds-table-group-row-cell", never, {}, {}, never, never, true, never>;
 }
 
 /**
@@ -2532,6 +2960,8 @@ declare class DsTableStatusBarComponent implements OnDestroy {
     private readonly _modelUpdated;
     constructor(cdr: ChangeDetectorRef);
     agInit(params: AgStatusPanelParams): void;
+    /** Called by AG Grid when the status bar panel should refresh its data. */
+    refresh(): void;
     ngOnDestroy(): void;
     private _syncRowCount;
     hasAggregates(): boolean;
@@ -2589,6 +3019,7 @@ interface AgRowGroupsApi {
             headerName?: string;
         };
     }[];
+    addRowGroupColumn(key: string): void;
     removeRowGroupColumn(key: string): void;
     addEventListener(event: string, callback: () => void): void;
     removeEventListener(event: string, callback: () => void): void;
@@ -2939,5 +3370,5 @@ declare class TopNavComponent implements AfterViewInit, OnDestroy {
     static ɵcmp: i0.ɵɵComponentDeclaration<TopNavComponent, "ds-top-nav", never, { "tabs": { "alias": "tabs"; "required": false; }; }, { "tabActivate": "tabActivate"; "tabClose": "tabClose"; "tabCloseAll": "tabCloseAll"; }, never, ["[top-nav-actions]"], true, never>;
 }
 
-export { AgentStatusComponent, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent };
-export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };
+export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, onfloTheme };
+export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };

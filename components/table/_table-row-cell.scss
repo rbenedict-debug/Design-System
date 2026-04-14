@@ -56,7 +56,7 @@ $tier2-indent: 64px;
     gap: var(--spacing-sm);
     flex: 1 0 0;
     min-width: 0;
-    height: 100%;
+    align-self: stretch;   // fill cell height so icon buttons are always centered
 
     &--right {
       justify-content: flex-end;
@@ -109,11 +109,7 @@ $tier2-indent: 64px;
     &:hover::after  { opacity: 1; }
     &:active::after { background: var(--overlay-pressed); opacity: 1; }
 
-    .ds-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
+    // Size applied via ds-icon--sm class in the template
   }
 
   // ── Checkbox slot ─────────────────────────────────────────────

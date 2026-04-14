@@ -108,6 +108,10 @@ export interface AgHeaderParams {
      * Used alongside getSelectedNodes to determine indeterminate state.
      */
     getDisplayedRowCount?(): number;
+    /** Subscribe to grid-level events (e.g. 'selectionChanged'). */
+    addEventListener(event: string, listener: () => void): void;
+    /** Unsubscribe from grid-level events. */
+    removeEventListener(event: string, listener: () => void): void;
   };
   /** Advance sort direction through the cycle: none → asc → desc → none. */
   progressSort(multiSort?: boolean): void;
@@ -317,6 +321,12 @@ export class DsTableHeaderCellComponent implements OnDestroy {
     if (this.sortDirection === 'asc')  return 'ds-table-header-cell__sort-icon--asc';
     if (this.sortDirection === 'desc') return 'ds-table-header-cell__sort-icon--desc';
     return 'ds-table-header-cell__sort-icon--none';
+  }
+
+  get sortAriaLabel(): string {
+    if (this.sortDirection === 'asc')  return 'Sorted ascending — click to sort descending';
+    if (this.sortDirection === 'desc') return 'Sorted descending — click to clear sort';
+    return 'Sort column';
   }
 
   get ariaSortValue(): string | null {

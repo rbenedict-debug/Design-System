@@ -20,6 +20,7 @@
     gap: var(--spacing-sm);
     flex: 1 0 0;
     min-width: 0;
+    align-self: stretch;   // fill cell height so the toggle is always centered
     padding: 0 var(--spacing-xs) 0 var(--spacing-sm);
   }
 
@@ -37,18 +38,17 @@
     flex-shrink: 1;
   }
 
-  // ── Expand chevron ─────────────────────────────────────────────────────────
-  // Rotates 90° when the group is expanded. Uses the same motion token as
-  // ds-table-group-row-cell for visual consistency.
+  // ── Expand chevron — arrow_drop_down; -90° = collapsed (pointing right), 0° = expanded (pointing down) ──
+  // Do not override display — ds-icon's inline-flex + align-items/justify-content centers the glyph.
   &__chevron {
     color: var(--color-icon-default);
-    display: inline-block;
     transition: transform var(--motion-duration-short) ease,
                 color var(--motion-duration-short) ease;
+    transform: rotate(-90deg);
   }
 
   &--expanded &__chevron {
-    transform: rotate(90deg);
+    transform: rotate(0deg);
     color: var(--color-icon-brand);
   }
 

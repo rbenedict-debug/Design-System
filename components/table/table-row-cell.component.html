@@ -20,7 +20,7 @@
       class="ds-table-row-cell__gripper"
       aria-label="Drag to reorder row"
     >
-      <span class="ds-icon">drag_indicator</span>
+      <span class="ds-icon ds-icon--sm">drag_indicator</span>
     </button>
 
     <!-- Row selection checkbox -->
@@ -28,6 +28,12 @@
       *ngIf="checkbox"
       class="ds-table-row-cell__checkbox"
       [class]="checkboxClass"
+      role="checkbox"
+      [attr.aria-checked]="indeterminate ? 'mixed' : checked"
+      tabindex="0"
+      (click)="onCheckboxClick()"
+      (keydown.enter)="onCheckboxClick()"
+      (keydown.space)="$event.preventDefault(); onCheckboxClick()"
     >
       <span
         class="ds-icon"

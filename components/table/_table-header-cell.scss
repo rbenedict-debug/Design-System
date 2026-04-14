@@ -73,7 +73,7 @@ $checkbox-only-width: 56px;
     gap: var(--spacing-sm);
     flex: 1 0 0;
     min-width: 0;
-    height: 100%;
+    align-self: stretch;   // fill cell height so icon buttons are always centered
 
     &--right {
       justify-content: flex-end;
@@ -127,12 +127,14 @@ $checkbox-only-width: 56px;
     align-items: center;
     justify-content: flex-end;
     min-width: $resize-handle-width;
-    height: 100%;
+    align-self: stretch;   // fill cell height so icon buttons are always centered
     flex-shrink: 0;
   }
 
   // ── Sort icon states (projected into ds-icon-button) ──────────
-  // Sort icon — only rendered when actively sorted (asc or desc)
+  // The sort button is always rendered for sortable columns.
+  // --asc / --desc are always visible; --none is hidden until the header is
+  // hovered or keyboard-focused so it doesn't clutter unsorted columns.
   &__sort-icon--asc {
     color: var(--color-icon-brand);
   }
@@ -141,6 +143,18 @@ $checkbox-only-width: 56px;
     color: var(--color-icon-brand);
     transform: rotate(180deg);
     display: inline-block;
+  }
+
+  &__sort-icon--none {
+    color: var(--color-icon-subtle);
+    opacity: 0;
+    transition: opacity var(--motion-duration-short) ease;
+  }
+
+  // Reveal the unsorted sort affordance on header hover or keyboard focus-within
+  &:hover &__sort-icon--none,
+  &:focus-within &__sort-icon--none {
+    opacity: 1;
   }
 
   // ── Menu icon — default icon colour (turns brand on hover via ghost button) ─

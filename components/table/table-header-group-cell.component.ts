@@ -116,6 +116,7 @@ export class DsTableHeaderGroupCellComponent implements OnDestroy {
     this.agParams = params;
     this.label = params.displayName;
     this.isExpandable = params.columnGroup.isExpandable();
+    this.isExpanded   = params.columnGroup.isExpanded();
     this.cdr.markForCheck();
     return true;
   }

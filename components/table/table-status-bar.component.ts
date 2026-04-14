@@ -112,6 +112,11 @@ export class DsTableStatusBarComponent implements OnDestroy {
     this._syncRowCount();
   }
 
+  /** Called by AG Grid when the status bar panel should refresh its data. */
+  refresh(): void {
+    this._syncRowCount();
+  }
+
   ngOnDestroy(): void {
     this._api?.removeEventListener('modelUpdated', this._modelUpdated);
     this._api?.removeEventListener('filterChanged', this._modelUpdated);

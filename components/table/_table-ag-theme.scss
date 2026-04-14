@@ -1,0 +1,97 @@
+// Onflo Design System — AG Grid Theme CSS Variable Layer
+//
+// Maps Onflo design tokens to AG Grid's CSS custom property system.
+// Applied to .ag-root-wrapper — the outermost container injected by AG Grid.
+//
+// These properties override the defaults set by onfloTheme.withParams() in
+// table-ag-theme.ts. Colors and typography live here (not in withParams) because
+// they reference CSS custom properties (var(--color-*)) which can only be resolved
+// at runtime — the programmatic API only accepts static values.
+//
+// Scope: any AG Grid element that onfloTheme doesn't reach via custom renderers.
+// That includes filter menus, no-rows overlay, loading overlay, sidebar container,
+// set filter checkboxes, and any other AG Grid-native UI.
+//
+// Our custom renderers (ds-table-header-cell, ds-table-row-cell, etc.) manage
+// their own internal styles directly and are not affected by these overrides.
+
+.ag-root-wrapper {
+
+  // ── Core colours ──────────────────────────────────────────────────────────
+  --ag-background-color: var(--color-surface-default);
+  --ag-foreground-color: var(--color-text-primary);
+  --ag-accent-color: var(--color-surface-brand-bold);
+  --ag-border-color: var(--color-border-primary);
+  --ag-secondary-foreground-color: var(--color-text-secondary);
+  --ag-disabled-foreground-color: var(--color-text-disabled);
+
+  // ── Header ────────────────────────────────────────────────────────────────
+  // Background is set here as a fallback for header chrome not covered by
+  // ds-table-header-cell (e.g. overscroll, group header spacers).
+  --ag-header-background-color: var(--color-surface-subtle);
+  --ag-header-foreground-color: var(--color-text-primary);
+
+  // Hover and moving backgrounds: transparent — ds-table-header-cell owns
+  // these states via its --dragging modifier and icon-button hover states.
+  --ag-header-cell-hover-background-color: transparent;
+  --ag-header-cell-moving-background-color: transparent;
+
+  // ── Row hover and selection ───────────────────────────────────────────────
+  // Set to transparent so AG Grid does not apply overlay backgrounds to .ag-row.
+  // _table-row-cell.scss handles hover and selection via .ag-row-hover and
+  // .ag-row-selected class hooks directly on ds-table-row-cell — applying both
+  // would double the semi-transparent overlay and produce the wrong colour.
+  --ag-row-hover-color: transparent;
+  --ag-selected-row-background-color: transparent;
+
+  // ── Range selection (cell range, AG Grid Enterprise) ─────────────────────
+  --ag-range-selection-border-color: var(--color-border-brand);
+  --ag-range-selection-background-color: var(--overlay-focused);
+  --ag-range-selection-highlight-color: var(--overlay-pressed);
+
+  // ── Inputs (filter text fields, set filter search) ────────────────────────
+  --ag-input-border-color: var(--color-border-input);
+  --ag-input-focus-border-color: var(--color-border-input-active);
+  --ag-input-placeholder-text-color: var(--color-text-placeholder);
+
+  // ── Checkboxes (set filter, native column panel checkboxes) ───────────────
+  // These do not affect ds-table-header-cell or ds-table-row-cell checkboxes —
+  // those are Material icons managed by our custom renderers. These target
+  // AG Grid's own checkbox widget used in filter panels and column visibility.
+  --ag-checkbox-background-color: transparent;
+  --ag-checkbox-unchecked-border-color: var(--color-border-input);
+  --ag-checkbox-checked-background-color: var(--color-surface-brand-bold);
+  --ag-checkbox-checked-border-color: var(--color-surface-brand-bold);
+  --ag-checkbox-checked-shape-color: var(--color-text-on-brand);
+  --ag-checkbox-indeterminate-background-color: var(--color-surface-brand-bold);
+  --ag-checkbox-indeterminate-border-color: var(--color-surface-brand-bold);
+
+  // ── Menus and popups (filter menu, column menu) ───────────────────────────
+  --ag-menu-background-color: var(--color-surface-overlay);
+  --ag-menu-border-color: var(--color-border-primary);
+  --ag-menu-separator-color: var(--color-border-subtle);
+  --ag-menu-text-color: var(--color-text-primary);
+
+  // Shadows — full box-shadow values using Onflo shadow colour tokens.
+  // --shadow-elevation-* tokens are the rgba colour only; we compose the
+  // full shadow value here.
+  --ag-card-shadow: 0 2px 8px var(--shadow-elevation-1);
+  --ag-popup-shadow: 0 4px 16px var(--shadow-elevation-2);
+
+  // ── Sidebar (column / filter panel container) ─────────────────────────────
+  // Panel width matches ds-column-panel's own width: 300px.
+  --ag-side-bar-panel-width: 300px;
+  --ag-side-button-bar-background-color: var(--color-surface-subtle);
+  --ag-side-button-selected-background-color: var(--color-surface-default);
+  --ag-side-button-selected-underline-color: var(--color-border-brand);
+
+  // ── Typography ────────────────────────────────────────────────────────────
+  // Proxima Nova — applies to AG Grid's native UI (filter panels, overlays,
+  // column panel native elements). Our custom renderers set their own font
+  // directly via Onflo typescale tokens.
+  --ag-font-family: var(--ref-typeface-brand), sans-serif;
+  --ag-font-size: var(--ref-typescale-body-medium-size);       // 14px
+  --ag-header-font-size: var(--ref-typescale-label-medium-size); // 14px
+  --ag-header-font-weight: var(--ref-typeface-weight-bold);       // label-medium-weight-prominent
+
+}
