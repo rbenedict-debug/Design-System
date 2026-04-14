@@ -8,8 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet" />
-  <!-- AG Grid Community — loaded for functional table sim (test) -->
-  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@35.2.1/dist/ag-grid-community.min.js"></script>
 <!-- ONFLO-TOKENS:START -->
   <style>
     /* ── Onflo Design Tokens — inlined for self-contained preview ──────────── */
@@ -662,6 +660,36 @@
     #table .demo-row {
       width: calc(100vw - var(--sidebar-width));
       margin-left: -48px;
+    }
+
+    /* AG Grid sim — zero out ag-theme-quartz cell/header padding and borders
+       that conflict with DS shim renderer styles. In production these are
+       suppressed by onfloTheme.withParams() (rowBorder:false, spacing:8, etc.).
+       The preview uses ag-theme-quartz from CDN without onfloTheme, so we
+       override them here with direct element targeting. */
+    #ag-sim-grid .ag-cell {
+      padding: 0;
+      border-right: none;
+      overflow: hidden;
+    }
+    #ag-sim-grid .ag-header-cell {
+      padding: 0;
+      border-right: none;
+      overflow: hidden;
+    }
+    #ag-sim-grid .ag-row {
+      border-bottom: none;
+    }
+    #ag-sim-grid .ag-header-row {
+      border-bottom: none;
+    }
+    /* Hide AG Grid's native resize grip — DS header shim has its own */
+    #ag-sim-grid .ag-header-cell-resize {
+      display: none;
+    }
+    /* Remove AG Grid's native floating filter row padding */
+    #ag-sim-grid .ag-floating-filter {
+      padding: 0 var(--spacing-sm);
     }
 
     /* Table keyword-search highlight */
@@ -3925,20 +3953,25 @@
 .ds-card-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: 0 var(--spacing-md);
   min-height: 56px;
   background: var(--color-surface-page);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
+  overflow: hidden;
   position: relative;
   box-sizing: border-box;
   width: 100%;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
+.ds-card-item--no-leading {
+  padding-left: var(--spacing-lg);
+}
+.ds-card-item--no-trailing {
+  padding-right: var(--spacing-lg);
+}
 .ds-card-item--elevated {
   border: 1px solid transparent;
-  box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+  box-shadow: 0 0 2px 0 var(--shadow-elevation-2), 0 2px 6px 2px var(--shadow-elevation-2);
 }
 .ds-card-item--interactive {
   cursor: pointer;
@@ -3952,8 +3985,19 @@
   pointer-events: none;
   transition: background 0.12s ease;
 }
+.ds-card-item--interactive:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: 0 0 2px 0 var(--shadow-elevation-2), 0 2px 6px 2px var(--shadow-elevation-2);
+}
 .ds-card-item--interactive:hover::after {
   background: var(--overlay-hovered);
+}
+.ds-card-item--interactive:active {
+  border-color: var(--color-border-active);
+  box-shadow: 0 0 2px 0 var(--shadow-elevation-2), 0 2px 6px 2px var(--shadow-elevation-2);
+}
+.ds-card-item--interactive:active::after {
+  background: var(--overlay-pressed);
 }
 .ds-card-item--interactive:focus-visible {
   outline: none;
@@ -3962,8 +4006,11 @@
 .ds-card-item--interactive:focus-visible::after {
   background: var(--overlay-focused);
 }
-.ds-card-item--interactive:active::after {
-  background: var(--overlay-pressed);
+.ds-card-item--elevated.ds-card-item--interactive:hover {
+  border-color: transparent;
+}
+.ds-card-item--elevated.ds-card-item--interactive:active {
+  border-color: transparent;
 }
 .ds-card-item.is-disabled {
   pointer-events: none;
@@ -3983,6 +4030,7 @@
 }
 .ds-card-item__leading {
   flex-shrink: 0;
+  align-self: stretch;
   display: flex;
   align-items: center;
   color: var(--color-icon-default);
@@ -3995,13 +4043,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 0 var(--spacing-sm);
   position: relative;
   z-index: 1;
 }
 .ds-card-item__primary {
   font-family: var(--ref-typeface-brand);
   font-size: var(--ref-typescale-body-medium-size);
-  font-weight: var(--ref-typeface-weight-regular);
+  font-weight: var(--ref-typeface-weight-bold);
   line-height: var(--ref-typescale-body-medium-line-height);
   color: var(--color-text-primary);
   white-space: nowrap;
@@ -4017,10 +4066,11 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 .ds-card-item__trailing {
   flex-shrink: 0;
+  align-self: stretch;
   display: flex;
   align-items: center;
   color: var(--color-icon-default);
@@ -4031,6 +4081,7 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  padding-right: var(--spacing-sm);
   position: relative;
   z-index: 1;
 }
@@ -8829,6 +8880,10 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 }
 </style>
 
+  <!-- AG Grid Community — loaded for the AG Grid live simulation section -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.3.4/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.3.4/styles/ag-theme-quartz.css">
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@31.3.4/dist/ag-grid-community.min.js"></script>
 </head>
 <body>
 <div class="layout">
@@ -8924,7 +8979,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
       <a class="nav-link" href="#table-toolbar" onclick="setActive(this)"><span class="nav-dot"></span>Toolbar</a>
       <a class="nav-link" href="#column-panel" onclick="setActive(this)"><span class="nav-dot"></span>Column Panel</a>
       <a class="nav-link" href="#table-context-menu" onclick="setActive(this)"><span class="nav-dot"></span>Context Menu</a>
-      <a class="nav-link" href="#table-basic-sim" onclick="setActive(this)"><span class="nav-dot"></span>★ Basic Sim (test)</a>
+      <a class="nav-link" href="#ag-grid-sim" onclick="setActive(this)"><span class="nav-dot"></span>AG Grid Sim</a>
     </nav>
 
     <nav class="sidebar-nav" id="nav-examples" style="display:none">
@@ -12714,53 +12769,30 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <h2 class="section-title">Card Item</h2>
           <span class="section-source">components/card/_card.scss</span>
         </div>
-        <p class="section-desc">Compact 56px horizontal card. Use <code>ds-card-item--interactive</code> to make the entire card hoverable and clickable. Optional leading icon, trailing static icon, and a <code>__action</code> slot for a context menu button (clicks inside <code>__action</code> do not bubble to the card click). Angular component: <code>&lt;ds-card-item&gt;</code> with <code>[primary]</code>, <code>[secondary]</code>, <code>[interactive]</code>, <code>[variant]</code>, <code>[disabled]</code> inputs, <code>(cardClick)</code> output, and content slots <code>[leading]</code>, <code>[trailing]</code>, <code>[card-action]</code>.</p>
+        <p class="section-desc">Compact horizontal card with flexible leading and trailing slots. Leading/trailing content is flush to the card edge — images fill edge-to-edge, icons sit flush left or right. <code>--no-leading</code> / <code>--no-trailing</code> add 16px outer padding when the slot is absent (Angular sets these automatically). Use <code>--interactive</code> for hoverable/clickable cards: outlined variant gains a hover border + elevation lift; elevated keeps its shadow and suppresses border change. Angular component: <code>&lt;ds-card-item&gt;</code> with <code>[primary]</code>, <code>[secondary]</code>, <code>[interactive]</code>, <code>[variant]</code>, <code>[disabled]</code> inputs, <code>(cardClick)</code> output, and content slots <code>[leading]</code>, <code>[trailing]</code>, <code>[card-action]</code>.</p>
 
         <div class="component-demo">
 
-          <!-- Row 1: Basic variants -->
+          <!-- Row 1: Outlined — static (default) -->
           <div class="demo-row">
-            <div class="demo-row-label">Basic</div>
-            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
-              <div class="ds-card-item">
+            <div class="demo-row-label">Outlined</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px; gap: 8px;">
+              <!-- No slots: both padding modifiers active -->
+              <div class="ds-card-item ds-card-item--no-leading ds-card-item--no-trailing">
                 <div class="ds-card-item__body">
                   <span class="ds-card-item__primary">Primary text only</span>
                 </div>
               </div>
-              <div class="ds-card-item" style="margin-top: 8px;">
+              <!-- No slots, with secondary -->
+              <div class="ds-card-item ds-card-item--no-leading ds-card-item--no-trailing">
                 <div class="ds-card-item__body">
                   <span class="ds-card-item__primary">With secondary text</span>
                   <span class="ds-card-item__secondary">Supporting detail below the label</span>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- Row 2: Interactive — full-card click -->
-          <div class="demo-row">
-            <div class="demo-row-label">Interactive</div>
-            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
-              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" onclick="alert('Card clicked')">
-                <div class="ds-card-item__body">
-                  <span class="ds-card-item__primary">Click anywhere on this card</span>
-                  <span class="ds-card-item__secondary">Hover and focus states active</span>
-                </div>
-              </div>
-              <div class="ds-card-item ds-card-item--interactive ds-card-item--elevated" tabindex="0" role="button" style="margin-top: 8px;" onclick="alert('Elevated card clicked')">
-                <div class="ds-card-item__body">
-                  <span class="ds-card-item__primary">Elevated + interactive</span>
-                  <span class="ds-card-item__secondary">Shadow elevation variant</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Row 3: Leading icon -->
-          <div class="demo-row">
-            <div class="demo-row-label">Leading icon</div>
-            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
-              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button">
-                <div class="ds-card-item__leading">
+              <!-- Leading icon, no trailing -->
+              <div class="ds-card-item ds-card-item--no-trailing">
+                <div class="ds-card-item__leading" style="padding: 0 12px;">
                   <span class="ds-icon" aria-hidden="true">support_agent</span>
                 </div>
                 <div class="ds-card-item__body">
@@ -12768,8 +12800,105 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <span class="ds-card-item__secondary">14 agents online</span>
                 </div>
               </div>
-              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" style="margin-top: 8px;">
+              <!-- Both leading + trailing icons -->
+              <div class="ds-card-item">
+                <div class="ds-card-item__leading" style="padding: 0 12px;">
+                  <span class="ds-icon" aria-hidden="true">inbox</span>
+                </div>
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Inbox</span>
+                  <span class="ds-card-item__secondary">3 unread</span>
+                </div>
+                <div class="ds-card-item__trailing" style="padding: 0 12px;">
+                  <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-accent-green);" aria-hidden="true">circle</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Elevated — static -->
+          <div class="demo-row">
+            <div class="demo-row-label">Elevated</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px; gap: 8px;">
+              <div class="ds-card-item ds-card-item--elevated ds-card-item--no-leading ds-card-item--no-trailing">
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Elevated card</span>
+                  <span class="ds-card-item__secondary">Shadow, no border</span>
+                </div>
+              </div>
+              <!-- No leading, trailing icon -->
+              <div class="ds-card-item ds-card-item--elevated ds-card-item--no-leading">
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Open analytics</span>
+                  <span class="ds-card-item__secondary">Last 30 days</span>
+                </div>
+                <div class="ds-card-item__trailing" style="padding: 0 12px;">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">chevron_right</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Image slot — flush edge-to-edge -->
+          <div class="demo-row">
+            <div class="demo-row-label">Image slot</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px; gap: 8px;">
+              <!-- Leading image flush left — no leading padding, trailing gets 16px -->
+              <div class="ds-card-item ds-card-item--no-trailing">
                 <div class="ds-card-item__leading">
+                  <div style="width: 80px; height: 80px; background: var(--color-surface-subtle); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <span class="ds-icon ds-icon--lg" style="color:var(--color-icon-subtle);" aria-hidden="true">image</span>
+                  </div>
+                </div>
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Header</span>
+                  <span class="ds-card-item__secondary">Subhead</span>
+                </div>
+              </div>
+              <!-- Both image slots flush -->
+              <div class="ds-card-item">
+                <div class="ds-card-item__leading">
+                  <div style="width: 80px; height: 80px; background: var(--color-surface-subtle); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <span class="ds-icon ds-icon--lg" style="color:var(--color-icon-subtle);" aria-hidden="true">image</span>
+                  </div>
+                </div>
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Header</span>
+                  <span class="ds-card-item__secondary">Subhead</span>
+                </div>
+                <div class="ds-card-item__trailing">
+                  <div style="width: 80px; height: 80px; background: var(--color-surface-subtle); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <span class="ds-icon ds-icon--lg" style="color:var(--color-icon-subtle);" aria-hidden="true">image</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Elevated + trailing image flush right -->
+              <div class="ds-card-item ds-card-item--elevated ds-card-item--no-leading">
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Header</span>
+                  <span class="ds-card-item__secondary">Subhead</span>
+                </div>
+                <div class="ds-card-item__trailing">
+                  <div style="width: 80px; height: 80px; background: var(--color-surface-subtle); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <span class="ds-icon ds-icon--lg" style="color:var(--color-icon-subtle);" aria-hidden="true">image</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 4: Interactive — outlined (hover/active change border + shadow) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Interactive outlined</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px; gap: 8px;">
+              <div class="ds-card-item ds-card-item--interactive ds-card-item--no-leading ds-card-item--no-trailing" tabindex="0" role="button" onclick="alert('Card clicked')">
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Hover me</span>
+                  <span class="ds-card-item__secondary">Border + shadow lift on hover</span>
+                </div>
+              </div>
+              <div class="ds-card-item ds-card-item--interactive ds-card-item--no-trailing" tabindex="0" role="button" onclick="alert('Card clicked')">
+                <div class="ds-card-item__leading" style="padding: 0 12px;">
                   <span class="ds-icon" aria-hidden="true">filter_alt</span>
                 </div>
                 <div class="ds-card-item__body">
@@ -12780,39 +12909,33 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div>
           </div>
 
-          <!-- Row 4: Trailing icon -->
+          <!-- Row 5: Interactive — elevated (no border change on hover) -->
           <div class="demo-row">
-            <div class="demo-row-label">Trailing icon</div>
-            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
-              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button">
+            <div class="demo-row-label">Interactive elevated</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px; gap: 8px;">
+              <div class="ds-card-item ds-card-item--elevated ds-card-item--interactive ds-card-item--no-leading ds-card-item--no-trailing" tabindex="0" role="button" onclick="alert('Card clicked')">
+                <div class="ds-card-item__body">
+                  <span class="ds-card-item__primary">Elevated + interactive</span>
+                  <span class="ds-card-item__secondary">Overlay only — border stays transparent</span>
+                </div>
+              </div>
+              <div class="ds-card-item ds-card-item--elevated ds-card-item--interactive ds-card-item--no-leading" tabindex="0" role="button" onclick="alert('Card clicked')">
                 <div class="ds-card-item__body">
                   <span class="ds-card-item__primary">Open analytics page</span>
                 </div>
-                <div class="ds-card-item__trailing">
+                <div class="ds-card-item__trailing" style="padding: 0 12px;">
                   <span class="ds-icon ds-icon--sm" aria-hidden="true">chevron_right</span>
-                </div>
-              </div>
-              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" style="margin-top: 8px;">
-                <div class="ds-card-item__leading">
-                  <span class="ds-icon" aria-hidden="true">inbox</span>
-                </div>
-                <div class="ds-card-item__body">
-                  <span class="ds-card-item__primary">Inbox</span>
-                  <span class="ds-card-item__secondary">3 unread</span>
-                </div>
-                <div class="ds-card-item__trailing">
-                  <span class="ds-icon ds-icon--sm" style="color: var(--color-icon-accent-green);" aria-hidden="true">circle</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Row 5: Action button (more menu) — click doesn't bubble to card -->
+          <!-- Row 6: Action button — click doesn't bubble to card -->
           <div class="demo-row">
             <div class="demo-row-label">Action button</div>
-            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px; gap: 8px;">
               <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" onclick="alert('Card body clicked')">
-                <div class="ds-card-item__leading">
+                <div class="ds-card-item__leading" style="padding: 0 12px;">
                   <span class="ds-icon" aria-hidden="true">bookmark</span>
                 </div>
                 <div class="ds-card-item__body">
@@ -12825,14 +12948,14 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   </button>
                 </div>
               </div>
-              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" style="margin-top: 8px;" onclick="alert('Card body clicked')">
-                <div class="ds-card-item__leading">
+              <div class="ds-card-item ds-card-item--interactive" tabindex="0" role="button" onclick="alert('Card body clicked')">
+                <div class="ds-card-item__leading" style="padding: 0 12px;">
                   <span class="ds-icon" aria-hidden="true">star</span>
                 </div>
                 <div class="ds-card-item__body">
                   <span class="ds-card-item__primary">Favourites queue</span>
                 </div>
-                <div class="ds-card-item__trailing">
+                <div class="ds-card-item__trailing" style="padding: 0 12px;">
                   <span class="ds-icon ds-icon--sm" aria-hidden="true">chevron_right</span>
                 </div>
                 <div class="ds-card-item__action" onclick="event.stopPropagation()">
@@ -12844,19 +12967,19 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div>
           </div>
 
-          <!-- Row 6: Disabled -->
+          <!-- Row 7: Disabled -->
           <div class="demo-row">
             <div class="demo-row-label">Disabled</div>
             <div class="demo-row-items" style="flex-direction: column; align-items: stretch; max-width: 360px;">
               <div class="ds-card-item ds-card-item--interactive is-disabled" aria-disabled="true">
-                <div class="ds-card-item__leading">
+                <div class="ds-card-item__leading" style="padding: 0 12px;">
                   <span class="ds-icon" aria-hidden="true">lock</span>
                 </div>
                 <div class="ds-card-item__body">
                   <span class="ds-card-item__primary">Restricted view</span>
                   <span class="ds-card-item__secondary">You don't have access</span>
                 </div>
-                <div class="ds-card-item__trailing">
+                <div class="ds-card-item__trailing" style="padding: 0 12px;">
                   <span class="ds-icon ds-icon--sm" aria-hidden="true">chevron_right</span>
                 </div>
               </div>
@@ -15717,689 +15840,1017 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           </div>
         </div>
       </section>
-      <!-- ══════════════════════════════════════════════════════════════════════ -->
-      <!-- BASIC TABLE — FUNCTIONAL TEST (remove after review)                  -->
-      <!-- ══════════════════════════════════════════════════════════════════════ -->
-      <section class="section" id="table-basic-sim">
-        <style>
-          /* AG Grid theme token overrides — scoped to this grid instance */
-          #bsim-grid .ag-root-wrapper {
-            --ag-background-color: var(--color-surface-default);
-            --ag-foreground-color: var(--color-text-primary);
-            --ag-accent-color: var(--color-surface-brand-bold);
-            --ag-border-color: var(--color-border-primary);
-            --ag-secondary-foreground-color: var(--color-text-secondary);
-            --ag-disabled-foreground-color: var(--color-text-disabled);
-            --ag-header-background-color: var(--color-surface-subtle);
-            --ag-header-foreground-color: var(--color-text-primary);
-            --ag-header-cell-hover-background-color: transparent;
-            --ag-header-cell-moving-background-color: transparent;
-            --ag-row-hover-color: transparent;
-            --ag-selected-row-background-color: transparent;
-            --ag-input-border-color: var(--color-border-input);
-            --ag-input-focus-border-color: var(--color-border-input-active);
-            --ag-menu-background-color: var(--color-surface-overlay);
-            --ag-menu-border-color: var(--color-border-primary);
-            --ag-menu-text-color: var(--color-text-primary);
-            --ag-card-shadow: 0 2px 8px var(--shadow-elevation-1);
-            --ag-popup-shadow: 0 4px 16px var(--shadow-elevation-2);
-            --ag-font-family: var(--ref-typeface-brand), sans-serif;
-            --ag-font-size: var(--ref-typescale-body-medium-size);
-            --ag-header-font-size: var(--ref-typescale-label-medium-size);
-            --ag-header-font-weight: var(--ref-typeface-weight-bold);
-            /* Custom renderers own all internal padding */
-            --ag-cell-horizontal-padding: 0;
-            /* Toolbar/header separator */
-            border-top: 1px solid var(--color-border-subtle);
-          }
-          /* Cells fill AG Grid's row height for density switching */
-          #bsim-grid .ag-cell .ds-table-row-cell,
-          #bsim-grid .ag-header-cell .ds-table-header-cell { height: 100%; }
-          /* Row borders: --color-border-secondary (#CACACA) is visible on #F6F6F6 bg;
-             --color-border-subtle (#E9E9E9) is nearly invisible on this background */
-          #bsim-grid .ds-table-row-cell { border-bottom-color: var(--color-border-secondary); }
-          /* Grid + column panel sit in a flex row */
-          #bsim-body { display: flex; overflow: hidden; }
-          #bsim-grid { flex: 1; min-width: 0; }
-          /* Row/header context menu overlays — position:fixed, not clipped by overflow:hidden */
-          #bsim-ctx, #bsim-hctx { position: fixed; z-index: 9999; display: none; min-width: 180px; }
-          #bsim-ctx.is-open, #bsim-hctx.is-open { display: block; }
-        </style>
 
-        <h2 class="section-title">Basic Table — Functional (test)</h2>
+      <!-- ═══════════════════════════════════════════════════════════════════════ -->
+      <!--  AG GRID LIVE SIMULATION                                                -->
+      <!-- ═══════════════════════════════════════════════════════════════════════ -->
+      <section class="section" id="ag-grid-sim">
+        <div class="section-header">
+          <h2 class="section-title">AG Grid — Live Simulation</h2>
+          <span class="section-source">ag-grid-community v31 · all community features enabled</span>
+        </div>
         <p class="section-desc">
-          Real AG Grid 35 instance using Onflo vanilla-JS renderers. Sorting, column resize,
-          row selection (checkboxes), quick-filter search, column panel, and right-click context
-          menu are all live. No pre-selected rows, no pinned columns, no status bar — the default
-          baseline for any new table.
+          Fully interactive AG Grid instance using vanilla JS shim renderers that reproduce
+          the exact DOM structure of <code>DsTableHeaderCellComponent</code> and
+          <code>DsTableRowCellComponent</code>, so DS CSS applies correctly without Angular.
+          Demonstrates: multi-column sort, text / number / date / set filters, column resize,
+          drag-to-reorder columns, column pinning, row checkbox selection, quick search,
+          CSV export, column visibility panel, and right-click context menus.
+          In production wire up via <code>DS_TABLE_DEFAULT_COL_DEF</code> and <code>onfloTheme</code> —
+          see <code>.claude/specs/specs-table.md</code> for the canonical Angular integration pattern.
         </p>
 
-        <div class="component-demo">
-          <div style="width: calc(100vw - var(--sidebar-width)); margin-left: -48px; padding: 0 48px;">
-            <div id="bsim-wrapper" style="border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); overflow: hidden;">
+        <div id="ag-sim-container" style="display:flex; flex-direction:column; border:1px solid var(--color-border-subtle); border-radius:var(--radius-sm); overflow:hidden; user-select:none;">
 
-              <!-- ── Toolbar ─────────────────────────────────────────────────────── -->
-              <div class="ds-table-toolbar">
-                <div class="ds-table-toolbar__left">
-                  <button class="ds-button ds-button--filled ds-button--leading-icon" type="button">
-                    <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">add</span></span>
-                    Add Contact
-                  </button>
-                </div>
-                <div class="ds-table-toolbar__right">
-                  <div class="ds-input ds-search" role="search">
-                    <div class="ds-input__field">
-                      <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
-                      <input class="ds-input__control" id="bsim-search" type="search"
-                             placeholder="Search contacts…" aria-label="Search contacts" />
-                    </div>
-                  </div>
-                  <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined"
-                          type="button" aria-pressed="false" aria-label="Toggle filters"
-                          onclick="togglePressed(this)">
-                    <span class="ds-icon ds-icon--filled">filter_alt</span>
-                  </button>
-                  <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined"
-                          id="bsim-settings-btn"
-                          type="button" aria-pressed="false" aria-label="Column settings"
-                          onclick="bsimTogglePanel(this)">
-                    <span class="ds-icon ds-icon--filled">settings</span>
-                  </button>
-                  <button class="ds-icon-button ds-icon-button--outlined" type="button"
-                          aria-label="Download">
-                    <span class="ds-icon">download</span>
-                  </button>
+          <!-- ── Toolbar (ds-table-toolbar) ─────────────────────────────────── -->
+          <div class="ds-table-toolbar">
+            <div class="ds-table-toolbar__left">
+              <button class="ds-button ds-button--filled ds-button--leading-icon" type="button" onclick="agSimAddRow()">
+                <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">add</span></span>
+                New Ticket
+              </button>
+              <button class="ds-button ds-button--outlined ds-button--trailing-icon" type="button" id="ag-sim-bulk-btn" style="display:none;">
+                Bulk Actions
+                <span class="ds-button__icon ds-button__icon--trailing"><span class="ds-icon">arrow_drop_down</span></span>
+              </button>
+            </div>
+            <div class="ds-table-toolbar__right">
+              <div class="ds-input ds-search" role="search">
+                <div class="ds-input__field">
+                  <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                  <input id="ag-sim-search" class="ds-input__control" type="search" placeholder="Search tickets…" aria-label="Search tickets">
                 </div>
               </div>
-
-              <!-- ── Grid + Column Panel (flex row) ─────────────────────────────── -->
-              <div id="bsim-body">
-
-                <!-- AG Grid fills remaining width -->
-                <div id="bsim-grid"></div>
-
-                <!-- Column panel — 300px, revealed by [data-panel-open] on #bsim-wrapper -->
-                <div class="ds-column-panel">
-
-                  <!-- Density toggle -->
-                  <div class="ds-column-panel__density">
-                    <div class="ds-density-toggle" role="group" aria-label="Row density">
-                      <button type="button" class="ds-density-toggle__btn is-selected"
-                              aria-pressed="true" onclick="bsimSetDensity('comfort', this)">Comfort</button>
-                      <button type="button" class="ds-density-toggle__btn"
-                              aria-pressed="false" onclick="bsimSetDensity('compact', this)">Compact</button>
-                    </div>
-                  </div>
-
-                  <!-- Column Visibility -->
-                  <button type="button" class="ds-column-panel__section-hd" aria-expanded="true"
-                          onclick="var l=this.nextElementSibling;var e=this.getAttribute('aria-expanded')==='true';this.setAttribute('aria-expanded',e?'false':'true');l.style.display=e?'none':''">
-                    <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">visibility</span>
-                    <span class="ds-column-panel__section-title">Column Visibility</span>
-                    <span class="ds-icon ds-icon--sm ds-column-panel__expand-icon" aria-hidden="true">arrow_drop_down</span>
-                  </button>
-
-                  <div class="ds-column-panel__col-list">
-                    <!-- Name -->
-                    <div class="ds-column-panel__col-row" draggable="true" data-col-id="name"
-                         ondragstart="bsimPanelDragStart(event,'name')"
-                         ondragover="bsimPanelDragOver(event)"
-                         ondrop="bsimPanelDrop(event,'name')">
-                      <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked"
-                           role="checkbox" aria-checked="true" aria-label="Toggle Name visibility" tabindex="0"
-                           onclick="bsimToggleCol('name',this)"
-                           onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();bsimToggleCol('name',this)}">
-                        <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
-                      </div>
-                      <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
-                      <span class="ds-column-panel__col-name">Name</span>
-                    </div>
-                    <!-- Email -->
-                    <div class="ds-column-panel__col-row" draggable="true" data-col-id="email"
-                         ondragstart="bsimPanelDragStart(event,'email')"
-                         ondragover="bsimPanelDragOver(event)"
-                         ondrop="bsimPanelDrop(event,'email')">
-                      <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked"
-                           role="checkbox" aria-checked="true" aria-label="Toggle Email visibility" tabindex="0"
-                           onclick="bsimToggleCol('email',this)"
-                           onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();bsimToggleCol('email',this)}">
-                        <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
-                      </div>
-                      <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
-                      <span class="ds-column-panel__col-name">Email</span>
-                    </div>
-                    <!-- Status -->
-                    <div class="ds-column-panel__col-row" draggable="true" data-col-id="status"
-                         ondragstart="bsimPanelDragStart(event,'status')"
-                         ondragover="bsimPanelDragOver(event)"
-                         ondrop="bsimPanelDrop(event,'status')">
-                      <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked"
-                           role="checkbox" aria-checked="true" aria-label="Toggle Status visibility" tabindex="0"
-                           onclick="bsimToggleCol('status',this)"
-                           onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();bsimToggleCol('status',this)}">
-                        <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
-                      </div>
-                      <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
-                      <span class="ds-column-panel__col-name">Status</span>
-                    </div>
-                    <!-- Amount -->
-                    <div class="ds-column-panel__col-row" draggable="true" data-col-id="amount"
-                         ondragstart="bsimPanelDragStart(event,'amount')"
-                         ondragover="bsimPanelDragOver(event)"
-                         ondrop="bsimPanelDrop(event,'amount')">
-                      <div class="ds-column-panel__col-checkbox ds-column-panel__col-checkbox--checked"
-                           role="checkbox" aria-checked="true" aria-label="Toggle Amount visibility" tabindex="0"
-                           onclick="bsimToggleCol('amount',this)"
-                           onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();bsimToggleCol('amount',this)}">
-                        <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_box</span>
-                      </div>
-                      <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
-                      <span class="ds-column-panel__col-name">Amount</span>
-                    </div>
-                  </div><!-- /.ds-column-panel__col-list -->
-
-                </div><!-- /.ds-column-panel -->
-
-              </div><!-- /#bsim-body -->
-
-              <!-- ── Paginator ──────────────────────────────────────────────────── -->
-              <div class="ds-ag-paginator">
-                <div class="ds-ag-paginator__inner">
-                  <div class="ds-ag-paginator__counter">
-                    <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
-                    <div class="ds-select ds-ag-paginator__size-select">
-                      <div class="ds-select__field-row">
-                        <div class="ds-select__field" onclick="document.getElementById('bsim-ps').focus()">
-                          <input type="text" id="bsim-ps" class="ds-select__control"
-                                 value="5" data-default-placeholder=""
-                                 autocomplete="off" spellcheck="false"
-                                 role="combobox" aria-haspopup="listbox" aria-expanded="false"
-                                 aria-controls="bsim-ps-menu" aria-label="Items per page"
-                                 onfocus="dsSelectOpen('bsim-ps')"
-                                 oninput="dsSelectFilter('bsim-ps', this.value)"
-                                 onblur="dsSelectBlur('bsim-ps', event)" />
-                          <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
-                        </div>
-                        <div class="ds-select__dropdown" id="bsim-ps-menu" role="listbox" aria-label="Items per page">
-                          <div class="ds-menu">
-                            <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true"
-                                    data-label="5"
-                                    onclick="dsSelectOption('bsim-ps',this); window._bsimApi&&window._bsimApi.paginationSetPageSize(5)">
-                              <span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>5
-                            </button>
-                            <button class="ds-menu__item" role="option" aria-selected="false"
-                                    data-label="10"
-                                    onclick="dsSelectOption('bsim-ps',this); window._bsimApi&&window._bsimApi.paginationSetPageSize(10)">10</button>
-                            <button class="ds-menu__item" role="option" aria-selected="false"
-                                    data-label="25"
-                                    onclick="dsSelectOption('bsim-ps',this); window._bsimApi&&window._bsimApi.paginationSetPageSize(25)">25</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ds-ag-paginator__pagination">
-                    <span class="ds-ag-paginator__range" id="bsim-range" aria-live="polite">— of —</span>
-                    <div class="ds-ag-paginator__nav">
-                      <button class="ds-icon-button ds-icon-button--icon" id="bsim-first"
-                              type="button" aria-label="First page" disabled>
-                        <span class="ds-icon">first_page</span>
-                      </button>
-                      <button class="ds-icon-button ds-icon-button--icon" id="bsim-prev"
-                              type="button" aria-label="Previous page" disabled>
-                        <span class="ds-icon">keyboard_arrow_left</span>
-                      </button>
-                      <button class="ds-icon-button ds-icon-button--icon" id="bsim-next"
-                              type="button" aria-label="Next page" disabled>
-                        <span class="ds-icon">keyboard_arrow_right</span>
-                      </button>
-                      <button class="ds-icon-button ds-icon-button--icon" id="bsim-last"
-                              type="button" aria-label="Last page" disabled>
-                        <span class="ds-icon">last_page</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div><!-- /#bsim-wrapper -->
+              <span id="ag-sim-filter-badge" style="display:none; font-size:12px; color:var(--color-text-brand); background:var(--color-surface-brand); padding:2px 10px; border-radius:999px; white-space:nowrap; align-self:center;"></span>
+              <span id="ag-sim-sel-count" style="display:none; font-size:13px; color:var(--color-text-secondary); align-self:center; white-space:nowrap;"></span>
+              <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" id="ag-sim-filter-btn" type="button" aria-pressed="false" aria-label="Toggle floating filters" onclick="agSimToggleFilters(this)">
+                <span class="ds-icon ds-icon--filled">filter_alt</span>
+              </button>
+              <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" id="ag-sim-col-btn" type="button" aria-pressed="false" aria-label="Column settings" onclick="agSimToggleCols(this)">
+                <span class="ds-icon ds-icon--filled">settings</span>
+              </button>
+              <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Export to CSV" onclick="agSimExport()">
+                <span class="ds-icon">download</span>
+              </button>
+            </div>
           </div>
-        </div>
 
-        <!-- Row cell context menu -->
-        <div id="bsim-ctx" class="ds-menu" role="menu">
-          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimCtxCopy()">
-            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">content_copy</span>
-            Copy cell value
-          </button>
-          <div class="ds-divider ds-menu__divider" role="separator" aria-hidden="true"></div>
-          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimCtxSort('asc')">
-            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">arrow_upward</span>
-            Sort ascending
-          </button>
-          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimCtxSort('desc')">
-            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">arrow_downward</span>
-            Sort descending
-          </button>
-        </div>
+          <!-- ── Grid + ds-column-panel wrapper ────────────────────────────── -->
+          <div style="display:flex; flex:1; min-height:0;">
 
-        <!-- Header cell context menu -->
-        <div id="bsim-hctx" class="ds-menu" role="menu">
-          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxSort('asc')">
-            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">arrow_upward</span>
-            Sort ascending
-          </button>
-          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxSort('desc')">
-            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">arrow_downward</span>
-            Sort descending
-          </button>
-          <div class="ds-divider ds-menu__divider" role="separator" aria-hidden="true"></div>
-          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxPin('left')">
-            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">push_pin</span>
-            Pin left
-          </button>
-          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxPin('right')">
-            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">push_pin</span>
-            Pin right
-          </button>
-          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxPin(null)">
-            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">close</span>
-            No pin
-          </button>
-          <div class="ds-divider ds-menu__divider" role="separator" aria-hidden="true"></div>
-          <button class="ds-menu__item" role="menuitem" type="button" onclick="bsimHCtxAutoSize()">
-            <span class="ds-icon ds-icon--sm ds-menu__item-icon" aria-hidden="true">fit_width</span>
-            Auto-size column
-          </button>
-        </div>
+            <!-- AG Grid -->
+            <div id="ag-sim-grid" class="ag-theme-quartz" style="flex:1; height:560px;"></div>
+
+            <!-- ds-column-panel (opened by settings toggle) -->
+            <div id="ag-sim-col-sidebar" style="display:none; width:300px; border-left:1px solid var(--color-border-subtle); flex-shrink:0; overflow-y:auto;">
+              <div class="ds-column-panel" style="border:none; border-radius:0; height:100%;">
+
+                <!-- Density -->
+                <div class="ds-column-panel__density">
+                  <div class="ds-density-toggle" role="group" aria-label="Row density" style="width:100%;">
+                    <button type="button" class="ds-density-toggle__btn" id="ag-density-comfort" aria-pressed="false" style="flex:1 0 0;" onclick="agSimSetDensity('comfort',this)">Comfort</button>
+                    <button type="button" class="ds-density-toggle__btn is-selected" id="ag-density-standard" aria-pressed="true" style="flex:1 0 0;" onclick="agSimSetDensity('standard',this)">Standard</button>
+                    <button type="button" class="ds-density-toggle__btn" id="ag-density-compact" aria-pressed="false" style="flex:1 0 0;" onclick="agSimSetDensity('compact',this)">Compact</button>
+                  </div>
+                </div>
+
+                <!-- Column Visibility -->
+                <button type="button" class="ds-column-panel__section-hd" aria-expanded="true"
+                        onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true' ? 'false' : 'true')">
+                  <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">visibility</span>
+                  <span class="ds-column-panel__section-title">Column Visibility</span>
+                  <span class="ds-icon ds-icon--sm ds-column-panel__expand-icon" aria-hidden="true">arrow_drop_down</span>
+                </button>
+                <div class="ds-column-panel__col-list" id="ag-sim-col-list"></div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ── ds-ag-paginator ────────────────────────────────────────────── -->
+          <div class="ds-ag-paginator" style="border-top:1px solid var(--color-border-subtle); border-radius:0; flex-shrink:0;">
+            <div class="ds-ag-paginator__inner">
+              <div class="ds-ag-paginator__counter">
+                <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
+                <div class="ds-select ds-ag-paginator__size-select">
+                  <div class="ds-select__field-row">
+                    <div class="ds-select__field" onclick="document.getElementById('ag-pag-size').focus()">
+                      <input type="text" id="ag-pag-size" class="ds-select__control"
+                             value="10" data-default-placeholder=""
+                             autocomplete="off" spellcheck="false"
+                             role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                             aria-controls="ag-pag-size-menu" aria-label="Items per page"
+                             onfocus="dsSelectOpen('ag-pag-size')"
+                             oninput="dsSelectFilter('ag-pag-size', this.value)"
+                             onblur="dsSelectBlur('ag-pag-size', event)">
+                      <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                    </div>
+                    <div class="ds-select__dropdown" id="ag-pag-size-menu" role="listbox" aria-label="Items per page">
+                      <div class="ds-menu">
+                        <button class="ds-menu__item ds-menu__item--selected" role="option" aria-selected="true" data-label="10" onclick="dsSelectOption('ag-pag-size',this); agSimChangePageSize(10)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>10</button>
+                        <button class="ds-menu__item" role="option" aria-selected="false" data-label="25" onclick="dsSelectOption('ag-pag-size',this); agSimChangePageSize(25)">25</button>
+                        <button class="ds-menu__item" role="option" aria-selected="false" data-label="50" onclick="dsSelectOption('ag-pag-size',this); agSimChangePageSize(50)">50</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ds-ag-paginator__pagination">
+                <span class="ds-ag-paginator__range" id="ag-sim-pag-counter" aria-live="polite">1 - 10 of 50</span>
+                <div class="ds-ag-paginator__nav">
+                  <button class="ds-icon-button ds-icon-button--icon" type="button" id="ag-sim-first" aria-label="First page" onclick="agSimGoToPage('first')" disabled>
+                    <span class="ds-icon">first_page</span>
+                  </button>
+                  <button class="ds-icon-button ds-icon-button--icon" type="button" id="ag-sim-prev" aria-label="Previous page" onclick="agSimGoToPage('prev')" disabled>
+                    <span class="ds-icon">keyboard_arrow_left</span>
+                  </button>
+                  <button class="ds-icon-button ds-icon-button--icon" type="button" id="ag-sim-next" aria-label="Next page" onclick="agSimGoToPage('next')">
+                    <span class="ds-icon">keyboard_arrow_right</span>
+                  </button>
+                  <button class="ds-icon-button ds-icon-button--icon" type="button" id="ag-sim-last" aria-label="Last page" onclick="agSimGoToPage('last')">
+                    <span class="ds-icon">last_page</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /#ag-sim-container -->
+
+        <!-- Toast feedback -->
+        <div id="ag-sim-toast" style="display:none; margin-top:8px; font-size:12px; color:var(--color-text-secondary); font-style:italic;"></div>
 
         <script>
-        (function () {
-          if (typeof agGrid === 'undefined') { console.warn('AG Grid not loaded'); return; }
-          const { createGrid, themeQuartz } = agGrid;
-
-          // ── Theme — mirrors onfloTheme params ──────────────────────────────────
-          const previewTheme = themeQuartz.withParams({
-            rowHeight: 56, headerHeight: 56, iconSize: 20, spacing: 8,
-            cellHorizontalPadding: 0,
-            rowBorder: false, columnBorder: false,
-            headerRowBorder: false, headerColumnBorder: false, wrapperBorder: false,
-          });
-
-          // ── Column panel toggle ────────────────────────────────────────────────
-          function bsimTogglePanel(btn) {
-            const wrapper = document.getElementById('bsim-wrapper');
-            const pressed = btn.getAttribute('aria-pressed') === 'true';
-            btn.setAttribute('aria-pressed', pressed ? 'false' : 'true');
-            if (pressed) wrapper.removeAttribute('data-panel-open');
-            else         wrapper.setAttribute('data-panel-open', '');
-            setTimeout(() => window._bsimApi?.sizeColumnsToFit(), 0);
+        (function() {
+          /* ── Guard: AG Grid must be loaded from CDN ─────────────────────── */
+          if (typeof agGrid === 'undefined') {
+            var c = document.getElementById('ag-sim-container');
+            if (c) c.innerHTML = '<div style="padding:48px;text-align:center;color:var(--color-text-secondary);">AG Grid failed to load from CDN — check network connection.</div>';
+            return;
           }
-          window.bsimTogglePanel = bsimTogglePanel;
 
-          // ── Density toggle ─────────────────────────────────────────────────────
-          // Use CSS custom properties + updateGridOptions together:
-          // CSS vars set the visual row height; updateGridOptions updates AG Grid's
-          // virtual DOM height calculation (used for row positioning and scroll height).
-          function bsimSetDensity(mode, btn) {
-            const h = mode === 'compact' ? 42 : 68;
-            const grid = document.getElementById('bsim-grid');
-            grid.style.setProperty('--ag-row-height', h + 'px');
-            grid.style.setProperty('--ag-header-height', h + 'px');
-            window._bsimApi?.updateGridOptions({ rowHeight: h, headerHeight: h });
-            btn.closest('.ds-density-toggle').querySelectorAll('.ds-density-toggle__btn').forEach(b => {
-              b.classList.toggle('is-selected', b === btn);
-              b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+          var agSimApi = null;
+          var toastTimer;
+
+          /* ── Toast ──────────────────────────────────────────────────────── */
+          function showToast(msg) {
+            clearTimeout(toastTimer);
+            var el = document.getElementById('ag-sim-toast');
+            if (!el) return;
+            el.textContent = msg;
+            el.style.display = 'block';
+            toastTimer = setTimeout(function() { el.style.display = 'none'; }, 2200);
+          }
+
+          /* ── Dummy data (50 support tickets) ───────────────────────────── */
+          var STATUSES   = ['Open', 'In Progress', 'Pending', 'Resolved', 'Closed'];
+          var PRIORITIES = ['Critical', 'High', 'Medium', 'Low'];
+          var TYPES      = ['Technical', 'Billing', 'General', 'Feature Request', 'Bug Report'];
+          var AGENTS     = ['Sarah K.', 'Marcus T.', 'Priya R.', 'Jordan L.', 'Alex M.', 'Dana W.'];
+          var CUSTOMERS  = [
+            'Acme Corporation', 'Globex Industries', 'Initech LLC', 'Umbrella Corp',
+            'Stark Industries', 'Wayne Enterprises', 'Tyrell Corp', 'Veridian Dynamics',
+            'Hooli Technologies', 'Pied Piper Inc', 'Dunder Mifflin', 'Vandelay Industries',
+            'Bluth Company', 'Gringotts Bank', 'Soylent Corp', 'Oceanic Airlines',
+            'Pendant Publishing', 'Wernham Hogg', 'Buy More', 'Paper Street Soap Co.'
+          ];
+
+          var rowData = [];
+          for (var i = 0; i < 50; i++) {
+            var m = (i % 3) + 1;
+            var d = (i % 28) + 1;
+            var sat = i % 7 === 0 ? null : ((i % 5) + 1);
+            rowData.push({
+              id:           'TKT-' + (1001 + i),
+              customer:     CUSTOMERS[i % CUSTOMERS.length],
+              issueType:    TYPES[i % TYPES.length],
+              status:       STATUSES[i % STATUSES.length],
+              priority:     PRIORITIES[i % PRIORITIES.length],
+              assignedTo:   AGENTS[i % AGENTS.length],
+              created:      '2026-' + (m < 10 ? '0' : '') + m + '-' + (d < 10 ? '0' : '') + d,
+              responseTime: Math.round(((i * 1.73 + 0.6) % 48) * 10) / 10,
+              satisfaction: sat,
+              revenue:      Math.round((i * 347 + 1250) % 95000),
             });
           }
-          window.bsimSetDensity = bsimSetDensity;
 
-          // ── Column visibility toggle ───────────────────────────────────────────
-          // Use getColumnState() for reliable visibility reading — getColumn()?.isVisible()
-          // can be stale in some AG Grid 35 rendering contexts.
-          function bsimToggleCol(colId, el) {
-            const api = window._bsimApi;
-            if (!api) return;
-            const state = api.getColumnState().find(s => s.colId === colId);
-            const isVisible = !state?.hide;  // hide:true = hidden; undefined/false = visible
-            api.setColumnVisible(colId, !isVisible);
-            const icon = el.querySelector('.ds-icon');
-            if (isVisible) {
-              el.classList.remove('ds-column-panel__col-checkbox--checked');
-              el.setAttribute('aria-checked', 'false');
-              icon.className = 'ds-icon ds-icon--sm';
-              icon.textContent = 'check_box_outline_blank';
+          /* ── DS Vanilla JS Shims ──────────────────────────────────────────
+             These reproduce the DOM structure of DsTableHeaderCellComponent
+             and DsTableRowCellComponent so DS CSS applies in plain HTML/JS.
+          ─────────────────────────────────────────────────────────────────── */
+
+          /* Header cell shim — mirrors DsTableHeaderCellComponent template */
+          function DsHeaderShim() {}
+          DsHeaderShim.prototype.init = function(params) {
+            var self = this;
+            this._params = params;
+            var label      = params.displayName;
+            var sortable   = params.enableSorting;
+            var hasMenu    = params.enableMenu;
+            var hasFilter  = params.enableFilterButton || params.filtering;
+            var isCheckbox = params.checkbox;
+            var isRight    = params.align === 'right';
+
+            // Host wrapper — mirrors Angular host: display:block; height:100%
+            this._host = document.createElement('div');
+            this._host.style.cssText = 'display:block;height:100%;';
+
+            var cell = document.createElement('div');
+            cell.className = 'ds-table-header-cell'
+              + (isRight ? ' ds-table-header-cell--right' : '')
+              + (isCheckbox && !label ? ' ds-table-header-cell--checkbox-only' : '');
+            if (params.column.getPinned && params.column.getPinned() === 'left')  cell.classList.add('ds-table-pinned-left');
+            if (params.column.getPinned && params.column.getPinned() === 'right') cell.classList.add('ds-table-pinned-right');
+            this._cell = cell;
+
+            // Left resize handle
+            var leftHandle = document.createElement('div');
+            leftHandle.className = 'ds-table-header-cell__resize-handle';
+            cell.appendChild(leftHandle);
+
+            // Content
+            var content = document.createElement('div');
+            content.className = 'ds-table-header-cell__content'
+              + (isRight ? ' ds-table-header-cell__content--right' : '');
+
+            if (isCheckbox) {
+              this._cb     = document.createElement('div');
+              this._cbIcon = document.createElement('span');
+              this._cb.className = 'ds-table-header-cell__checkbox';
+              this._cb.setAttribute('role', 'checkbox');
+              this._cb.setAttribute('aria-checked', 'false');
+              this._cb.setAttribute('tabindex', '0');
+              this._cbIcon.className = 'ds-icon';
+              this._cbIcon.textContent = 'check_box_outline_blank';
+              this._cb.appendChild(this._cbIcon);
+              content.appendChild(this._cb);
+              this._cb.addEventListener('click', function() { self._onCheckboxClick(); });
+              this._cb.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); self._onCheckboxClick(); }
+              });
+              this._selectionListener = function() { self._syncCheckbox(); };
+              params.api.addEventListener('selectionChanged', this._selectionListener);
             } else {
-              el.classList.add('ds-column-panel__col-checkbox--checked');
-              el.setAttribute('aria-checked', 'true');
-              icon.className = 'ds-icon ds-icon--sm ds-icon--filled';
-              icon.textContent = 'check_box';
+              if (label) {
+                var labelEl = document.createElement('span');
+                labelEl.className = 'ds-table-header-cell__label';
+                labelEl.textContent = label;
+                content.appendChild(labelEl);
+              }
+              if (sortable) {
+                var sortBtn = document.createElement('button');
+                sortBtn.type = 'button';
+                sortBtn.className = 'ds-icon-button ds-icon-button--icon ds-icon-button--sm';
+                sortBtn.setAttribute('aria-label', 'Sort column');
+                sortBtn.style.flexShrink = '0';
+                this._sortIcon = document.createElement('span');
+                this._sortIcon.className = 'ds-icon ds-table-header-cell__sort-icon--none';
+                this._sortIcon.textContent = 'arrow_upward_alt';
+                sortBtn.appendChild(this._sortIcon);
+                content.appendChild(sortBtn);
+                sortBtn.addEventListener('click', function(e) { params.progressSort(e.shiftKey); });
+                this._sortChangedListener = function() { self._syncSort(); };
+                params.column.addEventListener('sortChanged', this._sortChangedListener);
+                this._syncSort();
+              }
             }
-            setTimeout(() => api.sizeColumnsToFit(), 0);
-          }
-          window.bsimToggleCol = bsimToggleCol;
+            cell.appendChild(content);
 
-          // ── Column panel drag reorder ──────────────────────────────────────────
-          let _panelDragColId = null;
+            // Trailing actions
+            var actions = document.createElement('div');
+            actions.className = 'ds-table-header-cell__actions';
 
-          function bsimPanelDragStart(e, colId) {
-            _panelDragColId = colId;
-            e.dataTransfer.effectAllowed = 'move';
-          }
-          function bsimPanelDragOver(e) {
-            if (!_panelDragColId) return;
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-          }
-          function bsimPanelDrop(e, targetColId) {
-            e.preventDefault();
-            const api = window._bsimApi;
-            if (!_panelDragColId || !api || _panelDragColId === targetColId) {
-              _panelDragColId = null; return;
+            if (hasMenu && !isCheckbox) {
+              var menuBtn = document.createElement('button');
+              menuBtn.type = 'button';
+              menuBtn.className = 'ds-icon-button ds-icon-button--icon ds-icon-button--sm';
+              menuBtn.setAttribute('aria-label', 'Column options');
+              var menuIcon = document.createElement('span');
+              menuIcon.className = 'ds-icon ds-table-header-cell__menu-icon';
+              menuIcon.textContent = 'more_vert';
+              menuBtn.appendChild(menuIcon);
+              menuBtn.addEventListener('click', function() { params.showColumnMenu(menuBtn); });
+              actions.appendChild(menuBtn);
             }
-            // Find the target's absolute grid index (+1 because 'sel' checkbox is at 0)
-            const movable = api.getColumnState().filter(s => s.colId !== 'sel').map(s => s.colId);
-            const toGridIdx = movable.indexOf(targetColId) + 1;
-            api.moveColumn(_panelDragColId, toGridIdx);
-            // Reorder panel DOM rows to reflect the new grid column order
-            const list = document.querySelector('#bsim-wrapper .ds-column-panel__col-list');
-            const rows = Array.from(list.querySelectorAll('[data-col-id]'));
-            api.getColumnState().filter(s => s.colId !== 'sel').forEach(s => {
-              const row = rows.find(r => r.dataset.colId === s.colId);
-              if (row) list.appendChild(row);
-            });
-            _panelDragColId = null;
-          }
-          window.bsimPanelDragStart = bsimPanelDragStart;
-          window.bsimPanelDragOver  = bsimPanelDragOver;
-          window.bsimPanelDrop      = bsimPanelDrop;
 
-          // ── Row context menu ───────────────────────────────────────────────────
-          let _ctxVal = null, _ctxColId = null;
-
-          function bsimShowCtx(x, y, val, colId) {
-            _ctxVal = val; _ctxColId = colId;
-            const m = document.getElementById('bsim-ctx');
-            m.style.left = x + 'px'; m.style.top = y + 'px';
-            m.classList.add('is-open');
-            requestAnimationFrame(() => {
-              const r = m.getBoundingClientRect();
-              if (r.right  > window.innerWidth)  m.style.left = (x - r.width)  + 'px';
-              if (r.bottom > window.innerHeight)  m.style.top  = (y - r.height) + 'px';
-            });
-          }
-          function bsimHideCtx() {
-            document.getElementById('bsim-ctx').classList.remove('is-open');
-            _ctxVal = null; _ctxColId = null;
-          }
-          function bsimCtxCopy() {
-            if (_ctxVal != null) navigator.clipboard?.writeText(String(_ctxVal)).catch(() => {});
-            bsimHideCtx();
-          }
-          function bsimCtxSort(dir) {
-            if (_ctxColId && window._bsimApi) {
-              window._bsimApi.applyColumnState({ state: [{ colId: _ctxColId, sort: dir }], defaultState: { sort: null } });
+            if (hasFilter && !isCheckbox) {
+              var filterBtn = document.createElement('button');
+              filterBtn.type = 'button';
+              filterBtn.className = 'ds-icon-button ds-icon-button--icon ds-icon-button--sm';
+              filterBtn.setAttribute('aria-label', 'Filter column');
+              this._filterIcon = document.createElement('span');
+              this._filterIcon.className = 'ds-icon ds-icon--filled';
+              this._filterIcon.textContent = 'filter_alt';
+              filterBtn.appendChild(this._filterIcon);
+              if (params.showFilter) {
+                filterBtn.addEventListener('click', function() { params.showFilter(filterBtn); });
+              }
+              actions.appendChild(filterBtn);
+              this._filterChangedListener = function() { self._syncFilter(); };
+              params.column.addEventListener('filterChanged', this._filterChangedListener);
             }
-            bsimHideCtx();
-          }
-          window.bsimCtxCopy = bsimCtxCopy;
-          window.bsimCtxSort = bsimCtxSort;
 
-          // ── Header context menu ────────────────────────────────────────────────
-          let _hdrCtxParams = null;
-
-          function bsimShowHeaderCtx(x, y, p) {
-            _hdrCtxParams = p;
-            const m = document.getElementById('bsim-hctx');
-            m.style.left = x + 'px'; m.style.top = y + 'px';
-            m.classList.add('is-open');
-            requestAnimationFrame(() => {
-              const r = m.getBoundingClientRect();
-              if (r.right  > window.innerWidth)  m.style.left = (x - r.width)  + 'px';
-              if (r.bottom > window.innerHeight)  m.style.top  = (y - r.height) + 'px';
-            });
-          }
-          function bsimHideHeaderCtx() {
-            document.getElementById('bsim-hctx').classList.remove('is-open');
-            _hdrCtxParams = null;
-          }
-          function bsimHCtxSort(dir) {
-            if (!_hdrCtxParams) return;
-            window._bsimApi?.applyColumnState({
-              state: [{ colId: _hdrCtxParams.column.getColId(), sort: dir }],
-              defaultState: { sort: null },
-            });
-            bsimHideHeaderCtx();
-          }
-          function bsimHCtxPin(pinned) {
-            if (!_hdrCtxParams) return;
-            window._bsimApi?.applyColumnState({
-              state: [{ colId: _hdrCtxParams.column.getColId(), pinned }],
-            });
-            bsimHideHeaderCtx();
-          }
-          function bsimHCtxAutoSize() {
-            if (!_hdrCtxParams) return;
-            window._bsimApi?.autoSizeColumns([_hdrCtxParams.column.getColId()]);
-            bsimHideHeaderCtx();
-          }
-          window.bsimHCtxSort     = bsimHCtxSort;
-          window.bsimHCtxPin      = bsimHCtxPin;
-          window.bsimHCtxAutoSize = bsimHCtxAutoSize;
-
-          // Close both menus on outside left-click
-          document.addEventListener('click', e => {
-            const ctx  = document.getElementById('bsim-ctx');
-            const hctx = document.getElementById('bsim-hctx');
-            if (ctx  && !ctx.contains(e.target))  bsimHideCtx();
-            if (hctx && !hctx.contains(e.target)) bsimHideHeaderCtx();
-          });
-
-          // ── Custom header cell ─────────────────────────────────────────────────
-          class DsHeaderCell {
-            init(p) {
-              this.p = p;
-              this.el = document.createElement('div');
-              this.el.className = 'ds-table-header-cell';
-              this._draw();
-              this._onSort = () => this._refreshSort();
-              p.column.addEventListener('sortChanged', this._onSort);
-              // Sort: click anywhere on the header cell except resize handles.
-              // This covers both label clicks and sort-icon button clicks (which
-              // bubble up from __actions) without needing separate listeners.
-              this.el.addEventListener('click', e => {
-                if (e.target.closest('.ds-table-header-cell__resize-handle')) return;
-                if (typeof p.progressSort === 'function') p.progressSort(e.shiftKey);
-              });
-              // Header right-click context menu
-              this.el.addEventListener('contextmenu', e => {
+            if (!isCheckbox) {
+              var rightHandle = document.createElement('div');
+              rightHandle.className = 'ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active';
+              var resizeBar = document.createElement('span');
+              resizeBar.className = 'ds-table-header-cell__resize-bar';
+              rightHandle.appendChild(resizeBar);
+              rightHandle.addEventListener('mousedown', function(e) { self._onResizeStart(e); });
+              rightHandle.addEventListener('dblclick', function(e) {
                 e.preventDefault();
-                e.stopPropagation();
-                bsimShowHeaderCtx(e.clientX, e.clientY, p);
+                params.api.autoSizeColumn(params.column.getColId());
               });
+              actions.appendChild(rightHandle);
             }
-            _sort() { const s = this.p.column.getSort(); return s || 'none'; }
-            _draw() {
-              const s = this._sort(), desc = s === 'desc';
-              const glyph = desc ? 'arrow_downward' : 'arrow_upward';
-              const cls = `ds-table-header-cell__sort-icon--${s}`;
-              this.el.innerHTML = `
-                <div class="ds-table-header-cell__resize-handle"></div>
-                <div class="ds-table-header-cell__content">
-                  <span class="ds-table-header-cell__label" style="cursor:pointer">${this.p.displayName}</span>
-                </div>
-                <div class="ds-table-header-cell__actions">
-                  <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sort" tabindex="-1">
-                    <span class="ds-icon ds-icon--sm ${cls}">${glyph}</span>
-                  </button>
-                  <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active">
-                    <span class="ds-table-header-cell__resize-bar"></span>
-                  </div>
-                </div>`;
-              // No click listener here — init() adds it after _draw() to avoid duplicates
-            }
-            _refreshSort() {
-              const s = this._sort();
-              const icon = this.el.querySelector('[class*="sort-icon"]');
-              if (!icon) return;
-              icon.className = `ds-icon ds-icon--sm ds-table-header-cell__sort-icon--${s}`;
-              icon.textContent = s === 'desc' ? 'arrow_downward' : 'arrow_upward';
-            }
-            getGui() { return this.el; }
-            refresh(p) { this.p = p; this._refreshSort(); return true; }
-            destroy() { this.p.column.removeEventListener('sortChanged', this._onSort); }
-          }
 
-          // ── Checkbox header ────────────────────────────────────────────────────
-          class DsCheckboxHeader {
-            init(p) {
-              this.p = p;
-              this.el = document.createElement('div');
-              this.el.className = 'ds-table-header-cell ds-table-header-cell--checkbox-only';
-              this.el.innerHTML = `<div class="ds-table-header-cell__content"><div class="ds-table-header-cell__checkbox" role="checkbox" aria-checked="false" aria-label="Select all rows" tabindex="0"><span class="ds-icon">check_box_outline_blank</span></div></div>`;
-              this._cb = this.el.querySelector('.ds-table-header-cell__checkbox');
-              this._ic = this._cb.querySelector('.ds-icon');
-              this._cb.addEventListener('click', () => this._toggle());
-              this._cb.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this._toggle(); } });
-              this._onSel = () => this._update();
-              p.api.addEventListener('selectionChanged', this._onSel);
+            cell.appendChild(actions);
+            this._host.appendChild(cell);
+          };
+          DsHeaderShim.prototype._syncSort = function() {
+            if (!this._sortIcon) return;
+            var def = this._params.column.getSortDef ? this._params.column.getSortDef() : null;
+            var dir = def ? def.direction : (this._params.column.getSort ? this._params.column.getSort() : null);
+            this._sortIcon.className = 'ds-icon '
+              + (dir === 'asc' ? 'ds-table-header-cell__sort-icon--asc'
+               : dir === 'desc' ? 'ds-table-header-cell__sort-icon--desc'
+               : 'ds-table-header-cell__sort-icon--none');
+          };
+          DsHeaderShim.prototype._syncFilter = function() {
+            if (!this._filterIcon) return;
+            this._filterIcon.classList.toggle('ds-table-header-cell__filter-icon--active', this._params.column.isFilterActive());
+          };
+          DsHeaderShim.prototype._onCheckboxClick = function() {
+            var api = this._params.api;
+            if (this._checked || this._indeterminate) { api.deselectAll && api.deselectAll(); }
+            else { api.selectAllFiltered ? api.selectAllFiltered() : (api.selectAll && api.selectAll()); }
+          };
+          DsHeaderShim.prototype._syncCheckbox = function() {
+            if (!this._cb) return;
+            var api = this._params.api;
+            var sel  = api.getSelectedNodes ? api.getSelectedNodes().length : 0;
+            var disp = api.getDisplayedRowCount ? api.getDisplayedRowCount() : 0;
+            this._checked      = disp > 0 && sel >= disp;
+            this._indeterminate = sel > 0 && !this._checked;
+            this._cbIcon.textContent = this._indeterminate ? 'indeterminate_check_box' : this._checked ? 'check_box' : 'check_box_outline_blank';
+            if (this._checked || this._indeterminate) {
+              this._cbIcon.classList.add('ds-icon--filled');
+              this._cb.classList.add('ds-table-header-cell__checkbox--checked');
+              this._cb.setAttribute('aria-checked', this._indeterminate ? 'mixed' : 'true');
+            } else {
+              this._cbIcon.classList.remove('ds-icon--filled');
+              this._cb.classList.remove('ds-table-header-cell__checkbox--checked');
+              this._cb.setAttribute('aria-checked', 'false');
             }
-            _toggle() {
-              const sel = this.p.api.getSelectedRows().length;
-              const tot = this.p.api.getDisplayedRowCount();
-              sel === tot ? this.p.api.deselectAll() : this.p.api.selectAll();
+          };
+          DsHeaderShim.prototype._onResizeStart = function(e) {
+            var params = this._params;
+            e.preventDefault(); e.stopPropagation();
+            var startX = e.clientX, startW = params.column.getActualWidth(), curW = startW;
+            function onMove(ev) {
+              curW = Math.max(50, startW + ev.clientX - startX);
+              params.api.setColumnWidth(params.column.getColId(), curW, false);
             }
-            _update() {
-              const sel = this.p.api.getSelectedRows().length;
-              const tot = this.p.api.getDisplayedRowCount();
-              const all = sel > 0 && sel === tot, some = sel > 0 && !all;
-              this._cb.setAttribute('aria-checked', all ? 'true' : some ? 'mixed' : 'false');
-              if (all)        { this._cb.classList.add('ds-table-header-cell__checkbox--checked'); this._ic.className = 'ds-icon ds-icon--filled'; this._ic.textContent = 'check_box'; }
-              else if (some)  { this._cb.classList.add('ds-table-header-cell__checkbox--checked'); this._ic.className = 'ds-icon ds-icon--filled'; this._ic.textContent = 'indeterminate_check_box'; }
-              else            { this._cb.classList.remove('ds-table-header-cell__checkbox--checked'); this._ic.className = 'ds-icon'; this._ic.textContent = 'check_box_outline_blank'; }
+            function onUp() {
+              params.api.setColumnWidth(params.column.getColId(), curW, true);
+              document.removeEventListener('mousemove', onMove);
+              document.removeEventListener('mouseup', onUp);
             }
-            getGui() { return this.el; }
-            refresh() { return true; }
-            destroy() { this.p.api.removeEventListener('selectionChanged', this._onSel); }
-          }
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+          };
+          DsHeaderShim.prototype.getGui    = function() { return this._host; };
+          DsHeaderShim.prototype.refresh   = function(p) { this._params = p; this._syncSort(); this._syncFilter(); return true; };
+          DsHeaderShim.prototype.destroy   = function() {
+            if (!this._params) return;
+            if (this._sortChangedListener)      this._params.column.removeEventListener('sortChanged', this._sortChangedListener);
+            if (this._filterChangedListener)    this._params.column.removeEventListener('filterChanged', this._filterChangedListener);
+            if (this._selectionListener)        this._params.api.removeEventListener('selectionChanged', this._selectionListener);
+          };
 
-          // ── Data row cell ──────────────────────────────────────────────────────
-          class DsRowCell {
-            init(p) {
-              this.p = p;
-              const right = p.colDef.cellRendererParams?.align === 'right';
-              this.el = document.createElement('div');
-              this.el.className = 'ds-table-row-cell';
-              this.el.innerHTML = `<div class="ds-table-row-cell__content${right ? ' ds-table-row-cell__content--right' : ''}"><span class="ds-table-row-cell__data${right ? ' ds-table-row-cell__data--right' : ''}">${p.valueFormatted ?? p.value ?? ''}</span></div>`;
-              this._d = this.el.querySelector('.ds-table-row-cell__data');
-              this.el.addEventListener('contextmenu', e => {
-                e.preventDefault(); e.stopPropagation();
-                bsimShowCtx(e.clientX, e.clientY, p.valueFormatted ?? p.value, p.column.getColId());
+          /* Row cell shim — mirrors DsTableRowCellComponent template */
+          function DsRowCellShim() {}
+          DsRowCellShim.prototype.init = function(params) {
+            var self = this;
+            this._params = params;
+            var isCheckbox = !!(params.colDef && params.colDef.cellRendererParams && params.colDef.cellRendererParams.checkbox);
+            var isRight    = !!(params.colDef && params.colDef.cellRendererParams && params.colDef.cellRendererParams.align === 'right');
+
+            this._host = document.createElement('div');
+            this._host.style.cssText = 'display:block;height:100%;';
+            this._cell = document.createElement('div');
+            this._cell.className = 'ds-table-row-cell';
+            if (params.column && params.column.getPinned) {
+              if (params.column.getPinned() === 'left')  this._cell.classList.add('ds-table-pinned-left');
+              if (params.column.getPinned() === 'right') this._cell.classList.add('ds-table-pinned-right');
+            }
+            this._content = document.createElement('div');
+            this._content.className = 'ds-table-row-cell__content' + (isRight ? ' ds-table-row-cell__content--right' : '');
+            this._cell.appendChild(this._content);
+            this._host.appendChild(this._cell);
+
+            if (isCheckbox) {
+              this._cb     = document.createElement('div');
+              this._cbIcon = document.createElement('span');
+              this._cb.className = 'ds-table-row-cell__checkbox';
+              this._cb.setAttribute('role', 'checkbox');
+              this._cb.setAttribute('tabindex', '0');
+              this._cbIcon.className = 'ds-icon';
+              this._cb.appendChild(this._cbIcon);
+              this._content.appendChild(this._cb);
+              this._cb.addEventListener('click', function() { params.node.setSelected && params.node.setSelected(!params.node.isSelected()); });
+              this._cb.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); params.node.setSelected && params.node.setSelected(!params.node.isSelected()); }
               });
+              this._rowSelectedListener = function() { self._syncCheckbox(); };
+              params.node.addEventListener('rowSelected', this._rowSelectedListener);
+              this._syncCheckbox();
+            } else {
+              this._dataEl = document.createElement('span');
+              this._dataEl.className = 'ds-table-row-cell__data' + (isRight ? ' ds-table-row-cell__data--right' : '');
+              this._content.appendChild(this._dataEl);
+              this._updateText(params);
             }
-            refresh(p) { this.p = p; if (this._d) this._d.textContent = p.valueFormatted ?? p.value ?? ''; return true; }
-            getGui() { return this.el; }
-            destroy() {}
+
+            this._syncSelected(params.node.isSelected());
+            this._selListener = function() { self._syncSelected(params.node.isSelected()); };
+            params.node.addEventListener('rowSelected', this._selListener);
+          };
+          DsRowCellShim.prototype._updateText = function(p) {
+            if (!this._dataEl) return;
+            this._dataEl.textContent = p.valueFormatted != null ? p.valueFormatted : p.value != null ? String(p.value) : '';
+          };
+          DsRowCellShim.prototype._syncCheckbox = function() {
+            var sel = this._params.node.isSelected();
+            this._cbIcon.textContent = sel ? 'check_box' : 'check_box_outline_blank';
+            if (sel) { this._cbIcon.classList.add('ds-icon--filled'); this._cb.classList.add('ds-table-row-cell__checkbox--checked'); this._cb.setAttribute('aria-checked','true'); }
+            else     { this._cbIcon.classList.remove('ds-icon--filled'); this._cb.classList.remove('ds-table-row-cell__checkbox--checked'); this._cb.setAttribute('aria-checked','false'); }
+          };
+          DsRowCellShim.prototype._syncSelected = function(sel) { this._cell.classList.toggle('is-selected', !!sel); };
+          DsRowCellShim.prototype.getGui  = function() { return this._host; };
+          DsRowCellShim.prototype.refresh = function(p) { this._params = p; this._updateText(p); this._syncSelected(p.node.isSelected()); return true; };
+          DsRowCellShim.prototype.destroy = function() {
+            if (this._params) {
+              if (this._rowSelectedListener) this._params.node.removeEventListener('rowSelected', this._rowSelectedListener);
+              if (this._selListener)         this._params.node.removeEventListener('rowSelected', this._selListener);
+            }
+          };
+
+          /* Factory for columns with custom cell content (badges, stars, etc.)
+             Wraps custom HTML inside the DS row cell shell. */
+          function makeDsRowCellWithContent(getHtml) {
+            function C() {}
+            C.prototype.init = function(params) {
+              var self = this;
+              this._params = params;
+              this._host = document.createElement('div');
+              this._host.style.cssText = 'display:block;height:100%;';
+              this._cell = document.createElement('div');
+              this._cell.className = 'ds-table-row-cell';
+              if (params.column && params.column.getPinned) {
+                if (params.column.getPinned() === 'left')  this._cell.classList.add('ds-table-pinned-left');
+                if (params.column.getPinned() === 'right') this._cell.classList.add('ds-table-pinned-right');
+              }
+              this._content = document.createElement('div');
+              this._content.className = 'ds-table-row-cell__content';
+              this._cell.appendChild(this._content);
+              this._host.appendChild(this._cell);
+              this._render(params);
+              this._syncSelected(params.node.isSelected());
+              this._selListener = function() { self._syncSelected(params.node.isSelected()); };
+              params.node.addEventListener('rowSelected', this._selListener);
+            };
+            C.prototype._render = function(p) { this._content.innerHTML = getHtml(p); };
+            C.prototype._syncSelected = function(sel) { this._cell.classList.toggle('is-selected', !!sel); };
+            C.prototype.getGui  = function() { return this._host; };
+            C.prototype.refresh = function(p) { this._params = p; this._render(p); this._syncSelected(p.node.isSelected()); return true; };
+            C.prototype.destroy = function() { if (this._selListener) this._params.node.removeEventListener('rowSelected', this._selListener); };
+            return C;
           }
 
-          // ── Checkbox row cell ──────────────────────────────────────────────────
-          class DsCheckboxCell {
-            init(p) {
-              this.p = p; this._chk = p.node.isSelected();
-              this.el = document.createElement('div');
-              this.el.className = 'ds-table-row-cell ds-table-row-cell--checkbox-only';
-              this.el.innerHTML = `<div class="ds-table-row-cell__content"><div class="ds-table-row-cell__checkbox" role="checkbox" aria-checked="false" aria-label="Select row" tabindex="0"><span class="ds-icon">check_box_outline_blank</span></div></div>`;
-              this._cb = this.el.querySelector('.ds-table-row-cell__checkbox');
-              this._ic = this._cb.querySelector('.ds-icon');
-              this._cb.addEventListener('click', e => { e.stopPropagation(); p.node.setSelected(!this._chk); });
-              this._cb.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); p.node.setSelected(!this._chk); } });
-              this._onSel = () => { this._chk = p.node.isSelected(); this._sync(); };
-              p.node.addEventListener('rowSelected', this._onSel);
-              this._sync();
-            }
-            _sync() {
-              this._cb.setAttribute('aria-checked', String(this._chk));
-              if (this._chk) { this._cb.classList.add('ds-table-row-cell__checkbox--checked'); this._ic.className = 'ds-icon ds-icon--filled'; this._ic.textContent = 'check_box'; }
-              else           { this._cb.classList.remove('ds-table-row-cell__checkbox--checked'); this._ic.className = 'ds-icon'; this._ic.textContent = 'check_box_outline_blank'; }
-            }
-            getGui() { return this.el; }
-            refresh() { return true; }
-            destroy() { this.p.node.removeEventListener('rowSelected', this._onSel); }
+          /* ── Cell renderers ─────────────────────────────────────────────── */
+          var STATUS_STYLE = {
+            'Open':        'color:var(--ref-color-primary-blue-default);background:var(--ref-color-primary-blue-bg);',
+            'In Progress': 'color:var(--ref-color-accent-orange-default);background:var(--ref-color-accent-orange-bg);',
+            'Pending':     'color:#9F6100;background:var(--ref-color-accent-yellow-bg);',
+            'Resolved':    'color:var(--ref-color-accent-green-default);background:var(--ref-color-accent-green-bg);',
+            'Closed':      'color:var(--ref-color-neutral-text-soft);background:var(--ref-color-neutral-bg-default);',
+          };
+          var PRIORITY_STYLE = {
+            'Critical': 'color:var(--ref-color-accent-red-default);background:var(--ref-color-accent-red-bg);',
+            'High':     'color:var(--ref-color-accent-orange-default);background:var(--ref-color-accent-orange-bg);',
+            'Medium':   'color:#9F6100;background:var(--ref-color-accent-yellow-bg);',
+            'Low':      'color:var(--ref-color-neutral-text-soft);background:var(--ref-color-neutral-bg-default);',
+          };
+          var PRIORITY_ICON = {
+            Critical: 'keyboard_double_arrow_up',
+            High:     'keyboard_arrow_up',
+            Medium:   'drag_handle',
+            Low:      'keyboard_arrow_down',
+          };
+          var PRIORITY_ORDER = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+
+          function badge(label, styleStr) {
+            return '<span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:500;line-height:1;' + styleStr + '">' + label + '</span>';
           }
 
-          // ── Sample data ────────────────────────────────────────────────────────
-          const rowData = [
-            { name: 'Acme Corporation',   email: 'hello@acmecorp.com',        status: 'Active',   amount: 12400 },
-            { name: 'Bright Ideas Ltd',   email: 'contact@brightideas.co',    status: 'Active',   amount: 8750  },
-            { name: 'Cedar Solutions',    email: 'info@cedarsolutions.com',    status: 'Inactive', amount: 31200 },
-            { name: 'Delta Systems Inc',  email: 'support@deltasystems.io',    status: 'Active',   amount: 5900  },
-            { name: 'Echo Partners',      email: 'hello@echopartners.net',     status: 'Pending',  amount: 2100  },
-            { name: 'Foxtrot Ventures',   email: 'team@foxtrot.com',           status: 'Active',   amount: 18600 },
-            { name: 'Gamma Industries',   email: 'info@gamma.co',              status: 'Active',   amount: 9300  },
-            { name: 'Harbor Collective',  email: 'hello@harborcollective.io',  status: 'Pending',  amount: 4750  },
-            { name: 'Iris Technologies',  email: 'ops@iristech.com',           status: 'Active',   amount: 22100 },
-            { name: 'Jade & Associates',  email: 'contact@jadeassoc.com',      status: 'Inactive', amount: 7800  },
-          ];
+          function statusCellContent(p) {
+            return badge(p.value, STATUS_STYLE[p.value] || '');
+          }
 
-          const columnDefs = [
-            { colId: 'sel', width: 56, minWidth: 56, maxWidth: 56, resizable: false, sortable: false, suppressMovable: true, headerComponent: DsCheckboxHeader, cellRenderer: DsCheckboxCell },
-            { field: 'name',   headerName: 'Name',   width: 200, resizable: true, sortable: true, headerComponent: DsHeaderCell, cellRenderer: DsRowCell },
-            { field: 'email',  headerName: 'Email',  flex: 1,    resizable: true, sortable: true, headerComponent: DsHeaderCell, cellRenderer: DsRowCell },
-            { field: 'status', headerName: 'Status', width: 120, resizable: true, sortable: true, headerComponent: DsHeaderCell, cellRenderer: DsRowCell },
-            { field: 'amount', headerName: 'Amount', width: 130, resizable: true, sortable: true, headerComponent: DsHeaderCell, cellRenderer: DsRowCell,
+          function priorityCellContent(p) {
+            var icon = PRIORITY_ICON[p.value] || '';
+            return '<span style="display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:999px;font-size:12px;font-weight:500;line-height:1;' + (PRIORITY_STYLE[p.value] || '') + '">'
+              + '<span class="ds-icon" style="font-size:15px;line-height:1;">' + icon + '</span>'
+              + p.value + '</span>';
+          }
+
+          function satisfactionCellContent(p) {
+            if (p.value === null || p.value === undefined) {
+              return '<span style="color:var(--color-text-disabled);">—</span>';
+            }
+            var out = '<span style="display:flex;align-items:center;gap:2px;">';
+            for (var j = 1; j <= 5; j++) {
+              var filled = j <= p.value;
+              out += '<span class="ds-icon ds-icon--sm' + (filled ? ' ds-icon--filled' : '') + '" style="color:' + (filled ? 'var(--ref-color-accent-yellow-default)' : 'var(--color-border-primary)') + '">star</span>';
+            }
+            out += '</span>';
+            return out;
+          }
+
+          function renderRevenue(p) {
+            if (p.value == null) return '—';
+            return '$' + p.value.toLocaleString();
+          }
+
+          function renderDate(p) {
+            if (!p.value) return '';
+            var parts = p.value.split('-');
+            var dt = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+            return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          }
+
+          /* ── Column definitions ──────────────────────────────────────────── */
+          var colDefs = [
+            {
+              colId: '_sel',
+              headerName: '',
+              width: 56, maxWidth: 56, minWidth: 56,
+              pinned: 'left',
+              sortable: false, filter: false, resizable: false,
+              suppressMovable: true, lockPosition: true, suppressSizeToFit: true,
+              headerComponentParams: { checkbox: true },
+              cellRendererParams: { checkbox: true, cellData: false },
+            },
+            {
+              field: 'id',
+              headerName: 'Ticket #',
+              width: 120,
+              pinned: 'left',
+              sort: 'asc',
+              filter: 'agTextColumnFilter',
+              cellRenderer: makeDsRowCellWithContent(function(p) {
+                return '<span class="ds-table-row-cell__data" style="color:var(--color-text-brand);font-weight:600;cursor:pointer;">' + (p.value != null ? String(p.value) : '') + '</span>';
+              }),
+            },
+            {
+              field: 'customer',
+              headerName: 'Customer',
+              flex: 2, minWidth: 160,
+              filter: 'agTextColumnFilter',
+            },
+            {
+              field: 'issueType',
+              headerName: 'Issue Type',
+              flex: 1, minWidth: 130,
+              filter: 'agSetColumnFilter',
+            },
+            {
+              field: 'status',
+              headerName: 'Status',
+              flex: 1, minWidth: 130,
+              filter: 'agSetColumnFilter',
+              cellRenderer: makeDsRowCellWithContent(statusCellContent),
+            },
+            {
+              field: 'priority',
+              headerName: 'Priority',
+              flex: 1, minWidth: 120,
+              filter: 'agSetColumnFilter',
+              cellRenderer: makeDsRowCellWithContent(priorityCellContent),
+              comparator: function(a, b) { return (PRIORITY_ORDER[a] || 99) - (PRIORITY_ORDER[b] || 99); },
+            },
+            {
+              field: 'assignedTo',
+              headerName: 'Assigned To',
+              flex: 1, minWidth: 140,
+              filter: 'agSetColumnFilter',
+            },
+            {
+              field: 'created',
+              headerName: 'Created',
+              flex: 1, minWidth: 130,
+              filter: 'agDateColumnFilter',
+              valueFormatter: renderDate,
+            },
+            {
+              field: 'responseTime',
+              headerName: 'Response (h)',
+              flex: 1, minWidth: 140,
+              type: 'numericColumn',
+              filter: 'agNumberColumnFilter',
+              valueFormatter: function(p) { return p.value != null ? p.value + 'h' : '—'; },
               cellRendererParams: { align: 'right' },
-              valueFormatter: p => '$' + Number(p.value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) },
+            },
+            {
+              field: 'revenue',
+              headerName: 'Revenue',
+              flex: 1, minWidth: 120,
+              type: 'numericColumn',
+              filter: 'agNumberColumnFilter',
+              valueFormatter: renderRevenue,
+              cellRendererParams: { align: 'right' },
+            },
+            {
+              field: 'satisfaction',
+              headerName: 'Satisfaction',
+              flex: 1, minWidth: 165,
+              filter: 'agNumberColumnFilter',
+              cellRenderer: makeDsRowCellWithContent(satisfactionCellContent),
+              comparator: function(a, b) { return (a || 0) - (b || 0); },
+            },
           ];
 
-          // ── Paginator sync ─────────────────────────────────────────────────────
-          function syncPaginator(api) {
-            const page  = api.paginationGetCurrentPage();
-            const size  = api.paginationGetPageSize();
-            const total = api.paginationGetRowCount();
-            const pages = api.paginationGetTotalPages();
-            const start = total === 0 ? 0 : page * size + 1;
-            const end   = Math.min((page + 1) * size, total);
-            document.getElementById('bsim-range').textContent = total === 0 ? '0 of 0' : `${start} – ${end} of ${total}`;
-            document.getElementById('bsim-first').disabled = page === 0;
-            document.getElementById('bsim-prev').disabled  = page === 0;
-            document.getElementById('bsim-next').disabled  = page >= pages - 1;
-            document.getElementById('bsim-last').disabled  = page >= pages - 1;
-          }
+          /* ── Grid options ────────────────────────────────────────────────── */
+          var gridOptions = {
+            columnDefs: colDefs,
+            rowData:    rowData,
 
-          // ── Grid init ──────────────────────────────────────────────────────────
-          let api;
-          api = window._bsimApi = createGrid(document.getElementById('bsim-grid'), {
-            theme: previewTheme,
-            columnDefs,
-            rowData,
+            defaultColDef: {
+              headerComponent: DsHeaderShim,
+              cellRenderer: DsRowCellShim,
+              sortable: true,
+              filter: true,
+              resizable: true,
+              minWidth: 80,
+              floatingFilter: false,
+            },
+
+            /* Selection */
             rowSelection: 'multiple',
+            rowMultiSelectWithClick: false,
             suppressRowClickSelection: true,
+
+            /* Pagination */
+            pagination: true,
+            paginationPageSize: 10,
+            suppressPaginationPanel: true,   /* hide built-in panel; ds-ag-paginator takes over */
+
+            /* Layout */
+            headerHeight: 56,
+            rowHeight: 56,
+
+            /* Context menus — suppress AG Grid's built-in; we provide our own */
             suppressContextMenu: true,
             suppressHeaderContextMenu: true,
-            domLayout: 'autoHeight',
-            pagination: true,
-            paginationPageSize: 5,
-            suppressPaginationPanel: true,
-            defaultColDef: { suppressHeaderMenuButton: true, resizable: true, sortable: true },
-            onPaginationChanged: () => { if (api) syncPaginator(api); },
-            onFirstDataRendered: () => { syncPaginator(api); api.sizeColumnsToFit(); },
-            onGridSizeChanged:   () => { api?.sizeColumnsToFit(); },
-          });
 
-          // Search → quick filter
-          document.getElementById('bsim-search').addEventListener('input', function () {
-            api.setGridOption('quickFilterText', this.value);
-            setTimeout(() => syncPaginator(api), 0);
-          });
+            /* Misc */
+            animateRows: true,
+            enableRangeSelection: false,
+            suppressCellFocus: false,
 
-          // Paginator nav buttons
-          document.getElementById('bsim-first').addEventListener('click', () => api.paginationGoToFirstPage());
-          document.getElementById('bsim-prev').addEventListener('click',  () => api.paginationGoToPreviousPage());
-          document.getElementById('bsim-next').addEventListener('click',  () => api.paginationGoToNextPage());
-          document.getElementById('bsim-last').addEventListener('click',  () => api.paginationGoToLastPage());
+            /* ── Lifecycle callbacks ──────────────────────────────────────── */
+            onGridReady: function(e) {
+              agSimApi = e.api;
+              buildColPanel();
+              updatePaginator();
+
+              /* Wire search input */
+              var inp = document.getElementById('ag-sim-search');
+              if (inp) {
+                inp.addEventListener('input', function() {
+                  if (agSimApi.setQuickFilter) {
+                    agSimApi.setQuickFilter(inp.value);
+                  } else {
+                    agSimApi.setGridOption('quickFilterText', inp.value);
+                  }
+                  updatePaginator();
+                });
+              }
+            },
+
+            onPaginationChanged: function() { updatePaginator(); },
+            onSortChanged:       function() { updatePaginator(); },
+            onFilterChanged:     function() { updatePaginator(); updateFilterBadge(); },
+            onSelectionChanged:  function() { updateSelCount(); },
+
+            /* ── Right-click context menu ─────────────────────────────────── */
+            onCellContextMenu: function(params) {
+              params.event.preventDefault();
+              if (!window.dsCtxShow) return;
+
+              var data = params.data;
+              var cellVal = params.value != null ? String(params.value) : '';
+
+              var items = [
+                {
+                  label: 'Copy cell value',
+                  icon: 'content_copy',
+                  action: function() {
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(cellVal)
+                        .then(function() { showToast('Copied "' + cellVal + '"'); })
+                        .catch(function() { showToast('"' + cellVal + '" (simulated copy)'); });
+                    } else {
+                      showToast('"' + cellVal + '" (simulated copy)');
+                    }
+                  },
+                },
+                {
+                  label: 'Copy row',
+                  icon: 'table_rows',
+                  action: function() {
+                    var text = [data.id, data.customer, data.issueType, data.status, data.priority, data.assignedTo, data.created].join('\t');
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(text)
+                        .then(function() { showToast('Row copied to clipboard'); })
+                        .catch(function() { showToast('Row copied (simulated)'); });
+                    } else {
+                      showToast('Row copied (simulated)');
+                    }
+                  },
+                },
+                { separator: true },
+                {
+                  label: 'View ticket ' + data.id,
+                  icon: 'open_in_new',
+                  action: function() { showToast('Opening ' + data.id + '… (simulated)'); },
+                },
+                {
+                  label: 'Reassign ticket',
+                  icon: 'person_add',
+                  action: function() { showToast('Reassign dialog would open (simulated)'); },
+                },
+                { separator: true },
+                {
+                  label: 'Delete row',
+                  icon: 'delete',
+                  destructive: true,
+                  action: function() {
+                    agSimApi.applyTransaction({ remove: [data] });
+                    showToast('Row ' + data.id + ' removed');
+                    updatePaginator();
+                  },
+                },
+              ];
+
+              window.dsCtxShow(params.event.clientX, params.event.clientY, items);
+            },
+          };
+
+          /* ── Create the grid ─────────────────────────────────────────────── */
+          var gridEl = document.getElementById('ag-sim-grid');
+          if (!gridEl) return;
+
+          if (typeof agGrid.createGrid === 'function') {
+            agSimApi = agGrid.createGrid(gridEl, gridOptions);
+          } else {
+            new agGrid.Grid(gridEl, gridOptions);
+            agSimApi = gridOptions.api;
+          }
+
+          /* ── Paginator helpers ───────────────────────────────────────────── */
+          function updatePaginator() {
+            if (!agSimApi) return;
+
+            var total      = agSimApi.paginationGetRowCount    ? agSimApi.paginationGetRowCount()    : 0;
+            var curPage    = agSimApi.paginationGetCurrentPage ? agSimApi.paginationGetCurrentPage() : 0;
+            var pageSize   = agSimApi.paginationGetPageSize    ? agSimApi.paginationGetPageSize()    : 10;
+            var totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+            var start = total === 0 ? 0 : curPage * pageSize + 1;
+            var end   = Math.min(curPage * pageSize + pageSize, total);
+
+            var elCounter = document.getElementById('ag-sim-pag-counter');
+            var elFirst   = document.getElementById('ag-sim-first');
+            var elPrev    = document.getElementById('ag-sim-prev');
+            var elNext    = document.getElementById('ag-sim-next');
+            var elLast    = document.getElementById('ag-sim-last');
+
+            if (elCounter) elCounter.textContent = total === 0 ? '0 of 0' : start + ' - ' + end + ' of ' + total;
+
+            var isFirst = curPage === 0;
+            var isLast  = curPage >= totalPages - 1;
+            if (elFirst) elFirst.disabled = isFirst;
+            if (elPrev)  elPrev.disabled  = isFirst;
+            if (elNext)  elNext.disabled  = isLast;
+            if (elLast)  elLast.disabled  = isLast;
+          }
+
+          /* Exposed paginator callbacks (called from onclick attributes) */
+          window.agSimGoToPage = function(dir) {
+            if (!agSimApi) return;
+            var cur   = agSimApi.paginationGetCurrentPage ? agSimApi.paginationGetCurrentPage() : 0;
+            var total = agSimApi.paginationGetRowCount    ? agSimApi.paginationGetRowCount()    : 0;
+            var size  = agSimApi.paginationGetPageSize    ? agSimApi.paginationGetPageSize()    : 10;
+            var pages = Math.max(1, Math.ceil(total / size));
+            var target = dir === 'first' ? 0
+                       : dir === 'last'  ? pages - 1
+                       : dir === 'prev'  ? cur - 1
+                       : dir === 'next'  ? cur + 1
+                       : cur;
+            target = Math.max(0, Math.min(target, pages - 1));
+            if (agSimApi.paginationGoToPage) agSimApi.paginationGoToPage(target);
+          };
+
+          window.agSimChangePageSize = function(val) {
+            if (!agSimApi) return;
+            var n = parseInt(val, 10);
+            if (agSimApi.paginationSetPageSize) {
+              agSimApi.paginationSetPageSize(n);
+            } else {
+              agSimApi.setGridOption('paginationPageSize', n);
+            }
+            updatePaginator();
+          };
+
+          /* ── Toolbar helpers ─────────────────────────────────────────────── */
+          window.agSimExport = function() {
+            if (agSimApi && agSimApi.exportDataAsCsv) {
+              agSimApi.exportDataAsCsv({ fileName: 'onflo-tickets.csv' });
+              showToast('Exported onflo-tickets.csv');
+            }
+          };
+
+          /* Toggle AG Grid floating filter row */
+          window.agSimToggleFilters = function(btn) {
+            var pressed  = btn.getAttribute('aria-pressed') === 'true';
+            var newState = !pressed;
+            btn.setAttribute('aria-pressed', String(newState));
+            btn.classList.toggle('is-selected', newState);
+
+            if (agSimApi) {
+              /* Re-set column defs with floatingFilter toggled */
+              var defs = agSimApi.getColumnDefs ? agSimApi.getColumnDefs() : [];
+              var newDefs = defs.map(function(c) {
+                if (c.colId === '_sel') return c;
+                return Object.assign({}, c, { floatingFilter: newState });
+              });
+              agSimApi.setColumnDefs(newDefs);
+
+              /* Turning off → also clear all filters + quick filter */
+              if (!newState) {
+                agSimApi.setFilterModel(null);
+                var inp = document.getElementById('ag-sim-search');
+                if (inp) inp.value = '';
+                if (agSimApi.setQuickFilter) agSimApi.setQuickFilter('');
+                else agSimApi.setGridOption('quickFilterText', '');
+              }
+            }
+          };
+
+          /* Add a blank ticket row at the top */
+          window.agSimAddRow = function() {
+            if (!agSimApi) return;
+            var r = {
+              id: 'TKT-' + (1051 + Math.floor(Math.random() * 900)),
+              customer: 'New Customer',
+              issueType: 'General',
+              status: 'Open',
+              priority: 'Medium',
+              assignedTo: AGENTS[0],
+              created: '2026-04-14',
+              responseTime: null,
+              satisfaction: null,
+              revenue: 0,
+            };
+            agSimApi.applyTransaction({ add: [r], addIndex: 0 });
+            agSimApi.paginationGoToPage(0);
+            updatePaginator();
+            showToast('Added ' + r.id);
+          };
+
+          /* Density toggle */
+          window.agSimSetDensity = function(density, btn) {
+            ['ag-density-comfort', 'ag-density-standard', 'ag-density-compact'].forEach(function(id) {
+              var b = document.getElementById(id);
+              if (b) { b.classList.remove('is-selected'); b.setAttribute('aria-pressed', 'false'); }
+            });
+            btn.classList.add('is-selected');
+            btn.setAttribute('aria-pressed', 'true');
+            var h = density === 'comfort' ? 68 : density === 'compact' ? 42 : 56;
+            var gridEl = document.getElementById('ag-sim-grid');
+            if (gridEl) {
+              gridEl.style.setProperty('--ag-row-height', h + 'px');
+              gridEl.style.setProperty('--ag-header-height', h + 'px');
+              gridEl.style.setProperty('--ag-line-height', h + 'px');
+            }
+          };
+
+          /* Filter badge */
+          function updateFilterBadge() {
+            if (!agSimApi) return;
+            var model = agSimApi.getFilterModel ? agSimApi.getFilterModel() : {};
+            var count = Object.keys(model || {}).length;
+            var el    = document.getElementById('ag-sim-filter-badge');
+            if (el) {
+              el.textContent  = count > 0 ? count + ' filter' + (count > 1 ? 's' : '') + ' active' : '';
+              el.style.display = count > 0 ? 'inline' : 'none';
+            }
+          }
+
+          /* Selection count + Bulk Actions visibility */
+          function updateSelCount() {
+            if (!agSimApi) return;
+            var el       = document.getElementById('ag-sim-sel-count');
+            var bulkBtn  = document.getElementById('ag-sim-bulk-btn');
+            var count    = agSimApi.getSelectedRows ? agSimApi.getSelectedRows().length : 0;
+            if (el) {
+              el.textContent   = count > 0 ? count + ' selected' : '';
+              el.style.display = count > 0 ? 'inline' : 'none';
+            }
+            if (bulkBtn) bulkBtn.style.display = count > 0 ? 'flex' : 'none';
+          }
+
+          /* ── Column panel (ds-column-panel) ──────────────────────────────── */
+          window.agSimToggleCols = function(btn) {
+            var el     = document.getElementById('ag-sim-col-sidebar');
+            if (!el) return;
+            var isOpen = el.style.display !== 'none';
+            el.style.display = isOpen ? 'none' : 'block';
+            if (btn) {
+              btn.setAttribute('aria-pressed', String(!isOpen));
+              btn.classList.toggle('is-selected', !isOpen);
+            }
+            if (!isOpen) buildColPanel();
+          };
+
+          function buildColPanel() {
+            if (!agSimApi) return;
+            var list = document.getElementById('ag-sim-col-list');
+            if (!list) return;
+            list.innerHTML = '';
+
+            var cols = agSimApi.getColumns ? agSimApi.getColumns() : [];
+            cols.forEach(function(col) {
+              var def     = col.getColDef();
+              var id      = col.getColId();
+              if (id === '_sel') return;
+              var label   = def.headerName || id;
+              var visible = col.isVisible();
+              var isSystem = !!def.pinned && id !== 'id'; /* pinned-left + not Ticket# = system */
+
+              var row = document.createElement('div');
+              row.className = 'ds-column-panel__col-row' + (isSystem ? ' ds-column-panel__col-row--system' : '');
+              row.setAttribute('data-col-key', id);
+              if (!isSystem) row.setAttribute('draggable', 'true');
+
+              /* Checkbox */
+              var cb = document.createElement('div');
+              cb.className = 'ds-column-panel__col-checkbox' + (visible ? ' ds-column-panel__col-checkbox--checked' : '');
+              cb.setAttribute('role', 'checkbox');
+              cb.setAttribute('aria-checked', String(visible));
+              cb.setAttribute('aria-label', 'Toggle ' + label + ' visibility');
+              cb.setAttribute('tabindex', isSystem ? '-1' : '0');
+              var icon = document.createElement('span');
+              icon.className = 'ds-icon ds-icon--sm' + (visible ? ' ds-icon--filled' : '');
+              icon.setAttribute('aria-hidden', 'true');
+              icon.textContent = visible ? 'check_box' : 'check_box_outline_blank';
+              cb.appendChild(icon);
+              if (!isSystem) {
+                cb.addEventListener('click', function() {
+                  if (agSimApi.setColumnVisible) agSimApi.setColumnVisible(id, !col.isVisible());
+                  setTimeout(buildColPanel, 40);
+                });
+                cb.addEventListener('keydown', function(e) {
+                  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); cb.click(); }
+                });
+              }
+
+              row.appendChild(cb);
+
+              /* Drag handle */
+              if (!isSystem) {
+                var drag = document.createElement('span');
+                drag.className = 'ds-icon ds-icon--sm ds-column-panel__col-drag';
+                drag.setAttribute('aria-hidden', 'true');
+                drag.textContent = 'drag_indicator';
+                row.appendChild(drag);
+              }
+
+              /* Label */
+              var name = document.createElement('span');
+              name.className = 'ds-column-panel__col-name';
+              name.textContent = label;
+              row.appendChild(name);
+
+              list.appendChild(row);
+            });
+          }
+
         })();
         </script>
-      </section><!-- /#table-basic-sim -->
+
+      </section>
 
       </div><!-- /#page-table-components -->
 

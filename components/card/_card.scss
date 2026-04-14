@@ -135,26 +135,44 @@
 }
 
 // ── ds-card-item (compact horizontal card) ────────────────────────────────────
+//
+// Layout: leading/trailing slots are flush to the card edge (overflow hidden +
+// border-radius clips image corners). The outer card has no horizontal padding —
+// instead, modifier classes add --spacing-lg (16px) padding on whichever side has
+// no slot. The body always carries 8px (--spacing-sm) horizontal padding.
+//
+// Interaction (outlined): hover shifts border to --color-border-hover and lifts
+// the card with elevation shadow; active shifts border to --color-border-active.
+// Elevated variant: shadow is always present; border stays transparent on hover/active.
 
 .ds-card-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: 0 var(--spacing-md);
   min-height: 56px;
   background: var(--color-surface-page);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
+  overflow: hidden;
   position: relative;
   box-sizing: border-box;
   width: 100%;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
 
+  // ── Padding when no leading slot ───────────────────────────────────────────
+  // Applied by Angular when hasLeading is false.
+
+  &--no-leading { padding-left: var(--spacing-lg); }
+
+  // ── Padding when no trailing slot (and no action button) ───────────────────
+  // Applied by Angular when hasTrailing and hasAction are both false.
+
+  &--no-trailing { padding-right: var(--spacing-lg); }
+
   // ── Elevated variant ───────────────────────────────────────────────────────
 
   &--elevated {
     border: 1px solid transparent;
-    box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+    box-shadow: 0 0 2px 0 var(--shadow-elevation-2), 0 2px 6px 2px var(--shadow-elevation-2);
   }
 
   // ── Interactive — entire card is clickable ─────────────────────────────────
@@ -172,10 +190,30 @@
       transition: background 0.12s ease;
     }
 
-    &:hover::after         { background: var(--overlay-hovered); }
-    &:focus-visible        { outline: none; box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
-    &:focus-visible::after { background: var(--overlay-focused); }
-    &:active::after        { background: var(--overlay-pressed); }
+    &:hover {
+      border-color: var(--color-border-hover);
+      box-shadow: 0 0 2px 0 var(--shadow-elevation-2), 0 2px 6px 2px var(--shadow-elevation-2);
+      &::after { background: var(--overlay-hovered); }
+    }
+
+    &:active {
+      border-color: var(--color-border-active);
+      box-shadow: 0 0 2px 0 var(--shadow-elevation-2), 0 2px 6px 2px var(--shadow-elevation-2);
+      &::after { background: var(--overlay-pressed); }
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+      &::after { background: var(--overlay-focused); }
+    }
+  }
+
+  // ── Elevated + interactive: keep border transparent on hover/active ────────
+
+  &--elevated#{&}--interactive {
+    &:hover  { border-color: transparent; }
+    &:active { border-color: transparent; }
   }
 
   // ── Disabled ───────────────────────────────────────────────────────────────
@@ -190,10 +228,13 @@
     .ds-card-item__trailing  { color: var(--color-icon-disabled); }
   }
 
-  // ── Leading slot (icon, avatar, etc.) ──────────────────────────────────────
+  // ── Leading slot ───────────────────────────────────────────────────────────
+  // Flush to the left edge. align-self: stretch so image slots fill full height.
+  // The outer overflow: hidden + border-radius clips image corners automatically.
 
   &__leading {
     flex-shrink: 0;
+    align-self: stretch;
     display: flex;
     align-items: center;
     color: var(--color-icon-default);
@@ -209,6 +250,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 0 var(--spacing-sm);
     position: relative;
     z-index: 1;
   }
@@ -216,7 +258,7 @@
   &__primary {
     font-family: var(--ref-typeface-brand);
     font-size: var(--ref-typescale-body-medium-size);
-    font-weight: var(--ref-typeface-weight-regular);
+    font-weight: var(--ref-typeface-weight-bold);
     line-height: var(--ref-typescale-body-medium-line-height);
     color: var(--color-text-primary);
     white-space: nowrap;
@@ -233,13 +275,15 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top: 1px;
+    margin-top: 2px;
   }
 
-  // ── Trailing slot (static icon, status dot, etc.) ──────────────────────────
+  // ── Trailing slot (static icon, image, status indicator, etc.) ────────────
+  // Flush to the right edge. align-self: stretch so image slots fill full height.
 
   &__trailing {
     flex-shrink: 0;
+    align-self: stretch;
     display: flex;
     align-items: center;
     color: var(--color-icon-default);
@@ -249,11 +293,13 @@
 
   // ── Action button slot ─────────────────────────────────────────────────────
   // Clicks inside __action stop propagation so they don't trigger card click.
+  // Has right padding so the button doesn't sit flush against the card edge.
 
   &__action {
     flex-shrink: 0;
     display: flex;
     align-items: center;
+    padding-right: var(--spacing-sm);
     position: relative;
     z-index: 1;
   }

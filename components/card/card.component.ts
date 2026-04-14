@@ -173,6 +173,8 @@ export class DsCardComponent implements AfterContentInit {
     <div class="ds-card-item"
          [class.ds-card-item--interactive]="interactive"
          [class.ds-card-item--elevated]="variant === 'elevated'"
+         [class.ds-card-item--no-leading]="!hasLeading"
+         [class.ds-card-item--no-trailing]="!hasTrailing && !hasAction"
          [class.is-disabled]="disabled"
          [attr.tabindex]="interactive && !disabled ? 0 : null"
          [attr.role]="interactive ? 'button' : null"
