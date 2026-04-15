@@ -8,8 +8,8 @@ Button, Icon Button, Input, Textarea, Select, Autocomplete, Checkbox, Toggle
 - Variants: `filled` | `outlined` | `text` | `destructive` | `destructive-outlined`
 - Sizes: `xs` (24px) | `sm` (32px) | `md` (42px, default) | `lg` (56px) — heights fixed via `min-height`
 - **Padding (horizontal only, no vertical)**:
-  - No icon: `xs=--spacing-sm (8px)`, `sm=--spacing-lg (16px)`, `md=--spacing-xl (24px)`, `lg=32px (calc(xl+sm))`
-  - Icon present: icon side uses `--spacing-lg (16px)`, non-icon side keeps full padding
+  - No icon: `xs=--spacing-md (12px)`, `sm=--spacing-lg (16px)`, `md=--spacing-xl (24px)`, `lg=32px (calc(xl+sm))`
+  - Icon present: icon side is reduced, non-icon side keeps the size's full padding — `xs: icon=--spacing-sm (8px)`, `sm: icon=--spacing-sm (8px)`, `md: icon=--spacing-lg (16px)`, `lg: icon=--spacing-xl (24px)`
   - Apply `ds-button--leading-icon` for leading icon, `ds-button--trailing-icon` for trailing icon — do NOT use `:has()` to infer padding
 - **Icon size**: `xs=12px`, `sm=16px`, `md=18px`, `lg=20px` — applies to both `__icon` SVG wrapper and `ds-icon` Material Symbol spans inside the button
 - Typography: label-large (`--ref-typescale-label-large-*`), weight-prominent (`--ref-typeface-weight-bold` = 600) — applies to all sizes except XS (label-small)

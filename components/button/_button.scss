@@ -91,7 +91,7 @@
   &--xs {
     font-size: var(--ref-typescale-label-small-size);
     min-height: 24px;
-    padding: 0 var(--spacing-sm);
+    padding: 0 var(--spacing-md);
     gap: var(--spacing-sm);
     border-radius: var(--radius-sm);
     .ds-button__icon,
@@ -117,12 +117,15 @@
 
 
   // ── Icon padding modifiers ──────────────────────────────────────────────────
-  // Icon side uses --spacing-lg (16px), non-icon side keeps --spacing-xl (24px)
+  // Icon side is reduced; non-icon side keeps the size's full padding.
+  // xs: icon=8px / non-icon=12px | sm: icon=8px / non-icon=16px | md: icon=16px / non-icon=24px | lg: icon=24px / non-icon=32px
 
   &--leading-icon  { padding-left:  var(--spacing-lg); }
   &--trailing-icon { padding-right: var(--spacing-lg); }
 
   // Size overrides for icon padding modifiers
+  &--xs.ds-button--leading-icon  { padding-left:  var(--spacing-sm); }
+  &--xs.ds-button--trailing-icon { padding-right: var(--spacing-sm); }
   &--sm.ds-button--leading-icon  { padding-left:  var(--spacing-sm); }
   &--sm.ds-button--trailing-icon { padding-right: var(--spacing-sm); }
   &--lg.ds-button--leading-icon  { padding-left:  var(--spacing-xl); }
