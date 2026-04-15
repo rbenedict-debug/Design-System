@@ -934,6 +934,15 @@
       --ag-row-hover-color:                     transparent;
       --ag-selected-row-background-color:       transparent;
 
+      /* Native borders — disable all; DS renderers own every border edge.
+         These CSS vars drive quartz's border system independently of direct rules. */
+      --ag-borders:                             none;
+      --ag-borders-critical:                    none;
+      --ag-row-border-style:                    none;
+      --ag-row-border-width:                    0;
+      --ag-cell-horizontal-border:              none;
+      --ag-header-column-separator-display:     none;
+
       /* Row banding — disable alternating row colour (onfloTheme never enables it) */
       --ag-odd-row-background-color:            var(--color-surface-page);
 
@@ -954,19 +963,19 @@
     }
     #ag-sim-grid .ag-cell {
       padding: 0;
-      border-right: none;
+      border: none;
       overflow: hidden;
     }
     #ag-sim-grid .ag-header-cell {
       padding: 0;
-      border-right: none;
+      border: none;
       overflow: hidden;
     }
     #ag-sim-grid .ag-row {
-      border-bottom: none;
+      border: none;
     }
     #ag-sim-grid .ag-header-row {
-      border-bottom: none;
+      border: none;
     }
     /* Hide AG Grid's native resize grip — DS header shim has its own */
     #ag-sim-grid .ag-header-cell-resize {
