@@ -910,11 +910,48 @@
       margin-left: -48px;
     }
 
-    /* AG Grid sim — zero out ag-theme-quartz cell/header padding and borders
-       that conflict with DS shim renderer styles. In production these are
-       suppressed by onfloTheme.withParams() (rowBorder:false, spacing:8, etc.).
+    /* AG Grid sim — mirror _table-ag-theme.scss token overrides + zero out
+       ag-theme-quartz structural chrome that conflicts with DS renderers.
+       In production these are handled by onfloTheme.withParams() + SCSS.
        The preview uses ag-theme-quartz from CDN without onfloTheme, so we
-       override them here with direct element targeting. */
+       replicate both layers here via CSS variable overrides and direct rules. */
+    #ag-sim-grid {
+      /* Core colours */
+      --ag-background-color:                    var(--color-surface-page);
+      --ag-foreground-color:                    var(--color-text-primary);
+      --ag-border-color:                        var(--color-border-primary);
+      --ag-secondary-foreground-color:          var(--color-text-secondary);
+      --ag-disabled-foreground-color:           var(--color-text-disabled);
+
+      /* Header */
+      --ag-header-background-color:             var(--color-surface-subtle);
+      --ag-header-foreground-color:             var(--color-text-primary);
+      --ag-header-cell-hover-background-color:  transparent;
+      --ag-header-cell-moving-background-color: transparent;
+
+      /* Row hover + selection — transparent so DS renderers handle these entirely.
+         Without this the quartz opaque row-hover bleeds at the border seam. */
+      --ag-row-hover-color:                     transparent;
+      --ag-selected-row-background-color:       transparent;
+
+      /* Row banding — disable alternating row colour (onfloTheme never enables it) */
+      --ag-odd-row-background-color:            var(--color-surface-page);
+
+      /* Inputs */
+      --ag-input-border-color:                  var(--color-border-input);
+      --ag-input-focus-border-color:            var(--color-border-input-active);
+      --ag-input-placeholder-text-color:        var(--color-text-placeholder);
+
+      /* Menus / popups */
+      --ag-menu-background-color:               var(--color-surface-overlay);
+      --ag-menu-border-color:                   var(--color-border-primary);
+      --ag-menu-separator-color:                var(--color-border-subtle);
+      --ag-menu-text-color:                     var(--color-text-primary);
+
+      /* Typography */
+      --ag-font-family:    var(--ref-typeface-brand), sans-serif;
+      --ag-font-size:      var(--ref-typescale-body-medium-size);
+    }
     #ag-sim-grid .ag-cell {
       padding: 0;
       border-right: none;
@@ -6087,7 +6124,7 @@
 
 .ag-root-wrapper {
   border-top: 1px solid var(--color-border-subtle);
-  --ag-background-color: var(--color-surface-default);
+  --ag-background-color: var(--color-surface-page);
   --ag-foreground-color: var(--color-text-primary);
   --ag-accent-color: var(--color-surface-brand-bold);
   --ag-border-color: var(--color-border-primary);
