@@ -148,6 +148,11 @@ export const onfloChartTheme: Highcharts.Options = {
   plotOptions: {
     series: {
       animation: { duration: 200 },
+      states: {
+        hover: {
+          halo: { size: 8, opacity: 0.15 },
+        },
+      },
     },
     line: {
       lineWidth: 2,
@@ -159,6 +164,9 @@ export const onfloChartTheme: Highcharts.Options = {
         symbol: 'circle',
         lineWidth: 2,
         lineColor: '#FFFFFF',
+        states: {
+          hover: { radius: 6, lineWidth: 2, lineColor: '#FFFFFF' },
+        },
       },
     },
     area: {
@@ -169,21 +177,33 @@ export const onfloChartTheme: Highcharts.Options = {
         symbol: 'circle',
         lineWidth: 2,
         lineColor: '#FFFFFF',
+        states: {
+          hover: { radius: 6, lineWidth: 2, lineColor: '#FFFFFF' },
+        },
       },
     },
     bar: {
       borderRadius: 4,
       borderWidth: 0,
+      states: {
+        hover: { brightness: 0.08 },
+      },
     },
     column: {
       borderRadius: 4,
       borderWidth: 0,
       groupPadding: 0.15,
       pointPadding: 0.05,
+      states: {
+        hover: { brightness: 0.08 },
+      },
     },
     pie: {
       borderWidth: 2,
       borderColor: '#FFFFFF',
+      states: {
+        hover: { brightness: 0.08 },
+      },
       dataLabels: {
         enabled: true,
         style: {

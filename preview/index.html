@@ -8827,6 +8827,44 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
     transform: rotate(360deg);
   }
 }
+
+/* ── SVG chart simulation hover effects ─────────────────────────────────── */
+/* Applied to static SVG demos — simulates Highcharts interactivity.         */
+
+/* Line / area: data-point markers grow on hover */
+.chart-sim-line circle,
+.chart-sim-area circle {
+  cursor: pointer;
+  transition: r 0.15s ease, filter 0.15s ease;
+}
+.chart-sim-line circle:hover,
+.chart-sim-area circle:hover {
+  r: 6px;
+  filter: brightness(1.2);
+}
+
+/* Column / bar: bars lighten on hover */
+.chart-sim-col rect.bar,
+.chart-sim-bar rect.bar {
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.chart-sim-col rect.bar:hover,
+.chart-sim-bar rect.bar:hover {
+  filter: brightness(1.2);
+}
+
+/* Donut / pie: slices lighten on hover */
+.chart-sim-donut path.slice,
+.chart-sim-pie path.slice {
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.chart-sim-donut path.slice:hover,
+.chart-sim-pie path.slice:hover {
+  filter: brightness(1.15);
+}
+
 .ds-metric-card {
   display: flex;
   flex-direction: column;
@@ -15005,7 +15043,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div class="demo-row-items" style="align-items: flex-start;">
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 520px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Monthly Cases</div>
-                <svg viewBox="0 0 520 265" width="100%" aria-label="Line chart: Monthly Cases" role="img">
+                <svg viewBox="0 0 520 265" width="100%" aria-label="Line chart: Monthly Cases" role="img" class="chart-sim-line">
                   <!-- Grid lines -->
                   <line x1="50" y1="20" x2="500" y2="20" stroke="#E9E9E9" stroke-width="1"/>
                   <line x1="50" y1="70" x2="500" y2="70" stroke="#E9E9E9" stroke-width="1"/>
@@ -15059,7 +15097,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div class="demo-row-items" style="align-items: flex-start;">
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 520px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Resolution Rate (%)</div>
-                <svg viewBox="0 0 520 240" width="100%" aria-label="Area chart: Resolution Rate" role="img">
+                <svg viewBox="0 0 520 240" width="100%" aria-label="Area chart: Resolution Rate" role="img" class="chart-sim-area">
                   <!-- Grid lines -->
                   <line x1="50" y1="20"  x2="500" y2="20"  stroke="#E9E9E9" stroke-width="1"/>
                   <line x1="50" y1="65"  x2="500" y2="65"  stroke="#E9E9E9" stroke-width="1"/>
@@ -15112,7 +15150,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <!-- Column -->
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 400px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
-                <svg viewBox="0 0 400 220" width="100%" aria-label="Column chart: Cases by Day of Week" role="img">
+                <svg viewBox="0 0 400 220" width="100%" aria-label="Column chart: Cases by Day of Week" role="img" class="chart-sim-col">
                   <!-- Grid lines -->
                   <line x1="40" y1="10"  x2="390" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
                   <line x1="40" y1="50"  x2="390" y2="50"  stroke="#E9E9E9" stroke-width="1"/>
@@ -15126,13 +15164,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <text x="34" y="54"  text-anchor="end" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">195</text>
                   <text x="34" y="14"  text-anchor="end" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">260</text>
                   <!-- Columns (rx=3 for border-radius) -->
-                  <rect x="46"  y="85"  width="34" height="85"  rx="3" fill="#0B6EB4"/>
-                  <rect x="96"  y="40"  width="34" height="130" rx="3" fill="#0B6EB4"/>
-                  <rect x="146" y="50"  width="34" height="120" rx="3" fill="#0B6EB4"/>
-                  <rect x="196" y="24"  width="34" height="146" rx="3" fill="#0B6EB4"/>
-                  <rect x="246" y="64"  width="34" height="106" rx="3" fill="#0B6EB4"/>
-                  <rect x="296" y="126" width="34" height="44"  rx="3" fill="#0B6EB4"/>
-                  <rect x="346" y="148" width="34" height="22"  rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="46"  y="85"  width="34" height="85"  rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="96"  y="40"  width="34" height="130" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="146" y="50"  width="34" height="120" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="196" y="24"  width="34" height="146" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="246" y="64"  width="34" height="106" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="296" y="126" width="34" height="44"  rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="346" y="148" width="34" height="22"  rx="3" fill="#0B6EB4"/>
                   <!-- X axis labels -->
                   <text x="63"  y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Mon</text>
                   <text x="113" y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Tue</text>
@@ -15147,7 +15185,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <!-- Bar (horizontal) -->
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; width: 360px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 12px;">Cases by Agent</div>
-                <svg viewBox="0 0 340 185" width="100%" aria-label="Bar chart: Cases by Agent" role="img">
+                <svg viewBox="0 0 340 185" width="100%" aria-label="Bar chart: Cases by Agent" role="img" class="chart-sim-bar">
                   <!-- Grid lines -->
                   <line x1="100" y1="0"   x2="100" y2="175" stroke="#E9E9E9" stroke-width="1"/>
                   <line x1="170" y1="0"   x2="170" y2="175" stroke="#E9E9E9" stroke-width="1"/>
@@ -15160,15 +15198,15 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <text x="310" y="183" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">210</text>
                   <!-- Bars -->
                   <text x="96" y="19" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Chen, L.</text>
-                  <rect x="100" y="8"  width="147" height="18" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="100" y="8"  width="147" height="18" rx="3" fill="#0B6EB4"/>
                   <text x="96" y="50" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Torres, M.</text>
-                  <rect x="100" y="39" width="119" height="18" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="100" y="39" width="119" height="18" rx="3" fill="#0B6EB4"/>
                   <text x="96" y="81" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Park, J.</text>
-                  <rect x="100" y="70" width="102" height="18" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="100" y="70" width="102" height="18" rx="3" fill="#0B6EB4"/>
                   <text x="96" y="112" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Reyes, A.</text>
-                  <rect x="100" y="101" width="87" height="18" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="100" y="101" width="87" height="18" rx="3" fill="#0B6EB4"/>
                   <text x="96" y="143" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Kim, S.</text>
-                  <rect x="100" y="132" width="64" height="18" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="100" y="132" width="64" height="18" rx="3" fill="#0B6EB4"/>
                 </svg>
               </div>
 
@@ -15183,18 +15221,18 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <!-- Donut -->
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; align-items: center; width: 260px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px; align-self: flex-start;">Cases by Channel</div>
-                <svg viewBox="0 0 240 240" width="100%" aria-label="Donut chart: Cases by Channel" role="img">
+                <svg viewBox="0 0 240 240" width="100%" aria-label="Donut chart: Cases by Channel" role="img" class="chart-sim-donut">
                   <!-- Slices (cx=120 cy=120, outerR=95, innerR=57) -->
                   <!-- Email 38% -->
-                  <path d="M 120 25 A 95 95 0 0 1 184.8 189.5 L 158.9 161.7 A 57 57 0 0 0 120 63 Z" fill="#0B6EB4"/>
+                  <path class="slice" d="M 120 25 A 95 95 0 0 1 184.8 189.5 L 158.9 161.7 A 57 57 0 0 0 120 63 Z" fill="#0B6EB4"/>
                   <!-- Chat 27% -->
-                  <path d="M 184.8 189.5 A 95 95 0 0 1 43.1 175.9 L 73.9 153.5 A 57 57 0 0 0 158.9 161.7 Z" fill="#45A55F"/>
+                  <path class="slice" d="M 184.8 189.5 A 95 95 0 0 1 43.1 175.9 L 73.9 153.5 A 57 57 0 0 0 158.9 161.7 Z" fill="#45A55F"/>
                   <!-- Phone 19% -->
-                  <path d="M 43.1 175.9 A 95 95 0 0 1 39.7 69.3 L 71.8 89.6 A 57 57 0 0 0 73.9 153.5 Z" fill="#FFBF00"/>
+                  <path class="slice" d="M 43.1 175.9 A 95 95 0 0 1 39.7 69.3 L 71.8 89.6 A 57 57 0 0 0 73.9 153.5 Z" fill="#FFBF00"/>
                   <!-- Portal 11% -->
-                  <path d="M 39.7 69.3 A 95 95 0 0 1 90.6 29.7 L 102.4 65.8 A 57 57 0 0 0 71.8 89.6 Z" fill="#43ADF2"/>
+                  <path class="slice" d="M 39.7 69.3 A 95 95 0 0 1 90.6 29.7 L 102.4 65.8 A 57 57 0 0 0 71.8 89.6 Z" fill="#43ADF2"/>
                   <!-- Other 5% -->
-                  <path d="M 90.6 29.7 A 95 95 0 0 1 120 25 L 120 63 A 57 57 0 0 0 102.4 65.8 Z" fill="#CACACA"/>
+                  <path class="slice" d="M 90.6 29.7 A 95 95 0 0 1 120 25 L 120 63 A 57 57 0 0 0 102.4 65.8 Z" fill="#CACACA"/>
                   <!-- Center hole label -->
                   <circle cx="120" cy="120" r="57" fill="white"/>
                   <text x="120" y="115" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="22" font-weight="600" fill="#2D3638">1,248</text>
@@ -15219,18 +15257,18 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <!-- Pie (same slices, no hole) -->
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; align-items: center; width: 260px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px; align-self: flex-start;">Cases by Priority</div>
-                <svg viewBox="0 0 240 240" width="100%" aria-label="Pie chart: Cases by Priority" role="img">
+                <svg viewBox="0 0 240 240" width="100%" aria-label="Pie chart: Cases by Priority" role="img" class="chart-sim-pie">
                   <!-- High 31%, Critical 14%, Medium 33%, Low 22% -->
                   <!-- Angles from top (0°=top, clockwise): Critical 0→50.4°, High 50.4→162°, Medium 162→280.8°, Low 280.8→360° -->
                   <!-- Endpoints: 0°=(120,25)  50.4°=(193.1,59.3)  162°=(149.4,210.4)  280.8°=(26.7,102.2) -->
                   <!-- Critical 14%: 0° to 50.4° -->
-                  <path d="M 120 120 L 120 25 A 95 95 0 0 1 193.1 59.3 Z" fill="#D70917"/>
+                  <path class="slice" d="M 120 120 L 120 25 A 95 95 0 0 1 193.1 59.3 Z" fill="#D70917"/>
                   <!-- High 31%: 50.4° to 162° -->
-                  <path d="M 120 120 L 193.1 59.3 A 95 95 0 0 1 149.4 210.4 Z" fill="#0B6EB4"/>
+                  <path class="slice" d="M 120 120 L 193.1 59.3 A 95 95 0 0 1 149.4 210.4 Z" fill="#0B6EB4"/>
                   <!-- Medium 33%: 162° to 280.8° -->
-                  <path d="M 120 120 L 149.4 210.4 A 95 95 0 0 1 26.7 102.2 Z" fill="#45A55F"/>
+                  <path class="slice" d="M 120 120 L 149.4 210.4 A 95 95 0 0 1 26.7 102.2 Z" fill="#45A55F"/>
                   <!-- Low 22%: 280.8° to 360° -->
-                  <path d="M 120 120 L 26.7 102.2 A 95 95 0 0 1 120 25 Z" fill="#43ADF2"/>
+                  <path class="slice" d="M 120 120 L 26.7 102.2 A 95 95 0 0 1 120 25 Z" fill="#43ADF2"/>
                   <!-- White borders -->
                   <path d="M 120 120 L 120 25 A 95 95 0 0 1 193.1 59.3 Z" fill="none" stroke="#fff" stroke-width="2"/>
                   <path d="M 120 120 L 193.1 59.3 A 95 95 0 0 1 149.4 210.4 Z" fill="none" stroke="#fff" stroke-width="2"/>
@@ -15345,7 +15383,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <!-- Line chart — full width -->
             <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; margin-bottom: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
               <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Monthly Cases</div>
-              <svg viewBox="0 0 740 210" width="100%" aria-label="Line chart: Monthly Cases" role="img" style="display:block;">
+              <svg viewBox="0 0 740 210" width="100%" aria-label="Line chart: Monthly Cases" role="img" class="chart-sim-line" style="display:block;">
                 <!-- Grid lines -->
                 <line x1="54" y1="20" x2="720" y2="20" stroke="#E9E9E9" stroke-width="1"/>
                 <line x1="54" y1="60" x2="720" y2="60" stroke="#E9E9E9" stroke-width="1"/>
@@ -15395,7 +15433,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <!-- Donut: Cases by Channel -->
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px;">Cases by Channel</div>
-                <svg viewBox="0 0 240 220" width="240" height="220" aria-label="Donut chart: Cases by Channel" role="img" style="display:block; margin: 0 auto;">
+                <svg viewBox="0 0 240 220" width="240" height="220" aria-label="Donut chart: Cases by Channel" role="img" class="chart-sim-donut" style="display:block; margin: 0 auto;">
                   <!-- Slices (cx=120 cy=110, outerR=88, innerR=53) -->
                   <!-- Angles from top (0°=top, clockwise). Endpoints computed as: -->
                   <!-- x = 120 + r·sin(θ),  y = 110 − r·cos(θ) -->
@@ -15404,15 +15442,15 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <!-- 302.4°=outer(45.8,62.7)/inner(75.3,81.5) -->
                   <!-- 342°=outer(92.8,26.3)/inner(103.6,59.6) -->
                   <!-- Email 38%: 0→136.8° -->
-                  <path d="M 120 22 A 88 88 0 0 1 180.2 174.2 L 156.3 148.6 A 53 53 0 0 0 120 57 Z" fill="#0B6EB4"/>
+                  <path class="slice" d="M 120 22 A 88 88 0 0 1 180.2 174.2 L 156.3 148.6 A 53 53 0 0 0 120 57 Z" fill="#0B6EB4"/>
                   <!-- Chat 27%: 136.8→234° -->
-                  <path d="M 180.2 174.2 A 88 88 0 0 1 48.8 161.7 L 77.1 141.2 A 53 53 0 0 0 156.3 148.6 Z" fill="#45A55F"/>
+                  <path class="slice" d="M 180.2 174.2 A 88 88 0 0 1 48.8 161.7 L 77.1 141.2 A 53 53 0 0 0 156.3 148.6 Z" fill="#45A55F"/>
                   <!-- Phone 19%: 234→302.4° -->
-                  <path d="M 48.8 161.7 A 88 88 0 0 1 45.8 62.7 L 75.3 81.5 A 53 53 0 0 0 77.1 141.2 Z" fill="#FFBF00"/>
+                  <path class="slice" d="M 48.8 161.7 A 88 88 0 0 1 45.8 62.7 L 75.3 81.5 A 53 53 0 0 0 77.1 141.2 Z" fill="#FFBF00"/>
                   <!-- Portal 11%: 302.4→342° -->
-                  <path d="M 45.8 62.7 A 88 88 0 0 1 92.8 26.3 L 103.6 59.6 A 53 53 0 0 0 75.3 81.5 Z" fill="#43ADF2"/>
+                  <path class="slice" d="M 45.8 62.7 A 88 88 0 0 1 92.8 26.3 L 103.6 59.6 A 53 53 0 0 0 75.3 81.5 Z" fill="#43ADF2"/>
                   <!-- Other 5%: 342→360° -->
-                  <path d="M 92.8 26.3 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 103.6 59.6 Z" fill="#CACACA"/>
+                  <path class="slice" d="M 92.8 26.3 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 103.6 59.6 Z" fill="#CACACA"/>
                   <!-- White borders -->
                   <path d="M 120 22 A 88 88 0 0 1 180.2 174.2 L 156.3 148.6 A 53 53 0 0 0 120 57 Z" fill="none" stroke="#fff" stroke-width="2"/>
                   <path d="M 180.2 174.2 A 88 88 0 0 1 48.8 161.7 L 77.1 141.2 A 53 53 0 0 0 156.3 148.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
@@ -15437,7 +15475,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <!-- Column: Cases by Day of Week -->
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
-                <svg viewBox="0 0 440 210" width="100%" aria-label="Column chart: Cases by Day of Week" role="img" style="display:block;">
+                <svg viewBox="0 0 440 210" width="100%" aria-label="Column chart: Cases by Day of Week" role="img" class="chart-sim-col" style="display:block;">
                   <!-- Grid lines -->
                   <line x1="44" y1="10"  x2="430" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
                   <line x1="44" y1="50"  x2="430" y2="50"  stroke="#E9E9E9" stroke-width="1"/>
@@ -15451,12 +15489,12 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <text x="38" y="54"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">195</text>
                   <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">260</text>
                   <!-- Columns (width=46, gap=18) -->
-                  <rect x="50"  y="85"  width="46" height="85"  rx="3" fill="#0B6EB4"/>
-                  <rect x="114" y="40"  width="46" height="130" rx="3" fill="#0B6EB4"/>
-                  <rect x="178" y="50"  width="46" height="120" rx="3" fill="#0B6EB4"/>
-                  <rect x="242" y="24"  width="46" height="146" rx="3" fill="#0B6EB4"/>
-                  <rect x="306" y="64"  width="46" height="106" rx="3" fill="#0B6EB4"/>
-                  <rect x="370" y="126" width="46" height="44"  rx="3" fill="#0B6EB4" opacity="0.5"/>
+                  <rect class="bar" x="50"  y="85"  width="46" height="85"  rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="114" y="40"  width="46" height="130" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="178" y="50"  width="46" height="120" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="242" y="24"  width="46" height="146" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="306" y="64"  width="46" height="106" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="370" y="126" width="46" height="44"  rx="3" fill="#0B6EB4" opacity="0.5"/>
                   <!-- X labels -->
                   <text x="73"  y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mon</text>
                   <text x="137" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Tue</text>
