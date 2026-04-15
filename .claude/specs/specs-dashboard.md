@@ -155,14 +155,23 @@ optional icon, and optional trend indicator (percentage change with directional 
 </div>
 ```
 
+### Visual treatment
+- **No border** on the default variant — elevation replaces the border. Card uses `box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2)` to float above the page surface.
+- **Brand variant** adds `border: 1px solid var(--color-border-brand)` on top of the elevation as a visual accent.
+- **Page background**: dashboard pages must use `background: var(--color-surface-page)` so the `--color-surface-default` card surface reads as elevated. Cards placed on a white/default background will not have meaningful contrast.
+
 ### Dashboard layout pattern
 Metric cards are typically arranged in a 3–4 column grid above charts:
 ```html
+<!-- Page wrapper — provides the canvas floor -->
+<div style="background: var(--color-surface-page); padding: 24px;">
 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;">
   <ds-metric-card value="1,248"  label="Open Cases"      icon="inbox"            [trend]="8.3"  trendLabel="vs last week" />
   <ds-metric-card value="92.4%"  label="CSAT Score"      icon="sentiment_satisfied" [trend]="-1.2" trendLabel="vs last month" />
   <ds-metric-card value="4m 32s" label="Avg Handle Time" icon="timer"            [trend]="12"   trendLabel="vs last week" />
   <ds-metric-card value="87.3%"  label="Resolution Rate" icon="check_circle"     [trend]="2.1"  trendLabel="vs last month" />
+</div>
+<!-- chart tiles follow, also floating on --color-surface-page -->
 </div>
 ```
 

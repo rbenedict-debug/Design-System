@@ -8832,9 +8832,9 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   flex-direction: column;
   gap: var(--spacing-xs);
   padding: var(--spacing-lg);
-  border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
   background: var(--color-surface-default);
+  box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
   min-width: 160px;
 }
 .ds-metric-card__header {
@@ -8909,7 +8909,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   margin-left: 1px;
 }
 .ds-metric-card--brand {
-  border-color: var(--color-border-brand);
+  border: 1px solid var(--color-border-brand);
   background: var(--color-surface-brand-subtle);
 }
 .ds-metric-card--brand .ds-metric-card__label {
@@ -14849,7 +14849,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         </div>
         <p class="section-desc">KPI tile for dashboards. Displays a prominently-sized primary value with an optional label, icon, trend indicator, and loading skeleton. Angular component: <code>&lt;ds-metric-card&gt;</code> with <code>[value]</code>, <code>[label]</code>, <code>[icon]</code>, <code>[trend]</code> (number, positive = green ↑, negative = red ↓), <code>[trendLabel]</code>, <code>[variant]</code> ('default' | 'brand'), and <code>[loading]</code>.</p>
 
-        <div class="component-demo">
+        <div class="component-demo" style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px;">
 
           <!-- Row 1: Default — 4 cards -->
           <div class="demo-row">
@@ -14996,13 +14996,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         </div>
         <p class="section-desc">Unified chart component wrapping Highcharts with the Onflo color palette, typography, and visual theme pre-applied. Requires <code>highcharts</code> as a peer dependency. Angular component: <code>&lt;ds-chart&gt;</code> with <code>[type]</code> ('line' | 'area' | 'bar' | 'column' | 'donut' | 'pie'), <code>[series]</code> (Highcharts.SeriesOptionsType[]), <code>[categories]</code>, <code>[title]</code>, <code>[height]</code>, <code>[legend]</code>, <code>[loading]</code>, and <code>[options]</code> (Highcharts.Options escape hatch). The Onflo theme is applied globally on first render via <code>Highcharts.setOptions(onfloChartTheme)</code> — also importable directly for apps using Highcharts outside ds-chart. <em>Preview below uses representative SVG — the Angular component renders live Highcharts.</em></p>
 
-        <div class="component-demo">
+        <div class="component-demo" style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px;">
 
           <!-- Row 1: Line chart (2 series) -->
           <div class="demo-row">
             <div class="demo-row-label">type="line"</div>
             <div class="demo-row-items" style="align-items: flex-start;">
-              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 520px;">
+              <div style="background: var(--color-surface-default); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 520px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Monthly Cases</div>
                 <svg viewBox="0 0 520 240" width="520" height="240" aria-label="Line chart: Monthly Cases" role="img">
                   <!-- Grid lines -->
@@ -15056,7 +15056,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           <div class="demo-row">
             <div class="demo-row-label">type="area"</div>
             <div class="demo-row-items" style="align-items: flex-start;">
-              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 520px;">
+              <div style="background: var(--color-surface-default); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 520px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Resolution Rate (%)</div>
                 <svg viewBox="0 0 520 240" width="520" height="240" aria-label="Area chart: Resolution Rate" role="img">
                   <!-- Grid lines -->
@@ -15109,7 +15109,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div class="demo-row-items" style="gap: 24px; align-items: flex-start; flex-wrap: wrap;">
 
               <!-- Column -->
-              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 400px;">
+              <div style="background: var(--color-surface-default); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 400px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
                 <svg viewBox="0 0 400 220" width="400" height="220" aria-label="Column chart: Cases by Day of Week" role="img">
                   <!-- Grid lines -->
@@ -15144,7 +15144,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               </div>
 
               <!-- Bar (horizontal) -->
-              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px; width: 360px;">
+              <div style="background: var(--color-surface-default); border-radius: var(--radius-md); padding: 16px; width: 360px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 12px;">Cases by Agent</div>
                 <svg viewBox="0 0 340 185" width="340" height="185" aria-label="Bar chart: Cases by Agent" role="img">
                   <!-- Grid lines -->
@@ -15180,7 +15180,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div class="demo-row-items" style="gap: 24px; align-items: flex-start; flex-wrap: wrap;">
 
               <!-- Donut -->
-              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; align-items: center; width: 260px;">
+              <div style="background: var(--color-surface-default); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; align-items: center; width: 260px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px; align-self: flex-start;">Cases by Channel</div>
                 <svg viewBox="0 0 240 240" width="240" height="240" aria-label="Donut chart: Cases by Channel" role="img">
                   <!-- Slices (cx=120 cy=120, outerR=95, innerR=57) -->
@@ -15216,7 +15216,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               </div>
 
               <!-- Pie (same slices, no hole) -->
-              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; align-items: center; width: 260px;">
+              <div style="background: var(--color-surface-default); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; align-items: center; width: 260px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px; align-self: flex-start;">Cases by Priority</div>
                 <svg viewBox="0 0 240 240" width="240" height="240" aria-label="Pie chart: Cases by Priority" role="img">
                   <!-- High 31%, Critical 14%, Medium 33%, Low 22% -->
@@ -15262,7 +15262,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         <p class="section-desc">Composed view showing <code>ds-metric-card</code> and <code>ds-chart</code> working together as a full dashboard page. In production, replace the SVG chart previews with live <code>&lt;ds-chart&gt;</code> components bound to real data and <code>&lt;ds-metric-card&gt;</code> components bound to aggregated values.</p>
 
         <div class="component-demo">
-          <div style="background: var(--color-surface-page); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 0 2px 0 rgba(45,54,56,0.06), 0 2px 6px 2px rgba(45,54,56,0.06); min-width: 820px; box-sizing: border-box;">
+          <div style="background: var(--color-surface-page); padding: 24px; min-width: 820px; box-sizing: border-box; border-radius: var(--radius-md);">
 
             <!-- Page header -->
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
@@ -15340,7 +15340,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div>
 
             <!-- Line chart — full width -->
-            <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px 16px 8px; margin-bottom: 16px;">
+            <div style="background: var(--color-surface-default); border-radius: var(--radius-md); padding: 16px 16px 8px; margin-bottom: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
               <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Monthly Cases</div>
               <svg viewBox="0 0 740 210" width="100%" height="210" aria-label="Line chart: Monthly Cases" role="img" style="display:block;">
                 <!-- Grid lines -->
@@ -15390,7 +15390,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div style="display: grid; grid-template-columns: 280px 1fr; gap: 16px;">
 
               <!-- Donut: Cases by Channel -->
-              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px;">
+              <div style="background: var(--color-surface-default); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px;">Cases by Channel</div>
                 <svg viewBox="0 0 240 220" width="240" height="220" aria-label="Donut chart: Cases by Channel" role="img" style="display:block; margin: 0 auto;">
                   <!-- Slices (cx=120 cy=110, outerR=88, innerR=53) -->
@@ -15426,7 +15426,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               </div>
 
               <!-- Column: Cases by Day of Week -->
-              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px 16px 8px;">
+              <div style="background: var(--color-surface-default); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
                 <svg viewBox="0 0 440 210" width="100%" height="210" aria-label="Column chart: Cases by Day of Week" role="img" style="display:block;">
                   <!-- Grid lines -->
