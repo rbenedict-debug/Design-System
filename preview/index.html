@@ -15345,7 +15345,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         <p class="section-desc">Composed view showing <code>ds-metric-card</code> and <code>ds-chart</code> working together as a full dashboard page. In production, replace the SVG chart previews with live <code>&lt;ds-chart&gt;</code> components bound to real data and <code>&lt;ds-metric-card&gt;</code> components bound to aggregated values.</p>
 
         <div class="component-demo">
-          <div style="background: var(--color-surface-page); padding: 24px; width: 100%; box-sizing: border-box; border-radius: var(--radius-md);">
+          <div style="background: var(--color-surface-page); padding: 24px; width: 100%; box-sizing: border-box; border-radius: var(--radius-md); max-width: 1100px; margin: 0 auto;">
 
             <!-- Page header -->
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
@@ -15425,7 +15425,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <!-- Line chart — full width -->
             <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; margin-bottom: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
               <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Monthly Cases</div>
-              <svg viewBox="0 0 740 210" width="100%" aria-label="Line chart: Monthly Cases" role="img" class="chart-sim-line" style="display:block;">
+              <svg viewBox="0 0 740 210" width="100%" height="210" aria-label="Line chart: Monthly Cases" role="img" class="chart-sim-line" style="display:block;">
                 <!-- Grid lines -->
                 <line x1="54" y1="20" x2="720" y2="20" stroke="#E9E9E9" stroke-width="1"/>
                 <line x1="54" y1="60" x2="720" y2="60" stroke="#E9E9E9" stroke-width="1"/>
@@ -15469,43 +15469,37 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               </svg>
             </div>
 
-            <!-- Bottom row: donut + column -->
-            <div style="display: grid; grid-template-columns: 280px 1fr; gap: 16px;">
+            <!-- Bottom row: 3 equal columns -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
 
               <!-- Donut: Cases by Channel -->
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
-                <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px;">Cases by Channel</div>
-                <svg viewBox="0 0 240 220" width="240" height="220" aria-label="Donut chart: Cases by Channel" role="img" class="chart-sim-donut" style="display:block; margin: 0 auto;">
-                  <!-- Slices (cx=120 cy=110, outerR=88, innerR=53) -->
-                  <!-- Angles from top (0°=top, clockwise). Endpoints computed as: -->
-                  <!-- x = 120 + r·sin(θ),  y = 110 − r·cos(θ) -->
-                  <!-- 0°=(120,22) 136.8°=outer(180.2,174.2)/inner(156.3,148.6) -->
-                  <!-- 234°=outer(48.8,161.7)/inner(77.1,141.2) -->
-                  <!-- 302.4°=outer(45.8,62.7)/inner(75.3,81.5) -->
-                  <!-- 342°=outer(92.8,26.3)/inner(103.6,59.6) -->
+                <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Channel</div>
+                <svg viewBox="0 0 240 200" width="100%" height="200" aria-label="Donut chart: Cases by Channel" role="img" class="chart-sim-donut" style="display:block; margin: 0 auto;">
+                  <!-- Slices (cx=120 cy=100, outerR=88, innerR=53) -->
                   <!-- Email 38%: 0→136.8° -->
-                  <path class="slice" d="M 120 22 A 88 88 0 0 1 180.2 174.2 L 156.3 148.6 A 53 53 0 0 0 120 57 Z" fill="#0B6EB4" data-tip-label="Email" data-tip-value="38% (474)" data-tip-color="#0B6EB4"/>
+                  <path class="slice" d="M 120 12 A 88 88 0 0 1 180.2 164.2 L 156.3 138.6 A 53 53 0 0 0 120 47 Z" fill="#0B6EB4" data-tip-label="Email" data-tip-value="38% (474)" data-tip-color="#0B6EB4"/>
                   <!-- Chat 27%: 136.8→234° -->
-                  <path class="slice" d="M 180.2 174.2 A 88 88 0 0 1 48.8 161.7 L 77.1 141.2 A 53 53 0 0 0 156.3 148.6 Z" fill="#45A55F" data-tip-label="Chat" data-tip-value="27% (337)" data-tip-color="#45A55F"/>
+                  <path class="slice" d="M 180.2 164.2 A 88 88 0 0 1 48.8 151.7 L 77.1 131.2 A 53 53 0 0 0 156.3 138.6 Z" fill="#45A55F" data-tip-label="Chat" data-tip-value="27% (337)" data-tip-color="#45A55F"/>
                   <!-- Phone 19%: 234→302.4° -->
-                  <path class="slice" d="M 48.8 161.7 A 88 88 0 0 1 45.8 62.7 L 75.3 81.5 A 53 53 0 0 0 77.1 141.2 Z" fill="#FFBF00" data-tip-label="Phone" data-tip-value="19% (237)" data-tip-color="#FFBF00"/>
+                  <path class="slice" d="M 48.8 151.7 A 88 88 0 0 1 45.8 52.7 L 75.3 71.5 A 53 53 0 0 0 77.1 131.2 Z" fill="#FFBF00" data-tip-label="Phone" data-tip-value="19% (237)" data-tip-color="#FFBF00"/>
                   <!-- Portal 11%: 302.4→342° -->
-                  <path class="slice" d="M 45.8 62.7 A 88 88 0 0 1 92.8 26.3 L 103.6 59.6 A 53 53 0 0 0 75.3 81.5 Z" fill="#43ADF2" data-tip-label="Portal" data-tip-value="11% (137)" data-tip-color="#43ADF2"/>
+                  <path class="slice" d="M 45.8 52.7 A 88 88 0 0 1 92.8 16.3 L 103.6 49.6 A 53 53 0 0 0 75.3 71.5 Z" fill="#43ADF2" data-tip-label="Portal" data-tip-value="11% (137)" data-tip-color="#43ADF2"/>
                   <!-- Other 5%: 342→360° -->
-                  <path class="slice" d="M 92.8 26.3 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 103.6 59.6 Z" fill="#CACACA" data-tip-label="Other" data-tip-value="5% (62)" data-tip-color="#CACACA"/>
+                  <path class="slice" d="M 92.8 16.3 A 88 88 0 0 1 120 12 L 120 47 A 53 53 0 0 0 103.6 49.6 Z" fill="#CACACA" data-tip-label="Other" data-tip-value="5% (62)" data-tip-color="#CACACA"/>
                   <!-- White borders -->
-                  <path d="M 120 22 A 88 88 0 0 1 180.2 174.2 L 156.3 148.6 A 53 53 0 0 0 120 57 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 180.2 174.2 A 88 88 0 0 1 48.8 161.7 L 77.1 141.2 A 53 53 0 0 0 156.3 148.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 48.8 161.7 A 88 88 0 0 1 45.8 62.7 L 75.3 81.5 A 53 53 0 0 0 77.1 141.2 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 45.8 62.7 A 88 88 0 0 1 92.8 26.3 L 103.6 59.6 A 53 53 0 0 0 75.3 81.5 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 92.8 26.3 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 103.6 59.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 120 12 A 88 88 0 0 1 180.2 164.2 L 156.3 138.6 A 53 53 0 0 0 120 47 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 180.2 164.2 A 88 88 0 0 1 48.8 151.7 L 77.1 131.2 A 53 53 0 0 0 156.3 138.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 48.8 151.7 A 88 88 0 0 1 45.8 52.7 L 75.3 71.5 A 53 53 0 0 0 77.1 131.2 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 45.8 52.7 A 88 88 0 0 1 92.8 16.3 L 103.6 49.6 A 53 53 0 0 0 75.3 71.5 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 92.8 16.3 A 88 88 0 0 1 120 12 L 120 47 A 53 53 0 0 0 103.6 49.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
                   <!-- Donut hole + center label -->
-                  <circle cx="120" cy="110" r="53" fill="white"/>
-                  <text x="120" y="105" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="20" font-weight="600" fill="#2D3638">1,248</text>
-                  <text x="120" y="121" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">total cases</text>
+                  <circle cx="120" cy="100" r="53" fill="white"/>
+                  <text x="120" y="95" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="20" font-weight="600" fill="#2D3638">1,248</text>
+                  <text x="120" y="111" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">total cases</text>
                 </svg>
-                <!-- Legend -->
-                <div style="display:flex; flex-direction:column; gap:3px; margin-top:4px;">
+                <!-- Legend — 2-column grid to fill horizontal space -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:3px 8px; margin-top:8px;">
                   <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#0B6EB4;flex-shrink:0;"></span>Email — 38%</div>
                   <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#45A55F;flex-shrink:0;"></span>Chat — 27%</div>
                   <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#FFBF00;flex-shrink:0;"></span>Phone — 19%</div>
@@ -15514,29 +15508,30 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 </div>
               </div>
 
-              <!-- Column: Cases by Day of Week -->
+              <!-- Column: Cases by Day of Week (Mon–Sun) -->
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
-                <svg viewBox="0 0 440 210" width="100%" aria-label="Column chart: Cases by Day of Week" role="img" class="chart-sim-col" style="display:block;">
-                  <!-- Grid lines -->
-                  <line x1="44" y1="10"  x2="430" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
-                  <line x1="44" y1="50"  x2="430" y2="50"  stroke="#E9E9E9" stroke-width="1"/>
-                  <line x1="44" y1="90"  x2="430" y2="90"  stroke="#E9E9E9" stroke-width="1"/>
-                  <line x1="44" y1="130" x2="430" y2="130" stroke="#E9E9E9" stroke-width="1"/>
-                  <line x1="44" y1="170" x2="430" y2="170" stroke="#E9E9E9" stroke-width="1"/>
+                <svg viewBox="0 0 502 210" width="100%" aria-label="Column chart: Cases by Day of Week" role="img" class="chart-sim-col" style="display:block;">
+                  <!-- Grid lines (extended to x=490) -->
+                  <line x1="44" y1="10"  x2="490" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="50"  x2="490" y2="50"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="90"  x2="490" y2="90"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="130" x2="490" y2="130" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="170" x2="490" y2="170" stroke="#E9E9E9" stroke-width="1"/>
                   <!-- Y labels -->
                   <text x="38" y="174" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">0</text>
                   <text x="38" y="134" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">65</text>
                   <text x="38" y="94"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">130</text>
                   <text x="38" y="54"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">195</text>
                   <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">260</text>
-                  <!-- Columns (width=46, gap=18) -->
+                  <!-- Columns (width=46, spacing=64) -->
                   <rect class="bar" x="50"  y="85"  width="46" height="85"  rx="3" fill="#0B6EB4" data-tip-header="Mon" data-tip-label="Cases Opened" data-tip-value="138" data-tip-color="#0B6EB4"/>
                   <rect class="bar" x="114" y="40"  width="46" height="130" rx="3" fill="#0B6EB4" data-tip-header="Tue" data-tip-label="Cases Opened" data-tip-value="211" data-tip-color="#0B6EB4"/>
                   <rect class="bar" x="178" y="50"  width="46" height="120" rx="3" fill="#0B6EB4" data-tip-header="Wed" data-tip-label="Cases Opened" data-tip-value="195" data-tip-color="#0B6EB4"/>
                   <rect class="bar" x="242" y="24"  width="46" height="146" rx="3" fill="#0B6EB4" data-tip-header="Thu" data-tip-label="Cases Opened" data-tip-value="237" data-tip-color="#0B6EB4"/>
                   <rect class="bar" x="306" y="64"  width="46" height="106" rx="3" fill="#0B6EB4" data-tip-header="Fri" data-tip-label="Cases Opened" data-tip-value="172" data-tip-color="#0B6EB4"/>
                   <rect class="bar" x="370" y="126" width="46" height="44"  rx="3" fill="#0B6EB4" opacity="0.5" data-tip-header="Sat" data-tip-label="Cases Opened" data-tip-value="71" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="434" y="153" width="46" height="17"  rx="3" fill="#0B6EB4" opacity="0.35" data-tip-header="Sun" data-tip-label="Cases Opened" data-tip-value="28" data-tip-color="#0B6EB4"/>
                   <!-- X labels -->
                   <text x="73"  y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mon</text>
                   <text x="137" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Tue</text>
@@ -15544,9 +15539,50 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <text x="265" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Thu</text>
                   <text x="329" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Fri</text>
                   <text x="393" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Sat</text>
+                  <text x="457" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Sun</text>
                   <!-- Legend -->
                   <rect x="44" y="196" width="10" height="10" rx="2" fill="#0B6EB4"/>
                   <text x="58" y="205" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Cases Opened</text>
+                </svg>
+              </div>
+
+              <!-- Area: Avg Handle Time trend -->
+              <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
+                <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Avg Handle Time</div>
+                <svg viewBox="0 0 280 190" width="100%" aria-label="Area chart: Avg Handle Time" role="img" class="chart-sim-area" style="display:block;">
+                  <!-- Grid lines (y: 0=160, 2m=123, 4m=85, 6m=48, 8m=10) -->
+                  <line x1="44" y1="10"  x2="270" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="48"  x2="270" y2="48"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="85"  x2="270" y2="85"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="123" x2="270" y2="123" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="160" x2="270" y2="160" stroke="#E9E9E9" stroke-width="1"/>
+                  <!-- Y labels -->
+                  <text x="38" y="164" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">0</text>
+                  <text x="38" y="127" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">2m</text>
+                  <text x="38" y="89"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">4m</text>
+                  <text x="38" y="52"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">6m</text>
+                  <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">8m</text>
+                  <!-- Area fill (teal with opacity) -->
+                  <path d="M 44 63 L 88 54 L 132 58 L 176 74 L 220 75 L 264 75 L 264 160 L 44 160 Z" fill="#0EA5A0" opacity="0.15"/>
+                  <!-- Area line -->
+                  <polyline points="44,63 88,54 132,58 176,74 220,75 264,75" fill="none" stroke="#0EA5A0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                  <!-- Data points -->
+                  <circle cx="44"  cy="63" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Nov" data-tip-label="Avg Handle Time" data-tip-value="5:12" data-tip-color="#0EA5A0"/>
+                  <circle cx="88"  cy="54" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Dec" data-tip-label="Avg Handle Time" data-tip-value="5:38" data-tip-color="#0EA5A0"/>
+                  <circle cx="132" cy="58" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Jan" data-tip-label="Avg Handle Time" data-tip-value="5:25" data-tip-color="#0EA5A0"/>
+                  <circle cx="176" cy="74" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Feb" data-tip-label="Avg Handle Time" data-tip-value="4:34" data-tip-color="#0EA5A0"/>
+                  <circle cx="220" cy="75" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Mar" data-tip-label="Avg Handle Time" data-tip-value="4:32" data-tip-color="#0EA5A0"/>
+                  <circle cx="264" cy="75" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Apr" data-tip-label="Avg Handle Time" data-tip-value="4:31" data-tip-color="#0EA5A0"/>
+                  <!-- X labels -->
+                  <text x="44"  y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Nov</text>
+                  <text x="88"  y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Dec</text>
+                  <text x="132" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Jan</text>
+                  <text x="176" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Feb</text>
+                  <text x="220" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mar</text>
+                  <text x="264" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Apr</text>
+                  <!-- Legend -->
+                  <rect x="44" y="181" width="10" height="10" rx="2" fill="#0EA5A0"/>
+                  <text x="58" y="190" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Avg Handle Time</text>
                 </svg>
               </div>
 

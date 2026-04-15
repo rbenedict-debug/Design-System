@@ -51,7 +51,7 @@ Table-family components (`ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-pag
 Dashboard-family components (`ds-metric-card`, `ds-chart`, and any future data-viz primitives) live on the **Dashboard** page tab and follow the same pattern:
 
 - Each component gets its own `<section class="section" id="{component}">` with isolated variant demos.
-- A shared `#dashboard-sim` section at the bottom of the Dashboard page shows a full composed view: metric card row → line chart → donut + column side by side.
+- A shared `#dashboard-sim` section at the bottom of the Dashboard page shows a full composed view: metric card row → full-width line chart → 3-column bottom row (donut | column bar | area chart).
 - **Update the `#dashboard-sim` whenever a new dashboard component is added.**
 - The `#dashboard-sim` nav link appears last in the Dashboard sidebar.
 - Chart demos use **SVG simulations** (not live Highcharts), since the preview is a static HTML file. The SVG must match the Onflo chart theme: brand blue as the first series color, `#E9E9E9` grid lines, `#73737F` axis labels, `DM Sans` font (proxy for Proxima Nova in the preview).
