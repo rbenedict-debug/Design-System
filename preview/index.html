@@ -14997,7 +14997,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         </div>
         <p class="section-desc">Unified chart component wrapping Highcharts with the Onflo color palette, typography, and visual theme pre-applied. Requires <code>highcharts</code> as a peer dependency. Angular component: <code>&lt;ds-chart&gt;</code> with <code>[type]</code> ('line' | 'area' | 'bar' | 'column' | 'donut' | 'pie'), <code>[series]</code> (Highcharts.SeriesOptionsType[]), <code>[categories]</code>, <code>[title]</code>, <code>[height]</code>, <code>[legend]</code>, <code>[loading]</code>, and <code>[options]</code> (Highcharts.Options escape hatch). The Onflo theme is applied globally on first render via <code>Highcharts.setOptions(onfloChartTheme)</code> — also importable directly for apps using Highcharts outside ds-chart. <em>Preview below uses representative SVG — the Angular component renders live Highcharts.</em></p>
 
-        <div class="component-demo" style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px;">
+        <div class="component-demo" style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; overflow-x: auto;">
 
           <!-- Row 1: Line chart (2 series) -->
           <div class="demo-row">
@@ -15005,7 +15005,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div class="demo-row-items" style="align-items: flex-start;">
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 520px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Monthly Cases</div>
-                <svg viewBox="0 0 520 240" width="520" height="240" aria-label="Line chart: Monthly Cases" role="img">
+                <svg viewBox="0 0 520 265" width="520" height="265" aria-label="Line chart: Monthly Cases" role="img">
                   <!-- Grid lines -->
                   <line x1="50" y1="20" x2="500" y2="20" stroke="#E9E9E9" stroke-width="1"/>
                   <line x1="50" y1="70" x2="500" y2="70" stroke="#E9E9E9" stroke-width="1"/>
@@ -15221,24 +15221,26 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px; align-self: flex-start;">Cases by Priority</div>
                 <svg viewBox="0 0 240 240" width="240" height="240" aria-label="Pie chart: Cases by Priority" role="img">
                   <!-- High 31%, Critical 14%, Medium 33%, Low 22% -->
+                  <!-- Angles from top (0°=top, clockwise): Critical 0→50.4°, High 50.4→162°, Medium 162→280.8°, Low 280.8→360° -->
+                  <!-- Endpoints: 0°=(120,25)  50.4°=(193.1,59.3)  162°=(149.4,210.4)  280.8°=(26.7,102.2) -->
                   <!-- Critical 14%: 0° to 50.4° -->
-                  <path d="M 120 120 L 120 25 A 95 95 0 0 1 192.8 72.5 Z" fill="#D70917"/>
+                  <path d="M 120 120 L 120 25 A 95 95 0 0 1 193.1 59.3 Z" fill="#D70917"/>
                   <!-- High 31%: 50.4° to 162° -->
-                  <path d="M 120 120 L 192.8 72.5 A 95 95 0 0 1 29.6 149.5 Z" fill="#0B6EB4"/>
+                  <path d="M 120 120 L 193.1 59.3 A 95 95 0 0 1 149.4 210.4 Z" fill="#0B6EB4"/>
                   <!-- Medium 33%: 162° to 280.8° -->
-                  <path d="M 120 120 L 29.6 149.5 A 95 95 0 0 1 136.8 25.4 Z" fill="#45A55F"/>
+                  <path d="M 120 120 L 149.4 210.4 A 95 95 0 0 1 26.7 102.2 Z" fill="#45A55F"/>
                   <!-- Low 22%: 280.8° to 360° -->
-                  <path d="M 120 120 L 136.8 25.4 A 95 95 0 0 1 120 25 Z" fill="#43ADF2"/>
+                  <path d="M 120 120 L 26.7 102.2 A 95 95 0 0 1 120 25 Z" fill="#43ADF2"/>
                   <!-- White borders -->
-                  <path d="M 120 120 L 120 25 A 95 95 0 0 1 192.8 72.5 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 120 120 L 192.8 72.5 A 95 95 0 0 1 29.6 149.5 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 120 120 L 29.6 149.5 A 95 95 0 0 1 136.8 25.4 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 120 120 L 136.8 25.4 A 95 95 0 0 1 120 25 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <!-- Labels -->
-                  <text x="162" y="68" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">14%</text>
-                  <text x="80"  y="100" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">31%</text>
-                  <text x="112" y="175" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">33%</text>
-                  <text x="148" y="50"  font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">22%</text>
+                  <path d="M 120 120 L 120 25 A 95 95 0 0 1 193.1 59.3 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 120 120 L 193.1 59.3 A 95 95 0 0 1 149.4 210.4 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 120 120 L 149.4 210.4 A 95 95 0 0 1 26.7 102.2 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 120 120 L 26.7 102.2 A 95 95 0 0 1 120 25 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <!-- Labels at ~65% radius from center at each slice midpoint -->
+                  <text x="146" y="68" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">14%</text>
+                  <text x="180" y="141" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">31%</text>
+                  <text x="79"  y="171" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">33%</text>
+                  <text x="81"  y="76"  text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">22%</text>
                 </svg>
                 <!-- Legend -->
                 <div style="display: flex; flex-direction: column; gap: 4px; align-self: flex-start; padding: 0 4px 4px;">
@@ -15263,7 +15265,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         <p class="section-desc">Composed view showing <code>ds-metric-card</code> and <code>ds-chart</code> working together as a full dashboard page. In production, replace the SVG chart previews with live <code>&lt;ds-chart&gt;</code> components bound to real data and <code>&lt;ds-metric-card&gt;</code> components bound to aggregated values.</p>
 
         <div class="component-demo">
-          <div style="background: var(--color-surface-page); padding: 24px; min-width: 820px; box-sizing: border-box; border-radius: var(--radius-md);">
+          <div style="background: var(--color-surface-page); padding: 24px; width: 100%; box-sizing: border-box; border-radius: var(--radius-md);">
 
             <!-- Page header -->
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
@@ -15343,7 +15345,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <!-- Line chart — full width -->
             <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; margin-bottom: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
               <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Monthly Cases</div>
-              <svg viewBox="0 0 740 210" width="100%" height="210" aria-label="Line chart: Monthly Cases" role="img" style="display:block;">
+              <svg viewBox="0 0 740 210" width="100%" aria-label="Line chart: Monthly Cases" role="img" style="display:block;">
                 <!-- Grid lines -->
                 <line x1="54" y1="20" x2="720" y2="20" stroke="#E9E9E9" stroke-width="1"/>
                 <line x1="54" y1="60" x2="720" y2="60" stroke="#E9E9E9" stroke-width="1"/>
@@ -15395,22 +15397,28 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px;">Cases by Channel</div>
                 <svg viewBox="0 0 240 220" width="240" height="220" aria-label="Donut chart: Cases by Channel" role="img" style="display:block; margin: 0 auto;">
                   <!-- Slices (cx=120 cy=110, outerR=88, innerR=53) -->
+                  <!-- Angles from top (0°=top, clockwise). Endpoints computed as: -->
+                  <!-- x = 120 + r·sin(θ),  y = 110 − r·cos(θ) -->
+                  <!-- 0°=(120,22) 136.8°=outer(180.2,174.2)/inner(156.3,148.6) -->
+                  <!-- 234°=outer(48.8,161.7)/inner(77.1,141.2) -->
+                  <!-- 302.4°=outer(45.8,62.7)/inner(75.3,81.5) -->
+                  <!-- 342°=outer(92.8,26.3)/inner(103.6,59.6) -->
                   <!-- Email 38%: 0→136.8° -->
-                  <path d="M 120 22 A 88 88 0 0 1 178.9 183.4 L 147.1 157.3 A 53 53 0 0 0 120 57 Z" fill="#0B6EB4"/>
+                  <path d="M 120 22 A 88 88 0 0 1 180.2 174.2 L 156.3 148.6 A 53 53 0 0 0 120 57 Z" fill="#0B6EB4"/>
                   <!-- Chat 27%: 136.8→234° -->
-                  <path d="M 178.9 183.4 A 88 88 0 0 1 40.4 168.8 L 69.9 151.3 A 53 53 0 0 0 147.1 157.3 Z" fill="#45A55F"/>
+                  <path d="M 180.2 174.2 A 88 88 0 0 1 48.8 161.7 L 77.1 141.2 A 53 53 0 0 0 156.3 148.6 Z" fill="#45A55F"/>
                   <!-- Phone 19%: 234→302.4° -->
-                  <path d="M 40.4 168.8 A 88 88 0 0 1 37.3 64.6 L 67.4 83.6 A 53 53 0 0 0 69.9 151.3 Z" fill="#FFBF00"/>
+                  <path d="M 48.8 161.7 A 88 88 0 0 1 45.8 62.7 L 75.3 81.5 A 53 53 0 0 0 77.1 141.2 Z" fill="#FFBF00"/>
                   <!-- Portal 11%: 302.4→342° -->
-                  <path d="M 37.3 64.6 A 88 88 0 0 1 87.7 23.5 L 100.9 55.4 A 53 53 0 0 0 67.4 83.6 Z" fill="#43ADF2"/>
+                  <path d="M 45.8 62.7 A 88 88 0 0 1 92.8 26.3 L 103.6 59.6 A 53 53 0 0 0 75.3 81.5 Z" fill="#43ADF2"/>
                   <!-- Other 5%: 342→360° -->
-                  <path d="M 87.7 23.5 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 100.9 55.4 Z" fill="#CACACA"/>
+                  <path d="M 92.8 26.3 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 103.6 59.6 Z" fill="#CACACA"/>
                   <!-- White borders -->
-                  <path d="M 120 22 A 88 88 0 0 1 178.9 183.4 L 147.1 157.3 A 53 53 0 0 0 120 57 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 178.9 183.4 A 88 88 0 0 1 40.4 168.8 L 69.9 151.3 A 53 53 0 0 0 147.1 157.3 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 40.4 168.8 A 88 88 0 0 1 37.3 64.6 L 67.4 83.6 A 53 53 0 0 0 69.9 151.3 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 37.3 64.6 A 88 88 0 0 1 87.7 23.5 L 100.9 55.4 A 53 53 0 0 0 67.4 83.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                  <path d="M 87.7 23.5 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 100.9 55.4 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 120 22 A 88 88 0 0 1 180.2 174.2 L 156.3 148.6 A 53 53 0 0 0 120 57 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 180.2 174.2 A 88 88 0 0 1 48.8 161.7 L 77.1 141.2 A 53 53 0 0 0 156.3 148.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 48.8 161.7 A 88 88 0 0 1 45.8 62.7 L 75.3 81.5 A 53 53 0 0 0 77.1 141.2 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 45.8 62.7 A 88 88 0 0 1 92.8 26.3 L 103.6 59.6 A 53 53 0 0 0 75.3 81.5 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 92.8 26.3 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 103.6 59.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
                   <!-- Donut hole + center label -->
                   <circle cx="120" cy="110" r="53" fill="white"/>
                   <text x="120" y="105" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="20" font-weight="600" fill="#2D3638">1,248</text>
@@ -15429,7 +15437,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <!-- Column: Cases by Day of Week -->
               <div style="background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                 <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
-                <svg viewBox="0 0 440 210" width="100%" height="210" aria-label="Column chart: Cases by Day of Week" role="img" style="display:block;">
+                <svg viewBox="0 0 440 210" width="100%" aria-label="Column chart: Cases by Day of Week" role="img" style="display:block;">
                   <!-- Grid lines -->
                   <line x1="44" y1="10"  x2="430" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
                   <line x1="44" y1="50"  x2="430" y2="50"  stroke="#E9E9E9" stroke-width="1"/>
