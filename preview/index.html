@@ -16266,7 +16266,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           see <code>.claude/specs/specs-table.md</code> for the canonical Angular integration pattern.
         </p>
 
-        <div id="ag-sim-container" style="display:flex; flex-direction:column; border:1px solid var(--color-border-subtle); border-radius:var(--radius-sm); overflow:hidden; user-select:none;">
+        <div id="ag-sim-container" style="display:flex; flex-direction:column; border-radius:var(--radius-lg); box-shadow:0 0 2px 0 var(--shadow-elevation-2),0 2px 6px 2px var(--shadow-elevation-2); overflow:hidden; user-select:none;">
 
           <!-- ── Toolbar (ds-table-toolbar) ─────────────────────────────────── -->
           <div class="ds-table-toolbar">
@@ -16301,6 +16301,15 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div>
           </div>
 
+          <!-- ── Row groups bar (ds-table-row-groups-bar) ─────────────────── -->
+          <div class="ds-table-row-groups-bar">
+            <div class="ds-table-row-groups-bar__drop-zone">
+              <span class="ds-icon ds-icon--xs ds-table-row-groups-bar__drag-icon" aria-hidden="true">cell_merge</span>
+              <span class="ds-table-row-groups-bar__chips" id="ag-sim-group-chips"></span>
+              <span class="ds-table-row-groups-bar__placeholder">Drag here to set row groups</span>
+            </div>
+          </div>
+
           <!-- ── Grid + ds-column-panel wrapper ────────────────────────────── -->
           <div style="display:flex; flex:1; min-height:0;">
 
@@ -16308,19 +16317,18 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div id="ag-sim-grid" class="ag-theme-quartz" style="flex:1; height:560px;"></div>
 
             <!-- ds-column-panel (opened by settings toggle) -->
-            <div id="ag-sim-col-sidebar" style="display:none; width:300px; border-left:1px solid var(--color-border-subtle); flex-shrink:0; overflow-y:auto;">
+            <div id="ag-sim-col-sidebar" style="display:none; width:300px; border-left:1px solid var(--color-border-secondary); flex-shrink:0; overflow-y:auto;">
               <div class="ds-column-panel" style="border:none; border-radius:0; height:100%;">
 
-                <!-- Density -->
+                <!-- 1. Density -->
                 <div class="ds-column-panel__density">
                   <div class="ds-density-toggle" role="group" aria-label="Row density" style="width:100%;">
                     <button type="button" class="ds-density-toggle__btn" id="ag-density-comfort" aria-pressed="false" style="flex:1 0 0;" onclick="agSimSetDensity('comfort',this)">Comfort</button>
-                    <button type="button" class="ds-density-toggle__btn is-selected" id="ag-density-standard" aria-pressed="true" style="flex:1 0 0;" onclick="agSimSetDensity('standard',this)">Standard</button>
                     <button type="button" class="ds-density-toggle__btn" id="ag-density-compact" aria-pressed="false" style="flex:1 0 0;" onclick="agSimSetDensity('compact',this)">Compact</button>
                   </div>
                 </div>
 
-                <!-- Column Visibility -->
+                <!-- 2. Column Visibility -->
                 <button type="button" class="ds-column-panel__section-hd" aria-expanded="true"
                         onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true' ? 'false' : 'true')">
                   <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">visibility</span>
@@ -16329,8 +16337,61 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 </button>
                 <div class="ds-column-panel__col-list" id="ag-sim-col-list"></div>
 
+                <!-- Divider -->
+                <div class="ds-divider" role="separator" aria-hidden="true"></div>
+
+                <!-- 3. Pivot Mode -->
+                <div class="ds-column-panel__pivot-row">
+                  <span class="ds-column-panel__pivot-label">Pivot Mode</span>
+                  <label class="ds-toggle" aria-label="Enable pivot mode">
+                    <input type="checkbox" class="ds-toggle__control" />
+                    <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
+                  </label>
+                </div>
+
+                <!-- Divider -->
+                <div class="ds-divider" role="separator" aria-hidden="true"></div>
+
+                <!-- 4. Row Groups -->
+                <div class="ds-column-panel__section-hd">
+                  <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">drag_indicator</span>
+                  <span class="ds-column-panel__section-title">Row Groups</span>
+                </div>
+                <button type="button" class="ds-column-panel__add-btn">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
+                  Add Column
+                </button>
+
+                <!-- Divider -->
+                <div class="ds-divider" role="separator" aria-hidden="true"></div>
+
+                <!-- 5. Values -->
+                <div class="ds-column-panel__section-hd">
+                  <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">functions</span>
+                  <span class="ds-column-panel__section-title">Values</span>
+                </div>
+                <button type="button" class="ds-column-panel__add-btn">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
+                  Add Column
+                </button>
+
               </div>
             </div>
+          </div>
+
+          <!-- ── Status bar (ds-table-status-bar) ─────────────────────────── -->
+          <div class="ds-table-status-bar">
+            <div class="ds-table-status-bar__counts">
+              <span class="ds-table-status-bar__stat">
+                <span class="ds-table-status-bar__stat-label">Rows:</span>
+                <span class="ds-table-status-bar__stat-value" id="ag-sim-status-rows">—</span>
+              </span>
+              <span class="ds-table-status-bar__stat">
+                <span class="ds-table-status-bar__stat-label">Total Rows:</span>
+                <span class="ds-table-status-bar__stat-value" id="ag-sim-status-total">—</span>
+              </span>
+            </div>
+            <div class="ds-table-status-bar__aggregates" aria-live="polite"></div>
           </div>
 
           <!-- ── ds-ag-paginator ────────────────────────────────────────────── -->
@@ -17044,6 +17105,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
             if (elCounter) elCounter.textContent = total === 0 ? '0 of 0' : start + ' - ' + end + ' of ' + total;
 
+            /* Update status bar row counts */
+            var elRows  = document.getElementById('ag-sim-status-rows');
+            var elTotal = document.getElementById('ag-sim-status-total');
+            var dispTotal = agSimApi.getDisplayedRowCount ? agSimApi.getDisplayedRowCount() : total;
+            if (elRows)  elRows.textContent  = dispTotal;
+            if (elTotal) elTotal.textContent = total;
+
             var isFirst = curPage === 0;
             var isLast  = curPage >= totalPages - 1;
             if (elFirst) elFirst.disabled = isFirst;
@@ -17135,15 +17203,21 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             showToast('Added ' + r.id);
           };
 
-          /* Density toggle */
+          /* Density toggle — Comfort / Compact are independent toggles.
+             Pressing an already-selected button deselects it, returning to
+             standard density (56px). Neither selected = standard. */
           window.agSimSetDensity = function(density, btn) {
-            ['ag-density-comfort', 'ag-density-standard', 'ag-density-compact'].forEach(function(id) {
+            var wasSelected = btn.classList.contains('is-selected');
+            ['ag-density-comfort', 'ag-density-compact'].forEach(function(id) {
               var b = document.getElementById(id);
               if (b) { b.classList.remove('is-selected'); b.setAttribute('aria-pressed', 'false'); }
             });
-            btn.classList.add('is-selected');
-            btn.setAttribute('aria-pressed', 'true');
-            var h = density === 'comfort' ? 68 : density === 'compact' ? 42 : 56;
+            var h = 56; // default: standard
+            if (!wasSelected) {
+              btn.classList.add('is-selected');
+              btn.setAttribute('aria-pressed', 'true');
+              h = density === 'comfort' ? 68 : 42;
+            }
             var gridEl = document.getElementById('ag-sim-grid');
             if (gridEl) {
               gridEl.style.setProperty('--ag-row-height', h + 'px');
