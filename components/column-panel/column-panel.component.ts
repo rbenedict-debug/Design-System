@@ -56,8 +56,9 @@ export interface ColumnPanelItem {
   /** Whether the column is currently visible. */
   visible: boolean;
   /**
-   * When true the row is non-interactive (e.g. checkbox col, actions col).
-   * Displayed at reduced opacity with no pointer events.
+   * When true the row is non-interactive (standalone usage only — shown at reduced
+   * opacity with no pointer events). Not used when driven by the AG Grid API, where
+   * lockVisible columns are hidden from the list entirely.
    */
   system?: boolean;
 }
@@ -88,6 +89,11 @@ export interface AgPanelColumn {
   getColId(): string;
   getColDef(): {
     headerName?: string;
+    /**
+     * Set true on colDef to hide this column from the Column Visibility list entirely.
+     * The column still exists in the grid — it is just not shown in ds-column-panel.
+     * Use on system columns that should never be toggled (checkbox cols, pinned action cols).
+     */
     lockVisible?: boolean;
     suppressMovable?: boolean;
     /** Set true on colDef to allow this column to appear in the row groups picker. */
@@ -284,12 +290,14 @@ export class DsColumnPanelComponent implements OnDestroy {
   private _syncColumns(): void {
     if (!this._api) { return; }
     this.columns = this._api.getAllGridColumns()
-      .filter(col => col.getColDef().suppressColumnsToolPanel !== true)
+      .filter(col => {
+        const def = col.getColDef();
+        return def.suppressColumnsToolPanel !== true && def.lockVisible !== true;
+      })
       .map(col => ({
         colId:   col.getColId(),
         label:   col.getColDef().headerName ?? col.getColId(),
         visible: col.isVisible(),
-        system:  col.getColDef().lockVisible === true,
       }));
     this.cdr.markForCheck();
   }
