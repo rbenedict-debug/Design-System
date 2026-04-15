@@ -8865,6 +8865,48 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   filter: brightness(1.15);
 }
 
+/* ── SVG chart simulation tooltip ───────────────────────────────────────── */
+#chart-tooltip {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  background: #ffffff;
+  border: 1px solid #E9E9E9;
+  border-radius: 8px;
+  padding: 10px 12px;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(45, 54, 56, 0.12);
+  max-width: 220px;
+}
+#chart-tooltip .ct-header {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #73737F;
+  margin-bottom: 6px;
+}
+#chart-tooltip .ct-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 20px;
+}
+#chart-tooltip .ct-swatch {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+#chart-tooltip .ct-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #2D3638;
+}
+#chart-tooltip .ct-text strong {
+  font-weight: 600;
+}
+
 .ds-metric-card {
   display: flex;
   flex-direction: column;
@@ -15067,20 +15109,20 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <text x="500" y="236" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Apr</text>
                   <!-- Series 1: Opened — brand blue -->
                   <polyline points="50,97 140,75 230,65 320,77 410,60 500,71" fill="none" stroke="#0B6EB4" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                  <circle cx="50"  cy="97" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                  <circle cx="140" cy="75" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                  <circle cx="230" cy="65" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                  <circle cx="320" cy="77" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                  <circle cx="410" cy="60" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                  <circle cx="500" cy="71" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="50"  cy="97" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Nov" data-tip-label="Opened" data-tip-value="246" data-tip-color="#0B6EB4"/>
+                  <circle cx="140" cy="75" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Dec" data-tip-label="Opened" data-tip-value="290" data-tip-color="#0B6EB4"/>
+                  <circle cx="230" cy="65" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Jan" data-tip-label="Opened" data-tip-value="310" data-tip-color="#0B6EB4"/>
+                  <circle cx="320" cy="77" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Feb" data-tip-label="Opened" data-tip-value="286" data-tip-color="#0B6EB4"/>
+                  <circle cx="410" cy="60" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Mar" data-tip-label="Opened" data-tip-value="320" data-tip-color="#0B6EB4"/>
+                  <circle cx="500" cy="71" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Apr" data-tip-label="Opened" data-tip-value="298" data-tip-color="#0B6EB4"/>
                   <!-- Series 2: Closed — green -->
                   <polyline points="50,105 140,87 230,77 320,85 410,66 500,65" fill="none" stroke="#45A55F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                  <circle cx="50"  cy="105" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                  <circle cx="140" cy="87"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                  <circle cx="230" cy="77"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                  <circle cx="320" cy="85"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                  <circle cx="410" cy="66"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                  <circle cx="500" cy="65"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                  <circle cx="50"  cy="105" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Nov" data-tip-label="Closed" data-tip-value="230" data-tip-color="#45A55F"/>
+                  <circle cx="140" cy="87"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Dec" data-tip-label="Closed" data-tip-value="266" data-tip-color="#45A55F"/>
+                  <circle cx="230" cy="77"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Jan" data-tip-label="Closed" data-tip-value="286" data-tip-color="#45A55F"/>
+                  <circle cx="320" cy="85"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Feb" data-tip-label="Closed" data-tip-value="270" data-tip-color="#45A55F"/>
+                  <circle cx="410" cy="66"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Mar" data-tip-label="Closed" data-tip-value="308" data-tip-color="#45A55F"/>
+                  <circle cx="500" cy="65"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Apr" data-tip-label="Closed" data-tip-value="310" data-tip-color="#45A55F"/>
                   <!-- Legend -->
                   <rect x="50" y="250" width="10" height="10" rx="2" fill="#0B6EB4"/>
                   <text x="64" y="259" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#2D3638">Opened</text>
@@ -15128,12 +15170,12 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <!-- Line -->
                   <polyline points="50,52 140,47 230,41 320,49 410,36 500,33" fill="none" stroke="#0B6EB4" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
                   <!-- Dots -->
-                  <circle cx="50"  cy="52" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                  <circle cx="140" cy="47" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                  <circle cx="230" cy="41" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                  <circle cx="320" cy="49" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                  <circle cx="410" cy="36" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                  <circle cx="500" cy="33" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="50"  cy="52" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Nov" data-tip-label="Resolution Rate" data-tip-value="82%" data-tip-color="#0B6EB4"/>
+                  <circle cx="140" cy="47" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Dec" data-tip-label="Resolution Rate" data-tip-value="85%" data-tip-color="#0B6EB4"/>
+                  <circle cx="230" cy="41" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Jan" data-tip-label="Resolution Rate" data-tip-value="88%" data-tip-color="#0B6EB4"/>
+                  <circle cx="320" cy="49" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Feb" data-tip-label="Resolution Rate" data-tip-value="84%" data-tip-color="#0B6EB4"/>
+                  <circle cx="410" cy="36" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Mar" data-tip-label="Resolution Rate" data-tip-value="91%" data-tip-color="#0B6EB4"/>
+                  <circle cx="500" cy="33" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Apr" data-tip-label="Resolution Rate" data-tip-value="93%" data-tip-color="#0B6EB4"/>
                   <!-- Legend -->
                   <rect x="50" y="228" width="10" height="10" rx="2" fill="#0B6EB4"/>
                   <text x="64" y="237" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#2D3638">Resolution Rate</text>
@@ -15164,13 +15206,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <text x="34" y="54"  text-anchor="end" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">195</text>
                   <text x="34" y="14"  text-anchor="end" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">260</text>
                   <!-- Columns (rx=3 for border-radius) -->
-                  <rect class="bar" x="46"  y="85"  width="34" height="85"  rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="96"  y="40"  width="34" height="130" rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="146" y="50"  width="34" height="120" rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="196" y="24"  width="34" height="146" rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="246" y="64"  width="34" height="106" rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="296" y="126" width="34" height="44"  rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="346" y="148" width="34" height="22"  rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="46"  y="85"  width="34" height="85"  rx="3" fill="#0B6EB4" data-tip-header="Mon" data-tip-label="Cases Opened" data-tip-value="138" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="96"  y="40"  width="34" height="130" rx="3" fill="#0B6EB4" data-tip-header="Tue" data-tip-label="Cases Opened" data-tip-value="211" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="146" y="50"  width="34" height="120" rx="3" fill="#0B6EB4" data-tip-header="Wed" data-tip-label="Cases Opened" data-tip-value="195" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="196" y="24"  width="34" height="146" rx="3" fill="#0B6EB4" data-tip-header="Thu" data-tip-label="Cases Opened" data-tip-value="237" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="246" y="64"  width="34" height="106" rx="3" fill="#0B6EB4" data-tip-header="Fri" data-tip-label="Cases Opened" data-tip-value="172" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="296" y="126" width="34" height="44"  rx="3" fill="#0B6EB4" data-tip-header="Sat" data-tip-label="Cases Opened" data-tip-value="72"  data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="346" y="148" width="34" height="22"  rx="3" fill="#0B6EB4" data-tip-header="Sun" data-tip-label="Cases Opened" data-tip-value="36"  data-tip-color="#0B6EB4"/>
                   <!-- X axis labels -->
                   <text x="63"  y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Mon</text>
                   <text x="113" y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Tue</text>
@@ -15198,15 +15240,15 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <text x="310" y="183" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">210</text>
                   <!-- Bars -->
                   <text x="96" y="19" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Chen, L.</text>
-                  <rect class="bar" x="100" y="8"  width="147" height="18" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="100" y="8"  width="147" height="18" rx="3" fill="#0B6EB4" data-tip-header="Chen, L." data-tip-label="Cases" data-tip-value="147" data-tip-color="#0B6EB4"/>
                   <text x="96" y="50" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Torres, M.</text>
-                  <rect class="bar" x="100" y="39" width="119" height="18" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="100" y="39" width="119" height="18" rx="3" fill="#0B6EB4" data-tip-header="Torres, M." data-tip-label="Cases" data-tip-value="119" data-tip-color="#0B6EB4"/>
                   <text x="96" y="81" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Park, J.</text>
-                  <rect class="bar" x="100" y="70" width="102" height="18" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="100" y="70" width="102" height="18" rx="3" fill="#0B6EB4" data-tip-header="Park, J." data-tip-label="Cases" data-tip-value="102" data-tip-color="#0B6EB4"/>
                   <text x="96" y="112" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Reyes, A.</text>
-                  <rect class="bar" x="100" y="101" width="87" height="18" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="100" y="101" width="87" height="18" rx="3" fill="#0B6EB4" data-tip-header="Reyes, A." data-tip-label="Cases" data-tip-value="87" data-tip-color="#0B6EB4"/>
                   <text x="96" y="143" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Kim, S.</text>
-                  <rect class="bar" x="100" y="132" width="64" height="18" rx="3" fill="#0B6EB4"/>
+                  <rect class="bar" x="100" y="132" width="64" height="18" rx="3" fill="#0B6EB4" data-tip-header="Kim, S." data-tip-label="Cases" data-tip-value="64" data-tip-color="#0B6EB4"/>
                 </svg>
               </div>
 
@@ -15224,15 +15266,15 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <svg viewBox="0 0 240 240" width="100%" aria-label="Donut chart: Cases by Channel" role="img" class="chart-sim-donut">
                   <!-- Slices (cx=120 cy=120, outerR=95, innerR=57) -->
                   <!-- Email 38% -->
-                  <path class="slice" d="M 120 25 A 95 95 0 0 1 184.8 189.5 L 158.9 161.7 A 57 57 0 0 0 120 63 Z" fill="#0B6EB4"/>
+                  <path class="slice" d="M 120 25 A 95 95 0 0 1 184.8 189.5 L 158.9 161.7 A 57 57 0 0 0 120 63 Z" fill="#0B6EB4" data-tip-label="Email" data-tip-value="38% (474)" data-tip-color="#0B6EB4"/>
                   <!-- Chat 27% -->
-                  <path class="slice" d="M 184.8 189.5 A 95 95 0 0 1 43.1 175.9 L 73.9 153.5 A 57 57 0 0 0 158.9 161.7 Z" fill="#45A55F"/>
+                  <path class="slice" d="M 184.8 189.5 A 95 95 0 0 1 43.1 175.9 L 73.9 153.5 A 57 57 0 0 0 158.9 161.7 Z" fill="#45A55F" data-tip-label="Chat" data-tip-value="27% (337)" data-tip-color="#45A55F"/>
                   <!-- Phone 19% -->
-                  <path class="slice" d="M 43.1 175.9 A 95 95 0 0 1 39.7 69.3 L 71.8 89.6 A 57 57 0 0 0 73.9 153.5 Z" fill="#FFBF00"/>
+                  <path class="slice" d="M 43.1 175.9 A 95 95 0 0 1 39.7 69.3 L 71.8 89.6 A 57 57 0 0 0 73.9 153.5 Z" fill="#FFBF00" data-tip-label="Phone" data-tip-value="19% (237)" data-tip-color="#FFBF00"/>
                   <!-- Portal 11% -->
-                  <path class="slice" d="M 39.7 69.3 A 95 95 0 0 1 90.6 29.7 L 102.4 65.8 A 57 57 0 0 0 71.8 89.6 Z" fill="#43ADF2"/>
+                  <path class="slice" d="M 39.7 69.3 A 95 95 0 0 1 90.6 29.7 L 102.4 65.8 A 57 57 0 0 0 71.8 89.6 Z" fill="#43ADF2" data-tip-label="Portal" data-tip-value="11% (137)" data-tip-color="#43ADF2"/>
                   <!-- Other 5% -->
-                  <path class="slice" d="M 90.6 29.7 A 95 95 0 0 1 120 25 L 120 63 A 57 57 0 0 0 102.4 65.8 Z" fill="#CACACA"/>
+                  <path class="slice" d="M 90.6 29.7 A 95 95 0 0 1 120 25 L 120 63 A 57 57 0 0 0 102.4 65.8 Z" fill="#CACACA" data-tip-label="Other" data-tip-value="5% (62)" data-tip-color="#CACACA"/>
                   <!-- Center hole label -->
                   <circle cx="120" cy="120" r="57" fill="white"/>
                   <text x="120" y="115" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="22" font-weight="600" fill="#2D3638">1,248</text>
@@ -15262,13 +15304,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <!-- Angles from top (0°=top, clockwise): Critical 0→50.4°, High 50.4→162°, Medium 162→280.8°, Low 280.8→360° -->
                   <!-- Endpoints: 0°=(120,25)  50.4°=(193.1,59.3)  162°=(149.4,210.4)  280.8°=(26.7,102.2) -->
                   <!-- Critical 14%: 0° to 50.4° -->
-                  <path class="slice" d="M 120 120 L 120 25 A 95 95 0 0 1 193.1 59.3 Z" fill="#D70917"/>
+                  <path class="slice" d="M 120 120 L 120 25 A 95 95 0 0 1 193.1 59.3 Z" fill="#D70917" data-tip-label="Critical" data-tip-value="14%" data-tip-color="#D70917"/>
                   <!-- High 31%: 50.4° to 162° -->
-                  <path class="slice" d="M 120 120 L 193.1 59.3 A 95 95 0 0 1 149.4 210.4 Z" fill="#0B6EB4"/>
+                  <path class="slice" d="M 120 120 L 193.1 59.3 A 95 95 0 0 1 149.4 210.4 Z" fill="#0B6EB4" data-tip-label="High" data-tip-value="31%" data-tip-color="#0B6EB4"/>
                   <!-- Medium 33%: 162° to 280.8° -->
-                  <path class="slice" d="M 120 120 L 149.4 210.4 A 95 95 0 0 1 26.7 102.2 Z" fill="#45A55F"/>
+                  <path class="slice" d="M 120 120 L 149.4 210.4 A 95 95 0 0 1 26.7 102.2 Z" fill="#45A55F" data-tip-label="Medium" data-tip-value="33%" data-tip-color="#45A55F"/>
                   <!-- Low 22%: 280.8° to 360° -->
-                  <path class="slice" d="M 120 120 L 26.7 102.2 A 95 95 0 0 1 120 25 Z" fill="#43ADF2"/>
+                  <path class="slice" d="M 120 120 L 26.7 102.2 A 95 95 0 0 1 120 25 Z" fill="#43ADF2" data-tip-label="Low" data-tip-value="22%" data-tip-color="#43ADF2"/>
                   <!-- White borders -->
                   <path d="M 120 120 L 120 25 A 95 95 0 0 1 193.1 59.3 Z" fill="none" stroke="#fff" stroke-width="2"/>
                   <path d="M 120 120 L 193.1 59.3 A 95 95 0 0 1 149.4 210.4 Z" fill="none" stroke="#fff" stroke-width="2"/>
@@ -15405,20 +15447,20 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <text x="720" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Apr</text>
                 <!-- Series 1: Opened — brand blue -->
                 <polyline points="60,82 192,64 324,56 456,66 588,52 720,61" fill="none" stroke="#0B6EB4" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                <circle cx="60"  cy="82" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                <circle cx="192" cy="64" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                <circle cx="324" cy="56" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                <circle cx="456" cy="66" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                <circle cx="588" cy="52" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                <circle cx="720" cy="61" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                <circle cx="60"  cy="82" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Nov" data-tip-label="Opened" data-tip-value="245" data-tip-color="#0B6EB4"/>
+                <circle cx="192" cy="64" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Dec" data-tip-label="Opened" data-tip-value="290" data-tip-color="#0B6EB4"/>
+                <circle cx="324" cy="56" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Jan" data-tip-label="Opened" data-tip-value="310" data-tip-color="#0B6EB4"/>
+                <circle cx="456" cy="66" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Feb" data-tip-label="Opened" data-tip-value="285" data-tip-color="#0B6EB4"/>
+                <circle cx="588" cy="52" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Mar" data-tip-label="Opened" data-tip-value="320" data-tip-color="#0B6EB4"/>
+                <circle cx="720" cy="61" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Apr" data-tip-label="Opened" data-tip-value="297" data-tip-color="#0B6EB4"/>
                 <!-- Series 2: Closed — green -->
                 <polyline points="60,88 192,74 324,66 456,72 588,57 720,56" fill="none" stroke="#45A55F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                <circle cx="60"  cy="88" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                <circle cx="192" cy="74" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                <circle cx="324" cy="66" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                <circle cx="456" cy="72" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                <circle cx="588" cy="57" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                <circle cx="720" cy="56" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                <circle cx="60"  cy="88" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Nov" data-tip-label="Closed" data-tip-value="230" data-tip-color="#45A55F"/>
+                <circle cx="192" cy="74" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Dec" data-tip-label="Closed" data-tip-value="265" data-tip-color="#45A55F"/>
+                <circle cx="324" cy="66" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Jan" data-tip-label="Closed" data-tip-value="285" data-tip-color="#45A55F"/>
+                <circle cx="456" cy="72" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Feb" data-tip-label="Closed" data-tip-value="270" data-tip-color="#45A55F"/>
+                <circle cx="588" cy="57" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Mar" data-tip-label="Closed" data-tip-value="307" data-tip-color="#45A55F"/>
+                <circle cx="720" cy="56" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Apr" data-tip-label="Closed" data-tip-value="310" data-tip-color="#45A55F"/>
                 <!-- Legend -->
                 <rect x="54" y="200" width="10" height="10" rx="2" fill="#0B6EB4"/>
                 <text x="68" y="209" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Opened</text>
@@ -15442,15 +15484,15 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <!-- 302.4°=outer(45.8,62.7)/inner(75.3,81.5) -->
                   <!-- 342°=outer(92.8,26.3)/inner(103.6,59.6) -->
                   <!-- Email 38%: 0→136.8° -->
-                  <path class="slice" d="M 120 22 A 88 88 0 0 1 180.2 174.2 L 156.3 148.6 A 53 53 0 0 0 120 57 Z" fill="#0B6EB4"/>
+                  <path class="slice" d="M 120 22 A 88 88 0 0 1 180.2 174.2 L 156.3 148.6 A 53 53 0 0 0 120 57 Z" fill="#0B6EB4" data-tip-label="Email" data-tip-value="38% (474)" data-tip-color="#0B6EB4"/>
                   <!-- Chat 27%: 136.8→234° -->
-                  <path class="slice" d="M 180.2 174.2 A 88 88 0 0 1 48.8 161.7 L 77.1 141.2 A 53 53 0 0 0 156.3 148.6 Z" fill="#45A55F"/>
+                  <path class="slice" d="M 180.2 174.2 A 88 88 0 0 1 48.8 161.7 L 77.1 141.2 A 53 53 0 0 0 156.3 148.6 Z" fill="#45A55F" data-tip-label="Chat" data-tip-value="27% (337)" data-tip-color="#45A55F"/>
                   <!-- Phone 19%: 234→302.4° -->
-                  <path class="slice" d="M 48.8 161.7 A 88 88 0 0 1 45.8 62.7 L 75.3 81.5 A 53 53 0 0 0 77.1 141.2 Z" fill="#FFBF00"/>
+                  <path class="slice" d="M 48.8 161.7 A 88 88 0 0 1 45.8 62.7 L 75.3 81.5 A 53 53 0 0 0 77.1 141.2 Z" fill="#FFBF00" data-tip-label="Phone" data-tip-value="19% (237)" data-tip-color="#FFBF00"/>
                   <!-- Portal 11%: 302.4→342° -->
-                  <path class="slice" d="M 45.8 62.7 A 88 88 0 0 1 92.8 26.3 L 103.6 59.6 A 53 53 0 0 0 75.3 81.5 Z" fill="#43ADF2"/>
+                  <path class="slice" d="M 45.8 62.7 A 88 88 0 0 1 92.8 26.3 L 103.6 59.6 A 53 53 0 0 0 75.3 81.5 Z" fill="#43ADF2" data-tip-label="Portal" data-tip-value="11% (137)" data-tip-color="#43ADF2"/>
                   <!-- Other 5%: 342→360° -->
-                  <path class="slice" d="M 92.8 26.3 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 103.6 59.6 Z" fill="#CACACA"/>
+                  <path class="slice" d="M 92.8 26.3 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 103.6 59.6 Z" fill="#CACACA" data-tip-label="Other" data-tip-value="5% (62)" data-tip-color="#CACACA"/>
                   <!-- White borders -->
                   <path d="M 120 22 A 88 88 0 0 1 180.2 174.2 L 156.3 148.6 A 53 53 0 0 0 120 57 Z" fill="none" stroke="#fff" stroke-width="2"/>
                   <path d="M 180.2 174.2 A 88 88 0 0 1 48.8 161.7 L 77.1 141.2 A 53 53 0 0 0 156.3 148.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
@@ -15489,12 +15531,12 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <text x="38" y="54"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">195</text>
                   <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">260</text>
                   <!-- Columns (width=46, gap=18) -->
-                  <rect class="bar" x="50"  y="85"  width="46" height="85"  rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="114" y="40"  width="46" height="130" rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="178" y="50"  width="46" height="120" rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="242" y="24"  width="46" height="146" rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="306" y="64"  width="46" height="106" rx="3" fill="#0B6EB4"/>
-                  <rect class="bar" x="370" y="126" width="46" height="44"  rx="3" fill="#0B6EB4" opacity="0.5"/>
+                  <rect class="bar" x="50"  y="85"  width="46" height="85"  rx="3" fill="#0B6EB4" data-tip-header="Mon" data-tip-label="Cases Opened" data-tip-value="138" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="114" y="40"  width="46" height="130" rx="3" fill="#0B6EB4" data-tip-header="Tue" data-tip-label="Cases Opened" data-tip-value="211" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="178" y="50"  width="46" height="120" rx="3" fill="#0B6EB4" data-tip-header="Wed" data-tip-label="Cases Opened" data-tip-value="195" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="242" y="24"  width="46" height="146" rx="3" fill="#0B6EB4" data-tip-header="Thu" data-tip-label="Cases Opened" data-tip-value="237" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="306" y="64"  width="46" height="106" rx="3" fill="#0B6EB4" data-tip-header="Fri" data-tip-label="Cases Opened" data-tip-value="172" data-tip-color="#0B6EB4"/>
+                  <rect class="bar" x="370" y="126" width="46" height="44"  rx="3" fill="#0B6EB4" opacity="0.5" data-tip-header="Sat" data-tip-label="Cases Opened" data-tip-value="71" data-tip-color="#0B6EB4"/>
                   <!-- X labels -->
                   <text x="73"  y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mon</text>
                   <text x="137" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Tue</text>
@@ -20533,6 +20575,54 @@ function closeNavTab(closeBtn) {
     });
   }
 
+})();
+</script>
+
+<!-- SVG chart simulation tooltip -->
+<div id="chart-tooltip" role="tooltip"></div>
+<script>
+(function () {
+  var tip = document.getElementById('chart-tooltip');
+  if (!tip) return;
+
+  function show(e) {
+    var el = e.target.closest('[data-tip-label]');
+    if (!el) return;
+    var header = el.dataset.tipHeader || '';
+    var label  = el.dataset.tipLabel  || '';
+    var value  = el.dataset.tipValue  || '';
+    var color  = el.dataset.tipColor  || '#0B6EB4';
+    var html   = '';
+    if (header) html += '<div class="ct-header">' + header + '</div>';
+    html += '<div class="ct-row"><span class="ct-swatch" style="background:' + color + '"></span>'
+          + '<span class="ct-text">' + label + ': <strong>' + value + '</strong></span></div>';
+    tip.innerHTML = html;
+    tip.style.display = 'block';
+    position(e);
+  }
+
+  function position(e) {
+    if (tip.style.display !== 'block') return;
+    var x = e.clientX + 14;
+    var y = e.clientY - 8;
+    var tw = tip.offsetWidth;
+    var th = tip.offsetHeight;
+    if (x + tw > window.innerWidth  - 8) x = e.clientX - tw - 14;
+    if (y + th > window.innerHeight - 8) y = e.clientY - th - 8;
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
+  }
+
+  function hide(e) {
+    var el = e.target.closest('[data-tip-label]');
+    if (!el) return;
+    if (e.relatedTarget && e.relatedTarget.closest('[data-tip-label]') === el) return;
+    tip.style.display = 'none';
+  }
+
+  document.addEventListener('mouseover',  show);
+  document.addEventListener('mousemove',  position);
+  document.addEventListener('mouseout',   hide);
 })();
 </script>
 </body>

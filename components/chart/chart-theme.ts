@@ -68,6 +68,11 @@ export const onfloChartTheme: Highcharts.Options = {
     lineColor: '#E9E9E9',   // --ref-color-neutral-border-subtle
     tickColor: '#E9E9E9',
     gridLineColor: 'transparent',
+    crosshair: {
+      color: '#E9E9E9',    // --ref-color-neutral-border-subtle
+      width: 1,
+      dashStyle: 'ShortDash',
+    },
     labels: {
       style: {
         fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
@@ -134,6 +139,10 @@ export const onfloChartTheme: Highcharts.Options = {
     borderRadius: 8,
     shadow: false,
     padding: 12,
+    shared: true,
+    useHTML: true,
+    headerFormat: '<div style="font-size:11px;font-weight:600;color:#73737F;margin-bottom:6px">{point.key}</div>',
+    pointFormat: '<div style="display:flex;align-items:center;gap:6px;line-height:20px"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:{series.color};flex-shrink:0"></span><span style="font-size:12px;color:#2D3638">{series.name}: <strong>{point.y}</strong></span></div>',
     style: {
       fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
       fontSize: '12px',
@@ -203,6 +212,10 @@ export const onfloChartTheme: Highcharts.Options = {
       borderColor: '#FFFFFF',
       states: {
         hover: { brightness: 0.08 },
+      },
+      tooltip: {
+        headerFormat: '',
+        pointFormat: '<div style="display:flex;align-items:center;gap:6px;line-height:20px"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:{point.color};flex-shrink:0"></span><span style="font-size:12px;color:#2D3638">{point.name}: <strong>{point.percentage:.1f}%</strong></span></div>',
       },
       dataLabels: {
         enabled: true,
