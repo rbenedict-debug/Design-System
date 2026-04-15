@@ -20625,5 +20625,163 @@ function closeNavTab(closeBtn) {
   document.addEventListener('mouseout',   hide);
 })();
 </script>
+
+<script>
+// ── Line / area chart SVG: crosshair + snap-tracking ─────────────────────
+// Adds a vertical crosshair that snaps to the nearest x-category as the
+// cursor moves anywhere in the plot area — matching Highcharts shared-tooltip
+// behaviour where you don't have to hover directly on a dot.
+(function () {
+  var ns = 'http://www.w3.org/2000/svg';
+
+  function initTracking(svg) {
+    var circles = Array.from(svg.querySelectorAll('circle[data-tip-label]'));
+    if (!circles.length) return;
+
+    // Map rounded cx → [circles at that x-position] (one entry per series)
+    var xMap = {};
+    circles.forEach(function (c) {
+      var key = String(Math.round(parseFloat(c.getAttribute('cx'))));
+      if (!xMap[key]) xMap[key] = [];
+      xMap[key].push(c);
+    });
+    var xValues = Object.keys(xMap).map(Number).sort(function (a, b) { return a - b; });
+
+    // Plot area y-bounds: use the horizontal SVG grid lines
+    var gridYs = Array.from(svg.querySelectorAll('line'))
+      .filter(function (l) { return l.getAttribute('y1') === l.getAttribute('y2'); })
+      .map(function (l) { return parseFloat(l.getAttribute('y1')); });
+    var vbH       = parseFloat(svg.getAttribute('viewBox').split(' ')[3]);
+    var plotTop    = gridYs.length ? Math.min.apply(null, gridYs) : 10;
+    var plotBottom = gridYs.length ? Math.max.apply(null, gridYs) : vbH - 30;
+
+    // Plot area x-bounds: extend half a step beyond the first / last point
+    var step      = xValues.length > 1 ? (xValues[1] - xValues[0]) : 30;
+    var plotLeft  = xValues[0] - step / 2;
+    var plotRight = xValues[xValues.length - 1] + step / 2;
+
+    // Unique series labels in their original DOM order
+    var seenLabels = [];
+    circles.forEach(function (c) {
+      if (seenLabels.indexOf(c.dataset.tipLabel) === -1) seenLabels.push(c.dataset.tipLabel);
+    });
+
+    // Crosshair line — inserted before the first polyline so it renders behind data
+    var crosshair = document.createElementNS(ns, 'line');
+    crosshair.setAttribute('stroke', '#D0D5D6');
+    crosshair.setAttribute('stroke-width', '1');
+    crosshair.setAttribute('stroke-dasharray', '3,2');
+    crosshair.setAttribute('pointer-events', 'none');
+    crosshair.style.visibility = 'hidden';
+    var anchor = svg.querySelector('polyline') || svg.querySelector('path');
+    svg.insertBefore(crosshair, anchor);
+
+    // Per-series halo + dot overlay markers — appended last so they're on top
+    var seriesInfo = {};
+    seenLabels.forEach(function (label) {
+      var sc    = circles.filter(function (c) { return c.dataset.tipLabel === label; });
+      var color = sc[0].getAttribute('fill');
+
+      var halo = document.createElementNS(ns, 'circle');
+      halo.setAttribute('r', '8');
+      halo.setAttribute('fill', color);
+      halo.setAttribute('fill-opacity', '0.18');
+      halo.setAttribute('stroke', 'none');
+      halo.setAttribute('pointer-events', 'none');
+      halo.style.visibility = 'hidden';
+      svg.appendChild(halo);
+
+      var dot = document.createElementNS(ns, 'circle');
+      dot.setAttribute('r', '4');
+      dot.setAttribute('fill', color);
+      dot.setAttribute('stroke', '#fff');
+      dot.setAttribute('stroke-width', '2');
+      dot.setAttribute('pointer-events', 'none');
+      dot.style.visibility = 'hidden';
+      svg.appendChild(dot);
+
+      seriesInfo[label] = { circles: sc, color: color, halo: halo, dot: dot };
+    });
+
+    // Transparent tracking overlay — captures mouse events across the whole plot area
+    var overlay = document.createElementNS(ns, 'rect');
+    overlay.setAttribute('x',      String(plotLeft));
+    overlay.setAttribute('y',      String(plotTop));
+    overlay.setAttribute('width',  String(plotRight - plotLeft));
+    overlay.setAttribute('height', String(plotBottom - plotTop));
+    overlay.setAttribute('fill', 'transparent');
+    overlay.style.cursor = 'crosshair';
+    svg.appendChild(overlay);
+
+    function getSvgX(e) {
+      var pt = svg.createSVGPoint();
+      pt.x = e.clientX; pt.y = e.clientY;
+      return pt.matrixTransform(svg.getScreenCTM().inverse()).x;
+    }
+
+    function snapNearest(x) {
+      return xValues.reduce(function (best, v) {
+        return Math.abs(v - x) < Math.abs(best - x) ? v : best;
+      });
+    }
+
+    var tip = document.getElementById('chart-tooltip');
+
+    overlay.addEventListener('mousemove', function (e) {
+      var snap = snapNearest(getSvgX(e));
+      var idx  = xValues.indexOf(snap);
+      var key  = String(snap);
+
+      // Position and show crosshair
+      crosshair.setAttribute('x1', key); crosshair.setAttribute('x2', key);
+      crosshair.setAttribute('y1', String(plotTop)); crosshair.setAttribute('y2', String(plotBottom));
+      crosshair.style.visibility = 'visible';
+
+      // Build tooltip HTML while updating per-series halo markers
+      var header = xMap[key] && xMap[key][0].dataset.tipHeader || '';
+      var html   = header ? '<div class="ct-header">' + header + '</div>' : '';
+
+      seenLabels.forEach(function (label) {
+        var s  = seriesInfo[label];
+        var c  = s.circles[idx];
+        var cy = parseFloat(c.getAttribute('cy'));
+
+        // Fade out the original dot at this index; restore all others
+        s.circles.forEach(function (oc, i) { oc.style.opacity = i === idx ? '0' : '1'; });
+
+        s.halo.setAttribute('cx', key); s.halo.setAttribute('cy', String(cy));
+        s.dot.setAttribute('cx',  key); s.dot.setAttribute('cy',  String(cy));
+        s.halo.style.visibility = 'visible';
+        s.dot.style.visibility  = 'visible';
+
+        html += '<div class="ct-row">'
+              + '<span class="ct-swatch" style="background:' + s.color + '"></span>'
+              + '<span class="ct-text">' + label + ': <strong>' + c.dataset.tipValue + '</strong></span>'
+              + '</div>';
+      });
+
+      tip.innerHTML      = html;
+      tip.style.display  = 'block';
+      var tx = e.clientX + 14, ty = e.clientY - 8;
+      if (tx + tip.offsetWidth  > window.innerWidth  - 8) tx = e.clientX - tip.offsetWidth  - 14;
+      if (ty + tip.offsetHeight > window.innerHeight - 8) ty = e.clientY - tip.offsetHeight - 8;
+      tip.style.left = tx + 'px'; tip.style.top = ty + 'px';
+    });
+
+    overlay.addEventListener('mouseleave', function () {
+      crosshair.style.visibility = 'hidden';
+      seenLabels.forEach(function (label) {
+        var s = seriesInfo[label];
+        s.halo.style.visibility = 'hidden';
+        s.dot.style.visibility  = 'hidden';
+        s.circles.forEach(function (c) { c.style.opacity = '1'; });
+      });
+      tip.style.display = 'none';
+    });
+  }
+
+  document.querySelectorAll('.chart-sim-line, .chart-sim-area').forEach(initTracking);
+})();
+</script>
 </body>
 </html>
