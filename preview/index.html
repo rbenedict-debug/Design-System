@@ -17256,7 +17256,11 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             var el     = document.getElementById('ag-sim-col-sidebar');
             if (!el) return;
             var isOpen = el.style.display !== 'none';
-            el.style.display = isOpen ? 'none' : 'block';
+            el.style.display = isOpen ? 'none' : 'flex';
+            /* .ds-column-panel is display:none by default (shown via [data-panel-open]
+               in production). Force-show it in the sim via inline style. */
+            var panel = el.querySelector('.ds-column-panel');
+            if (panel) panel.style.display = isOpen ? 'none' : 'flex';
             if (btn) {
               btn.setAttribute('aria-pressed', String(!isOpen));
               btn.classList.toggle('is-selected', !isOpen);
