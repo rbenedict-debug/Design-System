@@ -1,7 +1,7 @@
 import * as i0 from '@angular/core';
-import { signal, Input, ChangeDetectionStrategy, Component, EventEmitter, Output, HostListener, HostBinding, Directive, ContentChild, ViewChild, Optional, Inject, TemplateRef, ContentChildren } from '@angular/core';
+import { signal, Input, ChangeDetectionStrategy, Component, EventEmitter, Output, HostListener, HostBinding, Directive, ContentChild, ViewChild, Optional, Inject, TemplateRef, ContentChildren, PLATFORM_ID } from '@angular/core';
 import * as i1 from '@angular/common';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import * as i2 from '@angular/material/expansion';
 import { MatExpansionModule } from '@angular/material/expansion';
 import * as i2$1 from '@angular/material/form-field';
@@ -46,6 +46,7 @@ import * as i2$9 from '@angular/material/slide-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import * as i1$7 from '@angular/material/tooltip';
 import { MatTooltip } from '@angular/material/tooltip';
+import * as Highcharts from 'highcharts';
 
 /**
  * ds-accordion
@@ -848,11 +849,11 @@ class DsButtonComponent {
         }
     }
     static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsButtonComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "21.2.7", type: DsButtonComponent, isStandalone: true, selector: "ds-button", inputs: { variant: "variant", size: "size", disabled: "disabled", type: "type" }, outputs: { clicked: "clicked" }, ngImport: i0, template: "<ng-container [ngSwitch]=\"variant\">\n\n  <!-- filled \u2192 mat-flat-button -->\n  <button\n    *ngSwitchCase=\"'filled'\"\n    mat-flat-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n  <!-- outlined \u2192 mat-stroked-button -->\n  <button\n    *ngSwitchCase=\"'outlined'\"\n    mat-stroked-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n  <!-- text / destructive / destructive-outlined \u2192 mat-button -->\n  <button\n    *ngSwitchDefault\n    mat-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n</ng-container>\n", styles: [".ds-button{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:var(--spacing-sm);white-space:nowrap;flex-shrink:0;min-height:42px;border:1px solid transparent;border-radius:var(--radius-sm);padding:0 var(--spacing-xl);font-family:var(--ref-typeface-brand);font-size:var(--ref-typescale-label-large-size);font-weight:var(--ref-typeface-weight-bold);line-height:var(--ref-typescale-label-large-line-height);letter-spacing:var(--ref-typescale-label-large-tracking);cursor:pointer;position:relative;overflow:hidden;text-decoration:none;transition:background-color .15s ease,border-color .15s ease,box-shadow .15s ease}.ds-button:focus{outline:none}.ds-button:after{content:\"\";position:absolute;inset:0;background:transparent;pointer-events:none;transition:background .1s ease}.ds-button__icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:18px;height:18px}.ds-button__icon svg{width:100%;height:100%}.ds-button .ds-icon{font-size:18px;width:18px;height:18px}.ds-button--xs{font-size:var(--ref-typescale-label-small-size);min-height:24px;padding:0 var(--spacing-sm);gap:var(--spacing-sm);border-radius:var(--radius-sm)}.ds-button--xs .ds-button__icon,.ds-button--xs .ds-icon{width:12px;height:12px;font-size:12px}.ds-button--sm{min-height:32px;padding:0 var(--spacing-lg)}.ds-button--sm .ds-button__icon,.ds-button--sm .ds-icon{width:16px;height:16px;font-size:16px}.ds-button--lg{min-height:56px;padding:0 calc(var(--spacing-xl) + var(--spacing-sm))}.ds-button--lg .ds-button__icon,.ds-button--lg .ds-icon{width:20px;height:20px;font-size:20px}.ds-button--leading-icon{padding-left:var(--spacing-lg)}.ds-button--trailing-icon{padding-right:var(--spacing-lg)}.ds-button--sm.ds-button--leading-icon{padding-left:var(--spacing-sm)}.ds-button--sm.ds-button--trailing-icon{padding-right:var(--spacing-sm)}.ds-button--lg.ds-button--leading-icon{padding-left:var(--spacing-xl)}.ds-button--lg.ds-button--trailing-icon{padding-right:var(--spacing-xl)}.ds-button--filled{background:var(--color-surface-brand-bold);color:var(--color-text-on-brand)}.ds-button--filled:hover:not(:disabled):after{background:var(--overlay-hovered)}.ds-button--filled:focus-visible{box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--filled:focus-visible:after{background:var(--overlay-focused)}.ds-button--filled:active:not(:disabled):after{background:var(--overlay-pressed)}.ds-button--filled.is-error{background:var(--color-surface-error);color:var(--color-text-error);border-color:transparent}.ds-button--filled.is-error:hover:not(:disabled):after{background:var(--overlay-accent-red-hovered)}.ds-button--filled.is-error:active:not(:disabled):after{background:var(--overlay-accent-red-pressed)}.ds-button--outlined{background:transparent;color:var(--color-text-brand);border-color:var(--color-border-primary)}.ds-button--outlined:hover:not(:disabled){background:var(--overlay-hovered);border-color:var(--color-border-input-hover)}.ds-button--outlined:focus-visible{background:var(--overlay-focused);border-color:var(--color-border-input-active);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--outlined:active:not(:disabled){background:var(--overlay-pressed);border-color:var(--color-border-active)}.ds-button--outlined.is-error{color:var(--color-text-error);border-color:var(--color-border-error)}.ds-button--outlined.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered);border-color:var(--color-border-error)}.ds-button--outlined.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--text{background:transparent;color:var(--color-text-brand);border-color:transparent}.ds-button--text:hover:not(:disabled){background:var(--overlay-hovered)}.ds-button--text:focus-visible{background:var(--overlay-focused);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--text:active:not(:disabled){background:var(--overlay-pressed)}.ds-button--text.is-error{color:var(--color-text-error)}.ds-button--text.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered)}.ds-button--text.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--destructive{background:transparent;color:var(--color-text-primary);border-color:transparent}.ds-button--destructive:hover:not(:disabled){background:var(--overlay-accent-red-hovered);color:var(--color-text-accent-red)}.ds-button--destructive:focus-visible{background:var(--overlay-accent-red-focused);color:var(--color-text-accent-red);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--destructive:active:not(:disabled){background:var(--overlay-accent-red-pressed);color:var(--color-text-accent-red)}.ds-button--destructive.is-error{color:var(--color-text-error)}.ds-button--destructive.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered)}.ds-button--destructive.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--destructive-outlined{background:transparent;color:var(--color-text-primary);border-color:var(--color-border-primary)}.ds-button--destructive-outlined:hover:not(:disabled){background:var(--overlay-accent-red-hovered);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red)}.ds-button--destructive-outlined:focus-visible{background:var(--overlay-accent-red-focused);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--destructive-outlined:active:not(:disabled){background:var(--overlay-accent-red-pressed);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red)}.ds-button--destructive-outlined.is-error{color:var(--color-text-error);border-color:var(--color-border-error)}.ds-button--destructive-outlined.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered);border-color:var(--color-border-error)}.ds-button--destructive-outlined.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button:disabled,.ds-button[aria-disabled=true]{cursor:not-allowed}.ds-button:disabled:after,.ds-button[aria-disabled=true]:after{background:transparent!important}.ds-button--filled:disabled{background:var(--color-surface-disabled);color:var(--color-text-disabled);border-color:transparent}.ds-button--outlined:disabled,.ds-button--destructive-outlined:disabled{background:transparent;color:var(--color-text-disabled);border-color:var(--color-border-subtle)}.ds-button--text:disabled,.ds-button--destructive:disabled{background:transparent;color:var(--color-text-disabled);border-color:transparent}.ds-button.is-loading{cursor:wait;pointer-events:none}.ds-button.is-loading:before{content:\"\";width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ds-btn-spin .7s linear infinite;flex-shrink:0}@keyframes ds-btn-spin{to{transform:rotate(360deg)}}.mat-mdc-raised-button.ds-button,.mat-mdc-outlined-button.ds-button,.mat-mdc-text-button.ds-button{--mdc-filled-button-container-color: transparent;--mdc-filled-button-label-text-color: inherit;--mdc-outlined-button-label-text-color: inherit;--mdc-text-button-label-text-color: inherit;--mdc-outlined-button-outline-color: transparent;--mdc-filled-button-container-elevation: 0;--mdc-filled-button-hover-container-elevation: 0;--mdc-filled-button-focus-container-elevation: 0;--mdc-filled-button-pressed-container-elevation: 0;--mat-filled-button-hover-state-layer-opacity: 0;--mat-filled-button-focus-state-layer-opacity: 0;--mat-filled-button-pressed-state-layer-opacity: 0;--mat-outlined-button-hover-state-layer-opacity: 0;--mat-outlined-button-focus-state-layer-opacity: 0;--mat-outlined-button-pressed-state-layer-opacity: 0;--mat-text-button-hover-state-layer-opacity: 0;--mat-text-button-focus-state-layer-opacity: 0;--mat-text-button-pressed-state-layer-opacity: 0}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1.NgSwitch, selector: "[ngSwitch]", inputs: ["ngSwitch"] }, { kind: "directive", type: i1.NgSwitchCase, selector: "[ngSwitchCase]", inputs: ["ngSwitchCase"] }, { kind: "directive", type: i1.NgSwitchDefault, selector: "[ngSwitchDefault]" }, { kind: "ngmodule", type: MatButtonModule }, { kind: "component", type: i1$1.MatButton, selector: "    button[matButton], a[matButton], button[mat-button], button[mat-raised-button],    button[mat-flat-button], button[mat-stroked-button], a[mat-button], a[mat-raised-button],    a[mat-flat-button], a[mat-stroked-button]  ", inputs: ["matButton"], exportAs: ["matButton", "matAnchor"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "21.2.7", type: DsButtonComponent, isStandalone: true, selector: "ds-button", inputs: { variant: "variant", size: "size", disabled: "disabled", type: "type" }, outputs: { clicked: "clicked" }, ngImport: i0, template: "<ng-container [ngSwitch]=\"variant\">\n\n  <!-- filled \u2192 mat-flat-button -->\n  <button\n    *ngSwitchCase=\"'filled'\"\n    mat-flat-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n  <!-- outlined \u2192 mat-stroked-button -->\n  <button\n    *ngSwitchCase=\"'outlined'\"\n    mat-stroked-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n  <!-- text / destructive / destructive-outlined \u2192 mat-button -->\n  <button\n    *ngSwitchDefault\n    mat-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n</ng-container>\n", styles: [".ds-button{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:var(--spacing-sm);white-space:nowrap;flex-shrink:0;min-height:42px;border:1px solid transparent;border-radius:var(--radius-sm);padding:0 var(--spacing-xl);font-family:var(--ref-typeface-brand);font-size:var(--ref-typescale-label-large-size);font-weight:var(--ref-typeface-weight-bold);line-height:var(--ref-typescale-label-large-line-height);letter-spacing:var(--ref-typescale-label-large-tracking);cursor:pointer;position:relative;overflow:hidden;text-decoration:none;transition:background-color .15s ease,border-color .15s ease,box-shadow .15s ease}.ds-button:focus{outline:none}.ds-button:after{content:\"\";position:absolute;inset:0;background:transparent;pointer-events:none;transition:background .1s ease}.ds-button__icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:18px;height:18px}.ds-button__icon svg{width:100%;height:100%}.ds-button .ds-icon{font-size:18px;width:18px;height:18px}.ds-button--xs{font-size:var(--ref-typescale-label-small-size);min-height:24px;padding:0 var(--spacing-md);gap:var(--spacing-sm);border-radius:var(--radius-sm)}.ds-button--xs .ds-button__icon,.ds-button--xs .ds-icon{width:12px;height:12px;font-size:12px}.ds-button--sm{min-height:32px;padding:0 var(--spacing-lg)}.ds-button--sm .ds-button__icon,.ds-button--sm .ds-icon{width:16px;height:16px;font-size:16px}.ds-button--lg{min-height:56px;padding:0 calc(var(--spacing-xl) + var(--spacing-sm))}.ds-button--lg .ds-button__icon,.ds-button--lg .ds-icon{width:20px;height:20px;font-size:20px}.ds-button--leading-icon{padding-left:var(--spacing-lg)}.ds-button--trailing-icon{padding-right:var(--spacing-lg)}.ds-button--xs.ds-button--leading-icon{padding-left:var(--spacing-sm)}.ds-button--xs.ds-button--trailing-icon{padding-right:var(--spacing-sm)}.ds-button--sm.ds-button--leading-icon{padding-left:var(--spacing-sm)}.ds-button--sm.ds-button--trailing-icon{padding-right:var(--spacing-sm)}.ds-button--lg.ds-button--leading-icon{padding-left:var(--spacing-xl)}.ds-button--lg.ds-button--trailing-icon{padding-right:var(--spacing-xl)}.ds-button--filled{background:var(--color-surface-brand-bold);color:var(--color-text-on-brand)}.ds-button--filled:hover:not(:disabled):after{background:var(--overlay-hovered)}.ds-button--filled:focus-visible{box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--filled:focus-visible:after{background:var(--overlay-focused)}.ds-button--filled:active:not(:disabled):after{background:var(--overlay-pressed)}.ds-button--filled.is-error{background:var(--color-surface-error);color:var(--color-text-error);border-color:transparent}.ds-button--filled.is-error:hover:not(:disabled):after{background:var(--overlay-accent-red-hovered)}.ds-button--filled.is-error:active:not(:disabled):after{background:var(--overlay-accent-red-pressed)}.ds-button--outlined{background:transparent;color:var(--color-text-brand);border-color:var(--color-border-primary)}.ds-button--outlined:hover:not(:disabled){background:var(--overlay-hovered);border-color:var(--color-border-input-hover)}.ds-button--outlined:focus-visible{background:var(--overlay-focused);border-color:var(--color-border-input-active);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--outlined:active:not(:disabled){background:var(--overlay-pressed);border-color:var(--color-border-active)}.ds-button--outlined.is-error{color:var(--color-text-error);border-color:var(--color-border-error)}.ds-button--outlined.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered);border-color:var(--color-border-error)}.ds-button--outlined.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--text{background:transparent;color:var(--color-text-brand);border-color:transparent}.ds-button--text:hover:not(:disabled){background:var(--overlay-hovered)}.ds-button--text:focus-visible{background:var(--overlay-focused);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--text:active:not(:disabled){background:var(--overlay-pressed)}.ds-button--text.is-error{color:var(--color-text-error)}.ds-button--text.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered)}.ds-button--text.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--destructive{background:transparent;color:var(--color-text-primary);border-color:transparent}.ds-button--destructive:hover:not(:disabled){background:var(--overlay-accent-red-hovered);color:var(--color-text-accent-red)}.ds-button--destructive:focus-visible{background:var(--overlay-accent-red-focused);color:var(--color-text-accent-red);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--destructive:active:not(:disabled){background:var(--overlay-accent-red-pressed);color:var(--color-text-accent-red)}.ds-button--destructive.is-error{color:var(--color-text-error)}.ds-button--destructive.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered)}.ds-button--destructive.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--destructive-outlined{background:transparent;color:var(--color-text-primary);border-color:var(--color-border-primary)}.ds-button--destructive-outlined:hover:not(:disabled){background:var(--overlay-accent-red-hovered);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red)}.ds-button--destructive-outlined:focus-visible{background:var(--overlay-accent-red-focused);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--destructive-outlined:active:not(:disabled){background:var(--overlay-accent-red-pressed);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red)}.ds-button--destructive-outlined.is-error{color:var(--color-text-error);border-color:var(--color-border-error)}.ds-button--destructive-outlined.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered);border-color:var(--color-border-error)}.ds-button--destructive-outlined.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button:disabled,.ds-button[aria-disabled=true]{cursor:not-allowed}.ds-button:disabled:after,.ds-button[aria-disabled=true]:after{background:transparent!important}.ds-button--filled:disabled{background:var(--color-surface-disabled);color:var(--color-text-disabled);border-color:transparent}.ds-button--outlined:disabled,.ds-button--destructive-outlined:disabled{background:transparent;color:var(--color-text-disabled);border-color:var(--color-border-subtle)}.ds-button--text:disabled,.ds-button--destructive:disabled{background:transparent;color:var(--color-text-disabled);border-color:transparent}.ds-button.is-loading{cursor:wait;pointer-events:none}.ds-button.is-loading:before{content:\"\";width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ds-btn-spin .7s linear infinite;flex-shrink:0}@keyframes ds-btn-spin{to{transform:rotate(360deg)}}.mat-mdc-raised-button.ds-button,.mat-mdc-outlined-button.ds-button,.mat-mdc-text-button.ds-button{--mdc-filled-button-container-color: transparent;--mdc-filled-button-label-text-color: inherit;--mdc-outlined-button-label-text-color: inherit;--mdc-text-button-label-text-color: inherit;--mdc-outlined-button-outline-color: transparent;--mdc-filled-button-container-elevation: 0;--mdc-filled-button-hover-container-elevation: 0;--mdc-filled-button-focus-container-elevation: 0;--mdc-filled-button-pressed-container-elevation: 0;--mat-filled-button-hover-state-layer-opacity: 0;--mat-filled-button-focus-state-layer-opacity: 0;--mat-filled-button-pressed-state-layer-opacity: 0;--mat-outlined-button-hover-state-layer-opacity: 0;--mat-outlined-button-focus-state-layer-opacity: 0;--mat-outlined-button-pressed-state-layer-opacity: 0;--mat-text-button-hover-state-layer-opacity: 0;--mat-text-button-focus-state-layer-opacity: 0;--mat-text-button-pressed-state-layer-opacity: 0}\n"], dependencies: [{ kind: "ngmodule", type: CommonModule }, { kind: "directive", type: i1.NgSwitch, selector: "[ngSwitch]", inputs: ["ngSwitch"] }, { kind: "directive", type: i1.NgSwitchCase, selector: "[ngSwitchCase]", inputs: ["ngSwitchCase"] }, { kind: "directive", type: i1.NgSwitchDefault, selector: "[ngSwitchDefault]" }, { kind: "ngmodule", type: MatButtonModule }, { kind: "component", type: i1$1.MatButton, selector: "    button[matButton], a[matButton], button[mat-button], button[mat-raised-button],    button[mat-flat-button], button[mat-stroked-button], a[mat-button], a[mat-raised-button],    a[mat-flat-button], a[mat-stroked-button]  ", inputs: ["matButton"], exportAs: ["matButton", "matAnchor"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsButtonComponent, decorators: [{
             type: Component,
-            args: [{ selector: 'ds-button', standalone: true, imports: [CommonModule, MatButtonModule], changeDetection: ChangeDetectionStrategy.OnPush, template: "<ng-container [ngSwitch]=\"variant\">\n\n  <!-- filled \u2192 mat-flat-button -->\n  <button\n    *ngSwitchCase=\"'filled'\"\n    mat-flat-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n  <!-- outlined \u2192 mat-stroked-button -->\n  <button\n    *ngSwitchCase=\"'outlined'\"\n    mat-stroked-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n  <!-- text / destructive / destructive-outlined \u2192 mat-button -->\n  <button\n    *ngSwitchDefault\n    mat-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n</ng-container>\n", styles: [".ds-button{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:var(--spacing-sm);white-space:nowrap;flex-shrink:0;min-height:42px;border:1px solid transparent;border-radius:var(--radius-sm);padding:0 var(--spacing-xl);font-family:var(--ref-typeface-brand);font-size:var(--ref-typescale-label-large-size);font-weight:var(--ref-typeface-weight-bold);line-height:var(--ref-typescale-label-large-line-height);letter-spacing:var(--ref-typescale-label-large-tracking);cursor:pointer;position:relative;overflow:hidden;text-decoration:none;transition:background-color .15s ease,border-color .15s ease,box-shadow .15s ease}.ds-button:focus{outline:none}.ds-button:after{content:\"\";position:absolute;inset:0;background:transparent;pointer-events:none;transition:background .1s ease}.ds-button__icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:18px;height:18px}.ds-button__icon svg{width:100%;height:100%}.ds-button .ds-icon{font-size:18px;width:18px;height:18px}.ds-button--xs{font-size:var(--ref-typescale-label-small-size);min-height:24px;padding:0 var(--spacing-sm);gap:var(--spacing-sm);border-radius:var(--radius-sm)}.ds-button--xs .ds-button__icon,.ds-button--xs .ds-icon{width:12px;height:12px;font-size:12px}.ds-button--sm{min-height:32px;padding:0 var(--spacing-lg)}.ds-button--sm .ds-button__icon,.ds-button--sm .ds-icon{width:16px;height:16px;font-size:16px}.ds-button--lg{min-height:56px;padding:0 calc(var(--spacing-xl) + var(--spacing-sm))}.ds-button--lg .ds-button__icon,.ds-button--lg .ds-icon{width:20px;height:20px;font-size:20px}.ds-button--leading-icon{padding-left:var(--spacing-lg)}.ds-button--trailing-icon{padding-right:var(--spacing-lg)}.ds-button--sm.ds-button--leading-icon{padding-left:var(--spacing-sm)}.ds-button--sm.ds-button--trailing-icon{padding-right:var(--spacing-sm)}.ds-button--lg.ds-button--leading-icon{padding-left:var(--spacing-xl)}.ds-button--lg.ds-button--trailing-icon{padding-right:var(--spacing-xl)}.ds-button--filled{background:var(--color-surface-brand-bold);color:var(--color-text-on-brand)}.ds-button--filled:hover:not(:disabled):after{background:var(--overlay-hovered)}.ds-button--filled:focus-visible{box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--filled:focus-visible:after{background:var(--overlay-focused)}.ds-button--filled:active:not(:disabled):after{background:var(--overlay-pressed)}.ds-button--filled.is-error{background:var(--color-surface-error);color:var(--color-text-error);border-color:transparent}.ds-button--filled.is-error:hover:not(:disabled):after{background:var(--overlay-accent-red-hovered)}.ds-button--filled.is-error:active:not(:disabled):after{background:var(--overlay-accent-red-pressed)}.ds-button--outlined{background:transparent;color:var(--color-text-brand);border-color:var(--color-border-primary)}.ds-button--outlined:hover:not(:disabled){background:var(--overlay-hovered);border-color:var(--color-border-input-hover)}.ds-button--outlined:focus-visible{background:var(--overlay-focused);border-color:var(--color-border-input-active);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--outlined:active:not(:disabled){background:var(--overlay-pressed);border-color:var(--color-border-active)}.ds-button--outlined.is-error{color:var(--color-text-error);border-color:var(--color-border-error)}.ds-button--outlined.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered);border-color:var(--color-border-error)}.ds-button--outlined.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--text{background:transparent;color:var(--color-text-brand);border-color:transparent}.ds-button--text:hover:not(:disabled){background:var(--overlay-hovered)}.ds-button--text:focus-visible{background:var(--overlay-focused);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--text:active:not(:disabled){background:var(--overlay-pressed)}.ds-button--text.is-error{color:var(--color-text-error)}.ds-button--text.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered)}.ds-button--text.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--destructive{background:transparent;color:var(--color-text-primary);border-color:transparent}.ds-button--destructive:hover:not(:disabled){background:var(--overlay-accent-red-hovered);color:var(--color-text-accent-red)}.ds-button--destructive:focus-visible{background:var(--overlay-accent-red-focused);color:var(--color-text-accent-red);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--destructive:active:not(:disabled){background:var(--overlay-accent-red-pressed);color:var(--color-text-accent-red)}.ds-button--destructive.is-error{color:var(--color-text-error)}.ds-button--destructive.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered)}.ds-button--destructive.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--destructive-outlined{background:transparent;color:var(--color-text-primary);border-color:var(--color-border-primary)}.ds-button--destructive-outlined:hover:not(:disabled){background:var(--overlay-accent-red-hovered);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red)}.ds-button--destructive-outlined:focus-visible{background:var(--overlay-accent-red-focused);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--destructive-outlined:active:not(:disabled){background:var(--overlay-accent-red-pressed);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red)}.ds-button--destructive-outlined.is-error{color:var(--color-text-error);border-color:var(--color-border-error)}.ds-button--destructive-outlined.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered);border-color:var(--color-border-error)}.ds-button--destructive-outlined.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button:disabled,.ds-button[aria-disabled=true]{cursor:not-allowed}.ds-button:disabled:after,.ds-button[aria-disabled=true]:after{background:transparent!important}.ds-button--filled:disabled{background:var(--color-surface-disabled);color:var(--color-text-disabled);border-color:transparent}.ds-button--outlined:disabled,.ds-button--destructive-outlined:disabled{background:transparent;color:var(--color-text-disabled);border-color:var(--color-border-subtle)}.ds-button--text:disabled,.ds-button--destructive:disabled{background:transparent;color:var(--color-text-disabled);border-color:transparent}.ds-button.is-loading{cursor:wait;pointer-events:none}.ds-button.is-loading:before{content:\"\";width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ds-btn-spin .7s linear infinite;flex-shrink:0}@keyframes ds-btn-spin{to{transform:rotate(360deg)}}.mat-mdc-raised-button.ds-button,.mat-mdc-outlined-button.ds-button,.mat-mdc-text-button.ds-button{--mdc-filled-button-container-color: transparent;--mdc-filled-button-label-text-color: inherit;--mdc-outlined-button-label-text-color: inherit;--mdc-text-button-label-text-color: inherit;--mdc-outlined-button-outline-color: transparent;--mdc-filled-button-container-elevation: 0;--mdc-filled-button-hover-container-elevation: 0;--mdc-filled-button-focus-container-elevation: 0;--mdc-filled-button-pressed-container-elevation: 0;--mat-filled-button-hover-state-layer-opacity: 0;--mat-filled-button-focus-state-layer-opacity: 0;--mat-filled-button-pressed-state-layer-opacity: 0;--mat-outlined-button-hover-state-layer-opacity: 0;--mat-outlined-button-focus-state-layer-opacity: 0;--mat-outlined-button-pressed-state-layer-opacity: 0;--mat-text-button-hover-state-layer-opacity: 0;--mat-text-button-focus-state-layer-opacity: 0;--mat-text-button-pressed-state-layer-opacity: 0}\n"] }]
+            args: [{ selector: 'ds-button', standalone: true, imports: [CommonModule, MatButtonModule], changeDetection: ChangeDetectionStrategy.OnPush, template: "<ng-container [ngSwitch]=\"variant\">\n\n  <!-- filled \u2192 mat-flat-button -->\n  <button\n    *ngSwitchCase=\"'filled'\"\n    mat-flat-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n  <!-- outlined \u2192 mat-stroked-button -->\n  <button\n    *ngSwitchCase=\"'outlined'\"\n    mat-stroked-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n  <!-- text / destructive / destructive-outlined \u2192 mat-button -->\n  <button\n    *ngSwitchDefault\n    mat-button\n    [class]=\"buttonClasses\"\n    [disabled]=\"disabled\"\n    [type]=\"type\"\n    [disableRipple]=\"true\"\n    (click)=\"handleClick($event)\"\n  >\n    <ng-content select=\"[slot='icon-leading']\"></ng-content>\n    <ng-content></ng-content>\n    <ng-content select=\"[slot='icon-trailing']\"></ng-content>\n  </button>\n\n</ng-container>\n", styles: [".ds-button{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:var(--spacing-sm);white-space:nowrap;flex-shrink:0;min-height:42px;border:1px solid transparent;border-radius:var(--radius-sm);padding:0 var(--spacing-xl);font-family:var(--ref-typeface-brand);font-size:var(--ref-typescale-label-large-size);font-weight:var(--ref-typeface-weight-bold);line-height:var(--ref-typescale-label-large-line-height);letter-spacing:var(--ref-typescale-label-large-tracking);cursor:pointer;position:relative;overflow:hidden;text-decoration:none;transition:background-color .15s ease,border-color .15s ease,box-shadow .15s ease}.ds-button:focus{outline:none}.ds-button:after{content:\"\";position:absolute;inset:0;background:transparent;pointer-events:none;transition:background .1s ease}.ds-button__icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:18px;height:18px}.ds-button__icon svg{width:100%;height:100%}.ds-button .ds-icon{font-size:18px;width:18px;height:18px}.ds-button--xs{font-size:var(--ref-typescale-label-small-size);min-height:24px;padding:0 var(--spacing-md);gap:var(--spacing-sm);border-radius:var(--radius-sm)}.ds-button--xs .ds-button__icon,.ds-button--xs .ds-icon{width:12px;height:12px;font-size:12px}.ds-button--sm{min-height:32px;padding:0 var(--spacing-lg)}.ds-button--sm .ds-button__icon,.ds-button--sm .ds-icon{width:16px;height:16px;font-size:16px}.ds-button--lg{min-height:56px;padding:0 calc(var(--spacing-xl) + var(--spacing-sm))}.ds-button--lg .ds-button__icon,.ds-button--lg .ds-icon{width:20px;height:20px;font-size:20px}.ds-button--leading-icon{padding-left:var(--spacing-lg)}.ds-button--trailing-icon{padding-right:var(--spacing-lg)}.ds-button--xs.ds-button--leading-icon{padding-left:var(--spacing-sm)}.ds-button--xs.ds-button--trailing-icon{padding-right:var(--spacing-sm)}.ds-button--sm.ds-button--leading-icon{padding-left:var(--spacing-sm)}.ds-button--sm.ds-button--trailing-icon{padding-right:var(--spacing-sm)}.ds-button--lg.ds-button--leading-icon{padding-left:var(--spacing-xl)}.ds-button--lg.ds-button--trailing-icon{padding-right:var(--spacing-xl)}.ds-button--filled{background:var(--color-surface-brand-bold);color:var(--color-text-on-brand)}.ds-button--filled:hover:not(:disabled):after{background:var(--overlay-hovered)}.ds-button--filled:focus-visible{box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--filled:focus-visible:after{background:var(--overlay-focused)}.ds-button--filled:active:not(:disabled):after{background:var(--overlay-pressed)}.ds-button--filled.is-error{background:var(--color-surface-error);color:var(--color-text-error);border-color:transparent}.ds-button--filled.is-error:hover:not(:disabled):after{background:var(--overlay-accent-red-hovered)}.ds-button--filled.is-error:active:not(:disabled):after{background:var(--overlay-accent-red-pressed)}.ds-button--outlined{background:transparent;color:var(--color-text-brand);border-color:var(--color-border-primary)}.ds-button--outlined:hover:not(:disabled){background:var(--overlay-hovered);border-color:var(--color-border-input-hover)}.ds-button--outlined:focus-visible{background:var(--overlay-focused);border-color:var(--color-border-input-active);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--outlined:active:not(:disabled){background:var(--overlay-pressed);border-color:var(--color-border-active)}.ds-button--outlined.is-error{color:var(--color-text-error);border-color:var(--color-border-error)}.ds-button--outlined.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered);border-color:var(--color-border-error)}.ds-button--outlined.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--text{background:transparent;color:var(--color-text-brand);border-color:transparent}.ds-button--text:hover:not(:disabled){background:var(--overlay-hovered)}.ds-button--text:focus-visible{background:var(--overlay-focused);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--text:active:not(:disabled){background:var(--overlay-pressed)}.ds-button--text.is-error{color:var(--color-text-error)}.ds-button--text.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered)}.ds-button--text.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--destructive{background:transparent;color:var(--color-text-primary);border-color:transparent}.ds-button--destructive:hover:not(:disabled){background:var(--overlay-accent-red-hovered);color:var(--color-text-accent-red)}.ds-button--destructive:focus-visible{background:var(--overlay-accent-red-focused);color:var(--color-text-accent-red);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--destructive:active:not(:disabled){background:var(--overlay-accent-red-pressed);color:var(--color-text-accent-red)}.ds-button--destructive.is-error{color:var(--color-text-error)}.ds-button--destructive.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered)}.ds-button--destructive.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button--destructive-outlined{background:transparent;color:var(--color-text-primary);border-color:var(--color-border-primary)}.ds-button--destructive-outlined:hover:not(:disabled){background:var(--overlay-accent-red-hovered);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red)}.ds-button--destructive-outlined:focus-visible{background:var(--overlay-accent-red-focused);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red);box-shadow:0 0 0 3px var(--color-border-ada-focus-ring)}.ds-button--destructive-outlined:active:not(:disabled){background:var(--overlay-accent-red-pressed);color:var(--color-text-accent-red);border-color:var(--color-border-accent-red)}.ds-button--destructive-outlined.is-error{color:var(--color-text-error);border-color:var(--color-border-error)}.ds-button--destructive-outlined.is-error:hover:not(:disabled){background:var(--overlay-accent-red-hovered);border-color:var(--color-border-error)}.ds-button--destructive-outlined.is-error:active:not(:disabled){background:var(--overlay-accent-red-pressed)}.ds-button:disabled,.ds-button[aria-disabled=true]{cursor:not-allowed}.ds-button:disabled:after,.ds-button[aria-disabled=true]:after{background:transparent!important}.ds-button--filled:disabled{background:var(--color-surface-disabled);color:var(--color-text-disabled);border-color:transparent}.ds-button--outlined:disabled,.ds-button--destructive-outlined:disabled{background:transparent;color:var(--color-text-disabled);border-color:var(--color-border-subtle)}.ds-button--text:disabled,.ds-button--destructive:disabled{background:transparent;color:var(--color-text-disabled);border-color:transparent}.ds-button.is-loading{cursor:wait;pointer-events:none}.ds-button.is-loading:before{content:\"\";width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:ds-btn-spin .7s linear infinite;flex-shrink:0}@keyframes ds-btn-spin{to{transform:rotate(360deg)}}.mat-mdc-raised-button.ds-button,.mat-mdc-outlined-button.ds-button,.mat-mdc-text-button.ds-button{--mdc-filled-button-container-color: transparent;--mdc-filled-button-label-text-color: inherit;--mdc-outlined-button-label-text-color: inherit;--mdc-text-button-label-text-color: inherit;--mdc-outlined-button-outline-color: transparent;--mdc-filled-button-container-elevation: 0;--mdc-filled-button-hover-container-elevation: 0;--mdc-filled-button-focus-container-elevation: 0;--mdc-filled-button-pressed-container-elevation: 0;--mat-filled-button-hover-state-layer-opacity: 0;--mat-filled-button-focus-state-layer-opacity: 0;--mat-filled-button-pressed-state-layer-opacity: 0;--mat-outlined-button-hover-state-layer-opacity: 0;--mat-outlined-button-focus-state-layer-opacity: 0;--mat-outlined-button-pressed-state-layer-opacity: 0;--mat-text-button-hover-state-layer-opacity: 0;--mat-text-button-focus-state-layer-opacity: 0;--mat-text-button-pressed-state-layer-opacity: 0}\n"] }]
         }], propDecorators: { variant: [{
                 type: Input
             }], size: [{
@@ -3708,12 +3709,14 @@ class DsColumnPanelComponent {
             return;
         }
         this.columns = this._api.getAllGridColumns()
-            .filter(col => col.getColDef().suppressColumnsToolPanel !== true)
+            .filter(col => {
+            const def = col.getColDef();
+            return def.suppressColumnsToolPanel !== true && def.lockVisible !== true;
+        })
             .map(col => ({
             colId: col.getColId(),
             label: col.getColDef().headerName ?? col.getColId(),
             visible: col.isVisible(),
-            system: col.getColDef().lockVisible === true,
         }));
         this.cdr.markForCheck();
     }
@@ -5924,6 +5927,436 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
                 args: ['document:keydown.escape']
             }] } });
 
+/**
+ * onfloChartTheme
+ *
+ * Highcharts theme object for the Onflo Design System.
+ * Apply once at app bootstrap: Highcharts.setOptions(onfloChartTheme)
+ *
+ * ds-chart applies this automatically — consuming apps only need to call
+ * setOptions if they render Highcharts charts outside of ds-chart.
+ *
+ * All values are hardcoded to match the Onflo ref token palette
+ * (Highcharts options are JavaScript objects, not CSS, so var() is not valid here).
+ */
+// ── Series color palette ──────────────────────────────────────────────────────
+// Ordered for maximum contrast between adjacent series.
+// Maps to: brand blue, green, yellow, red, light blue, teal, orange, purple, navy.
+const ONFLO_CHART_COLORS = [
+    '#0B6EB4', // --ref-color-primary-blue-default
+    '#45A55F', // --ref-color-accent-green-default
+    '#FFBF00', // --ref-color-accent-yellow-default
+    '#D70917', // --ref-color-accent-red-default
+    '#43ADF2', // --ref-color-accent-lightblue-default
+    '#159B8E', // --ref-color-accent-teal-default
+    '#EB6E08', // --ref-color-accent-orange-default
+    '#622682', // --ref-color-accent-purple-default
+    '#0B3057', // --ref-color-accent-darkblue-default
+];
+// ── Theme ─────────────────────────────────────────────────────────────────────
+const onfloChartTheme = {
+    colors: ONFLO_CHART_COLORS,
+    chart: {
+        backgroundColor: 'transparent',
+        style: {
+            fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
+        },
+        animation: { duration: 200 },
+        spacingTop: 16,
+        spacingRight: 16,
+        spacingBottom: 16,
+        spacingLeft: 16,
+    },
+    title: {
+        text: undefined,
+        style: {
+            fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
+            fontSize: '16px',
+            fontWeight: '600',
+            color: '#2D3638', // --ref-color-neutral-text-default
+        },
+    },
+    subtitle: {
+        style: {
+            fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
+            fontSize: '12px',
+            fontWeight: '400',
+            color: '#73737F', // --ref-color-neutral-text-soft
+        },
+    },
+    xAxis: {
+        lineColor: '#E9E9E9', // --ref-color-neutral-border-subtle
+        tickColor: '#E9E9E9',
+        gridLineColor: 'transparent',
+        labels: {
+            style: {
+                fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
+                fontSize: '12px',
+                fontWeight: '400',
+                color: '#73737F',
+            },
+        },
+        title: {
+            style: {
+                fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
+                fontSize: '12px',
+                fontWeight: '500',
+                color: '#73737F',
+            },
+        },
+    },
+    yAxis: {
+        gridLineColor: '#E9E9E9',
+        lineColor: 'transparent',
+        tickColor: 'transparent',
+        labels: {
+            style: {
+                fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
+                fontSize: '12px',
+                fontWeight: '400',
+                color: '#73737F',
+            },
+        },
+        title: {
+            text: null,
+            style: {
+                fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
+                fontSize: '12px',
+                fontWeight: '500',
+                color: '#73737F',
+            },
+        },
+    },
+    legend: {
+        enabled: true,
+        align: 'left',
+        verticalAlign: 'bottom',
+        layout: 'horizontal',
+        itemStyle: {
+            fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
+            fontSize: '12px',
+            fontWeight: '500',
+            color: '#2D3638',
+        },
+        itemHoverStyle: {
+            color: '#0B6EB4',
+        },
+        itemHiddenStyle: {
+            color: '#9F9F9F',
+        },
+    },
+    tooltip: {
+        backgroundColor: '#FFFFFF',
+        borderColor: '#E9E9E9',
+        borderRadius: 8,
+        shadow: false,
+        padding: 12,
+        style: {
+            fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
+            fontSize: '12px',
+            color: '#2D3638',
+        },
+    },
+    credits: {
+        enabled: false,
+    },
+    plotOptions: {
+        series: {
+            animation: { duration: 200 },
+        },
+        line: {
+            lineWidth: 2,
+            states: {
+                hover: { lineWidth: 2 },
+            },
+            marker: {
+                radius: 4,
+                symbol: 'circle',
+                lineWidth: 2,
+                lineColor: '#FFFFFF',
+            },
+        },
+        area: {
+            lineWidth: 2,
+            fillOpacity: 0.12,
+            marker: {
+                radius: 4,
+                symbol: 'circle',
+                lineWidth: 2,
+                lineColor: '#FFFFFF',
+            },
+        },
+        bar: {
+            borderRadius: 4,
+            borderWidth: 0,
+        },
+        column: {
+            borderRadius: 4,
+            borderWidth: 0,
+            groupPadding: 0.15,
+            pointPadding: 0.05,
+        },
+        pie: {
+            borderWidth: 2,
+            borderColor: '#FFFFFF',
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontFamily: '"Proxima Nova", "DM Sans", system-ui, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: '500',
+                    textOutline: 'none',
+                    color: '#2D3638',
+                },
+            },
+        },
+    },
+};
+
+/**
+ * ds-chart
+ *
+ * Unified chart component wrapping Highcharts with the Onflo design theme.
+ * Requires `highcharts` as a peer dependency: npm install highcharts
+ *
+ * The Onflo Highcharts theme (colors, typography, grid, tooltips) is applied
+ * globally via Highcharts.setOptions() the first time any ds-chart renders.
+ * Consuming apps that render Highcharts outside of ds-chart can also import
+ * and apply the theme manually: import { onfloChartTheme } from '@onflo/design-system'.
+ *
+ * Inputs:
+ *   [type]       'line' | 'area' | 'bar' | 'column' | 'donut' | 'pie'  (default: 'line')
+ *   [title]      Optional chart title string
+ *   [series]     Highcharts.SeriesOptionsType[] — the data series
+ *   [categories] string[] — x-axis category labels (line, area, bar, column)
+ *   [height]     number — chart height in px (default: 300)
+ *   [legend]     boolean — show/hide legend (default: true)
+ *   [loading]    boolean — shows spinner overlay and fades the chart (default: false)
+ *   [options]    Highcharts.Options — advanced escape hatch, merged last
+ *
+ * @example
+ * <!-- Line chart -->
+ * <ds-chart
+ *   type="line"
+ *   title="Monthly Cases"
+ *   [series]="[{ name: 'Opened', data: [245, 290, 310] }, { name: 'Closed', data: [230, 265, 290] }]"
+ *   [categories]="['Jan', 'Feb', 'Mar']"
+ * />
+ *
+ * @example
+ * <!-- Donut chart -->
+ * <ds-chart
+ *   type="donut"
+ *   title="Cases by Channel"
+ *   [series]="[{ type: 'pie', data: [{ name: 'Email', y: 38 }, { name: 'Chat', y: 27 }] }]"
+ * />
+ *
+ * @example
+ * <!-- Loading state -->
+ * <ds-chart type="column" [series]="data" [loading]="isLoading" />
+ *
+ * @example
+ * <!-- Advanced — merge custom Highcharts options -->
+ * <ds-chart type="line" [series]="data" [options]="{ yAxis: { title: { text: 'Cases' } } }" />
+ */
+class DsChartComponent {
+    platformId;
+    /** Chart type. 'donut' is pie with a 60% inner radius. */
+    type = 'line';
+    /** Optional title rendered above the chart. */
+    title;
+    /**
+     * Highcharts series data.
+     * For line/area/bar/column: [{ name: 'Series', data: [1, 2, 3] }, ...]
+     * For pie/donut: [{ type: 'pie', data: [{ name: 'Label', y: 30 }, ...] }]
+     */
+    series = [];
+    /** X-axis category labels (line, area, bar, column charts). */
+    categories;
+    /** Chart height in px. Default: 300. */
+    height = 300;
+    /** Show the chart legend. Default: true. */
+    legend = true;
+    /** Shows a spinner overlay and fades the chart area. */
+    loading = false;
+    /**
+     * Advanced escape hatch — a raw Highcharts.Options object.
+     * Merged last, so these override derived options and the Onflo theme where they conflict.
+     */
+    options;
+    chartContainer;
+    chart;
+    initialized = false;
+    // Static flag: theme is applied once globally per app session.
+    static themeApplied = false;
+    constructor(platformId) {
+        this.platformId = platformId;
+    }
+    ngAfterViewInit() {
+        if (!isPlatformBrowser(this.platformId))
+            return;
+        this.applyThemeOnce();
+        this.initialized = true;
+        this.renderChart();
+    }
+    ngOnChanges() {
+        if (!this.initialized)
+            return;
+        this.destroyChart();
+        this.renderChart();
+    }
+    ngOnDestroy() {
+        this.destroyChart();
+    }
+    applyThemeOnce() {
+        if (DsChartComponent.themeApplied)
+            return;
+        Highcharts.setOptions(onfloChartTheme);
+        DsChartComponent.themeApplied = true;
+    }
+    renderChart() {
+        if (!this.chartContainer?.nativeElement)
+            return;
+        const resolvedType = this.type === 'donut' ? 'pie' : this.type;
+        const derivedOptions = {
+            chart: {
+                type: resolvedType,
+                height: this.height,
+            },
+            title: this.title ? { text: this.title } : { text: undefined },
+            legend: { enabled: this.legend },
+            series: this.series,
+        };
+        if (this.type === 'donut') {
+            derivedOptions.plotOptions = {
+                ...derivedOptions.plotOptions,
+                pie: { innerSize: '60%' },
+            };
+        }
+        if (this.categories?.length) {
+            derivedOptions.xAxis = { categories: this.categories };
+        }
+        const finalOptions = Highcharts.merge(derivedOptions, this.options ?? {});
+        this.chart = Highcharts.chart(this.chartContainer.nativeElement, finalOptions);
+    }
+    destroyChart() {
+        if (this.chart) {
+            this.chart.destroy();
+            this.chart = undefined;
+        }
+    }
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsChartComponent, deps: [{ token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.7", type: DsChartComponent, isStandalone: true, selector: "ds-chart", inputs: { type: "type", title: "title", series: "series", categories: "categories", height: "height", legend: "legend", loading: "loading", options: "options" }, viewQueries: [{ propertyName: "chartContainer", first: true, predicate: ["chartContainer"], descendants: true }], usesOnChanges: true, ngImport: i0, template: "<div class=\"ds-chart\"\n     [class.is-loading]=\"loading\"\n     [attr.aria-busy]=\"loading || null\">\n  <div #chartContainer\n       class=\"ds-chart__container\"\n       [style.height.px]=\"height\"></div>\n\n  @if (loading) {\n    <div class=\"ds-chart__loading\" aria-hidden=\"true\">\n      <div class=\"ds-chart__spinner\"></div>\n    </div>\n  }\n</div>\n", styles: [".ds-chart{position:relative;width:100%}.ds-chart__container{width:100%}.ds-chart__loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#ffffffa6;border-radius:var(--radius-md);z-index:2}.ds-chart__spinner{width:32px;height:32px;border:3px solid var(--color-border-subtle);border-top-color:var(--color-border-brand);border-radius:var(--radius-full);animation:ds-chart-spin .75s linear infinite;flex-shrink:0}.ds-chart.is-loading .ds-chart__container{opacity:.35;pointer-events:none}.ds-chart .highcharts-tooltip-box{filter:drop-shadow(0 2px 8px rgba(45,54,56,.1))}.ds-chart .highcharts-button{display:none}@keyframes ds-chart-spin{to{transform:rotate(360deg)}}\n"], changeDetection: i0.ChangeDetectionStrategy.OnPush });
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsChartComponent, decorators: [{
+            type: Component,
+            args: [{ selector: 'ds-chart', standalone: true, changeDetection: ChangeDetectionStrategy.OnPush, template: "<div class=\"ds-chart\"\n     [class.is-loading]=\"loading\"\n     [attr.aria-busy]=\"loading || null\">\n  <div #chartContainer\n       class=\"ds-chart__container\"\n       [style.height.px]=\"height\"></div>\n\n  @if (loading) {\n    <div class=\"ds-chart__loading\" aria-hidden=\"true\">\n      <div class=\"ds-chart__spinner\"></div>\n    </div>\n  }\n</div>\n", styles: [".ds-chart{position:relative;width:100%}.ds-chart__container{width:100%}.ds-chart__loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#ffffffa6;border-radius:var(--radius-md);z-index:2}.ds-chart__spinner{width:32px;height:32px;border:3px solid var(--color-border-subtle);border-top-color:var(--color-border-brand);border-radius:var(--radius-full);animation:ds-chart-spin .75s linear infinite;flex-shrink:0}.ds-chart.is-loading .ds-chart__container{opacity:.35;pointer-events:none}.ds-chart .highcharts-tooltip-box{filter:drop-shadow(0 2px 8px rgba(45,54,56,.1))}.ds-chart .highcharts-button{display:none}@keyframes ds-chart-spin{to{transform:rotate(360deg)}}\n"] }]
+        }], ctorParameters: () => [{ type: undefined, decorators: [{
+                    type: Inject,
+                    args: [PLATFORM_ID]
+                }] }], propDecorators: { type: [{
+                type: Input
+            }], title: [{
+                type: Input
+            }], series: [{
+                type: Input
+            }], categories: [{
+                type: Input
+            }], height: [{
+                type: Input
+            }], legend: [{
+                type: Input
+            }], loading: [{
+                type: Input
+            }], options: [{
+                type: Input
+            }], chartContainer: [{
+                type: ViewChild,
+                args: ['chartContainer']
+            }] } });
+
+/**
+ * ds-metric-card
+ *
+ * KPI metric tile for dashboards. Displays a primary value with an optional
+ * label, icon, and trend indicator.
+ *
+ * Inputs:
+ *   [value]      string | number — the primary metric value (e.g. '4m 32s', 1248, '92.4%')
+ *   [label]      string — descriptor label above the value (e.g. 'Avg Handle Time')
+ *   [icon]       string — Material Symbols icon name shown before the label (optional)
+ *   [trend]      number — percentage change; positive = up (green), negative = down (red)
+ *   [trendLabel] string — context for the trend (e.g. 'vs last week')
+ *   [variant]    'default' | 'brand'  (default: 'default')
+ *   [loading]    boolean — shows a pulsing skeleton in the value slot (default: false)
+ *
+ * @example
+ * <!-- Simple KPI card -->
+ * <ds-metric-card
+ *   value="1,248"
+ *   label="Open Cases"
+ *   icon="inbox"
+ *   [trend]="8.3"
+ *   trendLabel="vs last week"
+ * />
+ *
+ * @example
+ * <!-- Brand variant -->
+ * <ds-metric-card
+ *   value="92.4%"
+ *   label="CSAT Score"
+ *   icon="sentiment_satisfied"
+ *   [trend]="-1.2"
+ *   trendLabel="vs last month"
+ *   variant="brand"
+ * />
+ *
+ * @example
+ * <!-- Loading state -->
+ * <ds-metric-card value="" label="Resolution Rate" [loading]="true" />
+ */
+class DsMetricCardComponent {
+    /** The primary value displayed prominently (e.g. '1,248', '4m 32s', '92.4%'). */
+    value = '';
+    /** Descriptor label rendered above the value, next to the icon. */
+    label = '';
+    /** Optional Material Symbols icon name rendered before the label. */
+    icon = '';
+    /**
+     * Trend percentage (number only, no % symbol).
+     * Positive values render in green with trending_up icon.
+     * Negative values render in red with trending_down icon.
+     * Omit (or set to null) to hide the trend row entirely.
+     */
+    trend = null;
+    /** Context label for the trend row (e.g. 'vs last week', 'vs last month'). */
+    trendLabel = '';
+    /** Visual variant. 'brand' applies a blue-tinted background and border. */
+    variant = 'default';
+    /** Shows a skeleton pulse in the value slot while data is loading. */
+    loading = false;
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsMetricCardComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "21.2.7", type: DsMetricCardComponent, isStandalone: true, selector: "ds-metric-card", inputs: { value: "value", label: "label", icon: "icon", trend: "trend", trendLabel: "trendLabel", variant: "variant", loading: "loading" }, ngImport: i0, template: "<div class=\"ds-metric-card\"\n     [class.ds-metric-card--brand]=\"variant === 'brand'\"\n     [class.is-loading]=\"loading\">\n\n  @if (icon || label) {\n    <div class=\"ds-metric-card__header\">\n      @if (icon) {\n        <span class=\"ds-icon ds-icon--sm\" aria-hidden=\"true\">{{ icon }}</span>\n      }\n      @if (label) {\n        <span class=\"ds-metric-card__label\">{{ label }}</span>\n      }\n    </div>\n  }\n\n  <div class=\"ds-metric-card__value\"\n       [attr.aria-label]=\"label ? label + ': ' + value : null\">\n    @if (loading) {\n      <span class=\"ds-metric-card__skeleton\" aria-hidden=\"true\"></span>\n    } @else {\n      {{ value }}\n    }\n  </div>\n\n  @if (trend !== null && trend !== undefined && !loading) {\n    <div class=\"ds-metric-card__trend\">\n      <span class=\"ds-icon ds-icon--xs\"\n            [class.ds-metric-card__trend-icon--positive]=\"trend >= 0\"\n            [class.ds-metric-card__trend-icon--negative]=\"trend < 0\"\n            aria-hidden=\"true\">\n        {{ trend >= 0 ? 'trending_up' : 'trending_down' }}\n      </span>\n      <span class=\"ds-metric-card__trend-value\"\n            [class.is-positive]=\"trend >= 0\"\n            [class.is-negative]=\"trend < 0\">\n        {{ trend >= 0 ? '+' : '' }}{{ trend }}%\n      </span>\n      @if (trendLabel) {\n        <span class=\"ds-metric-card__trend-label\">{{ trendLabel }}</span>\n      }\n    </div>\n  }\n\n</div>\n", styles: [".ds-metric-card{display:flex;flex-direction:column;gap:var(--spacing-xs);padding:var(--spacing-lg);border:1px solid var(--color-border-subtle);border-radius:var(--radius-md);background:var(--color-surface-default);min-width:160px}.ds-metric-card__header{display:flex;align-items:center;gap:var(--spacing-xs)}.ds-metric-card__header .ds-icon{color:var(--color-icon-subtle);flex-shrink:0}.ds-metric-card__label{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight);line-height:var(--ref-typescale-label-medium-line-height);color:var(--color-text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ds-metric-card__value{font-family:var(--ref-typescale-title-h2-font);font-size:var(--ref-typescale-title-h2-size);font-weight:var(--ref-typescale-title-h2-weight);line-height:var(--ref-typescale-title-h2-line-height);letter-spacing:var(--ref-typescale-title-h2-tracking);color:var(--color-text-primary);margin-top:var(--spacing-xs)}.ds-metric-card__skeleton{display:block;height:28px;width:80px;border-radius:var(--radius-sm);background:var(--color-surface-disabled);animation:ds-metric-skeleton-pulse 1.4s ease-in-out infinite}.ds-metric-card__trend{display:flex;align-items:center;gap:3px;margin-top:2px}.ds-metric-card__trend .ds-icon{flex-shrink:0}.ds-metric-card__trend-icon--positive{color:var(--color-icon-accent-green)}.ds-metric-card__trend-icon--negative{color:var(--color-icon-accent-red)}.ds-metric-card__trend-value{font-family:var(--ref-typescale-label-small-font);font-size:var(--ref-typescale-label-small-size);font-weight:var(--ref-typescale-label-small-weight-prominent);line-height:var(--ref-typescale-label-small-line-height)}.ds-metric-card__trend-value.is-positive{color:var(--color-text-accent-green)}.ds-metric-card__trend-value.is-negative{color:var(--color-text-accent-red)}.ds-metric-card__trend-label{font-family:var(--ref-typescale-body-small-font);font-size:var(--ref-typescale-body-small-size);font-weight:var(--ref-typescale-body-small-weight);line-height:var(--ref-typescale-body-small-line-height);color:var(--color-text-secondary);margin-left:1px}.ds-metric-card--brand{border-color:var(--color-border-brand);background:var(--color-surface-brand-subtle)}.ds-metric-card--brand .ds-metric-card__label{color:var(--color-text-brand)}.ds-metric-card--brand .ds-metric-card__header .ds-icon{color:var(--color-icon-brand)}.ds-metric-card.is-loading{pointer-events:none}@keyframes ds-metric-skeleton-pulse{0%,to{opacity:1}50%{opacity:.4}}\n"], changeDetection: i0.ChangeDetectionStrategy.OnPush });
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsMetricCardComponent, decorators: [{
+            type: Component,
+            args: [{ selector: 'ds-metric-card', standalone: true, changeDetection: ChangeDetectionStrategy.OnPush, template: "<div class=\"ds-metric-card\"\n     [class.ds-metric-card--brand]=\"variant === 'brand'\"\n     [class.is-loading]=\"loading\">\n\n  @if (icon || label) {\n    <div class=\"ds-metric-card__header\">\n      @if (icon) {\n        <span class=\"ds-icon ds-icon--sm\" aria-hidden=\"true\">{{ icon }}</span>\n      }\n      @if (label) {\n        <span class=\"ds-metric-card__label\">{{ label }}</span>\n      }\n    </div>\n  }\n\n  <div class=\"ds-metric-card__value\"\n       [attr.aria-label]=\"label ? label + ': ' + value : null\">\n    @if (loading) {\n      <span class=\"ds-metric-card__skeleton\" aria-hidden=\"true\"></span>\n    } @else {\n      {{ value }}\n    }\n  </div>\n\n  @if (trend !== null && trend !== undefined && !loading) {\n    <div class=\"ds-metric-card__trend\">\n      <span class=\"ds-icon ds-icon--xs\"\n            [class.ds-metric-card__trend-icon--positive]=\"trend >= 0\"\n            [class.ds-metric-card__trend-icon--negative]=\"trend < 0\"\n            aria-hidden=\"true\">\n        {{ trend >= 0 ? 'trending_up' : 'trending_down' }}\n      </span>\n      <span class=\"ds-metric-card__trend-value\"\n            [class.is-positive]=\"trend >= 0\"\n            [class.is-negative]=\"trend < 0\">\n        {{ trend >= 0 ? '+' : '' }}{{ trend }}%\n      </span>\n      @if (trendLabel) {\n        <span class=\"ds-metric-card__trend-label\">{{ trendLabel }}</span>\n      }\n    </div>\n  }\n\n</div>\n", styles: [".ds-metric-card{display:flex;flex-direction:column;gap:var(--spacing-xs);padding:var(--spacing-lg);border:1px solid var(--color-border-subtle);border-radius:var(--radius-md);background:var(--color-surface-default);min-width:160px}.ds-metric-card__header{display:flex;align-items:center;gap:var(--spacing-xs)}.ds-metric-card__header .ds-icon{color:var(--color-icon-subtle);flex-shrink:0}.ds-metric-card__label{font-family:var(--ref-typescale-label-medium-font);font-size:var(--ref-typescale-label-medium-size);font-weight:var(--ref-typescale-label-medium-weight);line-height:var(--ref-typescale-label-medium-line-height);color:var(--color-text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ds-metric-card__value{font-family:var(--ref-typescale-title-h2-font);font-size:var(--ref-typescale-title-h2-size);font-weight:var(--ref-typescale-title-h2-weight);line-height:var(--ref-typescale-title-h2-line-height);letter-spacing:var(--ref-typescale-title-h2-tracking);color:var(--color-text-primary);margin-top:var(--spacing-xs)}.ds-metric-card__skeleton{display:block;height:28px;width:80px;border-radius:var(--radius-sm);background:var(--color-surface-disabled);animation:ds-metric-skeleton-pulse 1.4s ease-in-out infinite}.ds-metric-card__trend{display:flex;align-items:center;gap:3px;margin-top:2px}.ds-metric-card__trend .ds-icon{flex-shrink:0}.ds-metric-card__trend-icon--positive{color:var(--color-icon-accent-green)}.ds-metric-card__trend-icon--negative{color:var(--color-icon-accent-red)}.ds-metric-card__trend-value{font-family:var(--ref-typescale-label-small-font);font-size:var(--ref-typescale-label-small-size);font-weight:var(--ref-typescale-label-small-weight-prominent);line-height:var(--ref-typescale-label-small-line-height)}.ds-metric-card__trend-value.is-positive{color:var(--color-text-accent-green)}.ds-metric-card__trend-value.is-negative{color:var(--color-text-accent-red)}.ds-metric-card__trend-label{font-family:var(--ref-typescale-body-small-font);font-size:var(--ref-typescale-body-small-size);font-weight:var(--ref-typescale-body-small-weight);line-height:var(--ref-typescale-body-small-line-height);color:var(--color-text-secondary);margin-left:1px}.ds-metric-card--brand{border-color:var(--color-border-brand);background:var(--color-surface-brand-subtle)}.ds-metric-card--brand .ds-metric-card__label{color:var(--color-text-brand)}.ds-metric-card--brand .ds-metric-card__header .ds-icon{color:var(--color-icon-brand)}.ds-metric-card.is-loading{pointer-events:none}@keyframes ds-metric-skeleton-pulse{0%,to{opacity:1}50%{opacity:.4}}\n"] }]
+        }], propDecorators: { value: [{
+                type: Input
+            }], label: [{
+                type: Input
+            }], icon: [{
+                type: Input
+            }], trend: [{
+                type: Input
+            }], trendLabel: [{
+                type: Input
+            }], variant: [{
+                type: Input
+            }], loading: [{
+                type: Input
+            }] } });
+
 /*
  * Public API Surface of @onflo/design-system
  *
@@ -5936,5 +6369,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
  * Generated bundle index. Do not edit.
  */
 
-export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, onfloTheme };
+export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, onfloChartTheme, onfloTheme };
 //# sourceMappingURL=onflo-design-system.mjs.map

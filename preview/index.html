@@ -1403,7 +1403,7 @@
 .ds-button--xs {
   font-size: var(--ref-typescale-label-small-size);
   min-height: 24px;
-  padding: 0 var(--spacing-sm);
+  padding: 0 var(--spacing-md);
   gap: var(--spacing-sm);
   border-radius: var(--radius-sm);
 }
@@ -1438,6 +1438,12 @@
 }
 .ds-button--trailing-icon {
   padding-right: var(--spacing-lg);
+}
+.ds-button--xs.ds-button--leading-icon {
+  padding-left: var(--spacing-sm);
+}
+.ds-button--xs.ds-button--trailing-icon {
+  padding-right: var(--spacing-sm);
 }
 .ds-button--sm.ds-button--leading-icon {
   padding-left: var(--spacing-sm);
@@ -8778,6 +8784,152 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   white-space: nowrap;
   border: 0;
 }
+
+.ds-chart {
+  position: relative;
+  width: 100%;
+}
+.ds-chart__container {
+  width: 100%;
+}
+.ds-chart__loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: var(--radius-md);
+  z-index: 2;
+}
+.ds-chart__spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-border-subtle);
+  border-top-color: var(--color-border-brand);
+  border-radius: var(--radius-full);
+  animation: ds-chart-spin 0.75s linear infinite;
+  flex-shrink: 0;
+}
+.ds-chart.is-loading .ds-chart__container {
+  opacity: 0.35;
+  pointer-events: none;
+}
+.ds-chart :global(.highcharts-tooltip-box) {
+  filter: drop-shadow(0 2px 8px rgba(45, 54, 56, 0.1));
+}
+.ds-chart :global(.highcharts-button) {
+  display: none;
+}
+
+@keyframes ds-chart-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ds-metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-default);
+  min-width: 160px;
+}
+.ds-metric-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+.ds-metric-card__header .ds-icon {
+  color: var(--color-icon-subtle);
+  flex-shrink: 0;
+}
+.ds-metric-card__label {
+  font-family: var(--ref-typescale-label-medium-font);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-metric-card__value {
+  font-family: var(--ref-typescale-title-h2-font);
+  font-size: var(--ref-typescale-title-h2-size);
+  font-weight: var(--ref-typescale-title-h2-weight);
+  line-height: var(--ref-typescale-title-h2-line-height);
+  letter-spacing: var(--ref-typescale-title-h2-tracking);
+  color: var(--color-text-primary);
+  margin-top: var(--spacing-xs);
+}
+.ds-metric-card__skeleton {
+  display: block;
+  height: 28px;
+  width: 80px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-disabled);
+  animation: ds-metric-skeleton-pulse 1.4s ease-in-out infinite;
+}
+.ds-metric-card__trend {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 2px;
+}
+.ds-metric-card__trend .ds-icon {
+  flex-shrink: 0;
+}
+.ds-metric-card__trend-icon--positive {
+  color: var(--color-icon-accent-green);
+}
+.ds-metric-card__trend-icon--negative {
+  color: var(--color-icon-accent-red);
+}
+.ds-metric-card__trend-value {
+  font-family: var(--ref-typescale-label-small-font);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight-prominent);
+  line-height: var(--ref-typescale-label-small-line-height);
+}
+.ds-metric-card__trend-value.is-positive {
+  color: var(--color-text-accent-green);
+}
+.ds-metric-card__trend-value.is-negative {
+  color: var(--color-text-accent-red);
+}
+.ds-metric-card__trend-label {
+  font-family: var(--ref-typescale-body-small-font);
+  font-size: var(--ref-typescale-body-small-size);
+  font-weight: var(--ref-typescale-body-small-weight);
+  line-height: var(--ref-typescale-body-small-line-height);
+  color: var(--color-text-secondary);
+  margin-left: 1px;
+}
+.ds-metric-card--brand {
+  border-color: var(--color-border-brand);
+  background: var(--color-surface-brand-subtle);
+}
+.ds-metric-card--brand .ds-metric-card__label {
+  color: var(--color-text-brand);
+}
+.ds-metric-card--brand .ds-metric-card__header .ds-icon {
+  color: var(--color-icon-brand);
+}
+.ds-metric-card.is-loading {
+  pointer-events: none;
+}
+
+@keyframes ds-metric-skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
 </style><!-- ONFLO-COMPONENTS:END -->
 
 <style>
@@ -9324,6 +9476,16 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
       <div class="nav-group-items" id="group-utilities">
         <a class="nav-link" href="#form-section-title" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Form Section Title</span></a>
         <a class="nav-link" href="#sr-only" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Screen Reader Only</span></a>
+      </div>
+
+      <button class="nav-group-header" data-group="data-visualization" onclick="toggleGroup('data-visualization')" aria-expanded="true">
+        <span class="nav-group-label-text">Data Visualization</span>
+        <span class="nav-group-count">2</span>
+        <span class="nav-group-chevron" aria-hidden="true">expand_more</span>
+      </button>
+      <div class="nav-group-items" id="group-data-visualization">
+        <a class="nav-link" href="#metric-card" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Metric Card</span></a>
+        <a class="nav-link" href="#chart" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Chart</span></a>
       </div>
     </nav>
 
@@ -14671,6 +14833,420 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div class="demo-row-items">
               <button class="ds-button ds-button--filled ds-button--md" type="button" onclick="document.getElementById('modal-interactive-backdrop').style.display='flex'">Open Modal</button>
               <button class="ds-button ds-button--outlined ds-button--md" type="button" onclick="document.getElementById('modal-interactive-full-backdrop').style.display='flex'">Open Full-width</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Data Visualization ──────────────────────────────────────────── -->
+
+      <section class="section" id="metric-card">
+        <div class="section-header">
+          <h2 class="section-title">Metric Card</h2>
+          <span class="section-source">components/metric-card/_metric-card.scss</span>
+        </div>
+        <p class="section-desc">KPI tile for dashboards. Displays a prominently-sized primary value with an optional label, icon, trend indicator, and loading skeleton. Angular component: <code>&lt;ds-metric-card&gt;</code> with <code>[value]</code>, <code>[label]</code>, <code>[icon]</code>, <code>[trend]</code> (number, positive = green ↑, negative = red ↓), <code>[trendLabel]</code>, <code>[variant]</code> ('default' | 'brand'), and <code>[loading]</code>.</p>
+
+        <div class="component-demo">
+
+          <!-- Row 1: Default — 4 cards -->
+          <div class="demo-row">
+            <div class="demo-row-label">Default</div>
+            <div class="demo-row-items" style="gap: 12px; flex-wrap: wrap; align-items: flex-start;">
+
+              <div class="ds-metric-card" style="width: 188px;">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">inbox</span>
+                  <span class="ds-metric-card__label">Open Cases</span>
+                </div>
+                <div class="ds-metric-card__value" aria-label="Open Cases: 1,248">1,248</div>
+                <div class="ds-metric-card__trend">
+                  <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
+                  <span class="ds-metric-card__trend-value is-positive">+8.3%</span>
+                  <span class="ds-metric-card__trend-label">vs last week</span>
+                </div>
+              </div>
+
+              <div class="ds-metric-card" style="width: 188px;">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">sentiment_satisfied</span>
+                  <span class="ds-metric-card__label">CSAT Score</span>
+                </div>
+                <div class="ds-metric-card__value" aria-label="CSAT Score: 92.4%">92.4%</div>
+                <div class="ds-metric-card__trend">
+                  <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--negative" aria-hidden="true">trending_down</span>
+                  <span class="ds-metric-card__trend-value is-negative">-1.2%</span>
+                  <span class="ds-metric-card__trend-label">vs last month</span>
+                </div>
+              </div>
+
+              <div class="ds-metric-card" style="width: 188px;">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">timer</span>
+                  <span class="ds-metric-card__label">Avg Handle Time</span>
+                </div>
+                <div class="ds-metric-card__value" aria-label="Avg Handle Time: 4m 32s">4m 32s</div>
+                <div class="ds-metric-card__trend">
+                  <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
+                  <span class="ds-metric-card__trend-value is-positive">+12%</span>
+                  <span class="ds-metric-card__trend-label">vs last week</span>
+                </div>
+              </div>
+
+              <div class="ds-metric-card" style="width: 188px;">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">check_circle</span>
+                  <span class="ds-metric-card__label">Resolution Rate</span>
+                </div>
+                <div class="ds-metric-card__value" aria-label="Resolution Rate: 87.3%">87.3%</div>
+                <div class="ds-metric-card__trend">
+                  <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
+                  <span class="ds-metric-card__trend-value is-positive">+2.1%</span>
+                  <span class="ds-metric-card__trend-label">vs last month</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Row 2: Brand variant -->
+          <div class="demo-row">
+            <div class="demo-row-label">Brand variant</div>
+            <div class="demo-row-items" style="gap: 12px; align-items: flex-start;">
+
+              <div class="ds-metric-card ds-metric-card--brand" style="width: 188px;">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">support_agent</span>
+                  <span class="ds-metric-card__label">Agents Online</span>
+                </div>
+                <div class="ds-metric-card__value">14 / 18</div>
+                <div class="ds-metric-card__trend">
+                  <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--negative" aria-hidden="true">trending_down</span>
+                  <span class="ds-metric-card__trend-value is-negative">-4</span>
+                  <span class="ds-metric-card__trend-label">from yesterday</span>
+                </div>
+              </div>
+
+              <div class="ds-metric-card ds-metric-card--brand" style="width: 188px;">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">schedule</span>
+                  <span class="ds-metric-card__label">SLA Compliance</span>
+                </div>
+                <div class="ds-metric-card__value">96.1%</div>
+                <div class="ds-metric-card__trend">
+                  <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
+                  <span class="ds-metric-card__trend-value is-positive">+0.8%</span>
+                  <span class="ds-metric-card__trend-label">vs last week</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Row 3: No trend (value + label only) -->
+          <div class="demo-row">
+            <div class="demo-row-label">No trend</div>
+            <div class="demo-row-items" style="gap: 12px; align-items: flex-start;">
+
+              <div class="ds-metric-card" style="width: 188px;">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">folder_open</span>
+                  <span class="ds-metric-card__label">Total Cases</span>
+                </div>
+                <div class="ds-metric-card__value">24,891</div>
+              </div>
+
+              <div class="ds-metric-card" style="width: 188px;">
+                <div class="ds-metric-card__header">
+                  <span class="ds-metric-card__label">New Today</span>
+                </div>
+                <div class="ds-metric-card__value">83</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Row 4: Loading state -->
+          <div class="demo-row">
+            <div class="demo-row-label">Loading</div>
+            <div class="demo-row-items" style="gap: 12px; align-items: flex-start;">
+
+              <div class="ds-metric-card is-loading" style="width: 188px;">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">inbox</span>
+                  <span class="ds-metric-card__label">Open Cases</span>
+                </div>
+                <div class="ds-metric-card__value">
+                  <span class="ds-metric-card__skeleton" aria-hidden="true"></span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section" id="chart">
+        <div class="section-header">
+          <h2 class="section-title">Chart</h2>
+          <span class="section-source">components/chart/_chart.scss</span>
+        </div>
+        <p class="section-desc">Unified chart component wrapping Highcharts with the Onflo color palette, typography, and visual theme pre-applied. Requires <code>highcharts</code> as a peer dependency. Angular component: <code>&lt;ds-chart&gt;</code> with <code>[type]</code> ('line' | 'area' | 'bar' | 'column' | 'donut' | 'pie'), <code>[series]</code> (Highcharts.SeriesOptionsType[]), <code>[categories]</code>, <code>[title]</code>, <code>[height]</code>, <code>[legend]</code>, <code>[loading]</code>, and <code>[options]</code> (Highcharts.Options escape hatch). The Onflo theme is applied globally on first render via <code>Highcharts.setOptions(onfloChartTheme)</code> — also importable directly for apps using Highcharts outside ds-chart. <em>Preview below uses representative SVG — the Angular component renders live Highcharts.</em></p>
+
+        <div class="component-demo">
+
+          <!-- Row 1: Line chart (2 series) -->
+          <div class="demo-row">
+            <div class="demo-row-label">type="line"</div>
+            <div class="demo-row-items" style="align-items: flex-start;">
+              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 520px;">
+                <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Monthly Cases</div>
+                <svg viewBox="0 0 520 240" width="520" height="240" aria-label="Line chart: Monthly Cases" role="img">
+                  <!-- Grid lines -->
+                  <line x1="50" y1="20" x2="500" y2="20" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="50" y1="70" x2="500" y2="70" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="50" y1="120" x2="500" y2="120" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="50" y1="170" x2="500" y2="170" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="50" y1="220" x2="500" y2="220" stroke="#E9E9E9" stroke-width="1"/>
+                  <!-- Y axis labels -->
+                  <text x="44" y="224" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">0</text>
+                  <text x="44" y="174" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">100</text>
+                  <text x="44" y="124" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">200</text>
+                  <text x="44" y="74" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">300</text>
+                  <text x="44" y="24" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">400</text>
+                  <!-- X axis baseline -->
+                  <line x1="50" y1="220" x2="500" y2="220" stroke="#E9E9E9" stroke-width="1"/>
+                  <!-- X axis labels -->
+                  <text x="50"  y="236" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Nov</text>
+                  <text x="140" y="236" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Dec</text>
+                  <text x="230" y="236" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Jan</text>
+                  <text x="320" y="236" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Feb</text>
+                  <text x="410" y="236" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Mar</text>
+                  <text x="500" y="236" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Apr</text>
+                  <!-- Series 1: Opened — brand blue -->
+                  <polyline points="50,97 140,75 230,65 320,77 410,60 500,71" fill="none" stroke="#0B6EB4" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                  <circle cx="50"  cy="97" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="140" cy="75" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="230" cy="65" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="320" cy="77" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="410" cy="60" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="500" cy="71" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <!-- Series 2: Closed — green -->
+                  <polyline points="50,105 140,87 230,77 320,85 410,66 500,65" fill="none" stroke="#45A55F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                  <circle cx="50"  cy="105" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                  <circle cx="140" cy="87"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                  <circle cx="230" cy="77"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                  <circle cx="320" cy="85"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                  <circle cx="410" cy="66"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                  <circle cx="500" cy="65"  r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                  <!-- Legend -->
+                  <rect x="50" y="250" width="10" height="10" rx="2" fill="#0B6EB4"/>
+                  <text x="64" y="259" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#2D3638">Opened</text>
+                  <rect x="130" y="250" width="10" height="10" rx="2" fill="#45A55F"/>
+                  <text x="144" y="259" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#2D3638">Closed</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Area chart (filled) -->
+          <div class="demo-row">
+            <div class="demo-row-label">type="area"</div>
+            <div class="demo-row-items" style="align-items: flex-start;">
+              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 520px;">
+                <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Resolution Rate (%)</div>
+                <svg viewBox="0 0 520 240" width="520" height="240" aria-label="Area chart: Resolution Rate" role="img">
+                  <!-- Grid lines -->
+                  <line x1="50" y1="20"  x2="500" y2="20"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="50" y1="65"  x2="500" y2="65"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="50" y1="110" x2="500" y2="110" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="50" y1="155" x2="500" y2="155" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="50" y1="200" x2="500" y2="200" stroke="#E9E9E9" stroke-width="1"/>
+                  <!-- Y axis labels -->
+                  <text x="44" y="204" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">0%</text>
+                  <text x="44" y="159" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">25%</text>
+                  <text x="44" y="114" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">50%</text>
+                  <text x="44" y="69"  text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">75%</text>
+                  <text x="44" y="24"  text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">100%</text>
+                  <!-- X axis labels -->
+                  <text x="50"  y="216" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Nov</text>
+                  <text x="140" y="216" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Dec</text>
+                  <text x="230" y="216" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Jan</text>
+                  <text x="320" y="216" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Feb</text>
+                  <text x="410" y="216" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Mar</text>
+                  <text x="500" y="216" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Apr</text>
+                  <!-- Area fill (12% opacity) -->
+                  <defs>
+                    <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#0B6EB4" stop-opacity="0.18"/>
+                      <stop offset="100%" stop-color="#0B6EB4" stop-opacity="0.02"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M 50 52 L 140 47 L 230 41 L 320 49 L 410 36 L 500 33 L 500 200 L 50 200 Z" fill="url(#areaFill)"/>
+                  <!-- Line -->
+                  <polyline points="50,52 140,47 230,41 320,49 410,36 500,33" fill="none" stroke="#0B6EB4" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                  <!-- Dots -->
+                  <circle cx="50"  cy="52" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="140" cy="47" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="230" cy="41" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="320" cy="49" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="410" cy="36" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <circle cx="500" cy="33" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                  <!-- Legend -->
+                  <rect x="50" y="228" width="10" height="10" rx="2" fill="#0B6EB4"/>
+                  <text x="64" y="237" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#2D3638">Resolution Rate</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Column chart + Bar chart -->
+          <div class="demo-row">
+            <div class="demo-row-label">type="column" / "bar"</div>
+            <div class="demo-row-items" style="gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+
+              <!-- Column -->
+              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px 16px 8px; width: 400px;">
+                <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
+                <svg viewBox="0 0 400 220" width="400" height="220" aria-label="Column chart: Cases by Day of Week" role="img">
+                  <!-- Grid lines -->
+                  <line x1="40" y1="10"  x2="390" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="40" y1="50"  x2="390" y2="50"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="40" y1="90"  x2="390" y2="90"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="40" y1="130" x2="390" y2="130" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="40" y1="170" x2="390" y2="170" stroke="#E9E9E9" stroke-width="1"/>
+                  <!-- Y axis labels -->
+                  <text x="34" y="174" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">0</text>
+                  <text x="34" y="134" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">65</text>
+                  <text x="34" y="94"  text-anchor="end" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">130</text>
+                  <text x="34" y="54"  text-anchor="end" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">195</text>
+                  <text x="34" y="14"  text-anchor="end" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">260</text>
+                  <!-- Columns (rx=3 for border-radius) -->
+                  <rect x="46"  y="85"  width="34" height="85"  rx="3" fill="#0B6EB4"/>
+                  <rect x="96"  y="40"  width="34" height="130" rx="3" fill="#0B6EB4"/>
+                  <rect x="146" y="50"  width="34" height="120" rx="3" fill="#0B6EB4"/>
+                  <rect x="196" y="24"  width="34" height="146" rx="3" fill="#0B6EB4"/>
+                  <rect x="246" y="64"  width="34" height="106" rx="3" fill="#0B6EB4"/>
+                  <rect x="296" y="126" width="34" height="44"  rx="3" fill="#0B6EB4"/>
+                  <rect x="346" y="148" width="34" height="22"  rx="3" fill="#0B6EB4"/>
+                  <!-- X axis labels -->
+                  <text x="63"  y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Mon</text>
+                  <text x="113" y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Tue</text>
+                  <text x="163" y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Wed</text>
+                  <text x="213" y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Thu</text>
+                  <text x="263" y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Fri</text>
+                  <text x="313" y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Sat</text>
+                  <text x="363" y="186" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">Sun</text>
+                </svg>
+              </div>
+
+              <!-- Bar (horizontal) -->
+              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px; width: 360px;">
+                <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 12px;">Cases by Agent</div>
+                <svg viewBox="0 0 340 185" width="340" height="185" aria-label="Bar chart: Cases by Agent" role="img">
+                  <!-- Grid lines -->
+                  <line x1="100" y1="0"   x2="100" y2="175" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="170" y1="0"   x2="170" y2="175" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="240" y1="0"   x2="240" y2="175" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="310" y1="0"   x2="310" y2="175" stroke="#E9E9E9" stroke-width="1"/>
+                  <!-- X axis labels -->
+                  <text x="100" y="183" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">0</text>
+                  <text x="170" y="183" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">70</text>
+                  <text x="240" y="183" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">140</text>
+                  <text x="310" y="183" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="10" fill="#73737F">210</text>
+                  <!-- Bars -->
+                  <text x="96" y="19" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Chen, L.</text>
+                  <rect x="100" y="8"  width="147" height="18" rx="3" fill="#0B6EB4"/>
+                  <text x="96" y="50" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Torres, M.</text>
+                  <rect x="100" y="39" width="119" height="18" rx="3" fill="#0B6EB4"/>
+                  <text x="96" y="81" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Park, J.</text>
+                  <rect x="100" y="70" width="102" height="18" rx="3" fill="#0B6EB4"/>
+                  <text x="96" y="112" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Reyes, A.</text>
+                  <rect x="100" y="101" width="87" height="18" rx="3" fill="#0B6EB4"/>
+                  <text x="96" y="143" text-anchor="end" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">Kim, S.</text>
+                  <rect x="100" y="132" width="64" height="18" rx="3" fill="#0B6EB4"/>
+                </svg>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Row 4: Donut + Pie -->
+          <div class="demo-row">
+            <div class="demo-row-label">type="donut" / "pie"</div>
+            <div class="demo-row-items" style="gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+
+              <!-- Donut -->
+              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; align-items: center; width: 260px;">
+                <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px; align-self: flex-start;">Cases by Channel</div>
+                <svg viewBox="0 0 240 240" width="240" height="240" aria-label="Donut chart: Cases by Channel" role="img">
+                  <!-- Slices (cx=120 cy=120, outerR=95, innerR=57) -->
+                  <!-- Email 38% -->
+                  <path d="M 120 25 A 95 95 0 0 1 184.8 189.5 L 158.9 161.7 A 57 57 0 0 0 120 63 Z" fill="#0B6EB4"/>
+                  <!-- Chat 27% -->
+                  <path d="M 184.8 189.5 A 95 95 0 0 1 43.1 175.9 L 73.9 153.5 A 57 57 0 0 0 158.9 161.7 Z" fill="#45A55F"/>
+                  <!-- Phone 19% -->
+                  <path d="M 43.1 175.9 A 95 95 0 0 1 39.7 69.3 L 71.8 89.6 A 57 57 0 0 0 73.9 153.5 Z" fill="#FFBF00"/>
+                  <!-- Portal 11% -->
+                  <path d="M 39.7 69.3 A 95 95 0 0 1 90.6 29.7 L 102.4 65.8 A 57 57 0 0 0 71.8 89.6 Z" fill="#43ADF2"/>
+                  <!-- Other 5% -->
+                  <path d="M 90.6 29.7 A 95 95 0 0 1 120 25 L 120 63 A 57 57 0 0 0 102.4 65.8 Z" fill="#CACACA"/>
+                  <!-- Center hole label -->
+                  <circle cx="120" cy="120" r="57" fill="white"/>
+                  <text x="120" y="115" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="22" font-weight="600" fill="#2D3638">1,248</text>
+                  <text x="120" y="132" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="11" fill="#73737F">total cases</text>
+                  <!-- Border between slices (white stroke) -->
+                  <path d="M 120 25 A 95 95 0 0 1 184.8 189.5 L 158.9 161.7 A 57 57 0 0 0 120 63 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 184.8 189.5 A 95 95 0 0 1 43.1 175.9 L 73.9 153.5 A 57 57 0 0 0 158.9 161.7 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 43.1 175.9 A 95 95 0 0 1 39.7 69.3 L 71.8 89.6 A 57 57 0 0 0 73.9 153.5 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 39.7 69.3 A 95 95 0 0 1 90.6 29.7 L 102.4 65.8 A 57 57 0 0 0 71.8 89.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 90.6 29.7 A 95 95 0 0 1 120 25 L 120 63 A 57 57 0 0 0 102.4 65.8 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                </svg>
+                <!-- Legend -->
+                <div style="display: flex; flex-direction: column; gap: 4px; align-self: flex-start; padding: 0 4px 4px;">
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:10px;height:10px;border-radius:2px;background:#0B6EB4;flex-shrink:0;"></span>Email — 38%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:10px;height:10px;border-radius:2px;background:#45A55F;flex-shrink:0;"></span>Chat — 27%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:10px;height:10px;border-radius:2px;background:#FFBF00;flex-shrink:0;"></span>Phone — 19%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:10px;height:10px;border-radius:2px;background:#43ADF2;flex-shrink:0;"></span>Portal — 11%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:10px;height:10px;border-radius:2px;background:#CACACA;flex-shrink:0;"></span>Other — 5%</div>
+                </div>
+              </div>
+
+              <!-- Pie (same slices, no hole) -->
+              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; align-items: center; width: 260px;">
+                <div style="font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif); font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px; align-self: flex-start;">Cases by Priority</div>
+                <svg viewBox="0 0 240 240" width="240" height="240" aria-label="Pie chart: Cases by Priority" role="img">
+                  <!-- High 31%, Critical 14%, Medium 33%, Low 22% -->
+                  <!-- Critical 14%: 0° to 50.4° -->
+                  <path d="M 120 120 L 120 25 A 95 95 0 0 1 192.8 72.5 Z" fill="#D70917"/>
+                  <!-- High 31%: 50.4° to 162° -->
+                  <path d="M 120 120 L 192.8 72.5 A 95 95 0 0 1 29.6 149.5 Z" fill="#0B6EB4"/>
+                  <!-- Medium 33%: 162° to 280.8° -->
+                  <path d="M 120 120 L 29.6 149.5 A 95 95 0 0 1 136.8 25.4 Z" fill="#45A55F"/>
+                  <!-- Low 22%: 280.8° to 360° -->
+                  <path d="M 120 120 L 136.8 25.4 A 95 95 0 0 1 120 25 Z" fill="#43ADF2"/>
+                  <!-- White borders -->
+                  <path d="M 120 120 L 120 25 A 95 95 0 0 1 192.8 72.5 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 120 120 L 192.8 72.5 A 95 95 0 0 1 29.6 149.5 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 120 120 L 29.6 149.5 A 95 95 0 0 1 136.8 25.4 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 120 120 L 136.8 25.4 A 95 95 0 0 1 120 25 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <!-- Labels -->
+                  <text x="162" y="68" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">14%</text>
+                  <text x="80"  y="100" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">31%</text>
+                  <text x="112" y="175" font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">33%</text>
+                  <text x="148" y="50"  font-family="'DM Sans', sans-serif" font-size="11" font-weight="500" fill="#fff">22%</text>
+                </svg>
+                <!-- Legend -->
+                <div style="display: flex; flex-direction: column; gap: 4px; align-self: flex-start; padding: 0 4px 4px;">
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:10px;height:10px;border-radius:2px;background:#D70917;flex-shrink:0;"></span>Critical — 14%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:10px;height:10px;border-radius:2px;background:#0B6EB4;flex-shrink:0;"></span>High — 31%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:10px;height:10px;border-radius:2px;background:#45A55F;flex-shrink:0;"></span>Medium — 33%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:10px;height:10px;border-radius:2px;background:#43ADF2;flex-shrink:0;"></span>Low — 22%</div>
+                </div>
+              </div>
+
             </div>
           </div>
 

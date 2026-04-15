@@ -1,0 +1,44 @@
+<div class="ds-metric-card"
+     [class.ds-metric-card--brand]="variant === 'brand'"
+     [class.is-loading]="loading">
+
+  @if (icon || label) {
+    <div class="ds-metric-card__header">
+      @if (icon) {
+        <span class="ds-icon ds-icon--sm" aria-hidden="true">{{ icon }}</span>
+      }
+      @if (label) {
+        <span class="ds-metric-card__label">{{ label }}</span>
+      }
+    </div>
+  }
+
+  <div class="ds-metric-card__value"
+       [attr.aria-label]="label ? label + ': ' + value : null">
+    @if (loading) {
+      <span class="ds-metric-card__skeleton" aria-hidden="true"></span>
+    } @else {
+      {{ value }}
+    }
+  </div>
+
+  @if (trend !== null && trend !== undefined && !loading) {
+    <div class="ds-metric-card__trend">
+      <span class="ds-icon ds-icon--xs"
+            [class.ds-metric-card__trend-icon--positive]="trend >= 0"
+            [class.ds-metric-card__trend-icon--negative]="trend < 0"
+            aria-hidden="true">
+        {{ trend >= 0 ? 'trending_up' : 'trending_down' }}
+      </span>
+      <span class="ds-metric-card__trend-value"
+            [class.is-positive]="trend >= 0"
+            [class.is-negative]="trend < 0">
+        {{ trend >= 0 ? '+' : '' }}{{ trend }}%
+      </span>
+      @if (trendLabel) {
+        <span class="ds-metric-card__trend-label">{{ trendLabel }}</span>
+      }
+    </div>
+  }
+
+</div>

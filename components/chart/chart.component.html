@@ -1,0 +1,13 @@
+<div class="ds-chart"
+     [class.is-loading]="loading"
+     [attr.aria-busy]="loading || null">
+  <div #chartContainer
+       class="ds-chart__container"
+       [style.height.px]="height"></div>
+
+  @if (loading) {
+    <div class="ds-chart__loading" aria-hidden="true">
+      <div class="ds-chart__spinner"></div>
+    </div>
+  }
+</div>

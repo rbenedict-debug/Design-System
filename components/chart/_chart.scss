@@ -1,0 +1,52 @@
+.ds-chart {
+  position: relative;
+  width: 100%;
+
+  &__container {
+    width: 100%;
+    // Highcharts renders into this element.
+    // Height is set via [style.height.px]="height" on the element.
+  }
+
+  // Loading overlay — sits above the chart container
+  &__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: var(--radius-md);
+    z-index: 2;
+  }
+
+  &__spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--color-border-subtle);
+    border-top-color: var(--color-border-brand);
+    border-radius: var(--radius-full);
+    animation: ds-chart-spin 0.75s linear infinite;
+    flex-shrink: 0;
+  }
+
+  // Fade out the chart when loading
+  &.is-loading .ds-chart__container {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  // Highcharts tooltip — subtle shadow matching ds-card elevated
+  .highcharts-tooltip-box {
+    filter: drop-shadow(0 2px 8px rgba(45, 54, 56, 0.1));
+  }
+
+  // Highcharts export/hamburger button — hidden by default for a clean embed
+  .highcharts-button {
+    display: none;
+  }
+}
+
+@keyframes ds-chart-spin {
+  to { transform: rotate(360deg); }
+}

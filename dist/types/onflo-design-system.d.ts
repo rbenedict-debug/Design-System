@@ -11,6 +11,7 @@ import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { Theme } from 'ag-grid-community';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import * as i1 from '@angular/material/tooltip';
+import * as Highcharts from 'highcharts';
 
 declare class DsAccordionPanelComponent {
     title: string;
@@ -1866,8 +1867,9 @@ interface ColumnPanelItem {
     /** Whether the column is currently visible. */
     visible: boolean;
     /**
-     * When true the row is non-interactive (e.g. checkbox col, actions col).
-     * Displayed at reduced opacity with no pointer events.
+     * When true the row is non-interactive (standalone usage only — shown at reduced
+     * opacity with no pointer events). Not used when driven by the AG Grid API, where
+     * lockVisible columns are hidden from the list entirely.
      */
     system?: boolean;
 }
@@ -1895,6 +1897,11 @@ interface AgPanelColumn {
     getColId(): string;
     getColDef(): {
         headerName?: string;
+        /**
+         * Set true on colDef to hide this column from the Column Visibility list entirely.
+         * The column still exists in the grid — it is just not shown in ds-column-panel.
+         * Use on system columns that should never be toggled (checkbox cols, pinned action cols).
+         */
         lockVisible?: boolean;
         suppressMovable?: boolean;
         /** Set true on colDef to allow this column to appear in the row groups picker. */
@@ -3367,5 +3374,133 @@ declare class TopNavComponent implements AfterViewInit, OnDestroy {
     static ɵcmp: i0.ɵɵComponentDeclaration<TopNavComponent, "ds-top-nav", never, { "tabs": { "alias": "tabs"; "required": false; }; }, { "tabActivate": "tabActivate"; "tabClose": "tabClose"; "tabCloseAll": "tabCloseAll"; }, never, ["[top-nav-actions]"], true, never>;
 }
 
-export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, onfloTheme };
-export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };
+/**
+ * ds-chart
+ *
+ * Unified chart component wrapping Highcharts with the Onflo design theme.
+ * Requires `highcharts` as a peer dependency: npm install highcharts
+ *
+ * The Onflo Highcharts theme (colors, typography, grid, tooltips) is applied
+ * globally via Highcharts.setOptions() the first time any ds-chart renders.
+ * Consuming apps that render Highcharts outside of ds-chart can also import
+ * and apply the theme manually: import { onfloChartTheme } from '@onflo/design-system'.
+ *
+ * Inputs:
+ *   [type]       'line' | 'area' | 'bar' | 'column' | 'donut' | 'pie'  (default: 'line')
+ *   [title]      Optional chart title string
+ *   [series]     Highcharts.SeriesOptionsType[] — the data series
+ *   [categories] string[] — x-axis category labels (line, area, bar, column)
+ *   [height]     number — chart height in px (default: 300)
+ *   [legend]     boolean — show/hide legend (default: true)
+ *   [loading]    boolean — shows spinner overlay and fades the chart (default: false)
+ *   [options]    Highcharts.Options — advanced escape hatch, merged last
+ *
+ * @example
+ * <!-- Line chart -->
+ * <ds-chart
+ *   type="line"
+ *   title="Monthly Cases"
+ *   [series]="[{ name: 'Opened', data: [245, 290, 310] }, { name: 'Closed', data: [230, 265, 290] }]"
+ *   [categories]="['Jan', 'Feb', 'Mar']"
+ * />
+ *
+ * @example
+ * <!-- Donut chart -->
+ * <ds-chart
+ *   type="donut"
+ *   title="Cases by Channel"
+ *   [series]="[{ type: 'pie', data: [{ name: 'Email', y: 38 }, { name: 'Chat', y: 27 }] }]"
+ * />
+ *
+ * @example
+ * <!-- Loading state -->
+ * <ds-chart type="column" [series]="data" [loading]="isLoading" />
+ *
+ * @example
+ * <!-- Advanced — merge custom Highcharts options -->
+ * <ds-chart type="line" [series]="data" [options]="{ yAxis: { title: { text: 'Cases' } } }" />
+ */
+
+type DsChartType = 'line' | 'area' | 'bar' | 'column' | 'donut' | 'pie';
+declare class DsChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+    private platformId;
+    /** Chart type. 'donut' is pie with a 60% inner radius. */
+    type: DsChartType;
+    /** Optional title rendered above the chart. */
+    title?: string;
+    /**
+     * Highcharts series data.
+     * For line/area/bar/column: [{ name: 'Series', data: [1, 2, 3] }, ...]
+     * For pie/donut: [{ type: 'pie', data: [{ name: 'Label', y: 30 }, ...] }]
+     */
+    series: Highcharts.SeriesOptionsType[];
+    /** X-axis category labels (line, area, bar, column charts). */
+    categories?: string[];
+    /** Chart height in px. Default: 300. */
+    height: number;
+    /** Show the chart legend. Default: true. */
+    legend: boolean;
+    /** Shows a spinner overlay and fades the chart area. */
+    loading: boolean;
+    /**
+     * Advanced escape hatch — a raw Highcharts.Options object.
+     * Merged last, so these override derived options and the Onflo theme where they conflict.
+     */
+    options?: Highcharts.Options;
+    private chartContainer;
+    private chart?;
+    private initialized;
+    private static themeApplied;
+    constructor(platformId: object);
+    ngAfterViewInit(): void;
+    ngOnChanges(): void;
+    ngOnDestroy(): void;
+    private applyThemeOnce;
+    private renderChart;
+    private destroyChart;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DsChartComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsChartComponent, "ds-chart", never, { "type": { "alias": "type"; "required": false; }; "title": { "alias": "title"; "required": false; }; "series": { "alias": "series"; "required": false; }; "categories": { "alias": "categories"; "required": false; }; "height": { "alias": "height"; "required": false; }; "legend": { "alias": "legend"; "required": false; }; "loading": { "alias": "loading"; "required": false; }; "options": { "alias": "options"; "required": false; }; }, {}, never, never, true, never>;
+}
+
+/**
+ * onfloChartTheme
+ *
+ * Highcharts theme object for the Onflo Design System.
+ * Apply once at app bootstrap: Highcharts.setOptions(onfloChartTheme)
+ *
+ * ds-chart applies this automatically — consuming apps only need to call
+ * setOptions if they render Highcharts charts outside of ds-chart.
+ *
+ * All values are hardcoded to match the Onflo ref token palette
+ * (Highcharts options are JavaScript objects, not CSS, so var() is not valid here).
+ */
+
+declare const ONFLO_CHART_COLORS: string[];
+declare const onfloChartTheme: Highcharts.Options;
+
+declare class DsMetricCardComponent {
+    /** The primary value displayed prominently (e.g. '1,248', '4m 32s', '92.4%'). */
+    value: string | number;
+    /** Descriptor label rendered above the value, next to the icon. */
+    label: string;
+    /** Optional Material Symbols icon name rendered before the label. */
+    icon: string;
+    /**
+     * Trend percentage (number only, no % symbol).
+     * Positive values render in green with trending_up icon.
+     * Negative values render in red with trending_down icon.
+     * Omit (or set to null) to hide the trend row entirely.
+     */
+    trend: number | null;
+    /** Context label for the trend row (e.g. 'vs last week', 'vs last month'). */
+    trendLabel: string;
+    /** Visual variant. 'brand' applies a blue-tinted background and border. */
+    variant: 'default' | 'brand';
+    /** Shows a skeleton pulse in the value slot while data is loading. */
+    loading: boolean;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DsMetricCardComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsMetricCardComponent, "ds-metric-card", never, { "value": { "alias": "value"; "required": false; }; "label": { "alias": "label"; "required": false; }; "icon": { "alias": "icon"; "required": false; }; "trend": { "alias": "trend"; "required": false; }; "trendLabel": { "alias": "trendLabel"; "required": false; }; "variant": { "alias": "variant"; "required": false; }; "loading": { "alias": "loading"; "required": false; }; }, {}, never, never, true, never>;
+}
+
+export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, onfloChartTheme, onfloTheme };
+export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsChartType, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };

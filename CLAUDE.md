@@ -44,6 +44,8 @@ components/
   nav-button/ agent-status/ nav-sidebar/ nav-tab/ top-nav/ nav-expand/
   subnav-button/ subnav-subheader/ subnav-header/  # subnav-subheader: settings subnav only
   rich-text-editor/
+  chart/                    # ds-chart — Highcharts wrapper (peer dep: highcharts >=11)
+  metric-card/              # ds-metric-card — KPI tile for dashboards
   utilities/                # Utility classes (ds-sr-only, etc.) — ships in dist/components.css
 layout/
   index.scss               # Barrel: @use all layout patterns → dist/layout.css
@@ -225,6 +227,34 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-page-layout` | Custom | CSS-only app shell; SCSS in `layout/page-layout/`, ships as `dist/layout.css` |
 | `ds-split-page` | CdkDrag (CDK only) | CSS-only two-pane layout; SCSS in `layout/split-page/`, ships as `dist/layout.css`; use `CdkDragModule` for production resize |
 | `ds-rich-text-editor` | Custom (CKEditor 5) | No Angular Material equivalent — third-party CKEditor 5. Requires `@ckeditor/ckeditor5-angular` + `@ckeditor/ckeditor5-build-classic`. Custom toolbar calls `editor.execute()` commands; native CKEditor toolbar is suppressed via CSS. Inputs: `[label]`, `[placeholder]`, `[(value)]`, `[disabled]`, `[isError]`, `[showResize]`, `[showExpand]`. Resize = JS mousedown drag on host height. Expand = `position:fixed` overlay with a second editor instance that syncs back on close. |
+| `ds-chart` | Custom (Highcharts) | No Angular Material equivalent — wraps Highcharts with the Onflo color palette, typography, tooltip, and grid-line styles baked in. Requires `highcharts >=11` as a peer dep. The `onfloChartTheme` object is applied globally on first render via `Highcharts.setOptions()`. Inputs: `[type]` ('line' \| 'area' \| 'bar' \| 'column' \| 'donut' \| 'pie'), `[series]` (Highcharts.SeriesOptionsType[]), `[categories]` (string[]), `[title]`, `[height]` (default 300), `[legend]` (default true), `[loading]`, `[options]` (Highcharts.Options — merged last as escape hatch). 'donut' maps to pie with 60% innerSize. |
+| `ds-metric-card` | Custom | No Material equivalent — KPI tile for dashboards. Inputs: `[value]` (string \| number), `[label]`, `[icon]` (Material Symbol name), `[trend]` (number; positive = green trending_up, negative = red trending_down), `[trendLabel]`, `[variant]` ('default' \| 'brand'), `[loading]` (shows skeleton). |
+
+---
+
+## Highcharts Chart Theme
+
+### `components/chart/chart-theme.ts` — the Onflo Highcharts theme
+Exports `onfloChartTheme` (Highcharts.Options) and `ONFLO_CHART_COLORS` (string[]).
+
+**Key rules:**
+- All values are **hardcoded** to match the Onflo ref token palette — Highcharts options are JavaScript objects, `var()` is not valid there.
+- Series color order: brand blue → green → yellow → red → light blue → teal → orange → purple → navy.
+- `chart.backgroundColor: 'transparent'` — the chart inherits the container background.
+- `credits.enabled: false` — always.
+- Animation duration: 200ms across all series and chart (matches `--motion-duration-fast`).
+- The theme is applied once per app session via a static flag in `DsChartComponent`. Consuming apps that use Highcharts outside of `ds-chart` should call `Highcharts.setOptions(onfloChartTheme)` once at bootstrap.
+
+### Token mapping (hardcoded values → what they map to)
+| Value | Token |
+|---|---|
+| `#0B6EB4` | `--ref-color-primary-blue-default` |
+| `#2D3638` | `--ref-color-neutral-text-default` |
+| `#73737F` | `--ref-color-neutral-text-soft` |
+| `#E9E9E9` | `--ref-color-neutral-border-subtle` |
+| `#FFFFFF` | `--ref-color-neutral-surface` |
+
+**Never change the chart theme colors to `var()` references** — Highcharts won't resolve them.
 
 ---
 
@@ -369,3 +399,4 @@ Per-component specs are in `.claude/specs/` — read the relevant file before ad
 - `specs-layout.md` — Agent Status, Page Layout, Split Page, Utilities (ds-sr-only)
 - `specs-compositions.md` — Component selection guide + page-level composition patterns (data table, form/detail, empty/loading states)
 - `specs-motion.md` — Motion duration tokens, easing curves, prefers-reduced-motion rules
+- `specs-dashboard.md` — Chart (ds-chart + Highcharts theme), Metric Card (ds-metric-card)
