@@ -4,11 +4,11 @@
 
   @if (icon || label) {
     <div class="ds-metric-card__header">
-      @if (icon) {
-        <span class="ds-icon ds-icon--sm" aria-hidden="true">{{ icon }}</span>
-      }
       @if (label) {
         <span class="ds-metric-card__label">{{ label }}</span>
+      }
+      @if (icon) {
+        <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">{{ icon }}</span>
       }
     </div>
   }

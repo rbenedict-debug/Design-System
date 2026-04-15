@@ -122,7 +122,7 @@ optional icon, and optional trend indicator (percentage change with directional 
 |---|---|---|---|
 | `[value]` | `string \| number` | `''` | Primary metric: '1,248', '4m 32s', '92.4%', etc. |
 | `[label]` | `string` | `''` | Descriptor above the value: 'Open Cases', 'CSAT Score' |
-| `[icon]` | `string` | `''` | Material Symbol icon name shown before the label |
+| `[icon]` | `string` | `''` | Material Symbol icon name — rendered filled, right-aligned after the label |
 | `[trend]` | `number \| null` | `null` | Percent change (no % suffix). Positive = green ↑, negative = red ↓. Omit to hide trend row. |
 | `[trendLabel]` | `string` | `''` | Context text: 'vs last week', 'vs last month' |
 | `[variant]` | `'default' \| 'brand'` | `'default'` | Brand: blue border + blue-tinted background |
@@ -132,8 +132,8 @@ optional icon, and optional trend indicator (percentage change with directional 
 ```html
 <div class="ds-metric-card">
   <div class="ds-metric-card__header">
-    <span class="ds-icon ds-icon--sm">inbox</span>
     <span class="ds-metric-card__label">Open Cases</span>
+    <span class="ds-icon ds-icon--sm ds-icon--filled">inbox</span>
   </div>
   <div class="ds-metric-card__value">1,248</div>
   <div class="ds-metric-card__trend">
