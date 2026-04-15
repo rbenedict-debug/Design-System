@@ -14,6 +14,27 @@
 
 ---
 
+## Preview pages
+
+The preview uses four top-level page tabs. Each has its own `<div class="page" id="page-{name}">` container and `<nav class="sidebar-nav" id="nav-{name}">` sidebar:
+
+| Page tab label | `data-page` value | Content |
+|---|---|---|
+| Foundations | `foundations` | Colours, Typography, Spacing, Radius, Shadows, Overlays, Icons |
+| Components | `components` | All UI components (forms, actions, display, navigation, overlays, layout) |
+| Dashboard | `dashboard` | ds-metric-card, ds-chart, Dashboard Sim |
+| Table Components | `table-components` | AG Grid cell renderers, toolbar, column panel, paginator, live AG Grid sim |
+| Pages | `examples` | Full page layout demos |
+
+When adding a new component:
+- UI components go in **Components**
+- Dashboard / data-viz components go in **Dashboard**
+- AG Grid primitives go in **Table Components**
+
+To add a new page tab, update all four locations: (1) the `<button class="page-tab">` row in the topbar, (2) the `<nav class="sidebar-nav">` aside, (3) the `<div class="page">` in main, and (4) the `switchPage` page array and `anchorPageMap` in the `<script>` block at the bottom.
+
+---
+
 ## Table components — shared full sim
 
 Table-family components (`ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-paginator`, `ds-table-toolbar`, and any future AG Grid primitives) follow a different preview rule:
@@ -22,3 +43,15 @@ Table-family components (`ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-pag
 - **One shared `#table` section** sits at the top of the table group (before `#table-header-cell`) and contains a single comprehensive full simulation: toolbar → header row → data rows → paginator.
 - **Update the `#table` sim whenever a new table component is added** — add it to the sim so the composed view stays current.
 - The `#table` nav link appears first in the table group in the sidebar.
+
+---
+
+## Dashboard components — shared full sim
+
+Dashboard-family components (`ds-metric-card`, `ds-chart`, and any future data-viz primitives) live on the **Dashboard** page tab and follow the same pattern:
+
+- Each component gets its own `<section class="section" id="{component}">` with isolated variant demos.
+- A shared `#dashboard-sim` section at the bottom of the Dashboard page shows a full composed view: metric card row → line chart → donut + column side by side.
+- **Update the `#dashboard-sim` whenever a new dashboard component is added.**
+- The `#dashboard-sim` nav link appears last in the Dashboard sidebar.
+- Chart demos use **SVG simulations** (not live Highcharts), since the preview is a static HTML file. The SVG must match the Onflo chart theme: brand blue as the first series color, `#E9E9E9` grid lines, `#73737F` axis labels, `DM Sans` font (proxy for Proxima Nova in the preview).

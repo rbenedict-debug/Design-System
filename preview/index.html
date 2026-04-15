@@ -8815,10 +8815,10 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   opacity: 0.35;
   pointer-events: none;
 }
-.ds-chart :global(.highcharts-tooltip-box) {
+.ds-chart .highcharts-tooltip-box {
   filter: drop-shadow(0 2px 8px rgba(45, 54, 56, 0.1));
 }
-.ds-chart :global(.highcharts-button) {
+.ds-chart .highcharts-button {
   display: none;
 }
 
@@ -9478,15 +9478,13 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
         <a class="nav-link" href="#sr-only" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Screen Reader Only</span></a>
       </div>
 
-      <button class="nav-group-header" data-group="data-visualization" onclick="toggleGroup('data-visualization')" aria-expanded="true">
-        <span class="nav-group-label-text">Data Visualization</span>
-        <span class="nav-group-count">2</span>
-        <span class="nav-group-chevron" aria-hidden="true">expand_more</span>
-      </button>
-      <div class="nav-group-items" id="group-data-visualization">
-        <a class="nav-link" href="#metric-card" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Metric Card</span></a>
-        <a class="nav-link" href="#chart" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Chart</span></a>
-      </div>
+    </nav>
+
+    <nav class="sidebar-nav" id="nav-dashboard" style="display:none">
+      <div class="nav-section-label">Dashboard</div>
+      <a class="nav-link" href="#metric-card"   data-nav data-page="dashboard"><span class="nav-dot"></span><span class="nav-text">Metric Card</span></a>
+      <a class="nav-link" href="#chart"          data-nav data-page="dashboard"><span class="nav-dot"></span><span class="nav-text">Chart</span></a>
+      <a class="nav-link" href="#dashboard-sim"  data-nav data-page="dashboard"><span class="nav-dot"></span><span class="nav-text">Dashboard Sim</span></a>
     </nav>
 
     <nav class="sidebar-nav" id="nav-table-components" style="display:none">
@@ -9525,6 +9523,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
       <div class="topbar-tabs">
         <button class="page-tab active" data-page="foundations" onclick="switchPage('foundations')">Foundations</button>
         <button class="page-tab" data-page="components" onclick="switchPage('components')">Components</button>
+        <button class="page-tab" data-page="dashboard" onclick="switchPage('dashboard')">Dashboard</button>
         <button class="page-tab" data-page="table-components" onclick="switchPage('table-components')">Table Components</button>
         <button class="page-tab" data-page="examples" onclick="switchPage('examples')">Pages</button>
       </div>
@@ -14839,7 +14838,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         </div>
       </section>
 
-      <!-- ── Data Visualization ──────────────────────────────────────────── -->
+      </div><!-- /#page-components -->
+
+      <div class="page" id="page-dashboard" style="display:none">
 
       <section class="section" id="metric-card">
         <div class="section-header">
@@ -15253,7 +15254,223 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         </div>
       </section>
 
-      <!-- Interactive modal (fixed) — rendered outside demo flow -->
+      <section class="section" id="dashboard-sim">
+        <div class="section-header">
+          <h2 class="section-title">Dashboard — Composed Simulation</h2>
+          <span class="section-source">components/chart + components/metric-card</span>
+        </div>
+        <p class="section-desc">Composed view showing <code>ds-metric-card</code> and <code>ds-chart</code> working together as a full dashboard page. In production, replace the SVG chart previews with live <code>&lt;ds-chart&gt;</code> components bound to real data and <code>&lt;ds-metric-card&gt;</code> components bound to aggregated values.</p>
+
+        <div class="component-demo">
+          <div style="background: var(--color-surface-page); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 0 2px 0 rgba(45,54,56,0.06), 0 2px 6px 2px rgba(45,54,56,0.06); min-width: 820px; box-sizing: border-box;">
+
+            <!-- Page header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+              <div>
+                <h1 style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 24px; font-weight: 600; line-height: 28px; color: var(--color-text-primary); margin: 0 0 4px;">Support Dashboard</h1>
+                <p style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 12px; color: var(--color-text-secondary); margin: 0;">April 15, 2026 · Last updated 2 minutes ago</p>
+              </div>
+              <div style="display: flex; gap: 8px; flex-shrink: 0;">
+                <button class="ds-button ds-button--outlined ds-button--sm" type="button">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">download</span>
+                  Export
+                </button>
+                <button class="ds-button ds-button--filled ds-button--sm" type="button">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">add</span>
+                  New Case
+                </button>
+              </div>
+            </div>
+
+            <!-- Metric cards row -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;">
+
+              <div class="ds-metric-card">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">inbox</span>
+                  <span class="ds-metric-card__label">Open Cases</span>
+                </div>
+                <div class="ds-metric-card__value">1,248</div>
+                <div class="ds-metric-card__trend">
+                  <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
+                  <span class="ds-metric-card__trend-value is-positive">+8.3%</span>
+                  <span class="ds-metric-card__trend-label">vs last week</span>
+                </div>
+              </div>
+
+              <div class="ds-metric-card">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">sentiment_satisfied</span>
+                  <span class="ds-metric-card__label">CSAT Score</span>
+                </div>
+                <div class="ds-metric-card__value">92.4%</div>
+                <div class="ds-metric-card__trend">
+                  <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--negative" aria-hidden="true">trending_down</span>
+                  <span class="ds-metric-card__trend-value is-negative">-1.2%</span>
+                  <span class="ds-metric-card__trend-label">vs last month</span>
+                </div>
+              </div>
+
+              <div class="ds-metric-card">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">timer</span>
+                  <span class="ds-metric-card__label">Avg Handle Time</span>
+                </div>
+                <div class="ds-metric-card__value">4m 32s</div>
+                <div class="ds-metric-card__trend">
+                  <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
+                  <span class="ds-metric-card__trend-value is-positive">+12%</span>
+                  <span class="ds-metric-card__trend-label">vs last week</span>
+                </div>
+              </div>
+
+              <div class="ds-metric-card">
+                <div class="ds-metric-card__header">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">check_circle</span>
+                  <span class="ds-metric-card__label">Resolution Rate</span>
+                </div>
+                <div class="ds-metric-card__value">87.3%</div>
+                <div class="ds-metric-card__trend">
+                  <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
+                  <span class="ds-metric-card__trend-value is-positive">+2.1%</span>
+                  <span class="ds-metric-card__trend-label">vs last month</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Line chart — full width -->
+            <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px 16px 8px; margin-bottom: 16px;">
+              <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Monthly Cases</div>
+              <svg viewBox="0 0 740 210" width="100%" height="210" aria-label="Line chart: Monthly Cases" role="img" style="display:block;">
+                <!-- Grid lines -->
+                <line x1="54" y1="20" x2="720" y2="20" stroke="#E9E9E9" stroke-width="1"/>
+                <line x1="54" y1="60" x2="720" y2="60" stroke="#E9E9E9" stroke-width="1"/>
+                <line x1="54" y1="100" x2="720" y2="100" stroke="#E9E9E9" stroke-width="1"/>
+                <line x1="54" y1="140" x2="720" y2="140" stroke="#E9E9E9" stroke-width="1"/>
+                <line x1="54" y1="180" x2="720" y2="180" stroke="#E9E9E9" stroke-width="1"/>
+                <!-- Y axis labels -->
+                <text x="48" y="184" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">0</text>
+                <text x="48" y="144" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">100</text>
+                <text x="48" y="104" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">200</text>
+                <text x="48" y="64"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">300</text>
+                <text x="48" y="24"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">400</text>
+                <!-- X axis labels -->
+                <text x="60"  y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Nov</text>
+                <text x="192" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Dec</text>
+                <text x="324" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Jan</text>
+                <text x="456" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Feb</text>
+                <text x="588" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Mar</text>
+                <text x="720" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Apr</text>
+                <!-- Series 1: Opened — brand blue -->
+                <polyline points="60,82 192,64 324,56 456,66 588,52 720,61" fill="none" stroke="#0B6EB4" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="60"  cy="82" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                <circle cx="192" cy="64" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                <circle cx="324" cy="56" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                <circle cx="456" cy="66" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                <circle cx="588" cy="52" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                <circle cx="720" cy="61" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                <!-- Series 2: Closed — green -->
+                <polyline points="60,88 192,74 324,66 456,72 588,57 720,56" fill="none" stroke="#45A55F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="60"  cy="88" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                <circle cx="192" cy="74" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                <circle cx="324" cy="66" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                <circle cx="456" cy="72" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                <circle cx="588" cy="57" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                <circle cx="720" cy="56" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                <!-- Legend -->
+                <rect x="54" y="200" width="10" height="10" rx="2" fill="#0B6EB4"/>
+                <text x="68" y="209" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Opened</text>
+                <rect x="132" y="200" width="10" height="10" rx="2" fill="#45A55F"/>
+                <text x="146" y="209" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Closed</text>
+              </svg>
+            </div>
+
+            <!-- Bottom row: donut + column -->
+            <div style="display: grid; grid-template-columns: 280px 1fr; gap: 16px;">
+
+              <!-- Donut: Cases by Channel -->
+              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px;">
+                <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px;">Cases by Channel</div>
+                <svg viewBox="0 0 240 220" width="240" height="220" aria-label="Donut chart: Cases by Channel" role="img" style="display:block; margin: 0 auto;">
+                  <!-- Slices (cx=120 cy=110, outerR=88, innerR=53) -->
+                  <!-- Email 38%: 0→136.8° -->
+                  <path d="M 120 22 A 88 88 0 0 1 178.9 183.4 L 147.1 157.3 A 53 53 0 0 0 120 57 Z" fill="#0B6EB4"/>
+                  <!-- Chat 27%: 136.8→234° -->
+                  <path d="M 178.9 183.4 A 88 88 0 0 1 40.4 168.8 L 69.9 151.3 A 53 53 0 0 0 147.1 157.3 Z" fill="#45A55F"/>
+                  <!-- Phone 19%: 234→302.4° -->
+                  <path d="M 40.4 168.8 A 88 88 0 0 1 37.3 64.6 L 67.4 83.6 A 53 53 0 0 0 69.9 151.3 Z" fill="#FFBF00"/>
+                  <!-- Portal 11%: 302.4→342° -->
+                  <path d="M 37.3 64.6 A 88 88 0 0 1 87.7 23.5 L 100.9 55.4 A 53 53 0 0 0 67.4 83.6 Z" fill="#43ADF2"/>
+                  <!-- Other 5%: 342→360° -->
+                  <path d="M 87.7 23.5 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 100.9 55.4 Z" fill="#CACACA"/>
+                  <!-- White borders -->
+                  <path d="M 120 22 A 88 88 0 0 1 178.9 183.4 L 147.1 157.3 A 53 53 0 0 0 120 57 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 178.9 183.4 A 88 88 0 0 1 40.4 168.8 L 69.9 151.3 A 53 53 0 0 0 147.1 157.3 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 40.4 168.8 A 88 88 0 0 1 37.3 64.6 L 67.4 83.6 A 53 53 0 0 0 69.9 151.3 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 37.3 64.6 A 88 88 0 0 1 87.7 23.5 L 100.9 55.4 A 53 53 0 0 0 67.4 83.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <path d="M 87.7 23.5 A 88 88 0 0 1 120 22 L 120 57 A 53 53 0 0 0 100.9 55.4 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                  <!-- Donut hole + center label -->
+                  <circle cx="120" cy="110" r="53" fill="white"/>
+                  <text x="120" y="105" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="20" font-weight="600" fill="#2D3638">1,248</text>
+                  <text x="120" y="121" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">total cases</text>
+                </svg>
+                <!-- Legend -->
+                <div style="display:flex; flex-direction:column; gap:3px; margin-top:4px;">
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#0B6EB4;flex-shrink:0;"></span>Email — 38%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#45A55F;flex-shrink:0;"></span>Chat — 27%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#FFBF00;flex-shrink:0;"></span>Phone — 19%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#43ADF2;flex-shrink:0;"></span>Portal — 11%</div>
+                  <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#CACACA;flex-shrink:0;"></span>Other — 5%</div>
+                </div>
+              </div>
+
+              <!-- Column: Cases by Day of Week -->
+              <div style="background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 16px 16px 8px;">
+                <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
+                <svg viewBox="0 0 440 210" width="100%" height="210" aria-label="Column chart: Cases by Day of Week" role="img" style="display:block;">
+                  <!-- Grid lines -->
+                  <line x1="44" y1="10"  x2="430" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="50"  x2="430" y2="50"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="90"  x2="430" y2="90"  stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="130" x2="430" y2="130" stroke="#E9E9E9" stroke-width="1"/>
+                  <line x1="44" y1="170" x2="430" y2="170" stroke="#E9E9E9" stroke-width="1"/>
+                  <!-- Y labels -->
+                  <text x="38" y="174" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">0</text>
+                  <text x="38" y="134" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">65</text>
+                  <text x="38" y="94"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">130</text>
+                  <text x="38" y="54"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">195</text>
+                  <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">260</text>
+                  <!-- Columns (width=46, gap=18) -->
+                  <rect x="50"  y="85"  width="46" height="85"  rx="3" fill="#0B6EB4"/>
+                  <rect x="114" y="40"  width="46" height="130" rx="3" fill="#0B6EB4"/>
+                  <rect x="178" y="50"  width="46" height="120" rx="3" fill="#0B6EB4"/>
+                  <rect x="242" y="24"  width="46" height="146" rx="3" fill="#0B6EB4"/>
+                  <rect x="306" y="64"  width="46" height="106" rx="3" fill="#0B6EB4"/>
+                  <rect x="370" y="126" width="46" height="44"  rx="3" fill="#0B6EB4" opacity="0.5"/>
+                  <!-- X labels -->
+                  <text x="73"  y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mon</text>
+                  <text x="137" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Tue</text>
+                  <text x="201" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Wed</text>
+                  <text x="265" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Thu</text>
+                  <text x="329" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Fri</text>
+                  <text x="393" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Sat</text>
+                  <!-- Legend -->
+                  <rect x="44" y="196" width="10" height="10" rx="2" fill="#0B6EB4"/>
+                  <text x="58" y="205" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Cases Opened</text>
+                </svg>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      </div><!-- /#page-dashboard -->
+
+      <!-- Interactive modal overlays — position:fixed; triggered from Components page modal demos -->
+      <!-- Placed outside page containers so they render correctly regardless of page visibility -->
       <div class="ds-modal-backdrop" id="modal-interactive-backdrop" style="display:none;"
            onclick="if(event.target===this)this.style.display='none'">
         <div class="ds-modal" role="dialog" aria-modal="true" aria-labelledby="modal-interactive-title" style="height: 520px;">
@@ -15338,8 +15555,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           });
         }
       </script>
-
-      </div><!-- /#page-components -->
 
       <div class="page" id="page-table-components" style="display:none">
       <section class="section" id="table-header-cell">
@@ -18905,7 +19120,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
   function switchPage(page) {
     if (typeof clearNavSearch === 'function') clearNavSearch();
-    ['foundations', 'components', 'table-components', 'examples'].forEach(function(p) {
+    ['foundations', 'components', 'dashboard', 'table-components', 'examples'].forEach(function(p) {
       var pageEl = document.getElementById('page-' + p);
       var navEl  = document.getElementById('nav-' + p);
       var tabEl  = document.querySelector('.page-tab[data-page="' + p + '"]');
@@ -18999,6 +19214,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     'ag-paginator': 'table-components', 'table-toolbar': 'table-components',
     'column-panel': 'table-components', 'table-context-menu': 'table-components',
     'split-page': 'components',
+    'metric-card': 'dashboard', 'chart': 'dashboard', 'dashboard-sim': 'dashboard',
     'page-layout': 'examples', 'split-page-layout': 'examples', table: 'examples',
   };
   var initHash = window.location.hash.slice(1);
