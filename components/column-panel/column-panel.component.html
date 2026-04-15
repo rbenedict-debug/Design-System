@@ -10,6 +10,7 @@
         [attr.aria-pressed]="density === 'comfort'"
         (click)="onDensityChange('comfort')"
       >
+        <span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>
         Comfort
       </button>
       <button
@@ -19,6 +20,7 @@
         [attr.aria-pressed]="density === 'compact'"
         (click)="onDensityChange('compact')"
       >
+        <span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>
         Compact
       </button>
     </div>
@@ -81,7 +83,6 @@
   <ng-container *ngIf="!suppressPivotMode">
     <div class="ds-divider" role="separator" aria-hidden="true"></div>
     <div class="ds-column-panel__pivot-row">
-      <span class="ds-column-panel__pivot-label">Pivot Mode</span>
       <label class="ds-toggle" aria-label="Enable pivot mode">
         <input
           type="checkbox"
@@ -91,6 +92,7 @@
         />
         <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
       </label>
+      <span class="ds-column-panel__pivot-label">Pivot Mode</span>
     </div>
   </ng-container>
 

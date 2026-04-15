@@ -17,8 +17,8 @@
 //     <!-- 1. Density -->
 //     <div class="ds-column-panel__density">
 //       <div class="ds-density-toggle">
-//         <button class="ds-density-toggle__btn is-selected">Comfort</button>
-//         <button class="ds-density-toggle__btn">Compact</button>
+//         <button class="ds-density-toggle__btn is-selected"><span class="ds-icon ds-icon--sm">density_medium</span>Comfort</button>
+//         <button class="ds-density-toggle__btn"><span class="ds-icon ds-icon--sm">density_small</span>Compact</button>
 //       </div>
 //     </div>
 //
@@ -45,11 +45,11 @@
 //
 //     <!-- 3. Pivot Mode -->
 //     <div class="ds-column-panel__pivot-row">
-//       <span class="ds-column-panel__pivot-label">Pivot Mode</span>
 //       <label class="ds-toggle" aria-label="Enable pivot mode">
 //         <input type="checkbox" class="ds-toggle__control" />
 //         <span class="ds-toggle__track"><span class="ds-toggle__thumb"></span></span>
 //       </label>
+//       <span class="ds-column-panel__pivot-label">Pivot Mode</span>
 //     </div>
 //
 //     <!-- Divider -->
@@ -238,13 +238,14 @@
   &__pivot-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: var(--spacing-md);
     height: 42px;
     padding: 0 var(--spacing-md);
     flex-shrink: 0;
   }
 
   &__pivot-label {
+    flex: 1 0 0;
     font-family: var(--ref-typescale-body-medium-font);
     font-size: var(--ref-typescale-body-medium-size);
     font-weight: var(--ref-typescale-body-medium-weight);
@@ -347,6 +348,10 @@ button.ds-column-panel__section-hd[aria-expanded="false"] + .ds-column-panel__co
   &__btn {
     appearance: none;
     -webkit-appearance: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
     background: var(--color-surface-page);
     border: 1px solid var(--color-border-primary);
     border-radius: var(--radius-sm);
