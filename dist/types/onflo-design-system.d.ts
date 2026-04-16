@@ -455,14 +455,23 @@ declare class DsButtonComponent {
     size: DsButtonSize;
     /** Disables the button and applies disabled styling. */
     disabled: boolean;
+    /**
+     * Toggle state. When set (true or false), marks this as a toggle button:
+     * - Adds `.is-selected` class when true
+     * - Binds `aria-pressed` on the native button element
+     * Pair with `ds-button-group` wrapper for full toggle group semantics.
+     */
+    selected: boolean | null;
     /** Native button type attribute. Default: 'button' */
     type: 'button' | 'submit' | 'reset';
     /** Emits the native MouseEvent when the button is clicked. */
     clicked: EventEmitter<MouseEvent>;
     get buttonClasses(): string;
+    /** Returns 'true'/'false' when this is a toggle button, null otherwise. */
+    get ariaPressed(): 'true' | 'false' | null;
     handleClick(event: MouseEvent): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsButtonComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<DsButtonComponent, "ds-button", never, { "variant": { "alias": "variant"; "required": false; }; "size": { "alias": "size"; "required": false; }; "disabled": { "alias": "disabled"; "required": false; }; "type": { "alias": "type"; "required": false; }; }, { "clicked": "clicked"; }, never, ["[slot='icon-leading']", "*", "[slot='icon-trailing']", "[slot='icon-leading']", "*", "[slot='icon-trailing']", "[slot='icon-leading']", "*", "[slot='icon-trailing']"], true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsButtonComponent, "ds-button", never, { "variant": { "alias": "variant"; "required": false; }; "size": { "alias": "size"; "required": false; }; "disabled": { "alias": "disabled"; "required": false; }; "selected": { "alias": "selected"; "required": false; }; "type": { "alias": "type"; "required": false; }; }, { "clicked": "clicked"; }, never, ["[slot='icon-leading']", "*", "[slot='icon-trailing']", "[slot='icon-leading']", "*", "[slot='icon-trailing']", "[slot='icon-leading']", "*", "[slot='icon-trailing']"], true, never>;
 }
 
 /**

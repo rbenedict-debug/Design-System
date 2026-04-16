@@ -488,11 +488,31 @@ export class DsColumnPanelComponent implements OnDestroy {
     const fromIndex = +(event.dataTransfer?.getData('text/plain') ?? '-1');
     if (fromIndex < 0 || fromIndex === toIndex) { return; }
 
+    // Locally reorder for immediate UI feedback.
     const moved = this.columns.splice(fromIndex, 1)[0];
     this.columns.splice(toIndex, 0, moved);
 
     if (this._api) {
-      this._api.moveColumn(moved.colId, toIndex);
+      // this.columns is a filtered subset of getAllGridColumns() — lockVisible and
+      // suppressColumnsToolPanel columns are excluded. Panel indices ≠ grid indices,
+      // so we can't pass toIndex directly to moveColumn(). Instead, anchor on a
+      // neighbor column's grid index to find the correct insertion point.
+      const allGridCols = this._api.getAllGridColumns();
+
+      let targetGridIndex: number;
+      if (toIndex > fromIndex) {
+        // Moved forward in the list — insert after the column now just before it.
+        const anchorColId = this.columns[toIndex - 1].colId;
+        targetGridIndex = allGridCols.findIndex(c => c.getColId() === anchorColId);
+      } else {
+        // Moved backward in the list — insert before the column now just after it.
+        const anchorColId = this.columns[toIndex + 1].colId;
+        targetGridIndex = allGridCols.findIndex(c => c.getColId() === anchorColId);
+      }
+
+      if (targetGridIndex >= 0) {
+        this._api.moveColumn(moved.colId, targetGridIndex);
+      }
     }
     this.cdr.markForCheck();
   }
