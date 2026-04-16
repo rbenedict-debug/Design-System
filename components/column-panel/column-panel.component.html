@@ -5,7 +5,7 @@
     <div class="ds-button-group" role="group" aria-label="Row density">
       <button
         type="button"
-        class="ds-button ds-button--outlined ds-button--sm"
+        class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon"
         [class.is-selected]="density === 'comfort'"
         [attr.aria-pressed]="density === 'comfort'"
         (click)="onDensityChange('comfort')"
@@ -15,7 +15,7 @@
       </button>
       <button
         type="button"
-        class="ds-button ds-button--outlined ds-button--sm"
+        class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon"
         [class.is-selected]="density === 'compact'"
         [attr.aria-pressed]="density === 'compact'"
         (click)="onDensityChange('compact')"
