@@ -1,0 +1,1298 @@
+// ============================================================
+// Onflo Design System — Filter Component
+// ============================================================
+//
+// Full-screen filter modal with a three-panel layout:
+//   Left:   group navigation + search bar
+//   Center: option cards, tier accordions, range pickers
+//   Right:  selected filters summary (data-theme="dark") + saved sets
+//
+// CSS class API:
+//   <div class="filter-overlay">
+//     <div class="filter-modal">
+//       <button class="ds-icon-button ds-icon-button--icon filter-modal__close">…</button>
+//       <div class="filter-modal__body">
+//         <div class="filter-modal__left">
+//           <header class="filter-modal__header">…</header>
+//           <div class="filter-modal__content">
+//             <nav class="filter-modal__nav">
+//               <button class="filter-nav-item [filter-nav-item--active]">…</button>
+//             </nav>
+//             <div class="filter-modal__options">
+//               <div class="filter-cards-grid">
+//                 <button class="filter-card [filter-card--selected]">…</button>
+//               </div>
+//               <div class="filter-tier">…</div>
+//             </div>
+//           </div>
+//         </div>
+//         <aside class="filter-modal__right" data-theme="dark">
+//           <div class="filter-modal__selected-header">…</div>
+//           <div class="filter-modal__selected-body">
+//             <ul class="selected-filter-list">
+//               <li class="selected-bucket [selected-bucket--excluded] [selected-bucket--collapsed]">…</li>
+//             </ul>
+//           </div>
+//           <div class="saved-sets-panel">…</div>
+//         </aside>
+//       </div>
+//       <footer class="filter-modal__footer">…</footer>
+//     </div>
+//   </div>
+//
+// Angular component: <ds-filter [(open)]="open" [groups]="groups" [(selection)]="selection"
+//                               [savedSetsKey]="'onflo-filter-sets-assets'" />
+// ============================================================
+
+
+// ── Overlay ───────────────────────────────────────────────────────────────────
+
+.filter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-page);
+  background: var(--color-surface-scrim);
+  animation: filter-overlay-in var(--motion-duration-medium) ease;
+}
+
+@keyframes filter-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+
+// ── Modal container ───────────────────────────────────────────────────────────
+
+.filter-modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow:
+    0px 1px 10px 4px var(--shadow-elevation-2),
+    0px 4px 3px  0px var(--shadow-elevation-2);
+  background: var(--color-surface-page);
+  animation: filter-modal-in var(--motion-duration-medium) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes filter-modal-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+// Close button — ds-icon-button overlaying the dark header region.
+// Positioned absolute top-right, custom radius to follow the modal corner.
+.filter-modal__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  border-radius: 0 var(--radius-lg) 0 var(--radius-sm);
+  color: var(--color-icon-inverse);
+}
+
+.filter-modal__close:hover:not(:disabled) {
+  background: var(--overlay-hovered);
+  color: var(--color-text-on-brand);
+}
+
+.filter-modal__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+
+// ── Left panel ────────────────────────────────────────────────────────────────
+
+.filter-modal__left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-page);
+  overflow: hidden;
+}
+
+.filter-modal__header {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-md);
+}
+
+.filter-modal__title {
+  margin: 0;
+  font-size: var(--ref-typescale-title-h2-size);
+  font-weight: var(--ref-typeface-weight-bold);
+  line-height: var(--ref-typescale-title-h2-line-height);
+  letter-spacing: 0;
+  color: var(--color-text-primary);
+}
+
+// Content area: nav + options side by side
+.filter-modal__content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  overflow: hidden;
+}
+
+
+// ── Group nav ─────────────────────────────────────────────────────────────────
+
+.filter-modal__nav {
+  flex-shrink: 0;
+  width: 238px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  overflow-y: auto;
+  scrollbar-color: var(--color-border-secondary) transparent;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-secondary);
+    border-radius: 2px;
+  }
+}
+
+.filter-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  height: 42px;
+  padding: 0 var(--spacing-sm) 0 var(--spacing-md);
+  border: none;
+  background: var(--color-surface-page);
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typeface-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--ref-typescale-label-medium-tracking);
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  transition: background var(--motion-duration-short);
+
+  &:hover:not(.filter-nav-item--active) {
+    background: color-mix(in srgb, var(--color-surface-nav) 60%, white);
+  }
+
+  &--active { background: var(--color-surface-nav); }
+
+  &:focus { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring) inset; }
+}
+
+.filter-nav-item__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-brand-bold);
+  color: var(--color-text-on-brand);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typeface-weight-extra-bold);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+
+// ── Options panel ─────────────────────────────────────────────────────────────
+
+.filter-modal__options {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  background: var(--color-surface-nav);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  scrollbar-color: var(--color-border-secondary) transparent;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-secondary);
+    border-radius: 2px;
+  }
+}
+
+// Remove top-left radius when the first nav item is active — panel sits flush against it.
+.filter-modal__nav:has(.filter-nav-item:first-child.filter-nav-item--active) ~ .filter-modal__options {
+  border-radius: 0 var(--radius-md) var(--radius-md) var(--radius-md);
+}
+
+// Empty state centered inside the options panel
+.filter-modal__options .ds-empty-state {
+  flex: 1;
+  padding: var(--spacing-page);
+}
+
+
+// ── Filter card grid ──────────────────────────────────────────────────────────
+
+.filter-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.filter-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+  min-width: 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-md);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  color: var(--color-text-primary);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color var(--motion-duration-short),
+    background-color var(--motion-duration-short),
+    box-shadow var(--motion-duration-short);
+
+  > span:first-child {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &:hover:not(.filter-card--selected) {
+    border-color: var(--color-border-input-hover);
+    background: var(--overlay-hovered);
+    box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+  }
+
+  &:focus { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+  &--selected {
+    border-color: transparent;
+    box-shadow: inset 0 0 0 2px var(--color-border-brand);
+    background: var(--color-surface-brand);
+    color: var(--color-text-brand);
+    font-weight: var(--ref-typeface-weight-bold);
+  }
+}
+
+.filter-card__check {
+  visibility: hidden;
+  flex-shrink: 0;
+  color: var(--color-text-brand);
+}
+
+.filter-card--selected .filter-card__check { visibility: visible; }
+
+// Invisible flex-wrap spacers — hidden in CSS Grid layout
+.filter-card-spacer { display: none; }
+
+
+// ── Tier accordion ────────────────────────────────────────────────────────────
+
+.filter-tier {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  + .filter-tier {
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+}
+
+.filter-tier__top-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+
+  .filter-tier__header { flex: 1; min-width: 0; }
+}
+
+.filter-tier__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  color: var(--color-text-primary);
+  text-align: left;
+  border-radius: var(--radius-sm);
+
+  &:focus { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+}
+
+.filter-tier__chevron {
+  color: var(--color-icon-default);
+  transition: transform var(--motion-duration-medium) ease;
+  flex-shrink: 0;
+}
+
+.filter-tier__header[aria-expanded="false"] .filter-tier__chevron {
+  transform: rotate(-90deg);
+}
+
+.filter-tier__end {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.filter-tier__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 var(--spacing-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-brand-bold);
+  color: var(--color-text-on-brand);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typeface-weight-extra-bold);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+
+// ── Group header row (flat groups: add-all aligned right) ─────────────────────
+
+.filter-group-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 var(--spacing-xs);
+}
+
+
+// ── Search results ────────────────────────────────────────────────────────────
+
+.search-results-header {
+  font-size: var(--ref-typescale-body-medium-size);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-xs) var(--spacing-xs) 0;
+}
+
+.search-result-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  + .search-result-group {
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+}
+
+.search-result-group__label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  color: var(--color-text-primary);
+  padding: 0 var(--spacing-xs);
+}
+
+.search-result-group__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 var(--spacing-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-border-secondary);
+  color: var(--color-text-secondary);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typeface-weight-extra-bold);
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+// Show-more button — layout only; ds-button--text --sm provides visual styles
+.search-show-more { width: 100%; }
+
+// Search highlight
+mark.search-match {
+  background: transparent;
+  color: var(--color-text-brand);
+  font-weight: var(--ref-typeface-weight-bold);
+}
+
+
+// ── Right panel — selected filters (data-theme="dark") ────────────────────────
+
+.filter-modal__right {
+  position: relative;
+  flex-shrink: 0;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-accent-navy-bold);
+  overflow: hidden;
+}
+
+.filter-modal__selected-header {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl) var(--spacing-md) var(--spacing-sm) var(--spacing-lg);
+}
+
+.filter-modal__selected-header-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.filter-modal__selected-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// ds-button--text and ds-button--outlined override for dark navy surface.
+// --color-text-brand is a light-surface token — remap to dark-surface equivalents.
+.filter-modal__right .ds-button--text,
+.filter-modal__right .ds-button--outlined {
+  color: var(--color-text-primary);
+}
+
+.filter-modal__right .ds-button--outlined { border-color: var(--color-border-subtle); }
+
+.filter-modal__right .ds-button--text:hover:not(:disabled) {
+  background: var(--overlay-hovered);
+}
+
+.filter-modal__right .ds-button--outlined:hover:not(:disabled) {
+  background: var(--overlay-hovered);
+  border-color: var(--color-border-secondary);
+}
+
+.filter-modal__selected-title {
+  margin: 0;
+  font-size: var(--ref-typescale-title-h2-size);
+  font-weight: var(--ref-typeface-weight-bold);
+  line-height: var(--ref-typescale-title-h2-line-height);
+  color: var(--color-text-on-brand);
+}
+
+.filter-modal__selected-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--spacing-xs) var(--spacing-lg) var(--spacing-lg);
+  border-top: 1px solid var(--color-border-subtle);
+  scrollbar-color: var(--color-border-secondary) transparent;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-secondary);
+    border-radius: 2px;
+  }
+}
+
+// Empty state centered in the dark right panel
+.filter-modal__selected-body .ds-empty-state {
+  height: 100%;
+  padding: var(--spacing-page) var(--spacing-xl);
+}
+
+// Selected filter list
+.selected-filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  list-style: none;
+  margin: 0;
+  padding-inline-start: 0;
+}
+
+
+// ── Selected bucket cards ─────────────────────────────────────────────────────
+
+.selected-bucket {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-secondary);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+
+  &--excluded {
+    background: var(--color-surface-error);
+    border-color: var(--color-border-error);
+  }
+}
+
+.selected-bucket__header {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-sm) var(--spacing-md);
+}
+
+.selected-bucket__header-top {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.selected-bucket__collapse-btn {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  gap: var(--spacing-sm);
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+
+  &:focus { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+}
+
+.selected-bucket__chevron {
+  flex-shrink: 0;
+  color: var(--color-icon-inverse);
+  transition: transform var(--motion-duration-short) ease;
+}
+
+.selected-bucket--collapsed .selected-bucket__chevron { transform: rotate(-90deg); }
+.selected-bucket--excluded .selected-bucket__chevron  { color: var(--color-icon-error); }
+
+.selected-bucket__crumb {
+  flex-shrink: 1;
+  min-width: 0;
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typescale-label-medium-weight-prominent);
+  line-height: var(--ref-typescale-label-medium-line-height);
+  color: var(--color-text-inverse);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selected-bucket--excluded .selected-bucket__crumb { color: var(--color-text-error); }
+
+.selected-bucket__header-bottom {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.selected-bucket__count {
+  margin-left: auto;
+  font-family: var(--ref-typescale-label-small-font);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typescale-label-small-weight);
+  line-height: var(--ref-typescale-label-small-line-height);
+  letter-spacing: var(--ref-typescale-label-small-tracking);
+  color: var(--color-text-disabled);
+  padding: 0 var(--spacing-xs);
+}
+
+.selected-bucket--excluded .selected-bucket__count { color: var(--color-icon-error); }
+
+// Remove button — ds-icon-button--icon --sm + dark surface overrides
+.selected-bucket__remove-btn {
+  color: var(--color-icon-disabled);
+  transition: background var(--motion-duration-short), color var(--motion-duration-short);
+
+  &:hover:not(:disabled) { background: var(--overlay-hovered); color: var(--color-icon-inverse); }
+  &:focus { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+}
+
+// Items list — hidden when collapsed
+.selected-bucket--collapsed .selected-bucket__items { display: none; }
+
+.selected-bucket__items {
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.selected-bucket--excluded .selected-bucket__items { border-top-color: var(--color-border-error); }
+
+.selected-bucket__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-md);
+  transition: background var(--motion-duration-short);
+
+  &:hover { background: var(--overlay-hovered); }
+
+  + .selected-bucket__item { border-top: 1px solid var(--color-border-subtle); }
+}
+
+.selected-bucket__item-label {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typeface-weight-medium);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Item remove button — ds-icon-button--icon --sm + dark surface overrides
+.selected-bucket__item-remove {
+  color: var(--color-icon-disabled);
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) { background: var(--overlay-hovered); color: var(--color-icon-inverse); }
+  &:focus { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+}
+
+
+// ── Active set chip ───────────────────────────────────────────────────────────
+
+.filter-active-set-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--ref-typescale-label-small-size);
+  color: var(--color-text-secondary);
+  min-width: 0;
+  padding-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.filter-active-set-chip__name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+// Update icon button — stays in layout flow (visibility:hidden) when hidden so chip height is stable
+.filter-active-set-chip__update[hidden] {
+  display: inline-flex !important;
+  visibility: hidden;
+}
+
+.filter-active-set-chip__update {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-icon-disabled);
+  transition: background var(--motion-duration-short), color var(--motion-duration-short);
+
+  &:hover { background: var(--overlay-hovered); color: var(--color-icon-inverse); }
+  &:focus { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 2px var(--color-border-ada-focus-ring); }
+
+  .ds-icon { font-size: var(--ref-typescale-label-small-size); }
+}
+
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+
+.filter-modal__footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  background: var(--color-surface-page);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.filter-modal__footer-summary {
+  flex: 1;
+  font-size: var(--ref-typescale-body-medium-size);
+  color: var(--color-text-secondary);
+}
+
+.filter-modal__footer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.filter-modal__footer-divider {
+  display: block;
+  width: 1px;
+  height: 20px;
+  background: var(--color-border-subtle);
+  margin: 0 var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+// Saved sets toggle button — active state
+.filter-saved-sets-toggle-btn[aria-pressed="true"] {
+  background: var(--overlay-hovered);
+  color: var(--color-text-brand);
+}
+
+
+// ── Saved sets overlay panel ──────────────────────────────────────────────────
+
+.filter-saved-sets-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-accent-navy-bold);
+}
+
+.filter-saved-sets-panel__header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.filter-saved-sets-panel__title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--ref-typescale-title-h2-size);
+  font-weight: var(--ref-typeface-weight-bold);
+  line-height: var(--ref-typescale-title-h2-line-height);
+  color: var(--color-text-on-brand);
+}
+
+.filter-saved-sets-panel__body {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  scrollbar-color: var(--color-border-secondary) transparent;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-secondary);
+    border-radius: 2px;
+  }
+}
+
+.filter-saved-sets-back-row { margin-bottom: calc(var(--spacing-sm) * -1); }
+
+.filter-saved-sets-back-btn { padding: 0 var(--spacing-md); }
+
+// Save form
+.filter-save-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-secondary);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.filter-save-form__label {
+  margin: 0;
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typeface-weight-bold);
+  color: var(--color-text-on-brand);
+}
+
+.filter-save-form__row {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.filter-save-form__input-wrap { flex: 1; }
+
+.filter-save-form__hint {
+  margin: 0;
+  font-size: var(--ref-typescale-label-small-size);
+  color: var(--color-text-disabled);
+}
+
+// Saved sets list
+.filter-saved-sets-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.filter-saved-set-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-secondary);
+  border: 1px solid transparent;
+  transition: background var(--motion-duration-short);
+
+  &:hover { background: var(--overlay-hovered); }
+
+  &--active {
+    background: var(--overlay-hovered);
+    border-color: var(--color-border-secondary);
+  }
+}
+
+.filter-saved-set-item__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.filter-saved-set-item__name {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--ref-typescale-label-medium-size);
+  font-weight: var(--ref-typeface-weight-medium);
+  color: var(--color-text-on-brand);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filter-saved-set-item__loaded-badge {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-secondary);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typeface-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--ref-typescale-body-small-tracking);
+  text-transform: uppercase;
+}
+
+.filter-saved-set-item__meta {
+  font-size: var(--ref-typescale-label-small-size);
+  color: var(--color-text-disabled);
+}
+
+.filter-saved-set-item__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+// Empty state on dark navy panel
+.filter-saved-sets-panel .ds-empty-state { padding: var(--spacing-xl) var(--spacing-lg); }
+
+
+// ── Date field picker (date-range tier) ───────────────────────────────────────
+// Field-specific From / To date selector inside a collapsed filter-tier.
+// In Angular: backed by ds-date-range-picker or mat-date-range-input.
+
+.filter-date-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+}
+
+.filter-date-field__row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+}
+
+.filter-date-field__group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 0;
+}
+
+.filter-date-field__label {
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typeface-weight-medium);
+  color: var(--color-text-secondary);
+  letter-spacing: var(--ref-typescale-label-small-tracking);
+}
+
+.filter-date-field .ds-input__control[type="date"] {
+  cursor: pointer;
+  padding-right: var(--spacing-sm);
+}
+
+.filter-date-field__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+}
+
+// Applied confirmation row shown once the range is committed
+.filter-date-field__applied {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-surface-brand);
+  border-radius: var(--radius-sm);
+  font-size: var(--ref-typescale-label-small-size);
+  color: var(--color-text-brand);
+  font-weight: var(--ref-typeface-weight-medium);
+
+  .ds-icon {
+    font-size: var(--ref-typescale-label-large-size);
+    color: var(--color-text-brand);
+  }
+}
+
+
+// ── Dual-thumb range sliders (cost-range + numeric-range) ─────────────────────
+// Both use the same track/fill/thumb pattern; cost-range uses $ formatting,
+// numeric-range uses an optional unit suffix.
+// In Angular: replace with <mat-slider [min] [max] [step]> and update template.
+
+.filter-cost-range,
+.filter-numeric-range {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+}
+
+.filter-cost-range__values,
+.filter-numeric-range__values {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  justify-content: center;
+}
+
+.filter-cost-range__value {
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-large-size);
+  font-weight: var(--ref-typeface-weight-medium);
+  color: var(--color-text-primary);
+  min-width: 64px;
+  text-align: center;
+}
+
+.filter-numeric-range__value {
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-label-large-size);
+  font-weight: var(--ref-typeface-weight-medium);
+  color: var(--color-text-primary);
+  min-width: 48px;
+  text-align: center;
+}
+
+.filter-cost-range__dash,
+.filter-numeric-range__dash {
+  color: var(--color-text-secondary);
+  font-size: var(--ref-typescale-label-medium-size);
+}
+
+// Slider track wrapper — --cr-min / --cr-max set inline via Angular binding
+.filter-cost-range__slider-wrap,
+.filter-numeric-range__slider-wrap {
+  position: relative;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.filter-cost-range__track,
+.filter-numeric-range__track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--color-border-subtle);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.filter-cost-range__fill,
+.filter-numeric-range__fill {
+  position: absolute;
+  top: 0;
+  left: var(--cr-min, 0%);
+  right: calc(100% - var(--cr-max, 100%));
+  height: 100%;
+  background: var(--color-surface-brand-bold);
+  border-radius: 2px;
+}
+
+.filter-cost-range__thumb,
+.filter-numeric-range__thumb {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+
+// Thumb knob — webkit
+.filter-cost-range__thumb::-webkit-slider-thumb,
+.filter-numeric-range__thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-surface-brand-bold);
+  border: 2px solid var(--color-surface-overlay);
+  box-shadow: 0 1px 4px var(--shadow-elevation-2);
+  cursor: pointer;
+  pointer-events: all;
+  transition: transform var(--motion-duration-short) ease, box-shadow var(--motion-duration-short) ease;
+}
+
+// Thumb knob — Firefox
+.filter-cost-range__thumb::-moz-range-thumb,
+.filter-numeric-range__thumb::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-surface-brand-bold);
+  border: 2px solid var(--color-surface-overlay);
+  box-shadow: 0 1px 4px var(--shadow-elevation-2);
+  cursor: pointer;
+  pointer-events: all;
+}
+
+// Hover halo — intentional rgba() using ref RGB channel token
+.filter-cost-range__thumb::-webkit-slider-thumb:hover,
+.filter-numeric-range__thumb::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 8px rgba(var(--ref-color-primary-blue-default-rgb, 25, 92, 178), 0.12),
+    0 1px 4px var(--shadow-elevation-2);
+}
+
+.filter-cost-range__thumb:focus-visible::-webkit-slider-thumb,
+.filter-numeric-range__thumb:focus-visible::-webkit-slider-thumb {
+  outline: 3px solid var(--color-border-ada-focus-ring);
+  outline-offset: 2px;
+}
+
+.filter-cost-range__thumb:focus-visible::-moz-range-thumb,
+.filter-numeric-range__thumb:focus-visible::-moz-range-thumb {
+  outline: 3px solid var(--color-border-ada-focus-ring);
+  outline-offset: 2px;
+}
+
+.filter-cost-range__bounds,
+.filter-numeric-range__bounds {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--ref-typescale-label-small-size);
+  color: var(--color-text-secondary);
+  padding: 0 var(--spacing-xs);
+}
+
+.filter-cost-range__actions,
+.filter-numeric-range__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-xs);
+}
+
+
+// ── Date preset list (date-preset group type) ─────────────────────────────────
+// Single-select preset tiles + expandable custom date range row.
+// In Angular: use mat-radio-group for presets + ds-date-range-picker for custom.
+
+.filter-preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+}
+
+.filter-preset-pill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.filter-preset-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-md);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: center;
+  white-space: normal;
+  transition:
+    border-color var(--motion-duration-short),
+    background-color var(--motion-duration-short),
+    box-shadow var(--motion-duration-short);
+
+  &:hover:not(.filter-preset-pill--selected) {
+    border-color: var(--color-border-input-hover);
+    background: var(--overlay-hovered);
+    box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+  }
+
+  &:focus { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+  &--selected {
+    border-color: transparent;
+    box-shadow: inset 0 0 0 2px var(--color-border-brand);
+    background: var(--color-surface-brand);
+    color: var(--color-text-brand);
+    font-weight: var(--ref-typeface-weight-bold);
+  }
+}
+
+// Custom date range toggle tile — same card shape, chevron rotates on expand
+.filter-preset-custom-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-surface-page);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-md);
+  font-family: var(--ref-typeface-brand);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typeface-weight-regular);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color var(--motion-duration-short),
+    background-color var(--motion-duration-short),
+    box-shadow var(--motion-duration-short);
+
+  &:hover:not(.filter-preset-custom-toggle--open) {
+    border-color: var(--color-border-input-hover);
+    background: var(--overlay-hovered);
+    box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+  }
+
+  &:focus { outline: none; }
+  &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+
+  &--open {
+    border-color: transparent;
+    box-shadow: inset 0 0 0 2px var(--color-border-brand);
+    background: var(--color-surface-brand);
+    color: var(--color-text-brand);
+    font-weight: var(--ref-typeface-weight-bold);
+  }
+}
+
+.filter-preset-custom-toggle__label { flex: 1; min-width: 0; }
+
+.filter-preset-custom-toggle__chevron {
+  margin-left: auto;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+  transition: transform var(--motion-duration-short) ease;
+}
+
+.filter-preset-custom-toggle--open .filter-preset-custom-toggle__chevron {
+  transform: rotate(180deg);
+}
+
+.filter-preset-custom-toggle__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 var(--spacing-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-brand-bold);
+  color: var(--color-text-inverse);
+  font-size: var(--ref-typescale-label-small-size);
+  font-weight: var(--ref-typeface-weight-medium);
+  margin-left: var(--spacing-xs);
+  vertical-align: middle;
+}
+
+// Container for the expanded custom date picker
+.filter-preset-custom-picker { padding: 0; }

@@ -1,0 +1,704 @@
+@if (open) {
+  <!-- Overlay — click outside to cancel -->
+  <div class="filter-overlay" (click)="cancel()" role="dialog" aria-modal="true" aria-label="Filter">
+
+    <!-- Modal — stop propagation so inner clicks don't dismiss -->
+    <div class="filter-modal" (click)="$event.stopPropagation()">
+
+      <!-- Close button -->
+      <button
+        class="ds-icon-button ds-icon-button--icon filter-modal__close"
+        type="button"
+        aria-label="Close filters"
+        (click)="cancel()"
+      >
+        <span class="ds-icon" aria-hidden="true">close</span>
+      </button>
+
+      <!-- ── Body ─────────────────────────────────────────────────── -->
+      <div class="filter-modal__body">
+
+        <!-- ── Left panel ──────────────────────────────────────────── -->
+        <div class="filter-modal__left">
+
+          <!-- Header: title + search -->
+          <header class="filter-modal__header">
+            <h2 class="filter-modal__title">Filters</h2>
+            <div class="ds-search ds-search--sm">
+              <span class="ds-search__icon ds-icon" aria-hidden="true">search</span>
+              <input
+                class="ds-search__input"
+                type="search"
+                placeholder="Search filters…"
+                autocomplete="off"
+                [value]="_searchQuery()"
+                (input)="setSearch($any($event.target).value)"
+                aria-label="Search filters"
+              />
+              @if (_searchQuery()) {
+                <button
+                  class="ds-search__clear ds-icon-button ds-icon-button--icon ds-icon-button--sm"
+                  type="button"
+                  aria-label="Clear search"
+                  (click)="setSearch('')"
+                >
+                  <span class="ds-icon" aria-hidden="true">close</span>
+                </button>
+              }
+            </div>
+          </header>
+
+          <!-- Content: nav + options -->
+          <div class="filter-modal__content">
+
+            <!-- Group navigation -->
+            <nav class="filter-modal__nav" aria-label="Filter groups">
+              @for (group of groups; track group.id) {
+                @let count = _getGroupActiveCount(group.id);
+                <button
+                  class="filter-nav-item"
+                  [class.filter-nav-item--active]="_activeGroupId() === group.id"
+                  type="button"
+                  (click)="setActiveGroup(group.id)"
+                >
+                  <span class="ds-icon filter-nav-item__icon" aria-hidden="true">{{ group.icon }}</span>
+                  <span class="filter-nav-item__label">{{ group.label }}</span>
+                  @if (count > 0) {
+                    <span class="filter-nav-item__badge" aria-label="{{ count }} selected">{{ count }}</span>
+                  }
+                </button>
+              }
+            </nav>
+
+            <!-- Options panel -->
+            <div class="filter-modal__options" role="region" aria-label="Filter options">
+
+              @if (_searchQuery()) {
+                <!-- ── Search results mode ─────────────────────────── -->
+                @if (searchResults().length === 0) {
+                  <div class="ds-empty-state">
+                    <span class="ds-icon ds-empty-state__icon" aria-hidden="true">search_off</span>
+                    <p class="ds-empty-state__title">No results</p>
+                    <p class="ds-empty-state__body">Try a different search term.</p>
+                  </div>
+                } @else {
+                  <p class="search-results-header">Results for "{{ _searchQuery() }}"</p>
+                  @for (result of searchResults(); track result.group.id) {
+                    <div class="search-result-group">
+                      <div class="search-result-group__label">
+                        <span class="ds-icon" aria-hidden="true">{{ result.group.icon }}</span>
+                        {{ result.group.label }}
+                        <span class="search-result-group__count">{{ result.options.length }}</span>
+                      </div>
+                      <div class="filter-cards-grid">
+                        @for (option of result.options; track option.id) {
+                          <button
+                            class="filter-card"
+                            [class.filter-card--selected]="isOptionSelected(option.id)"
+                            type="button"
+                            (click)="toggleOption(option.id)"
+                          >
+                            <span [innerHTML]="_highlightMatch(option.label, _searchQuery())"></span>
+                            <span class="ds-icon filter-card__check" aria-hidden="true">check</span>
+                          </button>
+                        }
+                      </div>
+                    </div>
+                  }
+                }
+
+              } @else if (activeGroup()) {
+                <!-- ── Normal group view ───────────────────────────── -->
+
+                @if (activeGroup()!.type === 'date-preset') {
+                  <!-- Date-preset group: pill grid + custom date range -->
+                  <div class="filter-preset-list">
+                    <div class="filter-preset-pill-grid">
+                      @for (option of activeGroup()!.options ?? []; track option.id) {
+                        <button
+                          class="filter-preset-pill"
+                          [class.filter-preset-pill--selected]="isDatePresetSelected(option.id)"
+                          type="button"
+                          (click)="selectDatePreset(option.id)"
+                        >
+                          {{ option.label }}
+                        </button>
+                      }
+                    </div>
+
+                    <!-- Custom date range toggle -->
+                    <button
+                      class="filter-preset-custom-toggle"
+                      [class.filter-preset-custom-toggle--open]="_customDateExpanded()"
+                      type="button"
+                      (click)="toggleCustomDateExpanded()"
+                    >
+                      <span class="ds-icon" aria-hidden="true">date_range</span>
+                      <span class="filter-preset-custom-toggle__label">Custom date range</span>
+                      @if (_dateRanges().find(r => r.tierId === null)) {
+                        <span class="filter-preset-custom-toggle__badge" aria-label="1 custom range applied">1</span>
+                      }
+                      <span class="ds-icon filter-preset-custom-toggle__chevron" aria-hidden="true">keyboard_arrow_down</span>
+                    </button>
+
+                    @if (_customDateExpanded()) {
+                      <div class="filter-preset-custom-picker">
+                        <div class="filter-date-field">
+                          <div class="filter-date-field__row">
+                            <div class="filter-date-field__group">
+                              <label class="filter-date-field__label" [for]="'custom-from'">From</label>
+                              <div class="ds-input ds-input--sm">
+                                <input
+                                  class="ds-input__control"
+                                  type="date"
+                                  [id]="'custom-from'"
+                                  [value]="_customDateDraft().from ?? ''"
+                                  (change)="setCustomDateDraft('from', $any($event.target).value)"
+                                />
+                              </div>
+                            </div>
+                            <div class="filter-date-field__group">
+                              <label class="filter-date-field__label" [for]="'custom-to'">To</label>
+                              <div class="ds-input ds-input--sm">
+                                <input
+                                  class="ds-input__control"
+                                  type="date"
+                                  [id]="'custom-to'"
+                                  [value]="_customDateDraft().to ?? ''"
+                                  (change)="setCustomDateDraft('to', $any($event.target).value)"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="filter-date-field__actions">
+                            <button
+                              class="ds-button ds-button--outlined ds-button--sm"
+                              type="button"
+                              (click)="_customDateDraft.set({})"
+                            >Clear</button>
+                            <button
+                              class="ds-button ds-button--filled ds-button--sm"
+                              type="button"
+                              (click)="commitCustomDateRange()"
+                            >Apply</button>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+
+                } @else if (activeGroup()!.tiers) {
+                  <!-- Tiered group -->
+                  @for (tier of activeGroup()!.tiers!; track tier.id) {
+                    @if (!tier.type) {
+                      <!-- Checkbox tier -->
+                      <div class="filter-tier">
+                        <div class="filter-tier__top-row">
+                          <button
+                            class="filter-tier__header"
+                            type="button"
+                            [attr.aria-expanded]="!isTierCollapsed(tier.id)"
+                            (click)="toggleTierCollapse(tier.id)"
+                          >
+                            <span class="ds-icon filter-tier__chevron" aria-hidden="true">keyboard_arrow_down</span>
+                            {{ tier.label }}
+                            @if (_getTierActiveCount(tier.id) > 0) {
+                              <span class="filter-tier__badge">{{ _getTierActiveCount(tier.id) }}</span>
+                            }
+                          </button>
+                        </div>
+                        @if (!isTierCollapsed(tier.id)) {
+                          <div class="filter-cards-grid">
+                            @for (option of tier.options ?? []; track option.id) {
+                              <button
+                                class="filter-card"
+                                [class.filter-card--selected]="isOptionSelected(option.id)"
+                                type="button"
+                                (click)="toggleOption(option.id)"
+                              >
+                                <span>{{ option.label }}</span>
+                                <span class="ds-icon filter-card__check" aria-hidden="true">check</span>
+                              </button>
+                            }
+                          </div>
+                        }
+                      </div>
+
+                    } @else if (tier.type === 'date-range') {
+                      <!-- Date-range tier -->
+                      <div class="filter-tier">
+                        <div class="filter-tier__top-row">
+                          <button
+                            class="filter-tier__header"
+                            type="button"
+                            [attr.aria-expanded]="!isTierCollapsed(tier.id)"
+                            (click)="toggleTierCollapse(tier.id)"
+                          >
+                            <span class="ds-icon filter-tier__chevron" aria-hidden="true">keyboard_arrow_down</span>
+                            {{ tier.label }}
+                            @if (_dateRanges().find(r => r.tierId === tier.id)) {
+                              <span class="filter-tier__badge">1</span>
+                            }
+                          </button>
+                        </div>
+                        @if (!isTierCollapsed(tier.id)) {
+                          <div class="filter-date-field">
+                            <div class="filter-date-field__row">
+                              <div class="filter-date-field__group">
+                                <label class="filter-date-field__label" [for]="tier.id + '-from'">From</label>
+                                <div class="ds-input ds-input--sm">
+                                  <input
+                                    class="ds-input__control"
+                                    type="date"
+                                    [id]="tier.id + '-from'"
+                                    [value]="getDateDraft(tier.id, 'from')"
+                                    (change)="setFieldDateDraft(tier.id, 'from', $any($event.target).value)"
+                                  />
+                                </div>
+                              </div>
+                              <div class="filter-date-field__group">
+                                <label class="filter-date-field__label" [for]="tier.id + '-to'">To</label>
+                                <div class="ds-input ds-input--sm">
+                                  <input
+                                    class="ds-input__control"
+                                    type="date"
+                                    [id]="tier.id + '-to'"
+                                    [value]="getDateDraft(tier.id, 'to')"
+                                    (change)="setFieldDateDraft(tier.id, 'to', $any($event.target).value)"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            @if (_dateRanges().find(r => r.tierId === tier.id); as applied) {
+                              <div class="filter-date-field__applied">
+                                <span class="ds-icon" aria-hidden="true">check_circle</span>
+                                {{ applied.label }}
+                              </div>
+                            }
+                            <div class="filter-date-field__actions">
+                              <button
+                                class="ds-button ds-button--outlined ds-button--sm"
+                                type="button"
+                                (click)="_dateRanges.set(_dateRanges().filter(r => r.tierId !== tier.id))"
+                              >Clear</button>
+                              <button
+                                class="ds-button ds-button--filled ds-button--sm"
+                                type="button"
+                                (click)="commitDateRange(tier.id)"
+                              >Apply</button>
+                            </div>
+                          </div>
+                        }
+                      </div>
+
+                    } @else if (tier.type === 'cost-range') {
+                      <!-- Cost-range tier -->
+                      <div class="filter-tier">
+                        <div class="filter-tier__top-row">
+                          <button
+                            class="filter-tier__header"
+                            type="button"
+                            [attr.aria-expanded]="!isTierCollapsed(tier.id)"
+                            (click)="toggleTierCollapse(tier.id)"
+                          >
+                            <span class="ds-icon filter-tier__chevron" aria-hidden="true">keyboard_arrow_down</span>
+                            {{ tier.label }}
+                            @if (_costRanges().find(r => r.tierId === tier.id)) {
+                              <span class="filter-tier__badge">1</span>
+                            }
+                          </button>
+                        </div>
+                        @if (!isTierCollapsed(tier.id)) {
+                          @let crDraft = getCostRangeDraft(tier.id, tier);
+                          @let crMin = tier.min ?? 0;
+                          @let crMax = tier.max ?? 100;
+                          @let crRange = crMax - crMin;
+                          <div class="filter-cost-range">
+                            <div class="filter-cost-range__values">
+                              <span class="filter-cost-range__value">${{ crDraft.min.toLocaleString() }}</span>
+                              <span class="filter-cost-range__dash">–</span>
+                              <span class="filter-cost-range__value">${{ crDraft.max.toLocaleString() }}</span>
+                            </div>
+                            <div
+                              class="filter-cost-range__slider-wrap"
+                              [style.--cr-min.%]="((crDraft.min - crMin) / crRange) * 100"
+                              [style.--cr-max.%]="((crDraft.max - crMin) / crRange) * 100"
+                            >
+                              <div class="filter-cost-range__track">
+                                <div class="filter-cost-range__fill"></div>
+                              </div>
+                              <input
+                                class="filter-cost-range__thumb"
+                                type="range"
+                                [min]="crMin" [max]="crMax" [step]="tier.step ?? 1"
+                                [value]="crDraft.min"
+                                (input)="setCostRangeDraft(tier.id, +$any($event.target).value, crDraft.max)"
+                                [attr.aria-label]="tier.label + ' minimum'"
+                              />
+                              <input
+                                class="filter-cost-range__thumb"
+                                type="range"
+                                [min]="crMin" [max]="crMax" [step]="tier.step ?? 1"
+                                [value]="crDraft.max"
+                                (input)="setCostRangeDraft(tier.id, crDraft.min, +$any($event.target).value)"
+                                [attr.aria-label]="tier.label + ' maximum'"
+                              />
+                            </div>
+                            <div class="filter-cost-range__bounds">
+                              <span>${{ crMin.toLocaleString() }}</span>
+                              <span>${{ crMax.toLocaleString() }}</span>
+                            </div>
+                            <div class="filter-cost-range__actions">
+                              <button
+                                class="ds-button ds-button--outlined ds-button--sm"
+                                type="button"
+                                (click)="_costRanges.set(_costRanges().filter(r => r.tierId !== tier.id))"
+                              >Clear</button>
+                              <button
+                                class="ds-button ds-button--filled ds-button--sm"
+                                type="button"
+                                (click)="commitCostRange(tier.id, crDraft.min, crDraft.max)"
+                              >Apply</button>
+                            </div>
+                          </div>
+                        }
+                      </div>
+
+                    } @else if (tier.type === 'numeric-range') {
+                      <!-- Numeric-range tier -->
+                      <div class="filter-tier">
+                        <div class="filter-tier__top-row">
+                          <button
+                            class="filter-tier__header"
+                            type="button"
+                            [attr.aria-expanded]="!isTierCollapsed(tier.id)"
+                            (click)="toggleTierCollapse(tier.id)"
+                          >
+                            <span class="ds-icon filter-tier__chevron" aria-hidden="true">keyboard_arrow_down</span>
+                            {{ tier.label }}
+                            @if (_numericRanges().find(r => r.tierId === tier.id)) {
+                              <span class="filter-tier__badge">1</span>
+                            }
+                          </button>
+                        </div>
+                        @if (!isTierCollapsed(tier.id)) {
+                          @let nrDraft = getNumericRangeDraft(tier.id, tier);
+                          @let nrMin = tier.min ?? 0;
+                          @let nrMax = tier.max ?? 100;
+                          @let nrRange = nrMax - nrMin;
+                          @let nrMaxLabel = (nrDraft.max === nrMax && tier.maxLabel) ? tier.maxLabel : '' + nrDraft.max;
+                          <div class="filter-numeric-range">
+                            <div class="filter-numeric-range__values">
+                              <span class="filter-numeric-range__value">{{ nrDraft.min }}{{ tier.unit ? ' ' + tier.unit : '' }}</span>
+                              <span class="filter-numeric-range__dash">–</span>
+                              <span class="filter-numeric-range__value">{{ nrMaxLabel }}{{ tier.unit ? ' ' + tier.unit : '' }}</span>
+                            </div>
+                            <div
+                              class="filter-numeric-range__slider-wrap"
+                              [style.--cr-min.%]="((nrDraft.min - nrMin) / nrRange) * 100"
+                              [style.--cr-max.%]="((nrDraft.max - nrMin) / nrRange) * 100"
+                            >
+                              <div class="filter-numeric-range__track">
+                                <div class="filter-numeric-range__fill"></div>
+                              </div>
+                              <input
+                                class="filter-numeric-range__thumb"
+                                type="range"
+                                [min]="nrMin" [max]="nrMax" [step]="tier.step ?? 1"
+                                [value]="nrDraft.min"
+                                (input)="setNumericRangeDraft(tier.id, +$any($event.target).value, nrDraft.max)"
+                                [attr.aria-label]="tier.label + ' minimum'"
+                              />
+                              <input
+                                class="filter-numeric-range__thumb"
+                                type="range"
+                                [min]="nrMin" [max]="nrMax" [step]="tier.step ?? 1"
+                                [value]="nrDraft.max"
+                                (input)="setNumericRangeDraft(tier.id, nrDraft.min, +$any($event.target).value)"
+                                [attr.aria-label]="tier.label + ' maximum'"
+                              />
+                            </div>
+                            <div class="filter-numeric-range__bounds">
+                              <span>{{ nrMin }}{{ tier.unit ? ' ' + tier.unit : '' }}</span>
+                              <span>{{ tier.maxLabel ?? nrMax }}{{ tier.unit ? ' ' + tier.unit : '' }}</span>
+                            </div>
+                            <div class="filter-numeric-range__actions">
+                              <button
+                                class="ds-button ds-button--outlined ds-button--sm"
+                                type="button"
+                                (click)="_numericRanges.set(_numericRanges().filter(r => r.tierId !== tier.id))"
+                              >Clear</button>
+                              <button
+                                class="ds-button ds-button--filled ds-button--sm"
+                                type="button"
+                                (click)="commitNumericRange(tier.id, nrDraft.min, nrDraft.max, tier.unit, (nrDraft.max === nrMax ? tier.maxLabel : undefined))"
+                              >Apply</button>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
+                  }
+
+                } @else if (activeGroup()!.options) {
+                  <!-- Flat group: cards grid -->
+                  <div class="filter-cards-grid">
+                    @for (option of activeGroup()!.options!; track option.id) {
+                      <button
+                        class="filter-card"
+                        [class.filter-card--selected]="isOptionSelected(option.id)"
+                        type="button"
+                        (click)="toggleOption(option.id)"
+                      >
+                        <span>{{ option.label }}</span>
+                        <span class="ds-icon filter-card__check" aria-hidden="true">check</span>
+                      </button>
+                    }
+                  </div>
+                }
+              }
+
+            </div><!-- /.filter-modal__options -->
+          </div><!-- /.filter-modal__content -->
+        </div><!-- /.filter-modal__left -->
+
+
+        <!-- ── Right panel (dark) ───────────────────────────────────── -->
+        <aside class="filter-modal__right" data-theme="dark" aria-label="Selected filters">
+
+          <!-- Header: title + active set chip + clear all -->
+          <div class="filter-modal__selected-header">
+            <div class="filter-modal__selected-header-row">
+              <h3 class="filter-modal__selected-title">
+                Selected
+                @if (draftActiveCount() > 0) { ({{ draftActiveCount() }}) }
+              </h3>
+            </div>
+
+            @if (activeSetName()) {
+              <div class="filter-active-set-chip">
+                <span class="ds-icon" aria-hidden="true" style="font-size: 14px;">bookmark</span>
+                <span class="filter-active-set-chip__name" [title]="activeSetName()">{{ activeSetName() }}</span>
+                @if (savedSetsKey) {
+                  <button
+                    class="filter-active-set-chip__update"
+                    type="button"
+                    title="Update saved set"
+                    (click)="updateCurrentSet()"
+                  >
+                    <span class="ds-icon" aria-hidden="true">save</span>
+                  </button>
+                }
+              </div>
+            }
+
+            @if (draftActiveCount() > 0) {
+              <div class="filter-modal__selected-header-actions">
+                <button class="ds-button ds-button--text ds-button--sm" type="button" (click)="clearAll()">
+                  Clear all
+                </button>
+              </div>
+            }
+          </div>
+
+          <!-- Selected buckets body -->
+          <div class="filter-modal__selected-body">
+            @if (selectedBuckets().length === 0) {
+              <div class="ds-empty-state" aria-live="polite">
+                <span class="ds-icon ds-empty-state__icon" aria-hidden="true">filter_list_off</span>
+                <p class="ds-empty-state__title">No filters selected</p>
+                <p class="ds-empty-state__body">Choose filters from the left panel.</p>
+              </div>
+            } @else {
+              <ul class="selected-filter-list" aria-label="Selected filters">
+                @for (bucket of selectedBuckets(); track bucket.key) {
+                  <li
+                    class="selected-bucket"
+                    [class.selected-bucket--excluded]="isBucketExcluded(bucket.key)"
+                    [class.selected-bucket--collapsed]="isBucketCollapsed(bucket.key)"
+                  >
+                    <div class="selected-bucket__header">
+                      <div class="selected-bucket__header-top">
+                        <button
+                          class="selected-bucket__collapse-btn"
+                          type="button"
+                          (click)="toggleBucketCollapse(bucket.key)"
+                          [attr.aria-expanded]="!isBucketCollapsed(bucket.key)"
+                          [attr.aria-label]="bucket.label + ' (' + bucket.items.length + ')'"
+                        >
+                          <span class="ds-icon selected-bucket__chevron" aria-hidden="true">keyboard_arrow_down</span>
+                          <span class="selected-bucket__crumb">{{ bucket.label }}</span>
+                        </button>
+                        <span class="selected-bucket__count">{{ bucket.items.length }}</span>
+                        <button
+                          class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__remove-btn"
+                          type="button"
+                          [attr.aria-label]="'Remove ' + bucket.label + ' filter'"
+                          (click)="removeBucket(bucket)"
+                        >
+                          <span class="ds-icon" aria-hidden="true">close</span>
+                        </button>
+                      </div>
+                      @if (bucket.items.length > 1) {
+                        <div class="selected-bucket__header-bottom">
+                          <button
+                            class="ds-button ds-button--text ds-button--xs"
+                            type="button"
+                            [class.ds-button--active]="isBucketExcluded(bucket.key)"
+                            (click)="toggleBucketExclude(bucket.key)"
+                          >
+                            @if (isBucketExcluded(bucket.key)) { Include } @else { Exclude }
+                          </button>
+                        </div>
+                      }
+                    </div>
+
+                    <div class="selected-bucket__items">
+                      @for (item of bucket.items; track item.id) {
+                        <div class="selected-bucket__item">
+                          <span class="selected-bucket__item-label">{{ item.label }}</span>
+                          <button
+                            class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__item-remove"
+                            type="button"
+                            [attr.aria-label]="'Remove ' + item.label"
+                            (click)="removeItem(item)"
+                          >
+                            <span class="ds-icon" aria-hidden="true">close</span>
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+
+          <!-- ── Saved sets overlay panel ───────────────────────────── -->
+          @if (_savedSetsOpen() && savedSetsKey) {
+            <div class="filter-saved-sets-panel" role="region" aria-label="Saved filter sets">
+              <div class="filter-saved-sets-panel__header">
+                <h3 class="filter-saved-sets-panel__title">Saved Sets</h3>
+                <button
+                  class="ds-icon-button ds-icon-button--icon"
+                  type="button"
+                  aria-label="Close saved sets"
+                  (click)="toggleSavedSetsPanel()"
+                >
+                  <span class="ds-icon" aria-hidden="true">close</span>
+                </button>
+              </div>
+
+              <div class="filter-saved-sets-panel__body">
+                <!-- Save form -->
+                <div class="filter-save-form">
+                  <p class="filter-save-form__label">Save current filters</p>
+                  <div class="filter-save-form__row">
+                    <div class="filter-save-form__input-wrap">
+                      <div class="ds-input ds-input--sm">
+                        <input
+                          class="ds-input__control"
+                          type="text"
+                          placeholder="Set name…"
+                          maxlength="60"
+                          [value]="_saveNameDraft()"
+                          (input)="setSaveNameDraft($any($event.target).value)"
+                          (keydown.enter)="saveCurrentSet()"
+                          aria-label="Saved filter set name"
+                        />
+                      </div>
+                    </div>
+                    <button
+                      class="ds-button ds-button--filled ds-button--sm"
+                      type="button"
+                      [disabled]="!_saveNameDraft().trim()"
+                      (click)="saveCurrentSet()"
+                    >Save</button>
+                  </div>
+                  <p class="filter-save-form__hint">Ranges (date, cost, numeric) are not included in saved sets.</p>
+                </div>
+
+                <!-- Saved sets list -->
+                @if (_savedSets().length > 0) {
+                  <ul class="filter-saved-sets-list" aria-label="Saved filter sets">
+                    @for (set of _savedSets(); track set.id) {
+                      <li
+                        class="filter-saved-set-item"
+                        [class.filter-saved-set-item--active]="_activeFilterSetId() === set.id"
+                        role="button"
+                        tabindex="0"
+                        [attr.aria-pressed]="_activeFilterSetId() === set.id"
+                        [attr.aria-label]="set.name"
+                        (click)="loadSavedSet(set)"
+                        (keydown.enter)="loadSavedSet(set)"
+                        (keydown.space)="loadSavedSet(set)"
+                      >
+                        <div class="filter-saved-set-item__info">
+                          <div class="filter-saved-set-item__name">
+                            {{ set.name }}
+                            @if (_activeFilterSetId() === set.id) {
+                              <span class="filter-saved-set-item__loaded-badge">Loaded</span>
+                            }
+                          </div>
+                          <div class="filter-saved-set-item__meta">Saved {{ formatSavedAt(set.savedAt) }}</div>
+                        </div>
+                        <div class="filter-saved-set-item__actions">
+                          <button
+                            class="ds-icon-button ds-icon-button--icon ds-icon-button--sm"
+                            type="button"
+                            [attr.aria-label]="'Delete ' + set.name"
+                            (click)="deleteSavedSet(set.id, $event)"
+                          >
+                            <span class="ds-icon" aria-hidden="true">delete</span>
+                          </button>
+                        </div>
+                      </li>
+                    }
+                  </ul>
+                } @else {
+                  <div class="ds-empty-state">
+                    <span class="ds-icon ds-empty-state__icon" aria-hidden="true">bookmark_border</span>
+                    <p class="ds-empty-state__title">No saved sets</p>
+                    <p class="ds-empty-state__body">Save your current selection to quickly apply it again.</p>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+        </aside><!-- /.filter-modal__right -->
+      </div><!-- /.filter-modal__body -->
+
+      <!-- ── Footer ──────────────────────────────────────────────────── -->
+      <footer class="filter-modal__footer">
+        <div class="filter-modal__footer-summary">
+          @if (draftActiveCount() === 0) {
+            No filters selected
+          } @else if (draftActiveCount() === 1) {
+            1 filter selected
+          } @else {
+            {{ draftActiveCount() }} filters selected
+          }
+        </div>
+
+        <div class="filter-modal__footer-actions">
+          @if (savedSetsKey) {
+            <button
+              class="ds-button ds-button--outlined ds-button--sm filter-saved-sets-toggle-btn"
+              type="button"
+              [attr.aria-pressed]="_savedSetsOpen()"
+              (click)="toggleSavedSetsPanel()"
+            >
+              <span class="ds-icon" aria-hidden="true">bookmark</span>
+              Saved sets
+            </button>
+            <span class="filter-modal__footer-divider" aria-hidden="true"></span>
+          }
+          <button class="ds-button ds-button--text ds-button--sm" type="button" (click)="cancel()">Cancel</button>
+          <button class="ds-button ds-button--filled ds-button--sm" type="button" (click)="apply()">Apply</button>
+        </div>
+      </footer>
+
+    </div><!-- /.filter-modal -->
+  </div><!-- /.filter-overlay -->
+}

@@ -9456,6 +9456,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
         <a class="nav-link" href="#dialog" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Dialog</span></a>
         <a class="nav-link" href="#save-bar" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Save Bar</span></a>
         <a class="nav-link" href="#modal" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Modal</span></a>
+        <a class="nav-link" href="#filter" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Filter</span></a>
       </div>
 
       <button class="nav-group-header" data-group="display" onclick="toggleGroup('display')" aria-expanded="true">
@@ -19425,6 +19426,170 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           </div><!-- /.ds-page-layout -->
         </div><!-- /.component-demo (75/25 composition) -->
 
+      </section>
+
+
+      <!-- ═══════════════════════════════════════════════════════════════ -->
+      <!-- Filter                                                          -->
+      <!-- ═══════════════════════════════════════════════════════════════ -->
+
+      <section class="section" id="filter">
+        <div class="section-header">
+          <h2 class="section-title">Filter</h2>
+          <span class="section-source">components/filter/_filter.scss</span>
+        </div>
+        <p class="section-desc">
+          Full-screen filter modal with a three-panel layout — left group navigation,
+          center option cards / tier accordions / range pickers, and a dark right panel
+          showing selected filters with saved-sets support. Angular component:
+          <code>&lt;ds-filter&gt;</code> with <code>[(open)]</code>, <code>[groups]</code>,
+          <code>[(selection)]</code>, <code>[savedSetsKey]</code>, and
+          <code>(filterCountChange)</code>. Import types from
+          <code>FilterGroup</code>, <code>FilterTier</code>, <code>FilterOption</code>,
+          <code>FilterSelection</code>, and <code>EMPTY_FILTER_SELECTION</code>.
+        </p>
+
+        <div class="component-demo">
+
+          <!-- Trigger button -->
+          <div class="demo-row">
+            <div class="demo-row-label">Trigger</div>
+            <div class="demo-row-items">
+              <button
+                class="ds-button ds-button--outlined"
+                type="button"
+                onclick="document.getElementById('preview-filter-overlay').style.display='flex'"
+              >
+                <span class="ds-icon" aria-hidden="true">filter_list</span>
+                Open Filter
+              </button>
+            </div>
+          </div>
+
+          <!-- Static HTML preview of the filter modal structure -->
+          <div id="preview-filter-overlay" class="filter-overlay" style="display:none; position:fixed;" onclick="this.style.display='none'">
+            <div class="filter-modal" onclick="event.stopPropagation()" style="max-height: 80vh;">
+
+              <button
+                class="ds-icon-button ds-icon-button--icon filter-modal__close"
+                type="button"
+                aria-label="Close"
+                onclick="document.getElementById('preview-filter-overlay').style.display='none'"
+              >
+                <span class="ds-icon">close</span>
+              </button>
+
+              <div class="filter-modal__body">
+                <!-- Left panel -->
+                <div class="filter-modal__left">
+                  <header class="filter-modal__header">
+                    <h2 class="filter-modal__title">Filters</h2>
+                    <div class="ds-search ds-search--sm">
+                      <span class="ds-search__icon ds-icon">search</span>
+                      <input class="ds-search__input" type="search" placeholder="Search filters…" />
+                    </div>
+                  </header>
+                  <div class="filter-modal__content">
+                    <nav class="filter-modal__nav">
+                      <button class="filter-nav-item filter-nav-item--active" type="button">
+                        <span class="ds-icon filter-nav-item__icon">inventory_2</span>
+                        <span class="filter-nav-item__label">Assets</span>
+                        <span class="filter-nav-item__badge">3</span>
+                      </button>
+                      <button class="filter-nav-item" type="button">
+                        <span class="ds-icon filter-nav-item__icon">payments</span>
+                        <span class="filter-nav-item__label">Financial</span>
+                      </button>
+                      <button class="filter-nav-item" type="button">
+                        <span class="ds-icon filter-nav-item__icon">calendar_month</span>
+                        <span class="filter-nav-item__label">Dates</span>
+                      </button>
+                    </nav>
+                    <div class="filter-modal__options">
+                      <div class="filter-tier">
+                        <div class="filter-tier__top-row">
+                          <button class="filter-tier__header" type="button" aria-expanded="true">
+                            <span class="ds-icon filter-tier__chevron">keyboard_arrow_down</span>
+                            Asset Type
+                            <span class="filter-tier__badge">2</span>
+                          </button>
+                        </div>
+                        <div class="filter-cards-grid">
+                          <button class="filter-card filter-card--selected" type="button">
+                            <span>Hardware</span>
+                            <span class="ds-icon filter-card__check">check</span>
+                          </button>
+                          <button class="filter-card filter-card--selected" type="button">
+                            <span>Software</span>
+                            <span class="ds-icon filter-card__check">check</span>
+                          </button>
+                          <button class="filter-card" type="button">
+                            <span>License</span>
+                            <span class="ds-icon filter-card__check">check</span>
+                          </button>
+                          <button class="filter-card" type="button">
+                            <span>Subscription</span>
+                            <span class="ds-icon filter-card__check">check</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right panel (dark) -->
+                <aside class="filter-modal__right" data-theme="dark">
+                  <div class="filter-modal__selected-header">
+                    <div class="filter-modal__selected-header-row">
+                      <h3 class="filter-modal__selected-title">Selected (3)</h3>
+                    </div>
+                    <div class="filter-modal__selected-header-actions">
+                      <button class="ds-button ds-button--text ds-button--sm" type="button">Clear all</button>
+                    </div>
+                  </div>
+                  <div class="filter-modal__selected-body">
+                    <ul class="selected-filter-list">
+                      <li class="selected-bucket">
+                        <div class="selected-bucket__header">
+                          <div class="selected-bucket__header-top">
+                            <button class="selected-bucket__collapse-btn" type="button" aria-expanded="true">
+                              <span class="ds-icon selected-bucket__chevron">keyboard_arrow_down</span>
+                              <span class="selected-bucket__crumb">Asset Type</span>
+                            </button>
+                            <span class="selected-bucket__count">2</span>
+                            <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__remove-btn" type="button" aria-label="Remove Asset Type filter">
+                              <span class="ds-icon">close</span>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="selected-bucket__items">
+                          <div class="selected-bucket__item">
+                            <span class="selected-bucket__item-label">Hardware</span>
+                            <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__item-remove" type="button" aria-label="Remove Hardware"><span class="ds-icon">close</span></button>
+                          </div>
+                          <div class="selected-bucket__item">
+                            <span class="selected-bucket__item-label">Software</span>
+                            <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__item-remove" type="button" aria-label="Remove Software"><span class="ds-icon">close</span></button>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </aside>
+              </div>
+
+              <footer class="filter-modal__footer">
+                <div class="filter-modal__footer-summary">3 filters selected</div>
+                <div class="filter-modal__footer-actions">
+                  <button class="ds-button ds-button--text ds-button--sm" type="button" onclick="document.getElementById('preview-filter-overlay').style.display='none'">Cancel</button>
+                  <button class="ds-button ds-button--filled ds-button--sm" type="button" onclick="document.getElementById('preview-filter-overlay').style.display='none'">Apply</button>
+                </div>
+              </footer>
+
+            </div><!-- /.filter-modal -->
+          </div><!-- /#preview-filter-overlay -->
+
+        </div><!-- /.component-demo -->
       </section>
 
 
