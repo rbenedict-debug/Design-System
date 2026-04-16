@@ -6910,6 +6910,7 @@
   flex-shrink: 0;
   border-left: 1px solid var(--color-border-secondary);
   background: var(--color-surface-subtle);
+  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -17517,8 +17518,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div id="ag-sim-grid" class="ag-theme-quartz" style="flex:1; height:560px;"></div>
 
             <!-- ds-column-panel (opened by settings toggle) -->
-            <div id="ag-sim-col-sidebar" style="display:none; width:300px; border-left:1px solid var(--color-border-secondary); flex-shrink:0; overflow-y:auto;">
-              <div class="ds-column-panel" style="border:none; border-radius:0; height:100%;">
+            <div id="ag-sim-col-sidebar" style="display:none; width:300px; height:560px; border-left:1px solid var(--color-border-secondary); flex-shrink:0;">
+              <div class="ds-column-panel" style="border:none; border-radius:0;">
 
                 <!-- 1. Density -->
                 <div class="ds-column-panel__density">
