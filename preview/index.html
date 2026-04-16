@@ -17117,6 +17117,63 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
         </div>
       </section>
+      <script>
+        /* Wire drag-to-reorder for the static column-panel preview demos.
+           These panels have no AG Grid behind them, so only DOM order is updated. */
+        (function() {
+          var section = document.getElementById('column-panel');
+          if (!section) return;
+          section.querySelectorAll('.ds-column-panel__col-list').forEach(function(list) {
+            list.addEventListener('dragstart', function(e) {
+              var row = e.target.closest('.ds-column-panel__col-row[draggable="true"]');
+              if (!row) return;
+              e.dataTransfer.setData('text/plain', row.getAttribute('data-col-key') || '');
+              e.dataTransfer.effectAllowed = 'move';
+            });
+            list.addEventListener('dragover', function(e) {
+              var row = e.target.closest('.ds-column-panel__col-row[draggable="true"]');
+              if (!row) return;
+              e.preventDefault();
+              list.querySelectorAll('.ds-column-panel__col-row').forEach(function(r) {
+                r.style.outline = '';
+                r.style.outlineOffset = '';
+              });
+              row.style.outline = '2px solid var(--color-border-brand)';
+              row.style.outlineOffset = '-2px';
+            });
+            list.addEventListener('dragleave', function(e) {
+              if (!list.contains(e.relatedTarget)) {
+                list.querySelectorAll('.ds-column-panel__col-row').forEach(function(r) {
+                  r.style.outline = '';
+                  r.style.outlineOffset = '';
+                });
+              }
+            });
+            list.addEventListener('drop', function(e) {
+              e.preventDefault();
+              list.querySelectorAll('.ds-column-panel__col-row').forEach(function(r) {
+                r.style.outline = '';
+                r.style.outlineOffset = '';
+              });
+              var targetRow = e.target.closest('.ds-column-panel__col-row[draggable="true"]');
+              if (!targetRow) return;
+              var draggedColId = e.dataTransfer.getData('text/plain');
+              var targetColId  = targetRow.getAttribute('data-col-key');
+              if (!draggedColId || draggedColId === targetColId) return;
+              var rows = Array.from(list.querySelectorAll('.ds-column-panel__col-row[draggable="true"]'));
+              var fromIndex = rows.findIndex(function(r) { return r.getAttribute('data-col-key') === draggedColId; });
+              var toIndex   = rows.findIndex(function(r) { return r.getAttribute('data-col-key') === targetColId; });
+              if (fromIndex < 0 || toIndex < 0) return;
+              var movedRow = rows[fromIndex];
+              if (fromIndex < toIndex) {
+                list.insertBefore(movedRow, targetRow.nextSibling);
+              } else {
+                list.insertBefore(movedRow, targetRow);
+              }
+            });
+          });
+        })();
+      </script>
 
       <!-- ──────────────────────────────────────────────────────────────────── -->
       <!-- TABLE CONTEXT MENU                                                   -->
@@ -18500,7 +18557,72 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               var row = document.createElement('div');
               row.className = 'ds-column-panel__col-row' + (isSystem ? ' ds-column-panel__col-row--system' : '');
               row.setAttribute('data-col-key', id);
-              if (!isSystem) row.setAttribute('draggable', 'true');
+              if (!isSystem) {
+                row.setAttribute('draggable', 'true');
+
+                /* ── Drag-to-reorder handlers ────────────────────────────── */
+                row.addEventListener('dragstart', function(e) {
+                  e.dataTransfer.setData('text/plain', id);
+                  e.dataTransfer.effectAllowed = 'move';
+                });
+
+                row.addEventListener('dragover', function(e) {
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = 'move';
+                  row.style.outline = '2px solid var(--color-border-brand)';
+                  row.style.outlineOffset = '-2px';
+                });
+
+                row.addEventListener('dragleave', function(e) {
+                  if (!row.contains(e.relatedTarget)) {
+                    row.style.outline = '';
+                    row.style.outlineOffset = '';
+                  }
+                });
+
+                row.addEventListener('drop', function(e) {
+                  e.preventDefault();
+                  row.style.outline = '';
+                  row.style.outlineOffset = '';
+
+                  var draggedColId = e.dataTransfer.getData('text/plain');
+                  var targetColId  = id;
+                  if (draggedColId === targetColId) return;
+
+                  // Derive from/to indices from current DOM order (robust across multiple drags)
+                  var rows = Array.from(list.querySelectorAll('.ds-column-panel__col-row[draggable="true"]'));
+                  var fromIndex = rows.findIndex(function(r) { return r.getAttribute('data-col-key') === draggedColId; });
+                  var toIndex   = rows.findIndex(function(r) { return r.getAttribute('data-col-key') === targetColId; });
+                  if (fromIndex < 0 || toIndex < 0) return;
+
+                  // Reorder DOM for immediate visual feedback
+                  var movedRow  = rows[fromIndex];
+                  var targetRow = rows[toIndex];
+                  if (fromIndex < toIndex) {
+                    list.insertBefore(movedRow, targetRow.nextSibling);
+                  } else {
+                    list.insertBefore(movedRow, targetRow);
+                  }
+
+                  // Map panel index → AG Grid column index using the neighbor-anchor
+                  // approach. Panel rows are a filtered subset of getAllGridColumns()
+                  // (the _sel checkbox col is excluded), so panel index ≠ grid index.
+                  var allGridCols = agSimApi.getColumns ? agSimApi.getColumns() : [];
+                  var panelRows   = Array.from(list.querySelectorAll('.ds-column-panel__col-row'));
+                  var newPos      = panelRows.findIndex(function(r) { return r.getAttribute('data-col-key') === draggedColId; });
+                  var anchorRow   = (toIndex > fromIndex) ? panelRows[newPos - 1] : panelRows[newPos + 1];
+                  var targetGridIndex = -1;
+                  if (anchorRow) {
+                    targetGridIndex = allGridCols.findIndex(function(c) {
+                      return c.getColId() === anchorRow.getAttribute('data-col-key');
+                    });
+                  }
+
+                  if (targetGridIndex >= 0 && agSimApi.moveColumn) {
+                    agSimApi.moveColumn(draggedColId, targetGridIndex);
+                  }
+                });
+              }
 
               /* Checkbox */
               var cb = document.createElement('div');
