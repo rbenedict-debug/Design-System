@@ -3524,5 +3524,354 @@ declare class DsMetricCardComponent {
     static ɵcmp: i0.ɵɵComponentDeclaration<DsMetricCardComponent, "ds-metric-card", never, { "value": { "alias": "value"; "required": false; }; "label": { "alias": "label"; "required": false; }; "icon": { "alias": "icon"; "required": false; }; "trend": { "alias": "trend"; "required": false; }; "trendLabel": { "alias": "trendLabel"; "required": false; }; "variant": { "alias": "variant"; "required": false; }; "loading": { "alias": "loading"; "required": false; }; }, {}, never, never, true, never>;
 }
 
-export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, onfloChartTheme, onfloTheme };
-export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsChartType, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };
+/**
+ * A single selectable option within a filter group or tier.
+ */
+interface FilterOption {
+    id: string;
+    label: string;
+}
+/**
+ * A tier is a sub-section within a filter group.
+ * When `type` is absent the tier renders as a checkbox card grid.
+ * Specialty tiers set `type` and omit `options`.
+ */
+interface FilterTier {
+    id: string;
+    label: string;
+    /** Checkbox card grid (default when `type` is absent). */
+    options?: FilterOption[];
+    /** Specialty tier type — determines which input UI is rendered. */
+    type?: 'date-range' | 'cost-range' | 'numeric-range';
+    /** Slider minimum (cost-range, numeric-range). */
+    min?: number;
+    /** Slider maximum (cost-range, numeric-range). */
+    max?: number;
+    /** Slider step size (cost-range, numeric-range). */
+    step?: number;
+    /** Unit suffix for numeric-range labels, e.g. 'days'. */
+    unit?: string;
+    /** Display label override for the max value, e.g. '32+'. */
+    maxLabel?: string;
+}
+/**
+ * A top-level filter group shown as a nav item.
+ * Two shapes exist: flat (options directly on the group) and tiered (options in tiers).
+ * A third shape `date-preset` renders a single-select preset list.
+ */
+interface FilterGroup {
+    id: string;
+    label: string;
+    /** Material Symbols ligature name, e.g. 'inventory_2'. */
+    icon: string;
+    /** Flat group — options rendered directly with no tier header. */
+    options?: FilterOption[];
+    /** Tiered group — options nested under named tier sections. */
+    tiers?: FilterTier[];
+    /**
+     * `date-preset` — renders `options` as a single-select preset list
+     * plus an expandable custom date range picker.
+     */
+    type?: 'date-preset';
+}
+/** A committed date range selection for a field-specific or custom date range. */
+interface FilterDateRangeSelection {
+    /** Matches FilterTier.id; null for a custom date-range in a date-preset group. */
+    tierId: string | null;
+    /** Formatted display label, e.g. 'Jan 5 – Feb 3'. */
+    label: string;
+    /** ISO date string 'YYYY-MM-DD'. */
+    from?: string;
+    /** ISO date string 'YYYY-MM-DD'. */
+    to?: string;
+    /** Mode used when adding — only set for date-preset custom ranges. */
+    mode?: 'range' | 'single';
+}
+/** A committed cost range selection from a dual-thumb slider tier. */
+interface FilterCostRangeSelection {
+    tierId: string;
+    /** Formatted display label, e.g. '$100 – $4,000'. */
+    label: string;
+    min: number;
+    max: number;
+}
+/** A committed numeric range selection from a dual-thumb slider tier. */
+interface FilterNumericRangeSelection {
+    tierId: string;
+    /** Formatted display label, e.g. '3–14 days'. */
+    label: string;
+    min: number;
+    max: number;
+}
+/**
+ * The committed filter selection state.
+ * Emitted by ds-filter on Apply; consumed by ds-filter-bar; passed to the data layer.
+ */
+interface FilterSelection {
+    /** Static checkbox option IDs. */
+    optionIds: string[];
+    /** Tier/group keys whose selections are EXCLUDED (NOT-filter). */
+    excludedBuckets: string[];
+    /** Field-specific and custom date range selections. */
+    dateRanges: FilterDateRangeSelection[];
+    /** Cost range slider selections. */
+    costRanges: FilterCostRangeSelection[];
+    /** Numeric range slider selections. */
+    numericRanges: FilterNumericRangeSelection[];
+    /** Single-select preset date option IDs (for date-preset groups). */
+    datePresetIds: string[];
+}
+/**
+ * A named saved filter set persisted to localStorage.
+ * Range selections (date, cost, numeric) are excluded from saved sets.
+ */
+interface SavedFilterSet {
+    /** 'fs-{timestamp}', generated on save. */
+    id: string;
+    name: string;
+    /** ISO datetime string. */
+    savedAt: string;
+    /** Static checkbox option IDs — dynamic (range) IDs are excluded. */
+    optionIds: string[];
+    excludedBuckets: string[];
+    /** Preset date option IDs. */
+    datePresetIds: string[];
+}
+/** Empty selection sentinel — use as the default value for the selection input. */
+declare const EMPTY_FILTER_SELECTION: FilterSelection;
+/** Returns the total count of all active selections across all types. */
+declare function getActiveFilterCount(s: FilterSelection): number;
+
+type _ItemKind = 'option' | 'date-preset' | 'date-range' | 'cost-range' | 'numeric-range' | 'custom-date';
+interface _SelectedBucketItem {
+    id: string;
+    label: string;
+    kind: _ItemKind;
+}
+interface _SelectedBucket {
+    key: string;
+    label: string;
+    items: _SelectedBucketItem[];
+}
+/**
+ * Onflo Design System — Filter
+ *
+ * Full-screen filter modal with a three-panel layout:
+ *   Left   — group navigation + search
+ *   Center — option cards, tier accordions, range pickers
+ *   Right  — selected filters summary (dark panel) + saved sets
+ *
+ * Two-way bindings:
+ *   [(open)]      — controls modal visibility
+ *   [(selection)] — committed FilterSelection; syncs on Apply
+ *
+ * Saved sets:
+ *   Provide [savedSetsKey] with a unique localStorage key per context.
+ *   Omit to hide the saved-sets feature entirely.
+ *
+ * @example
+ *   <ds-filter
+ *     [(open)]="filterOpen"
+ *     [groups]="filterGroups"
+ *     [(selection)]="filterSelection"
+ *     [savedSetsKey]="'onflo-filter-sets-assets'"
+ *     (filterCountChange)="filterCount = $event"
+ *   />
+ */
+declare class DsFilterComponent implements OnChanges {
+    /** Filter group definitions. */
+    groups: FilterGroup[];
+    /** Committed selection — two-way bindable via [(selection)]. */
+    selection: FilterSelection;
+    /** Whether the modal is open — two-way bindable via [(open)]. */
+    open: boolean;
+    /**
+     * localStorage key for saved filter sets, e.g. 'onflo-filter-sets-assets'.
+     * When omitted the saved-sets feature is hidden.
+     */
+    savedSetsKey?: string;
+    /** Emits the committed FilterSelection when the user clicks Apply. */
+    selectionChange: EventEmitter<FilterSelection>;
+    /** Emits false when the modal closes. */
+    openChange: EventEmitter<boolean>;
+    /** Emits the total active filter count after every Apply or Clear All. */
+    filterCountChange: EventEmitter<number>;
+    readonly _activeGroupId: i0.WritableSignal<string>;
+    readonly _searchQuery: i0.WritableSignal<string>;
+    readonly _selectedIds: i0.WritableSignal<Set<string>>;
+    readonly _excludedBuckets: i0.WritableSignal<Set<string>>;
+    readonly _dateRanges: i0.WritableSignal<FilterDateRangeSelection[]>;
+    readonly _costRanges: i0.WritableSignal<FilterCostRangeSelection[]>;
+    readonly _numericRanges: i0.WritableSignal<FilterNumericRangeSelection[]>;
+    readonly _datePresetIds: i0.WritableSignal<Set<string>>;
+    readonly _collapsedTiers: i0.WritableSignal<Set<string>>;
+    readonly _collapsedBuckets: i0.WritableSignal<Set<string>>;
+    /** Draft state for date-range tier inputs; keyed by tierId. */
+    readonly _fieldDateDrafts: i0.WritableSignal<Record<string, {
+        from?: string;
+        to?: string;
+    }>>;
+    /** Draft state for cost-range sliders; keyed by tierId. */
+    readonly _costRangeDrafts: i0.WritableSignal<Record<string, {
+        min: number;
+        max: number;
+    }>>;
+    /** Draft state for numeric-range sliders; keyed by tierId. */
+    readonly _numericRangeDrafts: i0.WritableSignal<Record<string, {
+        min: number;
+        max: number;
+    }>>;
+    readonly _activeFilterSetId: i0.WritableSignal<string>;
+    readonly _savedSetsOpen: i0.WritableSignal<boolean>;
+    readonly _savedSets: i0.WritableSignal<SavedFilterSet[]>;
+    readonly _saveNameDraft: i0.WritableSignal<string>;
+    readonly _customDateExpanded: i0.WritableSignal<boolean>;
+    readonly _customDateDraft: i0.WritableSignal<{
+        from?: string;
+        to?: string;
+    }>;
+    readonly activeGroup: i0.Signal<FilterGroup>;
+    readonly draftActiveCount: i0.Signal<number>;
+    /** Cross-group search results — non-empty only when search query is present. */
+    readonly searchResults: i0.Signal<{
+        group: FilterGroup;
+        options: Array<{
+            id: string;
+            label: string;
+        }>;
+    }[]>;
+    /** Buckets of selected items for display in the right panel. */
+    readonly selectedBuckets: i0.Signal<_SelectedBucket[]>;
+    readonly activeSetName: i0.Signal<string>;
+    private readonly _doc;
+    ngOnChanges(changes: SimpleChanges): void;
+    private _initDraftFromSelection;
+    apply(): void;
+    cancel(): void;
+    clearAll(): void;
+    setActiveGroup(groupId: string): void;
+    setSearch(query: string): void;
+    toggleOption(optionId: string): void;
+    isOptionSelected(optionId: string): boolean;
+    toggleBucketExclude(bucketKey: string): void;
+    isBucketExcluded(bucketKey: string): boolean;
+    toggleTierCollapse(tierId: string): void;
+    isTierCollapsed(tierId: string): boolean;
+    toggleBucketCollapse(bucketKey: string): void;
+    isBucketCollapsed(bucketKey: string): boolean;
+    selectDatePreset(presetId: string): void;
+    isDatePresetSelected(presetId: string): boolean;
+    toggleCustomDateExpanded(): void;
+    setCustomDateDraft(field: 'from' | 'to', value: string): void;
+    commitCustomDateRange(): void;
+    setFieldDateDraft(tierId: string, field: 'from' | 'to', value: string): void;
+    commitDateRange(tierId: string): void;
+    getDateDraft(tierId: string, field: 'from' | 'to'): string;
+    setCostRangeDraft(tierId: string, min: number, max: number): void;
+    commitCostRange(tierId: string, min: number, max: number): void;
+    getCostRangeDraft(tierId: string, tier: FilterTier): {
+        min: number;
+        max: number;
+    };
+    setNumericRangeDraft(tierId: string, min: number, max: number): void;
+    commitNumericRange(tierId: string, min: number, max: number, unit?: string, maxLabel?: string): void;
+    getNumericRangeDraft(tierId: string, tier: FilterTier): {
+        min: number;
+        max: number;
+    };
+    removeItem(item: _SelectedBucketItem): void;
+    removeBucket(bucket: _SelectedBucket): void;
+    private _loadSavedSets;
+    private _persistSavedSets;
+    toggleSavedSetsPanel(): void;
+    setSaveNameDraft(name: string): void;
+    saveCurrentSet(): void;
+    updateCurrentSet(): void;
+    loadSavedSet(set: SavedFilterSet): void;
+    deleteSavedSet(id: string, event: Event): void;
+    formatSavedAt(iso: string): string;
+    onEscape(): void;
+    private _close;
+    private _formatDateRangeLabel;
+    /** @internal Used in @for trackBy. */
+    _trackById(_: number, item: {
+        id: string;
+    }): string;
+    /** @internal Used in @for trackBy for buckets. */
+    _trackByKey(_: number, b: _SelectedBucket): string;
+    /** @internal Active selection count for a group — shown as nav badge. */
+    _getGroupActiveCount(groupId: string): number;
+    /** @internal Active option count for a checkbox tier — shown as tier badge. */
+    _getTierActiveCount(tierId: string): number;
+    /** @internal Returns HTML with the query term wrapped in <mark class="search-match">. */
+    _highlightMatch(label: string, query: string): string;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DsFilterComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsFilterComponent, "ds-filter", never, { "groups": { "alias": "groups"; "required": false; }; "selection": { "alias": "selection"; "required": false; }; "open": { "alias": "open"; "required": false; }; "savedSetsKey": { "alias": "savedSetsKey"; "required": false; }; }, { "selectionChange": "selectionChange"; "openChange": "openChange"; "filterCountChange": "filterCountChange"; }, never, never, true, never>;
+}
+
+interface _FilterChip {
+    /** Bucket key — matches keys used in `FilterSelection.excludedBuckets`. */
+    key: string;
+    /** ID of the parent FilterGroup — emitted via (filterClick). */
+    groupId: string;
+    /** Material Symbols ligature name from the group. */
+    icon: string;
+    /** Card primary label — group label (flat/preset groups) or tier label. */
+    primaryLabel: string;
+    /** Card secondary text — comma-joined item labels or a range label. */
+    secondaryText: string;
+    isExcluded: boolean;
+}
+/**
+ * Onflo Design System — Filter Bar
+ *
+ * Applied-filters strip rendered between the table toolbar and the table.
+ * Renders one `ds-card-item` chip per active selection bucket.
+ *
+ * The host element should be hidden when no filters are active:
+ * ```html
+ * <ds-filter-bar [hidden]="filterCount === 0" … />
+ * ```
+ * The component does NOT self-hide — visibility is the consumer's responsibility.
+ *
+ * Clicking a chip's body emits `(filterClick)` with the `groupId` so the
+ * consumer can re-open `ds-filter` scrolled to that group.
+ * Clicking the × button emits `(selectionChange)` with that bucket removed.
+ *
+ * @example
+ *   <ds-filter-bar
+ *     [hidden]="filterCount === 0"
+ *     [selection]="filterSelection"
+ *     [groups]="filterGroups"
+ *     (selectionChange)="filterSelection = $event"
+ *     (filterClick)="filterOpen = true"
+ *   />
+ */
+declare class DsFilterBarComponent {
+    /** The committed selection to render as chips. */
+    selection: FilterSelection;
+    /** Filter group definitions — needed to resolve labels and icons for each chip. */
+    groups: FilterGroup[];
+    /**
+     * Emits when the × button on a chip is clicked.
+     * Payload is the current selection with that bucket fully removed.
+     */
+    selectionChange: EventEmitter<FilterSelection>;
+    /**
+     * Emits the `groupId` when the body of a chip is clicked.
+     * The consumer typically uses this to re-open ds-filter navigated to that group.
+     */
+    filterClick: EventEmitter<string>;
+    get chips(): _FilterChip[];
+    onChipClick(chip: _FilterChip): void;
+    onRemove(chip: _FilterChip, event: Event): void;
+    private _buildChips;
+    private _removeChip;
+    /** @internal trackBy for @for. */
+    _trackByKey(_: number, chip: _FilterChip): string;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DsFilterBarComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsFilterBarComponent, "ds-filter-bar", never, { "selection": { "alias": "selection"; "required": false; }; "groups": { "alias": "groups"; "required": false; }; }, { "selectionChange": "selectionChange"; "filterClick": "filterClick"; }, never, never, true, never>;
+}
+
+export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsFilterBarComponent, DsFilterComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, EMPTY_FILTER_SELECTION, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, getActiveFilterCount, onfloChartTheme, onfloTheme };
+export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsChartType, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, FilterCostRangeSelection, FilterDateRangeSelection, FilterGroup, FilterNumericRangeSelection, FilterOption, FilterSelection, FilterTier, SavedFilterSet, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };

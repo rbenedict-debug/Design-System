@@ -1,6 +1,6 @@
 {
   "name": "@onflo/design-system",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Onflo Design System — tokens, components, and patterns for Angular + .NET Core products",
   "main": "./dist/fesm2022/onflo-design-system.mjs",
   "exports": {

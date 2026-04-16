@@ -153,7 +153,7 @@ export class DsFilterComponent implements OnChanges {
       .map(g => {
         const allOptions: Array<{ id: string; label: string }> = [
           ...(g.options ?? []),
-          ...(g.tiers ?? []).flatMap(t => t.options ?? []),
+          ...(g.tiers ?? []).reduce((acc: Array<{ id: string; label: string }>, t) => acc.concat(t.options ?? []), []),
         ];
         return { group: g, options: allOptions.filter(o => o.label.toLowerCase().includes(q)) };
       })
