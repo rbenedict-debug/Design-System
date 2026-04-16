@@ -1513,6 +1513,27 @@
 .ds-button--outlined.is-error:active:not(:disabled) {
   background: var(--overlay-accent-red-pressed);
 }
+.ds-button--outlined.is-selected {
+  background: var(--color-surface-accent-blue);
+  border-color: var(--color-border-active);
+  color: var(--color-text-brand);
+}
+.ds-button--outlined.is-selected:hover:not(:disabled), .ds-button--outlined.is-selected:focus-visible, .ds-button--outlined.is-selected:active:not(:disabled) {
+  background: var(--color-surface-accent-blue);
+  border-color: var(--color-border-active);
+}
+.ds-button--outlined.is-selected:hover:not(:disabled)::after {
+  background: var(--overlay-hovered);
+}
+.ds-button--outlined.is-selected:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-button--outlined.is-selected:focus-visible::after {
+  background: var(--overlay-focused);
+}
+.ds-button--outlined.is-selected:active:not(:disabled)::after {
+  background: var(--overlay-pressed);
+}
 .ds-button--text {
   background: transparent;
   color: var(--color-text-brand);
@@ -1637,6 +1658,12 @@
     transform: rotate(360deg);
   }
 }
+.ds-button-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
 .mat-mdc-raised-button.ds-button,
 .mat-mdc-outlined-button.ds-button,
 .mat-mdc-text-button.ds-button {
@@ -6891,10 +6918,10 @@
   padding: var(--spacing-sm);
   flex-shrink: 0;
 }
-.ds-column-panel__density .ds-density-toggle {
+.ds-column-panel__density .ds-button-group {
   width: 100%;
 }
-.ds-column-panel__density .ds-density-toggle .ds-density-toggle__btn {
+.ds-column-panel__density .ds-button-group .ds-button {
   flex: 1 0 0;
 }
 .ds-column-panel__col-list {
@@ -7132,50 +7159,6 @@ button.ds-column-panel__section-hd[aria-expanded=false] .ds-column-panel__expand
 
 button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-list {
   display: none;
-}
-
-.ds-density-toggle {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  flex-shrink: 0;
-}
-.ds-density-toggle__btn {
-  appearance: none;
-  -webkit-appearance: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  background: var(--color-surface-page);
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--radius-sm);
-  padding: 0 var(--spacing-md);
-  height: 42px;
-  cursor: pointer;
-  font-family: var(--ref-typescale-label-large-font);
-  font-size: var(--ref-typescale-label-large-size);
-  font-weight: var(--ref-typescale-label-large-weight-prominent);
-  line-height: var(--ref-typescale-label-large-line-height);
-  letter-spacing: var(--ref-typescale-label-large-tracking);
-  color: var(--color-text-primary);
-  white-space: nowrap;
-  position: relative;
-  transition: background 80ms ease, border-color 80ms ease, color 80ms ease;
-}
-.ds-density-toggle__btn:focus {
-  outline: none;
-}
-.ds-density-toggle__btn:focus-visible {
-  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-}
-.ds-density-toggle__btn:hover:not(.is-selected) {
-  background: var(--overlay-hovered);
-}
-.ds-density-toggle__btn.is-selected {
-  background: var(--color-surface-accent-blue);
-  border-color: var(--color-border-active);
-  color: var(--color-text-brand);
 }
 
 .ds-column-panel__picker {
@@ -16757,9 +16740,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                 <!-- 1. Density -->
                 <div class="ds-column-panel__density">
-                  <div class="ds-density-toggle" role="group" aria-label="Row density" style="width: 100%;">
-                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
-                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
+                  <div class="ds-button-group" role="group" aria-label="Row density" style="width: 100%;">
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon is-selected" aria-pressed="true" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon" aria-pressed="false" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
                   </div>
                 </div>
 
@@ -16854,9 +16837,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <div class="ds-column-panel" style="display: flex; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm);">
 
                 <div class="ds-column-panel__density">
-                  <div class="ds-density-toggle" role="group" aria-label="Row density" style="width: 100%;">
-                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
-                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
+                  <div class="ds-button-group" role="group" aria-label="Row density" style="width: 100%;">
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon is-selected" aria-pressed="true" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon" aria-pressed="false" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
                   </div>
                 </div>
 
@@ -16959,9 +16942,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <div class="ds-column-panel" style="display: flex; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm);">
 
                 <div class="ds-column-panel__density">
-                  <div class="ds-density-toggle" role="group" aria-label="Row density" style="width: 100%;">
-                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
-                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
+                  <div class="ds-button-group" role="group" aria-label="Row density" style="width: 100%;">
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon is-selected" aria-pressed="true" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon" aria-pressed="false" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
                   </div>
                 </div>
 
@@ -17040,9 +17023,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <div class="ds-column-panel" style="display: flex; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm);">
 
                 <div class="ds-column-panel__density">
-                  <div class="ds-density-toggle" role="group" aria-label="Row density" style="width: 100%;">
-                    <button type="button" class="ds-density-toggle__btn is-selected" aria-pressed="true" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
-                    <button type="button" class="ds-density-toggle__btn" aria-pressed="false" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
+                  <div class="ds-button-group" role="group" aria-label="Row density" style="width: 100%;">
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon is-selected" aria-pressed="true" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon" aria-pressed="false" style="flex: 1 0 0;"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
                   </div>
                 </div>
 
@@ -17538,9 +17521,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                 <!-- 1. Density -->
                 <div class="ds-column-panel__density">
-                  <div class="ds-density-toggle" role="group" aria-label="Row density" style="width:100%;">
-                    <button type="button" class="ds-density-toggle__btn" id="ag-density-comfort" aria-pressed="false" style="flex:1 0 0;" onclick="agSimSetDensity('comfort',this)"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
-                    <button type="button" class="ds-density-toggle__btn" id="ag-density-compact" aria-pressed="false" style="flex:1 0 0;" onclick="agSimSetDensity('compact',this)"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
+                  <div class="ds-button-group" role="group" aria-label="Row density" style="width:100%;">
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon" id="ag-density-comfort" aria-pressed="false" style="flex:1 0 0;" onclick="agSimSetDensity('comfort',this)"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon" id="ag-density-compact" aria-pressed="false" style="flex:1 0 0;" onclick="agSimSetDensity('compact',this)"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
                   </div>
                 </div>
 
