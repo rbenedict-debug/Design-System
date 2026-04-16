@@ -26,7 +26,7 @@
 //             </div>
 //           </div>
 //         </div>
-//         <aside class="filter-modal__right" data-theme="dark">
+//         <aside class="filter-modal__right">
 //           <div class="filter-modal__selected-header">…</div>
 //           <div class="filter-modal__selected-body">
 //             <ul class="selected-filter-list">
@@ -441,6 +441,11 @@
   line-height: var(--ref-typescale-label-medium-line-height);
   color: var(--color-text-primary);
   padding: 0 var(--spacing-xs);
+
+  > span:first-child {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 .search-result-group__count {
@@ -472,7 +477,13 @@ mark.search-match {
 }
 
 
-// ── Right panel — selected filters (data-theme="dark") ────────────────────────
+// ── Right panel — selected filters (dark navy surface) ────────────────────────
+//
+// The panel sits on --color-surface-accent-navy-bold (#0B3057 in light mode).
+// Tokens designed for light surfaces (--color-text-primary, overlays, etc.) are
+// scoped here to their dark-surface equivalents so every descendant inherits
+// correct legible values without needing data-theme="dark" on the element
+// (which would incorrectly flip the background and inverse tokens too).
 
 .filter-modal__right {
   position: relative;
@@ -482,6 +493,20 @@ mark.search-match {
   flex-direction: column;
   background: var(--color-surface-accent-navy-bold);
   overflow: hidden;
+
+  // Scope light-surface tokens to dark-surface equivalents.
+  --color-text-primary:      var(--color-text-inverse);
+  --color-text-secondary:    var(--color-text-disabled);
+  --color-icon-default:      var(--color-icon-inverse);
+  --color-icon-subtle:       var(--color-icon-disabled);
+  --overlay-hovered:         var(--overlay-inverse-hovered);
+  --overlay-pressed:         var(--overlay-inverse-pressed);
+  --color-surface-secondary: var(--overlay-inverse-hovered);
+  --color-border-subtle:     var(--color-border-subtle-on-dark);
+  --color-surface-error:     var(--color-surface-error-on-dark);
+  --color-text-error:        var(--color-text-error-on-dark);
+  --color-icon-error:        var(--color-icon-error-on-dark);
+  --color-border-error:      var(--color-border-error-on-dark);
 }
 
 .filter-modal__selected-header {
@@ -505,7 +530,8 @@ mark.search-match {
 }
 
 // ds-button--text and ds-button--outlined override for dark navy surface.
-// --color-text-brand is a light-surface token — remap to dark-surface equivalents.
+// --color-text-brand is a light-surface token; --color-text-primary is already
+// scoped to --color-text-inverse (white) on this panel via the root selector above.
 .filter-modal__right .ds-button--text,
 .filter-modal__right .ds-button--outlined {
   color: var(--color-text-primary);

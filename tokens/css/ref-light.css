@@ -23,12 +23,15 @@
   --ref-color-neutral-scrim: rgba(0, 0, 0, 0.4);
   --ref-color-neutral-scroll: rgba(115, 115, 127, 0.3);
   --ref-color-neutral-border-subtle: #E9E9E9;
+  --ref-color-neutral-border-subtle-on-dark: rgba(255, 255, 255, 0.15);
   --ref-color-accent-lightblue-default: #43ADF2;
   --ref-color-accent-lightblue-bg: #EEFAFF;
   --ref-color-accent-darkblue-default: #0B3057;
   --ref-color-accent-darkblue-bg: #EEF2F7;
   --ref-color-accent-red-default: #D70917;
   --ref-color-accent-red-bg: #FFF2F2;
+  --ref-color-accent-red-on-dark:    #FF4D55;
+  --ref-color-accent-red-bg-on-dark: #2A1215;
   --ref-color-accent-green-default: #45A55F;
   --ref-color-accent-green-bg: #EEFCE4;
   --ref-color-accent-yellow-default: #FFBF00;

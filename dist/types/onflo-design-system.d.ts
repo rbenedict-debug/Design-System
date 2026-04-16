@@ -3814,8 +3814,6 @@ interface _FilterChip {
     key: string;
     /** ID of the parent FilterGroup — emitted via (filterClick). */
     groupId: string;
-    /** Material Symbols ligature name from the group. */
-    icon: string;
     /** Card primary label — group label (flat/preset groups) or tier label. */
     primaryLabel: string;
     /** Card secondary text — comma-joined item labels or a range label. */

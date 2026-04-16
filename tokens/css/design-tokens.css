@@ -9,6 +9,7 @@
   /* ── Surface ───────────────────────────────────────── */
   --color-surface-page: var(--ref-color-neutral-surface);
   --color-surface-default: var(--ref-color-neutral-bg-default);
+  --color-surface-secondary: var(--ref-color-neutral-bg-default);
   --color-surface-subtle: var(--ref-color-neutral-bg-soft);
   --color-surface-disabled: var(--ref-color-neutral-bg-disabled);
   --color-surface-nav: var(--ref-color-primary-blue-bg-soft);
@@ -21,6 +22,7 @@
   --color-surface-input: var(--ref-color-neutral-surface);
   --color-surface-input-disabled: var(--ref-color-neutral-bg-disabled);
   --color-surface-error: var(--ref-color-accent-red-bg);
+  --color-surface-error-on-dark: var(--ref-color-accent-red-bg-on-dark);
   --color-surface-warning: var(--ref-color-accent-yellow-bg);
   --color-surface-success: var(--ref-color-accent-green-bg);
   --color-surface-info: var(--ref-color-accent-lightblue-bg);
@@ -55,6 +57,7 @@
   --color-text-on-brand: var(--ref-color-neutral-surface);
   --color-text-link: var(--ref-color-primary-blue-default);
   --color-text-error: var(--ref-color-accent-red-default);
+  --color-text-error-on-dark: var(--ref-color-accent-red-on-dark);
   --color-text-warning: var(--ref-color-neutral-text-default);
   --color-text-success: var(--ref-color-neutral-text-default);
   --color-text-info: var(--ref-color-neutral-text-default);
@@ -67,6 +70,7 @@
   --color-border-primary: var(--ref-color-neutral-border-primary);
   --color-border-secondary: var(--ref-color-neutral-border-soft);
   --color-border-subtle: var(--ref-color-neutral-border-subtle);
+  --color-border-subtle-on-dark: var(--ref-color-neutral-border-subtle-on-dark);
   --color-border-strong: var(--ref-color-neutral-text-soft);
   --color-border-inverse: var(--ref-color-neutral-surface);
   --color-border-accordion: var(--ref-color-accent-accordion-border);
@@ -78,6 +82,7 @@
   --color-border-input-active: var(--ref-color-primary-blue-default);
   --color-border-input-error: var(--ref-color-accent-red-default);
   --color-border-error: var(--ref-color-accent-red-default);
+  --color-border-error-on-dark: var(--ref-color-accent-red-on-dark);
   --color-border-warning: var(--ref-color-accent-yellow-default);
   --color-border-success: var(--ref-color-accent-green-default);
   --color-border-info: var(--ref-color-accent-lightblue-default);
@@ -140,6 +145,7 @@
   --color-icon-nav: var(--ref-color-neutral-text-default);
   --color-icon-nav-active: var(--ref-color-neutral-surface);
   --color-icon-error: var(--ref-color-accent-red-default);
+  --color-icon-error-on-dark: var(--ref-color-accent-red-on-dark);
   --color-icon-warning: var(--ref-color-accent-yellow-default);
   --color-icon-success: var(--ref-color-accent-green-default);
   --color-icon-info: var(--ref-color-accent-lightblue-default);

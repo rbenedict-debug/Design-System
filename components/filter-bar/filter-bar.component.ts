@@ -20,8 +20,6 @@ interface _FilterChip {
   key: string;
   /** ID of the parent FilterGroup — emitted via (filterClick). */
   groupId: string;
-  /** Material Symbols ligature name from the group. */
-  icon: string;
   /** Card primary label — group label (flat/preset groups) or tier label. */
   primaryLabel: string;
   /** Card secondary text — comma-joined item labels or a range label. */
@@ -116,7 +114,6 @@ export class DsFilterBarComponent {
           chips.push({
             key: group.id,
             groupId: group.id,
-            icon: group.icon,
             primaryLabel: group.label,
             secondaryText: presets.map(o => o.label).join(', '),
             isExcluded: excluded.has(group.id),
@@ -127,7 +124,6 @@ export class DsFilterBarComponent {
           chips.push({
             key: 'custom-date',
             groupId: group.id,
-            icon: group.icon,
             primaryLabel: 'Custom Date',
             secondaryText: custom.label,
             isExcluded: excluded.has('custom-date'),
@@ -139,7 +135,6 @@ export class DsFilterBarComponent {
           chips.push({
             key: group.id,
             groupId: group.id,
-            icon: group.icon,
             primaryLabel: group.label,
             secondaryText: items.map(o => o.label).join(', '),
             isExcluded: excluded.has(group.id),
@@ -149,20 +144,19 @@ export class DsFilterBarComponent {
         for (const tier of group.tiers) {
           if (tier.type === 'date-range') {
             const r = s.dateRanges.find(dr => dr.tierId === tier.id);
-            if (r) chips.push({ key: `dr-${tier.id}`, groupId: group.id, icon: group.icon, primaryLabel: tier.label, secondaryText: r.label, isExcluded: excluded.has(`dr-${tier.id}`) });
+            if (r) chips.push({ key: `dr-${tier.id}`, groupId: group.id, primaryLabel: tier.label, secondaryText: r.label, isExcluded: excluded.has(`dr-${tier.id}`) });
           } else if (tier.type === 'cost-range') {
             const r = s.costRanges.find(cr => cr.tierId === tier.id);
-            if (r) chips.push({ key: `cr-${tier.id}`, groupId: group.id, icon: group.icon, primaryLabel: tier.label, secondaryText: r.label, isExcluded: excluded.has(`cr-${tier.id}`) });
+            if (r) chips.push({ key: `cr-${tier.id}`, groupId: group.id, primaryLabel: tier.label, secondaryText: r.label, isExcluded: excluded.has(`cr-${tier.id}`) });
           } else if (tier.type === 'numeric-range') {
             const r = s.numericRanges.find(nr => nr.tierId === tier.id);
-            if (r) chips.push({ key: `nr-${tier.id}`, groupId: group.id, icon: group.icon, primaryLabel: tier.label, secondaryText: r.label, isExcluded: excluded.has(`nr-${tier.id}`) });
+            if (r) chips.push({ key: `nr-${tier.id}`, groupId: group.id, primaryLabel: tier.label, secondaryText: r.label, isExcluded: excluded.has(`nr-${tier.id}`) });
           } else {
             const items = (tier.options ?? []).filter(o => s.optionIds.includes(o.id));
             if (items.length) {
               chips.push({
                 key: tier.id,
                 groupId: group.id,
-                icon: group.icon,
                 primaryLabel: tier.label,
                 secondaryText: items.map(o => o.label).join(', '),
                 isExcluded: excluded.has(tier.id),

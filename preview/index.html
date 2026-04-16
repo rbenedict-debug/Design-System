@@ -30,12 +30,15 @@
       --ref-color-neutral-scrim: rgba(0, 0, 0, 0.4);
       --ref-color-neutral-scroll: rgba(115, 115, 127, 0.3);
       --ref-color-neutral-border-subtle: #E9E9E9;
+      --ref-color-neutral-border-subtle-on-dark: rgba(255, 255, 255, 0.15);
       --ref-color-accent-lightblue-default: #43ADF2;
       --ref-color-accent-lightblue-bg: #EEFAFF;
       --ref-color-accent-darkblue-default: #0B3057;
       --ref-color-accent-darkblue-bg: #EEF2F7;
       --ref-color-accent-red-default: #D70917;
       --ref-color-accent-red-bg: #FFF2F2;
+      --ref-color-accent-red-on-dark:    #FF4D55;
+      --ref-color-accent-red-bg-on-dark: #2A1215;
       --ref-color-accent-green-default: #45A55F;
       --ref-color-accent-green-bg: #EEFCE4;
       --ref-color-accent-yellow-default: #FFBF00;
@@ -153,6 +156,7 @@
       /* ── Semantic design tokens ── */
       --color-surface-page: var(--ref-color-neutral-surface);
       --color-surface-default: var(--ref-color-neutral-bg-default);
+      --color-surface-secondary: var(--ref-color-neutral-bg-default);
       --color-surface-subtle: var(--ref-color-neutral-bg-soft);
       --color-surface-disabled: var(--ref-color-neutral-bg-disabled);
       --color-surface-nav: var(--ref-color-primary-blue-bg-soft);
@@ -165,6 +169,7 @@
       --color-surface-input: var(--ref-color-neutral-surface);
       --color-surface-input-disabled: var(--ref-color-neutral-bg-disabled);
       --color-surface-error: var(--ref-color-accent-red-bg);
+      --color-surface-error-on-dark: var(--ref-color-accent-red-bg-on-dark);
       --color-surface-warning: var(--ref-color-accent-yellow-bg);
       --color-surface-success: var(--ref-color-accent-green-bg);
       --color-surface-info: var(--ref-color-accent-lightblue-bg);
@@ -197,6 +202,7 @@
       --color-text-on-brand: var(--ref-color-neutral-surface);
       --color-text-link: var(--ref-color-primary-blue-default);
       --color-text-error: var(--ref-color-accent-red-default);
+      --color-text-error-on-dark: var(--ref-color-accent-red-on-dark);
       --color-text-warning: var(--ref-color-neutral-text-default);
       --color-text-success: var(--ref-color-neutral-text-default);
       --color-text-info: var(--ref-color-neutral-text-default);
@@ -213,6 +219,7 @@
       --color-icon-nav: var(--ref-color-neutral-text-default);
       --color-icon-nav-active: var(--ref-color-neutral-surface);
       --color-icon-error: var(--ref-color-accent-red-default);
+      --color-icon-error-on-dark: var(--ref-color-accent-red-on-dark);
       --color-icon-warning: var(--ref-color-accent-yellow-default);
       --color-icon-success: var(--ref-color-accent-green-default);
       --color-icon-info: var(--ref-color-accent-lightblue-default);
@@ -228,6 +235,7 @@
       --color-border-primary: var(--ref-color-neutral-border-primary);
       --color-border-secondary: var(--ref-color-neutral-border-soft);
       --color-border-subtle: var(--ref-color-neutral-border-subtle);
+      --color-border-subtle-on-dark: var(--ref-color-neutral-border-subtle-on-dark);
       --color-border-strong: var(--ref-color-neutral-text-soft);
       --color-border-inverse: var(--ref-color-neutral-surface);
       --color-border-accordion: var(--ref-color-accent-accordion-border);
@@ -239,6 +247,7 @@
       --color-border-input-active: var(--ref-color-primary-blue-default);
       --color-border-input-error: var(--ref-color-accent-red-default);
       --color-border-error: var(--ref-color-accent-red-default);
+      --color-border-error-on-dark: var(--ref-color-accent-red-on-dark);
       --color-border-warning: var(--ref-color-accent-yellow-default);
       --color-border-success: var(--ref-color-accent-green-default);
       --color-border-info: var(--ref-color-accent-lightblue-default);
@@ -9345,6 +9354,10 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   color: var(--color-text-primary);
   padding: 0 var(--spacing-xs);
 }
+.search-result-group__label > span:first-child {
+  flex: 1;
+  min-width: 0;
+}
 
 .search-result-group__count {
   display: inline-flex;
@@ -9382,6 +9395,18 @@ mark.search-match {
   flex-direction: column;
   background: var(--color-surface-accent-navy-bold);
   overflow: hidden;
+  --color-text-primary: var(--color-text-inverse);
+  --color-text-secondary: var(--color-text-disabled);
+  --color-icon-default: var(--color-icon-inverse);
+  --color-icon-subtle: var(--color-icon-disabled);
+  --overlay-hovered: var(--overlay-inverse-hovered);
+  --overlay-pressed: var(--overlay-inverse-pressed);
+  --color-surface-secondary: var(--overlay-inverse-hovered);
+  --color-border-subtle: var(--color-border-subtle-on-dark);
+  --color-surface-error: var(--color-surface-error-on-dark);
+  --color-text-error: var(--color-text-error-on-dark);
+  --color-icon-error: var(--color-icon-error-on-dark);
+  --color-border-error: var(--color-border-error-on-dark);
 }
 
 .filter-modal__selected-header {
@@ -16420,7 +16445,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                   <div class="ds-card-item ds-card-item--interactive" style="position:relative;">
                     <div class="ds-card-item__leading">
-                      <span class="ds-icon ds-icon--sm" aria-hidden="true">inventory_2</span>
+                      <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">filter_alt</span>
                     </div>
                     <div class="ds-card-item__body">
                       <div class="ds-card-item__primary">Asset Type</div>
@@ -16436,7 +16461,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                   <div class="ds-card-item ds-card-item--interactive" style="position:relative;">
                     <div class="ds-card-item__leading">
-                      <span class="ds-icon ds-icon--sm" aria-hidden="true">payments</span>
+                      <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">filter_alt</span>
                     </div>
                     <div class="ds-card-item__body">
                       <div class="ds-card-item__primary">Total Cost</div>
@@ -16452,7 +16477,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                   <div class="ds-card-item ds-card-item--interactive" style="position:relative;">
                     <div class="ds-card-item__leading">
-                      <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_month</span>
+                      <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">filter_alt</span>
                     </div>
                     <div class="ds-card-item__body">
                       <div class="ds-card-item__primary">Purchase Date</div>
@@ -16480,7 +16505,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                   <div class="ds-card-item ds-card-item--interactive" style="position:relative;">
                     <div class="ds-card-item__leading">
-                      <span class="ds-icon ds-icon--sm" aria-hidden="true">inventory_2</span>
+                      <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">filter_alt</span>
                     </div>
                     <div class="ds-card-item__body">
                       <div class="ds-card-item__primary">Asset Type</div>
@@ -16496,7 +16521,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                   <div class="ds-card-item ds-card-item--interactive filter-applied-card--excluded" style="position:relative;">
                     <div class="ds-card-item__leading">
-                      <span class="ds-icon ds-icon--sm" aria-hidden="true">account_balance</span>
+                      <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">filter_alt_off</span>
                     </div>
                     <div class="ds-card-item__body">
                       <div class="ds-card-item__primary">Department</div>
@@ -16618,7 +16643,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               </div>
 
               <!-- RIGHT PANEL: selected filters (navy) -->
-              <div class="filter-modal__right" data-theme="dark">
+              <div class="filter-modal__right">
                 <div class="filter-modal__selected-header">
                   <div class="filter-modal__selected-header-row">
                     <h2 class="filter-modal__selected-title">Selected Filters</h2>
@@ -17875,7 +17900,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       return '<div class="ds-card-item ds-card-item--interactive' + excludedCls + '" role="button" tabindex="0"' +
         ' aria-label="' + esc(crumb) + ': ' + items.length + ' filter' + (items.length !== 1 ? 's' : '') + ' selected' + (excluded ? ', excluded' : '') + '. Click to edit."' +
         ' data-group-id="' + esc(meta.groupId) + '">' +
-        '<div class="ds-card-item__leading" aria-hidden="true"><span class="ds-icon ds-icon--filled ds-icon--xs">' + iconName + '</span></div>' +
+        '<div class="ds-card-item__leading" aria-hidden="true"><span class="ds-icon ds-icon--sm ds-icon--filled">' + iconName + '</span></div>' +
         '<div class="ds-card-item__body"><span class="ds-card-item__primary">' + esc(crumb) + '</span>' +
         '<span class="ds-card-item__secondary">' + itemsHtml + '</span></div>' +
         '<div class="ds-card-item__action"><button class="filter-applied-card__remove" type="button" aria-label="Remove all ' + esc(crumb) + ' filters" data-remove-bucket="' + esc(key) + '">' +
@@ -19032,8 +19057,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               </div><!-- /.filter-modal__content -->
             </div><!-- /.filter-modal__left -->
 
-            <!-- Right panel (dark) -->
-            <aside class="filter-modal__right" data-theme="dark" aria-label="Selected filters">
+            <!-- Right panel (dark navy) -->
+            <aside class="filter-modal__right" aria-label="Selected filters">
               <div class="filter-modal__selected-header">
                 <div class="filter-modal__selected-header-row">
                   <h3 class="filter-modal__selected-title">Selected (3)</h3>

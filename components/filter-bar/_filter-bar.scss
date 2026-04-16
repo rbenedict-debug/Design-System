@@ -16,7 +16,8 @@
 //                   [filter-applied-card--excluded]">
 //
 //         <div class="ds-card-item__leading">
-//           <span class="ds-icon">group_icon</span>
+//           <span class="ds-icon ds-icon--sm ds-icon--filled">filter_alt</span>      <!-- included -->
+//           <span class="ds-icon ds-icon--sm ds-icon--filled">filter_alt_off</span>  <!-- excluded -->
 //         </div>
 //
 //         <div class="ds-card-item__body">
