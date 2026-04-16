@@ -16530,22 +16530,1581 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
         <div class="component-demo">
 
-          <!-- Row 1: Trigger -->
+          <!-- Row 1: Context buttons -->
           <div class="demo-row">
             <div class="demo-row-label">Interactive</div>
             <div class="demo-row-items">
-              <button
-                class="ds-button ds-button--outlined ds-button--md"
-                type="button"
-                onclick="openPreviewFilter()"
-              >
+              <button class="ds-button ds-button--outlined ds-button--md" type="button" onclick="dsPreviewFilter.open('assets')">
                 <span class="ds-icon" aria-hidden="true">filter_list</span>
-                Open Filter
+                Assets Table
+              </button>
+              <button class="ds-button ds-button--outlined ds-button--md" type="button" onclick="dsPreviewFilter.open('service')">
+                <span class="ds-icon" aria-hidden="true">filter_list</span>
+                Service Overview
               </button>
             </div>
           </div>
 
+          <!-- Applied filters bar (hidden until filters applied) -->
+          <div id="ds-preview-filter-applied-bar" class="filter-applied-bar" style="display:none; margin-top:8px;">
+            <span class="filter-applied-bar__label">Filters</span>
+            <div class="filter-applied-bar__cards" id="ds-preview-filter-applied-cards" role="group" aria-label="Applied filters"></div>
+          </div>
+
         </div><!-- /.component-demo -->
+
+        <!-- Filter overlay (hidden until opened) -->
+        <div
+          class="filter-overlay"
+          id="ds-preview-filter-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ds-preview-filter-modal-title"
+          hidden
+        >
+          <div class="filter-modal" id="ds-preview-filter-modal">
+
+            <button class="ds-icon-button ds-icon-button--icon filter-modal__close" id="ds-preview-close-modal-btn" aria-label="Close filters">
+              <span class="ds-icon ds-icon--sm">close</span>
+            </button>
+
+            <div class="filter-modal__body">
+
+              <!-- LEFT PANEL -->
+              <div class="filter-modal__left">
+                <div class="filter-modal__header">
+                  <h2 class="filter-modal__title" id="ds-preview-filter-modal-title">Filters</h2>
+                  <div class="ds-input ds-search filter-modal__search" role="search">
+                    <div class="ds-input__field">
+                      <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                      <input
+                        class="ds-input__control"
+                        type="search"
+                        id="ds-preview-filter-search-input"
+                        placeholder="Search filters..."
+                        aria-label="Search all filters"
+                        autocomplete="off"
+                        spellcheck="false"
+                      />
+                      <button
+                        class="ds-input__action"
+                        id="ds-preview-search-clear-btn"
+                        type="button"
+                        aria-label="Clear search"
+                        hidden
+                      >
+                        <span class="ds-icon ds-icon--sm" aria-hidden="true">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="filter-modal__content">
+                  <nav class="filter-modal__nav" id="ds-preview-filter-nav" aria-label="Filter categories">
+                    <!-- JS-rendered -->
+                  </nav>
+                  <div
+                    class="filter-modal__options"
+                    id="ds-preview-filter-options"
+                    role="region"
+                    aria-label="Filter options"
+                    aria-live="polite"
+                  >
+                    <!-- JS-rendered -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- RIGHT PANEL: selected filters (navy) -->
+              <div class="filter-modal__right" data-theme="dark">
+                <div class="filter-modal__selected-header">
+                  <div class="filter-modal__selected-header-row">
+                    <h2 class="filter-modal__selected-title">Selected Filters</h2>
+                  </div>
+                  <div class="filter-modal__selected-header-actions">
+                    <button class="ds-button ds-button--outlined ds-button--xs ds-button--leading-icon filter-saved-sets-toggle-btn" id="ds-preview-saved-sets-toggle-btn" aria-pressed="false">
+                      <span class="ds-icon" aria-hidden="true">bookmark</span>Load Filters
+                    </button>
+                    <button class="ds-button ds-button--text ds-button--xs" id="ds-preview-header-clear-btn" hidden>Clear all</button>
+                  </div>
+                </div>
+
+                <div class="filter-modal__selected-body" id="ds-preview-selected-body">
+                  <div class="filter-active-set-chip" id="ds-preview-active-set-chip" hidden>
+                    <span class="ds-icon" aria-hidden="true" style="font-size:14px;">bookmark</span>
+                    <span class="filter-active-set-chip__name" id="ds-preview-active-set-name"></span>
+                    <button class="filter-active-set-chip__update" id="ds-preview-update-set-btn" aria-label="Update saved set" title="Update saved set" hidden>
+                      <span class="ds-icon" aria-hidden="true">save</span>
+                    </button>
+                  </div>
+
+                  <div class="ds-empty-state" id="ds-preview-selected-empty">
+                    <div class="ds-empty-state__graphic" aria-hidden="true">
+                      <span class="ds-icon ds-icon--xl">filter_alt_off</span>
+                    </div>
+                    <div class="ds-empty-state__body">
+                      <p class="ds-empty-state__heading">No filters selected</p>
+                      <p class="ds-empty-state__description">Pick options from the left panel.</p>
+                    </div>
+                  </div>
+
+                  <ul class="selected-filter-list" id="ds-preview-selected-list" aria-label="Selected filters" hidden></ul>
+                </div>
+
+                <!-- Saved sets overlay panel -->
+                <div class="filter-saved-sets-panel" id="ds-preview-saved-sets-panel" hidden>
+                  <div class="filter-saved-sets-panel__header">
+                    <h2 class="filter-saved-sets-panel__title">Saved Filter Sets</h2>
+                  </div>
+                  <div class="filter-saved-sets-panel__body" id="ds-preview-saved-sets-body">
+                    <!-- JS-rendered -->
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /.filter-modal__body -->
+
+            <!-- FOOTER -->
+            <div class="filter-modal__footer">
+              <div class="filter-modal__footer-summary" id="ds-preview-footer-summary"></div>
+              <div class="filter-modal__footer-actions">
+                <button class="ds-button ds-button--text" id="ds-preview-cancel-btn">Cancel</button>
+                <button class="ds-button ds-button--filled" id="ds-preview-apply-btn">Apply Filters</button>
+              </div>
+            </div>
+
+          </div><!-- /.filter-modal -->
+        </div><!-- /.filter-overlay -->
+
+        <script>
+(function() {
+  'use strict';
+
+  // ── Filter group data ─────────────────────────────────────────
+
+  const FILTER_GROUPS_ASSETS = [
+    {
+      id: 'assets', label: 'Assets', icon: 'devices',
+      tiers: [
+        { id: 'asset-status', label: 'Asset Status', options: [
+          { id: 'as-missing', label: 'Missing' }, { id: 'as-stolen', label: 'Stolen' },
+          { id: 'as-in-transit', label: 'In Transit' }, { id: 'as-in-use', label: 'In Use' },
+          { id: 'as-available', label: 'Available' }, { id: 'as-ready-disposal', label: 'Ready for Disposal' },
+          { id: 'as-disposed', label: 'Disposed' }, { id: 'as-maintenance', label: 'Under Maintenance' },
+          { id: 'as-repair', label: 'Under Repair' }, { id: 'as-pending-audit', label: 'Pending Audit' },
+          { id: 'as-on-loan', label: 'On Loan' }, { id: 'as-decommissioned', label: 'Decommissioned' },
+        ]},
+        { id: 'asset-type', label: 'Asset Type', options: [
+          { id: 'atype-chromebook', label: 'Chromebook' }, { id: 'atype-ipad', label: 'iPad' },
+          { id: 'atype-macbook', label: 'MacBook' }, { id: 'atype-windows-laptop', label: 'Windows Laptop' },
+          { id: 'atype-desktop', label: 'Desktop Computer' }, { id: 'atype-monitor', label: 'Monitor' },
+          { id: 'atype-interactive-display', label: 'Interactive Display' }, { id: 'atype-projector', label: 'Projector' },
+          { id: 'atype-printer', label: 'Printer' }, { id: 'atype-calculator', label: 'Graphing Calculator' },
+          { id: 'atype-hotspot', label: 'Hotspot / MiFi' }, { id: 'atype-headset', label: 'Headset / Headphones' },
+          { id: 'atype-charging-cart', label: 'Charging Cart' }, { id: 'atype-barcode-scanner', label: 'Barcode Scanner' },
+          { id: 'atype-camera', label: 'Camera' },
+        ]},
+        { id: 'asset-sub-type', label: 'Asset Sub-Type', options: [
+          { id: 'ast-student-chromebook', label: 'Student Chromebook' }, { id: 'ast-teacher-chromebook', label: 'Teacher Chromebook' },
+          { id: 'ast-loaner-chromebook', label: 'Loaner Chromebook' }, { id: 'ast-student-ipad', label: 'Student iPad' },
+          { id: 'ast-teacher-ipad', label: 'Teacher iPad' }, { id: 'ast-ipad-keyboard', label: 'iPad with Keyboard Case' },
+          { id: 'ast-student-macbook-air', label: 'Student MacBook Air' }, { id: 'ast-teacher-macbook-pro', label: 'Teacher MacBook Pro' },
+          { id: 'ast-classroom-desktop', label: 'Classroom Desktop' }, { id: 'ast-lab-desktop', label: 'Computer Lab Desktop' },
+          { id: 'ast-staff-laptop', label: 'Staff Laptop' }, { id: 'ast-smartboard', label: 'SMART Board' },
+          { id: 'ast-classroom-projector', label: 'Classroom Projector' }, { id: 'ast-laser-printer', label: 'Laser Printer' },
+          { id: 'ast-color-printer', label: 'Color Inkjet Printer' },
+        ]},
+        { id: 'custom-hierarchy', label: 'Custom Hierarchy', options: [
+          { id: 'ch-1to1', label: '1:1 Initiative Device' }, { id: 'ch-shared-pool', label: 'Shared Pool Device' },
+          { id: 'ch-title1', label: 'Title I Equipment' }, { id: 'ch-idea', label: 'IDEA / Special Ed Equipment' },
+          { id: 'ch-refresh-2024', label: 'Tech Refresh 2024' }, { id: 'ch-refresh-2025', label: 'Tech Refresh 2025' },
+          { id: 'ch-esser', label: 'ESSER Grant Equipment' }, { id: 'ch-lease', label: 'Lease Equipment' },
+          { id: 'ch-after-school', label: 'After School Program' },
+        ]},
+        { id: 'tags', label: 'Tags', options: [
+          { id: 'tag-1to1', label: '1:1 Device' }, { id: 'tag-loaner-pool', label: 'Loaner Pool' },
+          { id: 'tag-repair-queue', label: 'Repair Queue' }, { id: 'tag-needs-case', label: 'Needs Case' },
+          { id: 'tag-ada', label: 'ADA Compliant' }, { id: 'tag-do-not-loan', label: 'Do Not Loan' },
+          { id: 'tag-priority-refresh', label: 'Priority Refresh' }, { id: 'tag-surplus', label: 'Surplus' },
+          { id: 'tag-missing-charger', label: 'Missing Charger' }, { id: 'tag-district-lease', label: 'District Lease' },
+          { id: 'tag-classroom-set', label: 'Classroom Set' },
+        ]},
+        { id: 'manufacturer', label: 'Manufacturer', options: [
+          { id: 'mfr-apple', label: 'Apple' }, { id: 'mfr-dell', label: 'Dell' },
+          { id: 'mfr-hp', label: 'HP' }, { id: 'mfr-lenovo', label: 'Lenovo' },
+          { id: 'mfr-acer', label: 'Acer' }, { id: 'mfr-asus', label: 'ASUS' },
+          { id: 'mfr-samsung', label: 'Samsung' }, { id: 'mfr-microsoft', label: 'Microsoft' },
+          { id: 'mfr-epson', label: 'Epson' }, { id: 'mfr-benq', label: 'BenQ' },
+          { id: 'mfr-smart-tech', label: 'SMART Technologies' }, { id: 'mfr-brother', label: 'Brother' },
+          { id: 'mfr-logitech', label: 'Logitech' }, { id: 'mfr-ti', label: 'Texas Instruments' },
+        ]},
+        { id: 'asset-model', label: 'Asset Model', options: [
+          { id: 'model-cb-hp11', label: 'HP Chromebook 11 G9 EE' }, { id: 'model-cb-hp14', label: 'HP Chromebook 14 G7' },
+          { id: 'model-cb-lenovo300e', label: 'Lenovo 300e Chromebook Gen 3' }, { id: 'model-cb-acer311', label: 'Acer Chromebook 311 C722' },
+          { id: 'model-cb-dell3110', label: 'Dell Chromebook 3110' }, { id: 'model-ipad-10', label: 'iPad (10th Gen)' },
+          { id: 'model-ipad-air5', label: 'iPad Air (5th Gen)' }, { id: 'model-ipad-mini6', label: 'iPad Mini (6th Gen)' },
+          { id: 'model-mba-m2-13', label: 'MacBook Air 13" (M2)' }, { id: 'model-mba-m3', label: 'MacBook Air 15" (M3)' },
+          { id: 'model-dell-lat5430', label: 'Dell Latitude 5430' }, { id: 'model-hp-elite840', label: 'HP EliteBook 840 G9' },
+          { id: 'model-lenovo-e14', label: 'Lenovo ThinkPad E14 Gen 4' }, { id: 'model-sb-mx286', label: 'SMART Board MX286' },
+          { id: 'model-epson-eb-w52', label: 'Epson EB-W52 Projector' },
+        ]},
+      ],
+    },
+    {
+      id: 'assignment', label: 'Assignment', icon: 'person_pin',
+      tiers: [
+        { id: 'assignment-type', label: 'Assignment Type', options: [
+          { id: 'at-person', label: 'Person' }, { id: 'at-building', label: 'Building' },
+          { id: 'at-room', label: 'Room' }, { id: 'at-container', label: 'Container' },
+          { id: 'at-special-area', label: 'Special Area' }, { id: 'at-all-assigned', label: 'All Assigned' },
+          { id: 'at-all-unassigned', label: 'All Unassigned' },
+        ]},
+        { id: 'roles', label: 'Roles', options: [
+          { id: 'role-student', label: 'Student' }, { id: 'role-teacher', label: 'Teacher' },
+          { id: 'role-school-admin', label: 'School Admin' }, { id: 'role-district-admin', label: 'District Admin' },
+          { id: 'role-staff', label: 'Staff' },
+        ]},
+        { id: 'grade', label: 'Grade', options: [
+          { id: 'grade-prek', label: 'Pre-K' }, { id: 'grade-k', label: 'Kindergarten' },
+          { id: 'grade-1', label: 'Grade 1' }, { id: 'grade-2', label: 'Grade 2' },
+          { id: 'grade-3', label: 'Grade 3' }, { id: 'grade-4', label: 'Grade 4' },
+          { id: 'grade-5', label: 'Grade 5' }, { id: 'grade-6', label: 'Grade 6' },
+          { id: 'grade-7', label: 'Grade 7' }, { id: 'grade-8', label: 'Grade 8' },
+          { id: 'grade-9', label: 'Grade 9' }, { id: 'grade-10', label: 'Grade 10' },
+          { id: 'grade-11', label: 'Grade 11' }, { id: 'grade-12', label: 'Grade 12' },
+        ]},
+      ],
+    },
+    {
+      id: 'location', label: 'Location', icon: 'location_on',
+      tiers: [
+        { id: 'region', label: 'Region', options: [
+          { id: 'rgn-north', label: 'North Region' }, { id: 'rgn-south', label: 'South Region' },
+          { id: 'rgn-east', label: 'East Region' }, { id: 'rgn-west', label: 'West Region' },
+          { id: 'rgn-central', label: 'Central Region' },
+        ]},
+        { id: 'campus', label: 'Campus', options: [
+          { id: 'campus-lincoln', label: 'Lincoln Elementary' }, { id: 'campus-central', label: 'Central Elementary' },
+          { id: 'campus-garfield', label: 'Garfield Elementary' }, { id: 'campus-washington', label: 'Washington Middle School' },
+          { id: 'campus-roosevelt', label: 'Roosevelt Middle School' }, { id: 'campus-jefferson', label: 'Jefferson High School' },
+          { id: 'campus-district', label: 'District Office' }, { id: 'campus-depot', label: 'IT Depot' },
+        ]},
+        { id: 'building', label: 'Building', options: [
+          { id: 'bldg-main-lin', label: 'Lincoln \u2013 Main Building' }, { id: 'bldg-annex-lin', label: 'Lincoln \u2013 Annex' },
+          { id: 'bldg-main-was', label: 'Washington \u2013 Main Building' }, { id: 'bldg-gym-was', label: 'Washington \u2013 Gymnasium' },
+          { id: 'bldg-main-jef', label: 'Jefferson \u2013 Main Building' }, { id: 'bldg-stem-jef', label: 'Jefferson \u2013 STEM Wing' },
+          { id: 'bldg-arts-jef', label: 'Jefferson \u2013 Arts Building' }, { id: 'bldg-admin-dist', label: 'District \u2013 Administration Bldg' },
+        ]},
+        { id: 'room', label: 'Room', options: [
+          { id: 'room-101', label: 'Room 101 \u2013 Kindergarten' }, { id: 'room-102', label: 'Room 102 \u2013 Grade 1' },
+          { id: 'room-comp-lab-a', label: 'Computer Lab A' }, { id: 'room-comp-lab-b', label: 'Computer Lab B' },
+          { id: 'room-stem-lab', label: 'STEM Lab' }, { id: 'room-sci-lab', label: 'Science Lab' },
+          { id: 'room-media-ctr', label: 'Library / Media Center' }, { id: 'room-main-office', label: 'Main Office' },
+          { id: 'room-it-dept', label: 'IT Department' }, { id: 'room-conf-a', label: 'Conference Room A' },
+        ]},
+        { id: 'container', label: 'Container', options: [
+          { id: 'cont-ipad-a1', label: 'iPad Cart A-1' }, { id: 'cont-ipad-a2', label: 'iPad Cart A-2' },
+          { id: 'cont-cb-b1', label: 'Chromebook Cart B-1' }, { id: 'cont-cb-b2', label: 'Chromebook Cart B-2' },
+          { id: 'cont-cb-b3', label: 'Chromebook Cart B-3' }, { id: 'cont-loaner-1', label: 'Loaner Cart 1' },
+          { id: 'cont-loaner-2', label: 'Loaner Cart 2' }, { id: 'cont-storage-a', label: 'Storage Box A' },
+          { id: 'cont-storage-b', label: 'Storage Box B' },
+        ]},
+        { id: 'special-area', label: 'Special Area', options: [
+          { id: 'sa-library', label: 'Library / Media Center' }, { id: 'sa-gymnasium', label: 'Gymnasium' },
+          { id: 'sa-cafeteria', label: 'Cafeteria' }, { id: 'sa-auditorium', label: 'Auditorium' },
+          { id: 'sa-it-depot', label: 'IT Depot / Warehouse' }, { id: 'sa-after-school', label: 'After School Room' },
+          { id: 'sa-special-ed', label: 'Special Education Center' }, { id: 'sa-counseling', label: 'Counseling Suite' },
+        ]},
+      ],
+    },
+    {
+      id: 'financial', label: 'Financial', icon: 'attach_money',
+      tiers: [
+        { id: 'supplier', label: 'Supplier', options: [
+          { id: 'sup-cdwg', label: 'CDW-G' }, { id: 'sup-shi', label: 'SHI Government Solutions' },
+          { id: 'sup-apple-edu', label: 'Apple Education' }, { id: 'sup-insight', label: 'Insight Public Sector' },
+          { id: 'sup-connection', label: 'Connection (PCM Gov)' }, { id: 'sup-amazon-biz', label: 'Amazon Business' },
+          { id: 'sup-bbedu', label: 'Best Buy Education' }, { id: 'sup-zones', label: 'Zones' },
+          { id: 'sup-bh', label: 'B&H Photo / Video' },
+        ]},
+        { id: 'funding-source', label: 'Funding Source', options: [
+          { id: 'fund-general', label: 'General Fund' }, { id: 'fund-title1', label: 'Title I' },
+          { id: 'fund-title4', label: 'Title IV' }, { id: 'fund-erate', label: 'E-Rate' },
+          { id: 'fund-idea', label: 'IDEA' }, { id: 'fund-esser1', label: 'ESSER I' },
+          { id: 'fund-esser2', label: 'ESSER II' }, { id: 'fund-esser3', label: 'ESSER III' },
+          { id: 'fund-state-grant', label: 'State Technology Grant' }, { id: 'fund-bond', label: 'Local Bond Measure' },
+          { id: 'fund-pta', label: 'PTA / Booster Donation' },
+        ]},
+        { id: 'total-cost', label: 'Total Cost', type: 'cost-range', min: 0, max: 5000, step: 50 },
+      ],
+    },
+    {
+      id: 'dates', label: 'Dates', icon: 'calendar_today',
+      tiers: [
+        { id: 'date-created',  label: 'Created Date',      type: 'date-range' },
+        { id: 'date-purchase', label: 'Purchase Date',     type: 'date-range' },
+        { id: 'date-delivery', label: 'Delivery Date',     type: 'date-range' },
+        { id: 'date-warranty', label: 'Warranty End Date', type: 'date-range' },
+      ],
+    },
+    {
+      id: 'loans', label: 'Loans', icon: 'swap_horiz',
+      tiers: [
+        { id: 'loan-status', label: 'Loan Status', options: [
+          { id: 'ls-loaned', label: 'Loaned' }, { id: 'ls-available', label: 'Available for Loan' },
+          { id: 'ls-not-avail', label: 'Not Available for Loan' },
+        ]},
+        { id: 'date-loan-on',     label: 'Loan On',     type: 'date-range' },
+        { id: 'date-loan-expiry', label: 'Loan Expiry', type: 'date-range' },
+      ],
+    },
+  ];
+
+  const FILTER_GROUPS_SERVICE_OVERVIEW = [
+    {
+      id: 'dates', label: 'Date', icon: 'calendar_today', type: 'date-preset',
+      options: [
+        { id: 'dp-this-week',        label: 'This week' },
+        { id: 'dp-7days',            label: 'Last 7 days' },
+        { id: 'dp-this-month',       label: 'This month' },
+        { id: 'dp-30days',           label: 'Last 30 days' },
+        { id: 'dp-90days',           label: 'Last 90 days' },
+        { id: 'dp-cur-school-year',  label: 'Current school year' },
+        { id: 'dp-last-school-year', label: 'Last school year' },
+        { id: 'dp-all-time',         label: 'All time' },
+      ],
+    },
+    {
+      id: 'ticket', label: 'Ticket', icon: 'confirmation_number',
+      tiers: [
+        { id: 'ticket-type', label: 'Ticket Type', options: [
+          { id: 'tt-question', label: 'Question' }, { id: 'tt-comment', label: 'Comment' },
+          { id: 'tt-suggestion', label: 'Suggestion' }, { id: 'tt-concern', label: 'Concern' },
+          { id: 'tt-compliment', label: 'Compliment' },
+        ]},
+        { id: 'ticket-status', label: 'Ticket Status', options: [
+          { id: 'ts-critical', label: 'Critical' }, { id: 'ts-p1-high', label: 'P1 High' },
+          { id: 'ts-p2-normal', label: 'P2 Normal' }, { id: 'ts-p3-low', label: 'P3 Low' },
+        ]},
+        { id: 'ticket-age', label: 'Ticket Age', type: 'numeric-range', min: 0, max: 32, step: 1, unit: 'days', maxLabel: '32+' },
+        { id: 'cx-score', label: 'CX Score', type: 'numeric-range', min: 0, max: 10, step: 1, unit: '' },
+        { id: 'ticket-owner', label: 'Ticket Owner', options: [
+          { id: 'to-sarah-chen', label: 'Sarah Chen' }, { id: 'to-marcus-hayes', label: 'Marcus Hayes' },
+          { id: 'to-priya-patel', label: 'Priya Patel' }, { id: 'to-james-okonkwo', label: 'James Okonkwo' },
+          { id: 'to-linda-reyes', label: 'Linda Reyes' }, { id: 'to-derek-wu', label: 'Derek Wu' },
+          { id: 'to-unassigned', label: 'Unassigned' },
+        ]},
+        { id: 'svc-tags', label: 'Tags', options: [
+          { id: 'stag-escalated', label: 'Escalated' }, { id: 'stag-follow-up', label: 'Follow-up Required' },
+          { id: 'stag-after-hours', label: 'After Hours' }, { id: 'stag-parent-cb', label: 'Parent Callback' },
+          { id: 'stag-data-request', label: 'Data Request' }, { id: 'stag-tech-issue', label: 'Tech Issue' },
+          { id: 'stag-transport', label: 'Transportation' }, { id: 'stag-covid', label: 'COVID-Related' },
+        ]},
+      ],
+    },
+    {
+      id: 'customer', label: 'Customer', icon: 'person',
+      tiers: [
+        { id: 'customer-type', label: 'Customer Type', options: [
+          { id: 'ct-student', label: 'Student' }, { id: 'ct-employee', label: 'Employee' },
+          { id: 'ct-parent', label: 'Parent / Guardian' }, { id: 'ct-community', label: 'Community Member' },
+          { id: 'ct-other', label: 'Other' }, { id: 'ct-volunteer', label: 'Volunteer' },
+          { id: 'ct-vendor', label: 'Vendor' }, { id: 'ct-board', label: 'Board Member' },
+        ]},
+        { id: 'language', label: 'Language', options: [
+          { id: 'lang-ar', label: 'Arabic' }, { id: 'lang-zh', label: 'Chinese (Simplified)' },
+          { id: 'lang-en', label: 'English' }, { id: 'lang-fr', label: 'French' },
+          { id: 'lang-hi', label: 'Hindi' }, { id: 'lang-pl', label: 'Polish' },
+          { id: 'lang-ru', label: 'Russian' }, { id: 'lang-so', label: 'Somali' },
+          { id: 'lang-es', label: 'Spanish' }, { id: 'lang-uk', label: 'Ukrainian' },
+          { id: 'lang-ur', label: 'Urdu' },
+        ]},
+      ],
+    },
+    {
+      id: 'topic', label: 'Topic', icon: 'layers',
+      tiers: [
+        { id: 'topic-academics', label: 'Academics', options: [
+          { id: 'top-grades', label: 'Grades & Report Cards' }, { id: 'top-curriculum', label: 'Curriculum Questions' },
+          { id: 'top-hw-help', label: 'Homework Help' }, { id: 'top-testing', label: 'Standardized Testing' },
+          { id: 'top-special-ed', label: 'Special Education' },
+        ]},
+        { id: 'topic-enrollment', label: 'Enrollment & Attendance', options: [
+          { id: 'top-enroll', label: 'Enrollment Process' }, { id: 'top-withdrawal', label: 'Withdrawal / Transfer' },
+          { id: 'top-attendance', label: 'Attendance Questions' }, { id: 'top-tardies', label: 'Tardies & Absences' },
+        ]},
+        { id: 'topic-tech', label: 'Technology', options: [
+          { id: 'top-device', label: 'Device Issue' }, { id: 'top-login', label: 'Login / Password Reset' },
+          { id: 'top-app', label: 'App / Software Access' }, { id: 'top-wifi', label: 'Wi-Fi / Connectivity' },
+        ]},
+        { id: 'topic-facilities', label: 'Facilities & Safety', options: [
+          { id: 'top-facility', label: 'Facility Concern' }, { id: 'top-safety', label: 'Safety / Bullying' },
+          { id: 'top-food', label: 'Food Services' }, { id: 'top-transport', label: 'Transportation' },
+        ]},
+      ],
+    },
+    {
+      id: 'routing', label: 'Routing', icon: 'route',
+      tiers: [
+        { id: 'entry-point', label: 'Entry Point', options: [
+          { id: 'ep-website', label: 'District Website' }, { id: 'ep-email', label: 'Email' },
+          { id: 'ep-phone', label: 'Phone' }, { id: 'ep-recorder', label: 'Recorder' },
+          { id: 'ep-cx-app', label: 'Customer App' }, { id: 'ep-text', label: 'Text' },
+          { id: 'ep-chatbot', label: 'Chatbot' }, { id: 'ep-live-chat', label: 'Live Chat' },
+          { id: 'ep-global', label: 'Global Ticket' }, { id: 'ep-portal', label: 'Customer Portal' },
+        ]},
+        { id: 'landing-page', label: 'Landing Page', options: [
+          { id: 'lp-home', label: 'Homepage' }, { id: 'lp-it', label: 'IT Support' },
+          { id: 'lp-hr', label: 'Human Resources' }, { id: 'lp-registrar', label: 'Registrar' },
+          { id: 'lp-finance', label: 'Finance' }, { id: 'lp-nutrition', label: 'Nutrition Services' },
+          { id: 'lp-transport', label: 'Transportation' }, { id: 'lp-comm', label: 'Communications' },
+        ]},
+        { id: 'tab', label: 'Tab', options: [
+          { id: 'tab-general', label: 'General' }, { id: 'tab-academic', label: 'Academic' },
+          { id: 'tab-it', label: 'IT / Tech Support' }, { id: 'tab-hr', label: 'HR' },
+          { id: 'tab-facilities', label: 'Facilities' }, { id: 'tab-parents', label: 'Parents' },
+        ]},
+      ],
+    },
+    {
+      id: 'actions', label: 'Actions', icon: 'task_alt',
+      tiers: [
+        { id: 'action-taken', label: 'Action Taken', options: [
+          { id: 'act-phone', label: 'Phone Call' }, { id: 'act-blog', label: 'Blog Post' },
+          { id: 'act-email', label: 'Email' }, { id: 'act-letter', label: 'Letter' },
+          { id: 'act-meeting', label: 'In-Person Meeting' }, { id: 'act-newsletter', label: 'Newsletter' },
+          { id: 'act-oped', label: 'Op Ed' }, { id: 'act-speech', label: 'Speech' },
+          { id: 'act-other', label: 'Other' }, { id: 'act-none', label: 'None' },
+        ]},
+      ],
+    },
+  ];
+
+  // ── Context configuration ─────────────────────────────────────
+  const CONTEXTS = {
+    assets:  { label: 'Assets Table',     groups: FILTER_GROUPS_ASSETS,           savedSetsKey: 'onflo-ds-preview-filter-sets-assets'  },
+    service: { label: 'Service Overview', groups: FILTER_GROUPS_SERVICE_OVERVIEW,  savedSetsKey: 'onflo-ds-preview-filter-sets-service' },
+  };
+
+  let activeContext      = 'assets';
+  let activeFilterGroups = CONTEXTS[activeContext].groups;
+
+  // ── Build flat option lookup ──────────────────────────────────
+  function buildOptionMeta(groups) {
+    const map = new Map();
+    groups.forEach(group => {
+      if (group.options) {
+        group.options.forEach(opt => {
+          map.set(opt.id, { groupId: group.id, groupLabel: group.label, tierId: null, tierLabel: null, label: opt.label });
+        });
+      } else if (group.tiers) {
+        group.tiers.forEach(tier => {
+          if (!tier.options) return;
+          tier.options.forEach(opt => {
+            map.set(opt.id, { groupId: group.id, groupLabel: group.label, tierId: tier.id, tierLabel: tier.label, label: opt.label });
+          });
+        });
+      }
+    });
+    return map;
+  }
+
+  let OPTION_META = buildOptionMeta(activeFilterGroups);
+
+  // ── Application state ─────────────────────────────────────────
+  const BUCKET_AUTO_COLLAPSE_THRESHOLD = 4;
+
+  const state = {
+    activeGroupId:  activeFilterGroups[0]?.id ?? null,
+    searchQuery:    '',
+    selected:       new Set(),
+    excludedBuckets: new Set(),
+    collapsedTiers: new Set(),
+    expandedSearchGroups: new Set(),
+    collapsedSelectedBuckets: new Set(),
+    expandedSelectedBuckets:  new Set(),
+    fieldDateDrafts: {},
+    costRangeDraft: { min: null, max: null },
+    numericRangeDrafts: {},
+    datePresetCustomOpen: false,
+    dateRangeDraft:      { start: null, end: null },
+    datePickerViewYear:  new Date().getFullYear(),
+    datePickerViewMonth: new Date().getMonth(),
+    datePickerMode:      'range',
+    calendarOpen:        false,
+    activeDateInput:     'start',
+    activeFilterSetId:   null,
+    savedSetsOpen:       false,
+  };
+
+  // ── DOM refs (all using ds-preview- prefixed IDs) ─────────────
+  function $id(id) { return document.getElementById(id); }
+  const overlay        = $id('ds-preview-filter-overlay');
+  const modal          = $id('ds-preview-filter-modal');
+  const navEl          = $id('ds-preview-filter-nav');
+  const optionsEl      = $id('ds-preview-filter-options');
+  const selectedEmpty  = $id('ds-preview-selected-empty');
+  const selectedList   = $id('ds-preview-selected-list');
+  const searchInput    = $id('ds-preview-filter-search-input');
+  const searchClearBtn = $id('ds-preview-search-clear-btn');
+  const headerClearBtn     = $id('ds-preview-header-clear-btn');
+  const footerSummary      = $id('ds-preview-footer-summary');
+  const savedSetsPanel     = $id('ds-preview-saved-sets-panel');
+  const savedSetsBody      = $id('ds-preview-saved-sets-body');
+  const activeSetChip      = $id('ds-preview-active-set-chip');
+  const activeSetNameEl    = $id('ds-preview-active-set-name');
+  const updateSetBtnEl     = $id('ds-preview-update-set-btn');
+
+  // ── Utility ───────────────────────────────────────────────────
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function highlightMatch(text, query) {
+    if (!query) return esc(text);
+    const i = text.toLowerCase().indexOf(query.toLowerCase());
+    if (i < 0) return esc(text);
+    return esc(text.slice(0, i)) +
+      '<mark class="search-match">' + esc(text.slice(i, i + query.length)) + '</mark>' +
+      esc(text.slice(i + query.length));
+  }
+
+  function getGroupCount(groupId) {
+    let n = 0;
+    state.selected.forEach(id => { const m = OPTION_META.get(id); if (m && m.groupId === groupId) n++; });
+    return n;
+  }
+
+  function getTierCount(tierId) {
+    let n = 0;
+    state.selected.forEach(id => { const m = OPTION_META.get(id); if (m && m.tierId === tierId) n++; });
+    return n;
+  }
+
+  function getBreadcrumb(meta) {
+    return meta.tierLabel ? meta.groupLabel + ' \u203a ' + meta.tierLabel : meta.groupLabel;
+  }
+
+  function getBucketKey(meta) { return meta.tierId ?? meta.groupId; }
+
+  const GRID_SPACERS = Array.from({ length: 3 }, () =>
+    '<div class="filter-card-spacer" aria-hidden="true"></div>'
+  ).join('');
+
+  // ── Date utilities ────────────────────────────────────────────
+  const MONTH_NAMES_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function formatISODateLabel(iso) {
+    if (!iso) return '';
+    const [y, m, d] = iso.split('-').map(Number);
+    return MONTH_NAMES_SHORT[m - 1] + ' ' + d + ', ' + y;
+  }
+
+  function formatFieldDateRangeLabel(from, to) {
+    if (from && to)  return formatISODateLabel(from) + ' \u2013 ' + formatISODateLabel(to);
+    if (from)        return 'From ' + formatISODateLabel(from);
+    if (to)          return 'Until ' + formatISODateLabel(to);
+    return '';
+  }
+
+  function formatCostLabel(min, max, tierMin, tierMax) {
+    if (min === tierMin && max === tierMax) return 'Any cost';
+    if (min === tierMin) return 'Up to $' + max.toLocaleString();
+    if (max === tierMax) return '$' + min.toLocaleString() + ' and up';
+    return '$' + min.toLocaleString() + ' \u2013 $' + max.toLocaleString();
+  }
+
+  function formatNumericRangeLabel(min, max, tierMin, tierMax, unit, maxLabel) {
+    const u      = unit ? ' ' + unit : '';
+    const maxStr = (max === tierMax && maxLabel) ? maxLabel : String(max);
+    if (min === tierMin && max === tierMax) return unit ? 'Any ' + unit : 'Any';
+    return min + '\u2013' + maxStr + u;
+  }
+
+  // ── HTML builders ─────────────────────────────────────────────
+  function buildCard(opt, query) {
+    query = query || '';
+    const selected = state.selected.has(opt.id);
+    return '<button class="filter-card' + (selected ? ' filter-card--selected' : '') +
+      '" data-option-id="' + opt.id + '" aria-pressed="' + selected + '">' +
+      '<span>' + highlightMatch(opt.label, query) + '</span>' +
+      '<span class="ds-icon ds-icon--sm filter-card__check" aria-hidden="true">check</span>' +
+      '</button>';
+  }
+
+  function buildTierSection(tier) {
+    const collapsed = state.collapsedTiers.has(tier.id);
+
+    if (tier.type === 'date-range') {
+      const appliedId   = 'dr-' + tier.id;
+      const applied     = state.selected.has(appliedId);
+      const appliedMeta = applied ? OPTION_META.get(appliedId) : null;
+      const draft       = state.fieldDateDrafts[tier.id] || { from: '', to: '' };
+      const canApply    = !!(draft.from || draft.to);
+      const badge       = collapsed && applied ? '<span class="filter-tier__badge" aria-label="1 selected">1</span>' : '';
+      const body = collapsed ? '' : '<div class="filter-tier__body"><div class="filter-date-field" data-tier-id="' + tier.id + '">' +
+        '<div class="filter-date-field__row">' +
+        '<div class="filter-date-field__group"><label class="filter-date-field__label" for="dff-from-' + tier.id + '">From</label>' +
+        '<div class="ds-input"><div class="ds-input__field"><input class="ds-input__control" type="date" id="dff-from-' + tier.id + '" data-date-field-from="' + tier.id + '" value="' + esc(draft.from) + '"></div></div></div>' +
+        '<div class="filter-date-field__group"><label class="filter-date-field__label" for="dff-to-' + tier.id + '">To</label>' +
+        '<div class="ds-input"><div class="ds-input__field"><input class="ds-input__control" type="date" id="dff-to-' + tier.id + '" data-date-field-to="' + tier.id + '" value="' + esc(draft.to) + '"></div></div></div>' +
+        '</div><div class="filter-date-field__actions">' +
+        (applied ? '<button class="ds-button ds-button--text ds-button--sm" data-clear-date-field="' + tier.id + '" type="button">Clear</button>' : '') +
+        '<button class="ds-button ds-button--filled ds-button--sm" data-apply-date-field="' + tier.id + '" type="button"' + (canApply ? '' : ' disabled') + '>Apply</button>' +
+        '</div>' +
+        (applied ? '<div class="filter-date-field__applied"><span class="ds-icon ds-icon--sm" aria-hidden="true">check_circle</span> ' + esc(appliedMeta.label) + '</div>' : '') +
+        '</div></div>';
+      return '<div class="filter-tier" data-tier-id="' + tier.id + '">' +
+        '<div class="filter-tier__top-row"><button class="filter-tier__header" aria-expanded="' + !collapsed + '" data-tier-toggle="' + tier.id + '">' +
+        '<span>' + esc(tier.label) + '</span>' +
+        '<span class="ds-icon ds-icon--sm ds-icon--filled filter-tier__chevron" aria-hidden="true">arrow_drop_down</span>' +
+        '<span class="filter-tier__end">' + badge + '</span></button></div>' + body + '</div>';
+    }
+
+    if (tier.type === 'cost-range') {
+      const appliedId = 'cr-' + tier.id;
+      const applied   = state.selected.has(appliedId);
+      const tierMin   = tier.min ?? 0;
+      const tierMax   = tier.max ?? 5000;
+      const step      = tier.step ?? 50;
+      const curMin    = state.costRangeDraft.min !== null ? state.costRangeDraft.min : tierMin;
+      const curMax    = state.costRangeDraft.max !== null ? state.costRangeDraft.max : tierMax;
+      const minPct    = ((curMin - tierMin) / (tierMax - tierMin) * 100).toFixed(1);
+      const maxPct    = ((curMax - tierMin) / (tierMax - tierMin) * 100).toFixed(1);
+      const badge     = collapsed && applied ? '<span class="filter-tier__badge" aria-label="1 selected">1</span>' : '';
+      const body = collapsed ? '' : '<div class="filter-tier__body"><div class="filter-cost-range" data-tier-id="' + tier.id + '">' +
+        '<div class="filter-cost-range__values"><span class="filter-cost-range__value" id="cr-min-val-' + tier.id + '">$' + curMin.toLocaleString() + '</span>' +
+        '<span class="filter-cost-range__dash">\u2013</span><span class="filter-cost-range__value" id="cr-max-val-' + tier.id + '">$' + curMax.toLocaleString() + '</span></div>' +
+        '<div class="filter-cost-range__slider-wrap" id="cr-wrap-' + tier.id + '" style="--cr-min:' + minPct + '%;--cr-max:' + maxPct + '%">' +
+        '<div class="filter-cost-range__track" aria-hidden="true"><div class="filter-cost-range__fill"></div></div>' +
+        '<input type="range" class="filter-cost-range__thumb filter-cost-range__thumb--min" id="cr-thumb-min-' + tier.id + '" min="' + tierMin + '" max="' + tierMax + '" step="' + step + '" value="' + curMin + '" data-cost-min data-cost-tier="' + tier.id + '" data-cost-tier-min="' + tierMin + '" data-cost-tier-max="' + tierMax + '" aria-label="Minimum ' + esc(tier.label) + '">' +
+        '<input type="range" class="filter-cost-range__thumb filter-cost-range__thumb--max" id="cr-thumb-max-' + tier.id + '" min="' + tierMin + '" max="' + tierMax + '" step="' + step + '" value="' + curMax + '" data-cost-max data-cost-tier="' + tier.id + '" data-cost-tier-min="' + tierMin + '" data-cost-tier-max="' + tierMax + '" aria-label="Maximum ' + esc(tier.label) + '">' +
+        '</div><div class="filter-cost-range__bounds"><span>$' + tierMin.toLocaleString() + '</span><span>$' + tierMax.toLocaleString() + '</span></div>' +
+        '<div class="filter-cost-range__actions">' +
+        (applied ? '<button class="ds-button ds-button--text ds-button--sm" data-clear-cost-range="' + tier.id + '" type="button">Clear</button>' : '') +
+        '<button class="ds-button ds-button--filled ds-button--sm" data-apply-cost-range="' + tier.id + '" type="button">Apply</button>' +
+        '</div>' +
+        (applied ? '<div class="filter-date-field__applied"><span class="ds-icon ds-icon--sm" aria-hidden="true">check_circle</span> ' + esc(OPTION_META.get(appliedId)?.label ?? '') + '</div>' : '') +
+        '</div></div>';
+      return '<div class="filter-tier" data-tier-id="' + tier.id + '">' +
+        '<div class="filter-tier__top-row"><button class="filter-tier__header" aria-expanded="' + !collapsed + '" data-tier-toggle="' + tier.id + '">' +
+        '<span>' + esc(tier.label) + '</span>' +
+        '<span class="ds-icon ds-icon--sm ds-icon--filled filter-tier__chevron" aria-hidden="true">arrow_drop_down</span>' +
+        '<span class="filter-tier__end">' + badge + '</span></button></div>' + body + '</div>';
+    }
+
+    if (tier.type === 'numeric-range') {
+      const appliedId  = 'nr-' + tier.id;
+      const applied    = state.selected.has(appliedId);
+      const tierMin    = tier.min ?? 0;
+      const tierMax    = tier.max ?? 100;
+      const step       = tier.step ?? 1;
+      const draft      = state.numericRangeDrafts[tier.id];
+      const curMin     = draft?.min !== null && draft?.min !== undefined ? draft.min : tierMin;
+      const curMax     = draft?.max !== null && draft?.max !== undefined ? draft.max : tierMax;
+      const minPct     = ((curMin - tierMin) / (tierMax - tierMin) * 100).toFixed(1);
+      const maxPct     = ((curMax - tierMin) / (tierMax - tierMin) * 100).toFixed(1);
+      const u          = tier.unit ? ' ' + tier.unit : '';
+      const maxBound   = tier.maxLabel ?? String(tierMax);
+      const curMaxDisp = curMax === tierMax && tier.maxLabel ? tier.maxLabel : String(curMax);
+      const badge      = collapsed && applied ? '<span class="filter-tier__badge" aria-label="1 selected">1</span>' : '';
+      const body = collapsed ? '' : '<div class="filter-tier__body"><div class="filter-numeric-range" data-tier-id="' + tier.id + '">' +
+        '<div class="filter-numeric-range__values"><span class="filter-numeric-range__value" id="nr-min-val-' + tier.id + '">' + curMin + u + '</span>' +
+        '<span class="filter-numeric-range__dash">\u2013</span><span class="filter-numeric-range__value" id="nr-max-val-' + tier.id + '">' + curMaxDisp + u + '</span></div>' +
+        '<div class="filter-numeric-range__slider-wrap" id="nr-wrap-' + tier.id + '" style="--cr-min:' + minPct + '%;--cr-max:' + maxPct + '%">' +
+        '<div class="filter-numeric-range__track" aria-hidden="true"><div class="filter-numeric-range__fill"></div></div>' +
+        '<input type="range" class="filter-numeric-range__thumb filter-numeric-range__thumb--min" id="nr-thumb-min-' + tier.id + '" min="' + tierMin + '" max="' + tierMax + '" step="' + step + '" value="' + curMin + '" data-nr-min data-nr-tier="' + tier.id + '" data-nr-tier-min="' + tierMin + '" data-nr-tier-max="' + tierMax + '" aria-label="Minimum ' + esc(tier.label) + '">' +
+        '<input type="range" class="filter-numeric-range__thumb filter-numeric-range__thumb--max" id="nr-thumb-max-' + tier.id + '" min="' + tierMin + '" max="' + tierMax + '" step="' + step + '" value="' + curMax + '" data-nr-max data-nr-tier="' + tier.id + '" data-nr-tier-min="' + tierMin + '" data-nr-tier-max="' + tierMax + '" aria-label="Maximum ' + esc(tier.label) + '">' +
+        '</div><div class="filter-numeric-range__bounds"><span>' + tierMin + u + '</span><span>' + maxBound + u + '</span></div>' +
+        '<div class="filter-numeric-range__actions">' +
+        (applied ? '<button class="ds-button ds-button--text ds-button--sm" data-clear-nr="' + tier.id + '" type="button">Clear</button>' : '') +
+        '<button class="ds-button ds-button--filled ds-button--sm" data-apply-nr="' + tier.id + '" type="button">Apply</button>' +
+        '</div>' +
+        (applied ? '<div class="filter-date-field__applied"><span class="ds-icon ds-icon--sm" aria-hidden="true">check_circle</span> ' + esc(OPTION_META.get(appliedId)?.label ?? '') + '</div>' : '') +
+        '</div></div>';
+      return '<div class="filter-tier" data-tier-id="' + tier.id + '">' +
+        '<div class="filter-tier__top-row"><button class="filter-tier__header" aria-expanded="' + !collapsed + '" data-tier-toggle="' + tier.id + '">' +
+        '<span>' + esc(tier.label) + '</span>' +
+        '<span class="ds-icon ds-icon--sm ds-icon--filled filter-tier__chevron" aria-hidden="true">arrow_drop_down</span>' +
+        '<span class="filter-tier__end">' + badge + '</span></button></div>' + body + '</div>';
+    }
+
+    // Standard card-grid tier
+    const cards       = tier.options.map(opt => buildCard(opt)).join('');
+    const allIds      = tier.options.map(o => o.id).join(',');
+    const allSelected = tier.options.every(o => state.selected.has(o.id));
+    const addAllLabel   = allSelected ? 'Remove all' : 'Add all';
+    const addAllVariant = allSelected ? 'ds-button--destructive' : 'ds-button--text';
+    const tierCount     = getTierCount(tier.id);
+    const tierBadge     = collapsed && tierCount > 0
+      ? '<span class="filter-tier__badge" aria-label="' + tierCount + ' selected">' + tierCount + '</span>' : '';
+
+    return '<div class="filter-tier" data-tier-id="' + tier.id + '">' +
+      '<div class="filter-tier__top-row">' +
+      '<button class="filter-tier__header" aria-expanded="' + !collapsed + '" data-tier-toggle="' + tier.id + '">' +
+      '<span>' + esc(tier.label) + '</span>' +
+      '<span class="ds-icon ds-icon--sm ds-icon--filled filter-tier__chevron" aria-hidden="true">arrow_drop_down</span>' +
+      '<span class="filter-tier__end">' + tierBadge + '</span></button>' +
+      '<div class="ds-tooltip-wrapper">' +
+      '<button class="ds-button ds-button--xs ds-button--leading-icon ' + addAllVariant + '" data-add-all="' + allIds + '" aria-label="' + addAllLabel + ' ' + esc(tier.label) + ' filters">' +
+      '<span class="ds-icon" aria-hidden="true">' + (allSelected ? 'remove' : 'add') + '</span> All</button>' +
+      '<div class="ds-tooltip" role="tooltip">' + addAllLabel + '</div></div></div>' +
+      (collapsed ? '' : '<div class="filter-tier__body"><div class="filter-cards-grid">' + cards + GRID_SPACERS + '</div></div>') +
+      '</div>';
+  }
+
+  function buildDatePresetOptions(group) {
+    const presetItems = group.options.map(opt => {
+      const sel = state.selected.has(opt.id);
+      return '<button class="filter-preset-pill' + (sel ? ' filter-preset-pill--selected' : '') +
+        '" data-date-preset="' + opt.id + '" aria-pressed="' + sel + '">' + esc(opt.label) + '</button>';
+    }).join('');
+
+    const customCount = Array.from(state.selected).filter(id => id.startsWith('custom-dr-')).length;
+    const customOpen  = state.datePresetCustomOpen;
+    const badgeHtml   = customCount > 0 ? '<span class="filter-preset-option__badge">' + customCount + '</span>' : '';
+
+    const customToggle = '<button class="filter-preset-custom-toggle' + (customOpen ? ' filter-preset-custom-toggle--open' : '') +
+      '" data-date-preset-custom aria-expanded="' + customOpen + '">' +
+      '<span class="filter-preset-custom-toggle__label">Custom dates' + badgeHtml + '</span>' +
+      '<span class="ds-icon ds-icon--sm filter-preset-custom-toggle__chevron" aria-hidden="true">expand_more</span></button>';
+
+    const customPicker = customOpen ? '<div class="filter-preset-custom-picker">' + buildNativeDateRangePicker({ suppressChips: true }) + '</div>' : '';
+
+    return '<div class="filter-preset-list"><div class="filter-preset-pill-grid">' + presetItems + '</div>' + customToggle + customPicker + '</div>';
+  }
+
+  // Native date range picker (replaces custom calendar with <input type="date">)
+  function buildNativeDateRangePicker(opts) {
+    opts = opts || {};
+    const customRangeChips = Array.from(state.selected)
+      .filter(id => id.startsWith('custom-dr-'))
+      .map(id => {
+        const meta = OPTION_META.get(id);
+        if (!meta) return '';
+        return '<div class="ds-chip">' +
+          '<span class="ds-icon ds-icon--sm ds-chip__icon" aria-hidden="true">date_range</span>' +
+          '<span class="ds-chip__label">' + esc(meta.label) + '</span>' +
+          '<button class="ds-chip__remove" data-remove-id="' + id + '" type="button" aria-label="Remove ' + esc(meta.label) + '">' +
+          '<span class="ds-icon ds-icon--xs">close</span></button></div>';
+      }).join('');
+
+    const nativeFrom = state.dateRangeDraft.start
+      ? state.dateRangeDraft.start.toISOString().slice(0, 10) : '';
+    const nativeTo   = state.dateRangeDraft.end
+      ? state.dateRangeDraft.end.toISOString().slice(0, 10) : '';
+    const canAdd   = !!(state.dateRangeDraft.start && state.dateRangeDraft.end);
+
+    return '<div class="date-range-picker" id="ds-preview-date-range-picker">' +
+      '<div class="filter-date-field__row" style="margin-bottom:8px">' +
+      '<div class="filter-date-field__group">' +
+      '<label class="filter-date-field__label" for="ds-preview-dr-start">Start date</label>' +
+      '<div class="ds-input"><div class="ds-input__field"><input class="ds-input__control" type="date" id="ds-preview-dr-start" data-native-date-start value="' + nativeFrom + '"></div></div></div>' +
+      '<div class="filter-date-field__group">' +
+      '<label class="filter-date-field__label" for="ds-preview-dr-end">End date</label>' +
+      '<div class="ds-input"><div class="ds-input__field"><input class="ds-input__control" type="date" id="ds-preview-dr-end" data-native-date-end value="' + nativeTo + '"></div></div></div>' +
+      '</div>' +
+      '<div class="date-range-picker__actions">' +
+      '<button class="ds-button ds-button--text ds-button--sm" data-clear-native-date-draft type="button">Clear</button>' +
+      '<button class="ds-button ds-button--filled ds-button--sm" data-add-native-date-range type="button"' + (canAdd ? '' : ' disabled') + '>' +
+      '<span class="ds-icon ds-icon--sm" aria-hidden="true">date_range</span> Add Range</button>' +
+      '</div>' +
+      (!opts.suppressChips && customRangeChips ? '<div class="date-range-picker__chips"><span class="date-range-picker__chips-label">Added dates</span>' + customRangeChips + '</div>' : '') +
+      '</div>';
+  }
+
+  function buildGroupOptions(groupId) {
+    const group = activeFilterGroups.find(g => g.id === groupId);
+    if (!group) return '';
+
+    if (group.type === 'date-preset') {
+      return buildDatePresetOptions(group);
+    }
+
+    if (group.options) {
+      const allIds      = group.options.map(o => o.id).join(',');
+      const allSelected = group.options.every(o => state.selected.has(o.id));
+      const addAllLabel   = allSelected ? 'Remove all' : 'Add all';
+      const addAllVariant = allSelected ? 'ds-button--destructive' : 'ds-button--text';
+      const cards = group.options.map(opt => buildCard(opt)).join('');
+      return '<div class="filter-group-header-row">' +
+        '<div class="ds-tooltip-wrapper">' +
+        '<button class="ds-button ds-button--xs ds-button--leading-icon ' + addAllVariant + '" data-add-all="' + allIds + '" aria-label="' + addAllLabel + ' ' + esc(group.label) + ' filters">' +
+        '<span class="ds-icon" aria-hidden="true">' + (allSelected ? 'remove' : 'add') + '</span> All</button>' +
+        '<div class="ds-tooltip" role="tooltip">' + addAllLabel + '</div></div></div>' +
+        '<div class="filter-cards-grid">' + cards + GRID_SPACERS + '</div>';
+    }
+
+    return group.tiers.map(tier => buildTierSection(tier)).join('');
+  }
+
+  const SEARCH_GROUP_LIMIT = 6;
+
+  function rankMatch(label, q) {
+    const lower = label.toLowerCase();
+    if (lower.startsWith(q)) return 0;
+    if (lower.split(/[\s\/(–\-]+/).some(word => word.startsWith(q))) return 1;
+    return 2;
+  }
+
+  function buildSearchResults(rawQuery) {
+    const q = rawQuery.trim().toLowerCase();
+    if (!q) return buildGroupOptions(state.activeGroupId);
+
+    const grouped = new Map();
+    activeFilterGroups.forEach(group => {
+      if (group.type === 'date-preset') return;
+      const groupLabelMatch = group.label.toLowerCase().includes(q);
+      if (group.options) {
+        const isSectionMatch = groupLabelMatch;
+        const hits = [];
+        if (isSectionMatch) { group.options.forEach(opt => hits.push({ opt, rank: -1 })); }
+        else { group.options.forEach(opt => { if (opt.label.toLowerCase().includes(q)) hits.push({ opt, rank: rankMatch(opt.label, q) }); }); hits.sort((a, b) => a.rank - b.rank || a.opt.label.localeCompare(b.opt.label)); }
+        if (hits.length) grouped.set(group.id, { displayGroup: group, hits, sectionMatch: isSectionMatch });
+      } else if (group.tiers) {
+        group.tiers.forEach(tier => {
+          if (!tier.options) return;
+          const tierLabelMatch = tier.label.toLowerCase().includes(q);
+          const isSectionMatch = groupLabelMatch || tierLabelMatch;
+          const hits = [];
+          if (isSectionMatch) { tier.options.forEach(opt => hits.push({ opt, rank: -1 })); }
+          else { tier.options.forEach(opt => { if (opt.label.toLowerCase().includes(q)) hits.push({ opt, rank: rankMatch(opt.label, q) }); }); hits.sort((a, b) => a.rank - b.rank || a.opt.label.localeCompare(b.opt.label)); }
+          if (hits.length) grouped.set(tier.id, { displayGroup: tier, hits, sectionMatch: isSectionMatch });
+        });
+      }
+    });
+
+    if (!grouped.size) {
+      return '<div class="ds-empty-state">' +
+        '<div class="ds-empty-state__graphic" aria-hidden="true"><span class="ds-icon ds-icon--xl">search_off</span></div>' +
+        '<div class="ds-empty-state__body">' +
+        '<p class="ds-empty-state__heading">No results for \u201c' + esc(rawQuery) + '\u201d</p>' +
+        '<p class="ds-empty-state__description">Try a different search term.</p>' +
+        '</div></div>';
+    }
+
+    const sorted = Array.from(grouped.values()).sort((a, b) => {
+      if (a.sectionMatch && !b.sectionMatch) return -1;
+      if (!a.sectionMatch && b.sectionMatch) return 1;
+      return 0;
+    });
+
+    const totalHits = sorted.reduce((s, g) => s + g.hits.length, 0);
+    const header = '<div class="search-results-header">' + totalHits + ' result' + (totalHits !== 1 ? 's' : '') + ' for <strong>"' + esc(rawQuery) + '"</strong></div>';
+
+    const groups = sorted.map(({ displayGroup, hits, sectionMatch }) => {
+      const isExpanded  = state.expandedSearchGroups.has(displayGroup.id);
+      const visible     = (sectionMatch || isExpanded) ? hits : hits.slice(0, SEARCH_GROUP_LIMIT);
+      const remaining   = hits.length - visible.length;
+      const allHitIds   = hits.map(h => h.opt.id).join(',');
+      const allSelected = hits.every(h => state.selected.has(h.opt.id));
+      const addAllLabel   = allSelected ? 'Remove all' : 'Add all';
+      const addAllVariant = allSelected ? 'ds-button--destructive' : 'ds-button--text';
+      const groupLabelHtml = sectionMatch ? highlightMatch(displayGroup.label, rawQuery) : esc(displayGroup.label);
+      const cards = visible.map(({ opt }) => buildCard(opt, sectionMatch ? '' : rawQuery)).join('');
+      const showMore = remaining > 0
+        ? '<button class="ds-button ds-button--text ds-button--sm search-show-more" data-expand-group="' + displayGroup.id + '">' +
+          '<span class="ds-icon ds-icon--sm" aria-hidden="true">expand_more</span> Show ' + remaining + ' more in ' + esc(displayGroup.label) + '</button>' : '';
+      return '<div class="search-result-group' + (sectionMatch ? ' search-result-group--section' : '') + '">' +
+        '<div class="search-result-group__label"><span>' + groupLabelHtml + '</span>' +
+        '<span class="search-result-group__count">' + hits.length + '</span>' +
+        '<div class="ds-tooltip-wrapper">' +
+        '<button class="ds-button ds-button--xs ds-button--leading-icon ' + addAllVariant + '" data-add-all="' + allHitIds + '" aria-label="' + addAllLabel + ' ' + esc(displayGroup.label) + ' results">' +
+        '<span class="ds-icon" aria-hidden="true">' + (allSelected ? 'remove' : 'add') + '</span> All</button>' +
+        '<div class="ds-tooltip" role="tooltip">' + addAllLabel + '</div></div></div>' +
+        '<div class="filter-cards-grid">' + cards + GRID_SPACERS + '</div>' + showMore + '</div>';
+    }).join('');
+
+    return header + groups;
+  }
+
+  function buildSelectedBuckets() {
+    const buckets = new Map();
+    state.selected.forEach(optId => {
+      const meta = OPTION_META.get(optId);
+      if (!meta) return;
+      const key = getBucketKey(meta);
+      if (!buckets.has(key)) buckets.set(key, { meta, items: [] });
+      buckets.get(key).items.push(optId);
+    });
+
+    return Array.from(buckets.values()).map(({ meta, items }) => {
+      const key        = getBucketKey(meta);
+      const excluded   = state.excludedBuckets.has(key);
+      const crumb      = getBreadcrumb(meta);
+      const isCollapsed = state.collapsedSelectedBuckets.has(key) ||
+        (items.length > BUCKET_AUTO_COLLAPSE_THRESHOLD && !state.expandedSelectedBuckets.has(key));
+
+      const itemsHtml = items.map(optId => {
+        const m = OPTION_META.get(optId);
+        return '<div class="selected-bucket__item">' +
+          '<span class="selected-bucket__item-label">' + esc(m.label) + '</span>' +
+          '<button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__item-remove" aria-label="Remove ' + esc(m.label) + '" data-remove-id="' + optId + '">' +
+          '<span class="ds-icon ds-icon--sm">close</span></button></div>';
+      }).join('');
+
+      return '<li class="selected-bucket' + (excluded ? ' selected-bucket--excluded' : '') + (isCollapsed ? ' selected-bucket--collapsed' : '') + '">' +
+        '<div class="selected-bucket__header">' +
+        '<div class="selected-bucket__header-top">' +
+        '<button class="selected-bucket__collapse-btn" data-collapse-bucket="' + key + '" aria-expanded="' + !isCollapsed + '" aria-label="' + (isCollapsed ? 'Expand' : 'Collapse') + ' ' + esc(crumb) + '">' +
+        '<span class="selected-bucket__crumb">' + esc(crumb) + '</span>' +
+        '<span class="ds-icon ds-icon--sm ds-icon--filled selected-bucket__chevron" aria-hidden="true">arrow_drop_down</span></button>' +
+        '<div class="ds-tooltip-wrapper"><button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__remove-btn" aria-label="Remove all ' + esc(crumb) + ' filters" data-remove-bucket="' + key + '">' +
+        '<span class="ds-icon ds-icon--sm">delete</span></button><div class="ds-tooltip" role="tooltip">Remove all</div></div></div>' +
+        '<div class="selected-bucket__header-bottom">' +
+        '<div class="ds-tooltip-wrapper"><label class="filter-toggle" data-exclude-bucket="' + key + '">' +
+        '<input class="filter-toggle__control" type="checkbox" role="switch" aria-checked="' + excluded + '" aria-label="' + (excluded ? 'Disable' : 'Enable') + ' exclude for ' + esc(crumb) + '"' + (excluded ? ' checked' : '') + '/>' +
+        '<span class="filter-toggle__track"><span class="filter-toggle__thumb"></span></span>' +
+        '<span class="filter-toggle__label">Exclude</span></label>' +
+        '<div class="ds-tooltip" role="tooltip">' + (excluded ? 'Currently excluding \u2014 click to include' : 'Exclude these values') + '</div></div>' +
+        '<span class="selected-bucket__count">' + items.length + ' ' + (items.length === 1 ? 'filter' : 'filters') + '</span></div></div>' +
+        '<div class="selected-bucket__items">' + itemsHtml + '</div></li>';
+    }).join('');
+  }
+
+  // ── Render ────────────────────────────────────────────────────
+  function renderNav() {
+    const isSearching = state.searchQuery.trim().length > 0;
+    const searchResultsItem = isSearching
+      ? '<button class="filter-nav-item filter-nav-item--active" aria-pressed="true" aria-current="true">Search Results</button>' : '';
+    const groupItems = activeFilterGroups.map(group => {
+      const active = !isSearching && group.id === state.activeGroupId;
+      const count  = getGroupCount(group.id);
+      const badge  = count > 0 ? '<span class="filter-nav-item__badge" aria-label="' + count + ' selected">' + count + '</span>' : '';
+      return '<button class="filter-nav-item' + (active ? ' filter-nav-item--active' : '') + '" data-nav-group="' + group.id + '" aria-pressed="' + active + '">' + esc(group.label) + badge + '</button>';
+    }).join('');
+    navEl.innerHTML = searchResultsItem + groupItems;
+  }
+
+  function applyCardLabelTooltips(container) {
+    container.querySelectorAll('.filter-card > span:first-child').forEach(span => {
+      const card = span.closest('.filter-card');
+      const existing = card.querySelector('.ds-tooltip');
+      if (span.scrollWidth > span.offsetWidth) {
+        if (existing) { existing.textContent = span.textContent; }
+        else {
+          const tooltip = document.createElement('span');
+          tooltip.className = 'ds-tooltip'; tooltip.setAttribute('role', 'tooltip'); tooltip.textContent = span.textContent;
+          card.appendChild(tooltip); card.classList.add('ds-tooltip-wrapper');
+        }
+      } else if (existing) { existing.remove(); card.classList.remove('ds-tooltip-wrapper'); }
+    });
+  }
+
+  function renderOptions() {
+    optionsEl.innerHTML = state.searchQuery.trim() ? buildSearchResults(state.searchQuery) : buildGroupOptions(state.activeGroupId);
+    applyCardLabelTooltips(optionsEl);
+  }
+
+  function renderSelected() {
+    const count = state.selected.size;
+    if (count === 0) {
+      selectedEmpty.hidden  = false; selectedList.hidden = true;
+      selectedList.innerHTML = ''; headerClearBtn.hidden = true;
+      footerSummary.textContent = ''; return;
+    }
+    selectedEmpty.hidden  = true; selectedList.hidden = false;
+    headerClearBtn.hidden = false;
+    footerSummary.textContent = count + ' filter' + (count !== 1 ? 's' : '') + ' selected';
+    selectedList.innerHTML = buildSelectedBuckets();
+  }
+
+  function render() {
+    renderNav(); renderOptions(); renderSelected();
+    updateActiveSetChip(); updateSavedSetsToggleBtn();
+    if (state.savedSetsOpen) renderSavedSetsPanel();
+  }
+
+  // ── Saved Filter Sets ─────────────────────────────────────────
+  function getSavedSetsKey() { return CONTEXTS[activeContext].savedSetsKey; }
+  function getSavedSets() {
+    try { return JSON.parse(localStorage.getItem(getSavedSetsKey()) || '[]'); } catch { return []; }
+  }
+  function persistSets(sets) { localStorage.setItem(getSavedSetsKey(), JSON.stringify(sets)); }
+
+  function hasActiveSetChanges() {
+    if (!state.activeFilterSetId) return false;
+    const set = getSavedSets().find(s => s.id === state.activeFilterSetId);
+    if (!set) return false;
+    const currentSelected = [...state.selected].filter(id => !isDynamicId(id)).sort();
+    const savedSelected = [...set.selected].sort();
+    if (currentSelected.length !== savedSelected.length) return true;
+    if (currentSelected.some((id, i) => id !== savedSelected[i])) return true;
+    const currentExcluded = [...state.excludedBuckets].sort();
+    const savedExcluded = [...set.excludedBuckets].sort();
+    if (currentExcluded.length !== savedExcluded.length) return true;
+    return currentExcluded.some((k, i) => k !== savedExcluded[i]);
+  }
+
+  function updateActiveSetChip() {
+    if (!state.activeFilterSetId) { activeSetChip.hidden = true; updateSetBtnEl.hidden = true; return; }
+    const set = getSavedSets().find(s => s.id === state.activeFilterSetId);
+    if (set) { activeSetNameEl.textContent = set.name; activeSetChip.hidden = false; updateSetBtnEl.hidden = !hasActiveSetChanges(); }
+    else { activeSetChip.hidden = true; updateSetBtnEl.hidden = true; state.activeFilterSetId = null; }
+  }
+
+  function updateSavedSetsToggleBtn() {
+    const btn = $id('ds-preview-saved-sets-toggle-btn');
+    if (!btn) return;
+    const showSave = state.selected.size > 0 && (!state.activeFilterSetId || hasActiveSetChanges());
+    if (showSave) { btn.innerHTML = '<span class="ds-icon" aria-hidden="true">bookmark_add</span>Save Filters'; }
+    else          { btn.innerHTML = '<span class="ds-icon" aria-hidden="true">bookmark</span>Load Filters'; }
+  }
+
+  function renderSavedSetsPanel() {
+    const sets = getSavedSets();
+    const hasFilters = state.selected.size > 0;
+    const hasChanges = hasActiveSetChanges();
+    const saveForm = '<div class="filter-save-form">' +
+      '<p class="filter-save-form__label">Save current filters as new set</p>' +
+      '<div class="filter-save-form__row">' +
+      '<div class="filter-save-form__input-wrap"><div class="ds-input"><div class="ds-input__field">' +
+      '<input class="ds-input__control" type="text" id="ds-preview-save-set-name-input" placeholder="Name this filter set\u2026" maxlength="60"' + (!hasFilters ? ' disabled' : '') + ' aria-label="Filter set name"></div></div></div>' +
+      '<button class="ds-button ds-button--filled ds-button--sm" id="ds-preview-confirm-save-set-btn"' + (!hasFilters ? ' disabled' : '') + '>Save</button></div>' +
+      (!hasFilters ? '<p class="filter-save-form__hint">Select filters first to save a set.</p>' : '') + '</div>';
+
+    const listHtml = sets.length === 0
+      ? '<div class="ds-empty-state ds-empty-state--sm">' +
+        '<div class="ds-empty-state__graphic" aria-hidden="true"><span class="ds-icon ds-icon--xl">bookmark_border</span></div>' +
+        '<div class="ds-empty-state__body"><p class="ds-empty-state__heading">No saved filter sets yet.</p></div></div>'
+      : sets.slice().reverse().map(set => {
+          const isActive = set.id === state.activeFilterSetId;
+          const date = new Date(set.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          const count = set.selected.length;
+          const inlineAction = isActive
+            ? (hasChanges ? '<button class="ds-button ds-button--text ds-button--sm filter-saved-set-item__update-btn" data-update-set="' + esc(set.id) + '" aria-label="Update ' + esc(set.name) + '"><span class="ds-icon ds-icon--sm">sync</span></button>' : '')
+            : '<button class="ds-button ds-button--text ds-button--sm filter-saved-set-item__delete-btn" data-delete-set="' + esc(set.id) + '" aria-label="Delete ' + esc(set.name) + '"><span class="ds-icon ds-icon--sm">delete</span></button>';
+          return '<div class="filter-saved-set-item' + (isActive ? ' filter-saved-set-item--active' : '') + '">' +
+            '<div class="filter-saved-set-item__info"><span class="filter-saved-set-item__name">' + esc(set.name) +
+            (isActive ? ' <span class="filter-saved-set-item__loaded-badge">Loaded</span>' : '') + '</span>' +
+            '<span class="filter-saved-set-item__meta">' + count + ' filter' + (count !== 1 ? 's' : '') + ' \u00b7 ' + esc(date) + '</span></div>' +
+            '<div class="filter-saved-set-item__actions"><button class="ds-button ds-button--text ds-button--sm" data-load-set="' + esc(set.id) + '"' + (isActive ? ' disabled' : '') + '>' + (isActive ? 'Loaded' : 'Load') + '</button>' + inlineAction + '</div></div>';
+        }).join('');
+
+    const backBtn = '<div class="filter-saved-sets-back-row"><button class="ds-button ds-button--xs ds-button--text ds-button--leading-icon filter-saved-sets-back-btn" id="ds-preview-saved-sets-back-btn">' +
+      '<span class="ds-button__icon ds-button__icon--leading" aria-hidden="true"><span class="ds-icon">arrow_back</span></span> Back to filters</button></div>';
+
+    savedSetsBody.innerHTML = backBtn + saveForm + '<div class="filter-saved-sets-list">' + listHtml + '</div>';
+    if (hasFilters) requestAnimationFrame(() => { $id('ds-preview-save-set-name-input')?.focus(); });
+  }
+
+  function openSavedSetsPanel() {
+    state.savedSetsOpen = true; savedSetsPanel.hidden = false;
+    $id('ds-preview-saved-sets-toggle-btn').setAttribute('aria-pressed', 'true');
+    renderSavedSetsPanel();
+  }
+
+  function closeSavedSetsPanel() {
+    state.savedSetsOpen = false; savedSetsPanel.hidden = true;
+    const btn = $id('ds-preview-saved-sets-toggle-btn');
+    btn.setAttribute('aria-pressed', 'false'); btn.focus();
+  }
+
+  function saveCurrentSet(name) {
+    const trimmed = name.trim();
+    if (!trimmed || state.selected.size === 0) return null;
+    const sets = getSavedSets();
+    const newSet = { id: 'fs-' + Date.now(), name: trimmed, savedAt: new Date().toISOString(),
+      selected: [...state.selected].filter(id => !isDynamicId(id)), excludedBuckets: [...state.excludedBuckets] };
+    sets.push(newSet); persistSets(sets);
+    state.activeFilterSetId = newSet.id; updateActiveSetChip(); return newSet.id;
+  }
+
+  function updateCurrentSet() {
+    if (!state.activeFilterSetId) return;
+    const sets = getSavedSets(); const idx = sets.findIndex(s => s.id === state.activeFilterSetId);
+    if (idx < 0) return;
+    sets[idx] = { ...sets[idx], savedAt: new Date().toISOString(),
+      selected: [...state.selected].filter(id => !isDynamicId(id)), excludedBuckets: [...state.excludedBuckets] };
+    persistSets(sets); updateActiveSetChip(); renderSavedSetsPanel();
+  }
+
+  function loadSavedSet(id) {
+    const set = getSavedSets().find(s => s.id === id);
+    if (!set) return;
+    state.selected.forEach(optId => { if (isDynamicId(optId)) OPTION_META.delete(optId); });
+    state.fieldDateDrafts = {}; state.costRangeDraft = { min: null, max: null };
+    state.numericRangeDrafts = {}; state.datePresetCustomOpen = false;
+    state.selected = new Set(set.selected); state.excludedBuckets = new Set(set.excludedBuckets);
+    state.collapsedSelectedBuckets.clear(); state.expandedSelectedBuckets.clear();
+    state.activeFilterSetId = id; closeSavedSetsPanel(); updateActiveSetChip(); render();
+  }
+
+  function deleteSavedSet(id) {
+    const sets = getSavedSets().filter(s => s.id !== id); persistSets(sets);
+    if (state.activeFilterSetId === id) { state.activeFilterSetId = null; updateActiveSetChip(); }
+    renderSavedSetsPanel();
+  }
+
+  // ── Actions ───────────────────────────────────────────────────
+  function isDynamicId(id) {
+    return id.startsWith('custom-dr-') || id.startsWith('dr-') || id.startsWith('cr-') || id.startsWith('nr-');
+  }
+
+  function toggleFilter(optionId) {
+    if (state.selected.has(optionId)) {
+      state.selected.delete(optionId);
+      const meta = OPTION_META.get(optionId);
+      if (meta) {
+        const key = getBucketKey(meta);
+        const hasMore = Array.from(state.selected).some(id => { const m = OPTION_META.get(id); return m && getBucketKey(m) === key; });
+        if (!hasMore) state.excludedBuckets.delete(key);
+      }
+    } else { state.selected.add(optionId); }
+    render();
+  }
+
+  function toggleBucketExclude(bucketKey) {
+    if (state.excludedBuckets.has(bucketKey)) state.excludedBuckets.delete(bucketKey);
+    else state.excludedBuckets.add(bucketKey);
+    render();
+  }
+
+  function toggleBucketCollapse(bucketKey, isCurrentlyExpanded) {
+    if (isCurrentlyExpanded) { state.expandedSelectedBuckets.delete(bucketKey); state.collapsedSelectedBuckets.add(bucketKey); }
+    else { state.collapsedSelectedBuckets.delete(bucketKey); state.expandedSelectedBuckets.add(bucketKey); }
+    render();
+  }
+
+  function applyDateField(tierId) {
+    const draft = state.fieldDateDrafts[tierId];
+    if (!draft || (!draft.from && !draft.to)) return;
+    const found = findTierMeta(tierId); if (!found) return;
+    const { group, tier } = found;
+    const id = 'dr-' + tierId;
+    OPTION_META.set(id, { groupId: group.id, groupLabel: group.label, tierId, tierLabel: tier.label,
+      label: formatFieldDateRangeLabel(draft.from, draft.to), fromISO: draft.from, toISO: draft.to });
+    state.selected.add(id); render();
+  }
+
+  function clearDateField(tierId) {
+    const id = 'dr-' + tierId; state.selected.delete(id); OPTION_META.delete(id);
+    state.fieldDateDrafts[tierId] = { from: '', to: '' }; state.excludedBuckets.delete(tierId); render();
+  }
+
+  function applyCostRange(tierId) {
+    const found = findTierMeta(tierId); if (!found) return;
+    const { group, tier } = found;
+    const tierMin = tier.min ?? 0; const tierMax = tier.max ?? 5000;
+    const min = state.costRangeDraft.min !== null ? state.costRangeDraft.min : tierMin;
+    const max = state.costRangeDraft.max !== null ? state.costRangeDraft.max : tierMax;
+    const id = 'cr-' + tierId;
+    OPTION_META.set(id, { groupId: group.id, groupLabel: group.label, tierId, tierLabel: tier.label, label: formatCostLabel(min, max, tierMin, tierMax) });
+    state.selected.add(id); render();
+  }
+
+  function clearCostRange(tierId) {
+    const id = 'cr-' + tierId; state.selected.delete(id); OPTION_META.delete(id);
+    state.costRangeDraft = { min: null, max: null }; state.excludedBuckets.delete(tierId); render();
+  }
+
+  function applyNumericRange(tierId) {
+    const found = findTierMeta(tierId); if (!found) return;
+    const { group, tier } = found;
+    const tierMin = tier.min ?? 0; const tierMax = tier.max ?? 100;
+    const draft = state.numericRangeDrafts[tierId];
+    const min = draft?.min !== null && draft?.min !== undefined ? draft.min : tierMin;
+    const max = draft?.max !== null && draft?.max !== undefined ? draft.max : tierMax;
+    const id = 'nr-' + tierId;
+    OPTION_META.set(id, { groupId: group.id, groupLabel: group.label, tierId, tierLabel: tier.label, label: formatNumericRangeLabel(min, max, tierMin, tierMax, tier.unit, tier.maxLabel) });
+    state.selected.add(id); render();
+  }
+
+  function clearNumericRange(tierId) {
+    const id = 'nr-' + tierId; state.selected.delete(id); OPTION_META.delete(id);
+    state.numericRangeDrafts[tierId] = { min: null, max: null }; state.excludedBuckets.delete(tierId); render();
+  }
+
+  function updateNumericRangeDOM(tierId, minVal, maxVal) {
+    const found = findTierMeta(tierId); if (!found) return;
+    const { tier } = found;
+    const tierMin = tier.min ?? 0; const tierMax = tier.max ?? 100;
+    if (!state.numericRangeDrafts[tierId]) state.numericRangeDrafts[tierId] = {};
+    state.numericRangeDrafts[tierId].min = minVal; state.numericRangeDrafts[tierId].max = maxVal;
+    const minPct = ((minVal - tierMin) / (tierMax - tierMin) * 100).toFixed(1);
+    const maxPct = ((maxVal - tierMin) / (tierMax - tierMin) * 100).toFixed(1);
+    const u = tier.unit ? ' ' + tier.unit : '';
+    const maxDisp = maxVal === tierMax && tier.maxLabel ? tier.maxLabel : String(maxVal);
+    const wrap = $id('nr-wrap-' + tierId); const minEl = $id('nr-min-val-' + tierId); const maxEl = $id('nr-max-val-' + tierId);
+    if (wrap) { wrap.style.setProperty('--cr-min', minPct + '%'); wrap.style.setProperty('--cr-max', maxPct + '%'); }
+    if (minEl) minEl.textContent = minVal + u; if (maxEl) maxEl.textContent = maxDisp + u;
+  }
+
+  function updateCostRangeDOM(tierId, minVal, maxVal) {
+    const found = findTierMeta(tierId);
+    const tierMin = found?.tier.min ?? 0; const tierMax = found?.tier.max ?? 5000;
+    if (minVal > maxVal) return;
+    state.costRangeDraft = { min: minVal, max: maxVal };
+    const minPct = ((minVal - tierMin) / (tierMax - tierMin) * 100).toFixed(1);
+    const maxPct = ((maxVal - tierMin) / (tierMax - tierMin) * 100).toFixed(1);
+    const wrap = $id('cr-wrap-' + tierId); const minEl = $id('cr-min-val-' + tierId); const maxEl = $id('cr-max-val-' + tierId);
+    if (wrap) { wrap.style.setProperty('--cr-min', minPct + '%'); wrap.style.setProperty('--cr-max', maxPct + '%'); }
+    if (minEl) minEl.textContent = '$' + minVal.toLocaleString(); if (maxEl) maxEl.textContent = '$' + maxVal.toLocaleString();
+  }
+
+  function selectDatePreset(optionId) {
+    const group = activeFilterGroups.find(g => g.type === 'date-preset'); if (!group) return;
+    const wasSelected = state.selected.has(optionId);
+    group.options.forEach(opt => state.selected.delete(opt.id));
+    Array.from(state.selected).forEach(id => {
+      if (id.startsWith('custom-dr-')) { const meta = OPTION_META.get(id); if (meta && meta.groupId === group.id) { state.selected.delete(id); OPTION_META.delete(id); } }
+    });
+    state.datePresetCustomOpen = false; state.dateRangeDraft = { start: null, end: null };
+    if (!wasSelected) state.selected.add(optionId);
+    render();
+  }
+
+  function toggleDatePresetCustom() {
+    if (!state.datePresetCustomOpen) {
+      const group = activeFilterGroups.find(g => g.type === 'date-preset');
+      if (group) group.options.forEach(opt => state.selected.delete(opt.id));
+    } else { state.dateRangeDraft = { start: null, end: null }; }
+    state.datePresetCustomOpen = !state.datePresetCustomOpen; render();
+  }
+
+  function addNativeDateRange() {
+    const { start, end } = state.dateRangeDraft;
+    if (!start || !end) return;
+    const id = 'custom-dr-' + Date.now();
+    const startISO = start.toISOString().slice(0, 10); const endISO = end.toISOString().slice(0, 10);
+    const label = formatISODateLabel(startISO) + ' \u2013 ' + formatISODateLabel(endISO);
+    const dateGroup = activeFilterGroups.find(g => g.id === 'dates');
+    const groupId = dateGroup?.id ?? 'dates'; const groupLabel = dateGroup?.label ?? 'Dates';
+    if (dateGroup?.type === 'date-preset') {
+      dateGroup.options.forEach(opt => state.selected.delete(opt.id));
+      Array.from(state.selected).forEach(id => { if (id.startsWith('custom-dr-')) { const meta = OPTION_META.get(id); if (meta && meta.groupId === groupId) { state.selected.delete(id); OPTION_META.delete(id); } } });
+    }
+    OPTION_META.set(id, { groupId, groupLabel, tierId: null, tierLabel: null, label, dateMode: 'range' });
+    state.selected.add(id); state.dateRangeDraft = { start: null, end: null }; render();
+  }
+
+  function removeFilter(optionId) {
+    state.selected.delete(optionId);
+    const meta = OPTION_META.get(optionId);
+    if (meta) {
+      const key = getBucketKey(meta);
+      const hasMore = Array.from(state.selected).some(id => { const m = OPTION_META.get(id); return m && getBucketKey(m) === key; });
+      if (!hasMore) state.excludedBuckets.delete(key);
+    }
+    if (isDynamicId(optionId)) {
+      OPTION_META.delete(optionId);
+      if (optionId.startsWith('dr-')) state.fieldDateDrafts[optionId.slice(3)] = { from: '', to: '' };
+      if (optionId.startsWith('cr-')) state.costRangeDraft = { min: null, max: null };
+      if (optionId.startsWith('nr-')) state.numericRangeDrafts[optionId.slice(3)] = { min: null, max: null };
+    }
+    render();
+  }
+
+  function removeBucket(bucketKey) {
+    state.selected.forEach(optId => {
+      const m = OPTION_META.get(optId);
+      if (m && getBucketKey(m) === bucketKey) {
+        state.selected.delete(optId);
+        if (isDynamicId(optId)) {
+          OPTION_META.delete(optId);
+          if (optId.startsWith('dr-')) state.fieldDateDrafts[optId.slice(3)] = { from: '', to: '' };
+          if (optId.startsWith('cr-')) state.costRangeDraft = { min: null, max: null };
+          if (optId.startsWith('nr-')) state.numericRangeDrafts[optId.slice(3)] = { min: null, max: null };
+        }
+      }
+    });
+    state.excludedBuckets.delete(bucketKey); state.collapsedSelectedBuckets.delete(bucketKey); state.expandedSelectedBuckets.delete(bucketKey); render();
+  }
+
+  function clearAll() {
+    state.selected.forEach(id => { if (isDynamicId(id)) OPTION_META.delete(id); });
+    state.selected.clear(); state.excludedBuckets.clear(); state.collapsedSelectedBuckets.clear(); state.expandedSelectedBuckets.clear();
+    state.dateRangeDraft = { start: null, end: null }; state.fieldDateDrafts = {}; state.costRangeDraft = { min: null, max: null };
+    state.numericRangeDrafts = {}; state.datePresetCustomOpen = false; state.activeFilterSetId = null; render();
+  }
+
+  function addAllOptions(optionIds) {
+    const allSelected = optionIds.every(id => state.selected.has(id));
+    if (allSelected) {
+      optionIds.forEach(id => state.selected.delete(id));
+      optionIds.forEach(id => {
+        const meta = OPTION_META.get(id); if (!meta) return;
+        const key = getBucketKey(meta);
+        const hasMore = Array.from(state.selected).some(sid => { const m = OPTION_META.get(sid); return m && getBucketKey(m) === key; });
+        if (!hasMore) state.excludedBuckets.delete(key);
+      });
+    } else { optionIds.forEach(id => state.selected.add(id)); }
+    render();
+  }
+
+  function findTierMeta(tierId) {
+    for (const group of activeFilterGroups) {
+      if (!group.tiers) continue;
+      const tier = group.tiers.find(t => t.id === tierId);
+      if (tier) return { group, tier };
+    }
+    return null;
+  }
+
+  function openModal() {
+    overlay.removeAttribute('hidden'); document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => searchInput.focus());
+  }
+
+  function closeModal() {
+    overlay.setAttribute('hidden', ''); document.body.style.overflow = '';
+  }
+
+  function renderAppliedBar() {
+    const bar     = $id('ds-preview-filter-applied-bar');
+    const cardsEl = $id('ds-preview-filter-applied-cards');
+    if (state.selected.size === 0) { bar.style.display = 'none'; return; }
+
+    const buckets = new Map();
+    state.selected.forEach(id => {
+      const meta = OPTION_META.get(id); if (!meta) return;
+      const key = getBucketKey(meta);
+      if (!buckets.has(key)) buckets.set(key, { meta, items: [] });
+      buckets.get(key).items.push(meta.label);
+    });
+
+    cardsEl.innerHTML = Array.from(buckets.entries()).map(([key, { meta, items }]) => {
+      const excluded = state.excludedBuckets.has(key);
+      const crumb    = getBreadcrumb(meta);
+      const excludedCls = excluded ? ' filter-applied-card--excluded' : '';
+      const itemsHtml   = items.map(esc).join(', ');
+      const iconName    = excluded ? 'filter_alt_off' : 'filter_alt';
+      return '<div class="ds-card-item ds-card-item--interactive' + excludedCls + '" role="button" tabindex="0"' +
+        ' aria-label="' + esc(crumb) + ': ' + items.length + ' filter' + (items.length !== 1 ? 's' : '') + ' selected' + (excluded ? ', excluded' : '') + '. Click to edit."' +
+        ' data-group-id="' + esc(meta.groupId) + '">' +
+        '<div class="ds-card-item__leading" aria-hidden="true"><span class="ds-icon ds-icon--filled ds-icon--xs">' + iconName + '</span></div>' +
+        '<div class="ds-card-item__body"><span class="ds-card-item__primary">' + esc(crumb) + '</span>' +
+        '<span class="ds-card-item__secondary">' + itemsHtml + '</span></div>' +
+        '<div class="ds-card-item__action"><button class="filter-applied-card__remove" type="button" aria-label="Remove all ' + esc(crumb) + ' filters" data-remove-bucket="' + esc(key) + '">' +
+        '<span class="ds-icon ds-icon--sm" aria-hidden="true">close</span></button></div></div>';
+    }).join('');
+
+    bar.style.display = '';
+  }
+
+  function applyFilters() {
+    renderAppliedBar(); closeModal();
+  }
+
+  function switchContext(contextKey) {
+    if (!CONTEXTS[contextKey] || contextKey === activeContext) return;
+    if (!overlay.hasAttribute('hidden')) closeModal();
+    activeContext = contextKey; activeFilterGroups = CONTEXTS[contextKey].groups;
+    OPTION_META = buildOptionMeta(activeFilterGroups);
+    state.activeGroupId = activeFilterGroups[0]?.id ?? null;
+    state.searchQuery = ''; state.selected.clear(); state.excludedBuckets.clear();
+    state.collapsedTiers.clear(); state.expandedSearchGroups.clear();
+    state.collapsedSelectedBuckets.clear(); state.expandedSelectedBuckets.clear();
+    state.dateRangeDraft = { start: null, end: null }; state.fieldDateDrafts = {};
+    state.costRangeDraft = { min: null, max: null }; state.numericRangeDrafts = {};
+    state.datePresetCustomOpen = false; state.datePickerViewYear = new Date().getFullYear();
+    state.datePickerViewMonth = new Date().getMonth(); state.calendarOpen = false;
+    state.activeDateInput = 'start'; state.activeFilterSetId = null; state.savedSetsOpen = false;
+    searchInput.value = ''; render(); updateSavedSetsToggleBtn();
+    renderAppliedBar();
+  }
+
+  // ── Event delegation on modal ─────────────────────────────────
+  modal.addEventListener('click', e => {
+    const applyDateFieldBtn = e.target.closest('[data-apply-date-field]');
+    if (applyDateFieldBtn && !applyDateFieldBtn.hasAttribute('disabled')) { applyDateField(applyDateFieldBtn.dataset.applyDateField); return; }
+
+    const clearDateFieldBtn = e.target.closest('[data-clear-date-field]');
+    if (clearDateFieldBtn) { clearDateField(clearDateFieldBtn.dataset.clearDateField); return; }
+
+    const datePresetBtn = e.target.closest('[data-date-preset]');
+    if (datePresetBtn && optionsEl.contains(datePresetBtn)) { selectDatePreset(datePresetBtn.dataset.datePreset); return; }
+
+    const datePresetCustomBtn = e.target.closest('[data-date-preset-custom]');
+    if (datePresetCustomBtn && optionsEl.contains(datePresetCustomBtn)) { toggleDatePresetCustom(); return; }
+
+    const applyNrBtn = e.target.closest('[data-apply-nr]');
+    if (applyNrBtn) { applyNumericRange(applyNrBtn.dataset.applyNr); return; }
+
+    const clearNrBtn = e.target.closest('[data-clear-nr]');
+    if (clearNrBtn) { clearNumericRange(clearNrBtn.dataset.clearNr); return; }
+
+    const applyCostBtn = e.target.closest('[data-apply-cost-range]');
+    if (applyCostBtn) { applyCostRange(applyCostBtn.dataset.applyCostRange); return; }
+
+    const clearCostBtn = e.target.closest('[data-clear-cost-range]');
+    if (clearCostBtn) { clearCostRange(clearCostBtn.dataset.clearCostRange); return; }
+
+    const addNativeDateRangeBtn = e.target.closest('[data-add-native-date-range]');
+    if (addNativeDateRangeBtn && !addNativeDateRangeBtn.hasAttribute('disabled')) { addNativeDateRange(); return; }
+
+    const clearNativeDateBtn = e.target.closest('[data-clear-native-date-draft]');
+    if (clearNativeDateBtn) { state.dateRangeDraft = { start: null, end: null }; render(); return; }
+
+    const addAllBtn = e.target.closest('[data-add-all]');
+    if (addAllBtn && optionsEl.contains(addAllBtn)) { addAllOptions(addAllBtn.dataset.addAll.split(',').filter(Boolean)); return; }
+
+    const card = e.target.closest('[data-option-id]');
+    if (card && optionsEl.contains(card)) { toggleFilter(card.dataset.optionId); return; }
+
+    const navItem = e.target.closest('[data-nav-group]');
+    if (navItem) { state.searchQuery = ''; searchInput.value = ''; searchClearBtn.hidden = true; state.activeGroupId = navItem.dataset.navGroup; optionsEl.scrollTop = 0; render(); return; }
+
+    const expandBtn = e.target.closest('[data-expand-group]');
+    if (expandBtn) { state.expandedSearchGroups.add(expandBtn.dataset.expandGroup); render(); return; }
+
+    const tierToggle = e.target.closest('[data-tier-toggle]');
+    if (tierToggle) {
+      const tierId = tierToggle.dataset.tierToggle;
+      if (state.collapsedTiers.has(tierId)) state.collapsedTiers.delete(tierId); else state.collapsedTiers.add(tierId);
+      render(); return;
+    }
+
+    const collapseBtn = e.target.closest('[data-collapse-bucket]');
+    if (collapseBtn) { toggleBucketCollapse(collapseBtn.dataset.collapseBucket, collapseBtn.getAttribute('aria-expanded') === 'true'); return; }
+
+    const excludeBtn = e.target.closest('[data-exclude-bucket]');
+    if (excludeBtn) { toggleBucketExclude(excludeBtn.dataset.excludeBucket); return; }
+
+    const removeBucketBtn = e.target.closest('[data-remove-bucket]');
+    if (removeBucketBtn) { removeBucket(removeBucketBtn.dataset.removeBucket); return; }
+
+    const removeBtn = e.target.closest('[data-remove-id]');
+    if (removeBtn) { removeFilter(removeBtn.dataset.removeId); return; }
+
+    if (e.target.closest('#ds-preview-saved-sets-toggle-btn')) { state.savedSetsOpen ? closeSavedSetsPanel() : openSavedSetsPanel(); return; }
+    if (e.target.closest('#ds-preview-saved-sets-back-btn'))   { closeSavedSetsPanel(); return; }
+    if (e.target.closest('#ds-preview-update-set-btn'))         { updateCurrentSet(); return; }
+
+    if (e.target.closest('#ds-preview-confirm-save-set-btn')) {
+      const input = $id('ds-preview-save-set-name-input');
+      if (input && input.value.trim()) { saveCurrentSet(input.value); renderSavedSetsPanel(); }
+      return;
+    }
+
+    const updateSetBtn = e.target.closest('[data-update-set]');
+    if (updateSetBtn) { updateCurrentSet(); return; }
+
+    const loadBtn = e.target.closest('[data-load-set]');
+    if (loadBtn) { loadSavedSet(loadBtn.dataset.loadSet); return; }
+
+    const deleteBtn = e.target.closest('[data-delete-set]');
+    if (deleteBtn) { deleteSavedSet(deleteBtn.dataset.deleteSet); return; }
+  });
+
+  // Options panel — native date inputs for native date range picker
+  optionsEl.addEventListener('input', e => {
+    const startEl = e.target.closest('[data-native-date-start]');
+    const endEl   = e.target.closest('[data-native-date-end]');
+    if (startEl) {
+      state.dateRangeDraft.start = startEl.value ? new Date(startEl.value + 'T00:00:00') : null;
+      const addBtn = optionsEl.querySelector('[data-add-native-date-range]');
+      if (addBtn) addBtn.disabled = !(state.dateRangeDraft.start && state.dateRangeDraft.end);
+    }
+    if (endEl) {
+      state.dateRangeDraft.end = endEl.value ? new Date(endEl.value + 'T00:00:00') : null;
+      const addBtn = optionsEl.querySelector('[data-add-native-date-range]');
+      if (addBtn) addBtn.disabled = !(state.dateRangeDraft.start && state.dateRangeDraft.end);
+    }
+  });
+
+  // Field-specific date inputs
+  optionsEl.addEventListener('input', e => {
+    const fromEl = e.target.closest('[data-date-field-from]');
+    const toEl   = e.target.closest('[data-date-field-to]');
+    if (fromEl || toEl) {
+      const tierId = fromEl ? fromEl.dataset.dateFieldFrom : toEl.dataset.dateFieldTo;
+      if (!state.fieldDateDrafts[tierId]) state.fieldDateDrafts[tierId] = { from: '', to: '' };
+      if (fromEl) state.fieldDateDrafts[tierId].from = fromEl.value;
+      else        state.fieldDateDrafts[tierId].to   = toEl.value;
+      const draft = state.fieldDateDrafts[tierId];
+      const applyBtn = e.target.closest('.filter-date-field')?.querySelector('[data-apply-date-field]');
+      if (applyBtn) applyBtn.disabled = !(draft.from || draft.to);
+    }
+  });
+
+  // Cost range sliders
+  optionsEl.addEventListener('input', e => {
+    const minInput = e.target.closest('[data-cost-min]'); const maxInput = e.target.closest('[data-cost-max]');
+    if (!minInput && !maxInput) return;
+    const tierId = (minInput || maxInput).dataset.costTier;
+    const minThumb = $id('cr-thumb-min-' + tierId); const maxThumb = $id('cr-thumb-max-' + tierId);
+    if (!minThumb || !maxThumb) return;
+    let minVal = Number(minThumb.value); let maxVal = Number(maxThumb.value);
+    if (minInput && minVal > maxVal) { minVal = maxVal; minThumb.value = minVal; }
+    if (maxInput && maxVal < minVal) { maxVal = minVal; maxThumb.value = maxVal; }
+    updateCostRangeDOM(tierId, minVal, maxVal);
+  });
+
+  // Numeric range sliders
+  optionsEl.addEventListener('input', e => {
+    const minInput = e.target.closest('[data-nr-min]'); const maxInput = e.target.closest('[data-nr-max]');
+    if (!minInput && !maxInput) return;
+    const tierId = (minInput || maxInput).dataset.nrTier;
+    const minThumb = $id('nr-thumb-min-' + tierId); const maxThumb = $id('nr-thumb-max-' + tierId);
+    if (!minThumb || !maxThumb) return;
+    let minVal = Number(minThumb.value); let maxVal = Number(maxThumb.value);
+    if (minInput && minVal > maxVal) { minVal = maxVal; minThumb.value = minVal; }
+    if (maxInput && maxVal < minVal) { maxVal = minVal; maxThumb.value = maxVal; }
+    updateNumericRangeDOM(tierId, minVal, maxVal);
+  });
+
+  // Saved sets: Enter to submit save form
+  savedSetsBody.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const input = e.target.closest('#ds-preview-save-set-name-input');
+    if (!input || !input.value.trim()) return;
+    saveCurrentSet(input.value); renderSavedSetsPanel();
+  });
+
+  // Search
+  searchInput.addEventListener('input', e => {
+    state.searchQuery = e.target.value; state.expandedSearchGroups.clear();
+    searchClearBtn.hidden = !e.target.value; render();
+  });
+
+  searchClearBtn.addEventListener('click', () => {
+    searchInput.value = ''; searchInput.focus(); state.searchQuery = ''; state.expandedSearchGroups.clear();
+    searchClearBtn.hidden = true; render();
+  });
+
+  headerClearBtn.addEventListener('click', clearAll);
+  $id('ds-preview-apply-btn').addEventListener('click', applyFilters);
+  $id('ds-preview-cancel-btn').addEventListener('click', closeModal);
+  $id('ds-preview-close-modal-btn').addEventListener('click', closeModal);
+
+  // Applied filters bar — click to edit / remove bucket
+  $id('ds-preview-filter-applied-cards').addEventListener('click', e => {
+    const removeBtn = e.target.closest('[data-remove-bucket]');
+    if (removeBtn) { removeBucket(removeBtn.dataset.removeBucket); renderAppliedBar(); return; }
+    const card = e.target.closest('.ds-card-item');
+    if (card) { state.activeGroupId = card.dataset.groupId; optionsEl.scrollTop = 0; render(); openModal(); }
+  });
+
+  $id('ds-preview-filter-applied-cards').addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('.ds-card-item[role="button"]');
+    if (card && e.target === card) { e.preventDefault(); state.activeGroupId = card.dataset.groupId; openModal(); }
+  });
+
+  // Close on scrim click
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+
+  // Close on Escape
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !overlay.hasAttribute('hidden')) closeModal(); });
+
+  // Public API
+  window.dsPreviewFilter = {
+    open: function(contextKey) {
+      if (contextKey && contextKey !== activeContext) switchContext(contextKey);
+      openModal();
+    },
+    close: closeModal,
+  };
+
+  // Init
+  render();
+  updateSavedSetsToggleBtn();
+
+})();
+        </script>
+
       </section>
 
 

@@ -79,9 +79,13 @@
                 <!-- ── Search results mode ─────────────────────────── -->
                 @if (searchResults().length === 0) {
                   <div class="ds-empty-state">
-                    <span class="ds-icon ds-empty-state__icon" aria-hidden="true">search_off</span>
-                    <p class="ds-empty-state__title">No results</p>
-                    <p class="ds-empty-state__body">Try a different search term.</p>
+                    <div class="ds-empty-state__graphic" aria-hidden="true">
+                      <span class="ds-icon ds-icon--lg">search_off</span>
+                    </div>
+                    <div class="ds-empty-state__body">
+                      <p class="ds-empty-state__heading">No results</p>
+                      <p class="ds-empty-state__description">Try a different search term.</p>
+                    </div>
                   </div>
                 } @else {
                   <p class="search-results-header">Results for "{{ _searchQuery() }}"</p>
@@ -515,9 +519,13 @@
           <div class="filter-modal__selected-body">
             @if (selectedBuckets().length === 0) {
               <div class="ds-empty-state" aria-live="polite">
-                <span class="ds-icon ds-empty-state__icon" aria-hidden="true">filter_list_off</span>
-                <p class="ds-empty-state__title">No filters selected</p>
-                <p class="ds-empty-state__body">Choose filters from the left panel.</p>
+                <div class="ds-empty-state__graphic" aria-hidden="true">
+                  <span class="ds-icon ds-icon--lg">filter_list_off</span>
+                </div>
+                <div class="ds-empty-state__body">
+                  <p class="ds-empty-state__heading">No filters selected</p>
+                  <p class="ds-empty-state__description">Choose filters from the left panel.</p>
+                </div>
               </div>
             } @else {
               <ul class="selected-filter-list" aria-label="Selected filters">
@@ -556,7 +564,7 @@
                         >
                           <input
                             type="checkbox"
-                            class="filter-toggle__input"
+                            class="filter-toggle__control"
                             [checked]="isBucketExcluded(bucket.key)"
                             (change)="toggleBucketExclude(bucket.key)"
                             [attr.aria-label]="'Exclude ' + bucket.label"
@@ -611,17 +619,19 @@
                   <p class="filter-save-form__label">Save current filters</p>
                   <div class="filter-save-form__row">
                     <div class="filter-save-form__input-wrap">
-                      <div class="ds-input ds-input--sm">
-                        <input
-                          class="ds-input__control"
-                          type="text"
-                          placeholder="Set name…"
-                          maxlength="60"
-                          [value]="_saveNameDraft()"
-                          (input)="setSaveNameDraft($any($event.target).value)"
-                          (keydown.enter)="saveCurrentSet()"
-                          aria-label="Saved filter set name"
-                        />
+                      <div class="ds-input">
+                        <div class="ds-input__field">
+                          <input
+                            class="ds-input__control"
+                            type="text"
+                            placeholder="Set name…"
+                            maxlength="60"
+                            [value]="_saveNameDraft()"
+                            (input)="setSaveNameDraft($any($event.target).value)"
+                            (keydown.enter)="saveCurrentSet()"
+                            aria-label="Saved filter set name"
+                          />
+                        </div>
                       </div>
                     </div>
                     <button
@@ -673,9 +683,13 @@
                   </ul>
                 } @else {
                   <div class="ds-empty-state">
-                    <span class="ds-icon ds-empty-state__icon" aria-hidden="true">bookmark_border</span>
-                    <p class="ds-empty-state__title">No saved sets</p>
-                    <p class="ds-empty-state__body">Save your current selection to quickly apply it again.</p>
+                    <div class="ds-empty-state__graphic" aria-hidden="true">
+                      <span class="ds-icon ds-icon--lg">bookmark_border</span>
+                    </div>
+                    <div class="ds-empty-state__body">
+                      <p class="ds-empty-state__heading">No saved sets</p>
+                      <p class="ds-empty-state__description">Save your current selection to quickly apply it again.</p>
+                    </div>
                   </div>
                 }
               </div>
