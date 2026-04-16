@@ -1890,6 +1890,9 @@ interface AgColumnPanelApi {
     getValueColumns(): AgPanelColumn[];
     addValueColumn(key: string): void;
     removeValueColumn(key: string): void;
+    getPivotColumns(): AgPanelColumn[];
+    addPivotColumn(key: string): void;
+    removePivotColumn(key: string): void;
     addEventListener(event: string, callback: () => void): void;
     removeEventListener(event: string, callback: () => void): void;
 }
@@ -1908,6 +1911,8 @@ interface AgPanelColumn {
         enableRowGroup?: boolean;
         /** Set true on colDef to allow this column to appear in the values (aggregation) picker. */
         enableValue?: boolean;
+        /** Set true on colDef to allow this column to appear in the pivot column labels picker. */
+        enablePivot?: boolean;
         /**
          * Set true to prevent UI-based pinning changes (drag-to-pin and column menu pin options).
          * The column can still be pinned/unpinned via API. Use on system columns that should
@@ -1976,6 +1981,10 @@ declare class DsColumnPanelComponent implements OnDestroy {
     showRowGroupMenu: boolean;
     /** Whether the value column picker menu is open. */
     showValueMenu: boolean;
+    /** Active pivot columns shown as list rows in the Column Labels section. */
+    activePivotColumns: ColumnPickerOption[];
+    /** Whether the pivot column picker menu is open. */
+    showPivotMenu: boolean;
     /** Whether the Pivot Mode row is hidden (set via suppressPivotMode toolPanelParam). */
     suppressPivotMode: boolean;
     /** Whether the Row Groups section is hidden (set via suppressRowGroups toolPanelParam). */
@@ -2006,6 +2015,7 @@ declare class DsColumnPanelComponent implements OnDestroy {
     private _syncGroups;
     get rowGroupMenuOptions(): ColumnPickerOption[];
     get valueMenuOptions(): ColumnPickerOption[];
+    get pivotMenuOptions(): ColumnPickerOption[];
     toggleColVisibility(): void;
     onDensityChange(value: TableDensity): void;
     toggleColumnVisibility(col: ColumnPanelItem): void;
@@ -2016,6 +2026,9 @@ declare class DsColumnPanelComponent implements OnDestroy {
     toggleValueMenu(event: Event): void;
     selectValueColumn(col: ColumnPickerOption, event: Event): void;
     removeValueColumn(colId: string): void;
+    togglePivotMenu(event: Event): void;
+    selectPivotColumn(col: ColumnPickerOption, event: Event): void;
+    removePivotColumn(colId: string): void;
     onDragStart(event: DragEvent, index: number): void;
     onDrop(event: DragEvent, toIndex: number): void;
     onDragOver(event: DragEvent): void;

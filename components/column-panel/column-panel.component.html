@@ -94,35 +94,92 @@
       </label>
       <span class="ds-column-panel__pivot-label">Pivot Mode</span>
     </div>
+
+    <!-- Column Labels (shown when pivot mode is active) -->
+    <ng-container *ngIf="pivotMode">
+      <div class="ds-column-panel__section-hd">
+        <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">view_column</span>
+        <span class="ds-column-panel__section-title">Column Labels</span>
+      </div>
+
+      <div class="ds-column-panel__pivot-col-list">
+        <div
+          *ngFor="let col of activePivotColumns"
+          class="ds-column-panel__pivot-col-row"
+        >
+          <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+          <span class="ds-column-panel__col-name">{{ col.label }}</span>
+          <button
+            type="button"
+            class="ds-column-panel__pivot-remove"
+            [attr.aria-label]="'Remove ' + col.label + ' pivot column'"
+            (click)="removePivotColumn(col.colId)"
+          >
+            <span class="ds-icon ds-icon--sm" aria-hidden="true">do_not_disturb_on</span>
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="ds-column-panel__add-btn"
+        [attr.aria-expanded]="showPivotMenu"
+        (click)="togglePivotMenu($event)"
+      >
+        <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
+        Add Column
+      </button>
+
+      <div
+        *ngIf="showPivotMenu"
+        class="ds-menu ds-column-panel__picker"
+        role="menu"
+        (click)="$event.stopPropagation()"
+      >
+        <ng-container *ngIf="pivotMenuOptions.length > 0; else noPivotCols">
+          <button
+            *ngFor="let opt of pivotMenuOptions"
+            type="button"
+            class="ds-menu__item"
+            role="menuitem"
+            (click)="selectPivotColumn(opt, $event)"
+          >{{ opt.label }}</button>
+        </ng-container>
+        <ng-template #noPivotCols>
+          <span class="ds-column-panel__picker-empty">All columns added</span>
+        </ng-template>
+      </div>
+    </ng-container>
   </ng-container>
 
   <!-- ── 4. Row Groups (optional — hidden by suppressRowGroups) ──────── -->
   <ng-container *ngIf="!suppressRowGroups">
     <div class="ds-divider" role="separator" aria-hidden="true"></div>
     <div class="ds-column-panel__section-hd">
-      <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">drag_indicator</span>
+      <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">stacks</span>
       <span class="ds-column-panel__section-title">Row Groups</span>
     </div>
 
-    <!-- Active row group chips -->
+    <!-- Active row group rows -->
     <div
       *ngIf="activeRowGroups.length > 0"
-      class="ds-column-panel__group-chips"
+      class="ds-column-panel__pivot-col-list"
     >
-      <span
+      <div
         *ngFor="let group of activeRowGroups"
-        class="ds-tag ds-tag--sm"
+        class="ds-column-panel__pivot-col-row"
       >
-        <span class="ds-tag__label">{{ group.label }}</span>
+        <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+        <span class="ds-column-panel__col-name">{{ group.label }}</span>
         <button
           type="button"
-          class="ds-tag__remove"
+          class="ds-column-panel__pivot-remove"
           [attr.aria-label]="'Remove ' + group.label + ' row group'"
           (click)="removeRowGroupColumn(group.colId)"
         >
-          <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+          <span class="ds-icon ds-icon--sm" aria-hidden="true">do_not_disturb_on</span>
         </button>
-      </span>
+      </div>
     </div>
 
     <!-- Add Column button + inline picker -->
@@ -165,25 +222,26 @@
       <span class="ds-column-panel__section-title">Values</span>
     </div>
 
-    <!-- Active value chips -->
+    <!-- Active value rows -->
     <div
       *ngIf="activeValueColumns.length > 0"
-      class="ds-column-panel__group-chips"
+      class="ds-column-panel__pivot-col-list"
     >
-      <span
+      <div
         *ngFor="let val of activeValueColumns"
-        class="ds-tag ds-tag--sm"
+        class="ds-column-panel__pivot-col-row"
       >
-        <span class="ds-tag__label">{{ val.label }}</span>
+        <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
+        <span class="ds-column-panel__col-name">{{ val.label }}</span>
         <button
           type="button"
-          class="ds-tag__remove"
+          class="ds-column-panel__pivot-remove"
           [attr.aria-label]="'Remove ' + val.label + ' value column'"
           (click)="removeValueColumn(val.colId)"
         >
-          <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+          <span class="ds-icon ds-icon--sm" aria-hidden="true">do_not_disturb_on</span>
         </button>
-      </span>
+      </div>
     </div>
 
     <!-- Add Column button + inline picker -->
