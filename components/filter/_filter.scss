@@ -145,7 +145,6 @@
   flex: 1;
   min-height: 0;
   display: flex;
-  gap: var(--spacing-md);
   padding: var(--spacing-lg) var(--spacing-xl);
   overflow: hidden;
 }
@@ -458,9 +457,11 @@
 
 // Search highlight
 mark.search-match {
-  background: transparent;
-  color: var(--color-text-brand);
+  background: var(--color-surface-accent-yellow-bold);
+  color: inherit;
   font-weight: var(--ref-typeface-weight-bold);
+  border-radius: 2px;
+  padding: 0 1px;
 }
 
 
