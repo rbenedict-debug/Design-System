@@ -24,27 +24,29 @@
           <!-- Header: title + search -->
           <header class="filter-modal__header">
             <h2 class="filter-modal__title">Filters</h2>
-            <div class="ds-search ds-search--sm">
-              <span class="ds-search__icon ds-icon" aria-hidden="true">search</span>
-              <input
-                class="ds-search__input"
-                type="search"
-                placeholder="Search filters…"
-                autocomplete="off"
-                [value]="_searchQuery()"
-                (input)="setSearch($any($event.target).value)"
-                aria-label="Search filters"
-              />
-              @if (_searchQuery()) {
-                <button
-                  class="ds-search__clear ds-icon-button ds-icon-button--icon ds-icon-button--sm"
-                  type="button"
-                  aria-label="Clear search"
-                  (click)="setSearch('')"
-                >
-                  <span class="ds-icon" aria-hidden="true">close</span>
-                </button>
-              }
+            <div class="ds-input ds-search filter-modal__search">
+              <div class="ds-input__field">
+                <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                <input
+                  class="ds-input__control"
+                  type="search"
+                  placeholder="Search filters…"
+                  autocomplete="off"
+                  [value]="_searchQuery()"
+                  (input)="setSearch($any($event.target).value)"
+                  aria-label="Search filters"
+                />
+                @if (_searchQuery()) {
+                  <button
+                    class="ds-input__action ds-icon-button ds-icon-button--icon ds-icon-button--sm"
+                    type="button"
+                    aria-label="Clear search"
+                    (click)="setSearch('')"
+                  >
+                    <span class="ds-icon" aria-hidden="true">close</span>
+                  </button>
+                }
+              </div>
             </div>
           </header>
 
@@ -133,12 +135,12 @@
                       type="button"
                       (click)="toggleCustomDateExpanded()"
                     >
-                      <span class="ds-icon" aria-hidden="true">date_range</span>
-                      <span class="filter-preset-custom-toggle__label">Custom date range</span>
-                      @if (_dateRanges().find(r => r.tierId === null)) {
-                        <span class="filter-preset-custom-toggle__badge" aria-label="1 custom range applied">1</span>
-                      }
-                      <span class="ds-icon filter-preset-custom-toggle__chevron" aria-hidden="true">keyboard_arrow_down</span>
+                      <span class="filter-preset-custom-toggle__label">Custom date range
+                        @if (_dateRanges().find(r => r.tierId === null)) {
+                          <span class="filter-preset-custom-toggle__badge" aria-label="1 custom range applied">1</span>
+                        }
+                      </span>
+                      <span class="ds-icon ds-icon--sm filter-preset-custom-toggle__chevron" aria-hidden="true">expand_more</span>
                     </button>
 
                     @if (_customDateExpanded()) {
@@ -147,26 +149,30 @@
                           <div class="filter-date-field__row">
                             <div class="filter-date-field__group">
                               <label class="filter-date-field__label" [for]="'custom-from'">From</label>
-                              <div class="ds-input ds-input--sm">
-                                <input
-                                  class="ds-input__control"
-                                  type="date"
-                                  [id]="'custom-from'"
-                                  [value]="_customDateDraft().from ?? ''"
-                                  (change)="setCustomDateDraft('from', $any($event.target).value)"
-                                />
+                              <div class="ds-input">
+                                <div class="ds-input__field">
+                                  <input
+                                    class="ds-input__control"
+                                    type="date"
+                                    [id]="'custom-from'"
+                                    [value]="_customDateDraft().from ?? ''"
+                                    (change)="setCustomDateDraft('from', $any($event.target).value)"
+                                  />
+                                </div>
                               </div>
                             </div>
                             <div class="filter-date-field__group">
                               <label class="filter-date-field__label" [for]="'custom-to'">To</label>
-                              <div class="ds-input ds-input--sm">
-                                <input
-                                  class="ds-input__control"
-                                  type="date"
-                                  [id]="'custom-to'"
-                                  [value]="_customDateDraft().to ?? ''"
-                                  (change)="setCustomDateDraft('to', $any($event.target).value)"
-                                />
+                              <div class="ds-input">
+                                <div class="ds-input__field">
+                                  <input
+                                    class="ds-input__control"
+                                    type="date"
+                                    [id]="'custom-to'"
+                                    [value]="_customDateDraft().to ?? ''"
+                                    (change)="setCustomDateDraft('to', $any($event.target).value)"
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -246,26 +252,30 @@
                             <div class="filter-date-field__row">
                               <div class="filter-date-field__group">
                                 <label class="filter-date-field__label" [for]="tier.id + '-from'">From</label>
-                                <div class="ds-input ds-input--sm">
-                                  <input
-                                    class="ds-input__control"
-                                    type="date"
-                                    [id]="tier.id + '-from'"
-                                    [value]="getDateDraft(tier.id, 'from')"
-                                    (change)="setFieldDateDraft(tier.id, 'from', $any($event.target).value)"
-                                  />
+                                <div class="ds-input">
+                                  <div class="ds-input__field">
+                                    <input
+                                      class="ds-input__control"
+                                      type="date"
+                                      [id]="tier.id + '-from'"
+                                      [value]="getDateDraft(tier.id, 'from')"
+                                      (change)="setFieldDateDraft(tier.id, 'from', $any($event.target).value)"
+                                    />
+                                  </div>
                                 </div>
                               </div>
                               <div class="filter-date-field__group">
                                 <label class="filter-date-field__label" [for]="tier.id + '-to'">To</label>
-                                <div class="ds-input ds-input--sm">
-                                  <input
-                                    class="ds-input__control"
-                                    type="date"
-                                    [id]="tier.id + '-to'"
-                                    [value]="getDateDraft(tier.id, 'to')"
-                                    (change)="setFieldDateDraft(tier.id, 'to', $any($event.target).value)"
-                                  />
+                                <div class="ds-input">
+                                  <div class="ds-input__field">
+                                    <input
+                                      class="ds-input__control"
+                                      type="date"
+                                      [id]="tier.id + '-to'"
+                                      [value]="getDateDraft(tier.id, 'to')"
+                                      (change)="setFieldDateDraft(tier.id, 'to', $any($event.target).value)"
+                                    />
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -526,31 +536,37 @@
                           [attr.aria-expanded]="!isBucketCollapsed(bucket.key)"
                           [attr.aria-label]="bucket.label + ' (' + bucket.items.length + ')'"
                         >
-                          <span class="ds-icon selected-bucket__chevron" aria-hidden="true">keyboard_arrow_down</span>
                           <span class="selected-bucket__crumb">{{ bucket.label }}</span>
+                          <span class="ds-icon ds-icon--sm ds-icon--filled selected-bucket__chevron" aria-hidden="true">arrow_drop_down</span>
                         </button>
-                        <span class="selected-bucket__count">{{ bucket.items.length }}</span>
                         <button
                           class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__remove-btn"
                           type="button"
                           [attr.aria-label]="'Remove ' + bucket.label + ' filter'"
                           (click)="removeBucket(bucket)"
                         >
-                          <span class="ds-icon" aria-hidden="true">close</span>
+                          <span class="ds-icon" aria-hidden="true">delete</span>
                         </button>
                       </div>
-                      @if (bucket.items.length > 1) {
-                        <div class="selected-bucket__header-bottom">
-                          <button
-                            class="ds-button ds-button--text ds-button--xs"
-                            type="button"
-                            [class.ds-button--active]="isBucketExcluded(bucket.key)"
-                            (click)="toggleBucketExclude(bucket.key)"
-                          >
-                            @if (isBucketExcluded(bucket.key)) { Include } @else { Exclude }
-                          </button>
-                        </div>
-                      }
+                      <div class="selected-bucket__header-bottom">
+                        <span class="selected-bucket__count">{{ bucket.items.length }} filter{{ bucket.items.length === 1 ? '' : 's' }}</span>
+                        <label
+                          class="filter-toggle"
+                          [class.filter-toggle--on]="isBucketExcluded(bucket.key)"
+                        >
+                          <input
+                            type="checkbox"
+                            class="filter-toggle__input"
+                            [checked]="isBucketExcluded(bucket.key)"
+                            (change)="toggleBucketExclude(bucket.key)"
+                            [attr.aria-label]="'Exclude ' + bucket.label"
+                          />
+                          <span class="filter-toggle__track">
+                            <span class="filter-toggle__thumb"></span>
+                          </span>
+                          <span class="filter-toggle__label">Exclude</span>
+                        </label>
+                      </div>
                     </div>
 
                     <div class="selected-bucket__items">
