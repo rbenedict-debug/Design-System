@@ -450,6 +450,8 @@
     /* demonstrating that the system works end-to-end.                         */
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Ensure [hidden] always wins even when component CSS sets display:flex/block */
+    [hidden] { display: none !important; }
 
     :root {
       --preview-font: 'DM Sans', sans-serif;
@@ -17843,12 +17845,12 @@ Source: <code>components/datepicker/_datepicker.scss</code>
   }
 
   function openModal() {
-    overlay.removeAttribute('hidden'); document.body.style.overflow = 'hidden';
+    overlay.hidden = false; document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => searchInput.focus());
   }
 
   function closeModal() {
-    overlay.setAttribute('hidden', ''); document.body.style.overflow = '';
+    overlay.hidden = true; document.body.style.overflow = '';
   }
 
   function renderAppliedBar() {
@@ -17889,7 +17891,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
   function switchContext(contextKey) {
     if (!CONTEXTS[contextKey] || contextKey === activeContext) return;
-    if (!overlay.hasAttribute('hidden')) closeModal();
+    if (!overlay.hidden) closeModal();
     activeContext = contextKey; activeFilterGroups = CONTEXTS[contextKey].groups;
     OPTION_META = buildOptionMeta(activeFilterGroups);
     state.activeGroupId = activeFilterGroups[0]?.id ?? null;
@@ -18087,7 +18089,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
   overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
 
   // Close on Escape
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !overlay.hasAttribute('hidden')) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !overlay.hidden) closeModal(); });
 
   // Public API
   window.dsPreviewFilter = {
