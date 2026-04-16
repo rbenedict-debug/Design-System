@@ -9457,6 +9457,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
         <a class="nav-link" href="#save-bar" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Save Bar</span></a>
         <a class="nav-link" href="#modal" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Modal</span></a>
         <a class="nav-link" href="#filter" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Filter</span></a>
+        <a class="nav-link" href="#filter-bar" data-nav data-page="components"><span class="nav-dot"></span><span class="nav-text">Filter Bar</span></a>
       </div>
 
       <button class="nav-group-header" data-group="display" onclick="toggleGroup('display')" aria-expanded="true">
@@ -19589,6 +19590,101 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div><!-- /.filter-modal -->
           </div><!-- /#preview-filter-overlay -->
 
+        </div><!-- /.component-demo -->
+      </section>
+
+
+      <!-- ═══════════════════════════════════════════════════════════════ -->
+      <!-- Filter Bar                                                      -->
+      <!-- ═══════════════════════════════════════════════════════════════ -->
+
+      <section class="section" id="filter-bar">
+        <div class="section-header">
+          <h2 class="section-title">Filter Bar</h2>
+          <span class="section-source">components/filter-bar/_filter-bar.scss</span>
+        </div>
+        <p class="section-desc">
+          Applied-filters strip rendered between the table toolbar and the table when filters
+          are active. Each active bucket is displayed as a <code>ds-card-item</code> chip with
+          a leading group icon, a primary bucket label, and a secondary comma-joined item list.
+          Clicking a chip body emits <code>(filterClick)</code> to re-open <code>ds-filter</code>;
+          clicking × emits <code>(selectionChange)</code> with that bucket removed.
+          Angular component: <code>&lt;ds-filter-bar&gt;</code> with <code>[selection]</code>,
+          <code>[groups]</code>, <code>(selectionChange)</code>, and <code>(filterClick)</code>.
+          Hide the host with <code>[hidden]="filterCount === 0"</code>.
+        </p>
+
+        <div class="component-demo">
+          <div class="demo-row">
+            <div class="demo-row-label">Active filters</div>
+            <div class="demo-row-items" style="flex-direction: column; align-items: stretch; width: 100%;">
+
+              <!-- Static HTML preview of the filter bar -->
+              <div class="filter-applied-bar">
+                <div class="filter-applied-bar__cards">
+
+                  <!-- Chip 1: flat group, 2 items, included -->
+                  <div class="ds-card-item ds-card-item--interactive" style="position:relative;">
+                    <div class="ds-card-item__leading">
+                      <span class="ds-icon ds-icon--sm" aria-hidden="true">inventory_2</span>
+                    </div>
+                    <div class="ds-card-item__body">
+                      <div class="ds-card-item__primary">Asset Type</div>
+                      <div class="ds-card-item__secondary">Hardware, Software</div>
+                    </div>
+                    <div class="filter-applied-card__tooltip" aria-hidden="true">
+                      <strong>Asset Type</strong><br />Hardware, Software
+                    </div>
+                    <div class="ds-card-item__action">
+                      <button class="filter-applied-card__remove" type="button" aria-label="Remove Asset Type filter">
+                        <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Chip 2: date range, 1 item, included -->
+                  <div class="ds-card-item ds-card-item--interactive" style="position:relative;">
+                    <div class="ds-card-item__leading">
+                      <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_month</span>
+                    </div>
+                    <div class="ds-card-item__body">
+                      <div class="ds-card-item__primary">Purchase Date</div>
+                      <div class="ds-card-item__secondary">Jan 5 – Mar 31</div>
+                    </div>
+                    <div class="filter-applied-card__tooltip" aria-hidden="true">
+                      <strong>Purchase Date</strong><br />Jan 5 – Mar 31
+                    </div>
+                    <div class="ds-card-item__action">
+                      <button class="filter-applied-card__remove" type="button" aria-label="Remove Purchase Date filter">
+                        <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Chip 3: flat group, excluded state -->
+                  <div class="ds-card-item ds-card-item--interactive filter-applied-card--excluded" style="position:relative;">
+                    <div class="ds-card-item__leading">
+                      <span class="ds-icon ds-icon--sm" aria-hidden="true">account_balance</span>
+                    </div>
+                    <div class="ds-card-item__body">
+                      <div class="ds-card-item__primary">Department</div>
+                      <div class="ds-card-item__secondary">Finance</div>
+                    </div>
+                    <div class="filter-applied-card__tooltip" aria-hidden="true">
+                      <strong>Department</strong><br />Finance
+                    </div>
+                    <div class="ds-card-item__action">
+                      <button class="filter-applied-card__remove" type="button" aria-label="Remove Department filter">
+                        <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+                      </button>
+                    </div>
+                  </div>
+
+                </div><!-- /.filter-applied-bar__cards -->
+              </div><!-- /.filter-applied-bar -->
+
+            </div>
+          </div>
         </div><!-- /.component-demo -->
       </section>
 

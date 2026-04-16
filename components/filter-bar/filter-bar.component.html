@@ -1,0 +1,47 @@
+<div class="filter-applied-bar" role="region" aria-label="Active filters">
+  <div class="filter-applied-bar__cards">
+
+    @for (chip of chips; track chip.key) {
+      <div
+        class="ds-card-item ds-card-item--interactive"
+        [class.filter-applied-card--excluded]="chip.isExcluded"
+        role="button"
+        tabindex="0"
+        [attr.aria-label]="chip.primaryLabel + ': ' + chip.secondaryText + (chip.isExcluded ? ' (excluded)' : '')"
+        (click)="onChipClick(chip)"
+        (keydown.enter)="onChipClick(chip)"
+        (keydown.space)="onChipClick(chip)"
+      >
+        <!-- Leading icon -->
+        <div class="ds-card-item__leading">
+          <span class="ds-icon ds-icon--sm" aria-hidden="true">{{ chip.icon }}</span>
+        </div>
+
+        <!-- Body -->
+        <div class="ds-card-item__body">
+          <div class="ds-card-item__primary">{{ chip.primaryLabel }}</div>
+          <div class="ds-card-item__secondary">{{ chip.secondaryText }}</div>
+        </div>
+
+        <!-- Overflow tooltip — always in DOM, visible on hover via CSS -->
+        <div class="filter-applied-card__tooltip" aria-hidden="true">
+          <strong>{{ chip.primaryLabel }}</strong><br />{{ chip.secondaryText }}
+        </div>
+
+        <!-- Remove action -->
+        <div class="ds-card-item__action">
+          <button
+            class="filter-applied-card__remove"
+            type="button"
+            [attr.aria-label]="'Remove ' + chip.primaryLabel + ' filter'"
+            (click)="onRemove(chip, $event)"
+          >
+            <span class="ds-icon ds-icon--xs" aria-hidden="true">close</span>
+          </button>
+        </div>
+
+      </div><!-- /.ds-card-item -->
+    }
+
+  </div><!-- /.filter-applied-bar__cards -->
+</div><!-- /.filter-applied-bar -->
