@@ -2,10 +2,10 @@
 
   <!-- ── 1. Density toggle ───────────────────────────────────────── -->
   <div class="ds-column-panel__density">
-    <div class="ds-density-toggle" role="group" aria-label="Row density">
+    <div class="ds-button-group" role="group" aria-label="Row density">
       <button
         type="button"
-        class="ds-density-toggle__btn"
+        class="ds-button ds-button--outlined ds-button--sm"
         [class.is-selected]="density === 'comfort'"
         [attr.aria-pressed]="density === 'comfort'"
         (click)="onDensityChange('comfort')"
@@ -15,7 +15,7 @@
       </button>
       <button
         type="button"
-        class="ds-density-toggle__btn"
+        class="ds-button ds-button--outlined ds-button--sm"
         [class.is-selected]="density === 'compact'"
         [attr.aria-pressed]="density === 'compact'"
         (click)="onDensityChange('compact')"

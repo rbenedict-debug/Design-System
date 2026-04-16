@@ -11,6 +11,7 @@ export type DsButtonVariant =
 
 export type DsButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
+
 /**
  * Onflo Design System — Button
  *
@@ -46,6 +47,14 @@ export class DsButtonComponent {
   /** Disables the button and applies disabled styling. */
   @Input() disabled = false;
 
+  /**
+   * Toggle state. When set (true or false), marks this as a toggle button:
+   * - Adds `.is-selected` class when true
+   * - Binds `aria-pressed` on the native button element
+   * Pair with `ds-button-group` wrapper for full toggle group semantics.
+   */
+  @Input() selected: boolean | null = null;
+
   /** Native button type attribute. Default: 'button' */
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
 
@@ -53,7 +62,14 @@ export class DsButtonComponent {
   @Output() clicked = new EventEmitter<MouseEvent>();
 
   get buttonClasses(): string {
-    return `ds-button ds-button--${this.variant} ds-button--${this.size}`;
+    const base = `ds-button ds-button--${this.variant} ds-button--${this.size}`;
+    return this.selected === true ? `${base} is-selected` : base;
+  }
+
+  /** Returns 'true'/'false' when this is a toggle button, null otherwise. */
+  get ariaPressed(): 'true' | 'false' | null {
+    if (this.selected === null) { return null; }
+    return this.selected ? 'true' : 'false';
   }
 
   handleClick(event: MouseEvent): void {

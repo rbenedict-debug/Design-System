@@ -168,7 +168,8 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | Onflo Component | Angular Material Module | Notes |
 |---|---|---|
 | `ds-icon` | n/a — Material Symbols Rounded font | CSS class API only |
-| `ds-button` | `MatButtonModule` | mat-flat-button, mat-stroked-button, mat-button |
+| `ds-button` | `MatButtonModule` | mat-flat-button, mat-stroked-button, mat-button; toggle via `[selected]` input (adds `.is-selected` + `aria-pressed`); pair with `ds-button-group` |
+| `ds-button-group` | Custom | CSS-only wrapper — `display: inline-flex; gap: --spacing-sm`; add `role="group"` + `aria-label`; buttons inside use `ds-button--outlined.is-selected` + `aria-pressed` |
 | `ds-icon-button` | `MatIconButtonModule` | mat-icon-button |
 | `ds-input` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput |
 | `ds-textarea` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput (textarea) |

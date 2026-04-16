@@ -11366,6 +11366,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             Five variants covering every action context. All interactive states (hover, focus, pressed, disabled)
             are token-driven. Use <code>class="ds-button ds-button--filled"</code> directly, or the
             Angular component <code>&lt;ds-button variant="filled"&gt;</code>.
+            Toggle groups use <code>ds-button--outlined.is-selected</code> + <code>aria-pressed</code>
+            inside a <code>ds-button-group</code> wrapper (<code>role="group"</code> + <code>aria-label</code>).
+            Angular: <code>[selected]="true|false"</code> input binds both class and <code>aria-pressed</code>.
             Source: <code>components/button/_button.scss</code>
           </p>
         </div>
@@ -11476,6 +11479,52 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <button class="ds-button ds-button--text is-loading">Processing</button>
               <div class="demo-divider"></div>
               <button class="ds-button ds-button--destructive is-loading">Deleting...</button>
+            </div>
+          </div>
+
+          <!-- Toggle group (md) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Toggle group</div>
+            <div class="demo-row-items">
+              <div class="ds-button-group" role="group" aria-label="View mode">
+                <button class="ds-button ds-button--outlined is-selected" aria-pressed="true">List</button>
+                <button class="ds-button ds-button--outlined" aria-pressed="false">Grid</button>
+                <button class="ds-button ds-button--outlined" aria-pressed="false">Board</button>
+              </div>
+              <div class="demo-divider"></div>
+              <div class="ds-button-group" role="group" aria-label="View mode with icons">
+                <button class="ds-button ds-button--outlined ds-button--leading-icon is-selected" aria-pressed="true">
+                  <span class="ds-icon">view_list</span>
+                  List
+                </button>
+                <button class="ds-button ds-button--outlined ds-button--leading-icon" aria-pressed="false">
+                  <span class="ds-icon">grid_view</span>
+                  Grid
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Toggle group (sm) -->
+          <div class="demo-row">
+            <div class="demo-row-label">Toggle group sm</div>
+            <div class="demo-row-items">
+              <div class="ds-button-group" role="group" aria-label="Row density">
+                <button class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon is-selected" aria-pressed="true">
+                  <span class="ds-icon ds-icon--sm">density_medium</span>
+                  Comfort
+                </button>
+                <button class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon" aria-pressed="false">
+                  <span class="ds-icon ds-icon--sm">density_small</span>
+                  Compact
+                </button>
+              </div>
+              <div class="demo-divider"></div>
+              <div class="ds-button-group" role="group" aria-label="Time range">
+                <button class="ds-button ds-button--outlined ds-button--sm" aria-pressed="false">7d</button>
+                <button class="ds-button ds-button--outlined ds-button--sm is-selected" aria-pressed="true">30d</button>
+                <button class="ds-button ds-button--outlined ds-button--sm" aria-pressed="false">90d</button>
+              </div>
             </div>
           </div>
 

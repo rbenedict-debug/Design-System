@@ -81,6 +81,9 @@ export interface AgColumnPanelApi {
   getValueColumns(): AgPanelColumn[];
   addValueColumn(key: string): void;
   removeValueColumn(key: string): void;
+  getPivotColumns(): AgPanelColumn[];
+  addPivotColumn(key: string): void;
+  removePivotColumn(key: string): void;
   addEventListener(event: string, callback: () => void): void;
   removeEventListener(event: string, callback: () => void): void;
 }
@@ -100,6 +103,8 @@ export interface AgPanelColumn {
     enableRowGroup?: boolean;
     /** Set true on colDef to allow this column to appear in the values (aggregation) picker. */
     enableValue?: boolean;
+    /** Set true on colDef to allow this column to appear in the pivot column labels picker. */
+    enablePivot?: boolean;
     /**
      * Set true to prevent UI-based pinning changes (drag-to-pin and column menu pin options).
      * The column can still be pinned/unpinned via API. Use on system columns that should
@@ -194,6 +199,12 @@ export class DsColumnPanelComponent implements OnDestroy {
   /** Whether the value column picker menu is open. */
   showValueMenu = false;
 
+  /** Active pivot columns shown as list rows in the Column Labels section. */
+  activePivotColumns: ColumnPickerOption[] = [];
+
+  /** Whether the pivot column picker menu is open. */
+  showPivotMenu = false;
+
   /** Whether the Pivot Mode row is hidden (set via suppressPivotMode toolPanelParam). */
   suppressPivotMode = false;
 
@@ -241,6 +252,7 @@ export class DsColumnPanelComponent implements OnDestroy {
     params.api.addEventListener('columnVisible',        this._colChanged);
     params.api.addEventListener('columnMoved',          this._colChanged);
     params.api.addEventListener('pivotModeChanged',     this._pivotChanged);
+    params.api.addEventListener('columnPivotChanged',   this._pivotChanged);
     params.api.addEventListener('columnRowGroupChanged', this._groupChanged);
     params.api.addEventListener('columnValueChanged',   this._groupChanged);
     this._syncColumns();
@@ -270,6 +282,7 @@ export class DsColumnPanelComponent implements OnDestroy {
     this._api?.removeEventListener('columnVisible',        this._colChanged);
     this._api?.removeEventListener('columnMoved',          this._colChanged);
     this._api?.removeEventListener('pivotModeChanged',     this._pivotChanged);
+    this._api?.removeEventListener('columnPivotChanged',   this._pivotChanged);
     this._api?.removeEventListener('columnRowGroupChanged', this._groupChanged);
     this._api?.removeEventListener('columnValueChanged',   this._groupChanged);
   }
@@ -278,9 +291,10 @@ export class DsColumnPanelComponent implements OnDestroy {
 
   @HostListener('document:click')
   onDocumentClick(): void {
-    if (this.showRowGroupMenu || this.showValueMenu) {
+    if (this.showRowGroupMenu || this.showValueMenu || this.showPivotMenu) {
       this.showRowGroupMenu = false;
       this.showValueMenu    = false;
+      this.showPivotMenu    = false;
       this.cdr.markForCheck();
     }
   }
@@ -305,6 +319,10 @@ export class DsColumnPanelComponent implements OnDestroy {
   private _syncPivot(): void {
     if (!this._api) { return; }
     this.pivotMode = this._api.isPivotMode();
+    this.activePivotColumns = this._api.getPivotColumns().map(col => ({
+      colId: col.getColId(),
+      label: col.getColDef().headerName ?? col.getColId(),
+    }));
     this.cdr.markForCheck();
   }
 
@@ -346,6 +364,22 @@ export class DsColumnPanelComponent implements OnDestroy {
       .filter(col => {
         const def = col.getColDef();
         return def.enableValue === true
+          && def.lockVisible !== true
+          && !activeIds.has(col.getColId());
+      })
+      .map(col => ({
+        colId: col.getColId(),
+        label: col.getColDef().headerName ?? col.getColId(),
+      }));
+  }
+
+  get pivotMenuOptions(): ColumnPickerOption[] {
+    const activeIds = new Set(this.activePivotColumns.map(p => p.colId));
+    if (!this._api) { return []; }
+    return this._api.getAllGridColumns()
+      .filter(col => {
+        const def = col.getColDef();
+        return def.enablePivot === true
           && def.lockVisible !== true
           && !activeIds.has(col.getColId());
       })
@@ -420,6 +454,27 @@ export class DsColumnPanelComponent implements OnDestroy {
   removeValueColumn(colId: string): void {
     this._api?.removeValueColumn(colId);
     this._syncGroups();
+  }
+
+  // ── Pivot column labels picker ────────────────────────────────────────────
+
+  togglePivotMenu(event: Event): void {
+    event.stopPropagation();
+    this.showPivotMenu    = !this.showPivotMenu;
+    this.showRowGroupMenu = false;
+    this.showValueMenu    = false;
+  }
+
+  selectPivotColumn(col: ColumnPickerOption, event: Event): void {
+    event.stopPropagation();
+    this._api?.addPivotColumn(col.colId);
+    this.showPivotMenu = false;
+    this._syncPivot();
+  }
+
+  removePivotColumn(colId: string): void {
+    this._api?.removePivotColumn(colId);
+    this._syncPivot();
   }
 
   // ── Drag-to-reorder ───────────────────────────────────────────────────────

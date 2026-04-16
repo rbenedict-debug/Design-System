@@ -169,6 +169,26 @@
       &:hover:not(:disabled)  { background: var(--overlay-accent-red-hovered); border-color: var(--color-border-error); }
       &:active:not(:disabled) { background: var(--overlay-accent-red-pressed); }
     }
+
+    // Toggle / selected state — used in ds-button-group toggle groups
+    &.is-selected {
+      background: var(--color-surface-accent-blue);
+      border-color: var(--color-border-active);
+      color: var(--color-text-brand);
+
+      // Keep the blue base across all interactive states; apply overlays via ::after
+      &:hover:not(:disabled),
+      &:focus-visible,
+      &:active:not(:disabled) {
+        background: var(--color-surface-accent-blue);
+        border-color: var(--color-border-active);
+      }
+
+      &:hover:not(:disabled)::after  { background: var(--overlay-hovered); }
+      &:focus-visible                 { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
+      &:focus-visible::after          { background: var(--overlay-focused); }
+      &:active:not(:disabled)::after  { background: var(--overlay-pressed); }
+    }
   }
 
   // Text — no border or background, just label (same horizontal padding as filled)
@@ -275,6 +295,24 @@
 
 @keyframes ds-btn-spin {
   to { transform: rotate(360deg); }
+}
+
+
+// ── Button Group ──────────────────────────────────────────────────────────────
+//
+// Wraps toggle buttons into a single-select group.
+// Add role="group" and aria-label on the host element.
+//
+// Usage:
+//   <div class="ds-button-group" role="group" aria-label="Row density">
+//     <button class="ds-button ds-button--outlined" [class.is-selected]="…" aria-pressed="true">…</button>
+//     <button class="ds-button ds-button--outlined" [class.is-selected]="…" aria-pressed="false">…</button>
+//   </div>
+
+.ds-button-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 

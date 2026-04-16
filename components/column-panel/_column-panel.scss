@@ -16,9 +16,9 @@
 //   <div class="ds-column-panel">
 //     <!-- 1. Density -->
 //     <div class="ds-column-panel__density">
-//       <div class="ds-density-toggle">
-//         <button class="ds-density-toggle__btn is-selected"><span class="ds-icon ds-icon--sm">density_medium</span>Comfort</button>
-//         <button class="ds-density-toggle__btn"><span class="ds-icon ds-icon--sm">density_small</span>Compact</button>
+//       <div class="ds-button-group" role="group" aria-label="Row density">
+//         <button class="ds-button ds-button--outlined ds-button--sm is-selected" aria-pressed="true"><span class="ds-icon ds-icon--sm">density_medium</span>Comfort</button>
+//         <button class="ds-button ds-button--outlined ds-button--sm" aria-pressed="false"><span class="ds-icon ds-icon--sm">density_small</span>Compact</button>
 //       </div>
 //     </div>
 //
@@ -132,11 +132,11 @@
     padding: var(--spacing-sm);
     flex-shrink: 0;
 
-    // The ds-density-toggle component fills the full width of the density slot
-    .ds-density-toggle {
+    // Button group fills the full width; each button takes equal share
+    .ds-button-group {
       width: 100%;
 
-      .ds-density-toggle__btn {
+      .ds-button {
         flex: 1 0 0;
       }
     }
@@ -404,56 +404,6 @@ button.ds-column-panel__section-hd {
 // Hide col-list when section header is collapsed (CSS-driven, no JS needed).
 button.ds-column-panel__section-hd[aria-expanded="false"] + .ds-column-panel__col-list {
   display: none;
-}
-
-// ── Density toggle — Comfort / Compact segmented button ──────────────────────
-//
-// Two adjacent outlined buttons acting as a single-select toggle group.
-// Lives exclusively in the column panel density slot.
-
-.ds-density-toggle {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  flex-shrink: 0;
-
-  &__btn {
-    appearance: none;
-    -webkit-appearance: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    background: var(--color-surface-page);
-    border: 1px solid var(--color-border-primary);
-    border-radius: var(--radius-sm);
-    padding: 0 var(--spacing-md);
-    height: 42px;
-    cursor: pointer;
-    font-family: var(--ref-typescale-label-large-font);
-    font-size: var(--ref-typescale-label-large-size);
-    font-weight: var(--ref-typescale-label-large-weight-prominent);
-    line-height: var(--ref-typescale-label-large-line-height);
-    letter-spacing: var(--ref-typescale-label-large-tracking);
-    color: var(--color-text-primary);
-    white-space: nowrap;
-    position: relative;
-    transition: background 80ms ease, border-color 80ms ease, color 80ms ease;
-
-    &:focus { outline: none; }
-    &:focus-visible { box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring); }
-
-    &:hover:not(.is-selected) {
-      background: var(--overlay-hovered);
-    }
-
-    // Selected state — accent blue tint with active border
-    &.is-selected {
-      background: var(--color-surface-accent-blue);
-      border-color: var(--color-border-active);
-      color: var(--color-text-brand);
-    }
-  }
 }
 
 // ── Inline column picker menu ────────────────────────────────────────────────
