@@ -276,6 +276,192 @@ columnDefs: ColDef[] = [
 
 ---
 
+## Filtered Table Page
+
+Use when the table page needs filters. Extends the Data Table Page pattern by adding `ds-filter` (modal) and `ds-filter-bar` (applied-filters strip) to the existing toolbar + grid + paginator assembly.
+
+### Where each element lives
+
+```
+ds-page-content__main--table
+  ├── ds-table-toolbar          ← filterActive + filterBadgeCount wired here
+  ├── ds-filter-bar             ← between toolbar and grid; hidden when filterCount === 0
+  ├── ag-grid-angular
+  ├── ds-ag-paginator
+  └── ds-column-panel
+
+ds-filter                       ← OUTSIDE ds-page-content__main — it's a full-screen overlay
+```
+
+`ds-filter` must be a sibling of `ds-page-content__main`, never nested inside it. It renders as a fixed overlay on top of the entire viewport.
+
+### Full template
+
+```html
+<main class="ds-page-content" role="main">
+
+  <div class="ds-page-content__heading">
+    <h1 class="ds-page-content__title">Assets</h1>
+  </div>
+
+  <div class="ds-page-content__main ds-page-content__main--table"
+       [attr.data-panel-open]="settingsActive || null">
+
+    <ds-table-toolbar
+      [searchPlaceholder]="'Search assets'"
+      [(filterActive)]="filterOpen"
+      [filterBadgeCount]="filterCount"
+      [(settingsActive)]="settingsActive"
+      (searchValueChange)="onSearch($event)"
+    >
+      <ng-container toolbar-actions>
+        <ds-button variant="filled">Add Asset</ds-button>
+      </ng-container>
+    </ds-table-toolbar>
+
+    <!-- hidden when no filters are active -->
+    <ds-filter-bar
+      [hidden]="filterCount === 0"
+      [selection]="filterSelection"
+      [groups]="filterGroups"
+      (selectionChange)="onFilterSelectionChange($event)"
+      (filterClick)="filterOpen = true"
+    />
+
+    <ag-grid-angular
+      class="ds-ag-grid ag-theme-quartz"
+      [defaultColDef]="defaultColDef"
+      [columnTypes]="columnTypes"
+      [columnDefs]="columnDefs"
+      [rowData]="rowData"
+      [rowHeight]="56"
+      [headerHeight]="56"
+      [pagination]="true"
+      [suppressPaginationPanel]="true"
+      [suppressContextMenu]="true"
+      [suppressHeaderContextMenu]="true"
+      (gridReady)="onGridReady($event)"
+    />
+
+    <ds-ag-paginator [api]="gridApi" />
+    <ds-column-panel [api]="gridApi" [(density)]="density" />
+
+  </div>
+
+</main>
+
+<!-- Full-screen overlay — OUTSIDE ds-page-content__main -->
+<ds-filter
+  [(open)]="filterOpen"
+  [groups]="filterGroups"
+  [(selection)]="filterSelection"
+  [savedSetsKey]="'onflo-filter-sets-assets'"
+  (filterCountChange)="filterCount = $event"
+/>
+```
+
+### Angular component class
+
+```typescript
+import {
+  DsFilterComponent,
+  DsFilterBarComponent,
+  FilterGroup,
+  FilterSelection,
+  FilterOption,
+  FilterTier,
+  EMPTY_FILTER_SELECTION,
+  getActiveFilterCount,
+  DS_TABLE_DEFAULT_COL_DEF,
+  DS_TABLE_COLUMN_TYPES,
+} from '@onflo/design-system';
+
+@Component({
+  standalone: true,
+  imports: [
+    DsFilterComponent,
+    DsFilterBarComponent,
+    // ... other DS imports
+  ],
+})
+export class AssetsPageComponent {
+  readonly defaultColDef = DS_TABLE_DEFAULT_COL_DEF;
+  readonly columnTypes   = DS_TABLE_COLUMN_TYPES;
+
+  gridApi?: GridApi;
+  settingsActive = false;
+  filterOpen     = false;
+  filterCount    = 0;
+  filterSelection: FilterSelection = { ...EMPTY_FILTER_SELECTION };
+
+  readonly filterGroups: FilterGroup[] = [
+    {
+      id: 'asset-type',
+      label: 'Asset Type',
+      icon: 'inventory_2',
+      tiers: [
+        {
+          id: 'asset-category',
+          label: 'Category',
+          options: [
+            { id: 'hardware', label: 'Hardware' },
+            { id: 'software', label: 'Software' },
+          ],
+        },
+      ],
+    },
+    // ... more groups
+  ];
+
+  onFilterSelectionChange(selection: FilterSelection): void {
+    this.filterSelection = selection;
+    this.filterCount = getActiveFilterCount(selection);
+    this.applyFiltersToGrid(selection);
+  }
+
+  private applyFiltersToGrid(selection: FilterSelection): void {
+    // Pass selection to data service / AG Grid filter model as needed
+  }
+
+  onGridReady(event: GridReadyEvent): void {
+    this.gridApi = event.api;
+    setTimeout(() => this.gridApi?.sizeColumnsToFit(), 0);
+  }
+
+  onSettingsToggle(active: boolean): void {
+    this.settingsActive = active;
+    setTimeout(() => this.gridApi?.sizeColumnsToFit(), 300);
+  }
+}
+```
+
+### `savedSetsKey` naming convention
+
+Use `'onflo-filter-sets-{page-slug}'` — lowercase, hyphenated, unique per page context:
+
+| Page | Key |
+|---|---|
+| Assets | `'onflo-filter-sets-assets'` |
+| Contacts | `'onflo-filter-sets-contacts'` |
+| Loans | `'onflo-filter-sets-loans'` |
+| Service Overview | `'onflo-filter-sets-service'` |
+
+Omit `savedSetsKey` entirely (or pass an empty string) to disable the saved-sets feature for a page.
+
+### Rules
+
+- `ds-filter` is always outside `ds-page-content__main` — it renders as a fixed viewport overlay
+- `ds-filter-bar` is always inside `ds-page-content__main--table`, between the toolbar and the grid
+- Always hide `ds-filter-bar` with `[hidden]="filterCount === 0"` — never remove it from the DOM; it must exist for Angular bindings to stay live
+- `filterBadgeCount` on `ds-table-toolbar` is the committed count (`filterCount`) — it drives the badge on the toolbar's filter icon button
+- `(filterCountChange)` on `ds-filter` fires on every Apply/Clear and updates the committed count
+- The `filterGroups` array is defined once in the component class and shared between `ds-filter` and `ds-filter-bar` — never duplicate it
+- `EMPTY_FILTER_SELECTION` is the correct initial value for `filterSelection` — do not initialize with `null` or a partial object
+- For range selections (date, cost, numeric), handle them in `applyFiltersToGrid` — they are not stored in `savedSetsKey` localStorage
+- `ds-filter-bar` chip click (`filterClick`) always sets `filterOpen = true` — the modal opens and the user continues editing
+
+---
+
 ## Page content structure
 
 Every page's content area follows this flex column layout. Understanding it is required before placing `ds-save-bar` or any fixed footer element correctly.

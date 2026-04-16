@@ -180,6 +180,67 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 | Table toolbar | `<ds-table-toolbar>` | `DsTableToolbarComponent` |
 | AG Grid paginator | `<ds-ag-paginator>` | `DsAgPaginatorComponent` |
 
+### Filtering
+
+Full filter system for table pages. Always use both components together — `ds-filter` is the modal and `ds-filter-bar` is the applied-filters strip that appears between the toolbar and the table.
+
+| Component | Selector | Import |
+|---|---|---|
+| Filter modal | `<ds-filter>` | `DsFilterComponent` |
+| Applied filters bar | `<ds-filter-bar>` | `DsFilterBarComponent` |
+
+**Also import these types from `@onflo/design-system`:**
+
+| Type | Purpose |
+|---|---|
+| `FilterGroup` | Top-level filter group definition (icon, label, options or tiers) |
+| `FilterTier` | Sub-section within a group (checkbox list, date-range, cost-range, numeric-range) |
+| `FilterOption` | A single selectable option `{ id, label }` |
+| `FilterSelection` | Committed selection state — emitted by `ds-filter`, consumed by `ds-filter-bar` |
+| `SavedFilterSet` | A named saved filter set stored in localStorage |
+| `EMPTY_FILTER_SELECTION` | Use as the default value for `filterSelection` |
+| `getActiveFilterCount` | Returns total active filter count from a `FilterSelection` |
+
+**Canonical wiring — always use this exact pattern for filtered table pages:**
+
+```html
+<div class="ds-page-content__main ds-page-content__main--table"
+     [attr.data-panel-open]="settingsActive || null">
+
+  <ds-table-toolbar
+    [(filterActive)]="filterOpen"
+    [filterBadgeCount]="filterCount"
+    [(settingsActive)]="settingsActive"
+  />
+
+  <ds-filter-bar
+    [hidden]="filterCount === 0"
+    [selection]="filterSelection"
+    [groups]="filterGroups"
+    (selectionChange)="onFilterSelectionChange($event)"
+    (filterClick)="filterOpen = true"
+  />
+
+  <ag-grid-angular class="ds-ag-grid ag-theme-quartz" ... />
+  <ds-ag-paginator [api]="gridApi" />
+  <ds-column-panel [api]="gridApi" [(density)]="density" />
+
+</div>
+
+<ds-filter
+  [(open)]="filterOpen"
+  [groups]="filterGroups"
+  [(selection)]="filterSelection"
+  [savedSetsKey]="'onflo-filter-sets-{context}'"
+  (filterCountChange)="filterCount = $event"
+/>
+```
+
+Replace `{context}` in `savedSetsKey` with a unique, lowercase slug for the page (e.g. `onflo-filter-sets-assets`, `onflo-filter-sets-contacts`). This namespaces saved sets per page so users don't see sets from other contexts.
+
+Full component class wiring and group configuration reference: `.claude/specs/specs-filter.md`
+Full composition rules: `.claude/specs/specs-compositions.md` → "Filtered Table Page"
+
 #### AG Grid wiring — always use this pattern
 
 Any time you create or modify an AG Grid table in a consuming project, ALWAYS use the pre-built exports from the design system. Do not set `headerComponent` or `cellRenderer` manually — use `DS_TABLE_DEFAULT_COL_DEF` which does this for you.
@@ -506,6 +567,7 @@ When building page sections that assemble multiple components together, consult
 It covers:
 - **Component selection** — which component to use when options overlap (dialog vs modal vs snackbar; label vs tag vs chip vs badge; skeleton vs spinner)
 - **Data table page** — toolbar + AG Grid + paginator assembly rules
+- **Filtered table page** — toolbar + filter bar + filter modal + AG Grid full wiring
 - **Form / detail page** — field layout, error handling, save-bar placement
 - **Empty and loading states** — skeleton vs spinner, aria-busy wiring, empty state structure
 
