@@ -3,7 +3,6 @@ import { OnInit, ElementRef, EventEmitter, OnDestroy, ChangeDetectorRef, OnChang
 import { MatSelectChange } from '@angular/material/select';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatMenu, MenuPositionX, MenuPositionY } from '@angular/material/menu';
 import { PageEvent } from '@angular/material/paginator';
 import { MatRadioChange } from '@angular/material/radio';
@@ -736,7 +735,6 @@ declare class DsDatepickerComponent implements OnInit {
     private _fieldId;
     get fieldId(): string;
     ngOnInit(): void;
-    onDateChange(event: MatDatepickerInputEvent<Date>): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsDatepickerComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<DsDatepickerComponent, "ds-datepicker", never, { "label": { "alias": "label"; "required": false; }; "required": { "alias": "required"; "required": false; }; "placeholder": { "alias": "placeholder"; "required": false; }; "value": { "alias": "value"; "required": false; }; "minDate": { "alias": "minDate"; "required": false; }; "maxDate": { "alias": "maxDate"; "required": false; }; "helperText": { "alias": "helperText"; "required": false; }; "errorText": { "alias": "errorText"; "required": false; }; "isError": { "alias": "isError"; "required": false; }; "disabled": { "alias": "disabled"; "required": false; }; }, { "valueChange": "valueChange"; }, never, never, true, never>;
 }
@@ -805,8 +803,8 @@ declare class DsDateRangePickerComponent implements OnInit {
     get startId(): string;
     get endId(): string;
     ngOnInit(): void;
-    onStartDateChange(event: MatDatepickerInputEvent<Date>): void;
-    onEndDateChange(event: MatDatepickerInputEvent<Date>): void;
+    onStartChange(value: Date | null): void;
+    onEndChange(value: Date | null): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsDateRangePickerComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<DsDateRangePickerComponent, "ds-date-range-picker", never, { "label": { "alias": "label"; "required": false; }; "required": { "alias": "required"; "required": false; }; "startPlaceholder": { "alias": "startPlaceholder"; "required": false; }; "endPlaceholder": { "alias": "endPlaceholder"; "required": false; }; "startDate": { "alias": "startDate"; "required": false; }; "endDate": { "alias": "endDate"; "required": false; }; "minDate": { "alias": "minDate"; "required": false; }; "maxDate": { "alias": "maxDate"; "required": false; }; "helperText": { "alias": "helperText"; "required": false; }; "errorText": { "alias": "errorText"; "required": false; }; "isError": { "alias": "isError"; "required": false; }; "disabled": { "alias": "disabled"; "required": false; }; }, { "startDateChange": "startDateChange"; "endDateChange": "endDateChange"; "rangeChange": "rangeChange"; }, never, never, true, never>;
 }
