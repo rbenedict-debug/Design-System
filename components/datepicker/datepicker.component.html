@@ -16,14 +16,14 @@
     [matDatepicker]="picker"
     [id]="fieldId"
     [placeholder]="placeholder"
-    [value]="value"
+    [(ngModel)]="value"
+    (ngModelChange)="valueChange.emit($event)"
     [disabled]="disabled"
     [min]="minDate"
     [max]="maxDate"
     [required]="required"
     [attr.aria-invalid]="isError ? 'true' : null"
     [attr.aria-describedby]="(helperText || errorText) ? fieldId + '-helper' : null"
-    (dateChange)="onDateChange($event)"
   />
 
   <!-- Error icon — shown in error state (replaces toggle) -->

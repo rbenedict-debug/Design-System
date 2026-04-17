@@ -23,17 +23,17 @@
       matStartDate
       [id]="startId"
       [placeholder]="startPlaceholder"
-      [value]="startDate"
+      [(ngModel)]="startDate"
+      (ngModelChange)="onStartChange($event)"
       [attr.aria-invalid]="isError ? 'true' : null"
-      (dateChange)="onStartDateChange($event)"
     />
     <input
       matEndDate
       [id]="endId"
       [placeholder]="endPlaceholder"
-      [value]="endDate"
+      [(ngModel)]="endDate"
+      (ngModelChange)="onEndChange($event)"
       [attr.aria-invalid]="isError ? 'true' : null"
-      (dateChange)="onEndDateChange($event)"
     />
   </mat-date-range-input>
 

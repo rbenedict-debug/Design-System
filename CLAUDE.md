@@ -175,8 +175,8 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-textarea` | `MatFormFieldModule` + `MatInputModule` | mat-form-field + matInput (textarea) |
 | `ds-select` | `MatSelectModule` | mat-select inside mat-form-field; `panelClass="ds-select__panel"` themes the dropdown |
 | `ds-autocomplete` | `MatAutocompleteModule` + `MatInputModule` | matInput + matAutocomplete; consumer owns panel and filtering; pass panel ref via `[panel]` |
-| `ds-datepicker` | `MatDatepickerModule` + `MatNativeDateModule` | matInput `[matDatepicker]` + `mat-datepicker-toggle`; styled to match ds-input (42px, same label/helper/error tokens); calendar popup globally styled via `.mat-datepicker-content` |
-| `ds-date-range-picker` | `MatDatepickerModule` + `MatNativeDateModule` | `mat-date-range-input` with `matStartDate` / `matEndDate` inputs + `mat-date-range-picker`; same field appearance as ds-datepicker |
+| `ds-datepicker` | `MatDatepickerModule` + `MatNativeDateModule` | matInput `[matDatepicker]` + `mat-datepicker-toggle`; styled to match ds-input (42px, same label/helper/error tokens); calendar popup globally styled via `.mat-datepicker-content`; value binding uses `[(ngModel)]` internally (`FormsModule` bundled in the standalone component) |
+| `ds-date-range-picker` | `MatDatepickerModule` + `MatNativeDateModule` | `mat-date-range-input` with `matStartDate` / `matEndDate` inputs + `mat-date-range-picker`; same field appearance as ds-datepicker; start/end value binding uses `[(ngModel)]` internally (`FormsModule` bundled in the standalone component) |
 | `ds-checkbox` | `MatCheckboxModule` | mat-checkbox |
 | `ds-radio` + `ds-radio-group` | `MatRadioModule` | mat-radio-group + mat-radio-button |
 | `ds-toggle` | `MatSlideToggleModule` | mat-slide-toggle |

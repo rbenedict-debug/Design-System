@@ -4,8 +4,9 @@ import {
   ChangeDetectionStrategy, OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
 export interface DsDateRange {
@@ -35,6 +36,7 @@ export interface DsDateRange {
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -129,15 +131,13 @@ export class DsDateRangePickerComponent implements OnInit {
     this._endId   = `ds-date-range-end-${slug}-${uid}`;
   }
 
-  onStartDateChange(event: MatDatepickerInputEvent<Date>): void {
-    this.startDate = event.value;
-    this.startDateChange.emit(this.startDate);
-    this.rangeChange.emit({ start: this.startDate, end: this.endDate });
+  onStartChange(value: Date | null): void {
+    this.startDateChange.emit(value);
+    this.rangeChange.emit({ start: value, end: this.endDate });
   }
 
-  onEndDateChange(event: MatDatepickerInputEvent<Date>): void {
-    this.endDate = event.value;
-    this.endDateChange.emit(this.endDate);
-    this.rangeChange.emit({ start: this.startDate, end: this.endDate });
+  onEndChange(value: Date | null): void {
+    this.endDateChange.emit(value);
+    this.rangeChange.emit({ start: this.startDate, end: value });
   }
 }

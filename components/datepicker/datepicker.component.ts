@@ -4,9 +4,10 @@ import {
   ChangeDetectionStrategy, OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
 /**
@@ -30,6 +31,7 @@ import { MatNativeDateModule } from '@angular/material/core';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
@@ -109,8 +111,4 @@ export class DsDatepickerComponent implements OnInit {
     this._fieldId = `ds-datepicker-${slug}-${Math.random().toString(36).slice(2)}`;
   }
 
-  onDateChange(event: MatDatepickerInputEvent<Date>): void {
-    this.value = event.value;
-    this.valueChange.emit(this.value);
-  }
 }
