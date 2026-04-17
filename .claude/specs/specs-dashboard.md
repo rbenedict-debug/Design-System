@@ -160,20 +160,98 @@ optional icon, and optional trend indicator (percentage change with directional 
 - **Brand variant** adds `border: 1px solid var(--color-border-brand)` on top of the elevation as a visual accent.
 - **Page background**: dashboard pages must use `background: var(--color-surface-page)` so the `--color-surface-default` card surface reads as elevated. Cards placed on a white/default background will not have meaningful contrast.
 
-### Dashboard layout pattern
-Metric cards are typically arranged in a 3–4 column grid above charts:
+### Dashboard layout pattern — bento grid
+
+**All dashboards use a bento box layout.** This is the standard — never use a simple uniform grid of equal-sized tiles.
+
+A bento grid is a single CSS Grid with `grid-template-areas` where tiles vary in size: metric cards occupy 1×1 cells, the primary "hero" chart spans 2 columns × 2 rows, and supporting charts fill the remaining cells. The asymmetric composition creates visual hierarchy without adding complexity to the markup.
+
+#### Canonical 4-column bento layout
+```
+┌────────┬────────┬─────────────────────┐
+│ mc1    │ mc2    │                     │
+│        │        │   hero chart        │
+├────────┼────────┤   2 cols × 2 rows   │
+│ mc3    │ mc4    │                     │
+│        │        │                     │
+├─────────────────┼────────┬────────────┤
+│ wide chart      │ tile   │ tile       │
+│ 2 cols          │ 1 col  │ 1 col      │
+└─────────────────┴────────┴────────────┘
+```
+
 ```html
-<!-- Page wrapper — provides the canvas floor -->
+<!-- Page wrapper — always use --color-surface-page as the canvas floor -->
 <div style="background: var(--color-surface-page); padding: 24px;">
-<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;">
-  <ds-metric-card value="1,248"  label="Open Cases"      icon="inbox"            [trend]="8.3"  trendLabel="vs last week" />
-  <ds-metric-card value="92.4%"  label="CSAT Score"      icon="sentiment_satisfied" [trend]="-1.2" trendLabel="vs last month" />
-  <ds-metric-card value="4m 32s" label="Avg Handle Time" icon="timer"            [trend]="12"   trendLabel="vs last week" />
-  <ds-metric-card value="87.3%"  label="Resolution Rate" icon="check_circle"     [trend]="2.1"  trendLabel="vs last month" />
-</div>
-<!-- chart tiles follow, also floating on --color-surface-page -->
+
+  <!-- Bento grid -->
+  <div style="
+    display: grid;
+    grid-template-areas:
+      'mc1  mc2  hero hero'
+      'mc3  mc4  hero hero'
+      'wide wide tile1 tile2';
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 12px;
+  ">
+
+    <!-- Metric cards — 1×1 each -->
+    <ds-metric-card style="grid-area: mc1;"  value="1,248"  label="Open Cases"      icon="inbox"               [trend]="8.3"  trendLabel="vs last week" />
+    <ds-metric-card style="grid-area: mc2;"  value="92.4%"  label="CSAT Score"      icon="sentiment_satisfied" [trend]="-1.2" trendLabel="vs last month" />
+    <ds-metric-card style="grid-area: mc3;"  value="4m 32s" label="Avg Handle Time" icon="timer"               [trend]="12"   trendLabel="vs last week" />
+    <ds-metric-card style="grid-area: mc4;"  value="87.3%"  label="Resolution Rate" icon="check_circle"        [trend]="2.1"  trendLabel="vs last month" />
+
+    <!-- Hero chart — spans 2 cols × 2 rows; use flex-column so chart fills the tall space -->
+    <div style="grid-area: hero; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2); display: flex; flex-direction: column;">
+      <ds-chart type="line" style="flex: 1; min-height: 0;"
+        [series]="[
+          { name: 'Opened', data: [245, 290, 310, 285, 320, 298] },
+          { name: 'Closed', data: [230, 265, 285, 270, 308, 310] }
+        ]"
+        [categories]="['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr']"
+        title="Monthly Cases"
+      />
+    </div>
+
+    <!-- Wide chart — spans 2 cols -->
+    <div style="grid-area: wide; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
+      <ds-chart type="column"
+        [series]="[{ name: 'Cases', data: [138, 211, 195, 237, 172, 71, 28] }]"
+        [categories]="['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
+        title="Cases by Day of Week"
+      />
+    </div>
+
+    <!-- Supporting tiles — 1×1 each -->
+    <div style="grid-area: tile1; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
+      <ds-chart type="donut"
+        [series]="[{ type: 'pie', data: [{ name: 'Email', y: 38 }, { name: 'Chat', y: 27 }, { name: 'Phone', y: 19 }, { name: 'Portal', y: 11 }, { name: 'Other', y: 5 }] }]"
+        title="Cases by Channel"
+      />
+    </div>
+
+    <div style="grid-area: tile2; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
+      <ds-chart type="area"
+        [series]="[{ name: 'Avg Handle Time', data: [5.2, 5.6, 5.4, 4.6, 4.5, 4.5] }]"
+        [categories]="['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr']"
+        title="Avg Handle Time"
+      />
+    </div>
+
+  </div>
 </div>
 ```
+
+#### Bento layout rules
+- **Always use `grid-template-areas`** — named areas make the layout intention explicit and easy to adjust.
+- **Hero tile spans at minimum 2 cols × 2 rows** — it must visually dominate. The most data-rich or business-critical chart is the hero.
+- **Metric cards go in the 2×2 quadrant opposite the hero** — they balance the hero's weight.
+- **Bottom row mixes one wide tile + two narrow tiles** — `2 cols + 1 col + 1 col` is the default; adjust to `2+2` or `3+1` for different content needs.
+- **All chart tiles** use `background: var(--color-surface-page)` + `box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2)` to float above the page canvas.
+- **Hero chart** should use `display: flex; flex-direction: column` with `flex: 1; min-height: 0` on the `<ds-chart>` to fill the tall grid area.
+- **Gap is always `12px`** across the bento grid.
+- **Never use a uniform equal-column grid** (`repeat(N, 1fr)`) for a dashboard — it loses the visual hierarchy the bento structure provides.
 
 ### Trend sign convention
 - `[trend]="8.3"` → `+8.3%` in green with `trending_up` icon
