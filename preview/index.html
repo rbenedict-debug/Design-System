@@ -8983,9 +8983,10 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 }
 .ds-dashboard-toolbar__identity {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--spacing-xl);
 }
 .ds-dashboard-toolbar__title {
   font-family: var(--ref-typeface-brand, "DM Sans", sans-serif);

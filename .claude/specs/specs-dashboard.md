@@ -282,10 +282,10 @@ individually elevated element. The visual language matches `ds-metric-card`:
 | Element | Class | Role |
 |---|---|---|
 | Host | `ds-dashboard-toolbar` | Flex column, `align-items: flex-start`, 8px gap |
-| Left | `__identity` | Title + subtitle stacked |
+| Top row | `__identity` | Full-width flex row, `justify-content: space-between`, `align-items: baseline` — title left, subtitle right |
 | Title | `__title` | `h1`, 20px/600, `--color-text-primary` |
 | Subtitle | `__subtitle` | `p`, 12px/400, `--color-text-secondary` |
-| Right | `__controls` | Flex row of floating controls, `gap: 8px` |
+| Bottom row | `__controls` | Flex row of floating controls, `gap: 8px`, left-aligned below identity |
 | Quick filter | `__date-select` | Input-style period selector with `calendar_today` leading icon and `arrow_drop_down` trailing icon |
 | Icon button | `__btn` | 42×42px floating square, elevated, `filter_alt` / `more_vert` |
 | Active state | `__btn.is-active` | Filter button when filter panel is open — brand blue fill |

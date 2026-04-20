@@ -71,9 +71,10 @@
 
   &__identity {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+    gap: var(--spacing-xl);
   }
 
   &__title {
