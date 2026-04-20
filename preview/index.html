@@ -7900,6 +7900,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 }
 .ds-top-nav__actions {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: var(--spacing-lg);
   flex-shrink: 0;
@@ -10980,6 +10981,13 @@ mark.search-match {
   box-shadow: 0 0 2px 0 var(--shadow-elevation-2, rgba(65,65,65,.1)),
               0 2px 6px 2px var(--shadow-elevation-2, rgba(65,65,65,.1));
   min-height: 0;
+  overflow-y: auto;
+}
+.ds-page-content__main--dashboard {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 4px 8px 8px;
 }
 
 /* ── Split Page Layout Pattern ─────────────────────────────────────────── */
@@ -17259,7 +17267,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     assets:    { label: 'Assets Table',     groups: FILTER_GROUPS_ASSETS,            savedSetsKey: 'onflo-ds-preview-filter-sets-assets',     appliedBarId: 'ds-preview-filter-applied-bar',    appliedCardsId: 'ds-preview-filter-applied-cards'    },
     service:   { label: 'Service Overview', groups: FILTER_GROUPS_SERVICE_OVERVIEW,   savedSetsKey: 'onflo-ds-preview-filter-sets-service',    appliedBarId: 'ds-preview-filter-applied-bar',    appliedCardsId: 'ds-preview-filter-applied-cards'    },
     dashboard:      { label: 'Dashboard',      groups: FILTER_GROUPS_DASHBOARD, savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard',      appliedBarId: 'ds-sim-dashboard-applied-bar',   appliedCardsId: 'ds-sim-dashboard-applied-cards'   },
-    'dashboard-page': { label: 'Dashboard Page', groups: FILTER_GROUPS_DASHBOARD, savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard-page', appliedBarId: 'dashboard-page-applied-bar',     appliedCardsId: 'dashboard-page-applied-cards'     },
   };
 
   let activeContext      = 'assets';
@@ -23108,19 +23115,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
       </section>
 
-
-
       <section class="section" id="dashboard-page">
         <div class="section-header">
-          <h2 class="section-title">Dashboard Page</h2>
-          <span class="section-source">CSS pattern · preview/index.html · see .claude/specs/specs-dashboard.md</span>
+          <h2 class="section-title">Dashboard Page Layout</h2>
+          <span class="section-source">CSS pattern · preview/index.html · see .claude/specs/specs-layout.md §Page Layouts + specs-dashboard.md</span>
         </div>
-        <p class="section-desc">Full application shell with a dashboard in the page content area. Composes <code>ds-nav-sidebar</code>, <code>ds-top-nav</code>, <code>ds-page-content</code>, <code>ds-dashboard-toolbar</code>, <code>ds-metric-card</code>, and <code>ds-chart</code>. No sub-navigation panel — analytics dashboards use the dashboard toolbar as the page-level control surface. The <code>ds-page-content__title</code> is visually hidden via <code>ds-sr-only</code> since the toolbar already communicates the page title.</p>
+        <p class="section-desc">Full application shell with a dashboard content area. Uses <code>ds-page-content__main--dashboard</code> (not plain <code>__main</code>) so metric cards and chart tiles float directly on the page-floor background without a double-card wrapper. <code>ds-dashboard-toolbar</code> provides the floating identity + controls row. Click the subnav toggle to try it.</p>
 
-        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); height: 680px;">
-          <div class="ds-page-layout" id="dashboard-page-demo" style="height: 100%;">
+        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+          <div class="ds-page-layout" id="dashboard-page-layout-demo">
 
-            <!-- ── Left nav sidebar — Analytics selected ──────────────────── -->
+            <!-- ── Left nav sidebar ───────────────────────────────────────── -->
             <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
               <div class="ds-nav-sidebar__logo">
                 <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -23158,21 +23163,11 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   </div>
                   <span class="ds-agent-status__indicator" aria-hidden="true"></span>
                 </button>
-                <button class="ds-agent-status is-offline" type="button" aria-pressed="false" aria-label="Live agent status: Offline">
-                  <div class="ds-agent-status__icon">
-                    <span class="ds-icon" aria-hidden="true">forum</span>
-                  </div>
-                  <div class="ds-agent-status__status">
-                    <span>Offline</span>
-                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                  </div>
-                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                </button>
               </div>
             </nav>
 
             <!-- ── Right side: top-nav + body ────────────────────────────── -->
-            <div class="ds-page-layout__content" style="overflow: hidden; display: flex; flex-direction: column; min-height: 0; flex: 1;">
+            <div class="ds-page-layout__content">
 
               <!-- Top nav -->
               <header class="ds-top-nav" role="banner">
@@ -23188,85 +23183,61 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   </div>
                 </div>
                 <div class="ds-top-nav__actions">
-                  <button class="ds-top-nav__action-btn" type="button" aria-label="Chatsy">
-                    <svg aria-hidden="true" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;flex-shrink:0;">
-                      <path d="M16.6419 8.93096V11.2075C16.6434 11.8671 16.5159 12.5209 16.2662 13.1342C16.7456 13.071 17.1851 12.8411 17.5036 12.4871C17.8221 12.133 17.9979 11.6788 17.9986 11.2085V10.7708C17.9956 10.3651 17.8633 9.97022 17.62 9.64062C17.3767 9.31101 17.0343 9.06285 16.6399 8.9303" fill="currentColor"/>
-                      <path d="M1.6434 12.8987C1.6194 12.8306 1.59675 12.7617 1.57547 12.6919C1.56901 12.6721 1.56358 12.6516 1.55814 12.6318C1.54252 12.5763 1.52689 12.5224 1.51296 12.4666C1.50436 12.432 1.49643 12.3971 1.48919 12.3619C1.479 12.318 1.46881 12.2724 1.45963 12.2298C1.45046 12.1872 1.44299 12.1403 1.43484 12.0911C1.42668 12.0418 1.42193 12.0194 1.41649 11.9827C1.40732 11.9289 1.40189 11.8754 1.39543 11.8215C1.39543 11.7911 1.38728 11.7598 1.38456 11.732C1.37811 11.6712 1.37369 11.6101 1.36996 11.5484C1.3709 11.5228 1.36907 11.4972 1.36452 11.4721C1.36452 11.3825 1.35807 11.293 1.35807 11.2098V8.93328C0.964056 9.06555 0.621864 9.31327 0.378551 9.64238C0.135237 9.97149 0.00275433 10.3658 -0.000679157 10.7711V11.2088C-0.000193948 11.6792 0.175587 12.1335 0.494109 12.4876C0.812631 12.8417 1.25231 13.0715 1.73172 13.1345C1.70138 13.0594 1.67284 12.9833 1.64612 12.9063C1.64631 12.9039 1.64631 12.9014 1.64612 12.899" fill="currentColor"/>
-                      <path d="M11.0571 6.58443H6.97411C6.09783 6.58539 5.25773 6.92431 4.63811 7.52683C4.01848 8.12935 3.66995 8.94627 3.66896 9.79836V10.8144C3.66995 11.6665 4.01848 12.4834 4.63811 13.0859C5.25773 13.6885 6.09783 14.0274 6.97411 14.0283H11.0571C11.9334 14.0274 12.7735 13.6885 13.3931 13.0859C14.0128 12.4834 14.3613 11.6665 14.3623 10.8144V9.79836C14.3613 8.94627 14.0128 8.12935 13.3931 7.52683C12.7735 6.92431 11.9334 6.58539 11.0571 6.58443Z" fill="currentColor"/>
-                      <path d="M11.1913 4.2445H9.34342V3.39164C9.70111 3.31393 10.0164 3.10985 10.2281 2.81895C10.4399 2.52805 10.533 2.17107 10.4895 1.8172C10.4459 1.46333 10.2688 1.13779 9.99246 0.903685C9.71612 0.669579 9.36022 0.543586 8.99378 0.550132C8.62733 0.556677 8.27644 0.695295 8.00912 0.939113C7.7418 1.18293 7.57711 1.51458 7.54696 1.86976C7.51681 2.22495 7.62336 2.57837 7.84594 2.8615C8.06853 3.14464 8.39131 3.33733 8.75169 3.40221V4.24417H6.84333C5.6332 4.24659 4.46648 4.68283 3.56644 5.46942C2.6664 6.25601 2.09625 7.33771 1.96509 8.50751L1.95592 8.6066C1.94958 8.67729 1.94493 8.74533 1.94199 8.81073C1.93927 8.87679 1.93655 8.94946 1.93655 9.0185V11.2002C1.93655 11.2773 1.93871 11.3534 1.94301 11.4285V11.4526C1.94301 11.5252 1.9532 11.5976 1.96033 11.6702V11.7016C1.96848 11.7713 1.97698 11.8413 1.98785 11.91L1.9943 11.9467C2.00551 12.0148 2.0174 12.0811 2.03099 12.1472L2.04118 12.1948C2.05205 12.243 2.06326 12.2916 2.07515 12.3388C2.08704 12.386 2.09824 12.4283 2.11115 12.4709L2.13323 12.5489C2.2119 12.804 2.31234 13.0522 2.43352 13.2911L2.50145 13.4262C2.91877 14.1943 3.54355 14.8372 4.30859 15.2858C5.07362 15.7344 5.94996 15.9717 6.84333 15.9722H10.0897H10.0985L12.2535 17.6981C12.2831 17.7224 12.3193 17.738 12.3577 17.7431C12.3962 17.7481 12.4353 17.7424 12.4705 17.7266C12.5057 17.7107 12.5355 17.6855 12.5564 17.6538C12.5774 17.6221 12.5886 17.5852 12.5888 17.5475L12.6177 15.7701L12.7834 15.7152C13.7513 15.3922 14.5915 14.7837 15.1869 13.9745C15.7823 13.1653 16.1033 12.1956 16.1052 11.2005V9.02048C16.1041 7.75373 15.586 6.53921 14.6646 5.6437C13.7433 4.74819 12.494 4.24494 11.1913 4.2445Z" fill="currentColor"/>
-                    </svg>
-                  </button>
                   <div class="ds-top-nav__action-badge">
                     <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
                       <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
                     </button>
                     <div class="ds-badge-indicator" aria-hidden="true">3</div>
                   </div>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
-                    <span class="ds-icon" aria-hidden="true">add_2</span>
-                  </button>
                   <button class="ds-top-nav__action-btn" type="button" aria-label="Help">
                     <span class="ds-icon ds-icon--filled" aria-hidden="true">person_raised_hand</span>
                   </button>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
-                    R
-                  </button>
+                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">R</button>
                 </div>
               </header>
 
-              <!-- Body: no subnav — dashboard uses toolbar as page-level control surface -->
-              <div class="ds-page-layout__body" style="overflow: hidden; flex: 1; min-height: 0;">
-                <main class="ds-page-content" role="main" style="overflow-y: auto;">
-                  <h1 class="ds-page-content__title ds-sr-only">Support Dashboard</h1>
-                  <div class="ds-page-content__main" style="padding: 24px; background: var(--color-surface-page); min-height: 100%; box-sizing: border-box;">
+              <!-- Body: subnav + dashboard content -->
+              <div class="ds-page-layout__body">
 
-                    <!-- Dashboard toolbar -->
-                    <div class="ds-dashboard-toolbar" id="dashboard-page-toolbar">
-                      <div class="ds-dashboard-toolbar__identity">
-                        <h2 class="ds-dashboard-toolbar__title">Support Dashboard</h2>
-                        <p class="ds-dashboard-toolbar__subtitle">April 20, 2026 · Last updated just now</p>
-                      </div>
-                      <div class="ds-dashboard-toolbar__controls">
-                        <div style="position: relative;">
-                          <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false" onclick="toggleDashboardDateMenu(this)">
-                            <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
-                            <span class="ds-dashboard-toolbar__date-label">Last 30 days</span>
-                            <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
-                          </button>
-                          <div class="ds-menu" role="menu" style="display:none; position:absolute; top:calc(100% + 4px); right:0; z-index:200; min-width:160px;">
-                            <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Today</button>
-                            <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Yesterday</button>
-                            <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Last 7 days</button>
-                            <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="true" onclick="selectDashboardDate(this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>Last 30 days</button>
-                            <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
-                          </div>
-                        </div>
-                        <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" id="dashboard-page-filter-btn" onclick="dsPreviewFilter.open('dashboard-page')">
-                          <span class="ds-icon" aria-hidden="true">filter_alt</span>
-                        </button>
-                        <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
-                          <span class="ds-icon" aria-hidden="true">more_vert</span>
+                <!-- Sub-navigation panel (collapsible) -->
+                <nav class="ds-subnav" id="subnav-panel-dashboard" role="navigation" aria-label="Analytics navigation">
+                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Overview</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Cases</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Agents</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Channels</button>
+                  <button class="ds-subnav-button" type="button" aria-pressed="false">Reports</button>
+                </nav>
+
+                <!-- Main dashboard content -->
+                <main class="ds-page-content" role="main">
+                  <div class="ds-page-content__heading" style="flex-direction: row; justify-content: space-between; align-items: baseline;">
+                    <h1 class="ds-page-content__title">Support Dashboard</h1>
+                    <p class="ds-dashboard-toolbar__subtitle" style="padding-right: var(--spacing-lg);">April 20, 2026 · Last updated 2 minutes ago</p>
+                  </div>
+
+                  <!-- Dashboard toolbar — sibling of __main, does not scroll -->
+                  <div class="ds-dashboard-toolbar" id="dashboard-page-toolbar" style="padding: 0;">
+                    <div class="ds-dashboard-toolbar__controls">
+                      <div style="position: relative;">
+                        <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false">
+                          <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+                          <span class="ds-dashboard-toolbar__date-label">Last 30 days</span>
+                          <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
                         </button>
                       </div>
+                      <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
+                        <span class="ds-icon" aria-hidden="true">filter_alt</span>
+                      </button>
+                      <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
+                        <span class="ds-icon" aria-hidden="true">more_vert</span>
+                      </button>
                     </div>
+                  </div>
 
-                    <!-- Filter applied bar -->
-                    <div id="dashboard-page-applied-bar" class="filter-applied-bar" style="display:none; margin-top:8px;">
-                      <div class="filter-applied-bar__cards" id="dashboard-page-applied-cards" role="group" aria-label="Applied filters"></div>
-                    </div>
+                  <!-- Dashboard tiles — this area scrolls -->
+                  <div class="ds-page-content__main ds-page-content__main--dashboard">
 
-                    <!--
-                      BENTO GRID
-                      ┌────────┬────────┬─────────────────────┐
-                      │ mc1    │ mc2    │                     │
-                      │        │        │   line (hero)       │
-                      ├────────┼────────┤   2 cols × 2 rows   │
-                      │ mc3    │ mc4    │                     │
-                      │        │        │                     │
-                      ├─────────────────┼────────┬────────────┤
-                      │ bar (2 cols)    │ donut  │ area       │
-                      └─────────────────┴────────┴────────────┘
-                    -->
+                    <!-- Bento grid: 4-col layout matching the Dashboard sim -->
                     <div style="
                       display: grid;
                       grid-template-areas:
@@ -23276,7 +23247,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                       grid-template-columns: 1fr 1fr 1fr 1fr;
                       grid-template-rows: auto auto auto;
                       gap: 16px;
-                      margin-top: 16px;
                     ">
 
                       <!-- mc1: Open Cases -->
@@ -23289,7 +23259,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                         <div class="ds-metric-card__trend">
                           <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
                           <span class="ds-metric-card__trend-value is-positive">+8.3%</span>
-                          <span class="ds-metric-card__trend-label">vs last month</span>
+                          <span class="ds-metric-card__trend-label">vs last week</span>
                         </div>
                       </div>
 
@@ -23335,7 +23305,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                         </div>
                       </div>
 
-                      <!-- line: Monthly Cases — hero tile -->
+                      <!-- line: Monthly Cases hero (2 cols × 2 rows) -->
                       <div style="grid-area: line; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2); display: flex; flex-direction: column;">
                         <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px; flex-shrink: 0;">Monthly Cases</div>
                         <div style="flex: 1; min-height: 0; overflow: hidden;">
@@ -23357,19 +23327,19 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                             <text x="588" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Mar</text>
                             <text x="720" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Apr</text>
                             <polyline points="60,82 192,64 324,56 456,66 588,52 720,61" fill="none" stroke="#0B6EB4" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                            <circle cx="60"  cy="82" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Nov" data-tip-label="Opened" data-tip-value="245" data-tip-color="#0B6EB4"/>
-                            <circle cx="192" cy="64" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Dec" data-tip-label="Opened" data-tip-value="290" data-tip-color="#0B6EB4"/>
-                            <circle cx="324" cy="56" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Jan" data-tip-label="Opened" data-tip-value="310" data-tip-color="#0B6EB4"/>
-                            <circle cx="456" cy="66" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Feb" data-tip-label="Opened" data-tip-value="285" data-tip-color="#0B6EB4"/>
-                            <circle cx="588" cy="52" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Mar" data-tip-label="Opened" data-tip-value="320" data-tip-color="#0B6EB4"/>
-                            <circle cx="720" cy="61" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2" data-tip-header="Apr" data-tip-label="Opened" data-tip-value="297" data-tip-color="#0B6EB4"/>
+                            <circle cx="60"  cy="82" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                            <circle cx="192" cy="64" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                            <circle cx="324" cy="56" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                            <circle cx="456" cy="66" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                            <circle cx="588" cy="52" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                            <circle cx="720" cy="61" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
                             <polyline points="60,88 192,74 324,66 456,72 588,57 720,56" fill="none" stroke="#45A55F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                            <circle cx="60"  cy="88" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Nov" data-tip-label="Closed" data-tip-value="230" data-tip-color="#45A55F"/>
-                            <circle cx="192" cy="74" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Dec" data-tip-label="Closed" data-tip-value="265" data-tip-color="#45A55F"/>
-                            <circle cx="324" cy="66" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Jan" data-tip-label="Closed" data-tip-value="285" data-tip-color="#45A55F"/>
-                            <circle cx="456" cy="72" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Feb" data-tip-label="Closed" data-tip-value="270" data-tip-color="#45A55F"/>
-                            <circle cx="588" cy="57" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Mar" data-tip-label="Closed" data-tip-value="307" data-tip-color="#45A55F"/>
-                            <circle cx="720" cy="56" r="4" fill="#45A55F" stroke="#fff" stroke-width="2" data-tip-header="Apr" data-tip-label="Closed" data-tip-value="310" data-tip-color="#45A55F"/>
+                            <circle cx="60"  cy="88" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                            <circle cx="192" cy="74" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                            <circle cx="324" cy="66" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                            <circle cx="456" cy="72" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                            <circle cx="588" cy="57" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                            <circle cx="720" cy="56" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
                             <rect x="54" y="200" width="10" height="10" rx="2" fill="#0B6EB4"/>
                             <text x="68" y="209" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Opened</text>
                             <rect x="132" y="200" width="10" height="10" rx="2" fill="#45A55F"/>
@@ -23378,7 +23348,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                         </div>
                       </div>
 
-                      <!-- bar: Cases by Day of Week -->
+                      <!-- bar: Cases by Day of Week (2 cols) -->
                       <div style="grid-area: bar; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                         <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
                         <svg viewBox="0 0 502 210" width="100%" height="210" aria-label="Column chart: Cases by Day of Week" role="img" style="display:block;">
@@ -23392,13 +23362,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                           <text x="38" y="94"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">130</text>
                           <text x="38" y="54"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">195</text>
                           <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">260</text>
-                          <rect class="bar" x="50"  y="85"  width="46" height="85"  rx="3" fill="#0B6EB4" data-tip-header="Mon" data-tip-label="Cases Opened" data-tip-value="138" data-tip-color="#0B6EB4"/>
-                          <rect class="bar" x="114" y="40"  width="46" height="130" rx="3" fill="#0B6EB4" data-tip-header="Tue" data-tip-label="Cases Opened" data-tip-value="211" data-tip-color="#0B6EB4"/>
-                          <rect class="bar" x="178" y="50"  width="46" height="120" rx="3" fill="#0B6EB4" data-tip-header="Wed" data-tip-label="Cases Opened" data-tip-value="195" data-tip-color="#0B6EB4"/>
-                          <rect class="bar" x="242" y="24"  width="46" height="146" rx="3" fill="#0B6EB4" data-tip-header="Thu" data-tip-label="Cases Opened" data-tip-value="237" data-tip-color="#0B6EB4"/>
-                          <rect class="bar" x="306" y="64"  width="46" height="106" rx="3" fill="#0B6EB4" data-tip-header="Fri" data-tip-label="Cases Opened" data-tip-value="172" data-tip-color="#0B6EB4"/>
-                          <rect class="bar" x="370" y="126" width="46" height="44"  rx="3" fill="#0B6EB4" opacity="0.5" data-tip-header="Sat" data-tip-label="Cases Opened" data-tip-value="71" data-tip-color="#0B6EB4"/>
-                          <rect class="bar" x="434" y="153" width="46" height="17"  rx="3" fill="#0B6EB4" opacity="0.35" data-tip-header="Sun" data-tip-label="Cases Opened" data-tip-value="28" data-tip-color="#0B6EB4"/>
+                          <rect x="50"  y="85"  width="46" height="85"  rx="3" fill="#0B6EB4"/>
+                          <rect x="114" y="40"  width="46" height="130" rx="3" fill="#0B6EB4"/>
+                          <rect x="178" y="50"  width="46" height="120" rx="3" fill="#0B6EB4"/>
+                          <rect x="242" y="24"  width="46" height="146" rx="3" fill="#0B6EB4"/>
+                          <rect x="306" y="64"  width="46" height="106" rx="3" fill="#0B6EB4"/>
+                          <rect x="370" y="126" width="46" height="44"  rx="3" fill="#0B6EB4" opacity="0.5"/>
+                          <rect x="434" y="153" width="46" height="17"  rx="3" fill="#0B6EB4" opacity="0.35"/>
                           <text x="73"  y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mon</text>
                           <text x="137" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Tue</text>
                           <text x="201" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Wed</text>
@@ -23415,11 +23385,11 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                       <div style="grid-area: donut; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                         <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Channel</div>
                         <svg viewBox="0 0 240 200" width="100%" height="200" aria-label="Donut chart: Cases by Channel" role="img" style="display:block; margin: 0 auto;">
-                          <path class="slice" d="M 120 12 A 88 88 0 0 1 180.2 164.2 L 156.3 138.6 A 53 53 0 0 0 120 47 Z" fill="#0B6EB4" data-tip-label="Email" data-tip-value="38% (474)" data-tip-color="#0B6EB4"/>
-                          <path class="slice" d="M 180.2 164.2 A 88 88 0 0 1 48.8 151.7 L 77.1 131.2 A 53 53 0 0 0 156.3 138.6 Z" fill="#45A55F" data-tip-label="Chat" data-tip-value="27% (337)" data-tip-color="#45A55F"/>
-                          <path class="slice" d="M 48.8 151.7 A 88 88 0 0 1 45.8 52.7 L 75.3 71.5 A 53 53 0 0 0 77.1 131.2 Z" fill="#FFBF00" data-tip-label="Phone" data-tip-value="19% (237)" data-tip-color="#FFBF00"/>
-                          <path class="slice" d="M 45.8 52.7 A 88 88 0 0 1 92.8 16.3 L 103.6 49.6 A 53 53 0 0 0 75.3 71.5 Z" fill="#43ADF2" data-tip-label="Portal" data-tip-value="11% (137)" data-tip-color="#43ADF2"/>
-                          <path class="slice" d="M 92.8 16.3 A 88 88 0 0 1 120 12 L 120 47 A 53 53 0 0 0 103.6 49.6 Z" fill="#CACACA" data-tip-label="Other" data-tip-value="5% (62)" data-tip-color="#CACACA"/>
+                          <path d="M 120 12 A 88 88 0 0 1 180.2 164.2 L 156.3 138.6 A 53 53 0 0 0 120 47 Z" fill="#0B6EB4"/>
+                          <path d="M 180.2 164.2 A 88 88 0 0 1 48.8 151.7 L 77.1 131.2 A 53 53 0 0 0 156.3 138.6 Z" fill="#45A55F"/>
+                          <path d="M 48.8 151.7 A 88 88 0 0 1 45.8 52.7 L 75.3 71.5 A 53 53 0 0 0 77.1 131.2 Z" fill="#FFBF00"/>
+                          <path d="M 45.8 52.7 A 88 88 0 0 1 92.8 16.3 L 103.6 49.6 A 53 53 0 0 0 75.3 71.5 Z" fill="#43ADF2"/>
+                          <path d="M 92.8 16.3 A 88 88 0 0 1 120 12 L 120 47 A 53 53 0 0 0 103.6 49.6 Z" fill="#CACACA"/>
                           <path d="M 120 12 A 88 88 0 0 1 180.2 164.2 L 156.3 138.6 A 53 53 0 0 0 120 47 Z" fill="none" stroke="#fff" stroke-width="2"/>
                           <path d="M 180.2 164.2 A 88 88 0 0 1 48.8 151.7 L 77.1 131.2 A 53 53 0 0 0 156.3 138.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
                           <path d="M 48.8 151.7 A 88 88 0 0 1 45.8 52.7 L 75.3 71.5 A 53 53 0 0 0 77.1 131.2 Z" fill="none" stroke="#fff" stroke-width="2"/>
@@ -23438,7 +23408,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                         </div>
                       </div>
 
-                      <!-- area: Avg Handle Time -->
+                      <!-- area: Avg Handle Time trend -->
                       <div style="grid-area: area; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
                         <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Avg Handle Time</div>
                         <svg viewBox="0 0 280 190" width="100%" height="190" aria-label="Area chart: Avg Handle Time" role="img" style="display:block;">
@@ -23454,35 +23424,45 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                           <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">8m</text>
                           <path d="M 44 63 L 88 54 L 132 58 L 176 74 L 220 75 L 264 75 L 264 160 L 44 160 Z" fill="#0EA5A0" opacity="0.15"/>
                           <polyline points="44,63 88,54 132,58 176,74 220,75 264,75" fill="none" stroke="#0EA5A0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                          <circle cx="44"  cy="63" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Nov" data-tip-label="Avg Handle Time" data-tip-value="5:12" data-tip-color="#0EA5A0"/>
-                          <circle cx="88"  cy="54" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Dec" data-tip-label="Avg Handle Time" data-tip-value="5:38" data-tip-color="#0EA5A0"/>
-                          <circle cx="132" cy="58" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Jan" data-tip-label="Avg Handle Time" data-tip-value="5:25" data-tip-color="#0EA5A0"/>
-                          <circle cx="176" cy="74" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Feb" data-tip-label="Avg Handle Time" data-tip-value="4:34" data-tip-color="#0EA5A0"/>
-                          <circle cx="220" cy="75" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Mar" data-tip-label="Avg Handle Time" data-tip-value="4:32" data-tip-color="#0EA5A0"/>
-                          <circle cx="264" cy="75" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2" data-tip-header="Apr" data-tip-label="Avg Handle Time" data-tip-value="4:31" data-tip-color="#0EA5A0"/>
+                          <circle cx="44"  cy="63" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                          <circle cx="88"  cy="54" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                          <circle cx="132" cy="58" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                          <circle cx="176" cy="74" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                          <circle cx="220" cy="75" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                          <circle cx="264" cy="75" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
                           <text x="44"  y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Nov</text>
                           <text x="88"  y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Dec</text>
                           <text x="132" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Jan</text>
                           <text x="176" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Feb</text>
                           <text x="220" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mar</text>
                           <text x="264" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Apr</text>
-                          <rect x="44" y="181" width="10" height="10" rx="2" fill="#0EA5A0"/>
-                          <text x="58" y="190" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Avg Handle Time</text>
+                          <rect x="44" y="180" width="10" height="10" rx="2" fill="#0EA5A0"/>
+                          <text x="58" y="189" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Avg Handle Time</text>
                         </svg>
                       </div>
 
-                    </div><!-- /bento grid -->
+                    </div><!-- /.bento grid -->
 
-                  </div><!-- /ds-page-content__main -->
+                  </div><!-- /.ds-page-content__main--dashboard -->
                 </main>
-              </div><!-- /ds-page-layout__body -->
 
-            </div><!-- /ds-page-layout__content -->
+              </div><!-- /.ds-page-layout__body -->
+            </div><!-- /.ds-page-layout__content -->
 
-          </div><!-- /ds-page-layout -->
-        </div><!-- /component-demo -->
+            <!-- Floating expand/collapse toggle -->
+            <button class="ds-nav-expand" id="nav-expand-btn-dashboard"
+                    type="button"
+                    aria-label="Collapse sub navigation"
+                    aria-expanded="true"
+                    onclick="toggleSubnavDashboard()">
+              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+            </button>
+
+          </div><!-- /.ds-page-layout -->
+        </div><!-- /.component-demo -->
 
       </section>
+
 
       </div><!-- /#page-examples -->
 
@@ -24300,6 +24280,26 @@ function toggleSubnavSplit2575() {
 function toggleSubnavSplit7525() {
   var panel = document.getElementById('subnav-panel-split-7525');
   var btn   = document.getElementById('nav-expand-btn-split-7525');
+  var icon  = btn.querySelector('.ds-icon');
+  var isOpen = !panel.classList.contains('is-collapsed');
+  if (isOpen) {
+    panel.classList.add('is-collapsed');
+    btn.classList.add('is-collapsed');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Expand navigation');
+    icon.textContent = 'right_panel_close';
+  } else {
+    panel.classList.remove('is-collapsed');
+    btn.classList.remove('is-collapsed');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-label', 'Collapse navigation');
+    icon.textContent = 'right_panel_open';
+  }
+}
+
+function toggleSubnavDashboard() {
+  var panel = document.getElementById('subnav-panel-dashboard');
+  var btn   = document.getElementById('nav-expand-btn-dashboard');
   var icon  = btn.querySelector('.ds-icon');
   var isOpen = !panel.classList.contains('is-collapsed');
   if (isOpen) {

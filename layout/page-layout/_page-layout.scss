@@ -147,6 +147,27 @@
     display: flex;
     flex-direction: column;
   }
+
+  // ── Dashboard canvas variant ────────────────────────────────────────────────
+  //
+  // Use instead of plain __main on dashboard pages. Strips the card shell
+  // (no border-radius, no box-shadow, no padding) so ds-metric-card and
+  // ds-chart tiles float directly on the page-floor background.
+  //
+  // ds-dashboard-toolbar goes OUTSIDE this element (sibling between
+  // ds-page-content__heading and __main--dashboard) so it stays fixed
+  // while only the tile content scrolls.
+  //
+  // Usage:
+  //   <div class="ds-page-content__main ds-page-content__main--dashboard">
+  //     <!-- metric cards, chart tiles — no toolbar here -->
+  //   </div>
+  &--dashboard {
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 4px 8px 8px;  // give tile shadows room — overflow-y:auto coerces overflow-x:hidden
+  }
 }
 
 // ── AG Grid container sizing ──────────────────────────────────────────────────

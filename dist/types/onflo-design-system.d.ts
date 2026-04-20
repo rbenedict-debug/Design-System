@@ -3795,6 +3795,7 @@ declare class DsFilterComponent implements OnChanges {
     /** Buckets of selected items for display in the right panel. */
     readonly selectedBuckets: i0.Signal<_SelectedBucket[]>;
     readonly activeSetName: i0.Signal<string>;
+    readonly savedSetsToggleLabel: i0.Signal<"Save Filters" | "Load Filters">;
     private readonly _doc;
     ngOnChanges(changes: SimpleChanges): void;
     private _initDraftFromSelection;
