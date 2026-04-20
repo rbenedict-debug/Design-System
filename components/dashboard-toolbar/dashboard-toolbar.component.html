@@ -8,6 +8,8 @@
 
   <button
     class="ds-dashboard-toolbar__btn"
+    [class.is-active]="filterActive"
+    [attr.aria-pressed]="filterActive"
     type="button"
     aria-label="Filter"
     (click)="filterClick.emit()">

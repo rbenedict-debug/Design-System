@@ -44,6 +44,7 @@
 //   <ds-dashboard-toolbar
 //     title="Support Dashboard"
 //     subtitle="April 15, 2026 · Last updated 2 min ago"
+//     [filterActive]="filterOpen"
 //     (filterClick)="openFilter()"
 //     (moreClick)="openMenu()">
 //     <!-- Quick filters go in the toolbar-filters slot -->
@@ -65,10 +66,6 @@
   align-items: flex-start;
   gap: var(--spacing-lg);              // 16px between identity and controls
   padding: var(--spacing-md) 0 var(--spacing-lg); // 12px 0 16px
-
-  // All icons within the toolbar use the filled variant.
-  .ds-icon     { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-  .ds-icon--sm { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
 
 
   // ── Identity — bare text on the page canvas ────────────────────────────────
@@ -163,6 +160,10 @@
 
     &:active::after { background: var(--overlay-pressed); }
 
+    // Date-select icons are always filled
+    .ds-icon     { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .ds-icon--sm { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+
     // Leading calendar icon
     > .ds-icon:first-child {
       color: var(--color-icon-subtle);
@@ -244,6 +245,7 @@
       color: var(--color-icon-brand);
       background: var(--color-surface-brand);
       &::after { background: transparent; }
+      .ds-icon { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     }
   }
 }

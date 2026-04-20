@@ -7,8 +7,9 @@
  * ds-metric-card: elevation via box-shadow, no borders.
  *
  * Inputs:
- *   [title]    string — page title (required)
- *   [subtitle] string — optional supporting text (date, status, etc.)
+ *   [title]        string  — page title (required)
+ *   [subtitle]     string  — optional supporting text (date, status, etc.)
+ *   [filterActive] boolean — marks filter button as toggled (brand bg + filled icon)
  *
  * Outputs:
  *   (filterClick) — emitted when the filter icon button is clicked
@@ -63,6 +64,9 @@ export class DsDashboardToolbarComponent {
 
   /** Optional supporting text shown below the title (date, status, etc.). */
   @Input() subtitle = '';
+
+  /** When true, renders the filter button in the active state (brand bg, filled icon). */
+  @Input() filterActive = false;
 
   /** Emitted when the filter icon button is clicked. */
   @Output() filterClick = new EventEmitter<void>();
