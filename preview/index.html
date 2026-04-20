@@ -18777,7 +18777,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <div style="position: relative;">
                     <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false" onclick="toggleDashboardDateMenu(this)">
                       <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
-                      Today
+                      <span class="ds-dashboard-toolbar__date-label">Today</span>
                       <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
                     </button>
                     <div class="ds-menu" role="menu" style="display:none; position:absolute; top:calc(100% + 4px); left:0; z-index:200; min-width:160px;">
@@ -18814,7 +18814,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <div style="position: relative;">
                     <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false" onclick="toggleDashboardDateMenu(this)">
                       <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
-                      Last 7 days
+                      <span class="ds-dashboard-toolbar__date-label">Last 7 days</span>
                       <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
                     </button>
                     <div class="ds-menu" role="menu" style="display:none; position:absolute; top:calc(100% + 4px); left:0; z-index:200; min-width:160px;">
@@ -18881,7 +18881,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <div style="position: relative;">
                   <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false" onclick="toggleDashboardDateMenu(this)">
                     <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
-                    Today
+                    <span class="ds-dashboard-toolbar__date-label">Today</span>
                     <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
                   </button>
                   <div class="ds-menu" role="menu" style="display:none; position:absolute; top:calc(100% + 4px); left:0; z-index:200; min-width:160px;">
@@ -19567,21 +19567,25 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         function selectDashboardDate(item) {
           var menu = item.closest('.ds-menu');
           var btn = menu.previousElementSibling;
-          // Remove all check icons first (so item.textContent is clean below)
+          // Read label from direct text nodes only — safe regardless of checkSpan presence
+          var label = Array.from(item.childNodes)
+            .filter(function(n) { return n.nodeType === 3; })
+            .map(function(n) { return n.textContent; })
+            .join('').trim();
+          // Update aria-checked and move check icon
           menu.querySelectorAll('[role=menuitemradio]').forEach(function(b) {
             b.setAttribute('aria-checked', 'false');
             var chk = b.querySelector('.ds-menu__item-check');
             if (chk) b.removeChild(chk);
           });
-          // Get label after checkSpans are gone, before inserting new one
-          var label = item.textContent.trim();
           item.setAttribute('aria-checked', 'true');
           var checkSpan = document.createElement('span');
           checkSpan.className = 'ds-menu__item-check';
           checkSpan.innerHTML = '<span class="ds-icon ds-icon--filled" aria-hidden="true">check</span>';
           item.insertBefore(checkSpan, item.firstChild);
-          // Update button label text node (the middle text node between the two icons)
-          btn.childNodes.forEach(function(n) { if (n.nodeType === 3) n.textContent = ' ' + label + ' '; });
+          // Update the dedicated label span in the trigger button
+          var labelEl = btn.querySelector('.ds-dashboard-toolbar__date-label');
+          if (labelEl) labelEl.textContent = label;
           // Close
           menu.style.display = 'none';
           btn.setAttribute('aria-expanded', 'false');
