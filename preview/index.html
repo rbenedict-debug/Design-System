@@ -10704,9 +10704,32 @@ mark.search-match {
 /* ── AG Grid sim: checkbox column header — no right border ───────────────
    The SCSS rule .ag-pinned-left-header .ds-table-header-cell applies a
    border-right to ALL cells in the pinned section. Suppress it on the
-   checkbox-only cell; only Ticket # (the last pinned column) gets the border. */
+   checkbox-only cell; only the pinned container itself gets the separator. */
 #ag-sim-grid .ag-pinned-left-header .ds-table-header-cell--checkbox-only {
   border-right: none;
+}
+/* The last pinned-left header cell's border-right sits exactly at the container
+   edge and gets clipped. Use a border on the header container itself — it sits
+   outside the cell overflow and is always visible. Row cells keep their own
+   per-row border-right from ds-table-pinned-left (no double-border risk there). */
+#ag-sim-grid .ag-pinned-left-header {
+  border-right: 1px solid var(--color-border-secondary);
+}
+/* Suppress all individual cell border-right on pinned-left header cells —
+   the container border owns the separator. Two selectors must be overridden:
+   the ag-pinned-left-header scope AND the global ds-table-pinned-left class. */
+#ag-sim-grid .ag-pinned-left-header .ds-table-header-cell,
+#ag-sim-grid .ds-table-header-cell.ds-table-pinned-left {
+  border-right: none;
+}
+/* Resize bar: hidden by default, revealed on column header hover so the pipe
+   doesn't appear floating in the middle of the gap between column labels. */
+#ag-sim-grid .ds-table-header-cell__resize-bar {
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+#ag-sim-grid .ds-table-header-cell:hover .ds-table-header-cell__resize-bar {
+  opacity: 1;
 }
 
 /* ── Date Picker calendar mockup ─────────────────────────────────────────── */
