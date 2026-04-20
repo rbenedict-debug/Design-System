@@ -988,7 +988,16 @@
     #ag-sim-grid .ag-header-row {
       border: none;
     }
-    /* AG Grid native resize handle — styled with DS visual bar, hover-only */
+    /* Bottom border owned by the AG Grid cell wrapper so it spans the full
+       column width including any absolutely-positioned resize handle overlay */
+    #ag-sim-grid .ag-header-cell {
+      border-bottom: 1px solid var(--color-border-secondary);
+      box-sizing: border-box;
+    }
+    #ag-sim-grid .ds-table-header-cell {
+      border-bottom: none;
+    }
+    /* AG Grid native resize handle — styled with DS visual bar */
     #ag-sim-grid .ag-header-cell-resize {
       position: absolute;
       right: 0;
@@ -997,7 +1006,6 @@
       width: 16px;
       cursor: col-resize;
       z-index: 1;
-      border-bottom: 1px solid var(--color-border-secondary);
     }
     #ag-sim-grid .ag-header-cell-resize::after {
       content: '';
