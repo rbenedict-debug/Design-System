@@ -23319,13 +23319,27 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                         <h1 class="ds-page-content__title">Support Dashboard</h1>
                         <p class="ds-page-content__meta">April 20, 2026</p>
                       </div>
-                      <div class="ds-dashboard-toolbar">
+                      <div class="ds-dashboard-toolbar" style="padding: 0;">
                         <div class="ds-dashboard-toolbar__controls">
+                          <div style="position: relative;">
+                            <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false" onclick="toggleDashboardDateMenu(this)">
+                              <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+                              <span class="ds-dashboard-toolbar__date-label">Today</span>
+                              <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                            </button>
+                            <div class="ds-menu" role="menu" style="display:none; position:absolute; top:calc(100% + 4px); left:0; z-index:200; min-width:160px;">
+                              <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="true" onclick="selectDashboardDate(this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>Today</button>
+                              <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Yesterday</button>
+                              <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Last 7 days</button>
+                              <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Last 30 days</button>
+                              <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
+                            </div>
+                          </div>
                           <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
-                            <span class="ds-icon" aria-hidden="true">filter_list</span>
+                            <span class="ds-icon" aria-hidden="true">filter_alt</span>
                           </button>
                           <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
-                            <span class="ds-icon" aria-hidden="true">more_horiz</span>
+                            <span class="ds-icon" aria-hidden="true">more_vert</span>
                           </button>
                         </div>
                       </div>
