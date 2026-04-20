@@ -19567,20 +19567,20 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         function selectDashboardDate(item) {
           var menu = item.closest('.ds-menu');
           var btn = menu.previousElementSibling;
-          // Update aria-checked and move check icon
+          // Remove all check icons first (so item.textContent is clean below)
           menu.querySelectorAll('[role=menuitemradio]').forEach(function(b) {
             b.setAttribute('aria-checked', 'false');
             var chk = b.querySelector('.ds-menu__item-check');
             if (chk) b.removeChild(chk);
           });
+          // Get label after checkSpans are gone, before inserting new one
+          var label = item.textContent.trim();
           item.setAttribute('aria-checked', 'true');
           var checkSpan = document.createElement('span');
           checkSpan.className = 'ds-menu__item-check';
           checkSpan.innerHTML = '<span class="ds-icon ds-icon--filled" aria-hidden="true">check</span>';
           item.insertBefore(checkSpan, item.firstChild);
-          // Update button label (keep the two icon spans, replace text node)
-          var icons = btn.querySelectorAll('.ds-icon');
-          var label = item.textContent.trim();
+          // Update button label text node (the middle text node between the two icons)
           btn.childNodes.forEach(function(n) { if (n.nodeType === 3) n.textContent = ' ' + label + ' '; });
           // Close
           menu.style.display = 'none';
