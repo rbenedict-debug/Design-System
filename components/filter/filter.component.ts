@@ -216,6 +216,12 @@ export class DsFilterComponent implements OnChanges {
     return this._savedSets().find(s => s.id === id)?.name ?? '';
   });
 
+  readonly savedSetsToggleLabel = computed(() => {
+    const hasDraft = this.draftActiveCount() > 0;
+    const hasActiveSet = !!this._activeFilterSetId();
+    return hasDraft && !hasActiveSet ? 'Save Filters' : 'Load Filters';
+  });
+
   // ── Lifecycle ──────────────────────────────────────────────────────────────
 
   private readonly _doc = inject(DOCUMENT);

@@ -720,12 +720,12 @@
               (click)="toggleSavedSetsPanel()"
             >
               <span class="ds-icon" aria-hidden="true">bookmark</span>
-              Saved sets
+              {{ savedSetsToggleLabel() }}
             </button>
             <span class="filter-modal__footer-divider" aria-hidden="true"></span>
           }
           <button class="ds-button ds-button--text ds-button--sm" type="button" (click)="cancel()">Cancel</button>
-          <button class="ds-button ds-button--filled ds-button--sm" type="button" (click)="apply()">Apply</button>
+          <button class="ds-button ds-button--filled ds-button--sm" type="button" (click)="apply()">Apply Filters</button>
         </div>
       </footer>
 
