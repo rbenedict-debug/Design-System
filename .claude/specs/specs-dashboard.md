@@ -193,7 +193,7 @@ A bento grid is a single CSS Grid with `grid-template-areas` where tiles vary in
       'wide wide tile1 tile2';
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: auto auto auto;
-    gap: 12px;
+    gap: 16px;
   ">
 
     <!-- Metric cards — 1×1 each -->
@@ -250,7 +250,7 @@ A bento grid is a single CSS Grid with `grid-template-areas` where tiles vary in
 - **Bottom row mixes one wide tile + two narrow tiles** — `2 cols + 1 col + 1 col` is the default; adjust to `2+2` or `3+1` for different content needs.
 - **All chart tiles** use `background: var(--color-surface-page)` + `box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2)` to float above the page canvas.
 - **Hero chart** should use `display: flex; flex-direction: column` with `flex: 1; min-height: 0` on the `<ds-chart>` to fill the tall grid area.
-- **Gap is always `12px`** across the bento grid.
+- **Gap is always `16px`** across the bento grid.
 - **Never use a uniform equal-column grid** (`repeat(N, 1fr)`) for a dashboard — it loses the visual hierarchy the bento structure provides.
 
 ### Trend sign convention
