@@ -8870,6 +8870,46 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
     transform: rotate(360deg);
   }
 }
+#chart-tooltip {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  background: #ffffff;
+  border: 1px solid #E9E9E9;
+  border-radius: 8px;
+  padding: 10px 12px;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(45, 54, 56, 0.12);
+  max-width: 220px;
+}
+#chart-tooltip .ct-header {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #73737F;
+  margin-bottom: 6px;
+}
+#chart-tooltip .ct-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 20px;
+}
+#chart-tooltip .ct-swatch {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+#chart-tooltip .ct-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #2D3638;
+}
+#chart-tooltip .ct-text strong {
+  font-weight: 600;
+}
 .ds-metric-card {
   display: flex;
   flex-direction: column;
