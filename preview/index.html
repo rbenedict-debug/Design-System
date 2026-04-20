@@ -21861,25 +21861,16 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             'Medium':   'ds-label--yellow',
             'Low':      'ds-label--disabled',
           };
-          var PRIORITY_ICON = {
-            Critical: 'keyboard_double_arrow_up',
-            High:     'keyboard_arrow_up',
-            Medium:   'drag_handle',
-            Low:      'keyboard_arrow_down',
-          };
           var PRIORITY_ORDER = { Critical: 0, High: 1, Medium: 2, Low: 3 };
 
           function statusCellContent(p) {
             var cls = STATUS_CLASS[p.value] || '';
-            return '<span class="ds-label ds-label--pill ds-label--sm ' + cls + '">' + p.value + '</span>';
+            return '<span class="ds-label ds-label--pill ds-label--xs ds-label--outline ds-label--has-dot ' + cls + '"><span class="ds-label__dot" aria-hidden="true"></span>' + p.value + '</span>';
           }
 
           function priorityCellContent(p) {
             var cls = PRIORITY_CLASS[p.value] || '';
-            var icon = PRIORITY_ICON[p.value] || '';
-            return '<span class="ds-label ds-label--pill ds-label--sm ' + cls + '">'
-              + '<span class="ds-label__icon">' + icon + '</span>'
-              + p.value + '</span>';
+            return '<span class="ds-label ds-label--pill ds-label--xs ds-label--outline ds-label--has-dot ' + cls + '"><span class="ds-label__dot" aria-hidden="true"></span>' + p.value + '</span>';
           }
 
           function satisfactionCellContent(p) {
