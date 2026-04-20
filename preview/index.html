@@ -23346,37 +23346,210 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                     </div>
                     <!-- Dashboard tile canvas — no card shell, tiles float on page floor -->
                     <div class="ds-page-content__main ds-page-content__main--dashboard">
-                      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px;">
-                        <div class="ds-metric-card">
+                      <div style="
+                        display: grid;
+                        grid-template-areas:
+                          'mc1  mc2  line line'
+                          'mc3  mc4  line line'
+                          'bar  bar  donut area';
+                        grid-template-columns: 1fr 1fr 1fr 1fr;
+                        grid-template-rows: auto auto auto;
+                        gap: 16px;
+                      ">
+
+                        <!-- mc1: Open Cases -->
+                        <div class="ds-metric-card" style="grid-area: mc1;">
                           <div class="ds-metric-card__header">
-                            <span class="ds-metric-card__label">Open Tickets</span>
-                            <span class="ds-icon ds-icon--filled ds-metric-card__icon" aria-hidden="true">confirmation_number</span>
+                            <span class="ds-metric-card__label">Open Cases</span>
+                            <span class="ds-icon ds-icon--sm ds-icon--filled ds-metric-card__icon" aria-hidden="true">inbox</span>
                           </div>
                           <div class="ds-metric-card__value">1,248</div>
-                        </div>
-                        <div class="ds-metric-card">
-                          <div class="ds-metric-card__header">
-                            <span class="ds-metric-card__label">Resolved Today</span>
-                            <span class="ds-icon ds-icon--filled ds-metric-card__icon" aria-hidden="true">task_alt</span>
+                          <div class="ds-metric-card__trend">
+                            <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
+                            <span class="ds-metric-card__trend-value is-positive">+8.3%</span>
+                            <span class="ds-metric-card__trend-label">vs last week</span>
                           </div>
-                          <div class="ds-metric-card__value">84</div>
                         </div>
-                        <div class="ds-metric-card">
-                          <div class="ds-metric-card__header">
-                            <span class="ds-metric-card__label">Avg Response</span>
-                            <span class="ds-icon ds-icon--filled ds-metric-card__icon" aria-hidden="true">timer</span>
-                          </div>
-                          <div class="ds-metric-card__value">4.2h</div>
-                        </div>
-                        <div class="ds-metric-card">
+
+                        <!-- mc2: CSAT Score -->
+                        <div class="ds-metric-card" style="grid-area: mc2;">
                           <div class="ds-metric-card__header">
                             <span class="ds-metric-card__label">CSAT Score</span>
-                            <span class="ds-icon ds-icon--filled ds-metric-card__icon" aria-hidden="true">sentiment_satisfied</span>
+                            <span class="ds-icon ds-icon--sm ds-icon--filled ds-metric-card__icon" aria-hidden="true">sentiment_satisfied</span>
                           </div>
-                          <div class="ds-metric-card__value">92%</div>
+                          <div class="ds-metric-card__value">92.4%</div>
+                          <div class="ds-metric-card__trend">
+                            <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--negative" aria-hidden="true">trending_down</span>
+                            <span class="ds-metric-card__trend-value is-negative">-1.2%</span>
+                            <span class="ds-metric-card__trend-label">vs last month</span>
+                          </div>
                         </div>
-                      </div>
-                      <div class="ds-metric-card" style="height: 140px; align-items: stretch;"></div>
+
+                        <!-- mc3: Avg Handle Time -->
+                        <div class="ds-metric-card" style="grid-area: mc3;">
+                          <div class="ds-metric-card__header">
+                            <span class="ds-metric-card__label">Avg Handle Time</span>
+                            <span class="ds-icon ds-icon--sm ds-icon--filled ds-metric-card__icon" aria-hidden="true">timer</span>
+                          </div>
+                          <div class="ds-metric-card__value">4m 32s</div>
+                          <div class="ds-metric-card__trend">
+                            <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
+                            <span class="ds-metric-card__trend-value is-positive">+12%</span>
+                            <span class="ds-metric-card__trend-label">vs last week</span>
+                          </div>
+                        </div>
+
+                        <!-- mc4: Resolution Rate -->
+                        <div class="ds-metric-card" style="grid-area: mc4;">
+                          <div class="ds-metric-card__header">
+                            <span class="ds-metric-card__label">Resolution Rate</span>
+                            <span class="ds-icon ds-icon--sm ds-icon--filled ds-metric-card__icon" aria-hidden="true">check_circle</span>
+                          </div>
+                          <div class="ds-metric-card__value">87.3%</div>
+                          <div class="ds-metric-card__trend">
+                            <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
+                            <span class="ds-metric-card__trend-value is-positive">+2.1%</span>
+                            <span class="ds-metric-card__trend-label">vs last month</span>
+                          </div>
+                        </div>
+
+                        <!-- line: Monthly Cases — hero tile (2 cols × 2 rows) -->
+                        <div style="grid-area: line; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2); display: flex; flex-direction: column;">
+                          <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px; flex-shrink: 0;">Monthly Cases</div>
+                          <div style="flex: 1; min-height: 0; overflow: hidden;">
+                            <svg viewBox="0 0 740 210" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-label="Line chart: Monthly Cases" role="img" style="display:block;">
+                              <line x1="54" y1="20" x2="720" y2="20" stroke="#E9E9E9" stroke-width="1"/>
+                              <line x1="54" y1="60" x2="720" y2="60" stroke="#E9E9E9" stroke-width="1"/>
+                              <line x1="54" y1="100" x2="720" y2="100" stroke="#E9E9E9" stroke-width="1"/>
+                              <line x1="54" y1="140" x2="720" y2="140" stroke="#E9E9E9" stroke-width="1"/>
+                              <line x1="54" y1="180" x2="720" y2="180" stroke="#E9E9E9" stroke-width="1"/>
+                              <text x="48" y="184" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">0</text>
+                              <text x="48" y="144" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">100</text>
+                              <text x="48" y="104" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">200</text>
+                              <text x="48" y="64"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">300</text>
+                              <text x="48" y="24"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">400</text>
+                              <text x="60"  y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Nov</text>
+                              <text x="192" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Dec</text>
+                              <text x="324" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Jan</text>
+                              <text x="456" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Feb</text>
+                              <text x="588" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Mar</text>
+                              <text x="720" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Apr</text>
+                              <polyline points="60,82 192,64 324,56 456,66 588,52 720,61" fill="none" stroke="#0B6EB4" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                              <circle cx="60"  cy="82" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                              <circle cx="192" cy="64" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                              <circle cx="324" cy="56" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                              <circle cx="456" cy="66" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                              <circle cx="588" cy="52" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                              <circle cx="720" cy="61" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
+                              <polyline points="60,88 192,74 324,66 456,72 588,57 720,56" fill="none" stroke="#45A55F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                              <circle cx="60"  cy="88" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                              <circle cx="192" cy="74" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                              <circle cx="324" cy="66" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                              <circle cx="456" cy="72" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                              <circle cx="588" cy="57" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                              <circle cx="720" cy="56" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
+                              <rect x="54" y="200" width="10" height="10" rx="2" fill="#0B6EB4"/>
+                              <text x="68" y="209" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Opened</text>
+                              <rect x="132" y="200" width="10" height="10" rx="2" fill="#45A55F"/>
+                              <text x="146" y="209" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Closed</text>
+                            </svg>
+                          </div>
+                        </div>
+
+                        <!-- bar: Cases by Day of Week (2 cols wide) -->
+                        <div style="grid-area: bar; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
+                          <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
+                          <svg viewBox="0 0 502 210" width="100%" height="210" aria-label="Column chart: Cases by Day of Week" role="img" style="display:block;">
+                            <line x1="44" y1="10"  x2="490" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
+                            <line x1="44" y1="50"  x2="490" y2="50"  stroke="#E9E9E9" stroke-width="1"/>
+                            <line x1="44" y1="90"  x2="490" y2="90"  stroke="#E9E9E9" stroke-width="1"/>
+                            <line x1="44" y1="130" x2="490" y2="130" stroke="#E9E9E9" stroke-width="1"/>
+                            <line x1="44" y1="170" x2="490" y2="170" stroke="#E9E9E9" stroke-width="1"/>
+                            <text x="38" y="174" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">0</text>
+                            <text x="38" y="134" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">65</text>
+                            <text x="38" y="94"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">130</text>
+                            <text x="38" y="54"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">195</text>
+                            <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">260</text>
+                            <rect x="50"  y="85"  width="46" height="85"  rx="3" fill="#0B6EB4"/>
+                            <rect x="114" y="40"  width="46" height="130" rx="3" fill="#0B6EB4"/>
+                            <rect x="178" y="50"  width="46" height="120" rx="3" fill="#0B6EB4"/>
+                            <rect x="242" y="24"  width="46" height="146" rx="3" fill="#0B6EB4"/>
+                            <rect x="306" y="64"  width="46" height="106" rx="3" fill="#0B6EB4"/>
+                            <rect x="370" y="126" width="46" height="44"  rx="3" fill="#0B6EB4" opacity="0.5"/>
+                            <rect x="434" y="153" width="46" height="17"  rx="3" fill="#0B6EB4" opacity="0.35"/>
+                            <text x="73"  y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mon</text>
+                            <text x="137" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Tue</text>
+                            <text x="201" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Wed</text>
+                            <text x="265" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Thu</text>
+                            <text x="329" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Fri</text>
+                            <text x="393" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Sat</text>
+                            <text x="457" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Sun</text>
+                            <rect x="44" y="196" width="10" height="10" rx="2" fill="#0B6EB4"/>
+                            <text x="58" y="205" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Cases Opened</text>
+                          </svg>
+                        </div>
+
+                        <!-- donut: Cases by Channel -->
+                        <div style="grid-area: donut; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
+                          <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Channel</div>
+                          <svg viewBox="0 0 240 200" width="100%" height="200" aria-label="Donut chart: Cases by Channel" role="img" style="display:block; margin: 0 auto;">
+                            <path d="M 120 12 A 88 88 0 0 1 180.2 164.2 L 156.3 138.6 A 53 53 0 0 0 120 47 Z" fill="#0B6EB4"/>
+                            <path d="M 180.2 164.2 A 88 88 0 0 1 48.8 151.7 L 77.1 131.2 A 53 53 0 0 0 156.3 138.6 Z" fill="#45A55F"/>
+                            <path d="M 48.8 151.7 A 88 88 0 0 1 45.8 52.7 L 75.3 71.5 A 53 53 0 0 0 77.1 131.2 Z" fill="#FFBF00"/>
+                            <path d="M 45.8 52.7 A 88 88 0 0 1 92.8 16.3 L 103.6 49.6 A 53 53 0 0 0 75.3 71.5 Z" fill="#43ADF2"/>
+                            <path d="M 92.8 16.3 A 88 88 0 0 1 120 12 L 120 47 A 53 53 0 0 0 103.6 49.6 Z" fill="#CACACA"/>
+                            <path d="M 120 12 A 88 88 0 0 1 180.2 164.2 L 156.3 138.6 A 53 53 0 0 0 120 47 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                            <path d="M 180.2 164.2 A 88 88 0 0 1 48.8 151.7 L 77.1 131.2 A 53 53 0 0 0 156.3 138.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                            <path d="M 48.8 151.7 A 88 88 0 0 1 45.8 52.7 L 75.3 71.5 A 53 53 0 0 0 77.1 131.2 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                            <path d="M 45.8 52.7 A 88 88 0 0 1 92.8 16.3 L 103.6 49.6 A 53 53 0 0 0 75.3 71.5 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                            <path d="M 92.8 16.3 A 88 88 0 0 1 120 12 L 120 47 A 53 53 0 0 0 103.6 49.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
+                            <circle cx="120" cy="100" r="53" fill="white"/>
+                            <text x="120" y="95" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="20" font-weight="600" fill="#2D3638">1,248</text>
+                            <text x="120" y="111" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">total cases</text>
+                          </svg>
+                          <div style="display:flex; flex-direction:column; gap:3px; margin-top:8px;">
+                            <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#0B6EB4;flex-shrink:0;"></span>Email — 38%</div>
+                            <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#45A55F;flex-shrink:0;"></span>Chat — 27%</div>
+                            <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#FFBF00;flex-shrink:0;"></span>Phone — 19%</div>
+                            <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#43ADF2;flex-shrink:0;"></span>Portal — 11%</div>
+                            <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#CACACA;flex-shrink:0;"></span>Other — 5%</div>
+                          </div>
+                        </div>
+
+                        <!-- area: Avg Handle Time trend -->
+                        <div style="grid-area: area; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
+                          <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Avg Handle Time</div>
+                          <svg viewBox="0 0 280 190" width="100%" height="190" aria-label="Area chart: Avg Handle Time" role="img" style="display:block;">
+                            <line x1="44" y1="10"  x2="270" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
+                            <line x1="44" y1="48"  x2="270" y2="48"  stroke="#E9E9E9" stroke-width="1"/>
+                            <line x1="44" y1="85"  x2="270" y2="85"  stroke="#E9E9E9" stroke-width="1"/>
+                            <line x1="44" y1="123" x2="270" y2="123" stroke="#E9E9E9" stroke-width="1"/>
+                            <line x1="44" y1="160" x2="270" y2="160" stroke="#E9E9E9" stroke-width="1"/>
+                            <text x="38" y="164" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">0</text>
+                            <text x="38" y="127" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">2m</text>
+                            <text x="38" y="89"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">4m</text>
+                            <text x="38" y="52"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">6m</text>
+                            <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">8m</text>
+                            <path d="M 44 63 L 88 54 L 132 58 L 176 74 L 220 75 L 264 75 L 264 160 L 44 160 Z" fill="#0EA5A0" opacity="0.15"/>
+                            <polyline points="44,63 88,54 132,58 176,74 220,75 264,75" fill="none" stroke="#0EA5A0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                            <circle cx="44"  cy="63" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                            <circle cx="88"  cy="54" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                            <circle cx="132" cy="58" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                            <circle cx="176" cy="74" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                            <circle cx="220" cy="75" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                            <circle cx="264" cy="75" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
+                            <text x="44"  y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Nov</text>
+                            <text x="88"  y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Dec</text>
+                            <text x="132" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Jan</text>
+                            <text x="176" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Feb</text>
+                            <text x="220" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mar</text>
+                            <text x="264" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Apr</text>
+                            <rect x="44" y="181" width="10" height="10" rx="2" fill="#0EA5A0"/>
+                            <text x="58" y="190" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Avg Handle Time</text>
+                          </svg>
+                        </div>
+
+                      </div><!-- /bento grid -->
                     </div>
                   </main>
                 </div>
