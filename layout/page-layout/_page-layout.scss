@@ -166,7 +166,11 @@
     background: transparent;
     border-radius: 0;
     box-shadow: none;
-    padding: 4px 8px 8px;  // give tile shadows room — overflow-y:auto coerces overflow-x:hidden
+    // overflow-x:clip is exempt from the CSS coercion rule (visible→auto) so it can coexist
+    // with overflow-y:auto. overflow-clip-margin lets tile box-shadows render outside the
+    // scroll container's border box without adding layout padding.
+    overflow-x: clip;
+    overflow-clip-margin: 12px;
   }
 }
 
