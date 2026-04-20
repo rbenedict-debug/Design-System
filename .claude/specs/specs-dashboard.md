@@ -281,7 +281,7 @@ individually elevated element. The visual language matches `ds-metric-card`:
 
 | Element | Class | Role |
 |---|---|---|
-| Host | `ds-dashboard-toolbar` | Flex row, `justify-content: space-between` |
+| Host | `ds-dashboard-toolbar` | Flex column, `align-items: flex-start`, 8px gap |
 | Left | `__identity` | Title + subtitle stacked |
 | Title | `__title` | `h1`, 20px/600, `--color-text-primary` |
 | Subtitle | `__subtitle` | `p`, 12px/400, `--color-text-secondary` |

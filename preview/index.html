@@ -8976,9 +8976,9 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 }
 .ds-dashboard-toolbar {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-xl);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
   padding: var(--spacing-md) 0 var(--spacing-lg);
 }
 .ds-dashboard-toolbar__identity {
@@ -9007,7 +9007,6 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  flex-shrink: 0;
 }
 .ds-dashboard-toolbar__date-select {
   display: flex;
