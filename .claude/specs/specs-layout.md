@@ -29,6 +29,97 @@ Agent Status, Page Layout, Split Page Layout, Utilities (ds-sr-only)
 
 CSS-only composition patterns. SCSS lives in `layout/page-layout/` and `layout/split-page/` and compiles into `dist/layout.css` (separate from `dist/components.css`). Consuming projects add `"node_modules/@onflo/design-system/dist/layout.css"` to their `angular.json` styles array. The preview (`preview/index.html`) provides interactive demos — the preview wraps these in a 640px fixed-height frame; production apps use `height: 100%` on the app root. Reference the preview for canonical HTML structure.
 
+### Page content edit scope
+
+When Rebecca says **"change the page content to X"**, **"build a table on this page"**, **"put a dashboard here"**, or any similar instruction to replace or swap what a page shows:
+
+- **Only modify the contents of `ds-page-content__main`** (or, on a split layout, the specified `ds-split-page__panel--left` or `ds-split-page__panel--right`).
+- **Never touch `ds-page-content__heading`** — the `<h1 class="ds-page-content__title">` and any `<ds-tabs>` inside it are structural and must be preserved exactly as-is. The heading sits ABOVE the content area and is NEVER placed inside `__main`.
+- **Never remove or replace the `<main class="ds-page-content">` shell** — it always wraps both `__heading` and `__main`.
+- If switching from a split layout to a regular layout (or vice versa), swap only the markup *inside* `__main` — the heading above it does not change.
+
+**Correct scope:**
+```
+ds-page-content
+  ds-page-content__heading   ← NEVER touch this (sits above the content area)
+    h1.ds-page-content__title
+  ds-page-content__main      ← edit ONLY this (replace its contents)
+    [replace contents here]
+```
+
+**Dashboard exception — `ds-page-content__main--dashboard`:**
+
+`ds-page-content__main` is a card (border-radius + box-shadow). Dashboard pages must NOT use the plain `__main` because it creates a double-layer: the card wrapping the metric cards and chart tiles which have their own elevation. Use the `--dashboard` modifier instead — it strips the card shell so tiles float directly on the page-floor background.
+
+**Canonical dashboard page structure** — the page title is visible in `__heading` (same as any other page), `ds-dashboard-toolbar` sits between the heading and main as a sibling flex child (it does not scroll), and only the bento grid tiles are inside `__main--dashboard` (which scrolls):
+
+```html
+<main class="ds-page-content ds-page-content--dashboard" role="main">
+  <div class="ds-page-content__dashboard-header">
+
+    <!-- Use --row when pairing the title with a date/status line beside it.
+         If there is no metadata, use plain ds-page-content__heading. -->
+    <div class="ds-page-content__heading ds-page-content__heading--row">
+      <h1 class="ds-page-content__title">Support Dashboard</h1>
+      <p class="ds-page-content__meta">April 20, 2026 · Last updated 2 minutes ago</p>
+    </div>
+
+    <!-- Toolbar controls — no __identity needed when title is in __heading -->
+    <div class="ds-dashboard-toolbar">
+      <div class="ds-dashboard-toolbar__controls">…</div>
+    </div>
+
+  </div><!-- /.ds-page-content__dashboard-header -->
+
+  <!-- Dashboard tiles — ds-page-content--dashboard scrolls, not this element -->
+  <div class="ds-page-content__main ds-page-content__main--dashboard">
+    <!-- metric cards, chart tiles -->
+  </div>
+</main>
+```
+
+Never put `ds-dashboard-toolbar` inside `__main--dashboard` — it would scroll with the content. Never use `style="background: ...; border-radius: 0; box-shadow: none"` inline overrides to work around the card — use the `--dashboard` modifier.
+
+---
+
+### Subnav + nav-expand rules
+
+These rules apply to every page in every Onflo application:
+
+1. **Every page shell must include `<nav class="ds-subnav">`** inside `ds-page-layout__body`, even if the subnav has no items yet. Never omit the subnav element.
+2. **Every page shell must include `<ds-nav-expand>`** (the show/hide toggle button). It is always a direct child of `ds-page-layout`, absolutely positioned at the right edge of the subnav. Never omit it.
+3. Both elements must be wired together — `[open]` on `<ds-nav-expand>` reflects subnav state, `(toggle)` flips it, and `.is-collapsed` is applied to `.ds-subnav` when closed.
+
+---
+
+### Top-nav structural rules
+
+These rules apply to every page shell:
+
+1. **`ds-top-nav__tabs` is always present** — never omit the tab strip `<div class="ds-top-nav__tabs">`, even if it starts with only one tab.
+2. **All action icon buttons must be inside `<div class="ds-top-nav__actions">`** — never place them directly as children of `<header class="ds-top-nav">`. The wrapper is what enforces the horizontal row layout.
+3. **`__actions` is always a single flat flex row** — `flex-direction: row` is explicit in the SCSS. Never nest a column-direction container inside it. Each button (or `__action-badge` wrapper) is a direct child.
+4. **Each button uses `ds-top-nav__action-btn`** — 32×32px circular button. If it needs a badge, wrap it in `ds-top-nav__action-badge`; the button itself stays a direct child of that wrapper, not buried deeper.
+
+**Canonical structure:**
+```html
+<header class="ds-top-nav" role="banner">
+  <div class="ds-top-nav__tabs">
+    <!-- ds-nav-tab items -->
+  </div>
+  <div class="ds-top-nav__actions">
+    <button class="ds-top-nav__action-btn" type="button" aria-label="Chatsy">…</button>
+    <div class="ds-top-nav__action-badge">
+      <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">…</button>
+      <div class="ds-badge-indicator" aria-hidden="true">3</div>
+    </div>
+    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">R</button>
+  </div>
+</header>
+```
+
+---
+
 ### Page title rules
 
 These rules apply to every page in every Onflo application:
@@ -108,8 +199,10 @@ These rules apply to every page in every Onflo application:
 | `ds-subnav-header` | Sub-nav top header | Expandable top-level row with 12px icon + Label Small text; Angular: `<ds-subnav-header [text]="..." [icon]="..." [(expanded)]="...">` |
 | `.ds-page-content` | Main area | `flex: 1; display: flex; flex-direction: column; gap: --spacing-lg` |
 | `.ds-page-content__heading` | Heading row | `flex-shrink: 0` — title + optional tabs, never scrolls |
+| `.ds-page-content__heading--row` | Heading row (dashboard) | Switches heading to `flex-direction: row; justify-content: space-between` — places `__meta` date/subtitle beside the title |
 | `.ds-page-content__title` | H1 | Title H1 typography (`--ref-typescale-title-h1-*`) |
-| `.ds-page-content__main` | Content card | `flex: 1; overflow-y: auto` — scroll boundary; heading and save bar remain fixed above/below |
+| `.ds-page-content__meta` | Page metadata | Body Small typography, `--color-text-secondary` — use for date/status text beside the title in `--row` mode |
+| `.ds-page-content__main` | Content card | `flex: 1; overflow-y: auto` — scroll boundary; heading and save bar remain fixed above/below. **Not used on split or dashboard pages.** |
 | `.ds-page-content__main--table` | Content card (table pages) | Adds `overflow: hidden; display: flex; flex-direction: column` — use instead of plain `__main` on any page containing an AG Grid; hands scroll control to the grid's own viewport |
 | `.ds-ag-grid` | AG Grid host element | `flex: 1 1 0; min-height: 0; width: 100%` — apply on `ag-grid-angular` inside `__main--table` to fill remaining height correctly |
 | `<ds-save-bar>` (when used) | Save footer | Sibling of `.ds-page-content__main`, never inside it — stays below the card regardless of scroll |
@@ -190,7 +283,7 @@ When switching a page from split layout to a regular layout: replace the `ds-spl
 
 ### Split Page Layout (`ds-split-page`)
 
-- **Purpose**: Two-panel content area for detail views — a list or context panel beside a primary content panel. Lives inside `ds-page-content__main`. The page title (`ds-page-content__heading` + `ds-page-content__title`) is a **sibling of `__main`** — it stays fixed above the panels and must never be placed inside them.
+- **Purpose**: Two-panel content area for detail views — a list or context panel beside a primary content panel. Placed as a **direct child of `ds-page-content`** (sibling of `ds-page-content__heading`) — never wrapped in `ds-page-content__main`. Each `ds-split-page__panel` already provides its own card shell (background, border-radius, box-shadow), so adding `__main` would create a double-card. The page title (`ds-page-content__heading` + `ds-page-content__title`) stays fixed above the panels.
 
 #### HTML structure
 
@@ -199,21 +292,21 @@ Always use this full `ds-page-content` shell when switching a page to a split la
 ```html
 <main class="ds-page-content" role="main">
 
-  <!-- Title stays OUTSIDE __main — fixed above the panels, never inside them -->
+  <!-- Title — fixed above the panels, never inside them -->
   <div class="ds-page-content__heading">
     <h1 class="ds-page-content__title">Page Title</h1>
     <!-- <ds-tabs> here if the page has section tabs -->
   </div>
 
-  <!-- Fixed split (prototype default) — Engineering: replace with CdkDragModule for resizable handle -->
-  <div class="ds-page-content__main">
-    <div class="ds-split-page">
-      <div class="ds-split-page__panel ds-split-page__panel--left">
-        <!-- left panel content -->
-      </div>
-      <div class="ds-split-page__panel ds-split-page__panel--right">
-        <!-- right panel content -->
-      </div>
+  <!-- Split panels are DIRECT children of ds-page-content — never wrap in ds-page-content__main.
+       Each ds-split-page__panel already provides its own card shell (bg + border-radius + box-shadow).
+       Wrapping in __main would create a double-card: a card wrapping cards. -->
+  <div class="ds-split-page">
+    <div class="ds-split-page__panel ds-split-page__panel--left">
+      <!-- left panel content -->
+    </div>
+    <div class="ds-split-page__panel ds-split-page__panel--right">
+      <!-- right panel content -->
     </div>
   </div>
 
@@ -223,16 +316,14 @@ Always use this full `ds-page-content` shell when switching a page to a split la
 Resizable variant (add `ds-split-page--resizable` + handle element):
 
 ```html
-<div class="ds-page-content__main">
-  <div class="ds-split-page ds-split-page--resizable">
-    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-    <div class="ds-split-page__handle" aria-hidden="true">
-      <div class="ds-split-page__handle-line"></div>
-      <span class="ds-icon" aria-hidden="true">drag_indicator</span>
-      <div class="ds-split-page__handle-line"></div>
-    </div>
-    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+<div class="ds-split-page ds-split-page--resizable">
+  <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+  <div class="ds-split-page__handle" aria-hidden="true">
+    <div class="ds-split-page__handle-line"></div>
+    <span class="ds-icon" aria-hidden="true">drag_indicator</span>
+    <div class="ds-split-page__handle-line"></div>
   </div>
+  <div class="ds-split-page__panel ds-split-page__panel--right"></div>
 </div>
 ```
 

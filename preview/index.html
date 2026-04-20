@@ -10961,6 +10961,11 @@ mark.search-match {
   gap: var(--spacing-xs, 4px);
   flex-shrink: 0;
 }
+.ds-page-content__heading--row {
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+}
 
 .ds-page-content__title {
   font-family: var(--ref-typescale-title-h1-font, 'Proxima Nova', sans-serif);
@@ -10970,6 +10975,16 @@ mark.search-match {
   color: var(--color-text-primary, #2d3638);
   margin: 0;
   padding: var(--spacing-sm, 8px) 0 0 var(--spacing-lg, 16px);
+}
+.ds-page-content__meta {
+  font-family: var(--ref-typescale-body-small-font, 'Proxima Nova', sans-serif);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--color-text-secondary, #73737f);
+  margin: 0;
+  padding-right: var(--spacing-lg, 16px);
+  white-space: nowrap;
 }
 
 /* ds-page-content__tabs-bar removed — use ds-tabs directly */
@@ -23235,9 +23250,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
                   <!-- Sticky header: heading + toolbar pin while tiles scroll -->
                   <div class="ds-page-content__dashboard-header">
-                    <div class="ds-page-content__heading" style="flex-direction: row; justify-content: space-between; align-items: baseline;">
+                    <div class="ds-page-content__heading ds-page-content__heading--row">
                       <h1 class="ds-page-content__title">Support Dashboard</h1>
-                      <p class="ds-dashboard-toolbar__subtitle" style="padding-right: var(--spacing-lg);">April 20, 2026 · Last updated 2 minutes ago</p>
+                      <p class="ds-page-content__meta">April 20, 2026 · Last updated 2 minutes ago</p>
                     </div>
 
                     <div class="ds-dashboard-toolbar" id="dashboard-page-toolbar" style="padding: 0;">

@@ -104,6 +104,14 @@
   flex-direction: column;
   gap: var(--spacing-xs);
   flex-shrink: 0;
+
+  // Row variant — title and meta text side-by-side (e.g. dashboard pages).
+  // Usage: <div class="ds-page-content__heading ds-page-content__heading--row">
+  &--row {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
 }
 
 .ds-page-content__title {
@@ -114,6 +122,19 @@
   color: var(--color-text-primary);
   margin: 0;
   padding: var(--spacing-sm) 0 0 var(--spacing-lg);
+}
+
+// Page-level metadata (e.g. "Last updated 2 minutes ago" on dashboard pages).
+// Always paired with ds-page-content__heading--row so it sits beside the title.
+.ds-page-content__meta {
+  font-family: var(--ref-typescale-body-small-font);
+  font-size: var(--ref-typescale-body-small-size);
+  font-weight: var(--ref-typescale-body-small-weight);
+  line-height: var(--ref-typescale-body-small-line-height);
+  color: var(--color-text-secondary);
+  margin: 0;
+  padding-right: var(--spacing-lg);
+  white-space: nowrap;
 }
 
 .ds-page-content__main {
@@ -194,6 +215,9 @@
   &:hover { scrollbar-color: var(--color-surface-scroll) transparent; }
 }
 
+// Z-index stacking: dashboard sticky header sits above scrolling tile content.
+// z-index: 10 — same layer as other fixed/sticky page chrome (below dialogs/modals).
+// If adding new overlaying elements: dialogs/modals use 100+, tooltips 50+.
 .ds-page-content__dashboard-header {
   position: sticky;
   top: 0;
