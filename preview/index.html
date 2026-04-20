@@ -17210,10 +17210,53 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     },
   ];
 
+  const FILTER_GROUPS_DASHBOARD = [
+    {
+      id: 'ds-date', label: 'Date', icon: 'calendar_today', type: 'date-preset',
+      options: [
+        { id: 'ds-dp-today',    label: 'Today' },
+        { id: 'ds-dp-yesterday',label: 'Yesterday' },
+        { id: 'ds-dp-7days',    label: 'Last 7 days' },
+        { id: 'ds-dp-30days',   label: 'Last 30 days' },
+        { id: 'ds-dp-3months',  label: 'Last 3 months' },
+        { id: 'ds-dp-year',     label: 'This year' },
+      ],
+    },
+    {
+      id: 'ds-channel', label: 'Channel', icon: 'support_agent',
+      options: [
+        { id: 'ds-ch-email',  label: 'Email' },
+        { id: 'ds-ch-chat',   label: 'Chat' },
+        { id: 'ds-ch-phone',  label: 'Phone' },
+        { id: 'ds-ch-portal', label: 'Portal' },
+        { id: 'ds-ch-other',  label: 'Other' },
+      ],
+    },
+    {
+      id: 'ds-status', label: 'Status', icon: 'check_circle',
+      options: [
+        { id: 'ds-st-open',     label: 'Open' },
+        { id: 'ds-st-progress', label: 'In Progress' },
+        { id: 'ds-st-pending',  label: 'Pending' },
+        { id: 'ds-st-closed',   label: 'Closed' },
+      ],
+    },
+    {
+      id: 'ds-team', label: 'Team', icon: 'groups',
+      options: [
+        { id: 'ds-tm-tier1',   label: 'Tier 1 Support' },
+        { id: 'ds-tm-tier2',   label: 'Tier 2 Support' },
+        { id: 'ds-tm-billing', label: 'Billing' },
+        { id: 'ds-tm-tech',    label: 'Technical' },
+      ],
+    },
+  ];
+
   // ── Context configuration ─────────────────────────────────────
   const CONTEXTS = {
-    assets:  { label: 'Assets Table',     groups: FILTER_GROUPS_ASSETS,           savedSetsKey: 'onflo-ds-preview-filter-sets-assets'  },
-    service: { label: 'Service Overview', groups: FILTER_GROUPS_SERVICE_OVERVIEW,  savedSetsKey: 'onflo-ds-preview-filter-sets-service' },
+    assets:    { label: 'Assets Table',     groups: FILTER_GROUPS_ASSETS,            savedSetsKey: 'onflo-ds-preview-filter-sets-assets',     appliedBarId: 'ds-preview-filter-applied-bar',    appliedCardsId: 'ds-preview-filter-applied-cards'    },
+    service:   { label: 'Service Overview', groups: FILTER_GROUPS_SERVICE_OVERVIEW,   savedSetsKey: 'onflo-ds-preview-filter-sets-service',    appliedBarId: 'ds-preview-filter-applied-bar',    appliedCardsId: 'ds-preview-filter-applied-cards'    },
+    dashboard: { label: 'Dashboard',        groups: FILTER_GROUPS_DASHBOARD,          savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard',  appliedBarId: 'ds-sim-dashboard-applied-bar',     appliedCardsId: 'ds-sim-dashboard-applied-cards'     },
   };
 
   let activeContext      = 'assets';
@@ -18082,9 +18125,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
   }
 
   function renderAppliedBar() {
-    const bar     = $id('ds-preview-filter-applied-bar');
-    const cardsEl = $id('ds-preview-filter-applied-cards');
-    if (state.selected.size === 0) { bar.style.display = 'none'; return; }
+    const ctx      = CONTEXTS[activeContext];
+    const bar      = $id(ctx.appliedBarId);
+    const cardsEl  = $id(ctx.appliedCardsId);
+    const simBtn   = $id('sim-filter-btn');
+    const hasFilters = state.selected.size > 0;
+
+    if (!hasFilters) {
+      if (bar) bar.style.display = 'none';
+      if (simBtn && activeContext === 'dashboard') { simBtn.classList.remove('is-active'); simBtn.removeAttribute('aria-pressed'); }
+      return;
+    }
 
     const buckets = new Map();
     state.selected.forEach(id => {
@@ -18094,7 +18145,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       buckets.get(key).items.push(meta.label);
     });
 
-    cardsEl.innerHTML = Array.from(buckets.entries()).map(([key, { meta, items }]) => {
+    if (cardsEl) cardsEl.innerHTML = Array.from(buckets.entries()).map(([key, { meta, items }]) => {
       const excluded = state.excludedBuckets.has(key);
       const crumb    = getBreadcrumb(meta);
       const excludedCls = excluded ? ' filter-applied-card--excluded' : '';
@@ -18110,7 +18161,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         '<span class="ds-icon ds-icon--sm" aria-hidden="true">close</span></button></div></div>';
     }).join('');
 
-    bar.style.display = '';
+    if (bar) bar.style.display = '';
+    if (simBtn && activeContext === 'dashboard') { simBtn.classList.add('is-active'); simBtn.setAttribute('aria-pressed', 'true'); }
   }
 
   function applyFilters() {
@@ -18120,6 +18172,11 @@ Source: <code>components/datepicker/_datepicker.scss</code>
   function switchContext(contextKey) {
     if (!CONTEXTS[contextKey] || contextKey === activeContext) return;
     if (!overlay.hidden) closeModal();
+    // Clear the outgoing context's applied bar
+    const prevBar = $id(CONTEXTS[activeContext].appliedBarId);
+    if (prevBar) prevBar.style.display = 'none';
+    const prevBtn = $id('sim-filter-btn');
+    if (prevBtn && activeContext === 'dashboard') { prevBtn.classList.remove('is-active'); prevBtn.removeAttribute('aria-pressed'); }
     activeContext = contextKey; activeFilterGroups = CONTEXTS[contextKey].groups;
     OPTION_META = buildOptionMeta(activeFilterGroups);
     state.activeGroupId = activeFilterGroups[0]?.id ?? null;
@@ -18299,19 +18356,23 @@ Source: <code>components/datepicker/_datepicker.scss</code>
   $id('ds-preview-cancel-btn').addEventListener('click', closeModal);
   $id('ds-preview-close-modal-btn').addEventListener('click', closeModal);
 
-  // Applied filters bar — click to edit / remove bucket
-  $id('ds-preview-filter-applied-cards').addEventListener('click', e => {
-    const removeBtn = e.target.closest('[data-remove-bucket]');
-    if (removeBtn) { removeBucket(removeBtn.dataset.removeBucket); renderAppliedBar(); return; }
-    const card = e.target.closest('.ds-card-item');
-    if (card) { state.activeGroupId = card.dataset.groupId; optionsEl.scrollTop = 0; render(); openModal(); }
-  });
-
-  $id('ds-preview-filter-applied-cards').addEventListener('keydown', e => {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    const card = e.target.closest('.ds-card-item[role="button"]');
-    if (card && e.target === card) { e.preventDefault(); state.activeGroupId = card.dataset.groupId; openModal(); }
-  });
+  // Applied filters bars — click to edit / remove bucket (shared handler)
+  function wireAppliedBar(cardsId) {
+    const el = $id(cardsId); if (!el) return;
+    el.addEventListener('click', e => {
+      const removeBtn = e.target.closest('[data-remove-bucket]');
+      if (removeBtn) { removeBucket(removeBtn.dataset.removeBucket); renderAppliedBar(); return; }
+      const card = e.target.closest('.ds-card-item');
+      if (card) { state.activeGroupId = card.dataset.groupId; optionsEl.scrollTop = 0; render(); openModal(); }
+    });
+    el.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const card = e.target.closest('.ds-card-item[role="button"]');
+      if (card && e.target === card) { e.preventDefault(); state.activeGroupId = card.dataset.groupId; openModal(); }
+    });
+  }
+  wireAppliedBar('ds-preview-filter-applied-cards');
+  wireAppliedBar('ds-sim-dashboard-applied-cards');
 
   // Close on scrim click
   overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
@@ -18788,7 +18849,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                       <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
                     </div>
                   </div>
-                  <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" onclick="openPreviewFilter()">
+                  <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" onclick="dsPreviewFilter.open('dashboard')">
                     <span class="ds-icon" aria-hidden="true">filter_alt</span>
                   </button>
                   <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
@@ -18892,13 +18953,18 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                     <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
                   </div>
                 </div>
-                <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" id="sim-filter-btn" onclick="openPreviewFilter()">
+                <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" id="sim-filter-btn" onclick="dsPreviewFilter.open('dashboard')">
                   <span class="ds-icon" aria-hidden="true">filter_alt</span>
                 </button>
                 <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
                   <span class="ds-icon" aria-hidden="true">more_vert</span>
                 </button>
               </div>
+            </div>
+
+            <!-- Dashboard filter applied bar -->
+            <div id="ds-sim-dashboard-applied-bar" class="filter-applied-bar" style="display:none; margin-top:8px;">
+              <div class="filter-applied-bar__cards" id="ds-sim-dashboard-applied-cards" role="group" aria-label="Applied filters"></div>
             </div>
 
             <!--
@@ -19237,309 +19303,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             var el = document.getElementById('modal-' + id);
             if (el) el.style.display = (id === tabId) ? '' : 'none';
           });
-        }
-      </script>
-
-      <!-- ── Filter interactive overlay (Components page demo) ──────── -->
-      <div id="preview-filter-overlay" class="filter-overlay" style="display:none; position:fixed; z-index:2000;" role="dialog" aria-modal="true" aria-label="Filter" onclick="closePreviewFilter()">
-        <div class="filter-modal" onclick="event.stopPropagation()">
-
-          <button class="ds-icon-button ds-icon-button--icon filter-modal__close" type="button" aria-label="Close filters" onclick="closePreviewFilter()">
-            <span class="ds-icon" aria-hidden="true">close</span>
-          </button>
-
-          <div class="filter-modal__body">
-
-            <!-- Left panel -->
-            <div class="filter-modal__left">
-              <header class="filter-modal__header">
-                <h2 class="filter-modal__title">Filters</h2>
-                <div class="ds-search ds-search--sm">
-                  <span class="ds-search__icon ds-icon" aria-hidden="true">search</span>
-                  <input class="ds-search__input" type="search" placeholder="Search filters…" aria-label="Search filters" />
-                </div>
-              </header>
-              <div class="filter-modal__content">
-
-                <!-- Group nav -->
-                <nav class="filter-modal__nav" aria-label="Filter groups">
-                  <button class="filter-nav-item filter-nav-item--active" type="button" onclick="switchFilterGroup(this,'pf-group-assets')">
-                    <span class="ds-icon filter-nav-item__icon" aria-hidden="true">inventory_2</span>
-                    <span class="filter-nav-item__label">Assets</span>
-                    <span class="filter-nav-item__badge" aria-label="2 selected">2</span>
-                  </button>
-                  <button class="filter-nav-item" type="button" onclick="switchFilterGroup(this,'pf-group-financial')">
-                    <span class="ds-icon filter-nav-item__icon" aria-hidden="true">payments</span>
-                    <span class="filter-nav-item__label">Financial</span>
-                  </button>
-                  <button class="filter-nav-item" type="button" onclick="switchFilterGroup(this,'pf-group-dates')">
-                    <span class="ds-icon filter-nav-item__icon" aria-hidden="true">calendar_month</span>
-                    <span class="filter-nav-item__label">Dates</span>
-                    <span class="filter-nav-item__badge" aria-label="1 selected">1</span>
-                  </button>
-                  <button class="filter-nav-item" type="button" onclick="switchFilterGroup(this,'pf-group-status')">
-                    <span class="ds-icon filter-nav-item__icon" aria-hidden="true">check_circle</span>
-                    <span class="filter-nav-item__label">Status</span>
-                  </button>
-                </nav>
-
-                <!-- Options panel -->
-                <div class="filter-modal__options" role="region" aria-label="Filter options">
-
-                  <!-- ── Assets group ──────────────────────────────── -->
-                  <div id="pf-group-assets">
-                    <div class="filter-tier">
-                      <div class="filter-tier__top-row">
-                        <button class="filter-tier__header" type="button" aria-expanded="true" onclick="togglePreviewTier(this)">
-                          <span class="ds-icon filter-tier__chevron" aria-hidden="true">keyboard_arrow_down</span>
-                          Asset Type
-                          <span class="filter-tier__badge">2</span>
-                        </button>
-                      </div>
-                      <div class="filter-cards-grid">
-                        <button class="filter-card filter-card--selected" type="button" onclick="togglePreviewCard(this)">
-                          <span>Hardware</span>
-                          <span class="ds-icon filter-card__check" aria-hidden="true">check</span>
-                        </button>
-                        <button class="filter-card filter-card--selected" type="button" onclick="togglePreviewCard(this)">
-                          <span>Software</span>
-                          <span class="ds-icon filter-card__check" aria-hidden="true">check</span>
-                        </button>
-                        <button class="filter-card" type="button" onclick="togglePreviewCard(this)">
-                          <span>License</span>
-                          <span class="ds-icon filter-card__check" aria-hidden="true">check</span>
-                        </button>
-                        <button class="filter-card" type="button" onclick="togglePreviewCard(this)">
-                          <span>Subscription</span>
-                          <span class="ds-icon filter-card__check" aria-hidden="true">check</span>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="filter-tier">
-                      <div class="filter-tier__top-row">
-                        <button class="filter-tier__header" type="button" aria-expanded="false" onclick="togglePreviewTier(this)">
-                          <span class="ds-icon filter-tier__chevron" aria-hidden="true">keyboard_arrow_down</span>
-                          Department
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- ── Financial group ───────────────────────────── -->
-                  <div id="pf-group-financial" style="display:none;">
-                    <div class="filter-tier">
-                      <div class="filter-tier__top-row">
-                        <button class="filter-tier__header" type="button" aria-expanded="true" onclick="togglePreviewTier(this)">
-                          <span class="ds-icon filter-tier__chevron" aria-hidden="true">keyboard_arrow_down</span>
-                          Total Cost
-                        </button>
-                      </div>
-                      <div class="filter-cost-range">
-                        <div class="filter-cost-range__values">
-                          <span class="filter-cost-range__value">$0</span>
-                          <span class="filter-cost-range__dash">–</span>
-                          <span class="filter-cost-range__value">$5,000</span>
-                        </div>
-                        <div class="filter-cost-range__slider-wrap" style="--cr-min:0%; --cr-max:100%;">
-                          <div class="filter-cost-range__track"><div class="filter-cost-range__fill"></div></div>
-                          <input class="filter-cost-range__thumb" type="range" min="0" max="5000" value="0" aria-label="Total Cost minimum" />
-                          <input class="filter-cost-range__thumb" type="range" min="0" max="5000" value="5000" aria-label="Total Cost maximum" />
-                        </div>
-                        <div class="filter-cost-range__bounds"><span>$0</span><span>$5,000</span></div>
-                        <div class="filter-cost-range__actions">
-                          <button class="ds-button ds-button--outlined ds-button--sm" type="button">Clear</button>
-                          <button class="ds-button ds-button--filled ds-button--sm" type="button">Apply</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- ── Dates group (date-preset) ─────────────────── -->
-                  <div id="pf-group-dates" style="display:none;">
-                    <div class="filter-preset-list">
-                      <div class="filter-preset-pill-grid">
-                        <button class="filter-preset-pill" type="button" onclick="togglePreviewPill(this)">Today</button>
-                        <button class="filter-preset-pill" type="button" onclick="togglePreviewPill(this)">Yesterday</button>
-                        <button class="filter-preset-pill filter-preset-pill--selected" type="button" onclick="togglePreviewPill(this)">Last 7 days</button>
-                        <button class="filter-preset-pill" type="button" onclick="togglePreviewPill(this)">Last 30 days</button>
-                        <button class="filter-preset-pill" type="button" onclick="togglePreviewPill(this)">This month</button>
-                        <button class="filter-preset-pill" type="button" onclick="togglePreviewPill(this)">This quarter</button>
-                      </div>
-                      <button class="filter-preset-custom-toggle" type="button">
-                        <span class="ds-icon" aria-hidden="true">date_range</span>
-                        <span class="filter-preset-custom-toggle__label">Custom date range</span>
-                        <span class="ds-icon filter-preset-custom-toggle__chevron" aria-hidden="true">keyboard_arrow_down</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- ── Status group (flat) ───────────────────────── -->
-                  <div id="pf-group-status" style="display:none;">
-                    <div class="filter-cards-grid">
-                      <button class="filter-card" type="button" onclick="togglePreviewCard(this)">
-                        <span>Active</span><span class="ds-icon filter-card__check" aria-hidden="true">check</span>
-                      </button>
-                      <button class="filter-card" type="button" onclick="togglePreviewCard(this)">
-                        <span>Inactive</span><span class="ds-icon filter-card__check" aria-hidden="true">check</span>
-                      </button>
-                      <button class="filter-card" type="button" onclick="togglePreviewCard(this)">
-                        <span>Pending</span><span class="ds-icon filter-card__check" aria-hidden="true">check</span>
-                      </button>
-                      <button class="filter-card" type="button" onclick="togglePreviewCard(this)">
-                        <span>Retired</span><span class="ds-icon filter-card__check" aria-hidden="true">check</span>
-                      </button>
-                    </div>
-                  </div>
-
-                </div><!-- /.filter-modal__options -->
-              </div><!-- /.filter-modal__content -->
-            </div><!-- /.filter-modal__left -->
-
-            <!-- Right panel (dark navy) -->
-            <aside class="filter-modal__right" aria-label="Selected filters">
-              <div class="filter-modal__selected-header">
-                <div class="filter-modal__selected-header-row">
-                  <h3 class="filter-modal__selected-title">Selected (3)</h3>
-                </div>
-                <div class="filter-modal__selected-header-actions">
-                  <button class="ds-button ds-button--text ds-button--sm" type="button">Clear all</button>
-                </div>
-              </div>
-              <div class="filter-modal__selected-body">
-                <ul class="selected-filter-list" aria-label="Selected filters">
-
-                  <li class="selected-bucket">
-                    <div class="selected-bucket__header">
-                      <div class="selected-bucket__header-top">
-                        <button class="selected-bucket__collapse-btn" type="button" aria-expanded="true" aria-label="Asset Type (2)">
-                          <span class="ds-icon selected-bucket__chevron" aria-hidden="true">keyboard_arrow_down</span>
-                          <span class="selected-bucket__crumb">Asset Type</span>
-                        </button>
-                        <span class="selected-bucket__count">2</span>
-                        <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__remove-btn" type="button" aria-label="Remove Asset Type filter">
-                          <span class="ds-icon" aria-hidden="true">close</span>
-                        </button>
-                      </div>
-                      <div class="selected-bucket__header-bottom">
-                        <button class="ds-button ds-button--text ds-button--xs" type="button">Exclude</button>
-                      </div>
-                    </div>
-                    <div class="selected-bucket__items">
-                      <div class="selected-bucket__item">
-                        <span class="selected-bucket__item-label">Hardware</span>
-                        <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__item-remove" type="button" aria-label="Remove Hardware"><span class="ds-icon" aria-hidden="true">close</span></button>
-                      </div>
-                      <div class="selected-bucket__item">
-                        <span class="selected-bucket__item-label">Software</span>
-                        <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__item-remove" type="button" aria-label="Remove Software"><span class="ds-icon" aria-hidden="true">close</span></button>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li class="selected-bucket selected-bucket--excluded">
-                    <div class="selected-bucket__header">
-                      <div class="selected-bucket__header-top">
-                        <button class="selected-bucket__collapse-btn" type="button" aria-expanded="true" aria-label="Department (1)">
-                          <span class="ds-icon selected-bucket__chevron" aria-hidden="true">keyboard_arrow_down</span>
-                          <span class="selected-bucket__crumb">Department</span>
-                        </button>
-                        <span class="selected-bucket__count">1</span>
-                        <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__remove-btn" type="button" aria-label="Remove Department filter">
-                          <span class="ds-icon" aria-hidden="true">close</span>
-                        </button>
-                      </div>
-                      <div class="selected-bucket__header-bottom">
-                        <button class="ds-button ds-button--text ds-button--xs ds-button--active" type="button">Include</button>
-                      </div>
-                    </div>
-                    <div class="selected-bucket__items">
-                      <div class="selected-bucket__item">
-                        <span class="selected-bucket__item-label">Finance</span>
-                        <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__item-remove" type="button" aria-label="Remove Finance"><span class="ds-icon" aria-hidden="true">close</span></button>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li class="selected-bucket">
-                    <div class="selected-bucket__header">
-                      <div class="selected-bucket__header-top">
-                        <button class="selected-bucket__collapse-btn" type="button" aria-expanded="true" aria-label="Dates (1)">
-                          <span class="ds-icon selected-bucket__chevron" aria-hidden="true">keyboard_arrow_down</span>
-                          <span class="selected-bucket__crumb">Dates</span>
-                        </button>
-                        <span class="selected-bucket__count">1</span>
-                        <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__remove-btn" type="button" aria-label="Remove Dates filter">
-                          <span class="ds-icon" aria-hidden="true">close</span>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="selected-bucket__items">
-                      <div class="selected-bucket__item">
-                        <span class="selected-bucket__item-label">Last 7 days</span>
-                        <button class="ds-icon-button ds-icon-button--icon ds-icon-button--sm selected-bucket__item-remove" type="button" aria-label="Remove Last 7 days"><span class="ds-icon" aria-hidden="true">close</span></button>
-                      </div>
-                    </div>
-                  </li>
-
-                </ul>
-              </div>
-            </aside>
-
-          </div><!-- /.filter-modal__body -->
-
-          <footer class="filter-modal__footer">
-            <div class="filter-modal__footer-summary">3 filters selected</div>
-            <div class="filter-modal__footer-actions">
-              <button class="ds-button ds-button--text ds-button--sm" type="button" onclick="closePreviewFilter()">Cancel</button>
-              <button class="ds-button ds-button--filled ds-button--sm" type="button" onclick="closePreviewFilter()">Apply</button>
-            </div>
-          </footer>
-
-        </div><!-- /.filter-modal -->
-      </div><!-- /#preview-filter-overlay -->
-
-      <script>
-        function openPreviewFilter() {
-          var el = document.getElementById('preview-filter-overlay');
-          el.style.display = 'flex';
-          document.body.style.overflow = 'hidden';
-        }
-        function closePreviewFilter() {
-          var el = document.getElementById('preview-filter-overlay');
-          el.style.display = 'none';
-          document.body.style.overflow = '';
-        }
-        document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape') {
-            var el = document.getElementById('preview-filter-overlay');
-            if (el && el.style.display === 'flex') closePreviewFilter();
-          }
-        });
-        function switchFilterGroup(btn, groupId) {
-          var nav = btn.closest('.filter-modal__nav');
-          nav.querySelectorAll('.filter-nav-item').forEach(function(b) {
-            b.classList.remove('filter-nav-item--active');
-          });
-          btn.classList.add('filter-nav-item--active');
-          ['pf-group-assets','pf-group-financial','pf-group-dates','pf-group-status'].forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) el.style.display = (id === groupId) ? '' : 'none';
-          });
-        }
-        function togglePreviewTier(btn) {
-          var expanded = btn.getAttribute('aria-expanded') === 'true';
-          btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-          var grid = btn.closest('.filter-tier').querySelector('.filter-cards-grid, .filter-cost-range, .filter-date-field, .filter-preset-list');
-          if (grid) grid.style.display = expanded ? 'none' : '';
-        }
-        function togglePreviewCard(btn) {
-          btn.classList.toggle('filter-card--selected');
-        }
-        function togglePreviewPill(btn) {
-          btn.closest('.filter-preset-pill-grid').querySelectorAll('.filter-preset-pill').forEach(function(p) {
-            p.classList.remove('filter-preset-pill--selected');
-          });
-          btn.classList.add('filter-preset-pill--selected');
         }
       </script>
 
