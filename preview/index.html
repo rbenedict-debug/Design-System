@@ -10987,8 +10987,27 @@ mark.search-match {
   background: transparent;
   border-radius: 0;
   box-shadow: none;
-  overflow-x: clip;
-  overflow-clip-margin: 12px;
+  overflow: visible;
+  flex: none;
+  min-height: unset;
+}
+.ds-page-content--dashboard {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.ds-page-content--dashboard:hover {
+  scrollbar-color: var(--color-surface-scroll) transparent;
+}
+.ds-page-content__dashboard-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-surface-default, #f3f4f5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg, 16px);
+  flex-shrink: 0;
 }
 
 /* ── Split Page Layout Pattern ─────────────────────────────────────────── */
@@ -23210,32 +23229,35 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 </nav>
 
                 <!-- Main dashboard content -->
-                <main class="ds-page-content" role="main">
-                  <div class="ds-page-content__heading" style="flex-direction: row; justify-content: space-between; align-items: baseline;">
-                    <h1 class="ds-page-content__title">Support Dashboard</h1>
-                    <p class="ds-dashboard-toolbar__subtitle" style="padding-right: var(--spacing-lg);">April 20, 2026 · Last updated 2 minutes ago</p>
-                  </div>
+                <main class="ds-page-content ds-page-content--dashboard" role="main">
 
-                  <!-- Dashboard toolbar — sibling of __main, does not scroll -->
-                  <div class="ds-dashboard-toolbar" id="dashboard-page-toolbar" style="padding: 0;">
-                    <div class="ds-dashboard-toolbar__controls">
-                      <div style="position: relative;">
-                        <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false">
-                          <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
-                          <span class="ds-dashboard-toolbar__date-label">Last 30 days</span>
-                          <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                  <!-- Sticky header: heading + toolbar pin while tiles scroll -->
+                  <div class="ds-page-content__dashboard-header">
+                    <div class="ds-page-content__heading" style="flex-direction: row; justify-content: space-between; align-items: baseline;">
+                      <h1 class="ds-page-content__title">Support Dashboard</h1>
+                      <p class="ds-dashboard-toolbar__subtitle" style="padding-right: var(--spacing-lg);">April 20, 2026 · Last updated 2 minutes ago</p>
+                    </div>
+
+                    <div class="ds-dashboard-toolbar" id="dashboard-page-toolbar" style="padding: 0;">
+                      <div class="ds-dashboard-toolbar__controls">
+                        <div style="position: relative;">
+                          <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false">
+                            <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+                            <span class="ds-dashboard-toolbar__date-label">Last 30 days</span>
+                            <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                          </button>
+                        </div>
+                        <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
+                          <span class="ds-icon" aria-hidden="true">filter_alt</span>
+                        </button>
+                        <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
+                          <span class="ds-icon" aria-hidden="true">more_vert</span>
                         </button>
                       </div>
-                      <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
-                        <span class="ds-icon" aria-hidden="true">filter_alt</span>
-                      </button>
-                      <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
-                        <span class="ds-icon" aria-hidden="true">more_vert</span>
-                      </button>
                     </div>
-                  </div>
+                  </div><!-- /.ds-page-content__dashboard-header -->
 
-                  <!-- Dashboard tiles — this area scrolls -->
+                  <!-- Dashboard tiles — ds-page-content--dashboard scrolls, not this element -->
                   <div class="ds-page-content__main ds-page-content__main--dashboard">
 
                     <!-- Bento grid: 4-col layout matching the Dashboard sim -->

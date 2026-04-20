@@ -151,27 +151,57 @@
   // ── Dashboard canvas variant ────────────────────────────────────────────────
   //
   // Use instead of plain __main on dashboard pages. Strips the card shell
-  // (no border-radius, no box-shadow, no padding) so ds-metric-card and
-  // ds-chart tiles float directly on the page-floor background.
+  // (no border-radius, no box-shadow) so ds-metric-card and ds-chart tiles
+  // float directly on the page-floor background.
   //
-  // ds-dashboard-toolbar goes OUTSIDE this element (sibling between
-  // ds-page-content__heading and __main--dashboard) so it stays fixed
-  // while only the tile content scrolls.
+  // Scrolling is owned by the parent ds-page-content--dashboard, not this
+  // element — so tile box-shadows are never clipped by a scroll container.
   //
-  // Usage:
-  //   <div class="ds-page-content__main ds-page-content__main--dashboard">
-  //     <!-- metric cards, chart tiles — no toolbar here -->
-  //   </div>
+  // Usage (required companion classes):
+  //   <main class="ds-page-content ds-page-content--dashboard">
+  //     <div class="ds-page-content__dashboard-header">
+  //       <div class="ds-page-content__heading">...</div>
+  //       <div class="ds-dashboard-toolbar">...</div>
+  //     </div>
+  //     <div class="ds-page-content__main ds-page-content__main--dashboard">
+  //       <!-- metric cards, chart tiles -->
+  //     </div>
+  //   </main>
   &--dashboard {
     background: transparent;
     border-radius: 0;
     box-shadow: none;
-    // overflow-x:clip is exempt from the CSS coercion rule (visible→auto) so it can coexist
-    // with overflow-y:auto. overflow-clip-margin lets tile box-shadows render outside the
-    // scroll container's border box without adding layout padding.
-    overflow-x: clip;
-    overflow-clip-margin: 12px;
+    overflow: visible;  // parent ds-page-content--dashboard is the scroll container
+    flex: none;         // natural height — tiles determine the scrollable length
+    min-height: unset;
   }
+}
+
+// ── Dashboard page: scroll container + sticky header ──────────────────────
+//
+// Add ds-page-content--dashboard to ds-page-content on dashboard pages.
+// This makes ds-page-content the scroll container, keeping tile shadows
+// unclipped (a scroll container always clips its children's box-shadows).
+//
+// Wrap ds-page-content__heading + ds-dashboard-toolbar in
+// ds-page-content__dashboard-header so both stay pinned while tiles scroll.
+
+.ds-page-content--dashboard {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  &:hover { scrollbar-color: var(--color-surface-scroll) transparent; }
+}
+
+.ds-page-content__dashboard-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-surface-default);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  flex-shrink: 0;
 }
 
 // ── AG Grid container sizing ──────────────────────────────────────────────────
