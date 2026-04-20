@@ -135,6 +135,7 @@
 
   &__actions {
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: var(--spacing-lg);
     flex-shrink: 0;

@@ -23283,10 +23283,240 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                     <!-- __main--table: overflow:hidden + flex column — hands scroll to AG Grid viewport -->
                     <div class="ds-page-content__main ds-page-content__main--table">
                       <!-- ag-grid-angular gets class="ds-ag-grid" in Angular (flex: 1 1 0; min-height: 0) -->
-                      <div class="ds-ag-grid">
-                        <div class="ds-table-toolbar" style="flex-shrink: 0;"></div>
-                        <div style="flex: 1 1 0; min-height: 0; border-top: 1px solid var(--color-border-subtle);"></div>
-                      </div>
+                      <div class="ds-ag-grid" style="flex:1 1 0; min-height:0; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 0 2px 0 var(--shadow-elevation-1),0 2px 4px 0 var(--shadow-elevation-1); border-radius:var(--radius-lg);">
+
+                        <!-- Toolbar -->
+                        <div class="ds-table-toolbar" style="flex-shrink:0;">
+                          <div class="ds-table-toolbar__left">
+                            <button class="ds-button ds-button--filled ds-button--leading-icon" type="button">
+                              <span class="ds-button__icon ds-button__icon--leading"><span class="ds-icon">add</span></span>
+                              Add Asset
+                            </button>
+                          </div>
+                          <div class="ds-table-toolbar__right">
+                            <div class="ds-input ds-search" role="search" style="width:200px;">
+                              <div class="ds-input__field">
+                                <span class="ds-icon ds-icon--sm ds-input__icon" aria-hidden="true">search</span>
+                                <input class="ds-input__control" type="search" placeholder="Search assets…" aria-label="Search assets">
+                              </div>
+                            </div>
+                            <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Toggle filters">
+                              <span class="ds-icon ds-icon--filled">filter_alt</span>
+                            </button>
+                            <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Column settings">
+                              <span class="ds-icon ds-icon--filled">settings</span>
+                            </button>
+                            <button class="ds-icon-button ds-icon-button--outlined" type="button" aria-label="Export">
+                              <span class="ds-icon">download</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Header row -->
+                        <div style="display:flex; flex-shrink:0; border-bottom:1px solid var(--color-border-secondary); background:var(--color-surface-default);">
+                          <!-- Checkbox col -->
+                          <div class="ds-table-header-cell" style="width:48px; flex-shrink:0; justify-content:center;">
+                            <div class="ds-table-header-cell__content" style="justify-content:center;">
+                              <label class="ds-checkbox" aria-label="Select all rows"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label>
+                            </div>
+                          </div>
+                          <!-- Asset ID -->
+                          <div class="ds-table-header-cell" style="width:88px; flex-shrink:0;">
+                            <div class="ds-table-header-cell__resize-handle"></div>
+                            <div class="ds-table-header-cell__content">
+                              <span class="ds-table-header-cell__label">Asset ID</span>
+                            </div>
+                            <div class="ds-table-header-cell__actions">
+                              <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active"><span class="ds-table-header-cell__resize-bar"></span></div>
+                            </div>
+                          </div>
+                          <!-- Asset Name -->
+                          <div class="ds-table-header-cell" style="flex:1 1 0; min-width:0;">
+                            <div class="ds-table-header-cell__resize-handle"></div>
+                            <div class="ds-table-header-cell__content">
+                              <span class="ds-table-header-cell__label">Asset Name</span>
+                              <button type="button" class="ds-icon-button ds-icon-button--icon ds-icon-button--sm" aria-label="Sort: asc">
+                                <span class="ds-icon ds-table-header-cell__sort-icon--asc">arrow_upward_alt</span>
+                              </button>
+                            </div>
+                            <div class="ds-table-header-cell__actions">
+                              <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active"><span class="ds-table-header-cell__resize-bar"></span></div>
+                            </div>
+                          </div>
+                          <!-- Type -->
+                          <div class="ds-table-header-cell" style="width:100px; flex-shrink:0;">
+                            <div class="ds-table-header-cell__resize-handle"></div>
+                            <div class="ds-table-header-cell__content">
+                              <span class="ds-table-header-cell__label">Type</span>
+                            </div>
+                            <div class="ds-table-header-cell__actions">
+                              <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active"><span class="ds-table-header-cell__resize-bar"></span></div>
+                            </div>
+                          </div>
+                          <!-- Status -->
+                          <div class="ds-table-header-cell" style="width:108px; flex-shrink:0;">
+                            <div class="ds-table-header-cell__resize-handle"></div>
+                            <div class="ds-table-header-cell__content">
+                              <span class="ds-table-header-cell__label">Status</span>
+                            </div>
+                            <div class="ds-table-header-cell__actions">
+                              <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active"><span class="ds-table-header-cell__resize-bar"></span></div>
+                            </div>
+                          </div>
+                          <!-- Location -->
+                          <div class="ds-table-header-cell" style="width:110px; flex-shrink:0;">
+                            <div class="ds-table-header-cell__resize-handle"></div>
+                            <div class="ds-table-header-cell__content">
+                              <span class="ds-table-header-cell__label">Location</span>
+                            </div>
+                            <div class="ds-table-header-cell__actions">
+                              <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active"><span class="ds-table-header-cell__resize-bar"></span></div>
+                            </div>
+                          </div>
+                          <!-- Assigned To -->
+                          <div class="ds-table-header-cell" style="width:118px; flex-shrink:0;">
+                            <div class="ds-table-header-cell__resize-handle"></div>
+                            <div class="ds-table-header-cell__content">
+                              <span class="ds-table-header-cell__label">Assigned To</span>
+                            </div>
+                            <div class="ds-table-header-cell__actions">
+                              <div class="ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active"><span class="ds-table-header-cell__resize-bar"></span></div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Data rows -->
+                        <div style="flex:1 1 0; min-height:0; overflow-y:auto;">
+
+                          <!-- Row 1 -->
+                          <div style="display:flex;">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only" style="width:48px; flex-shrink:0;"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                            <div class="ds-table-row-cell" style="width:88px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data" style="color:var(--color-text-brand); font-weight:500;">#A-1001</span></div></div>
+                            <div class="ds-table-row-cell" style="flex:1 1 0; min-width:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">MacBook Pro 16"</span></div></div>
+                            <div class="ds-table-row-cell" style="width:100px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Laptop</span></div></div>
+                            <div class="ds-table-row-cell" style="width:108px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-label ds-label--green ds-label--sm">Active</span></div></div>
+                            <div class="ds-table-row-cell" style="width:110px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Building A</span></div></div>
+                            <div class="ds-table-row-cell" style="width:118px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sarah K.</span></div></div>
+                          </div>
+
+                          <!-- Row 2 -->
+                          <div style="display:flex;">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only" style="width:48px; flex-shrink:0;"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                            <div class="ds-table-row-cell" style="width:88px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data" style="color:var(--color-text-brand); font-weight:500;">#A-1002</span></div></div>
+                            <div class="ds-table-row-cell" style="flex:1 1 0; min-width:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Dell UltraSharp 27"</span></div></div>
+                            <div class="ds-table-row-cell" style="width:100px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Monitor</span></div></div>
+                            <div class="ds-table-row-cell" style="width:108px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-label ds-label--green ds-label--sm">Active</span></div></div>
+                            <div class="ds-table-row-cell" style="width:110px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Building B</span></div></div>
+                            <div class="ds-table-row-cell" style="width:118px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Marcus T.</span></div></div>
+                          </div>
+
+                          <!-- Row 3 (selected) -->
+                          <div style="display:flex;">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only is-selected" style="width:48px; flex-shrink:0;"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" checked /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                            <div class="ds-table-row-cell is-selected" style="width:88px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data" style="color:var(--color-text-brand); font-weight:500;">#A-1003</span></div></div>
+                            <div class="ds-table-row-cell is-selected" style="flex:1 1 0; min-width:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">HP LaserJet Pro 400</span></div></div>
+                            <div class="ds-table-row-cell is-selected" style="width:100px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Printer</span></div></div>
+                            <div class="ds-table-row-cell is-selected" style="width:108px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-label ds-label--yellow ds-label--sm">In Repair</span></div></div>
+                            <div class="ds-table-row-cell is-selected" style="width:110px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">IT Dept</span></div></div>
+                            <div class="ds-table-row-cell is-selected" style="width:118px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Priya R.</span></div></div>
+                          </div>
+
+                          <!-- Row 4 -->
+                          <div style="display:flex;">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only" style="width:48px; flex-shrink:0;"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                            <div class="ds-table-row-cell" style="width:88px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data" style="color:var(--color-text-brand); font-weight:500;">#A-1004</span></div></div>
+                            <div class="ds-table-row-cell" style="flex:1 1 0; min-width:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Cisco IP Phone 7942G</span></div></div>
+                            <div class="ds-table-row-cell" style="width:100px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Phone</span></div></div>
+                            <div class="ds-table-row-cell" style="width:108px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-label ds-label--green ds-label--sm">Active</span></div></div>
+                            <div class="ds-table-row-cell" style="width:110px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Reception</span></div></div>
+                            <div class="ds-table-row-cell" style="width:118px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Jordan L.</span></div></div>
+                          </div>
+
+                          <!-- Row 5 -->
+                          <div style="display:flex;">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only" style="width:48px; flex-shrink:0;"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                            <div class="ds-table-row-cell" style="width:88px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data" style="color:var(--color-text-brand); font-weight:500;">#A-1005</span></div></div>
+                            <div class="ds-table-row-cell" style="flex:1 1 0; min-width:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Microsoft Surface Pro 9</span></div></div>
+                            <div class="ds-table-row-cell" style="width:100px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Laptop</span></div></div>
+                            <div class="ds-table-row-cell" style="width:108px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-label ds-label--green ds-label--sm">Active</span></div></div>
+                            <div class="ds-table-row-cell" style="width:110px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Room 204</span></div></div>
+                            <div class="ds-table-row-cell" style="width:118px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Alex M.</span></div></div>
+                          </div>
+
+                          <!-- Row 6 -->
+                          <div style="display:flex;">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only" style="width:48px; flex-shrink:0;"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                            <div class="ds-table-row-cell" style="width:88px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data" style="color:var(--color-text-brand); font-weight:500;">#A-1006</span></div></div>
+                            <div class="ds-table-row-cell" style="flex:1 1 0; min-width:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">WD My Cloud EX4100</span></div></div>
+                            <div class="ds-table-row-cell" style="width:100px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Storage</span></div></div>
+                            <div class="ds-table-row-cell" style="width:108px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-label ds-label--sm">Retired</span></div></div>
+                            <div class="ds-table-row-cell" style="width:110px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Server Rm</span></div></div>
+                            <div class="ds-table-row-cell" style="width:118px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Dana W.</span></div></div>
+                          </div>
+
+                          <!-- Row 7 -->
+                          <div style="display:flex;">
+                            <div class="ds-table-row-cell ds-table-row-cell--checkbox-only" style="width:48px; flex-shrink:0;"><div class="ds-table-row-cell__content" style="justify-content:center;"><label class="ds-checkbox" aria-label="Select row"><input type="checkbox" class="ds-checkbox__control" /><span class="ds-checkbox__touch"><span class="ds-checkbox__box"></span></span></label></div></div>
+                            <div class="ds-table-row-cell" style="width:88px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data" style="color:var(--color-text-brand); font-weight:500;">#A-1007</span></div></div>
+                            <div class="ds-table-row-cell" style="flex:1 1 0; min-width:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Brother QL-820NWB</span></div></div>
+                            <div class="ds-table-row-cell" style="width:100px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Printer</span></div></div>
+                            <div class="ds-table-row-cell" style="width:108px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-label ds-label--green ds-label--sm">Active</span></div></div>
+                            <div class="ds-table-row-cell" style="width:110px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Warehouse</span></div></div>
+                            <div class="ds-table-row-cell" style="width:118px; flex-shrink:0;"><div class="ds-table-row-cell__content"><span class="ds-table-row-cell__data">Sarah K.</span></div></div>
+                          </div>
+
+                        </div><!-- /data rows -->
+
+                        <!-- Status bar -->
+                        <div class="ds-table-status-bar" style="flex-shrink:0;">
+                          <div class="ds-table-status-bar__counts">
+                            <span class="ds-table-status-bar__stat">
+                              <span class="ds-table-status-bar__stat-label">Rows:</span>
+                              <span class="ds-table-status-bar__stat-value">7</span>
+                            </span>
+                            <span class="ds-table-status-bar__stat">
+                              <span class="ds-table-status-bar__stat-label">Total Rows:</span>
+                              <span class="ds-table-status-bar__stat-value">143</span>
+                            </span>
+                          </div>
+                          <div class="ds-table-status-bar__aggregates"></div>
+                        </div>
+
+                        <!-- Paginator -->
+                        <div class="ds-ag-paginator" style="border-top:1px solid var(--color-border-subtle); border-radius:0; flex-shrink:0;">
+                          <div class="ds-ag-paginator__inner">
+                            <div class="ds-ag-paginator__counter">
+                              <span class="ds-ag-paginator__label" aria-hidden="true">Items per page:</span>
+                              <div class="ds-select ds-ag-paginator__size-select">
+                                <div class="ds-select__field-row">
+                                  <div class="ds-select__field">
+                                    <input type="text" class="ds-select__control" value="25" data-default-placeholder="" autocomplete="off" spellcheck="false" role="combobox" aria-label="Items per page" readonly>
+                                    <span class="ds-icon ds-icon--sm ds-select__arrow" aria-hidden="true">arrow_drop_down</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="ds-ag-paginator__pagination">
+                              <span class="ds-ag-paginator__range" aria-live="polite">1 – 25 of 143</span>
+                              <div class="ds-ag-paginator__nav">
+                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="First page" disabled>
+                                  <span class="ds-icon">first_page</span>
+                                </button>
+                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Previous page" disabled>
+                                  <span class="ds-icon">keyboard_arrow_left</span>
+                                </button>
+                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Next page">
+                                  <span class="ds-icon">keyboard_arrow_right</span>
+                                </button>
+                                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Last page">
+                                  <span class="ds-icon">last_page</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div><!-- /ds-ag-grid -->
                     </div>
                   </main>
                 </div>
