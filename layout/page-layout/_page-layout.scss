@@ -195,10 +195,10 @@
     overflow: visible;  // parent ds-page-content--dashboard is the scroll container
     flex: none;         // natural height — tiles determine the scrollable length
     min-height: unset;
-    // Horizontal padding gives tile box-shadows room within the scroll container
-    // so they aren't clipped at the content edges. Top padding is 0 — the
-    // dashboard-header's padding-bottom handles the header-to-tile gap.
-    padding: 0 var(--spacing-lg) var(--spacing-lg);
+    // Right and bottom padding give tile box-shadows breathing room so they
+    // aren't clipped at the container edge. No left padding — tiles must align
+    // with the toolbar and heading (both start at the scroll container content edge).
+    padding: 0 var(--spacing-lg) var(--spacing-lg) 0;
   }
 }
 
