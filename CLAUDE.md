@@ -323,6 +323,9 @@ Row height defaults to 56px (standard). To switch density at runtime, set CSS cu
 - Never use inline `style="flex-direction: row..."` on `ds-page-content__heading` — use the `ds-page-content__heading--row` modifier class and `ds-page-content__meta` for the date/subtitle text beside the title
 - Never omit `<nav class="ds-subnav">` or `<ds-nav-expand>` from any page shell — both are required on every page; see "Subnav + nav-expand rules" in `specs-layout.md`
 - Never place `ds-top-nav__action-btn` buttons directly inside `<header class="ds-top-nav">` — they must always be inside `<div class="ds-top-nav__actions">`; that wrapper is what keeps them in a horizontal row; see "Top-nav structural rules" in `specs-layout.md`
+- Never add inline `style` attributes to `ds-nav-sidebar`, `ds-top-nav`, or any of their structural child elements — all sizing and layout is owned by the component SCSS; inline overrides conflict with it and must not be used anywhere (preview demos included)
+- Never deviate from the canonical `ds-nav-sidebar` structure — `__logo` first, `__nav` containing all nav buttons, `__bottom` last with agent-status; selected button must carry `is-selected` + `aria-pressed="true"` + `ds-icon--filled` together; see "Nav-sidebar structural rules" in `specs-layout.md`
+- Never deviate from the canonical `ds-top-nav` structure — `__tabs` must be present (even with one tab), all action buttons inside `__actions` (never direct children of `<header>`); see "Top-nav structural rules" in `specs-layout.md`
 
 ---
 

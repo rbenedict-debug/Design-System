@@ -120,6 +120,50 @@ These rules apply to every page shell:
 
 ---
 
+### Nav-sidebar structural rules
+
+These rules apply to every page shell:
+
+1. **`ds-nav-sidebar__logo` is always first** — the Onflo logo SVG is always the first child of `ds-nav-sidebar`. Never omit it, replace it with text, or move it.
+2. **`ds-nav-sidebar__nav` holds all nav buttons** — every `ds-nav-button` item must be inside this wrapper. Never place nav buttons as direct children of `ds-nav-sidebar`.
+3. **`ds-nav-sidebar__bottom` is always last** — holds `ds-agent-status` (and any other bottom-pinned elements). Never omit it.
+4. **Selected state: `is-selected` + `aria-pressed="true"` + `ds-icon--filled`** — all three must move together. Unselected: no modifier class, `aria-pressed="false"`, plain `ds-icon` (no `--filled`).
+5. **Never add inline `style` attributes to `ds-nav-sidebar` or any of its children** — all sizing and layout is owned by the component SCSS. Inline overrides (e.g. `style="flex-shrink: 0"`) conflict with the component and must never be used.
+
+**Canonical structure:**
+```html
+<nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+  <div class="ds-nav-sidebar__logo">
+    <!-- Onflo logo SVG -->
+  </div>
+  <div class="ds-nav-sidebar__nav">
+    <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+      <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+      <span class="ds-nav-button__label">Tickets</span>
+    </button>
+    <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Contacts">
+      <span class="ds-icon" aria-hidden="true">contacts</span>
+      <span class="ds-nav-button__label">Contacts</span>
+    </button>
+    <!-- additional nav buttons -->
+  </div>
+  <div class="ds-nav-sidebar__bottom">
+    <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+      <div class="ds-agent-status__icon">
+        <span class="ds-icon" aria-hidden="true">support_agent</span>
+      </div>
+      <div class="ds-agent-status__status">
+        <span>Online</span>
+        <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+      </div>
+      <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+    </button>
+  </div>
+</nav>
+```
+
+---
+
 ### Page title rules
 
 These rules apply to every page in every Onflo application:
