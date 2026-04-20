@@ -6316,7 +6316,7 @@
 .ds-table-header-cell {
   display: flex;
   align-items: center;
-  height: 56px;
+  height: var(--ds-table-header-height, 56px);
   width: 100%;
   background: var(--color-surface-subtle);
   border-bottom: 1px solid var(--color-border-secondary);
@@ -6491,7 +6491,7 @@
 .ds-table-row-cell {
   display: flex;
   align-items: center;
-  height: 56px;
+  height: var(--ds-table-row-height, 56px);
   width: 100%;
   padding: 0 var(--spacing-lg);
   border-bottom: 1px solid var(--color-border-secondary);
@@ -10718,18 +10718,15 @@ mark.search-match {
 
 <style>
 /* ── Page template density toggle ───────────────────────────────────────── */
-/* Overrides the fixed SCSS row height using the semantic density tokens.    */
-#table-sim-pt[data-density="comfort"] .ds-table-row-cell {
-  height: var(--color-table-cell-height-comfortable-height);
+/* Sets --ds-table-row-height / --ds-table-header-height on the container;
+   the component SCSS var() fallback picks these up automatically.           */
+#table-sim-pt[data-density="comfort"] {
+  --ds-table-row-height: 68px;
+  --ds-table-header-height: 68px;
 }
-#table-sim-pt[data-density="compact"] .ds-table-row-cell {
-  height: var(--color-table-cell-height-compact-height);
-}
-#table-sim-pt[data-density="comfort"] .ds-table-group-row-cell {
-  min-height: var(--color-table-cell-height-comfortable-height);
-}
-#table-sim-pt[data-density="compact"] .ds-table-group-row-cell {
-  min-height: var(--color-table-cell-height-compact-height);
+#table-sim-pt[data-density="compact"] {
+  --ds-table-row-height: 42px;
+  --ds-table-header-height: 42px;
 }
 /* Pinned right column needs a solid background so it occludes scrolled cells.
    Using surface-default matches the table's container background. */
@@ -22289,6 +22286,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               gridEl.style.setProperty('--ag-row-height', h + 'px');
               gridEl.style.setProperty('--ag-header-height', h + 'px');
               gridEl.style.setProperty('--ag-line-height', h + 'px');
+              gridEl.style.setProperty('--ds-table-row-height', h + 'px');
+              gridEl.style.setProperty('--ds-table-header-height', h + 'px');
             }
           };
 
