@@ -18,6 +18,8 @@ All design system changes are made in this repository by Rebecca only.
 
 **Owner:** Rebecca Benedict (design system lead — Figma + engineering)
 **Stack:** Angular (standalone components) + .NET Core
+
+> **Claude Design users:** Read `DESIGN.md` — it has resolved hex values, typography specs, spacing, and the full component inventory in a format Claude Design can use directly.
 **Purpose:** Shared component and token library for the Onflo product suite.
 
 ---
