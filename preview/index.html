@@ -22289,6 +22289,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               gridEl.style.setProperty('--ds-table-row-height', h + 'px');
               gridEl.style.setProperty('--ds-table-header-height', h + 'px');
             }
+            if (agSimApi) {
+              agSimApi.updateGridOptions({ rowHeight: h, headerHeight: h });
+              agSimApi.resetRowHeights();
+            }
           };
 
           /* Filter badge */
