@@ -10701,6 +10701,14 @@ mark.search-match {
   background: var(--color-surface-default);
 }
 
+/* ── AG Grid sim: checkbox column header — no right border ───────────────
+   The SCSS rule .ag-pinned-left-header .ds-table-header-cell applies a
+   border-right to ALL cells in the pinned section. Suppress it on the
+   checkbox-only cell; only Ticket # (the last pinned column) gets the border. */
+#ag-sim-grid .ag-pinned-left-header .ds-table-header-cell--checkbox-only {
+  border-right: none;
+}
+
 /* ── Date Picker calendar mockup ─────────────────────────────────────────── */
 
 .ds-datepicker-cal-mock {
@@ -21571,14 +21579,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             if (!isCheckbox && params.column.getPinned && params.column.getPinned() === 'right') cell.classList.add('ds-table-pinned-right');
             this._cell = cell;
 
-            // Left resize handle spacer — only for non-pinned, non-checkbox columns
-            if (!isCheckbox && !isPinned) {
-              var leftHandle = document.createElement('div');
-              leftHandle.className = 'ds-table-header-cell__resize-handle';
-              cell.appendChild(leftHandle);
-            }
-
-            // Content
+            // Content — no separate left-handle spacer; use padding-left to match row cells (padding: 0 16px)
             var content = document.createElement('div');
             content.className = 'ds-table-header-cell__content'
               + (isRight ? ' ds-table-header-cell__content--right' : '');
@@ -21602,6 +21603,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               this._selectionListener = function() { self._syncCheckbox(); };
               params.api.addEventListener('selectionChanged', this._selectionListener);
             } else {
+              content.style.paddingLeft = 'var(--spacing-lg)'; // match row cell padding: 0 16px
               if (label) {
                 var labelEl = document.createElement('span');
                 labelEl.className = 'ds-table-header-cell__label';
