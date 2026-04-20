@@ -213,11 +213,7 @@
 
 .ds-page-content--dashboard {
   overflow-y: auto;
-  gap: 0;              // gap replaced by padding-bottom on dashboard-header (see below)
-  padding-left: 0;     // horizontal padding ownership moved to __dashboard-header and
-  padding-right: 0;    // __main--dashboard so the sticky header background covers the
-                       // full container width — preventing tile shadows from bleeding
-                       // through the header on scroll (left edge) or being clipped (right edge)
+  gap: 0;  // gap replaced by padding-bottom on dashboard-header (see below)
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
   &:hover { scrollbar-color: var(--color-surface-scroll) transparent; }
@@ -235,11 +231,8 @@
   flex-direction: column;
   gap: var(--spacing-lg);
   flex-shrink: 0;
-  // Left padding taken over from ds-page-content (which has padding-left: 16px for other
-  // page types). Because __dashboard-header now spans the full container width (no parent
-  // horizontal padding), the background fully covers any tile shadows on scroll — left
-  // AND right. Only padding-left is set here; ds-page-content__meta owns padding-right.
-  padding-left: var(--spacing-lg);
+  // padding-bottom replaces the parent gap AND extends the opaque background
+  // into the transition zone so tile shadows don't bleed through when scrolling.
   padding-bottom: var(--spacing-lg);
 }
 
