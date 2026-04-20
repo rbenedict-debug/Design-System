@@ -35,10 +35,17 @@ Every token you see in Figma Variables has a matching CSS custom property:
 
 ### Quick start — new Angular project
 
-**Step 1.** Install the design system from GitHub (SSH — see [SETUP.md](./SETUP.md) for first-time SSH setup):
+**Step 1.** Install the design system from GitHub Packages. Add the registry to your project's `.npmrc` (create it in the project root if it doesn't exist):
+
+```
+@onflo:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Set `GITHUB_TOKEN` to a GitHub Personal Access Token with `read:packages` scope — see [SETUP.md](./SETUP.md) for how to generate and configure one. Then:
 
 ```bash
-npm install git+ssh://git@github.com/rbenedict-debug/Design-System.git
+npm install @onflo/design-system
 ```
 
 **Step 2.** Add the token CSS to `angular.json`:
@@ -70,13 +77,13 @@ export const appConfig = { providers: [provideAnimationsAsync()] };
 import { DsButtonComponent, DsInputComponent } from '@onflo/design-system';
 ```
 
-**To get the latest updates** (run whenever Rebecca pushes changes):
+**To get the latest version** when a new release is published:
 
 ```bash
-npm update @onflo/design-system
+npm install @onflo/design-system@latest
 ```
 
-See [SETUP.md](./SETUP.md) for full setup instructions including SSH key setup.
+See [SETUP.md](./SETUP.md) for full setup instructions including GitHub token configuration.
 
 ---
 

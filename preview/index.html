@@ -8870,46 +8870,6 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
     transform: rotate(360deg);
   }
 }
-#chart-tooltip {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  background: #ffffff;
-  border: 1px solid #E9E9E9;
-  border-radius: 8px;
-  padding: 10px 12px;
-  pointer-events: none;
-  box-shadow: 0 4px 12px rgba(45, 54, 56, 0.12);
-  max-width: 220px;
-}
-#chart-tooltip .ct-header {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  color: #73737F;
-  margin-bottom: 6px;
-}
-#chart-tooltip .ct-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  line-height: 20px;
-}
-#chart-tooltip .ct-swatch {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-#chart-tooltip .ct-text {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  color: #2D3638;
-}
-#chart-tooltip .ct-text strong {
-  font-weight: 600;
-}
 .ds-metric-card {
   display: flex;
   flex-direction: column;
@@ -9014,6 +8974,160 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
     opacity: 0.4;
   }
 }
+.ds-dashboard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-md) 0 var(--spacing-lg);
+}
+.ds-dashboard-toolbar__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ds-dashboard-toolbar__title {
+  font-family: var(--ref-typeface-brand, "DM Sans", sans-serif);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+.ds-dashboard-toolbar__subtitle {
+  font-family: var(--ref-typeface-brand, "DM Sans", sans-serif);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+.ds-dashboard-toolbar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+.ds-dashboard-toolbar__date-select {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  height: 42px;
+  padding: 0 var(--spacing-sm) 0 var(--spacing-md);
+  background: var(--color-surface-page);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.12s ease;
+}
+.ds-dashboard-toolbar__date-select::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  transition: background 0.12s ease;
+  pointer-events: none;
+}
+.ds-dashboard-toolbar__date-select:hover::after {
+  background: var(--overlay-hovered);
+}
+.ds-dashboard-toolbar__date-select:focus-within:not([data-mouse-focus]) {
+  box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2), 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-dashboard-toolbar__date-select > .ds-icon:first-child {
+  color: var(--color-icon-subtle);
+  flex-shrink: 0;
+}
+.ds-dashboard-toolbar__date-select select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent;
+  font-family: var(--ref-typeface-brand, "DM Sans", sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+.ds-dashboard-toolbar__date-select > .ds-icon:last-child {
+  color: var(--color-icon-default);
+  flex-shrink: 0;
+}
+.ds-dashboard-toolbar__btn {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  padding: var(--spacing-xs);
+  background: var(--color-surface-page);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-icon-default);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+  transition: box-shadow 0.12s ease, color 0.12s ease;
+}
+.ds-dashboard-toolbar__btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  transition: background 0.12s ease;
+  pointer-events: none;
+}
+.ds-dashboard-toolbar__btn:focus {
+  outline: none;
+}
+.ds-dashboard-toolbar__btn:hover:not(:disabled) {
+  color: var(--color-icon-brand);
+}
+.ds-dashboard-toolbar__btn:hover:not(:disabled)::after {
+  background: var(--overlay-hovered);
+}
+.ds-dashboard-toolbar__btn:focus-visible {
+  color: var(--color-icon-brand);
+  box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2), 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-dashboard-toolbar__btn:focus-visible::after {
+  background: var(--overlay-focused);
+}
+.ds-dashboard-toolbar__btn:active:not(:disabled) {
+  color: var(--color-icon-brand);
+}
+.ds-dashboard-toolbar__btn:active:not(:disabled)::after {
+  background: var(--overlay-pressed);
+}
+.ds-dashboard-toolbar__btn:disabled {
+  color: var(--color-icon-disabled);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.ds-dashboard-toolbar__btn:disabled::after {
+  background: transparent;
+}
+.ds-dashboard-toolbar__btn.is-active {
+  color: var(--color-icon-brand);
+  background: var(--color-surface-brand);
+}
+.ds-dashboard-toolbar__btn.is-active::after {
+  background: transparent;
+}
+
 .filter-overlay {
   position: fixed;
   inset: 0;
@@ -11057,9 +11171,10 @@ mark.search-match {
 
     <nav class="sidebar-nav" id="nav-dashboard" style="display:none">
       <div class="nav-section-label">Dashboard</div>
-      <a class="nav-link" href="#metric-card"   data-nav data-page="dashboard"><span class="nav-dot"></span><span class="nav-text">Metric Card</span></a>
-      <a class="nav-link" href="#chart"          data-nav data-page="dashboard"><span class="nav-dot"></span><span class="nav-text">Chart</span></a>
-      <a class="nav-link" href="#dashboard-sim"  data-nav data-page="dashboard"><span class="nav-dot"></span><span class="nav-text">Dashboard Sim</span></a>
+      <a class="nav-link" href="#metric-card"        data-nav data-page="dashboard"><span class="nav-dot"></span><span class="nav-text">Metric Card</span></a>
+      <a class="nav-link" href="#chart"               data-nav data-page="dashboard"><span class="nav-dot"></span><span class="nav-text">Chart</span></a>
+      <a class="nav-link" href="#dashboard-toolbar"  data-nav data-page="dashboard"><span class="nav-dot"></span><span class="nav-text">Dashboard Toolbar</span></a>
+      <a class="nav-link" href="#dashboard-sim"       data-nav data-page="dashboard"><span class="nav-dot"></span><span class="nav-text">Dashboard Sim</span></a>
     </nav>
 
     <nav class="sidebar-nav" id="nav-table-components" style="display:none">
@@ -18593,30 +18708,138 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         </div>
       </section>
 
+      <section class="section" id="dashboard-toolbar">
+        <div class="section-header">
+          <h2 class="section-title">Dashboard Toolbar</h2>
+          <span class="section-source">components/dashboard-toolbar/_dashboard-toolbar.scss</span>
+        </div>
+        <p class="section-desc">Floating toolbar above a dashboard bento grid. No enclosing box — each control is an individually elevated element matching the metric card visual language. Elevation via <code>box-shadow</code>, no borders. Left side: page title + optional subtitle (bare text on canvas). Right side: optional pulled-out quick filters + filter icon button + more icon button.</p>
+
+        <!-- Default -->
+        <div class="demo-row">
+          <div class="demo-label">Default</div>
+          <div class="demo-items" style="width: 100%;">
+            <div style="background: var(--color-surface-page); padding: 0 24px; border-radius: var(--radius-md); width: 100%; box-sizing: border-box;">
+              <div class="ds-dashboard-toolbar">
+                <div class="ds-dashboard-toolbar__identity">
+                  <h1 class="ds-dashboard-toolbar__title">Support Dashboard</h1>
+                  <p class="ds-dashboard-toolbar__subtitle">April 15, 2026 · Last updated 2 minutes ago</p>
+                </div>
+                <div class="ds-dashboard-toolbar__controls">
+                  <div class="ds-dashboard-toolbar__date-select" id="demo-date-select">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+                    <select aria-label="Date range">
+                      <option>Today</option>
+                      <option>Yesterday</option>
+                      <option>Last 7 days</option>
+                      <option>Last 30 days</option>
+                      <option>Custom range</option>
+                    </select>
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                  </div>
+                  <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" onclick="openPreviewFilter()">
+                    <span class="ds-icon" aria-hidden="true">filter_alt</span>
+                  </button>
+                  <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
+                    <span class="ds-icon" aria-hidden="true">more_vert</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter active state -->
+        <div class="demo-row">
+          <div class="demo-label">Filter active</div>
+          <div class="demo-items" style="width: 100%;">
+            <div style="background: var(--color-surface-page); padding: 0 24px; border-radius: var(--radius-md); width: 100%; box-sizing: border-box;">
+              <div class="ds-dashboard-toolbar">
+                <div class="ds-dashboard-toolbar__identity">
+                  <h1 class="ds-dashboard-toolbar__title">Support Dashboard</h1>
+                  <p class="ds-dashboard-toolbar__subtitle">April 15, 2026 · Filtered by: Agent = Chen, L.</p>
+                </div>
+                <div class="ds-dashboard-toolbar__controls">
+                  <div class="ds-dashboard-toolbar__date-select">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+                    <select aria-label="Date range">
+                      <option>Last 7 days</option>
+                      <option>Today</option>
+                      <option>Yesterday</option>
+                      <option>Last 30 days</option>
+                      <option>Custom range</option>
+                    </select>
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                  </div>
+                  <button class="ds-dashboard-toolbar__btn is-active" type="button" aria-label="Filter" aria-pressed="true">
+                    <span class="ds-icon" aria-hidden="true">filter_alt</span>
+                  </button>
+                  <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
+                    <span class="ds-icon" aria-hidden="true">more_vert</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Control states -->
+        <div class="demo-row">
+          <div class="demo-label">Button states</div>
+          <div class="demo-items" style="flex-wrap: wrap; gap: 8px; align-items: center;">
+            <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
+              <span class="ds-icon" aria-hidden="true">filter_alt</span>
+            </button>
+            <button class="ds-dashboard-toolbar__btn is-active" type="button" aria-label="Filter active" aria-pressed="true">
+              <span class="ds-icon" aria-hidden="true">filter_alt</span>
+            </button>
+            <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
+              <span class="ds-icon" aria-hidden="true">more_vert</span>
+            </button>
+            <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Download">
+              <span class="ds-icon" aria-hidden="true">download</span>
+            </button>
+            <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Disabled" disabled>
+              <span class="ds-icon" aria-hidden="true">filter_alt</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
       <section class="section" id="dashboard-sim">
         <div class="section-header">
           <h2 class="section-title">Dashboard — Composed Simulation</h2>
-          <span class="section-source">components/chart + components/metric-card</span>
+          <span class="section-source">components/chart + components/metric-card + components/dashboard-toolbar</span>
         </div>
         <p class="section-desc">Composed view showing <code>ds-metric-card</code> and <code>ds-chart</code> working together as a full dashboard page. In production, replace the SVG chart previews with live <code>&lt;ds-chart&gt;</code> components bound to real data and <code>&lt;ds-metric-card&gt;</code> components bound to aggregated values.</p>
 
         <div class="component-demo">
           <div style="background: var(--color-surface-page); padding: 24px; width: 100%; box-sizing: border-box; border-radius: var(--radius-md); max-width: 1100px; margin: 0 auto;">
 
-            <!-- Page header -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
-              <div>
-                <h1 style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 24px; font-weight: 600; line-height: 28px; color: var(--color-text-primary); margin: 0 0 4px;">Support Dashboard</h1>
-                <p style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 12px; color: var(--color-text-secondary); margin: 0;">April 15, 2026 · Last updated 2 minutes ago</p>
+            <!-- Dashboard toolbar -->
+            <div class="ds-dashboard-toolbar" id="sim-dashboard-toolbar">
+              <div class="ds-dashboard-toolbar__identity">
+                <h1 class="ds-dashboard-toolbar__title">Support Dashboard</h1>
+                <p class="ds-dashboard-toolbar__subtitle">April 15, 2026 · Last updated 2 minutes ago</p>
               </div>
-              <div style="display: flex; gap: 8px; flex-shrink: 0;">
-                <button class="ds-button ds-button--outlined ds-button--sm" type="button">
-                  <span class="ds-icon ds-icon--sm" aria-hidden="true">download</span>
-                  Export
+              <div class="ds-dashboard-toolbar__controls">
+                <div class="ds-dashboard-toolbar__date-select" id="sim-date-select">
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+                  <select aria-label="Date range">
+                    <option>Today</option>
+                    <option>Yesterday</option>
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Custom range</option>
+                  </select>
+                  <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                </div>
+                <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" id="sim-filter-btn" onclick="openPreviewFilter()">
+                  <span class="ds-icon" aria-hidden="true">filter_alt</span>
                 </button>
-                <button class="ds-button ds-button--filled ds-button--sm" type="button">
-                  <span class="ds-icon ds-icon--sm" aria-hidden="true">add</span>
-                  New Case
+                <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
+                  <span class="ds-icon" aria-hidden="true">more_vert</span>
                 </button>
               </div>
             </div>
@@ -23342,7 +23565,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     'column-panel': 'table-components', 'table-context-menu': 'table-components',
     'split-page': 'components',
     'filter-bar': 'components', 'filter': 'components',
-    'metric-card': 'dashboard', 'chart': 'dashboard', 'dashboard-sim': 'dashboard',
+    'metric-card': 'dashboard', 'chart': 'dashboard', 'dashboard-toolbar': 'dashboard', 'dashboard-sim': 'dashboard',
     'page-layout': 'examples', 'split-page-layout': 'examples', table: 'examples',
   };
   var initHash = window.location.hash.slice(1);
@@ -24078,7 +24301,7 @@ function closeNavTab(closeBtn) {
   document.addEventListener('keydown', function () { lastWasMouse = false; }, true);
   document.addEventListener('focusin', function (e) {
     var el = e.target && e.target.closest &&
-      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search') || e.target.closest('.ds-autocomplete'));
+      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search') || e.target.closest('.ds-autocomplete') || e.target.closest('.ds-dashboard-toolbar__date-select'));
     if (!el) return;
     if (lastWasMouse) { el.setAttribute('data-mouse-focus', ''); }
     else              { el.removeAttribute('data-mouse-focus'); }
@@ -24088,7 +24311,7 @@ function closeNavTab(closeBtn) {
     // Resetting here would clear the flag before the next focusin fires
     // when clicking from one field directly to another.
     var el = e.target && e.target.closest &&
-      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search') || e.target.closest('.ds-autocomplete'));
+      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search') || e.target.closest('.ds-autocomplete') || e.target.closest('.ds-dashboard-toolbar__date-select'));
     if (el) el.removeAttribute('data-mouse-focus');
   }, true);
 })();

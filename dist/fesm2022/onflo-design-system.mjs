@@ -1,7 +1,7 @@
 import * as i0 from '@angular/core';
 import { signal, Input, ChangeDetectionStrategy, Component, EventEmitter, Output, HostListener, HostBinding, Directive, ContentChild, ViewChild, Optional, Inject, TemplateRef, ContentChildren, PLATFORM_ID, computed, inject, DOCUMENT } from '@angular/core';
 import * as i1 from '@angular/common';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgIf } from '@angular/common';
 import * as i2 from '@angular/material/expansion';
 import { MatExpansionModule } from '@angular/material/expansion';
 import * as i2$1 from '@angular/material/form-field';
@@ -6469,6 +6469,71 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
                 type: Input
             }] } });
 
+/**
+ * ds-dashboard-toolbar
+ *
+ * Floating toolbar above a dashboard bento grid. Each control
+ * (date selector, filter button, more button) is an individually
+ * elevated element — no enclosing bar box. Visual language matches
+ * ds-metric-card: elevation via box-shadow, no borders.
+ *
+ * Inputs:
+ *   [title]    string — page title (required)
+ *   [subtitle] string — optional supporting text (date, status, etc.)
+ *
+ * Outputs:
+ *   (filterClick) — emitted when the filter icon button is clicked
+ *   (moreClick)   — emitted when the more icon button is clicked
+ *
+ * Content slots:
+ *   [toolbar-filters] — one or more quick-filter controls pulled out from
+ *                       the filter modal (e.g. a ds-dashboard-toolbar__date-select)
+ *
+ * @example
+ * <ds-dashboard-toolbar
+ *   title="Support Dashboard"
+ *   subtitle="April 15, 2026 · Last updated 2 min ago"
+ *   (filterClick)="openFilter()"
+ *   (moreClick)="openMoreMenu()">
+ *
+ *   <div toolbar-filters class="ds-dashboard-toolbar__date-select">
+ *     <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+ *     <select aria-label="Date range" [(ngModel)]="selectedPeriod">
+ *       <option value="today">Today</option>
+ *       <option value="7d">Last 7 days</option>
+ *       <option value="30d">Last 30 days</option>
+ *       <option value="custom">Custom range</option>
+ *     </select>
+ *     <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+ *   </div>
+ *
+ * </ds-dashboard-toolbar>
+ */
+class DsDashboardToolbarComponent {
+    /** Page title rendered as bare text on the canvas. */
+    title = '';
+    /** Optional supporting text shown below the title (date, status, etc.). */
+    subtitle = '';
+    /** Emitted when the filter icon button is clicked. */
+    filterClick = new EventEmitter();
+    /** Emitted when the more options icon button is clicked. */
+    moreClick = new EventEmitter();
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsDashboardToolbarComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
+    static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "21.2.7", type: DsDashboardToolbarComponent, isStandalone: true, selector: "ds-dashboard-toolbar", inputs: { title: "title", subtitle: "subtitle" }, outputs: { filterClick: "filterClick", moreClick: "moreClick" }, host: { classAttribute: "ds-dashboard-toolbar" }, ngImport: i0, template: "<div class=\"ds-dashboard-toolbar__identity\">\n  <h1 class=\"ds-dashboard-toolbar__title\">{{ title }}</h1>\n  <p class=\"ds-dashboard-toolbar__subtitle\" *ngIf=\"subtitle\">{{ subtitle }}</p>\n</div>\n\n<div class=\"ds-dashboard-toolbar__controls\">\n  <ng-content select=\"[toolbar-filters]\"></ng-content>\n\n  <button\n    class=\"ds-dashboard-toolbar__btn\"\n    type=\"button\"\n    aria-label=\"Filter\"\n    (click)=\"filterClick.emit()\">\n    <span class=\"ds-icon\" aria-hidden=\"true\">filter_alt</span>\n  </button>\n\n  <button\n    class=\"ds-dashboard-toolbar__btn\"\n    type=\"button\"\n    aria-label=\"More options\"\n    (click)=\"moreClick.emit()\">\n    <span class=\"ds-icon\" aria-hidden=\"true\">more_vert</span>\n  </button>\n</div>\n", styles: [".ds-dashboard-toolbar{display:flex;align-items:center;justify-content:space-between;gap:var(--spacing-xl);padding:var(--spacing-md) 0 var(--spacing-lg)}.ds-dashboard-toolbar__identity{display:flex;flex-direction:column;gap:2px;min-width:0}.ds-dashboard-toolbar__title{font-family:var(--ref-typeface-brand, \"DM Sans\", sans-serif);font-size:20px;font-weight:600;line-height:24px;color:var(--color-text-primary);margin:0}.ds-dashboard-toolbar__subtitle{font-family:var(--ref-typeface-brand, \"DM Sans\", sans-serif);font-size:12px;font-weight:400;line-height:16px;color:var(--color-text-secondary);margin:0}.ds-dashboard-toolbar__controls{display:flex;align-items:center;gap:var(--spacing-sm);flex-shrink:0}.ds-dashboard-toolbar__date-select{display:flex;align-items:center;gap:var(--spacing-xs);height:42px;padding:0 var(--spacing-sm) 0 var(--spacing-md);background:var(--color-surface-page);border-radius:var(--radius-sm);box-shadow:0 1px 4px var(--shadow-elevation-1),0 2px 8px var(--shadow-elevation-2);cursor:pointer;position:relative;overflow:hidden;transition:box-shadow .12s ease}.ds-dashboard-toolbar__date-select:after{content:\"\";position:absolute;inset:0;background:transparent;transition:background .12s ease;pointer-events:none}.ds-dashboard-toolbar__date-select:hover:after{background:var(--overlay-hovered)}.ds-dashboard-toolbar__date-select:focus-within:not([data-mouse-focus]){box-shadow:0 1px 4px var(--shadow-elevation-1),0 2px 8px var(--shadow-elevation-2),0 0 0 3px var(--color-border-ada-focus-ring)}.ds-dashboard-toolbar__date-select>.ds-icon:first-child{color:var(--color-icon-subtle);flex-shrink:0}.ds-dashboard-toolbar__date-select select{appearance:none;-webkit-appearance:none;border:none;background:transparent;font-family:var(--ref-typeface-brand, \"DM Sans\", sans-serif);font-size:13px;font-weight:500;color:var(--color-text-primary);cursor:pointer;outline:none;padding:0;flex:1;min-width:0;position:relative;z-index:1}.ds-dashboard-toolbar__date-select>.ds-icon:last-child{color:var(--color-icon-default);flex-shrink:0}.ds-dashboard-toolbar__btn{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:42px;height:42px;padding:var(--spacing-xs);background:var(--color-surface-page);border:none;border-radius:var(--radius-sm);color:var(--color-icon-default);cursor:pointer;position:relative;overflow:hidden;box-shadow:0 1px 4px var(--shadow-elevation-1),0 2px 8px var(--shadow-elevation-2);transition:box-shadow .12s ease,color .12s ease}.ds-dashboard-toolbar__btn:after{content:\"\";position:absolute;inset:0;background:transparent;transition:background .12s ease;pointer-events:none}.ds-dashboard-toolbar__btn:focus{outline:none}.ds-dashboard-toolbar__btn:hover:not(:disabled){color:var(--color-icon-brand)}.ds-dashboard-toolbar__btn:hover:not(:disabled):after{background:var(--overlay-hovered)}.ds-dashboard-toolbar__btn:focus-visible{color:var(--color-icon-brand);box-shadow:0 1px 4px var(--shadow-elevation-1),0 2px 8px var(--shadow-elevation-2),0 0 0 3px var(--color-border-ada-focus-ring)}.ds-dashboard-toolbar__btn:focus-visible:after{background:var(--overlay-focused)}.ds-dashboard-toolbar__btn:active:not(:disabled){color:var(--color-icon-brand)}.ds-dashboard-toolbar__btn:active:not(:disabled):after{background:var(--overlay-pressed)}.ds-dashboard-toolbar__btn:disabled{color:var(--color-icon-disabled);box-shadow:none;cursor:not-allowed}.ds-dashboard-toolbar__btn:disabled:after{background:transparent}.ds-dashboard-toolbar__btn.is-active{color:var(--color-icon-brand);background:var(--color-surface-brand)}.ds-dashboard-toolbar__btn.is-active:after{background:transparent}\n"], dependencies: [{ kind: "directive", type: NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }], changeDetection: i0.ChangeDetectionStrategy.OnPush });
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImport: i0, type: DsDashboardToolbarComponent, decorators: [{
+            type: Component,
+            args: [{ selector: 'ds-dashboard-toolbar', standalone: true, imports: [NgIf], changeDetection: ChangeDetectionStrategy.OnPush, host: { class: 'ds-dashboard-toolbar' }, template: "<div class=\"ds-dashboard-toolbar__identity\">\n  <h1 class=\"ds-dashboard-toolbar__title\">{{ title }}</h1>\n  <p class=\"ds-dashboard-toolbar__subtitle\" *ngIf=\"subtitle\">{{ subtitle }}</p>\n</div>\n\n<div class=\"ds-dashboard-toolbar__controls\">\n  <ng-content select=\"[toolbar-filters]\"></ng-content>\n\n  <button\n    class=\"ds-dashboard-toolbar__btn\"\n    type=\"button\"\n    aria-label=\"Filter\"\n    (click)=\"filterClick.emit()\">\n    <span class=\"ds-icon\" aria-hidden=\"true\">filter_alt</span>\n  </button>\n\n  <button\n    class=\"ds-dashboard-toolbar__btn\"\n    type=\"button\"\n    aria-label=\"More options\"\n    (click)=\"moreClick.emit()\">\n    <span class=\"ds-icon\" aria-hidden=\"true\">more_vert</span>\n  </button>\n</div>\n", styles: [".ds-dashboard-toolbar{display:flex;align-items:center;justify-content:space-between;gap:var(--spacing-xl);padding:var(--spacing-md) 0 var(--spacing-lg)}.ds-dashboard-toolbar__identity{display:flex;flex-direction:column;gap:2px;min-width:0}.ds-dashboard-toolbar__title{font-family:var(--ref-typeface-brand, \"DM Sans\", sans-serif);font-size:20px;font-weight:600;line-height:24px;color:var(--color-text-primary);margin:0}.ds-dashboard-toolbar__subtitle{font-family:var(--ref-typeface-brand, \"DM Sans\", sans-serif);font-size:12px;font-weight:400;line-height:16px;color:var(--color-text-secondary);margin:0}.ds-dashboard-toolbar__controls{display:flex;align-items:center;gap:var(--spacing-sm);flex-shrink:0}.ds-dashboard-toolbar__date-select{display:flex;align-items:center;gap:var(--spacing-xs);height:42px;padding:0 var(--spacing-sm) 0 var(--spacing-md);background:var(--color-surface-page);border-radius:var(--radius-sm);box-shadow:0 1px 4px var(--shadow-elevation-1),0 2px 8px var(--shadow-elevation-2);cursor:pointer;position:relative;overflow:hidden;transition:box-shadow .12s ease}.ds-dashboard-toolbar__date-select:after{content:\"\";position:absolute;inset:0;background:transparent;transition:background .12s ease;pointer-events:none}.ds-dashboard-toolbar__date-select:hover:after{background:var(--overlay-hovered)}.ds-dashboard-toolbar__date-select:focus-within:not([data-mouse-focus]){box-shadow:0 1px 4px var(--shadow-elevation-1),0 2px 8px var(--shadow-elevation-2),0 0 0 3px var(--color-border-ada-focus-ring)}.ds-dashboard-toolbar__date-select>.ds-icon:first-child{color:var(--color-icon-subtle);flex-shrink:0}.ds-dashboard-toolbar__date-select select{appearance:none;-webkit-appearance:none;border:none;background:transparent;font-family:var(--ref-typeface-brand, \"DM Sans\", sans-serif);font-size:13px;font-weight:500;color:var(--color-text-primary);cursor:pointer;outline:none;padding:0;flex:1;min-width:0;position:relative;z-index:1}.ds-dashboard-toolbar__date-select>.ds-icon:last-child{color:var(--color-icon-default);flex-shrink:0}.ds-dashboard-toolbar__btn{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:42px;height:42px;padding:var(--spacing-xs);background:var(--color-surface-page);border:none;border-radius:var(--radius-sm);color:var(--color-icon-default);cursor:pointer;position:relative;overflow:hidden;box-shadow:0 1px 4px var(--shadow-elevation-1),0 2px 8px var(--shadow-elevation-2);transition:box-shadow .12s ease,color .12s ease}.ds-dashboard-toolbar__btn:after{content:\"\";position:absolute;inset:0;background:transparent;transition:background .12s ease;pointer-events:none}.ds-dashboard-toolbar__btn:focus{outline:none}.ds-dashboard-toolbar__btn:hover:not(:disabled){color:var(--color-icon-brand)}.ds-dashboard-toolbar__btn:hover:not(:disabled):after{background:var(--overlay-hovered)}.ds-dashboard-toolbar__btn:focus-visible{color:var(--color-icon-brand);box-shadow:0 1px 4px var(--shadow-elevation-1),0 2px 8px var(--shadow-elevation-2),0 0 0 3px var(--color-border-ada-focus-ring)}.ds-dashboard-toolbar__btn:focus-visible:after{background:var(--overlay-focused)}.ds-dashboard-toolbar__btn:active:not(:disabled){color:var(--color-icon-brand)}.ds-dashboard-toolbar__btn:active:not(:disabled):after{background:var(--overlay-pressed)}.ds-dashboard-toolbar__btn:disabled{color:var(--color-icon-disabled);box-shadow:none;cursor:not-allowed}.ds-dashboard-toolbar__btn:disabled:after{background:transparent}.ds-dashboard-toolbar__btn.is-active{color:var(--color-icon-brand);background:var(--color-surface-brand)}.ds-dashboard-toolbar__btn.is-active:after{background:transparent}\n"] }]
+        }], propDecorators: { title: [{
+                type: Input
+            }], subtitle: [{
+                type: Input
+            }], filterClick: [{
+                type: Output
+            }], moreClick: [{
+                type: Output
+            }] } });
+
 // ============================================================
 // Onflo Design System — Filter Types
 // Public data contract for ds-filter and ds-filter-bar.
@@ -7259,5 +7324,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
  * Generated bundle index. Do not edit.
  */
 
-export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsFilterBarComponent, DsFilterComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, EMPTY_FILTER_SELECTION, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, getActiveFilterCount, onfloChartTheme, onfloTheme };
+export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDashboardToolbarComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsFilterBarComponent, DsFilterComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, EMPTY_FILTER_SELECTION, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, getActiveFilterCount, onfloChartTheme, onfloTheme };
 //# sourceMappingURL=onflo-design-system.mjs.map

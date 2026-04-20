@@ -68,6 +68,7 @@ export * from './components/top-nav/top-nav.component';
 export * from './components/chart/chart.component';
 export * from './components/chart/chart-theme';
 export * from './components/metric-card/metric-card.component';
+export * from './components/dashboard-toolbar/dashboard-toolbar.component';
 export * from './components/filter/filter.component';
 export * from './components/filter/filter.types';
 export * from './components/filter-bar/filter-bar.component';

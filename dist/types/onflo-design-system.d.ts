@@ -3523,6 +3523,60 @@ declare class DsMetricCardComponent {
 }
 
 /**
+ * ds-dashboard-toolbar
+ *
+ * Floating toolbar above a dashboard bento grid. Each control
+ * (date selector, filter button, more button) is an individually
+ * elevated element — no enclosing bar box. Visual language matches
+ * ds-metric-card: elevation via box-shadow, no borders.
+ *
+ * Inputs:
+ *   [title]    string — page title (required)
+ *   [subtitle] string — optional supporting text (date, status, etc.)
+ *
+ * Outputs:
+ *   (filterClick) — emitted when the filter icon button is clicked
+ *   (moreClick)   — emitted when the more icon button is clicked
+ *
+ * Content slots:
+ *   [toolbar-filters] — one or more quick-filter controls pulled out from
+ *                       the filter modal (e.g. a ds-dashboard-toolbar__date-select)
+ *
+ * @example
+ * <ds-dashboard-toolbar
+ *   title="Support Dashboard"
+ *   subtitle="April 15, 2026 · Last updated 2 min ago"
+ *   (filterClick)="openFilter()"
+ *   (moreClick)="openMoreMenu()">
+ *
+ *   <div toolbar-filters class="ds-dashboard-toolbar__date-select">
+ *     <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+ *     <select aria-label="Date range" [(ngModel)]="selectedPeriod">
+ *       <option value="today">Today</option>
+ *       <option value="7d">Last 7 days</option>
+ *       <option value="30d">Last 30 days</option>
+ *       <option value="custom">Custom range</option>
+ *     </select>
+ *     <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+ *   </div>
+ *
+ * </ds-dashboard-toolbar>
+ */
+
+declare class DsDashboardToolbarComponent {
+    /** Page title rendered as bare text on the canvas. */
+    title: string;
+    /** Optional supporting text shown below the title (date, status, etc.). */
+    subtitle: string;
+    /** Emitted when the filter icon button is clicked. */
+    filterClick: EventEmitter<void>;
+    /** Emitted when the more options icon button is clicked. */
+    moreClick: EventEmitter<void>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DsDashboardToolbarComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsDashboardToolbarComponent, "ds-dashboard-toolbar", never, { "title": { "alias": "title"; "required": false; }; "subtitle": { "alias": "subtitle"; "required": false; }; }, { "filterClick": "filterClick"; "moreClick": "moreClick"; }, never, ["[toolbar-filters]"], true, never>;
+}
+
+/**
  * A single selectable option within a filter group or tier.
  */
 interface FilterOption {
@@ -3869,5 +3923,5 @@ declare class DsFilterBarComponent {
     static ɵcmp: i0.ɵɵComponentDeclaration<DsFilterBarComponent, "ds-filter-bar", never, { "selection": { "alias": "selection"; "required": false; }; "groups": { "alias": "groups"; "required": false; }; }, { "selectionChange": "selectionChange"; "filterClick": "filterClick"; }, never, never, true, never>;
 }
 
-export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsFilterBarComponent, DsFilterComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, EMPTY_FILTER_SELECTION, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, getActiveFilterCount, onfloChartTheme, onfloTheme };
+export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDashboardToolbarComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsFilterBarComponent, DsFilterComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, EMPTY_FILTER_SELECTION, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, getActiveFilterCount, onfloChartTheme, onfloTheme };
 export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsChartType, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, FilterCostRangeSelection, FilterDateRangeSelection, FilterGroup, FilterNumericRangeSelection, FilterOption, FilterSelection, FilterTier, SavedFilterSet, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };

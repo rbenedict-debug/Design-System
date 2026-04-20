@@ -1,6 +1,6 @@
 # Dashboard Component Specs
 
-Covers `ds-chart` (Highcharts wrapper) and `ds-metric-card` (KPI tile).
+Covers `ds-chart` (Highcharts wrapper), `ds-metric-card` (KPI tile), and `ds-dashboard-toolbar` (floating page-level toolbar).
 
 ---
 
@@ -258,3 +258,117 @@ A bento grid is a single CSS Grid with `grid-template-areas` where tiles vary in
 - `[trend]="-1.2"` → `-1.2%` in red with `trending_down` icon
 - `[trend]="0"` → `+0%` in green (zero is treated as non-negative)
 - `[trend]="null"` → trend row hidden entirely
+
+---
+
+## ds-dashboard-toolbar
+
+### Purpose
+A floating page-level toolbar placed above the bento grid on dashboard pages.
+Unlike `ds-table-toolbar`, there is **no enclosing box** — each control is its own
+individually elevated element. The visual language matches `ds-metric-card`:
+`box-shadow` for elevation, no borders.
+
+### Design principles
+- Title and subtitle are **bare text on the page canvas** — no background, no container.
+- Each control in `__controls` floats independently using the same elevation as metric cards:
+  `box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2)`.
+- **No borders** on any control — elevation alone conveys the interactive surface.
+- Quick filters are pulled out of the filter modal into the `__controls` row so the most
+  common filter is one click away. The filter icon button still opens the full filter modal.
+
+### Anatomy
+
+| Element | Class | Role |
+|---|---|---|
+| Host | `ds-dashboard-toolbar` | Flex row, `justify-content: space-between` |
+| Left | `__identity` | Title + subtitle stacked |
+| Title | `__title` | `h1`, 20px/600, `--color-text-primary` |
+| Subtitle | `__subtitle` | `p`, 12px/400, `--color-text-secondary` |
+| Right | `__controls` | Flex row of floating controls, `gap: 8px` |
+| Quick filter | `__date-select` | Input-style period selector with `calendar_today` leading icon and `arrow_drop_down` trailing icon |
+| Icon button | `__btn` | 42×42px floating square, elevated, `filter_alt` / `more_vert` |
+| Active state | `__btn.is-active` | Filter button when filter panel is open — brand blue fill |
+
+### Inputs / Outputs (Angular)
+
+| Input | Type | Notes |
+|---|---|---|
+| `[title]` | `string` | Page title (required) |
+| `[subtitle]` | `string` | Optional supporting text — date, status, last-updated |
+
+| Output | Notes |
+|---|---|
+| `(filterClick)` | Filter icon button clicked — open the filter modal |
+| `(moreClick)` | More options icon button clicked |
+
+Content slot: `[toolbar-filters]` — project quick-filter controls (e.g. `__date-select`) here.
+
+### __date-select details
+- 42px tall, `--radius-sm`, elevated (no border)
+- Leading `ds-icon ds-icon--sm calendar_today` in `--color-icon-subtle`
+- Native `<select>` — `appearance: none`, transparent background, 13px/500 text
+- Trailing `ds-icon ds-icon--sm arrow_drop_down` in `--color-icon-default`
+- Overlay tint via `::after` pseudo-element on hover
+- Focus ring: `:focus-within:not([data-mouse-focus])` with `0 0 0 3px var(--color-border-ada-focus-ring)` added to the existing box-shadow (doesn't replace elevation)
+- `data-mouse-focus` set via JS on mousedown/touchstart; removed on focusout — same pattern as `ds-input`
+
+### CSS class API
+```html
+<div class="ds-dashboard-toolbar">
+  <div class="ds-dashboard-toolbar__identity">
+    <h1 class="ds-dashboard-toolbar__title">Support Dashboard</h1>
+    <p class="ds-dashboard-toolbar__subtitle">April 15, 2026 · Last updated 2 min ago</p>
+  </div>
+  <div class="ds-dashboard-toolbar__controls">
+    <!-- Pulled-out quick filter -->
+    <div class="ds-dashboard-toolbar__date-select">
+      <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+      <select aria-label="Date range">
+        <option>Today</option>
+        <option>Last 7 days</option>
+        <option>Last 30 days</option>
+        <option>Custom range</option>
+      </select>
+      <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+    </div>
+    <!-- Filter button — add is-active when filter panel is open -->
+    <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
+      <span class="ds-icon" aria-hidden="true">filter_alt</span>
+    </button>
+    <!-- More options -->
+    <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
+      <span class="ds-icon" aria-hidden="true">more_vert</span>
+    </button>
+  </div>
+</div>
+```
+
+### Angular component
+```html
+<ds-dashboard-toolbar
+  title="Support Dashboard"
+  subtitle="April 15, 2026 · Last updated 2 min ago"
+  (filterClick)="openFilter()"
+  (moreClick)="openMoreMenu()">
+
+  <div toolbar-filters class="ds-dashboard-toolbar__date-select">
+    <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+    <select aria-label="Date range" [(ngModel)]="selectedPeriod">
+      <option value="today">Today</option>
+      <option value="7d">Last 7 days</option>
+      <option value="30d">Last 30 days</option>
+      <option value="custom">Custom range</option>
+    </select>
+    <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+  </div>
+
+</ds-dashboard-toolbar>
+```
+
+### What NOT to do
+- Never add a background or border to the `ds-dashboard-toolbar` container — it must be transparent.
+- Never use a border on `__btn` or `__date-select` — elevation only.
+- Never put action buttons (Export, New Case, etc.) in the toolbar controls — action buttons belong in the page header outside the toolbar, or in a `__btn.more_vert` menu.
+- Never skip `aria-label` on `__btn` elements — they are icon-only.
+- Never use `filter_alt` as the filter icon when no filters are active with `.is-active` — only apply `.is-active` when the filter panel is actually open or active filters exist.

@@ -1,0 +1,24 @@
+<div class="ds-dashboard-toolbar__identity">
+  <h1 class="ds-dashboard-toolbar__title">{{ title }}</h1>
+  <p class="ds-dashboard-toolbar__subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+</div>
+
+<div class="ds-dashboard-toolbar__controls">
+  <ng-content select="[toolbar-filters]"></ng-content>
+
+  <button
+    class="ds-dashboard-toolbar__btn"
+    type="button"
+    aria-label="Filter"
+    (click)="filterClick.emit()">
+    <span class="ds-icon" aria-hidden="true">filter_alt</span>
+  </button>
+
+  <button
+    class="ds-dashboard-toolbar__btn"
+    type="button"
+    aria-label="More options"
+    (click)="moreClick.emit()">
+    <span class="ds-icon" aria-hidden="true">more_vert</span>
+  </button>
+</div>

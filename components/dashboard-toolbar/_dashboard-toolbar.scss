@@ -1,0 +1,252 @@
+// ============================================================
+// Onflo Design System — Dashboard Toolbar
+// ============================================================
+//
+// A floating toolbar above a dashboard bento grid.
+// Unlike ds-table-toolbar there is no enclosing box — the
+// toolbar sits directly on the page canvas and each control
+// is its own floating elevated element matching the metric
+// card elevation treatment. No borders on any controls;
+// elevation alone conveys the interactive surface.
+//
+// Structure:
+//   __identity    — page title + optional subtitle (bare text on canvas)
+//   __controls    — flex row of floating controls (filters + icon btns)
+//   __date-select — input-style period selector with leading calendar icon
+//   __btn         — floating 42px icon button (filter, more, etc.)
+//
+// Usage (CSS-only):
+//   <div class="ds-dashboard-toolbar">
+//     <div class="ds-dashboard-toolbar__identity">
+//       <h1 class="ds-dashboard-toolbar__title">Support Dashboard</h1>
+//       <p class="ds-dashboard-toolbar__subtitle">April 15, 2026 · Last updated 2 min ago</p>
+//     </div>
+//     <div class="ds-dashboard-toolbar__controls">
+//       <div class="ds-dashboard-toolbar__date-select" data-mouse-focus="">
+//         <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+//         <select aria-label="Date range">
+//           <option>Today</option>
+//           <option>Last 7 days</option>
+//           <option>Last 30 days</option>
+//         </select>
+//         <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+//       </div>
+//       <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
+//         <span class="ds-icon" aria-hidden="true">filter_alt</span>
+//       </button>
+//       <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
+//         <span class="ds-icon" aria-hidden="true">more_vert</span>
+//       </button>
+//     </div>
+//   </div>
+//
+// Angular component:
+//   <ds-dashboard-toolbar
+//     title="Support Dashboard"
+//     subtitle="April 15, 2026 · Last updated 2 min ago"
+//     (filterClick)="openFilter()"
+//     (moreClick)="openMenu()">
+//     <!-- Quick filters go in the toolbar-filters slot -->
+//     <div toolbar-filters class="ds-dashboard-toolbar__date-select">
+//       <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+//       <select aria-label="Date range">
+//         <option>Today</option>
+//         <option>Last 7 days</option>
+//         <option>Last 30 days</option>
+//       </select>
+//       <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+//     </div>
+//   </ds-dashboard-toolbar>
+// ============================================================
+
+.ds-dashboard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xl);              // 24px
+  padding: var(--spacing-md) 0 var(--spacing-lg); // 12px 0 16px
+
+
+  // ── Identity — bare text on the page canvas ────────────────────────────────
+
+  &__identity {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+
+  // ── Controls — row of floating elements ───────────────────────────────────
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);            // 8px between controls
+    flex-shrink: 0;
+  }
+
+
+  // ── Date / period selector ─────────────────────────────────────────────────
+  //
+  // Pulled-out quick filter — an input-style select showing the active period.
+  // Uses elevation (not a border) to float on the canvas, matching the card
+  // visual language. The native <select> sits between the two icons.
+  //
+  // data-mouse-focus pattern: the Angular component sets [data-mouse-focus] on
+  // mousedown/touchstart and removes it on blur to suppress the focus ring for
+  // pointer-initiated focus — identical to how ds-input works.
+
+  &__date-select {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);            // 4px
+    height: 42px;
+    padding: 0 var(--spacing-sm) 0 var(--spacing-md); // 0 8px 0 12px
+    background: var(--color-surface-page);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.12s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      transition: background 0.12s ease;
+      pointer-events: none;
+    }
+
+    &:hover::after { background: var(--overlay-hovered); }
+
+    &:focus-within:not([data-mouse-focus]) {
+      box-shadow:
+        0 1px 4px var(--shadow-elevation-1),
+        0 2px 8px var(--shadow-elevation-2),
+        0 0 0 3px var(--color-border-ada-focus-ring);
+    }
+
+    // Leading calendar icon
+    > .ds-icon:first-child {
+      color: var(--color-icon-subtle);
+      flex-shrink: 0;
+    }
+
+    // Native select — transparent, fills the space between the two icons
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      border: none;
+      background: transparent;
+      font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      cursor: pointer;
+      outline: none;
+      padding: 0;
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    // Trailing chevron
+    > .ds-icon:last-child {
+      color: var(--color-icon-default);
+      flex-shrink: 0;
+    }
+  }
+
+
+  // ── Icon buttons — filter, more, custom ────────────────────────────────────
+  //
+  // 42×42px floating squares, same elevation as metric cards.
+  // Overlay tint via ::after — identical to other filled-surface hover patterns.
+
+  &__btn {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    padding: var(--spacing-xs);
+    background: var(--color-surface-page);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-icon-default);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+    transition: box-shadow 0.12s ease, color 0.12s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      transition: background 0.12s ease;
+      pointer-events: none;
+    }
+
+    &:focus { outline: none; }
+
+    &:hover:not(:disabled) {
+      color: var(--color-icon-brand);
+      &::after { background: var(--overlay-hovered); }
+    }
+
+    &:focus-visible {
+      color: var(--color-icon-brand);
+      box-shadow:
+        0 1px 4px var(--shadow-elevation-1),
+        0 2px 8px var(--shadow-elevation-2),
+        0 0 0 3px var(--color-border-ada-focus-ring);
+      &::after { background: var(--overlay-focused); }
+    }
+
+    &:active:not(:disabled) {
+      color: var(--color-icon-brand);
+      &::after { background: var(--overlay-pressed); }
+    }
+
+    &:disabled {
+      color: var(--color-icon-disabled);
+      box-shadow: none;
+      cursor: not-allowed;
+      &::after { background: transparent; }
+    }
+
+    // Active/toggled — e.g. filter button when filter panel is open
+    &.is-active {
+      color: var(--color-icon-brand);
+      background: var(--color-surface-brand);
+      &::after { background: transparent; }
+    }
+  }
+}

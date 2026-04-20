@@ -48,6 +48,7 @@ components/
   rich-text-editor/
   chart/                    # ds-chart — Highcharts wrapper (peer dep: highcharts >=11)
   metric-card/              # ds-metric-card — KPI tile for dashboards
+  dashboard-toolbar/        # ds-dashboard-toolbar — floating page-level toolbar for dashboards
   utilities/                # Utility classes (ds-sr-only, etc.) — ships in dist/components.css
 layout/
   index.scss               # Barrel: @use all layout patterns → dist/layout.css
@@ -232,6 +233,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-rich-text-editor` | Custom (CKEditor 5) | No Angular Material equivalent — third-party CKEditor 5. Requires `@ckeditor/ckeditor5-angular` + `@ckeditor/ckeditor5-build-classic`. Custom toolbar calls `editor.execute()` commands; native CKEditor toolbar is suppressed via CSS. Inputs: `[label]`, `[placeholder]`, `[(value)]`, `[disabled]`, `[isError]`, `[showResize]`, `[showExpand]`. Resize = JS mousedown drag on host height. Expand = `position:fixed` overlay with a second editor instance that syncs back on close. |
 | `ds-chart` | Custom (Highcharts) | No Angular Material equivalent — wraps Highcharts with the Onflo color palette, typography, tooltip, and grid-line styles baked in. Requires `highcharts >=11` as a peer dep. The `onfloChartTheme` object is applied globally on first render via `Highcharts.setOptions()`. Inputs: `[type]` ('line' \| 'area' \| 'bar' \| 'column' \| 'donut' \| 'pie'), `[series]` (Highcharts.SeriesOptionsType[]), `[categories]` (string[]), `[title]`, `[height]` (default 300), `[legend]` (default true), `[loading]`, `[options]` (Highcharts.Options — merged last as escape hatch). 'donut' maps to pie with 60% innerSize. |
 | `ds-metric-card` | Custom | No Material equivalent — KPI tile for dashboards. Inputs: `[value]` (string \| number), `[label]`, `[icon]` (Material Symbol name), `[trend]` (number; positive = green trending_up, negative = red trending_down), `[trendLabel]`, `[variant]` ('default' \| 'brand'), `[loading]` (shows skeleton). **Header layout:** label on the left, filled icon on the right (`justify-content: space-between`). **Visual:** no border — uses `--shadow-elevation-1/2` box-shadow so cards float on a `--color-surface-page` page background. Brand variant adds `border: 1px solid var(--color-border-brand)` on top of elevation. |
+| `ds-dashboard-toolbar` | Custom | No Material equivalent — floating page-level toolbar for dashboards. No enclosing box — each control is an individually elevated element (same `box-shadow` as metric cards, no borders). **Left:** `__identity` block with `__title` + optional `__subtitle` (bare text on canvas). **Right:** `__controls` row containing projected `[toolbar-filters]` quick-filter controls + `__btn` icon buttons for filter and more. Inputs: `[title]`, `[subtitle]`. Outputs: `(filterClick)`, `(moreClick)`. Quick filters (e.g. `__date-select`) use the `data-mouse-focus` focus-ring suppression pattern. `__btn.is-active` marks the filter button as toggled. |
 
 ---
 
@@ -392,4 +394,4 @@ Per-component specs are in `.claude/specs/` — read the relevant file before ad
 - `specs-layout.md` — Agent Status, Page Layout, Split Page, Utilities (ds-sr-only)
 - `specs-compositions.md` — Component selection guide + page-level composition patterns (data table, form/detail, empty/loading states)
 - `specs-motion.md` — Motion duration tokens, easing curves, prefers-reduced-motion rules
-- `specs-dashboard.md` — Chart (ds-chart + Highcharts theme), Metric Card (ds-metric-card)
+- `specs-dashboard.md` — Chart (ds-chart + Highcharts theme), Metric Card (ds-metric-card), Dashboard Toolbar (ds-dashboard-toolbar)
