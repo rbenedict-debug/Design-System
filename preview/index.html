@@ -17506,9 +17506,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       const body = collapsed ? '' : '<div class="filter-tier__body"><div class="filter-date-field" data-tier-id="' + tier.id + '">' +
         '<div class="filter-date-field__row">' +
         '<div class="filter-date-field__group"><label class="filter-date-field__label" for="dff-from-' + tier.id + '">From</label>' +
-        '<div class="dp-demo-field"><input type="text" id="dff-from-' + tier.id + '" data-date-field-from="' + tier.id + '" placeholder="YYYY-MM-DD" value="' + esc(draft.from) + '"><span class="dp-demo-field__icon-btn" aria-hidden="true" style="pointer-events:none"><span class="ds-icon ds-icon--sm">calendar_today</span></span></div></div>' +
+        '<div class="dp-demo-field"><input type="date" id="dff-from-' + tier.id + '" data-date-field-from="' + tier.id + '" lang="en-US" value="' + esc(draft.from) + '"><button class="dp-demo-field__icon-btn" type="button" aria-label="Open date picker" onclick="var i=this.previousElementSibling;i.showPicker&&i.showPicker()"><span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span></button></div></div>' +
         '<div class="filter-date-field__group"><label class="filter-date-field__label" for="dff-to-' + tier.id + '">To</label>' +
-        '<div class="dp-demo-field"><input type="text" id="dff-to-' + tier.id + '" data-date-field-to="' + tier.id + '" placeholder="YYYY-MM-DD" value="' + esc(draft.to) + '"><span class="dp-demo-field__icon-btn" aria-hidden="true" style="pointer-events:none"><span class="ds-icon ds-icon--sm">calendar_today</span></span></div></div>' +
+        '<div class="dp-demo-field"><input type="date" id="dff-to-' + tier.id + '" data-date-field-to="' + tier.id + '" lang="en-US" value="' + esc(draft.to) + '"><button class="dp-demo-field__icon-btn" type="button" aria-label="Open date picker" onclick="var i=this.previousElementSibling;i.showPicker&&i.showPicker()"><span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span></button></div></div>' +
         '</div><div class="filter-date-field__actions">' +
         (applied ? '<button class="ds-button ds-button--text ds-button--sm" data-clear-date-field="' + tier.id + '" type="button">Clear</button>' : '') +
         '<button class="ds-button ds-button--filled ds-button--sm" data-apply-date-field="' + tier.id + '" type="button"' + (canApply ? '' : ' disabled') + '>Apply</button>' +
@@ -17660,10 +17660,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       '<div class="filter-date-field__row" style="margin-bottom:8px">' +
       '<div class="filter-date-field__group">' +
       '<label class="filter-date-field__label" for="ds-preview-dr-start">Start date</label>' +
-      '<div class="dp-demo-field"><input type="text" id="ds-preview-dr-start" data-native-date-start placeholder="YYYY-MM-DD" value="' + nativeFrom + '"><span class="dp-demo-field__icon-btn" aria-hidden="true" style="pointer-events:none"><span class="ds-icon ds-icon--sm">calendar_today</span></span></div></div>' +
+      '<div class="dp-demo-field"><input type="date" id="ds-preview-dr-start" data-native-date-start lang="en-US" value="' + nativeFrom + '"><button class="dp-demo-field__icon-btn" type="button" aria-label="Open date picker" onclick="var i=this.previousElementSibling;i.showPicker&&i.showPicker()"><span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span></button></div></div>' +
       '<div class="filter-date-field__group">' +
       '<label class="filter-date-field__label" for="ds-preview-dr-end">End date</label>' +
-      '<div class="dp-demo-field"><input type="text" id="ds-preview-dr-end" data-native-date-end placeholder="YYYY-MM-DD" value="' + nativeTo + '"><span class="dp-demo-field__icon-btn" aria-hidden="true" style="pointer-events:none"><span class="ds-icon ds-icon--sm">calendar_today</span></span></div></div>' +
+      '<div class="dp-demo-field"><input type="date" id="ds-preview-dr-end" data-native-date-end lang="en-US" value="' + nativeTo + '"><button class="dp-demo-field__icon-btn" type="button" aria-label="Open date picker" onclick="var i=this.previousElementSibling;i.showPicker&&i.showPicker()"><span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span></button></div></div>' +
       '</div>' +
       '<div class="date-range-picker__actions">' +
       '<button class="ds-button ds-button--text ds-button--xs" data-clear-native-date-draft type="button">Clear</button>' +
