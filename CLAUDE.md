@@ -324,51 +324,41 @@ Row height defaults to 56px (standard). To switch density at runtime, set CSS cu
 
 ---
 
-## Template Sync Workflow
+## Cutting a Release
 
-The project template at `~/Developer/Onflo-Project-Template` installs the DS as a local tarball:
-`vendor/onflo-design-system-{version}.tgz`. Changes to the DS do **not** automatically appear
-in the template — the tarball must be rebuilt and reinstalled manually.
+The package publishes automatically to GitHub Packages when a version tag is pushed.
+GitHub Actions runs the build and `npm publish` — no manual steps needed.
 
-**When to sync:** whenever explicitly asked, or after any batch push where the template should
-reflect the new state of the DS.
-
-**Steps — run all commands from the DS repo root:**
+**Steps:**
 
 ```bash
-# 1. Build dist/ (compiles Angular components + CSS)
+# 1. Bump version in package.json (semver: patch = fixes, minor = new components, major = breaking)
+# Edit package.json "version" field manually
+
+# 2. Verify the build compiles cleanly
 npm run build
 
-# 2. Pack the tarball
-npm pack
-# → creates onflo-design-system-{version}.tgz in the DS root
+# 3. Commit the version bump
+git add package.json
+git commit -m "chore: bump version to x.x.x"
 
-# 3. Replace the tarball in the template's vendor directory
-mv onflo-design-system-$(node -p "require('./package.json').version").tgz \
-   ../Onflo-Project-Template/vendor/onflo-design-system-$(node -p "require('./package.json').version").tgz
-
-# 4. If the version number changed — update the template's package.json too:
-#    "file:./vendor/onflo-design-system-{NEW_VERSION}.tgz"
-#    (If version is unchanged, skip this step — the filename is the same)
-
-# 5. Reinstall in the template
-cd ../Onflo-Project-Template && npm install
+# 4. Tag and push — Actions publishes automatically
+git tag vx.x.x
+git push origin main --tags
 ```
 
-**After syncing:**
-- Verify `node_modules/@onflo/design-system/dist/` in the template reflects the new build
-- Commit the updated tarball in the template repo (`vendor/onflo-design-system-{version}.tgz`)
-- If `package.json` changed (version bump), commit that too
-
-**What ships in the tarball** (`files` field in `package.json`):
+**What ships in the package** (`files` field in `package.json`):
 - `dist/` — compiled components + CSS
 - `tokens/` — CSS and SCSS tokens
-- `AGENT-GUIDE.md` — loaded by the template's `CLAUDE.md`
+- `AGENT-GUIDE.md` — loaded by consuming project CLAUDE.md files
 - `preview/index.html` — visual component reference
 - `.claude/specs/` — composition patterns referenced by `AGENT-GUIDE.md`
 
-Internal files that do **not** ship: `CLAUDE.md`, `docs/`, `scripts/`, `preview-rules.md`,
-`.claude/settings.local.json`, `ng-package.json`, `public-api.ts`, `tsconfig.json`.
+Internal files that do **not** ship: `CLAUDE.md`, `DESIGN.md`, `docs/`, `scripts/`,
+`preview-rules.md`, `.claude/settings.local.json`, `ng-package.json`, `public-api.ts`, `tsconfig.json`.
+
+> **Note:** Publishing requires the repo to be under the `onflo` GitHub org.
+> The workflow is wired and ready — it will fire automatically once the repo is transferred.
 
 ---
 

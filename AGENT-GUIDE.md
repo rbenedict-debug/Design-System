@@ -22,6 +22,31 @@ radius, shadow, interaction states — is expressed as a CSS design token.
 
 ---
 
+## Installation
+
+The package is distributed via GitHub Packages under the `@onflo` scope.
+
+**1. Add to your project's `.npmrc`** (create if it doesn't exist):
+```
+@onflo:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+`GITHUB_TOKEN` should be a GitHub Personal Access Token with `read:packages` scope,
+set as an environment variable or in your CI secrets.
+
+**2. Install:**
+```bash
+npm install @onflo/design-system
+```
+
+**3. Add to your project's `CLAUDE.md`:**
+```
+@node_modules/@onflo/design-system/AGENT-GUIDE.md
+```
+
+---
+
 ## Non-negotiable rules
 
 ### 1. Always use design tokens — no exceptions

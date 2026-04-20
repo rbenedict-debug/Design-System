@@ -43,6 +43,9 @@
     "build": "ng-packagr -p ng-package.json && sass components/index.scss dist/components.css --load-path=components --style=compressed --no-source-map && sass layout/index.scss dist/layout.css --style=compressed --no-source-map",
     "preview": "open preview/index.html"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "engines": {
     "node": ">=18"
   },

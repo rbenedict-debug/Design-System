@@ -4,6 +4,7 @@
 
 # Node
 node_modules/
+*.tgz
 
 # macOS
 .DS_Store
