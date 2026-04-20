@@ -11287,9 +11287,13 @@ mark.search-match {
 
     <nav class="sidebar-nav" id="nav-examples" style="display:none">
       <div class="nav-section-label">Pages</div>
-      <a class="nav-link" href="#page-layout" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Page Layout</span></a>
-      <a class="nav-link" href="#split-page-layout" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Split Page</span></a>
-      <a class="nav-link" href="#dashboard-page" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Dashboard Page</span></a>
+      <a class="nav-link" href="#page-default" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Default</span></a>
+      <a class="nav-link" href="#page-default-tabs" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Default + Tabs</span></a>
+      <a class="nav-link" href="#split-resizable" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Split — Resizable</span></a>
+      <a class="nav-link" href="#split-fixed-7030" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Split — Fixed 70/30</span></a>
+      <a class="nav-link" href="#split-fixed-3070" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Split — Fixed 30/70</span></a>
+      <a class="nav-link" href="#dashboard-page" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Dashboard</span></a>
+      <a class="nav-link" href="#table-page" data-nav data-page="examples"><span class="nav-dot"></span><span class="nav-text">Table</span></a>
     </nav>
 
     <div class="sidebar-no-results" id="sidebarNoResults">No components found</div>
@@ -22400,1109 +22404,755 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       </div><!-- /#page-table-components -->
 
       <div class="page" id="page-examples" style="display:none">
-      <section class="section" id="page-layout">
-        <div class="section-header">
-          <h2 class="section-title">Page Layout</h2>
-          <span class="section-source">CSS pattern · preview/index.html · see .claude/specs/specs-layout.md §Page Layouts</span>
-        </div>
-        <p class="section-desc">Full application shell — composes <code>ds-nav-sidebar</code>, <code>ds-top-nav</code>, an optional collapsible sub-navigation panel (<code>ds-subnav</code>), and a main content area (<code>ds-page-content</code>). The floating <code>ds-nav-expand</code> toggle sits at the right edge of the sub-nav and repositions when the panel collapses. Sub-nav open state is managed via <code>[open]</code> on <code>ds-nav-expand</code> and <code>.is-collapsed</code> on <code>.ds-subnav</code>. Click the toggle to try it. ADA: <code>role="navigation"</code> on sidebar and subnav; <code>aria-expanded</code> on the toggle tracks panel state.</p>
 
-        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
-          <div class="ds-page-layout" id="page-layout-demo">
-
-            <!-- ── Left nav sidebar ───────────────────────────────────────── -->
-            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
-              <div class="ds-nav-sidebar__logo">
-                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
-                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
-                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
-                </svg>
-              </div>
-              <div class="ds-nav-sidebar__nav">
-                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
-                  <span class="ds-nav-button__label">Tickets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
-                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
-                  <span class="ds-nav-button__label">Assets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
-                  <span class="ds-icon" aria-hidden="true">equalizer</span>
-                  <span class="ds-nav-button__label">Analytics</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
-                  <span class="ds-nav-button__label">Settings</span>
-                </button>
-              </div>
-              <div class="ds-nav-sidebar__bottom">
-                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
-                  <div class="ds-agent-status__icon">
-                    <span class="ds-icon" aria-hidden="true">support_agent</span>
+        <!-- ── Default Page ──────────────────────────────────────── -->
+        <section class="section" id="page-default">
+          <div class="section-header">
+            <h2 class="section-title">Default Page</h2>
+            <span class="section-source">CSS pattern · layout/page-layout/ · see .claude/specs/specs-layout.md §Page Layouts</span>
+          </div>
+          <p class="section-desc">Standard application page shell — <code>ds-nav-sidebar</code>, <code>ds-top-nav</code>, collapsible <code>ds-subnav</code>, and <code>ds-page-content</code> with a sticky heading and scrollable <code>__main</code> card. Click the expand/collapse toggle at the right edge of the subnav panel to try collapsing it.</p>
+          <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+            <div class="ds-page-layout">
+              <!-- Nav sidebar -->
+              <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+                <div class="ds-nav-sidebar__logo">
+                  <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                    <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                    <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                  </svg>
+                </div>
+                <div class="ds-nav-sidebar__nav">
+                  <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+                    <span class="ds-nav-button__label">Tickets</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Contacts">
+                    <span class="ds-icon" aria-hidden="true">contacts</span>
+                    <span class="ds-nav-button__label">Contacts</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                    <span class="ds-icon" aria-hidden="true">equalizer</span>
+                    <span class="ds-nav-button__label">Analytics</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                    <span class="ds-icon" aria-hidden="true">settings</span>
+                    <span class="ds-nav-button__label">Settings</span>
+                  </button>
+                </div>
+                <div class="ds-nav-sidebar__bottom">
+                  <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">support_agent</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Online</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </nav>
+              <!-- Right: top-nav + body -->
+              <div class="ds-page-layout__content">
+                <header class="ds-top-nav" role="banner">
+                  <div class="ds-top-nav__tabs">
+                    <div class="ds-nav-tab is-active" role="button" tabindex="0" aria-pressed="true" aria-label="Inbox tab — active">
+                      <div class="ds-nav-tab__content">
+                        <span class="ds-nav-tab__label">Inbox</span>
+                        <button class="ds-nav-tab__close" type="button" aria-label="Close Inbox tab"><span class="ds-icon" aria-hidden="true">close_small</span></button>
+                      </div>
+                    </div>
                   </div>
-                  <div class="ds-agent-status__status">
-                    <span>Online</span>
-                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                  </div>
-                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                </button>
-                <button class="ds-agent-status is-offline" type="button" aria-pressed="false" aria-label="Live agent status: Offline">
-                  <div class="ds-agent-status__icon">
-                    <span class="ds-icon" aria-hidden="true">forum</span>
-                  </div>
-                  <div class="ds-agent-status__status">
-                    <span>Offline</span>
-                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                  </div>
-                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                </button>
-              </div>
-            </nav>
-
-            <!-- ── Right side: top-nav + body ────────────────────────────── -->
-            <div class="ds-page-layout__content">
-
-              <!-- Top nav -->
-              <header class="ds-top-nav" role="banner">
-                <div class="ds-top-nav__tabs">
-                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
-                       aria-pressed="true" aria-label="Inbox tab — active">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Inbox</span>
-                      <button class="ds-nav-tab__close" type="button" aria-label="Close Inbox tab">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                  <div class="ds-top-nav__actions">
+                    <div class="ds-top-nav__action-badge">
+                      <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                        <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
                       </button>
+                      <div class="ds-badge-indicator" aria-hidden="true">3</div>
                     </div>
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — R">R</button>
                   </div>
+                </header>
+                <div class="ds-page-layout__body">
+                  <nav class="ds-subnav" id="subnav-a" role="navigation" aria-label="Tickets navigation">
+                    <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
+                  </nav>
+                  <main class="ds-page-content" role="main">
+                    <div class="ds-page-content__heading">
+                      <h1 class="ds-page-content__title">Tickets</h1>
+                    </div>
+                    <div class="ds-page-content__main"></div>
+                  </main>
                 </div>
-                <div class="ds-top-nav__actions">
-                  <button class="ds-top-nav__action-btn" type="button" aria-label="Chatsy">
-                    <svg aria-hidden="true" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;flex-shrink:0;">
-                      <path d="M16.6419 8.93096V11.2075C16.6434 11.8671 16.5159 12.5209 16.2662 13.1342C16.7456 13.071 17.1851 12.8411 17.5036 12.4871C17.8221 12.133 17.9979 11.6788 17.9986 11.2085V10.7708C17.9956 10.3651 17.8633 9.97022 17.62 9.64062C17.3767 9.31101 17.0343 9.06285 16.6399 8.9303" fill="currentColor"/>
-                      <path d="M1.6434 12.8987C1.6194 12.8306 1.59675 12.7617 1.57547 12.6919C1.56901 12.6721 1.56358 12.6516 1.55814 12.6318C1.54252 12.5763 1.52689 12.5224 1.51296 12.4666C1.50436 12.432 1.49643 12.3971 1.48919 12.3619C1.479 12.318 1.46881 12.2724 1.45963 12.2298C1.45046 12.1872 1.44299 12.1403 1.43484 12.0911C1.42668 12.0418 1.42193 12.0194 1.41649 11.9827C1.40732 11.9289 1.40189 11.8754 1.39543 11.8215C1.39543 11.7911 1.38728 11.7598 1.38456 11.732C1.37811 11.6712 1.37369 11.6101 1.36996 11.5484C1.3709 11.5228 1.36907 11.4972 1.36452 11.4721C1.36452 11.3825 1.35807 11.293 1.35807 11.2098V8.93328C0.964056 9.06555 0.621864 9.31327 0.378551 9.64238C0.135237 9.97149 0.00275433 10.3658 -0.000679157 10.7711V11.2088C-0.000193948 11.6792 0.175587 12.1335 0.494109 12.4876C0.812631 12.8417 1.25231 13.0715 1.73172 13.1345C1.70138 13.0594 1.67284 12.9833 1.64612 12.9063C1.64631 12.9039 1.64631 12.9014 1.64612 12.899" fill="currentColor"/>
-                      <path d="M11.0571 6.58443H6.97411C6.09783 6.58539 5.25773 6.92431 4.63811 7.52683C4.01848 8.12935 3.66995 8.94627 3.66896 9.79836V10.8144C3.66995 11.6665 4.01848 12.4834 4.63811 13.0859C5.25773 13.6885 6.09783 14.0274 6.97411 14.0283H11.0571C11.9334 14.0274 12.7735 13.6885 13.3931 13.0859C14.0128 12.4834 14.3613 11.6665 14.3623 10.8144V9.79836C14.3613 8.94627 14.0128 8.12935 13.3931 7.52683C12.7735 6.92431 11.9334 6.58539 11.0571 6.58443ZM5.46148 9.45979C5.46148 9.29301 5.51235 9.12997 5.60764 8.99129C5.70293 8.85261 5.83837 8.74453 5.99683 8.6807C6.1553 8.61687 6.32967 8.60017 6.49789 8.63271C6.66611 8.66525 6.82064 8.74557 6.94192 8.8635C7.0632 8.98144 7.1458 9.1317 7.17926 9.29528C7.21272 9.45886 7.19555 9.62841 7.12991 9.7825C7.06427 9.93659 6.95312 10.0683 6.81051 10.161C6.66789 10.2536 6.50023 10.3031 6.32871 10.3031C6.0987 10.3031 5.87812 10.2142 5.71549 10.0561C5.55285 9.89794 5.46148 9.68345 5.46148 9.45979ZM9.14403 12.4785C8.20061 12.4664 7.27635 12.2179 6.4605 11.7571L6.71085 11.3667C7.4117 11.7689 8.21064 11.9811 9.02446 11.9811C9.83828 11.9811 10.6372 11.7689 11.3381 11.3667L11.5996 11.7498C10.8746 12.2259 10.0192 12.479 9.14437 12.4765M11.6631 10.3011C11.4916 10.3011 11.324 10.2516 11.1813 10.159C11.0387 10.0663 10.9276 9.93461 10.8619 9.78052C10.7963 9.62643 10.7791 9.45688 10.8126 9.2933C10.846 9.12971 10.9286 8.97946 11.0499 8.86152C11.1712 8.74359 11.3257 8.66327 11.494 8.63073C11.6622 8.59819 11.8366 8.61489 11.995 8.67872C12.1535 8.74255 12.2889 8.85063 12.3842 8.98931C12.4795 9.12799 12.5304 9.29103 12.5304 9.45781C12.5304 9.68146 12.439 9.89596 12.2764 10.0541C12.1137 10.2122 11.8931 10.3011 11.6631 10.3011Z" fill="currentColor"/>
-                      <path d="M11.1913 4.2445H9.34342V3.39164C9.70111 3.31393 10.0164 3.10985 10.2281 2.81895C10.4399 2.52805 10.533 2.17107 10.4895 1.8172C10.4459 1.46333 10.2688 1.13779 9.99246 0.903685C9.71612 0.669579 9.36022 0.543586 8.99378 0.550132C8.62733 0.556677 8.27644 0.695295 8.00912 0.939113C7.7418 1.18293 7.57711 1.51458 7.54696 1.86976C7.51681 2.22495 7.62336 2.57837 7.84594 2.8615C8.06853 3.14464 8.39131 3.33733 8.75169 3.40221V4.24417H6.84333C5.6332 4.24659 4.46648 4.68283 3.56644 5.46942C2.6664 6.25601 2.09625 7.33771 1.96509 8.50751L1.95592 8.6066C1.94958 8.67729 1.94493 8.74533 1.94199 8.81073C1.93927 8.87679 1.93655 8.94946 1.93655 9.0185V11.2002C1.93655 11.2773 1.93871 11.3534 1.94301 11.4285V11.4526C1.94301 11.5252 1.9532 11.5976 1.96033 11.6702V11.7016C1.96848 11.7713 1.97698 11.8413 1.98785 11.91L1.9943 11.9467C2.00551 12.0148 2.0174 12.0811 2.03099 12.1472L2.04118 12.1948C2.05205 12.243 2.06326 12.2916 2.07515 12.3388C2.08704 12.386 2.09824 12.4283 2.11115 12.4709L2.13323 12.5489C2.2119 12.804 2.31234 13.0522 2.43352 13.2911L2.50145 13.4262C2.91877 14.1943 3.54355 14.8372 4.30859 15.2858C5.07362 15.7344 5.94996 15.9717 6.84333 15.9722H10.0897H10.0985L12.2535 17.6981C12.2831 17.7224 12.3193 17.738 12.3577 17.7431C12.3962 17.7481 12.4353 17.7424 12.4705 17.7266C12.5057 17.7107 12.5355 17.6855 12.5564 17.6538C12.5774 17.6221 12.5886 17.5852 12.5888 17.5475L12.6177 15.7701L12.7834 15.7152C13.7513 15.3922 14.5915 14.7837 15.1869 13.9745C15.7823 13.1653 16.1033 12.1956 16.1052 11.2005V9.02048C16.1041 7.75373 15.586 6.53921 14.6646 5.6437C13.7433 4.74819 12.494 4.24494 11.1913 4.2445ZM14.9391 10.8058C14.938 11.7971 14.5326 12.7474 13.8119 13.4484C13.0911 14.1494 12.1139 14.5437 11.0945 14.5449H7.01113C5.99176 14.5437 5.0145 14.1494 4.29376 13.4484C3.57302 12.7474 3.16764 11.7971 3.16656 10.8058V9.78845C3.16809 8.7975 3.57366 7.84757 4.29436 7.14695C5.01505 6.44633 5.99205 6.0522 7.01113 6.05098H11.0942C12.1133 6.05211 13.0904 6.44621 13.8112 7.14683C14.5319 7.84746 14.9376 8.79744 14.9391 9.78845V10.8058Z" fill="currentColor"/>
-                    </svg>
+              </div>
+              <!-- Floating expand/collapse toggle -->
+              <button class="ds-nav-expand" id="nav-expand-a" type="button"
+                      aria-label="Collapse sub navigation" aria-expanded="true"
+                      onclick="toggleSubnavA()">
+                <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Default Page — With Tabs ──────────────────────────────────────── -->
+        <section class="section" id="page-default-tabs">
+          <div class="section-header">
+            <h2 class="section-title">Default Page — With Tabs</h2>
+            <span class="section-source">CSS pattern · layout/page-layout/ · see .claude/specs/specs-layout.md §Page Layouts</span>
+          </div>
+          <p class="section-desc">Same shell as Default, with a <code>ds-tabs</code> strip immediately after the <code>&lt;h1&gt;</code> inside <code>ds-page-content__heading</code>. Tabs live inside <code>__heading</code> — never inside <code>__main</code>. The heading never scrolls; the tab strip stays pinned at the top of the content area.</p>
+          <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+            <div class="ds-page-layout">
+              <!-- Nav sidebar -->
+              <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+                <div class="ds-nav-sidebar__logo">
+                  <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                    <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                    <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                  </svg>
+                </div>
+                <div class="ds-nav-sidebar__nav">
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Tickets">
+                    <span class="ds-icon" aria-hidden="true">inbox</span>
+                    <span class="ds-nav-button__label">Tickets</span>
                   </button>
-                  <div class="ds-top-nav__action-badge">
-                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
-                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
-                    </button>
-                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
-                  </div>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
-                    <span class="ds-icon" aria-hidden="true">add_2</span>
+                  <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Contacts">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">contacts</span>
+                    <span class="ds-nav-button__label">Contacts</span>
                   </button>
-                  <button class="ds-top-nav__action-btn" type="button" aria-label="Help">
-                    <span class="ds-icon ds-icon--filled" aria-hidden="true">person_raised_hand</span>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                    <span class="ds-icon" aria-hidden="true">equalizer</span>
+                    <span class="ds-nav-button__label">Analytics</span>
                   </button>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
-                    R
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                    <span class="ds-icon" aria-hidden="true">settings</span>
+                    <span class="ds-nav-button__label">Settings</span>
                   </button>
                 </div>
-              </header>
-
-              <!-- Body: subnav + page content -->
-              <div class="ds-page-layout__body">
-
-                <!-- Sub-navigation panel (collapsible) -->
-                <nav class="ds-subnav" id="subnav-panel" role="navigation" aria-label="Tickets navigation">
-                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
-                  <div class="ds-subnav-header is-expanded">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
-                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
-                      <span class="ds-subnav-header__label">Saved Searches</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
-                    </button>
-                    <div class="ds-subnav-header__children">
-                      <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
-                      <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
+                <div class="ds-nav-sidebar__bottom">
+                  <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">support_agent</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Online</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </nav>
+              <!-- Right: top-nav + body -->
+              <div class="ds-page-layout__content">
+                <header class="ds-top-nav" role="banner">
+                  <div class="ds-top-nav__tabs">
+                    <div class="ds-nav-tab is-active" role="button" tabindex="0" aria-pressed="true" aria-label="All Contacts tab — active">
+                      <div class="ds-nav-tab__content">
+                        <span class="ds-nav-tab__label">All Contacts</span>
+                        <button class="ds-nav-tab__close" type="button" aria-label="Close All Contacts tab"><span class="ds-icon" aria-hidden="true">close_small</span></button>
+                      </div>
+                    </div>
+                    <div class="ds-nav-tab" role="button" tabindex="0" aria-pressed="false" aria-label="Jane Smith tab">
+                      <div class="ds-nav-tab__content">
+                        <span class="ds-nav-tab__label">Jane Smith</span>
+                        <button class="ds-nav-tab__close" type="button" aria-label="Close Jane Smith tab"><span class="ds-icon" aria-hidden="true">close_small</span></button>
+                      </div>
                     </div>
                   </div>
-                </nav>
-
-                <!-- Main page content -->
-                <main class="ds-page-content" role="main">
-                  <div class="ds-page-content__heading">
-                    <h1 class="ds-page-content__title">Page Title</h1>
-                    <div class="ds-tabs" role="tablist" aria-label="Page sections">
-                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                    </div>
-                  </div>
-                  <div class="ds-page-content__main"></div>
-                </main>
-
-              </div><!-- /.ds-page-layout__body -->
-            </div><!-- /.ds-page-layout__content -->
-
-            <!-- Floating expand/collapse toggle (absolutely positioned) -->
-            <button class="ds-nav-expand" id="nav-expand-btn"
-                    type="button"
-                    aria-label="Collapse sub navigation"
-                    aria-expanded="true"
-                    onclick="toggleSubnav()">
-              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
-            </button>
-
-          </div><!-- /.ds-page-layout -->
-        </div><!-- /.component-demo -->
-
-      </section>
-      <section class="section" id="split-page-layout">
-        <div class="section-header">
-          <h2 class="section-title">Split Page Layout</h2>
-          <span class="section-source">CSS pattern · preview/index.html · see .claude/specs/specs-layout.md §Page Layouts</span>
-        </div>
-        <p class="section-desc">Split page layout demos — full application shell with split content area. See the <strong>Components</strong> tab → Split Page for ratio variants (50/50, 70/30, 30/70, 75/25, 25/75) and the fixed vs. resizable handle. Angular: use <code>CdkDragModule</code> from <code>@angular/cdk/drag-drop</code> on the handle for production. See <code>.claude/specs/specs-layout.md §Split Page Layout</code> for Angular wiring details.</p>
-
-        <!-- Resizable composition: full page shell with interactive drag handle -->
-        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
-          <div class="ds-page-layout" id="split-layout-demo">
-
-            <!-- Nav sidebar -->
-            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
-              <div class="ds-nav-sidebar__logo">
-                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
-                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
-                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
-                </svg>
-              </div>
-              <div class="ds-nav-sidebar__nav">
-                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
-                  <span class="ds-nav-button__label">Tickets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
-                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
-                  <span class="ds-nav-button__label">Assets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
-                  <span class="ds-icon" aria-hidden="true">equalizer</span>
-                  <span class="ds-nav-button__label">Analytics</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
-                  <span class="ds-nav-button__label">Settings</span>
-                </button>
-              </div>
-              <div class="ds-nav-sidebar__bottom">
-                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
-                  <div class="ds-agent-status__icon">
-                    <span class="ds-icon" aria-hidden="true">support_agent</span>
-                  </div>
-                  <div class="ds-agent-status__status">
-                    <span>Online</span>
-                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                  </div>
-                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                </button>
-              </div>
-            </nav>
-
-            <!-- Right side: top-nav + split content area -->
-            <div class="ds-page-layout__content">
-
-              <!-- Top nav -->
-              <header class="ds-top-nav" role="banner">
-                <div class="ds-top-nav__tabs">
-                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
-                       aria-pressed="true" aria-label="Tab Label tab — active"
-                       onclick="activateNavTab(this)">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Tab Label</span>
-                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
-                              onclick="event.stopPropagation(); closeNavTab(this)">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                  <div class="ds-top-nav__actions">
+                    <div class="ds-top-nav__action-badge">
+                      <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                        <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
                       </button>
+                      <div class="ds-badge-indicator" aria-hidden="true">3</div>
+                    </div>
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — R">R</button>
+                  </div>
+                </header>
+                <div class="ds-page-layout__body">
+                  <nav class="ds-subnav" id="subnav-b" role="navigation" aria-label="Contacts navigation">
+                    <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">All Contacts</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Recent</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Favourites</button>
+                  </nav>
+                  <main class="ds-page-content" role="main">
+                    <div class="ds-page-content__heading">
+                      <h1 class="ds-page-content__title">Contacts</h1>
+                      <div class="ds-tabs" role="tablist" aria-label="Contact sections">
+                        <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Details</button>
+                        <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Activity</button>
+                        <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Notes</button>
+                        <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Files</button>
+                      </div>
+                    </div>
+                    <div class="ds-page-content__main"></div>
+                  </main>
+                </div>
+              </div>
+              <!-- Floating expand/collapse toggle -->
+              <button class="ds-nav-expand" id="nav-expand-b" type="button"
+                      aria-label="Collapse sub navigation" aria-expanded="true"
+                      onclick="toggleSubnavB()">
+                <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Split Page — Resizable ──────────────────────────────────────── -->
+        <section class="section" id="split-resizable">
+          <div class="section-header">
+            <h2 class="section-title">Split Page — Resizable</h2>
+            <span class="section-source">CSS pattern · layout/split-page/ · see .claude/specs/specs-layout.md §Split Page Layout</span>
+          </div>
+          <p class="section-desc"><code>ds-split-page--resizable</code> — drag the handle to resize panels. In production use <code>CdkDragModule</code> from <code>@angular/cdk/drag-drop</code>. Split panels are direct children of <code>ds-page-content</code> — never wrapped in <code>__main</code>. Each panel already provides its own card shell (background + border-radius + box-shadow).</p>
+          <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+            <div class="ds-page-layout">
+              <!-- Nav sidebar -->
+              <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+                <div class="ds-nav-sidebar__logo">
+                  <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                    <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                    <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                  </svg>
+                </div>
+                <div class="ds-nav-sidebar__nav">
+                  <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+                    <span class="ds-nav-button__label">Tickets</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Contacts">
+                    <span class="ds-icon" aria-hidden="true">contacts</span>
+                    <span class="ds-nav-button__label">Contacts</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                    <span class="ds-icon" aria-hidden="true">equalizer</span>
+                    <span class="ds-nav-button__label">Analytics</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                    <span class="ds-icon" aria-hidden="true">settings</span>
+                    <span class="ds-nav-button__label">Settings</span>
+                  </button>
+                </div>
+                <div class="ds-nav-sidebar__bottom">
+                  <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">support_agent</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Online</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </nav>
+              <!-- Right: top-nav + body -->
+              <div class="ds-page-layout__content">
+                <header class="ds-top-nav" role="banner">
+                  <div class="ds-top-nav__tabs">
+                    <div class="ds-nav-tab is-active" role="button" tabindex="0" aria-pressed="true" aria-label="Ticket #4821 tab — active">
+                      <div class="ds-nav-tab__content">
+                        <span class="ds-nav-tab__label">Ticket #4821</span>
+                        <button class="ds-nav-tab__close" type="button" aria-label="Close Ticket #4821 tab"><span class="ds-icon" aria-hidden="true">close_small</span></button>
+                      </div>
+                    </div>
+                    <div class="ds-nav-tab" role="button" tabindex="0" aria-pressed="false" aria-label="Ticket #4820 tab">
+                      <div class="ds-nav-tab__content">
+                        <span class="ds-nav-tab__label">Ticket #4820</span>
+                        <button class="ds-nav-tab__close" type="button" aria-label="Close Ticket #4820 tab"><span class="ds-icon" aria-hidden="true">close_small</span></button>
+                      </div>
                     </div>
                   </div>
-                  <div class="ds-nav-tab" role="button" tabindex="0"
-                       aria-pressed="false" aria-label="Tab Label tab"
-                       onclick="activateNavTab(this)">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Tab Label</span>
-                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
-                              onclick="event.stopPropagation(); closeNavTab(this)">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                  <div class="ds-top-nav__actions">
+                    <div class="ds-top-nav__action-badge">
+                      <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                        <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
                       </button>
+                      <div class="ds-badge-indicator" aria-hidden="true">3</div>
                     </div>
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — R">R</button>
                   </div>
+                </header>
+                <div class="ds-page-layout__body">
+                  <nav class="ds-subnav" id="subnav-c" role="navigation" aria-label="Tickets navigation">
+                    <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
+                  </nav>
+                  <main class="ds-page-content" role="main">
+                    <div class="ds-page-content__heading">
+                      <h1 class="ds-page-content__title">Ticket #4821</h1>
+                    </div>
+                    <!-- Split panels — direct children of ds-page-content, never inside __main -->
+                    <div class="ds-split-page ds-split-page--resizable" id="split-page-c">
+                      <div class="ds-split-page__panel ds-split-page__panel--left" id="split-left-c"></div>
+                      <div class="ds-split-page__handle" id="split-handle-c"
+                           role="separator" aria-label="Drag to resize panels" aria-orientation="vertical" tabindex="0">
+                        <div class="ds-split-page__handle-line"></div>
+                        <span class="ds-icon" aria-hidden="true">drag_indicator</span>
+                        <div class="ds-split-page__handle-line"></div>
+                      </div>
+                      <div class="ds-split-page__panel ds-split-page__panel--right" id="split-right-c"></div>
+                    </div>
+                  </main>
                 </div>
-                <div class="ds-top-nav__actions">
-                  <div class="ds-top-nav__action-badge">
-                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
-                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
-                    </button>
-                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
-                  </div>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
-                    <span class="ds-icon" aria-hidden="true">add_2</span>
+              </div>
+              <!-- Floating expand/collapse toggle -->
+              <button class="ds-nav-expand" id="nav-expand-c" type="button"
+                      aria-label="Collapse sub navigation" aria-expanded="true"
+                      onclick="toggleSubnavC()">
+                <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Split Page — Fixed 70/30 ──────────────────────────────────────── -->
+        <section class="section" id="split-fixed-7030">
+          <div class="section-header">
+            <h2 class="section-title">Split Page — Fixed 70/30</h2>
+            <span class="section-source">CSS pattern · layout/split-page/ · see .claude/specs/specs-layout.md §Split Page Layout</span>
+          </div>
+          <p class="section-desc"><code>ds-split-page--7030</code> — fixed 70/30 flex split with no drag handle. Use a modifier class when the ratio is determined by the product. No JavaScript required; ratio is purely CSS. Use when the left panel holds the primary content (full ticket thread, rich editor).</p>
+          <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+            <div class="ds-page-layout">
+              <!-- Nav sidebar -->
+              <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+                <div class="ds-nav-sidebar__logo">
+                  <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                    <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                    <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                  </svg>
+                </div>
+                <div class="ds-nav-sidebar__nav">
+                  <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
+                    <span class="ds-nav-button__label">Tickets</span>
                   </button>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
-                    R
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Contacts">
+                    <span class="ds-icon" aria-hidden="true">contacts</span>
+                    <span class="ds-nav-button__label">Contacts</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                    <span class="ds-icon" aria-hidden="true">equalizer</span>
+                    <span class="ds-nav-button__label">Analytics</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                    <span class="ds-icon" aria-hidden="true">settings</span>
+                    <span class="ds-nav-button__label">Settings</span>
                   </button>
                 </div>
-              </header>
-
-              <!-- Body: subnav + split content -->
-              <div class="ds-page-layout__body">
-
-                <!-- Sub-navigation panel (collapsible) -->
-                <nav class="ds-subnav" id="subnav-panel-split" role="navigation" aria-label="Tickets navigation">
-                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
-                  <div class="ds-subnav-header is-expanded">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
-                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
-                      <span class="ds-subnav-header__label">Saved Searches</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
-                    </button>
-                    <div class="ds-subnav-header__children">
-                      <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
-                      <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
+                <div class="ds-nav-sidebar__bottom">
+                  <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">support_agent</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Online</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </nav>
+              <!-- Right: top-nav + body -->
+              <div class="ds-page-layout__content">
+                <header class="ds-top-nav" role="banner">
+                  <div class="ds-top-nav__tabs">
+                    <div class="ds-nav-tab is-active" role="button" tabindex="0" aria-pressed="true" aria-label="Ticket #1042 tab — active">
+                      <div class="ds-nav-tab__content">
+                        <span class="ds-nav-tab__label">Ticket #1042</span>
+                        <button class="ds-nav-tab__close" type="button" aria-label="Close Ticket #1042 tab"><span class="ds-icon" aria-hidden="true">close_small</span></button>
+                      </div>
                     </div>
                   </div>
-                </nav>
-
-                <!-- Page content: title + tabs + split panels replacing __main -->
-                <main class="ds-page-content" role="main">
-                  <div class="ds-page-content__heading">
-                    <h1 class="ds-page-content__title">Page Title</h1>
-                    <div class="ds-tabs" role="tablist" aria-label="Page sections">
-                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                    </div>
-                  </div>
-                  <div class="ds-split-page ds-split-page--resizable" id="split-page-resizable">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__handle" id="split-page-handle"
-                         role="separator" aria-label="Drag to resize panels" aria-orientation="vertical"
-                         tabindex="0">
-                      <div class="ds-split-page__handle-line"></div>
-                      <span class="ds-icon" aria-hidden="true">drag_indicator</span>
-                      <div class="ds-split-page__handle-line"></div>
-                    </div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </main>
-
-              </div><!-- /.ds-page-layout__body -->
-
-            </div><!-- /.ds-page-layout__content -->
-
-            <!-- Floating expand/collapse toggle (absolutely positioned) -->
-            <button class="ds-nav-expand" id="nav-expand-btn-split"
-                    type="button"
-                    aria-label="Collapse sub navigation"
-                    aria-expanded="true"
-                    onclick="toggleSubnavSplit()">
-              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
-            </button>
-
-          </div><!-- /.ds-page-layout -->
-        </div><!-- /.component-demo (composition) -->
-
-        <!-- Static 50/50 split composition -->
-        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); margin-top: 16px;">
-          <div class="ds-page-layout" id="split-layout-demo-static">
-
-            <!-- Nav sidebar -->
-            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
-              <div class="ds-nav-sidebar__logo">
-                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
-                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
-                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
-                </svg>
-              </div>
-              <div class="ds-nav-sidebar__nav">
-                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
-                  <span class="ds-nav-button__label">Tickets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
-                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
-                  <span class="ds-nav-button__label">Assets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
-                  <span class="ds-icon" aria-hidden="true">equalizer</span>
-                  <span class="ds-nav-button__label">Analytics</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
-                  <span class="ds-nav-button__label">Settings</span>
-                </button>
-              </div>
-              <div class="ds-nav-sidebar__bottom">
-                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
-                  <div class="ds-agent-status__icon">
-                    <span class="ds-icon" aria-hidden="true">support_agent</span>
-                  </div>
-                  <div class="ds-agent-status__status">
-                    <span>Online</span>
-                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                  </div>
-                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                </button>
-              </div>
-            </nav>
-
-            <!-- Right side: top-nav + split content area -->
-            <div class="ds-page-layout__content">
-
-              <!-- Top nav -->
-              <header class="ds-top-nav" role="banner">
-                <div class="ds-top-nav__tabs">
-                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
-                       aria-pressed="true" aria-label="Tab Label tab — active"
-                       onclick="activateNavTab(this)">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Tab Label</span>
-                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
-                              onclick="event.stopPropagation(); closeNavTab(this)">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                  <div class="ds-top-nav__actions">
+                    <div class="ds-top-nav__action-badge">
+                      <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                        <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
                       </button>
+                      <div class="ds-badge-indicator" aria-hidden="true">3</div>
+                    </div>
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — R">R</button>
+                  </div>
+                </header>
+                <div class="ds-page-layout__body">
+                  <nav class="ds-subnav" id="subnav-d" role="navigation" aria-label="Tickets navigation">
+                    <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
+                  </nav>
+                  <main class="ds-page-content" role="main">
+                    <div class="ds-page-content__heading">
+                      <h1 class="ds-page-content__title">Ticket #1042</h1>
+                    </div>
+                    <div class="ds-split-page ds-split-page--7030">
+                      <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                      <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                    </div>
+                  </main>
+                </div>
+              </div>
+              <!-- Floating expand/collapse toggle -->
+              <button class="ds-nav-expand" id="nav-expand-d" type="button"
+                      aria-label="Collapse sub navigation" aria-expanded="true"
+                      onclick="toggleSubnavD()">
+                <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Split Page — Fixed 30/70 ──────────────────────────────────────── -->
+        <section class="section" id="split-fixed-3070">
+          <div class="section-header">
+            <h2 class="section-title">Split Page — Fixed 30/70</h2>
+            <span class="section-source">CSS pattern · layout/split-page/ · see .claude/specs/specs-layout.md §Split Page Layout</span>
+          </div>
+          <p class="section-desc"><code>ds-split-page--3070</code> — fixed 30/70 flex split. Use when the right panel is the primary content area and the left panel is a narrower context, list, or properties panel.</p>
+          <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+            <div class="ds-page-layout">
+              <!-- Nav sidebar -->
+              <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+                <div class="ds-nav-sidebar__logo">
+                  <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                    <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                    <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                  </svg>
+                </div>
+                <div class="ds-nav-sidebar__nav">
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Tickets">
+                    <span class="ds-icon" aria-hidden="true">inbox</span>
+                    <span class="ds-nav-button__label">Tickets</span>
+                  </button>
+                  <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Contacts">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">contacts</span>
+                    <span class="ds-nav-button__label">Contacts</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                    <span class="ds-icon" aria-hidden="true">equalizer</span>
+                    <span class="ds-nav-button__label">Analytics</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                    <span class="ds-icon" aria-hidden="true">settings</span>
+                    <span class="ds-nav-button__label">Settings</span>
+                  </button>
+                </div>
+                <div class="ds-nav-sidebar__bottom">
+                  <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">support_agent</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Online</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </nav>
+              <!-- Right: top-nav + body -->
+              <div class="ds-page-layout__content">
+                <header class="ds-top-nav" role="banner">
+                  <div class="ds-top-nav__tabs">
+                    <div class="ds-nav-tab is-active" role="button" tabindex="0" aria-pressed="true" aria-label="Jane Smith tab — active">
+                      <div class="ds-nav-tab__content">
+                        <span class="ds-nav-tab__label">Jane Smith</span>
+                        <button class="ds-nav-tab__close" type="button" aria-label="Close Jane Smith tab"><span class="ds-icon" aria-hidden="true">close_small</span></button>
+                      </div>
                     </div>
                   </div>
-                  <div class="ds-nav-tab" role="button" tabindex="0"
-                       aria-pressed="false" aria-label="Tab Label tab"
-                       onclick="activateNavTab(this)">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Tab Label</span>
-                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
-                              onclick="event.stopPropagation(); closeNavTab(this)">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                  <div class="ds-top-nav__actions">
+                    <div class="ds-top-nav__action-badge">
+                      <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                        <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
                       </button>
+                      <div class="ds-badge-indicator" aria-hidden="true">3</div>
                     </div>
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — R">R</button>
                   </div>
+                </header>
+                <div class="ds-page-layout__body">
+                  <nav class="ds-subnav" id="subnav-e" role="navigation" aria-label="Contacts navigation">
+                    <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">All Contacts</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Recent</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Favourites</button>
+                  </nav>
+                  <main class="ds-page-content" role="main">
+                    <div class="ds-page-content__heading">
+                      <h1 class="ds-page-content__title">Jane Smith</h1>
+                    </div>
+                    <div class="ds-split-page ds-split-page--3070">
+                      <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+                      <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+                    </div>
+                  </main>
                 </div>
-                <div class="ds-top-nav__actions">
-                  <div class="ds-top-nav__action-badge">
-                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
-                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
-                    </button>
-                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
-                  </div>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
-                    <span class="ds-icon" aria-hidden="true">add_2</span>
+              </div>
+              <!-- Floating expand/collapse toggle -->
+              <button class="ds-nav-expand" id="nav-expand-e" type="button"
+                      aria-label="Collapse sub navigation" aria-expanded="true"
+                      onclick="toggleSubnavE()">
+                <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Dashboard Page ──────────────────────────────────────── -->
+        <section class="section" id="dashboard-page">
+          <div class="section-header">
+            <h2 class="section-title">Dashboard Page</h2>
+            <span class="section-source">CSS pattern · layout/page-layout/ · see .claude/specs/specs-layout.md §Page Layouts, specs-dashboard.md</span>
+          </div>
+          <p class="section-desc">Three companion classes work together: <code>ds-page-content--dashboard</code> on <code>ds-page-content</code> makes it the scroll container; <code>ds-page-content__dashboard-header</code> wraps the heading + toolbar and stays sticky; <code>ds-page-content__main--dashboard</code> is the tile canvas with no card shell — tiles float directly on the page floor. Never use plain <code>__main</code> on a dashboard page and never put the toolbar inside <code>__main--dashboard</code>.</p>
+          <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+            <div class="ds-page-layout">
+              <!-- Nav sidebar -->
+              <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+                <div class="ds-nav-sidebar__logo">
+                  <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                    <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                    <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                  </svg>
+                </div>
+                <div class="ds-nav-sidebar__nav">
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Tickets">
+                    <span class="ds-icon" aria-hidden="true">inbox</span>
+                    <span class="ds-nav-button__label">Tickets</span>
                   </button>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
-                    R
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Contacts">
+                    <span class="ds-icon" aria-hidden="true">contacts</span>
+                    <span class="ds-nav-button__label">Contacts</span>
+                  </button>
+                  <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Analytics">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">equalizer</span>
+                    <span class="ds-nav-button__label">Analytics</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
+                    <span class="ds-icon" aria-hidden="true">settings</span>
+                    <span class="ds-nav-button__label">Settings</span>
                   </button>
                 </div>
-              </header>
-
-              <!-- Body: subnav + split content -->
-              <div class="ds-page-layout__body">
-
-                <!-- Sub-navigation panel (collapsible) -->
-                <nav class="ds-subnav" id="subnav-panel-split-static" role="navigation" aria-label="Tickets navigation">
-                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
-                  <div class="ds-subnav-header is-expanded">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
-                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
-                      <span class="ds-subnav-header__label">Saved Searches</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
-                    </button>
-                    <div class="ds-subnav-header__children">
-                      <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
-                      <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
+                <div class="ds-nav-sidebar__bottom">
+                  <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">support_agent</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Online</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </nav>
+              <!-- Right: top-nav + body -->
+              <div class="ds-page-layout__content">
+                <header class="ds-top-nav" role="banner">
+                  <div class="ds-top-nav__tabs">
+                    <div class="ds-nav-tab is-active" role="button" tabindex="0" aria-pressed="true" aria-label="Support Dashboard tab — active">
+                      <div class="ds-nav-tab__content">
+                        <span class="ds-nav-tab__label">Support Dashboard</span>
+                        <button class="ds-nav-tab__close" type="button" aria-label="Close Support Dashboard tab"><span class="ds-icon" aria-hidden="true">close_small</span></button>
+                      </div>
                     </div>
                   </div>
-                </nav>
-
-                <!-- Page content: title + tabs + static 50/50 split -->
-                <main class="ds-page-content" role="main">
-                  <div class="ds-page-content__heading">
-                    <h1 class="ds-page-content__title">Page Title</h1>
-                    <div class="ds-tabs" role="tablist" aria-label="Page sections">
-                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                    </div>
-                  </div>
-                  <div class="ds-split-page">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </main>
-
-              </div><!-- /.ds-page-layout__body -->
-
-            </div><!-- /.ds-page-layout__content -->
-
-            <!-- Floating expand/collapse toggle (absolutely positioned) -->
-            <button class="ds-nav-expand" id="nav-expand-btn-split-static"
-                    type="button"
-                    aria-label="Collapse sub navigation"
-                    aria-expanded="true"
-                    onclick="toggleSubnavSplitStatic()">
-              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
-            </button>
-
-          </div><!-- /.ds-page-layout -->
-        </div><!-- /.component-demo (static 50/50 composition) -->
-
-        <!-- 25/75 split composition -->
-        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); margin-top: 16px;">
-          <div class="ds-page-layout" id="split-layout-demo-2575">
-
-            <!-- Nav sidebar -->
-            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
-              <div class="ds-nav-sidebar__logo">
-                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
-                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
-                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
-                </svg>
-              </div>
-              <div class="ds-nav-sidebar__nav">
-                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
-                  <span class="ds-nav-button__label">Tickets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
-                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
-                  <span class="ds-nav-button__label">Assets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
-                  <span class="ds-icon" aria-hidden="true">equalizer</span>
-                  <span class="ds-nav-button__label">Analytics</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
-                  <span class="ds-nav-button__label">Settings</span>
-                </button>
-              </div>
-              <div class="ds-nav-sidebar__bottom">
-                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
-                  <div class="ds-agent-status__icon">
-                    <span class="ds-icon" aria-hidden="true">support_agent</span>
-                  </div>
-                  <div class="ds-agent-status__status">
-                    <span>Online</span>
-                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                  </div>
-                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                </button>
-              </div>
-            </nav>
-
-            <!-- Right side: top-nav + split content area -->
-            <div class="ds-page-layout__content">
-
-              <!-- Top nav -->
-              <header class="ds-top-nav" role="banner">
-                <div class="ds-top-nav__tabs">
-                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
-                       aria-pressed="true" aria-label="Tab Label tab — active"
-                       onclick="activateNavTab(this)">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Tab Label</span>
-                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
-                              onclick="event.stopPropagation(); closeNavTab(this)">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
+                  <div class="ds-top-nav__actions">
+                    <div class="ds-top-nav__action-badge">
+                      <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                        <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
                       </button>
+                      <div class="ds-badge-indicator" aria-hidden="true">3</div>
                     </div>
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — R">R</button>
                   </div>
-                  <div class="ds-nav-tab" role="button" tabindex="0"
-                       aria-pressed="false" aria-label="Tab Label tab"
-                       onclick="activateNavTab(this)">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Tab Label</span>
-                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
-                              onclick="event.stopPropagation(); closeNavTab(this)">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="ds-top-nav__actions">
-                  <div class="ds-top-nav__action-badge">
-                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
-                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
-                    </button>
-                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
-                  </div>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
-                    <span class="ds-icon" aria-hidden="true">add_2</span>
-                  </button>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
-                    R
-                  </button>
-                </div>
-              </header>
-
-              <!-- Body: subnav + split content -->
-              <div class="ds-page-layout__body">
-
-                <!-- Sub-navigation panel (collapsible) -->
-                <nav class="ds-subnav" id="subnav-panel-split-2575" role="navigation" aria-label="Tickets navigation">
-                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
-                  <div class="ds-subnav-header is-expanded">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
-                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
-                      <span class="ds-subnav-header__label">Saved Searches</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
-                    </button>
-                    <div class="ds-subnav-header__children">
-                      <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
-                      <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
-                    </div>
-                  </div>
-                </nav>
-
-                <!-- Page content: title + tabs + 25/75 static split -->
-                <main class="ds-page-content" role="main">
-                  <div class="ds-page-content__heading">
-                    <h1 class="ds-page-content__title">Page Title</h1>
-                    <div class="ds-tabs" role="tablist" aria-label="Page sections">
-                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                    </div>
-                  </div>
-                  <div class="ds-split-page ds-split-page--2575">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </main>
-
-              </div><!-- /.ds-page-layout__body -->
-
-            </div><!-- /.ds-page-layout__content -->
-
-            <!-- Floating expand/collapse toggle (absolutely positioned) -->
-            <button class="ds-nav-expand" id="nav-expand-btn-split-2575"
-                    type="button"
-                    aria-label="Collapse sub navigation"
-                    aria-expanded="true"
-                    onclick="toggleSubnavSplit2575()">
-              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
-            </button>
-
-          </div><!-- /.ds-page-layout -->
-        </div><!-- /.component-demo (25/75 composition) -->
-
-        <!-- 75/25 split composition -->
-        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); margin-top: 16px;">
-          <div class="ds-page-layout" id="split-layout-demo-7525">
-
-            <!-- Nav sidebar -->
-            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
-              <div class="ds-nav-sidebar__logo">
-                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
-                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
-                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
-                </svg>
-              </div>
-              <div class="ds-nav-sidebar__nav">
-                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Tickets">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">inbox</span>
-                  <span class="ds-nav-button__label">Tickets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
-                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
-                  <span class="ds-nav-button__label">Assets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
-                  <span class="ds-icon" aria-hidden="true">equalizer</span>
-                  <span class="ds-nav-button__label">Analytics</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">settings</span>
-                  <span class="ds-nav-button__label">Settings</span>
-                </button>
-              </div>
-              <div class="ds-nav-sidebar__bottom">
-                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
-                  <div class="ds-agent-status__icon">
-                    <span class="ds-icon" aria-hidden="true">support_agent</span>
-                  </div>
-                  <div class="ds-agent-status__status">
-                    <span>Online</span>
-                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                  </div>
-                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                </button>
-              </div>
-            </nav>
-
-            <!-- Right side: top-nav + split content area -->
-            <div class="ds-page-layout__content">
-
-              <!-- Top nav -->
-              <header class="ds-top-nav" role="banner">
-                <div class="ds-top-nav__tabs">
-                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
-                       aria-pressed="true" aria-label="Tab Label tab — active"
-                       onclick="activateNavTab(this)">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Tab Label</span>
-                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
-                              onclick="event.stopPropagation(); closeNavTab(this)">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="ds-nav-tab" role="button" tabindex="0"
-                       aria-pressed="false" aria-label="Tab Label tab"
-                       onclick="activateNavTab(this)">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Tab Label</span>
-                      <button class="ds-nav-tab__close" type="button" aria-label="Close Tab Label tab"
-                              onclick="event.stopPropagation(); closeNavTab(this)">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="ds-top-nav__actions">
-                  <div class="ds-top-nav__action-badge">
-                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
-                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
-                    </button>
-                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
-                  </div>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green" type="button" aria-label="New">
-                    <span class="ds-icon" aria-hidden="true">add_2</span>
-                  </button>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">
-                    R
-                  </button>
-                </div>
-              </header>
-
-              <!-- Body: subnav + split content -->
-              <div class="ds-page-layout__body">
-
-                <!-- Sub-navigation panel (collapsible) -->
-                <nav class="ds-subnav" id="subnav-panel-split-7525" role="navigation" aria-label="Tickets navigation">
-                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Inbox</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Bookmarks</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Spam</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Drafts</button>
-                  <div class="ds-subnav-header is-expanded">
-                    <button class="ds-subnav-header__row" type="button" aria-expanded="true">
-                      <span class="ds-icon ds-subnav-header__icon" aria-hidden="true">search</span>
-                      <span class="ds-subnav-header__label">Saved Searches</span>
-                      <span class="ds-icon" aria-hidden="true">arrow_drop_down</span>
-                    </button>
-                    <div class="ds-subnav-header__children">
-                      <button class="ds-subnav-button" type="button" aria-pressed="false">Open Issues</button>
-                      <button class="ds-subnav-button" type="button" aria-pressed="false">Unassigned</button>
-                    </div>
-                  </div>
-                </nav>
-
-                <!-- Page content: title + tabs + 75/25 static split -->
-                <main class="ds-page-content" role="main">
-                  <div class="ds-page-content__heading">
-                    <h1 class="ds-page-content__title">Page Title</h1>
-                    <div class="ds-tabs" role="tablist" aria-label="Page sections">
-                      <button class="ds-tabs__tab is-selected" role="tab" aria-selected="true" tabindex="0">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                      <button class="ds-tabs__tab" role="tab" aria-selected="false" tabindex="-1">Tab Label</button>
-                    </div>
-                  </div>
-                  <div class="ds-split-page ds-split-page--7525">
-                    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-                    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
-                  </div>
-                </main>
-
-              </div><!-- /.ds-page-layout__body -->
-
-            </div><!-- /.ds-page-layout__content -->
-
-            <!-- Floating expand/collapse toggle (absolutely positioned) -->
-            <button class="ds-nav-expand" id="nav-expand-btn-split-7525"
-                    type="button"
-                    aria-label="Collapse sub navigation"
-                    aria-expanded="true"
-                    onclick="toggleSubnavSplit7525()">
-              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
-            </button>
-
-          </div><!-- /.ds-page-layout -->
-        </div><!-- /.component-demo (75/25 composition) -->
-
-      </section>
-
-      <section class="section" id="dashboard-page">
-        <div class="section-header">
-          <h2 class="section-title">Dashboard Page Layout</h2>
-          <span class="section-source">CSS pattern · preview/index.html · see .claude/specs/specs-layout.md §Page Layouts + specs-dashboard.md</span>
-        </div>
-        <p class="section-desc">Full application shell with a dashboard content area. Uses <code>ds-page-content__main--dashboard</code> (not plain <code>__main</code>) so metric cards and chart tiles float directly on the page-floor background without a double-card wrapper. <code>ds-dashboard-toolbar</code> provides the floating identity + controls row. Click the subnav toggle to try it.</p>
-
-        <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
-          <div class="ds-page-layout" id="dashboard-page-layout-demo">
-
-            <!-- ── Left nav sidebar ───────────────────────────────────────── -->
-            <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation" style="flex-shrink: 0;">
-              <div class="ds-nav-sidebar__logo">
-                <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
-                  <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
-                  <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
-                </svg>
-              </div>
-              <div class="ds-nav-sidebar__nav">
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Tickets">
-                  <span class="ds-icon" aria-hidden="true">inbox</span>
-                  <span class="ds-nav-button__label">Tickets</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Assets">
-                  <span class="ds-icon" aria-hidden="true">desktop_mac</span>
-                  <span class="ds-nav-button__label">Assets</span>
-                </button>
-                <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Analytics">
-                  <span class="ds-icon ds-icon--filled" aria-hidden="true">equalizer</span>
-                  <span class="ds-nav-button__label">Analytics</span>
-                </button>
-                <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Settings">
-                  <span class="ds-icon" aria-hidden="true">settings</span>
-                  <span class="ds-nav-button__label">Settings</span>
-                </button>
-              </div>
-              <div class="ds-nav-sidebar__bottom">
-                <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
-                  <div class="ds-agent-status__icon">
-                    <span class="ds-icon" aria-hidden="true">support_agent</span>
-                  </div>
-                  <div class="ds-agent-status__status">
-                    <span>Online</span>
-                    <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
-                  </div>
-                  <span class="ds-agent-status__indicator" aria-hidden="true"></span>
-                </button>
-              </div>
-            </nav>
-
-            <!-- ── Right side: top-nav + body ────────────────────────────── -->
-            <div class="ds-page-layout__content">
-
-              <!-- Top nav -->
-              <header class="ds-top-nav" role="banner">
-                <div class="ds-top-nav__tabs">
-                  <div class="ds-nav-tab is-active" role="button" tabindex="0"
-                       aria-pressed="true" aria-label="Support Dashboard tab — active">
-                    <div class="ds-nav-tab__content">
-                      <span class="ds-nav-tab__label">Support Dashboard</span>
-                      <button class="ds-nav-tab__close" type="button" aria-label="Close Support Dashboard tab">
-                        <span class="ds-icon" aria-hidden="true">close_small</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="ds-top-nav__actions">
-                  <div class="ds-top-nav__action-badge">
-                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
-                      <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
-                    </button>
-                    <div class="ds-badge-indicator" aria-hidden="true">3</div>
-                  </div>
-                  <button class="ds-top-nav__action-btn" type="button" aria-label="Help">
-                    <span class="ds-icon ds-icon--filled" aria-hidden="true">person_raised_hand</span>
-                  </button>
-                  <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — Rebecca B.">R</button>
-                </div>
-              </header>
-
-              <!-- Body: subnav + dashboard content -->
-              <div class="ds-page-layout__body">
-
-                <!-- Sub-navigation panel (collapsible) -->
-                <nav class="ds-subnav" id="subnav-panel-dashboard" role="navigation" aria-label="Analytics navigation">
-                  <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Overview</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Cases</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Agents</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Channels</button>
-                  <button class="ds-subnav-button" type="button" aria-pressed="false">Reports</button>
-                </nav>
-
-                <!-- Main dashboard content -->
-                <main class="ds-page-content ds-page-content--dashboard" role="main">
-
-                  <!-- Sticky header: heading + toolbar pin while tiles scroll -->
-                  <div class="ds-page-content__dashboard-header">
-                    <div class="ds-page-content__heading ds-page-content__heading--row">
-                      <h1 class="ds-page-content__title">Support Dashboard</h1>
-                      <p class="ds-page-content__meta">April 20, 2026 · Last updated 2 minutes ago</p>
-                    </div>
-
-                    <div class="ds-dashboard-toolbar" id="dashboard-page-toolbar" style="padding: 0;">
-                      <div class="ds-dashboard-toolbar__controls">
-                        <div style="position: relative;">
-                          <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false">
-                            <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
-                            <span class="ds-dashboard-toolbar__date-label">Last 30 days</span>
-                            <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                </header>
+                <div class="ds-page-layout__body">
+                  <nav class="ds-subnav" id="subnav-f" role="navigation" aria-label="Analytics navigation">
+                    <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">Summary</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Reports</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Forecasts</button>
+                  </nav>
+                  <main class="ds-page-content ds-page-content--dashboard" role="main">
+                    <!-- Dashboard header: sticky — contains heading + toolbar, never scrolls -->
+                    <div class="ds-page-content__dashboard-header">
+                      <div class="ds-page-content__heading ds-page-content__heading--row">
+                        <h1 class="ds-page-content__title">Support Dashboard</h1>
+                        <p class="ds-page-content__meta">April 20, 2026</p>
+                      </div>
+                      <div class="ds-dashboard-toolbar">
+                        <div class="ds-dashboard-toolbar__controls">
+                          <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
+                            <span class="ds-icon" aria-hidden="true">filter_list</span>
+                          </button>
+                          <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
+                            <span class="ds-icon" aria-hidden="true">more_horiz</span>
                           </button>
                         </div>
-                        <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
-                          <span class="ds-icon" aria-hidden="true">filter_alt</span>
-                        </button>
-                        <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
-                          <span class="ds-icon" aria-hidden="true">more_vert</span>
-                        </button>
                       </div>
                     </div>
-                  </div><!-- /.ds-page-content__dashboard-header -->
-
-                  <!-- Dashboard tiles — ds-page-content--dashboard scrolls, not this element -->
-                  <div class="ds-page-content__main ds-page-content__main--dashboard">
-
-                    <!-- Bento grid: 4-col layout matching the Dashboard sim -->
-                    <div style="
-                      display: grid;
-                      grid-template-areas:
-                        'mc1  mc2  line line'
-                        'mc3  mc4  line line'
-                        'bar  bar  donut area';
-                      grid-template-columns: 1fr 1fr 1fr 1fr;
-                      grid-template-rows: auto auto auto;
-                      gap: 16px;
-                    ">
-
-                      <!-- mc1: Open Cases -->
-                      <div class="ds-metric-card" style="grid-area: mc1;">
-                        <div class="ds-metric-card__header">
-                          <span class="ds-metric-card__label">Open Cases</span>
-                          <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">inbox</span>
+                    <!-- Dashboard tile canvas — no card shell, tiles float on page floor -->
+                    <div class="ds-page-content__main ds-page-content__main--dashboard">
+                      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px;">
+                        <div class="ds-metric-card">
+                          <div class="ds-metric-card__header">
+                            <span class="ds-metric-card__label">Open Tickets</span>
+                            <span class="ds-icon ds-icon--filled ds-metric-card__icon" aria-hidden="true">confirmation_number</span>
+                          </div>
+                          <div class="ds-metric-card__value">1,248</div>
                         </div>
-                        <div class="ds-metric-card__value">1,248</div>
-                        <div class="ds-metric-card__trend">
-                          <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
-                          <span class="ds-metric-card__trend-value is-positive">+8.3%</span>
-                          <span class="ds-metric-card__trend-label">vs last week</span>
+                        <div class="ds-metric-card">
+                          <div class="ds-metric-card__header">
+                            <span class="ds-metric-card__label">Resolved Today</span>
+                            <span class="ds-icon ds-icon--filled ds-metric-card__icon" aria-hidden="true">task_alt</span>
+                          </div>
+                          <div class="ds-metric-card__value">84</div>
                         </div>
-                      </div>
-
-                      <!-- mc2: CSAT Score -->
-                      <div class="ds-metric-card" style="grid-area: mc2;">
-                        <div class="ds-metric-card__header">
-                          <span class="ds-metric-card__label">CSAT Score</span>
-                          <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">sentiment_satisfied</span>
+                        <div class="ds-metric-card">
+                          <div class="ds-metric-card__header">
+                            <span class="ds-metric-card__label">Avg Response</span>
+                            <span class="ds-icon ds-icon--filled ds-metric-card__icon" aria-hidden="true">timer</span>
+                          </div>
+                          <div class="ds-metric-card__value">4.2h</div>
                         </div>
-                        <div class="ds-metric-card__value">92.4%</div>
-                        <div class="ds-metric-card__trend">
-                          <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--negative" aria-hidden="true">trending_down</span>
-                          <span class="ds-metric-card__trend-value is-negative">-1.2%</span>
-                          <span class="ds-metric-card__trend-label">vs last month</span>
+                        <div class="ds-metric-card">
+                          <div class="ds-metric-card__header">
+                            <span class="ds-metric-card__label">CSAT Score</span>
+                            <span class="ds-icon ds-icon--filled ds-metric-card__icon" aria-hidden="true">sentiment_satisfied</span>
+                          </div>
+                          <div class="ds-metric-card__value">92%</div>
                         </div>
                       </div>
+                      <div class="ds-metric-card" style="height: 140px; align-items: stretch;"></div>
+                    </div>
+                  </main>
+                </div>
+              </div>
+              <!-- Floating expand/collapse toggle -->
+              <button class="ds-nav-expand" id="nav-expand-f" type="button"
+                      aria-label="Collapse sub navigation" aria-expanded="true"
+                      onclick="toggleSubnavF()">
+                <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+              </button>
+            </div>
+          </div>
+        </section>
 
-                      <!-- mc3: Avg Handle Time -->
-                      <div class="ds-metric-card" style="grid-area: mc3;">
-                        <div class="ds-metric-card__header">
-                          <span class="ds-metric-card__label">Avg Handle Time</span>
-                          <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">timer</span>
-                        </div>
-                        <div class="ds-metric-card__value">4m 32s</div>
-                        <div class="ds-metric-card__trend">
-                          <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
-                          <span class="ds-metric-card__trend-value is-positive">+12%</span>
-                          <span class="ds-metric-card__trend-label">vs last week</span>
-                        </div>
+        <!-- ── Table Page ──────────────────────────────────────── -->
+        <section class="section" id="table-page">
+          <div class="section-header">
+            <h2 class="section-title">Table Page</h2>
+            <span class="section-source">CSS pattern · layout/page-layout/ · see .claude/specs/specs-layout.md §Page Layouts, specs-table.md</span>
+          </div>
+          <p class="section-desc">Table pages use <code>ds-page-content__main--table</code> (not plain <code>__main</code>) — sets <code>overflow: hidden; display: flex; flex-direction: column</code>, handing scroll control to the AG Grid viewport. Apply <code>ds-ag-grid</code> on the <code>ag-grid-angular</code> host (<code>flex: 1 1 0; min-height: 0; width: 100%</code>) so the grid fills remaining height correctly.</p>
+          <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+            <div class="ds-page-layout">
+              <!-- Nav sidebar -->
+              <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+                <div class="ds-nav-sidebar__logo">
+                  <svg aria-hidden="true" width="100%" viewBox="0 0 80 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M39.8749 19.3958V0.638365C39.8749 -0.601963 34.2018 0.313146 33.0587 0.506036C-3.5372 6.66058 -12.3416 54.4009 19.823 72.4181C46.4332 87.3247 79.4384 68.6769 79.4047 38.9697H59.3621C59.9606 56.6214 36.7683 64.8841 24.8326 51.7587C13.3296 39.111 22.8489 19.2388 39.8771 19.3981Z" fill="#0B3057"/>
+                    <g transform="translate(50.144 0.242)"><path d="M29.5085 0H0V19.5739H9.18769L13.1594 19.5716V29.3597H29.5085V0Z" fill="#43ADF2"/></g>
+                    <g transform="translate(63.304 0.242)"><path d="M0 19.5716V29.3597H16.3491V0Z" fill="#78C2FF"/></g>
+                  </svg>
+                </div>
+                <div class="ds-nav-sidebar__nav">
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Tickets">
+                    <span class="ds-icon" aria-hidden="true">inbox</span>
+                    <span class="ds-nav-button__label">Tickets</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Contacts">
+                    <span class="ds-icon" aria-hidden="true">contacts</span>
+                    <span class="ds-nav-button__label">Contacts</span>
+                  </button>
+                  <button class="ds-nav-button" type="button" aria-pressed="false" aria-label="Analytics">
+                    <span class="ds-icon" aria-hidden="true">equalizer</span>
+                    <span class="ds-nav-button__label">Analytics</span>
+                  </button>
+                  <button class="ds-nav-button is-selected" type="button" aria-pressed="true" aria-label="Assets">
+                    <span class="ds-icon ds-icon--filled" aria-hidden="true">desktop_mac</span>
+                    <span class="ds-nav-button__label">Assets</span>
+                  </button>
+                </div>
+                <div class="ds-nav-sidebar__bottom">
+                  <button class="ds-agent-status" type="button" aria-pressed="true" aria-label="Call agent status: Online">
+                    <div class="ds-agent-status__icon">
+                      <span class="ds-icon" aria-hidden="true">support_agent</span>
+                    </div>
+                    <div class="ds-agent-status__status">
+                      <span>Online</span>
+                      <span class="ds-icon" aria-hidden="true">keyboard_arrow_down</span>
+                    </div>
+                    <span class="ds-agent-status__indicator" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </nav>
+              <!-- Right: top-nav + body -->
+              <div class="ds-page-layout__content">
+                <header class="ds-top-nav" role="banner">
+                  <div class="ds-top-nav__tabs">
+                    <div class="ds-nav-tab is-active" role="button" tabindex="0" aria-pressed="true" aria-label="All Assets tab — active">
+                      <div class="ds-nav-tab__content">
+                        <span class="ds-nav-tab__label">All Assets</span>
+                        <button class="ds-nav-tab__close" type="button" aria-label="Close All Assets tab"><span class="ds-icon" aria-hidden="true">close_small</span></button>
                       </div>
-
-                      <!-- mc4: Resolution Rate -->
-                      <div class="ds-metric-card" style="grid-area: mc4;">
-                        <div class="ds-metric-card__header">
-                          <span class="ds-metric-card__label">Resolution Rate</span>
-                          <span class="ds-icon ds-icon--sm ds-icon--filled" aria-hidden="true">check_circle</span>
-                        </div>
-                        <div class="ds-metric-card__value">87.3%</div>
-                        <div class="ds-metric-card__trend">
-                          <span class="ds-icon ds-icon--xs ds-metric-card__trend-icon--positive" aria-hidden="true">trending_up</span>
-                          <span class="ds-metric-card__trend-value is-positive">+2.1%</span>
-                          <span class="ds-metric-card__trend-label">vs last month</span>
-                        </div>
+                    </div>
+                  </div>
+                  <div class="ds-top-nav__actions">
+                    <div class="ds-top-nav__action-badge">
+                      <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange" type="button" aria-label="Notifications, 3 new">
+                        <span class="ds-icon ds-icon--filled" aria-hidden="true">notifications</span>
+                      </button>
+                      <div class="ds-badge-indicator" aria-hidden="true">3</div>
+                    </div>
+                    <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy" type="button" aria-label="Profile — R">R</button>
+                  </div>
+                </header>
+                <div class="ds-page-layout__body">
+                  <nav class="ds-subnav" id="subnav-g" role="navigation" aria-label="Assets navigation">
+                    <button class="ds-subnav-button is-selected" type="button" aria-pressed="true">All Assets</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Warranties</button>
+                    <button class="ds-subnav-button" type="button" aria-pressed="false">Pending</button>
+                  </nav>
+                  <main class="ds-page-content" role="main">
+                    <div class="ds-page-content__heading">
+                      <h1 class="ds-page-content__title">Assets</h1>
+                    </div>
+                    <!-- __main--table: overflow:hidden + flex column — hands scroll to AG Grid viewport -->
+                    <div class="ds-page-content__main ds-page-content__main--table">
+                      <!-- ag-grid-angular gets class="ds-ag-grid" in Angular (flex: 1 1 0; min-height: 0) -->
+                      <div class="ds-ag-grid">
+                        <div class="ds-table-toolbar" style="flex-shrink: 0;"></div>
+                        <div style="flex: 1 1 0; min-height: 0; border-top: 1px solid var(--color-border-subtle);"></div>
                       </div>
-
-                      <!-- line: Monthly Cases hero (2 cols × 2 rows) -->
-                      <div style="grid-area: line; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2); display: flex; flex-direction: column;">
-                        <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px; flex-shrink: 0;">Monthly Cases</div>
-                        <div style="flex: 1; min-height: 0; overflow: hidden;">
-                          <svg viewBox="0 0 740 210" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-label="Line chart: Monthly Cases" role="img" style="display:block;">
-                            <line x1="54" y1="20" x2="720" y2="20" stroke="#E9E9E9" stroke-width="1"/>
-                            <line x1="54" y1="60" x2="720" y2="60" stroke="#E9E9E9" stroke-width="1"/>
-                            <line x1="54" y1="100" x2="720" y2="100" stroke="#E9E9E9" stroke-width="1"/>
-                            <line x1="54" y1="140" x2="720" y2="140" stroke="#E9E9E9" stroke-width="1"/>
-                            <line x1="54" y1="180" x2="720" y2="180" stroke="#E9E9E9" stroke-width="1"/>
-                            <text x="48" y="184" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">0</text>
-                            <text x="48" y="144" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">100</text>
-                            <text x="48" y="104" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">200</text>
-                            <text x="48" y="64"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">300</text>
-                            <text x="48" y="24"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">400</text>
-                            <text x="60"  y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Nov</text>
-                            <text x="192" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Dec</text>
-                            <text x="324" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Jan</text>
-                            <text x="456" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Feb</text>
-                            <text x="588" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Mar</text>
-                            <text x="720" y="196" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#73737F">Apr</text>
-                            <polyline points="60,82 192,64 324,56 456,66 588,52 720,61" fill="none" stroke="#0B6EB4" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                            <circle cx="60"  cy="82" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                            <circle cx="192" cy="64" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                            <circle cx="324" cy="56" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                            <circle cx="456" cy="66" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                            <circle cx="588" cy="52" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                            <circle cx="720" cy="61" r="4" fill="#0B6EB4" stroke="#fff" stroke-width="2"/>
-                            <polyline points="60,88 192,74 324,66 456,72 588,57 720,56" fill="none" stroke="#45A55F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                            <circle cx="60"  cy="88" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                            <circle cx="192" cy="74" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                            <circle cx="324" cy="66" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                            <circle cx="456" cy="72" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                            <circle cx="588" cy="57" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                            <circle cx="720" cy="56" r="4" fill="#45A55F" stroke="#fff" stroke-width="2"/>
-                            <rect x="54" y="200" width="10" height="10" rx="2" fill="#0B6EB4"/>
-                            <text x="68" y="209" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Opened</text>
-                            <rect x="132" y="200" width="10" height="10" rx="2" fill="#45A55F"/>
-                            <text x="146" y="209" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Closed</text>
-                          </svg>
-                        </div>
-                      </div>
-
-                      <!-- bar: Cases by Day of Week (2 cols) -->
-                      <div style="grid-area: bar; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
-                        <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Day of Week</div>
-                        <svg viewBox="0 0 502 210" width="100%" height="210" aria-label="Column chart: Cases by Day of Week" role="img" style="display:block;">
-                          <line x1="44" y1="10"  x2="490" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
-                          <line x1="44" y1="50"  x2="490" y2="50"  stroke="#E9E9E9" stroke-width="1"/>
-                          <line x1="44" y1="90"  x2="490" y2="90"  stroke="#E9E9E9" stroke-width="1"/>
-                          <line x1="44" y1="130" x2="490" y2="130" stroke="#E9E9E9" stroke-width="1"/>
-                          <line x1="44" y1="170" x2="490" y2="170" stroke="#E9E9E9" stroke-width="1"/>
-                          <text x="38" y="174" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">0</text>
-                          <text x="38" y="134" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">65</text>
-                          <text x="38" y="94"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">130</text>
-                          <text x="38" y="54"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">195</text>
-                          <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">260</text>
-                          <rect x="50"  y="85"  width="46" height="85"  rx="3" fill="#0B6EB4"/>
-                          <rect x="114" y="40"  width="46" height="130" rx="3" fill="#0B6EB4"/>
-                          <rect x="178" y="50"  width="46" height="120" rx="3" fill="#0B6EB4"/>
-                          <rect x="242" y="24"  width="46" height="146" rx="3" fill="#0B6EB4"/>
-                          <rect x="306" y="64"  width="46" height="106" rx="3" fill="#0B6EB4"/>
-                          <rect x="370" y="126" width="46" height="44"  rx="3" fill="#0B6EB4" opacity="0.5"/>
-                          <rect x="434" y="153" width="46" height="17"  rx="3" fill="#0B6EB4" opacity="0.35"/>
-                          <text x="73"  y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mon</text>
-                          <text x="137" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Tue</text>
-                          <text x="201" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Wed</text>
-                          <text x="265" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Thu</text>
-                          <text x="329" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Fri</text>
-                          <text x="393" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Sat</text>
-                          <text x="457" y="186" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Sun</text>
-                          <rect x="44" y="196" width="10" height="10" rx="2" fill="#0B6EB4"/>
-                          <text x="58" y="205" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Cases Opened</text>
-                        </svg>
-                      </div>
-
-                      <!-- donut: Cases by Channel -->
-                      <div style="grid-area: donut; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
-                        <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Cases by Channel</div>
-                        <svg viewBox="0 0 240 200" width="100%" height="200" aria-label="Donut chart: Cases by Channel" role="img" style="display:block; margin: 0 auto;">
-                          <path d="M 120 12 A 88 88 0 0 1 180.2 164.2 L 156.3 138.6 A 53 53 0 0 0 120 47 Z" fill="#0B6EB4"/>
-                          <path d="M 180.2 164.2 A 88 88 0 0 1 48.8 151.7 L 77.1 131.2 A 53 53 0 0 0 156.3 138.6 Z" fill="#45A55F"/>
-                          <path d="M 48.8 151.7 A 88 88 0 0 1 45.8 52.7 L 75.3 71.5 A 53 53 0 0 0 77.1 131.2 Z" fill="#FFBF00"/>
-                          <path d="M 45.8 52.7 A 88 88 0 0 1 92.8 16.3 L 103.6 49.6 A 53 53 0 0 0 75.3 71.5 Z" fill="#43ADF2"/>
-                          <path d="M 92.8 16.3 A 88 88 0 0 1 120 12 L 120 47 A 53 53 0 0 0 103.6 49.6 Z" fill="#CACACA"/>
-                          <path d="M 120 12 A 88 88 0 0 1 180.2 164.2 L 156.3 138.6 A 53 53 0 0 0 120 47 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                          <path d="M 180.2 164.2 A 88 88 0 0 1 48.8 151.7 L 77.1 131.2 A 53 53 0 0 0 156.3 138.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                          <path d="M 48.8 151.7 A 88 88 0 0 1 45.8 52.7 L 75.3 71.5 A 53 53 0 0 0 77.1 131.2 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                          <path d="M 45.8 52.7 A 88 88 0 0 1 92.8 16.3 L 103.6 49.6 A 53 53 0 0 0 75.3 71.5 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                          <path d="M 92.8 16.3 A 88 88 0 0 1 120 12 L 120 47 A 53 53 0 0 0 103.6 49.6 Z" fill="none" stroke="#fff" stroke-width="2"/>
-                          <circle cx="120" cy="100" r="53" fill="white"/>
-                          <text x="120" y="95" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="20" font-weight="600" fill="#2D3638">1,248</text>
-                          <text x="120" y="111" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">total cases</text>
-                        </svg>
-                        <div style="display:flex; flex-direction:column; gap:3px; margin-top:8px;">
-                          <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#0B6EB4;flex-shrink:0;"></span>Email — 38%</div>
-                          <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#45A55F;flex-shrink:0;"></span>Chat — 27%</div>
-                          <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#FFBF00;flex-shrink:0;"></span>Phone — 19%</div>
-                          <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#43ADF2;flex-shrink:0;"></span>Portal — 11%</div>
-                          <div style="display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:#2D3638;"><span style="width:8px;height:8px;border-radius:2px;background:#CACACA;flex-shrink:0;"></span>Other — 5%</div>
-                        </div>
-                      </div>
-
-                      <!-- area: Avg Handle Time trend -->
-                      <div style="grid-area: area; background: var(--color-surface-page); border-radius: var(--radius-md); padding: 16px 16px 8px; box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
-                        <div style="font-family: var(--ref-typeface-brand,'DM Sans',sans-serif); font-size: 14px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px;">Avg Handle Time</div>
-                        <svg viewBox="0 0 280 190" width="100%" height="190" aria-label="Area chart: Avg Handle Time" role="img" style="display:block;">
-                          <line x1="44" y1="10"  x2="270" y2="10"  stroke="#E9E9E9" stroke-width="1"/>
-                          <line x1="44" y1="48"  x2="270" y2="48"  stroke="#E9E9E9" stroke-width="1"/>
-                          <line x1="44" y1="85"  x2="270" y2="85"  stroke="#E9E9E9" stroke-width="1"/>
-                          <line x1="44" y1="123" x2="270" y2="123" stroke="#E9E9E9" stroke-width="1"/>
-                          <line x1="44" y1="160" x2="270" y2="160" stroke="#E9E9E9" stroke-width="1"/>
-                          <text x="38" y="164" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">0</text>
-                          <text x="38" y="127" text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">2m</text>
-                          <text x="38" y="89"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">4m</text>
-                          <text x="38" y="52"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">6m</text>
-                          <text x="38" y="14"  text-anchor="end" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">8m</text>
-                          <path d="M 44 63 L 88 54 L 132 58 L 176 74 L 220 75 L 264 75 L 264 160 L 44 160 Z" fill="#0EA5A0" opacity="0.15"/>
-                          <polyline points="44,63 88,54 132,58 176,74 220,75 264,75" fill="none" stroke="#0EA5A0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-                          <circle cx="44"  cy="63" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
-                          <circle cx="88"  cy="54" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
-                          <circle cx="132" cy="58" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
-                          <circle cx="176" cy="74" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
-                          <circle cx="220" cy="75" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
-                          <circle cx="264" cy="75" r="4" fill="#0EA5A0" stroke="#fff" stroke-width="2"/>
-                          <text x="44"  y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Nov</text>
-                          <text x="88"  y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Dec</text>
-                          <text x="132" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Jan</text>
-                          <text x="176" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Feb</text>
-                          <text x="220" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Mar</text>
-                          <text x="264" y="175" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#73737F">Apr</text>
-                          <rect x="44" y="180" width="10" height="10" rx="2" fill="#0EA5A0"/>
-                          <text x="58" y="189" font-family="'DM Sans',sans-serif" font-size="11" font-weight="500" fill="#2D3638">Avg Handle Time</text>
-                        </svg>
-                      </div>
-
-                    </div><!-- /.bento grid -->
-
-                  </div><!-- /.ds-page-content__main--dashboard -->
-                </main>
-
-              </div><!-- /.ds-page-layout__body -->
-            </div><!-- /.ds-page-layout__content -->
-
-            <!-- Floating expand/collapse toggle -->
-            <button class="ds-nav-expand" id="nav-expand-btn-dashboard"
-                    type="button"
-                    aria-label="Collapse sub navigation"
-                    aria-expanded="true"
-                    onclick="toggleSubnavDashboard()">
-              <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
-            </button>
-
-          </div><!-- /.ds-page-layout -->
-        </div><!-- /.component-demo -->
-
-      </section>
-
+                    </div>
+                  </main>
+                </div>
+              </div>
+              <!-- Floating expand/collapse toggle -->
+              <button class="ds-nav-expand" id="nav-expand-g" type="button"
+                      aria-label="Collapse sub navigation" aria-expanded="true"
+                      onclick="toggleSubnavG()">
+                <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
+              </button>
+            </div>
+          </div>
+        </section>
 
       </div><!-- /#page-examples -->
 
@@ -23842,7 +23492,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     'split-page': 'components',
     'filter-bar': 'components', 'filter': 'components',
     'metric-card': 'dashboard', 'chart': 'dashboard', 'dashboard-toolbar': 'dashboard', 'dashboard-sim': 'dashboard',
-    'page-layout': 'examples', 'split-page-layout': 'examples', 'dashboard-page': 'examples', table: 'examples',
+    'page-default': 'examples', 'page-default-tabs': 'examples',
+    'split-resizable': 'examples', 'split-fixed-7030': 'examples', 'split-fixed-3070': 'examples',
+    'dashboard-page': 'examples', 'table-page': 'examples',
   };
   var initHash = window.location.hash.slice(1);
   if (initHash && anchorPageMap[initHash]) {
@@ -24235,127 +23887,59 @@ Source: <code>components/datepicker/_datepicker.scss</code>
   })();
 </script>
 
-<!-- Page layout: subnav toggle -->
+<!-- Page examples: subnav toggle + split resize -->
 <script>
-function toggleSubnav() {
-  var panel = document.getElementById('subnav-panel');
-  var btn   = document.getElementById('nav-expand-btn');
-  var icon  = btn.querySelector('.ds-icon');
+function _subnavToggle(panelId, btnId) {
+  var panel  = document.getElementById(panelId);
+  var btn    = document.getElementById(btnId);
+  var icon   = btn.querySelector('.ds-icon');
   var isOpen = !panel.classList.contains('is-collapsed');
   if (isOpen) {
-    panel.classList.add('is-collapsed');
-    btn.classList.add('is-collapsed');
-    btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-label', 'Expand navigation');
+    panel.classList.add('is-collapsed'); btn.classList.add('is-collapsed');
+    btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-label', 'Expand navigation');
     icon.textContent = 'right_panel_close';
   } else {
-    panel.classList.remove('is-collapsed');
-    btn.classList.remove('is-collapsed');
-    btn.setAttribute('aria-expanded', 'true');
-    btn.setAttribute('aria-label', 'Collapse navigation');
+    panel.classList.remove('is-collapsed'); btn.classList.remove('is-collapsed');
+    btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-label', 'Collapse navigation');
     icon.textContent = 'right_panel_open';
   }
 }
+function toggleSubnavA() { _subnavToggle('subnav-a', 'nav-expand-a'); }
+function toggleSubnavB() { _subnavToggle('subnav-b', 'nav-expand-b'); }
+function toggleSubnavC() { _subnavToggle('subnav-c', 'nav-expand-c'); }
+function toggleSubnavD() { _subnavToggle('subnav-d', 'nav-expand-d'); }
+function toggleSubnavE() { _subnavToggle('subnav-e', 'nav-expand-e'); }
+function toggleSubnavF() { _subnavToggle('subnav-f', 'nav-expand-f'); }
+function toggleSubnavG() { _subnavToggle('subnav-g', 'nav-expand-g'); }
 
-function toggleSubnavSplit() {
-  var panel = document.getElementById('subnav-panel-split');
-  var btn   = document.getElementById('nav-expand-btn-split');
-  var icon  = btn.querySelector('.ds-icon');
-  var isOpen = !panel.classList.contains('is-collapsed');
-  if (isOpen) {
-    panel.classList.add('is-collapsed');
-    btn.classList.add('is-collapsed');
-    btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-label', 'Expand navigation');
-    icon.textContent = 'right_panel_close';
-  } else {
-    panel.classList.remove('is-collapsed');
-    btn.classList.remove('is-collapsed');
-    btn.setAttribute('aria-expanded', 'true');
-    btn.setAttribute('aria-label', 'Collapse navigation');
-    icon.textContent = 'right_panel_open';
-  }
-}
-
-function toggleSubnavSplitStatic() {
-  var panel = document.getElementById('subnav-panel-split-static');
-  var btn   = document.getElementById('nav-expand-btn-split-static');
-  var icon  = btn.querySelector('.ds-icon');
-  var isOpen = !panel.classList.contains('is-collapsed');
-  if (isOpen) {
-    panel.classList.add('is-collapsed');
-    btn.classList.add('is-collapsed');
-    btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-label', 'Expand navigation');
-    icon.textContent = 'right_panel_close';
-  } else {
-    panel.classList.remove('is-collapsed');
-    btn.classList.remove('is-collapsed');
-    btn.setAttribute('aria-expanded', 'true');
-    btn.setAttribute('aria-label', 'Collapse navigation');
-    icon.textContent = 'right_panel_open';
-  }
-}
-
-function toggleSubnavSplit2575() {
-  var panel = document.getElementById('subnav-panel-split-2575');
-  var btn   = document.getElementById('nav-expand-btn-split-2575');
-  var icon  = btn.querySelector('.ds-icon');
-  var isOpen = !panel.classList.contains('is-collapsed');
-  if (isOpen) {
-    panel.classList.add('is-collapsed');
-    btn.classList.add('is-collapsed');
-    btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-label', 'Expand navigation');
-    icon.textContent = 'right_panel_close';
-  } else {
-    panel.classList.remove('is-collapsed');
-    btn.classList.remove('is-collapsed');
-    btn.setAttribute('aria-expanded', 'true');
-    btn.setAttribute('aria-label', 'Collapse navigation');
-    icon.textContent = 'right_panel_open';
-  }
-}
-
-function toggleSubnavSplit7525() {
-  var panel = document.getElementById('subnav-panel-split-7525');
-  var btn   = document.getElementById('nav-expand-btn-split-7525');
-  var icon  = btn.querySelector('.ds-icon');
-  var isOpen = !panel.classList.contains('is-collapsed');
-  if (isOpen) {
-    panel.classList.add('is-collapsed');
-    btn.classList.add('is-collapsed');
-    btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-label', 'Expand navigation');
-    icon.textContent = 'right_panel_close';
-  } else {
-    panel.classList.remove('is-collapsed');
-    btn.classList.remove('is-collapsed');
-    btn.setAttribute('aria-expanded', 'true');
-    btn.setAttribute('aria-label', 'Collapse navigation');
-    icon.textContent = 'right_panel_open';
-  }
-}
-
-function toggleSubnavDashboard() {
-  var panel = document.getElementById('subnav-panel-dashboard');
-  var btn   = document.getElementById('nav-expand-btn-dashboard');
-  var icon  = btn.querySelector('.ds-icon');
-  var isOpen = !panel.classList.contains('is-collapsed');
-  if (isOpen) {
-    panel.classList.add('is-collapsed');
-    btn.classList.add('is-collapsed');
-    btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-label', 'Expand navigation');
-    icon.textContent = 'right_panel_close';
-  } else {
-    panel.classList.remove('is-collapsed');
-    btn.classList.remove('is-collapsed');
-    btn.setAttribute('aria-expanded', 'true');
-    btn.setAttribute('aria-label', 'Collapse navigation');
-    icon.textContent = 'right_panel_open';
-  }
-}
+// Split page resizable — preview-only drag handler
+(function() {
+  var handle = document.getElementById('split-handle-c');
+  if (!handle) return;
+  var root  = document.getElementById('split-page-c');
+  var left  = document.getElementById('split-left-c');
+  var right = document.getElementById('split-right-c');
+  handle.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    var total  = root.offsetWidth - 18;
+    var startX = e.clientX;
+    var startW = left.offsetWidth;
+    root.classList.add('is-dragging');
+    function onMove(e) {
+      var w   = Math.max(total * 0.2, Math.min(total * 0.8, startW + (e.clientX - startX)));
+      var pct = w / total;
+      left.style.flex  = pct + ' 1 0';
+      right.style.flex = (1 - pct) + ' 1 0';
+    }
+    function onUp() {
+      root.classList.remove('is-dragging');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+})();
 
 function ptToggleHeaderGroup(groupHd) {
   var isExpanded = groupHd.classList.contains('ds-table-header-group-cell--expanded');
