@@ -6042,6 +6042,13 @@
 .ds-label--pink.ds-label--outline {
   border-color: var(--color-border-accent-pink);
 }
+.ds-label--grey {
+  background: var(--color-surface-secondary);
+  --label-dot-color: var(--color-border-primary);
+}
+.ds-label--grey.ds-label--outline {
+  border-color: var(--color-border-primary);
+}
 .ds-label--disabled {
   background: var(--color-surface-disabled);
   color: var(--color-text-disabled);
@@ -14420,6 +14427,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--orange">Orange</span>
               <span class="ds-label ds-label--purple">Purple</span>
               <span class="ds-label ds-label--pink">Pink</span>
+              <span class="ds-label ds-label--grey">Grey</span>
               <span class="ds-label ds-label--disabled">Disabled</span>
             </div>
           </div>
@@ -14437,6 +14445,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--orange ds-label--outline">Orange</span>
               <span class="ds-label ds-label--purple ds-label--outline">Purple</span>
               <span class="ds-label ds-label--pink ds-label--outline">Pink</span>
+              <span class="ds-label ds-label--grey ds-label--outline">Grey</span>
               <span class="ds-label ds-label--disabled ds-label--outline">Disabled</span>
             </div>
           </div>
@@ -14449,6 +14458,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--sm">Brand</span>
               <span class="ds-label ds-label--blue ds-label--sm">Blue</span>
               <span class="ds-label ds-label--teal ds-label--sm">Teal</span>
+              <span class="ds-label ds-label--grey ds-label--sm">Grey</span>
               <span class="ds-label ds-label--disabled ds-label--sm">Disabled</span>
             </div>
           </div>
@@ -14461,6 +14471,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--sm ds-label--outline">Brand</span>
               <span class="ds-label ds-label--blue ds-label--sm ds-label--outline">Blue</span>
               <span class="ds-label ds-label--teal ds-label--sm ds-label--outline">Teal</span>
+              <span class="ds-label ds-label--grey ds-label--sm ds-label--outline">Grey</span>
               <span class="ds-label ds-label--disabled ds-label--sm ds-label--outline">Disabled</span>
             </div>
           </div>
@@ -14473,6 +14484,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--xs">Brand</span>
               <span class="ds-label ds-label--blue ds-label--xs">Blue</span>
               <span class="ds-label ds-label--teal ds-label--xs">Teal</span>
+              <span class="ds-label ds-label--grey ds-label--xs">Grey</span>
               <span class="ds-label ds-label--disabled ds-label--xs">Disabled</span>
             </div>
           </div>
@@ -14485,6 +14497,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--xs ds-label--outline">Brand</span>
               <span class="ds-label ds-label--blue ds-label--xs ds-label--outline">Blue</span>
               <span class="ds-label ds-label--teal ds-label--xs ds-label--outline">Teal</span>
+              <span class="ds-label ds-label--grey ds-label--xs ds-label--outline">Grey</span>
               <span class="ds-label ds-label--disabled ds-label--xs ds-label--outline">Disabled</span>
             </div>
           </div>
@@ -14503,6 +14516,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--orange ds-label--pill">Orange</span>
               <span class="ds-label ds-label--purple ds-label--pill">Purple</span>
               <span class="ds-label ds-label--pink ds-label--pill">Pink</span>
+              <span class="ds-label ds-label--grey ds-label--pill">Grey</span>
               <span class="ds-label ds-label--disabled ds-label--pill">Disabled</span>
             </div>
           </div>
@@ -14516,6 +14530,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Brand</span>
               <span class="ds-label ds-label--blue ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Blue</span>
               <span class="ds-label ds-label--teal ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Teal</span>
+              <span class="ds-label ds-label--grey ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Grey</span>
               <span class="ds-label ds-label--disabled ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Disabled</span>
             </div>
           </div>
@@ -14529,6 +14544,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--pill ds-label--outline">Brand</span>
               <span class="ds-label ds-label--blue ds-label--pill ds-label--outline">Blue</span>
               <span class="ds-label ds-label--teal ds-label--pill ds-label--outline">Teal</span>
+              <span class="ds-label ds-label--grey ds-label--pill ds-label--outline">Grey</span>
               <span class="ds-label ds-label--disabled ds-label--pill ds-label--outline">Disabled</span>
             </div>
           </div>
@@ -14542,6 +14558,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Brand</span>
               <span class="ds-label ds-label--blue ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Blue</span>
               <span class="ds-label ds-label--teal ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Teal</span>
+              <span class="ds-label ds-label--grey ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Grey</span>
               <span class="ds-label ds-label--disabled ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Disabled</span>
             </div>
           </div>
@@ -14554,6 +14571,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--sm ds-label--pill">Brand</span>
               <span class="ds-label ds-label--blue ds-label--sm ds-label--pill">Blue</span>
               <span class="ds-label ds-label--teal ds-label--sm ds-label--pill">Teal</span>
+              <span class="ds-label ds-label--grey ds-label--sm ds-label--pill">Grey</span>
               <span class="ds-label ds-label--disabled ds-label--sm ds-label--pill">Disabled</span>
             </div>
           </div>
@@ -14566,6 +14584,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--sm ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Brand</span>
               <span class="ds-label ds-label--blue ds-label--sm ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Blue</span>
               <span class="ds-label ds-label--teal ds-label--sm ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Teal</span>
+              <span class="ds-label ds-label--grey ds-label--sm ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Grey</span>
               <span class="ds-label ds-label--disabled ds-label--sm ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Disabled</span>
             </div>
           </div>
@@ -14578,6 +14597,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--sm ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Brand</span>
               <span class="ds-label ds-label--blue ds-label--sm ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Blue</span>
               <span class="ds-label ds-label--teal ds-label--sm ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Teal</span>
+              <span class="ds-label ds-label--grey ds-label--sm ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Grey</span>
               <span class="ds-label ds-label--disabled ds-label--sm ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Disabled</span>
             </div>
           </div>
@@ -14590,6 +14610,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--xs ds-label--pill">Brand</span>
               <span class="ds-label ds-label--blue ds-label--xs ds-label--pill">Blue</span>
               <span class="ds-label ds-label--teal ds-label--xs ds-label--pill">Teal</span>
+              <span class="ds-label ds-label--grey ds-label--xs ds-label--pill">Grey</span>
               <span class="ds-label ds-label--disabled ds-label--xs ds-label--pill">Disabled</span>
             </div>
           </div>
@@ -14602,6 +14623,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--xs ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Brand</span>
               <span class="ds-label ds-label--blue ds-label--xs ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Blue</span>
               <span class="ds-label ds-label--teal ds-label--xs ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Teal</span>
+              <span class="ds-label ds-label--grey ds-label--xs ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Grey</span>
               <span class="ds-label ds-label--disabled ds-label--xs ds-label--pill ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Disabled</span>
             </div>
           </div>
@@ -14614,6 +14636,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               <span class="ds-label ds-label--brand ds-label--xs ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Brand</span>
               <span class="ds-label ds-label--blue ds-label--xs ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Blue</span>
               <span class="ds-label ds-label--teal ds-label--xs ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Teal</span>
+              <span class="ds-label ds-label--grey ds-label--xs ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Grey</span>
               <span class="ds-label ds-label--disabled ds-label--xs ds-label--pill ds-label--outline ds-label--has-dot"><span class="ds-label__dot" aria-hidden="true"></span>Disabled</span>
             </div>
           </div>
@@ -21853,13 +21876,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             'In Progress': 'ds-label--orange',
             'Pending':     'ds-label--yellow',
             'Resolved':    'ds-label--green',
-            'Closed':      'ds-label--disabled',
+            'Closed':      'ds-label--grey',
           };
           var PRIORITY_CLASS = {
             'Critical': 'ds-label--red',
             'High':     'ds-label--orange',
             'Medium':   'ds-label--yellow',
-            'Low':      'ds-label--disabled',
+            'Low':      'ds-label--grey',
           };
           var PRIORITY_ORDER = { Critical: 0, High: 1, Medium: 2, Low: 3 };
 

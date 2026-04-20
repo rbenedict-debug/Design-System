@@ -20,7 +20,7 @@
 //   </span>
 //
 // Variants (color): green | red | yellow | brand | blue | navy | teal |
-//                   orange | purple | pink | disabled
+//                   orange | purple | pink | grey | disabled
 // Sizes:   xs | sm | md (default)
 // Outline: ds-label--outline (adds colored border)
 // Pill:    ds-label--pill (fully rounded, pill shape)
@@ -117,6 +117,12 @@
     background: var(--color-surface-accent-pink);
     --label-dot-color: var(--color-border-accent-pink);
     &.ds-label--outline { border-color: var(--color-border-accent-pink); }
+  }
+
+  &--grey {
+    background: var(--color-surface-secondary);
+    --label-dot-color: var(--color-border-primary);
+    &.ds-label--outline { border-color: var(--color-border-primary); }
   }
 
   &--disabled {
