@@ -21567,6 +21567,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           }
 
           var agSimApi = null;
+          var agSimRowHeight = 56;
           var toastTimer;
 
           /* ── Toast ──────────────────────────────────────────────────────── */
@@ -22037,7 +22038,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
             /* Layout */
             headerHeight: 56,
-            rowHeight: 56,
+            getRowHeight: function() { return agSimRowHeight; },
 
             /* Context menus — suppress AG Grid's built-in; we provide our own */
             suppressContextMenu: true,
@@ -22290,7 +22291,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               gridEl.style.setProperty('--ds-table-header-height', h + 'px');
             }
             if (agSimApi) {
-              agSimApi.updateGridOptions({ rowHeight: h, headerHeight: h });
+              agSimRowHeight = h;
+              agSimApi.updateGridOptions({ headerHeight: h });
               agSimApi.resetRowHeights();
             }
           };
