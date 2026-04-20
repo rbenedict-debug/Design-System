@@ -1413,3 +1413,16 @@ mark.search-match {
 
 // Container for the expanded custom date picker
 .filter-preset-custom-picker { padding: 0; }
+
+// Inner date range picker used inside the custom date preset expander
+.date-range-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.date-range-picker__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+}

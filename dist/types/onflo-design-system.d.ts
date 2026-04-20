@@ -3531,8 +3531,9 @@ declare class DsMetricCardComponent {
  * ds-metric-card: elevation via box-shadow, no borders.
  *
  * Inputs:
- *   [title]    string — page title (required)
- *   [subtitle] string — optional supporting text (date, status, etc.)
+ *   [title]        string  — page title (required)
+ *   [subtitle]     string  — optional supporting text (date, status, etc.)
+ *   [filterActive] boolean — marks filter button as toggled (brand bg + filled icon)
  *
  * Outputs:
  *   (filterClick) — emitted when the filter icon button is clicked
@@ -3568,12 +3569,14 @@ declare class DsDashboardToolbarComponent {
     title: string;
     /** Optional supporting text shown below the title (date, status, etc.). */
     subtitle: string;
+    /** When true, renders the filter button in the active state (brand bg, filled icon). */
+    filterActive: boolean;
     /** Emitted when the filter icon button is clicked. */
     filterClick: EventEmitter<void>;
     /** Emitted when the more options icon button is clicked. */
     moreClick: EventEmitter<void>;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsDashboardToolbarComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<DsDashboardToolbarComponent, "ds-dashboard-toolbar", never, { "title": { "alias": "title"; "required": false; }; "subtitle": { "alias": "subtitle"; "required": false; }; }, { "filterClick": "filterClick"; "moreClick": "moreClick"; }, never, ["[toolbar-filters]"], true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsDashboardToolbarComponent, "ds-dashboard-toolbar", never, { "title": { "alias": "title"; "required": false; }; "subtitle": { "alias": "subtitle"; "required": false; }; "filterActive": { "alias": "filterActive"; "required": false; }; }, { "filterClick": "filterClick"; "moreClick": "moreClick"; }, never, ["[toolbar-filters]"], true, never>;
 }
 
 /**

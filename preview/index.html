@@ -10519,6 +10519,18 @@ mark.search-match {
   padding: 0;
 }
 
+.date-range-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.date-range-picker__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+}
+
 .filter-applied-bar {
   display: flex;
   align-items: flex-start;
@@ -17652,9 +17664,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
       '<div class="ds-input"><div class="ds-input__field"><input class="ds-input__control" type="date" id="ds-preview-dr-end" data-native-date-end value="' + nativeTo + '"></div></div></div>' +
       '</div>' +
       '<div class="date-range-picker__actions">' +
-      '<button class="ds-button ds-button--text ds-button--sm" data-clear-native-date-draft type="button">Clear</button>' +
-      '<button class="ds-button ds-button--filled ds-button--sm" data-add-native-date-range type="button"' + (canAdd ? '' : ' disabled') + '>' +
-      '<span class="ds-icon ds-icon--sm" aria-hidden="true">date_range</span> Add Range</button>' +
+      '<button class="ds-button ds-button--text ds-button--xs" data-clear-native-date-draft type="button">Clear</button>' +
+      '<button class="ds-button ds-button--filled ds-button--xs" data-add-native-date-range type="button"' + (canAdd ? '' : ' disabled') + '>Add Range</button>' +
       '</div>' +
       (!opts.suppressChips && customRangeChips ? '<div class="date-range-picker__chips"><span class="date-range-picker__chips-label">Added dates</span>' + customRangeChips + '</div>' : '') +
       '</div>';
