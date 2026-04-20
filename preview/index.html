@@ -16933,24 +16933,46 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
         <div class="component-demo">
 
-          <!-- Row 1: Context buttons -->
+          <!-- Row 1: Assets context -->
           <div class="demo-row">
-            <div class="demo-row-label">Interactive</div>
+            <div class="demo-row-label">Assets</div>
             <div class="demo-row-items">
-              <button class="ds-button ds-button--outlined ds-button--md" type="button" onclick="dsPreviewFilter.open('assets')">
-                <span class="ds-icon" aria-hidden="true">filter_list</span>
-                Assets Table
-              </button>
-              <button class="ds-button ds-button--outlined ds-button--md" type="button" onclick="dsPreviewFilter.open('service')">
-                <span class="ds-icon" aria-hidden="true">filter_list</span>
-                Service Overview
-              </button>
+              <div class="ds-badge-indicator__host">
+                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Filter Assets" id="ds-preview-filter-btn-assets" onclick="dsPreviewFilter.open('assets')">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">filter_alt</span>
+                </button>
+                <span class="ds-badge-indicator" id="ds-preview-filter-badge-assets" hidden></span>
+              </div>
             </div>
           </div>
 
-          <!-- Applied filters bar (hidden until filters applied) -->
-          <div id="ds-preview-filter-applied-bar" class="filter-applied-bar" style="display:none; margin-top:8px;">
+          <!-- Applied filters bar for Assets (hidden until filters applied) -->
+          <div id="ds-preview-filter-applied-bar-assets" class="filter-applied-bar" style="display:none; margin-top:8px;">
             <span class="filter-applied-bar__label">Filters</span>
+            <div class="filter-applied-bar__cards" id="ds-preview-filter-applied-cards-assets" role="group" aria-label="Applied filters for Assets"></div>
+          </div>
+
+          <!-- Row 2: Service Overview context -->
+          <div class="demo-row" style="margin-top:16px;">
+            <div class="demo-row-label">Service Overview</div>
+            <div class="demo-row-items">
+              <div class="ds-badge-indicator__host">
+                <button class="ds-icon-button ds-icon-button--icon" type="button" aria-label="Filter Service Overview" id="ds-preview-filter-btn-service" onclick="dsPreviewFilter.open('service')">
+                  <span class="ds-icon ds-icon--filled" aria-hidden="true">filter_alt</span>
+                </button>
+                <span class="ds-badge-indicator" id="ds-preview-filter-badge-service" hidden></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Applied filters bar for Service Overview (hidden until filters applied) -->
+          <div id="ds-preview-filter-applied-bar-service" class="filter-applied-bar" style="display:none; margin-top:8px;">
+            <span class="filter-applied-bar__label">Filters</span>
+            <div class="filter-applied-bar__cards" id="ds-preview-filter-applied-cards-service" role="group" aria-label="Applied filters for Service Overview"></div>
+          </div>
+
+          <!-- Legacy shared bar kept for dashboard context (not shown in filter section) -->
+          <div id="ds-preview-filter-applied-bar" class="filter-applied-bar" style="display:none;">
             <div class="filter-applied-bar__cards" id="ds-preview-filter-applied-cards" role="group" aria-label="Applied filters"></div>
           </div>
 
@@ -17305,9 +17327,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
   // ── Context configuration ─────────────────────────────────────
   const CONTEXTS = {
-    assets:    { label: 'Assets Table',     groups: FILTER_GROUPS_ASSETS,            savedSetsKey: 'onflo-ds-preview-filter-sets-assets',     appliedBarId: 'ds-preview-filter-applied-bar',    appliedCardsId: 'ds-preview-filter-applied-cards'    },
-    service:   { label: 'Service Overview', groups: FILTER_GROUPS_SERVICE_OVERVIEW,   savedSetsKey: 'onflo-ds-preview-filter-sets-service',    appliedBarId: 'ds-preview-filter-applied-bar',    appliedCardsId: 'ds-preview-filter-applied-cards'    },
-    dashboard:      { label: 'Dashboard',      groups: FILTER_GROUPS_DASHBOARD, savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard',      appliedBarId: 'ds-sim-dashboard-applied-bar',   appliedCardsId: 'ds-sim-dashboard-applied-cards'   },
+    assets:    { label: 'Assets Table',     groups: FILTER_GROUPS_ASSETS,            savedSetsKey: 'onflo-ds-preview-filter-sets-assets',     appliedBarId: 'ds-preview-filter-applied-bar-assets',    appliedCardsId: 'ds-preview-filter-applied-cards-assets',    badgeId: 'ds-preview-filter-badge-assets'   },
+    service:   { label: 'Service Overview', groups: FILTER_GROUPS_SERVICE_OVERVIEW,   savedSetsKey: 'onflo-ds-preview-filter-sets-service',    appliedBarId: 'ds-preview-filter-applied-bar-service',   appliedCardsId: 'ds-preview-filter-applied-cards-service',   badgeId: 'ds-preview-filter-badge-service'  },
+    dashboard: { label: 'Dashboard',        groups: FILTER_GROUPS_DASHBOARD,          savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard',  appliedBarId: 'ds-sim-dashboard-applied-bar',            appliedCardsId: 'ds-sim-dashboard-applied-cards' },
   };
 
   let activeContext      = 'assets';
@@ -18180,11 +18202,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     const bar      = $id(ctx.appliedBarId);
     const cardsEl  = $id(ctx.appliedCardsId);
     const simBtn   = $id('sim-filter-btn');
+    const badge    = ctx.badgeId ? $id(ctx.badgeId) : null;
     const hasFilters = state.selected.size > 0;
 
     if (!hasFilters) {
       if (bar) bar.style.display = 'none';
       if (simBtn && activeContext === 'dashboard') { simBtn.classList.remove('is-active'); simBtn.removeAttribute('aria-pressed'); }
+      if (badge) { badge.hidden = true; badge.textContent = ''; }
       return;
     }
 
@@ -18214,6 +18238,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
     if (bar) bar.style.display = '';
     if (simBtn && activeContext === 'dashboard') { simBtn.classList.add('is-active'); simBtn.setAttribute('aria-pressed', 'true'); }
+    if (badge) { const n = state.selected.size; badge.textContent = n > 99 ? '99+' : String(n); badge.hidden = false; }
   }
 
   function applyFilters() {
@@ -18228,6 +18253,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     if (prevBar) prevBar.style.display = 'none';
     const prevBtn = $id('sim-filter-btn');
     if (prevBtn && activeContext === 'dashboard') { prevBtn.classList.remove('is-active'); prevBtn.removeAttribute('aria-pressed'); }
+    const prevBadge = CONTEXTS[activeContext].badgeId ? $id(CONTEXTS[activeContext].badgeId) : null;
+    if (prevBadge) { prevBadge.hidden = true; prevBadge.textContent = ''; }
     activeContext = contextKey; activeFilterGroups = CONTEXTS[contextKey].groups;
     OPTION_META = buildOptionMeta(activeFilterGroups);
     state.activeGroupId = activeFilterGroups[0]?.id ?? null;
@@ -18909,65 +18936,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Filter active state -->
-        <div class="demo-row">
-          <div class="demo-label">Filter active</div>
-          <div class="demo-items" style="width: 100%;">
-            <div style="background: var(--color-surface-page); padding: 0 24px; border-radius: var(--radius-md); width: 100%; box-sizing: border-box;">
-              <div class="ds-dashboard-toolbar">
-                <div class="ds-dashboard-toolbar__identity">
-                  <h1 class="ds-dashboard-toolbar__title">Support Dashboard</h1>
-                  <p class="ds-dashboard-toolbar__subtitle">April 15, 2026 · Filtered by: Agent = Chen, L.</p>
-                </div>
-                <div class="ds-dashboard-toolbar__controls">
-                  <div style="position: relative;">
-                    <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false" onclick="toggleDashboardDateMenu(this)">
-                      <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
-                      <span class="ds-dashboard-toolbar__date-label">Last 7 days</span>
-                      <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
-                    </button>
-                    <div class="ds-menu" role="menu" style="display:none; position:absolute; top:calc(100% + 4px); left:0; z-index:200; min-width:160px;">
-                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Today</button>
-                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Yesterday</button>
-                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="true" onclick="selectDashboardDate(this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>Last 7 days</button>
-                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Last 30 days</button>
-                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
-                    </div>
-                  </div>
-                  <button class="ds-dashboard-toolbar__btn is-active" type="button" aria-label="Filter" aria-pressed="true">
-                    <span class="ds-icon" aria-hidden="true">filter_alt</span>
-                  </button>
-                  <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
-                    <span class="ds-icon" aria-hidden="true">more_vert</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Control states -->
-        <div class="demo-row">
-          <div class="demo-label">Button states</div>
-          <div class="demo-items" style="flex-wrap: wrap; gap: 8px; align-items: center;">
-            <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
-              <span class="ds-icon" aria-hidden="true">filter_alt</span>
-            </button>
-            <button class="ds-dashboard-toolbar__btn is-active" type="button" aria-label="Filter active" aria-pressed="true">
-              <span class="ds-icon" aria-hidden="true">filter_alt</span>
-            </button>
-            <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
-              <span class="ds-icon" aria-hidden="true">more_vert</span>
-            </button>
-            <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Download">
-              <span class="ds-icon" aria-hidden="true">download</span>
-            </button>
-            <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Disabled" disabled>
-              <span class="ds-icon" aria-hidden="true">filter_alt</span>
-            </button>
           </div>
         </div>
 
