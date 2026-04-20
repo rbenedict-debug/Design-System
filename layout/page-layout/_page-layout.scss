@@ -188,6 +188,7 @@
 
 .ds-page-content--dashboard {
   overflow-y: auto;
+  gap: 0;  // gap replaced by padding-bottom on dashboard-header (see below)
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
   &:hover { scrollbar-color: var(--color-surface-scroll) transparent; }
@@ -202,6 +203,9 @@
   flex-direction: column;
   gap: var(--spacing-lg);
   flex-shrink: 0;
+  // padding-bottom replaces the parent gap AND extends the opaque background
+  // into the transition zone so tile shadows don't bleed through when scrolling.
+  padding-bottom: var(--spacing-lg);
 }
 
 // ── AG Grid container sizing ──────────────────────────────────────────────────
