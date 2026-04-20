@@ -9059,18 +9059,25 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   gap: var(--spacing-sm);
 }
 .ds-dashboard-toolbar__date-select {
-  display: flex;
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
   height: 42px;
   padding: 0 var(--spacing-sm) 0 var(--spacing-md);
   background: var(--color-surface-page);
+  border: none;
   border-radius: var(--radius-sm);
   box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+  font-family: var(--ref-typeface-brand, "DM Sans", sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: box-shadow 0.12s ease;
+  transition: box-shadow 0.12s ease, color 0.12s ease;
 }
 .ds-dashboard-toolbar__date-select::after {
   content: "";
@@ -9080,32 +9087,24 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   transition: background 0.12s ease;
   pointer-events: none;
 }
+.ds-dashboard-toolbar__date-select:focus {
+  outline: none;
+}
 .ds-dashboard-toolbar__date-select:hover::after {
   background: var(--overlay-hovered);
 }
-.ds-dashboard-toolbar__date-select:focus-within:not([data-mouse-focus]) {
+.ds-dashboard-toolbar__date-select:focus-visible {
   box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2), 0 0 0 3px var(--color-border-ada-focus-ring);
+}
+.ds-dashboard-toolbar__date-select:focus-visible::after {
+  background: var(--overlay-focused);
+}
+.ds-dashboard-toolbar__date-select:active::after {
+  background: var(--overlay-pressed);
 }
 .ds-dashboard-toolbar__date-select > .ds-icon:first-child {
   color: var(--color-icon-subtle);
   flex-shrink: 0;
-}
-.ds-dashboard-toolbar__date-select select {
-  appearance: none;
-  -webkit-appearance: none;
-  border: none;
-  background: transparent;
-  font-family: var(--ref-typeface-brand, "DM Sans", sans-serif);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-text-primary);
-  cursor: pointer;
-  outline: none;
-  padding: 0;
-  flex: 1;
-  min-width: 0;
-  position: relative;
-  z-index: 1;
 }
 .ds-dashboard-toolbar__date-select > .ds-icon:last-child {
   color: var(--color-icon-default);
@@ -18775,16 +18774,19 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <p class="ds-dashboard-toolbar__subtitle">April 15, 2026 · Last updated 2 minutes ago</p>
                 </div>
                 <div class="ds-dashboard-toolbar__controls">
-                  <div class="ds-dashboard-toolbar__date-select" id="demo-date-select">
-                    <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
-                    <select aria-label="Date range">
-                      <option>Today</option>
-                      <option>Yesterday</option>
-                      <option>Last 7 days</option>
-                      <option>Last 30 days</option>
-                      <option>Custom range</option>
-                    </select>
-                    <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                  <div style="position: relative;">
+                    <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false" onclick="toggleDashboardDateMenu(this)">
+                      <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+                      Today
+                      <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                    </button>
+                    <div class="ds-menu" role="menu" style="display:none; position:absolute; top:calc(100% + 4px); left:0; z-index:200; min-width:160px;">
+                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="true" onclick="selectDashboardDate(this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>Today</button>
+                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Yesterday</button>
+                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Last 7 days</button>
+                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Last 30 days</button>
+                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
+                    </div>
                   </div>
                   <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" onclick="openPreviewFilter()">
                     <span class="ds-icon" aria-hidden="true">filter_alt</span>
@@ -18809,16 +18811,19 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <p class="ds-dashboard-toolbar__subtitle">April 15, 2026 · Filtered by: Agent = Chen, L.</p>
                 </div>
                 <div class="ds-dashboard-toolbar__controls">
-                  <div class="ds-dashboard-toolbar__date-select">
-                    <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
-                    <select aria-label="Date range">
-                      <option>Last 7 days</option>
-                      <option>Today</option>
-                      <option>Yesterday</option>
-                      <option>Last 30 days</option>
-                      <option>Custom range</option>
-                    </select>
-                    <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                  <div style="position: relative;">
+                    <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false" onclick="toggleDashboardDateMenu(this)">
+                      <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+                      Last 7 days
+                      <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                    </button>
+                    <div class="ds-menu" role="menu" style="display:none; position:absolute; top:calc(100% + 4px); left:0; z-index:200; min-width:160px;">
+                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Today</button>
+                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Yesterday</button>
+                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="true" onclick="selectDashboardDate(this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>Last 7 days</button>
+                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Last 30 days</button>
+                      <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
+                    </div>
                   </div>
                   <button class="ds-dashboard-toolbar__btn is-active" type="button" aria-label="Filter" aria-pressed="true">
                     <span class="ds-icon" aria-hidden="true">filter_alt</span>
@@ -18873,16 +18878,19 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <p class="ds-dashboard-toolbar__subtitle">April 15, 2026 · Last updated 2 minutes ago</p>
               </div>
               <div class="ds-dashboard-toolbar__controls">
-                <div class="ds-dashboard-toolbar__date-select" id="sim-date-select">
-                  <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
-                  <select aria-label="Date range">
-                    <option>Today</option>
-                    <option>Yesterday</option>
-                    <option>Last 7 days</option>
-                    <option>Last 30 days</option>
-                    <option>Custom range</option>
-                  </select>
-                  <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                <div style="position: relative;">
+                  <button class="ds-dashboard-toolbar__date-select" type="button" aria-haspopup="menu" aria-expanded="false" onclick="toggleDashboardDateMenu(this)">
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">calendar_today</span>
+                    Today
+                    <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
+                  </button>
+                  <div class="ds-menu" role="menu" style="display:none; position:absolute; top:calc(100% + 4px); left:0; z-index:200; min-width:160px;">
+                    <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="true" onclick="selectDashboardDate(this)"><span class="ds-menu__item-check"><span class="ds-icon ds-icon--filled" aria-hidden="true">check</span></span>Today</button>
+                    <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Yesterday</button>
+                    <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Last 7 days</button>
+                    <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Last 30 days</button>
+                    <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
+                  </div>
                 </div>
                 <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" id="sim-filter-btn" onclick="openPreviewFilter()">
                   <span class="ds-icon" aria-hidden="true">filter_alt</span>
@@ -19533,6 +19541,61 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           });
           btn.classList.add('filter-preset-pill--selected');
         }
+      </script>
+
+      <script>
+        // Dashboard toolbar — date-range menu toggle
+        function toggleDashboardDateMenu(btn) {
+          var menu = btn.nextElementSibling;
+          var isOpen = menu.style.display !== 'none';
+          // Close any other open dashboard date menus
+          document.querySelectorAll('.ds-dashboard-toolbar__date-select').forEach(function(b) {
+            if (b !== btn) {
+              b.setAttribute('aria-expanded', 'false');
+              if (b.nextElementSibling) b.nextElementSibling.style.display = 'none';
+            }
+          });
+          if (isOpen) {
+            menu.style.display = 'none';
+            btn.setAttribute('aria-expanded', 'false');
+          } else {
+            menu.style.display = '';
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        }
+
+        function selectDashboardDate(item) {
+          var menu = item.closest('.ds-menu');
+          var btn = menu.previousElementSibling;
+          // Update aria-checked and move check icon
+          menu.querySelectorAll('[role=menuitemradio]').forEach(function(b) {
+            b.setAttribute('aria-checked', 'false');
+            var chk = b.querySelector('.ds-menu__item-check');
+            if (chk) b.removeChild(chk);
+          });
+          item.setAttribute('aria-checked', 'true');
+          var checkSpan = document.createElement('span');
+          checkSpan.className = 'ds-menu__item-check';
+          checkSpan.innerHTML = '<span class="ds-icon ds-icon--filled" aria-hidden="true">check</span>';
+          item.insertBefore(checkSpan, item.firstChild);
+          // Update button label (keep the two icon spans, replace text node)
+          var icons = btn.querySelectorAll('.ds-icon');
+          var label = item.textContent.trim();
+          btn.childNodes.forEach(function(n) { if (n.nodeType === 3) n.textContent = ' ' + label + ' '; });
+          // Close
+          menu.style.display = 'none';
+          btn.setAttribute('aria-expanded', 'false');
+        }
+
+        // Close dashboard date menus on outside click
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.ds-dashboard-toolbar__date-select') && !e.target.closest('.ds-menu')) {
+            document.querySelectorAll('.ds-dashboard-toolbar__date-select').forEach(function(btn) {
+              btn.setAttribute('aria-expanded', 'false');
+              if (btn.nextElementSibling) btn.nextElementSibling.style.display = 'none';
+            });
+          }
+        });
       </script>
 
       <div class="page" id="page-table-components" style="display:none">
@@ -24350,7 +24413,7 @@ function closeNavTab(closeBtn) {
   document.addEventListener('keydown', function () { lastWasMouse = false; }, true);
   document.addEventListener('focusin', function (e) {
     var el = e.target && e.target.closest &&
-      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search') || e.target.closest('.ds-autocomplete') || e.target.closest('.ds-dashboard-toolbar__date-select'));
+      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search') || e.target.closest('.ds-autocomplete'));
     if (!el) return;
     if (lastWasMouse) { el.setAttribute('data-mouse-focus', ''); }
     else              { el.removeAttribute('data-mouse-focus'); }
@@ -24360,7 +24423,7 @@ function closeNavTab(closeBtn) {
     // Resetting here would clear the flag before the next focusin fires
     // when clicking from one field directly to another.
     var el = e.target && e.target.closest &&
-      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search') || e.target.closest('.ds-autocomplete') || e.target.closest('.ds-dashboard-toolbar__date-select'));
+      (e.target.closest('.ds-input') || e.target.closest('.ds-select') || e.target.closest('.ds-textarea') || e.target.closest('.ds-search') || e.target.closest('.ds-autocomplete'));
     if (el) el.removeAttribute('data-mouse-focus');
   }, true);
 })();

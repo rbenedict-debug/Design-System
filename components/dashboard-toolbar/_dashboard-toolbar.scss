@@ -111,27 +111,34 @@
 
   // ── Date / period selector ─────────────────────────────────────────────────
   //
-  // Pulled-out quick filter — an input-style select showing the active period.
+  // Pulled-out quick filter — a button trigger that opens a ds-menu panel.
   // Uses elevation (not a border) to float on the canvas, matching the card
-  // visual language. The native <select> sits between the two icons.
+  // visual language. It is a simple <button>, so focus ring uses :focus-visible
+  // (no data-mouse-focus suppression needed).
   //
-  // data-mouse-focus pattern: the Angular component sets [data-mouse-focus] on
-  // mousedown/touchstart and removes it on blur to suppress the focus ring for
-  // pointer-initiated focus — identical to how ds-input works.
+  // Angular usage: put [matMenuTriggerFor]="dateMenu" on the button and wire
+  // a <mat-menu #dateMenu panelClass="ds-menu"> with menuitemradio items.
 
   &__date-select {
-    display: flex;
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex;
     align-items: center;
     gap: var(--spacing-xs);            // 4px
     height: 42px;
     padding: 0 var(--spacing-sm) 0 var(--spacing-md); // 0 8px 0 12px
     background: var(--color-surface-page);
+    border: none;
     border-radius: var(--radius-sm);
     box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+    font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-primary);
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: box-shadow 0.12s ease;
+    transition: box-shadow 0.12s ease, color 0.12s ease;
 
     &::after {
       content: '';
@@ -142,38 +149,24 @@
       pointer-events: none;
     }
 
+    &:focus { outline: none; }
+
     &:hover::after { background: var(--overlay-hovered); }
 
-    &:focus-within:not([data-mouse-focus]) {
+    &:focus-visible {
       box-shadow:
         0 1px 4px var(--shadow-elevation-1),
         0 2px 8px var(--shadow-elevation-2),
         0 0 0 3px var(--color-border-ada-focus-ring);
+      &::after { background: var(--overlay-focused); }
     }
+
+    &:active::after { background: var(--overlay-pressed); }
 
     // Leading calendar icon
     > .ds-icon:first-child {
       color: var(--color-icon-subtle);
       flex-shrink: 0;
-    }
-
-    // Native select — transparent, fills the space between the two icons
-    select {
-      appearance: none;
-      -webkit-appearance: none;
-      border: none;
-      background: transparent;
-      font-family: var(--ref-typeface-brand, 'DM Sans', sans-serif);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--color-text-primary);
-      cursor: pointer;
-      outline: none;
-      padding: 0;
-      flex: 1;
-      min-width: 0;
-      position: relative;
-      z-index: 1;
     }
 
     // Trailing chevron
