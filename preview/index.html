@@ -9025,6 +9025,12 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   gap: var(--spacing-lg);
   padding: var(--spacing-md) 0 var(--spacing-lg);
 }
+.ds-dashboard-toolbar .ds-icon {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+.ds-dashboard-toolbar .ds-icon--sm {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 20;
+}
 .ds-dashboard-toolbar__identity {
   display: flex;
   align-items: baseline;
@@ -9096,12 +9102,6 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 }
 .ds-dashboard-toolbar__date-select:active::after {
   background: var(--overlay-pressed);
-}
-.ds-dashboard-toolbar__date-select .ds-icon {
-  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
-}
-.ds-dashboard-toolbar__date-select .ds-icon--sm {
-  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 20;
 }
 .ds-dashboard-toolbar__date-select > .ds-icon:first-child {
   color: var(--color-icon-subtle);
@@ -9175,9 +9175,6 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 }
 .ds-dashboard-toolbar__btn.is-active::after {
   background: transparent;
-}
-.ds-dashboard-toolbar__btn.is-active .ds-icon {
-  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
 .filter-overlay {
