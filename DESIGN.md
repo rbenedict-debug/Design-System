@@ -271,6 +271,15 @@ Easing: standard ease-in-out. Always respect `prefers-reduced-motion`.
 | Subnav subheader | `ds-subnav-subheader` | Settings subnav only — expandable group within a header |
 | Subnav button | `ds-subnav-button` | Leaf nav item; selected = brand blue bg + white text |
 
+### Filtering
+
+Always use both components together — `ds-filter` is the slide-over modal and `ds-filter-bar` is the applied-filters strip that sits between the toolbar and the table. `ds-filter-bar` is hidden when no filters are active.
+
+| Component | Selector | Notes |
+|---|---|---|
+| Filter modal | `ds-filter` | Slide-over panel; filter groups containing checkboxes, date ranges, numeric ranges; supports saved filter sets (namespaced per page via `savedSetsKey`) |
+| Applied filters bar | `ds-filter-bar` | Horizontal strip of active filter chips; hidden when filter count is 0; each chip is removable |
+
 ### Data / Dashboard
 
 | Component | Selector | Notes |
