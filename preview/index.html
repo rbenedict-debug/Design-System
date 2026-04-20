@@ -988,9 +988,31 @@
     #ag-sim-grid .ag-header-row {
       border: none;
     }
-    /* Hide AG Grid's native resize grip — DS header shim has its own */
+    /* AG Grid native resize handle — styled with DS visual bar, hover-only */
     #ag-sim-grid .ag-header-cell-resize {
-      display: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 16px;
+      cursor: col-resize;
+      z-index: 1;
+    }
+    #ag-sim-grid .ag-header-cell-resize::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 2px;
+      height: 14px;
+      background: var(--color-border-primary);
+      border-radius: 1px;
+      opacity: 0;
+      transition: opacity 150ms ease;
+    }
+    #ag-sim-grid .ag-header-cell:hover .ag-header-cell-resize::after {
+      opacity: 1;
     }
     /* Remove AG Grid's native floating filter row padding */
     #ag-sim-grid .ag-floating-filter {
@@ -10722,16 +10744,6 @@ mark.search-match {
 #ag-sim-grid .ds-table-header-cell.ds-table-pinned-left {
   border-right: none;
 }
-/* Resize bar: hidden by default, revealed on column header hover so the pipe
-   doesn't appear floating in the middle of the gap between column labels. */
-#ag-sim-grid .ds-table-header-cell__resize-bar {
-  opacity: 0;
-  transition: opacity 150ms ease;
-}
-#ag-sim-grid .ds-table-header-cell:hover .ds-table-header-cell__resize-bar {
-  opacity: 1;
-}
-
 /* ── Date Picker calendar mockup ─────────────────────────────────────────── */
 
 .ds-datepicker-cal-mock {
@@ -21674,21 +21686,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 params.column.addEventListener('filterChanged', this._filterChangedListener);
               }
 
-              // Resize handle only on non-pinned columns
-              if (!isPinned) {
-                var rightHandle = document.createElement('div');
-                rightHandle.className = 'ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active';
-                var resizeBar = document.createElement('span');
-                resizeBar.className = 'ds-table-header-cell__resize-bar';
-                rightHandle.appendChild(resizeBar);
-                rightHandle.addEventListener('mousedown', function(e) { self._onResizeStart(e); });
-                rightHandle.addEventListener('dblclick', function(e) {
-                  e.preventDefault();
-                  params.api.autoSizeColumn(params.column.getColId());
-                });
-                actions.appendChild(rightHandle);
-              }
-
               cell.appendChild(actions);
             }
 
@@ -21729,22 +21726,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               this._cb.classList.remove('ds-table-header-cell__checkbox--checked');
               this._cb.setAttribute('aria-checked', 'false');
             }
-          };
-          DsHeaderShim.prototype._onResizeStart = function(e) {
-            var params = this._params;
-            e.preventDefault(); e.stopPropagation();
-            var startX = e.clientX, startW = params.column.getActualWidth(), curW = startW;
-            function onMove(ev) {
-              curW = Math.max(50, startW + ev.clientX - startX);
-              params.api.setColumnWidth(params.column.getColId(), curW, false);
-            }
-            function onUp() {
-              params.api.setColumnWidth(params.column.getColId(), curW, true);
-              document.removeEventListener('mousemove', onMove);
-              document.removeEventListener('mouseup', onUp);
-            }
-            document.addEventListener('mousemove', onMove);
-            document.addEventListener('mouseup', onUp);
           };
           DsHeaderShim.prototype.getGui    = function() { return this._host; };
           DsHeaderShim.prototype.refresh   = function(p) { this._params = p; this._syncSort(); this._syncFilter(); return true; };
@@ -21938,6 +21919,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               headerName: 'Ticket #',
               width: 120,
               pinned: 'left',
+              resizable: false,
               sort: 'asc',
               filter: 'agTextColumnFilter',
               cellRenderer: makeDsRowCellWithContent(function(p) {
