@@ -21327,8 +21327,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <div class="filter-applied-bar__cards" id="ag-sim-filter-bar-cards" role="group" aria-label="Applied filters"></div>
           </div>
 
-          <!-- ── Row groups bar (ds-table-row-groups-bar) ─────────────────── -->
-          <div class="ds-table-row-groups-bar">
+          <!-- ── Row groups bar (ds-table-row-groups-bar) — hidden until a row group is active ── -->
+          <div class="ds-table-row-groups-bar" id="ag-sim-groups-bar" style="display:none;">
             <div class="ds-table-row-groups-bar__drop-zone">
               <span class="ds-icon ds-icon--xs ds-table-row-groups-bar__drag-icon" aria-hidden="true">cell_merge</span>
               <span class="ds-table-row-groups-bar__chips" id="ag-sim-group-chips"></span>
@@ -21396,7 +21396,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">cell_merge</span>
                   <span class="ds-column-panel__section-title">Row Groups</span>
                 </div>
-                <button type="button" class="ds-column-panel__add-btn">
+                <div id="ag-sim-group-panel-chips" style="display:none;padding:0 var(--spacing-md) var(--spacing-sm);flex-wrap:wrap;gap:var(--spacing-xs);"></div>
+                <button type="button" class="ds-column-panel__add-btn" onclick="agSimAddRowGroup()">
                   <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
                   Add Column
                 </button>
@@ -21409,7 +21410,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">functions</span>
                   <span class="ds-column-panel__section-title">Values</span>
                 </div>
-                <button type="button" class="ds-column-panel__add-btn">
+                <div id="ag-sim-values-panel-chips" style="display:none;padding:0 var(--spacing-md) var(--spacing-sm);flex-wrap:wrap;gap:var(--spacing-xs);"></div>
+                <button type="button" class="ds-column-panel__add-btn" onclick="agSimAddValue()">
                   <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
                   Add Column
                 </button>
@@ -21418,8 +21420,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div>
           </div>
 
-          <!-- ── Status bar (ds-table-status-bar) ─────────────────────────── -->
-          <div class="ds-table-status-bar">
+          <!-- ── Status bar (ds-table-status-bar) — hidden until values are added in the column panel ── -->
+          <div class="ds-table-status-bar" id="ag-sim-status-bar" style="display:none;">
             <div class="ds-table-status-bar__counts">
               <span class="ds-table-status-bar__stat">
                 <span class="ds-table-status-bar__stat-label">Rows:</span>
@@ -21551,10 +21553,10 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             this._params = params;
             var label      = params.displayName;
             var sortable   = params.enableSorting;
-            var hasMenu    = params.enableMenu;
             var hasFilter  = params.enableFilterButton || params.filtering;
             var isCheckbox = params.checkbox;
             var isRight    = params.align === 'right';
+            var isPinned   = !!(params.column.getPinned && params.column.getPinned());
 
             // Host wrapper — mirrors Angular host: display:block; height:100%
             this._host = document.createElement('div');
@@ -21564,14 +21566,17 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             cell.className = 'ds-table-header-cell'
               + (isRight ? ' ds-table-header-cell--right' : '')
               + (isCheckbox && !label ? ' ds-table-header-cell--checkbox-only' : '');
-            if (params.column.getPinned && params.column.getPinned() === 'left')  cell.classList.add('ds-table-pinned-left');
-            if (params.column.getPinned && params.column.getPinned() === 'right') cell.classList.add('ds-table-pinned-right');
+            // Only add pinned border class to non-checkbox pinned columns (checkbox never gets a right-border divider)
+            if (!isCheckbox && params.column.getPinned && params.column.getPinned() === 'left')  cell.classList.add('ds-table-pinned-left');
+            if (!isCheckbox && params.column.getPinned && params.column.getPinned() === 'right') cell.classList.add('ds-table-pinned-right');
             this._cell = cell;
 
-            // Left resize handle
-            var leftHandle = document.createElement('div');
-            leftHandle.className = 'ds-table-header-cell__resize-handle';
-            cell.appendChild(leftHandle);
+            // Left resize handle spacer — only for non-pinned, non-checkbox columns
+            if (!isCheckbox && !isPinned) {
+              var leftHandle = document.createElement('div');
+              leftHandle.className = 'ds-table-header-cell__resize-handle';
+              cell.appendChild(leftHandle);
+            }
 
             // Content
             var content = document.createElement('div');
@@ -21579,6 +21584,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               + (isRight ? ' ds-table-header-cell__content--right' : '');
 
             if (isCheckbox) {
+              content.style.justifyContent = 'center';
               this._cb     = document.createElement('div');
               this._cbIcon = document.createElement('span');
               this._cb.className = 'ds-table-header-cell__checkbox';
@@ -21621,55 +21627,46 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             }
             cell.appendChild(content);
 
-            // Trailing actions
-            var actions = document.createElement('div');
-            actions.className = 'ds-table-header-cell__actions';
-
-            if (hasMenu && !isCheckbox) {
-              var menuBtn = document.createElement('button');
-              menuBtn.type = 'button';
-              menuBtn.className = 'ds-icon-button ds-icon-button--icon ds-icon-button--sm';
-              menuBtn.setAttribute('aria-label', 'Column options');
-              var menuIcon = document.createElement('span');
-              menuIcon.className = 'ds-icon ds-table-header-cell__menu-icon';
-              menuIcon.textContent = 'more_vert';
-              menuBtn.appendChild(menuIcon);
-              menuBtn.addEventListener('click', function() { params.showColumnMenu(menuBtn); });
-              actions.appendChild(menuBtn);
-            }
-
-            if (hasFilter && !isCheckbox) {
-              var filterBtn = document.createElement('button');
-              filterBtn.type = 'button';
-              filterBtn.className = 'ds-icon-button ds-icon-button--icon ds-icon-button--sm';
-              filterBtn.setAttribute('aria-label', 'Filter column');
-              this._filterIcon = document.createElement('span');
-              this._filterIcon.className = 'ds-icon ds-icon--filled';
-              this._filterIcon.textContent = 'filter_alt';
-              filterBtn.appendChild(this._filterIcon);
-              if (params.showFilter) {
-                filterBtn.addEventListener('click', function() { params.showFilter(filterBtn); });
-              }
-              actions.appendChild(filterBtn);
-              this._filterChangedListener = function() { self._syncFilter(); };
-              params.column.addEventListener('filterChanged', this._filterChangedListener);
-            }
-
+            // Trailing actions — omitted entirely for checkbox column; filter+resize for others
             if (!isCheckbox) {
-              var rightHandle = document.createElement('div');
-              rightHandle.className = 'ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active';
-              var resizeBar = document.createElement('span');
-              resizeBar.className = 'ds-table-header-cell__resize-bar';
-              rightHandle.appendChild(resizeBar);
-              rightHandle.addEventListener('mousedown', function(e) { self._onResizeStart(e); });
-              rightHandle.addEventListener('dblclick', function(e) {
-                e.preventDefault();
-                params.api.autoSizeColumn(params.column.getColId());
-              });
-              actions.appendChild(rightHandle);
+              var actions = document.createElement('div');
+              actions.className = 'ds-table-header-cell__actions';
+
+              if (hasFilter) {
+                var filterBtn = document.createElement('button');
+                filterBtn.type = 'button';
+                filterBtn.className = 'ds-icon-button ds-icon-button--icon ds-icon-button--sm';
+                filterBtn.setAttribute('aria-label', 'Filter column');
+                this._filterIcon = document.createElement('span');
+                this._filterIcon.className = 'ds-icon ds-icon--filled';
+                this._filterIcon.textContent = 'filter_alt';
+                filterBtn.appendChild(this._filterIcon);
+                if (params.showFilter) {
+                  filterBtn.addEventListener('click', function() { params.showFilter(filterBtn); });
+                }
+                actions.appendChild(filterBtn);
+                this._filterChangedListener = function() { self._syncFilter(); };
+                params.column.addEventListener('filterChanged', this._filterChangedListener);
+              }
+
+              // Resize handle only on non-pinned columns
+              if (!isPinned) {
+                var rightHandle = document.createElement('div');
+                rightHandle.className = 'ds-table-header-cell__resize-handle ds-table-header-cell__resize-handle--trailing ds-table-header-cell__resize-handle--active';
+                var resizeBar = document.createElement('span');
+                resizeBar.className = 'ds-table-header-cell__resize-bar';
+                rightHandle.appendChild(resizeBar);
+                rightHandle.addEventListener('mousedown', function(e) { self._onResizeStart(e); });
+                rightHandle.addEventListener('dblclick', function(e) {
+                  e.preventDefault();
+                  params.api.autoSizeColumn(params.column.getColId());
+                });
+                actions.appendChild(rightHandle);
+              }
+
+              cell.appendChild(actions);
             }
 
-            cell.appendChild(actions);
             this._host.appendChild(cell);
           };
           DsHeaderShim.prototype._syncSort = function() {
@@ -21745,12 +21742,16 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             this._host.style.cssText = 'display:block;height:100%;';
             this._cell = document.createElement('div');
             this._cell.className = 'ds-table-row-cell';
-            if (params.column && params.column.getPinned) {
+            if (isCheckbox) {
+              // Checkbox column: fixed width, centered, no pinned-left border (no divider between checkbox and Ticket #)
+              this._cell.classList.add('ds-table-row-cell--checkbox-only');
+            } else if (params.column && params.column.getPinned) {
               if (params.column.getPinned() === 'left')  this._cell.classList.add('ds-table-pinned-left');
               if (params.column.getPinned() === 'right') this._cell.classList.add('ds-table-pinned-right');
             }
             this._content = document.createElement('div');
             this._content.className = 'ds-table-row-cell__content' + (isRight ? ' ds-table-row-cell__content--right' : '');
+            if (isCheckbox) this._content.style.justifyContent = 'center';
             this._cell.appendChild(this._content);
             this._host.appendChild(this._cell);
 
@@ -22289,6 +22290,128 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             }
             if (bulkBtn) bulkBtn.style.display = count > 0 ? 'flex' : 'none';
           }
+
+          /* ── Row groups bar — show when first group is added ─────────────── */
+          var agSimGroupFields = [];
+          var GROUP_FIELD_LABELS = ['Status', 'Priority', 'Issue Type', 'Assigned To'];
+          window.agSimAddRowGroup = function() {
+            if (agSimGroupFields.length >= GROUP_FIELD_LABELS.length) return;
+            var label = GROUP_FIELD_LABELS[agSimGroupFields.length];
+            agSimGroupFields.push(label);
+
+            // Show the row groups bar
+            var bar = document.getElementById('ag-sim-groups-bar');
+            if (bar) bar.style.display = '';
+
+            // Add chip to bar
+            var chips = document.getElementById('ag-sim-group-chips');
+            if (chips) {
+              var chip = document.createElement('div');
+              chip.className = 'ds-chip';
+              chip.setAttribute('role', 'option');
+              chip.setAttribute('tabindex', '0');
+              chip.setAttribute('data-group-label', label);
+              chip.innerHTML = '<span class="ds-chip__label">' + label + '</span>'
+                + '<button type="button" class="ds-chip__remove" aria-label="Remove ' + label + ' group" onclick="agSimRemoveRowGroup(this,\'' + label + '\')">'
+                + '<span class="ds-icon ds-icon--sm">close</span></button>';
+              chips.appendChild(chip);
+            }
+
+            // Add chip to panel
+            var panelChips = document.getElementById('ag-sim-group-panel-chips');
+            if (panelChips) {
+              panelChips.style.display = 'flex';
+              var pc = document.createElement('div');
+              pc.className = 'ds-chip';
+              pc.setAttribute('role', 'option');
+              pc.setAttribute('tabindex', '0');
+              pc.setAttribute('data-group-label', label);
+              pc.innerHTML = '<span class="ds-chip__label">' + label + '</span>'
+                + '<button type="button" class="ds-chip__remove" aria-label="Remove ' + label + '" onclick="agSimRemoveRowGroup(this,\'' + label + '\')">'
+                + '<span class="ds-icon ds-icon--sm">close</span></button>';
+              panelChips.appendChild(pc);
+            }
+          };
+          window.agSimRemoveRowGroup = function(removeBtn, label) {
+            agSimGroupFields = agSimGroupFields.filter(function(f) { return f !== label; });
+            // Remove chip from bar
+            var chips = document.getElementById('ag-sim-group-chips');
+            if (chips) {
+              Array.from(chips.querySelectorAll('.ds-chip[data-group-label="' + label + '"]')).forEach(function(c) { c.remove(); });
+            }
+            // Remove chip from panel
+            var panelChips = document.getElementById('ag-sim-group-panel-chips');
+            if (panelChips) {
+              Array.from(panelChips.querySelectorAll('.ds-chip[data-group-label="' + label + '"]')).forEach(function(c) { c.remove(); });
+              if (!panelChips.querySelector('.ds-chip')) panelChips.style.display = 'none';
+            }
+            // Hide bar if no groups left
+            if (agSimGroupFields.length === 0) {
+              var bar = document.getElementById('ag-sim-groups-bar');
+              if (bar) bar.style.display = 'none';
+            }
+          };
+
+          /* ── Status bar / Values — show when first value column is added ─── */
+          var agSimValueFields = [];
+          var VALUE_FIELD_LABELS = ['Revenue (Sum)', 'Response (Avg)', 'Satisfaction (Avg)'];
+          var VALUE_FIELD_DATA   = [
+            { label: 'Sum', value: '$425,000' },
+            { label: 'Average', value: '18.4h' },
+            { label: 'Average', value: '3.8' },
+          ];
+          window.agSimAddValue = function() {
+            if (agSimValueFields.length >= VALUE_FIELD_LABELS.length) return;
+            var idx = agSimValueFields.length;
+            var label = VALUE_FIELD_LABELS[idx];
+            agSimValueFields.push(label);
+
+            // Show the status bar
+            var statusBar = document.getElementById('ag-sim-status-bar');
+            if (statusBar) statusBar.style.display = '';
+
+            // Add stat to aggregates section
+            var agg = statusBar ? statusBar.querySelector('.ds-table-status-bar__aggregates') : null;
+            if (agg) {
+              var stat = document.createElement('span');
+              stat.className = 'ds-table-status-bar__stat';
+              stat.setAttribute('data-value-label', label);
+              stat.innerHTML = '<span class="ds-table-status-bar__stat-label">' + VALUE_FIELD_DATA[idx].label + ':</span>'
+                + '<span class="ds-table-status-bar__stat-value">' + VALUE_FIELD_DATA[idx].value + '</span>';
+              agg.appendChild(stat);
+            }
+
+            // Add chip to panel
+            var panelChips = document.getElementById('ag-sim-values-panel-chips');
+            if (panelChips) {
+              panelChips.style.display = 'flex';
+              var pc = document.createElement('div');
+              pc.className = 'ds-chip';
+              pc.setAttribute('role', 'option');
+              pc.setAttribute('tabindex', '0');
+              pc.setAttribute('data-value-label', label);
+              pc.innerHTML = '<span class="ds-chip__label">' + label + '</span>'
+                + '<button type="button" class="ds-chip__remove" aria-label="Remove ' + label + '" onclick="agSimRemoveValue(this,\'' + label + '\')">'
+                + '<span class="ds-icon ds-icon--sm">close</span></button>';
+              panelChips.appendChild(pc);
+            }
+          };
+          window.agSimRemoveValue = function(removeBtn, label) {
+            agSimValueFields = agSimValueFields.filter(function(f) { return f !== label; });
+            // Remove stat from aggregates
+            var statusBar = document.getElementById('ag-sim-status-bar');
+            if (statusBar) {
+              var agg = statusBar.querySelector('.ds-table-status-bar__aggregates');
+              if (agg) Array.from(agg.querySelectorAll('[data-value-label="' + label + '"]')).forEach(function(e) { e.remove(); });
+              if (agSimValueFields.length === 0) statusBar.style.display = 'none';
+            }
+            // Remove chip from panel
+            var panelChips = document.getElementById('ag-sim-values-panel-chips');
+            if (panelChips) {
+              Array.from(panelChips.querySelectorAll('[data-value-label="' + label + '"]')).forEach(function(c) { c.remove(); });
+              if (!panelChips.querySelector('.ds-chip')) panelChips.style.display = 'none';
+            }
+          };
 
           /* ── Column panel (ds-column-panel) ──────────────────────────────── */
           window.agSimToggleCols = function(btn) {
