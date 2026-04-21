@@ -199,13 +199,16 @@
     // parent scroller and the header simply sits above without needing sticky.
     overflow-x: clip;          // no x scroll container — tiles clip at layout edge
     overflow-y: auto;          // tile area scrolls vertically
-    overflow-clip-margin: var(--spacing-sm);  // 8px — lets box-shadows bleed past the clip edge
+    overflow-clip-margin: var(--spacing-sm);  // 8px — lets box-shadows bleed past the clip edge (Chrome/Edge)
     flex: 1 1 0;               // fill remaining height in ds-page-content flex column
     min-height: 0;
-    // Right + bottom padding give tile box-shadows breathing room.
-    // No left padding — tiles align with toolbar and heading.
-    padding: 0 var(--spacing-lg) var(--spacing-lg) 0;
-    scrollbar-width: thin;
+    // Left padding gives tile box-shadows room to render on the left edge (overflow-clip-margin
+    // is not supported in Safari, so physical padding is the cross-browser solution).
+    // Right + bottom padding give tile box-shadows breathing room on other sides.
+    padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-sm);
+    // No scrollbar-width — lets macOS use native overlay scrollbars (no space reserved).
+    // scrollbar-color controls the fade-in on hover without disabling native overlay mode.
+    // Never define ::-webkit-scrollbar here — that disables native overlay behavior.
     scrollbar-color: transparent transparent;
     &:hover { scrollbar-color: var(--color-surface-scroll) transparent; }
   }
