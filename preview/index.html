@@ -10579,10 +10579,6 @@ mark.search-match {
 .filter-applied-bar__label {
   display: none;
 }
-#ds-sim-dashboard-applied-bar .ds-card-item,
-#dashboard-page-applied-bar .ds-card-item {
-  box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
-}
 
 .filter-applied-bar__cards {
   display: flex;
@@ -17468,8 +17464,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     service:    { label: 'Service Overview', groups: FILTER_GROUPS_SERVICE_OVERVIEW, savedSetsKey: 'onflo-ds-preview-filter-sets-service',     appliedBarId: 'ds-preview-filter-applied-bar-service',   appliedCardsId: 'ds-preview-filter-applied-cards-service',   badgeId: 'ds-preview-filter-badge-service'  },
     dashboard:  { label: 'Dashboard',        groups: FILTER_GROUPS_DASHBOARD,        savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard',   appliedBarId: 'ds-sim-dashboard-applied-bar',            appliedCardsId: 'ds-sim-dashboard-applied-cards',            filterBtnId: 'sim-filter-btn',          filterBtnActiveClass: 'is-active',   badgeId: 'sim-dashboard-filter-badge'    },
     'table-sim':     { label: 'Ticket Table',          groups: FILTER_GROUPS_TABLE_SIM,   savedSetsKey: 'onflo-ds-preview-filter-sets-table-sim',      appliedBarId: 'ag-sim-filter-bar',               appliedCardsId: 'ag-sim-filter-bar-cards',               filterBtnId: 'ag-sim-filter-btn',          filterBtnActiveClass: 'is-selected' },
-    'dashboard-page': { label: 'Dashboard Page',         groups: FILTER_GROUPS_DASHBOARD,   savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard-page', appliedBarId: 'dashboard-page-applied-bar',      appliedCardsId: 'dashboard-page-applied-cards',          filterBtnId: 'dashboard-page-filter-btn',  filterBtnActiveClass: 'is-active',  badgeId: 'dashboard-page-filter-badge' },
-    'table-page':     { label: 'Table Page',             groups: FILTER_GROUPS_TABLE_SIM,   savedSetsKey: 'onflo-ds-preview-filter-sets-table-page',     appliedBarId: 'table-page-applied-bar',          appliedCardsId: 'table-page-applied-cards',              filterBtnId: 'table-page-filter-btn',      filterBtnActiveClass: 'is-selected' },
+    'dashboard-page': { label: 'Dashboard Page',         groups: FILTER_GROUPS_DASHBOARD,   savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard-page', appliedBarId: 'dashboard-page-applied-bar',      appliedCardsId: 'dashboard-page-applied-cards',          filterBtnId: 'dashboard-page-filter-btn',  badgeId: 'dashboard-page-filter-badge' },
+    'table-page':     { label: 'Table Page',             groups: FILTER_GROUPS_TABLE_SIM,   savedSetsKey: 'onflo-ds-preview-filter-sets-table-page',     appliedBarId: 'table-page-applied-bar',          appliedCardsId: 'table-page-applied-cards',              filterBtnId: 'table-page-filter-btn',      badgeId: 'table-page-filter-badge' },
   };
 
   let activeContext      = 'assets';
@@ -18341,13 +18337,13 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     const bar      = $id(ctx.appliedBarId);
     const cardsEl  = $id(ctx.appliedCardsId);
     const filterBtn = ctx.filterBtnId ? $id(ctx.filterBtnId) : null;
-    const activeClass = ctx.filterBtnActiveClass || 'is-selected';
+    const activeClass = ctx.filterBtnActiveClass || null;
     const badge    = ctx.badgeId ? $id(ctx.badgeId) : null;
     const hasFilters = state.selected.size > 0;
 
     if (!hasFilters) {
       if (bar) bar.style.display = 'none';
-      if (filterBtn) { filterBtn.classList.remove(activeClass); filterBtn.setAttribute('aria-pressed', 'false'); }
+      if (filterBtn) { if (activeClass) filterBtn.classList.remove(activeClass); filterBtn.setAttribute('aria-pressed', 'false'); }
       if (badge) { badge.hidden = true; badge.textContent = ''; }
       return;
     }
@@ -18377,7 +18373,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     }).join('');
 
     if (bar) bar.style.display = '';
-    if (filterBtn) { filterBtn.classList.add(activeClass); filterBtn.setAttribute('aria-pressed', 'true'); }
+    if (filterBtn) { if (activeClass) filterBtn.classList.add(activeClass); filterBtn.setAttribute('aria-pressed', 'true'); }
     if (badge) { const n = state.selected.size; badge.textContent = n > 99 ? '99+' : String(n); badge.hidden = false; }
   }
 
@@ -18393,7 +18389,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     const prevBar = $id(prevCtx.appliedBarId);
     if (prevBar) prevBar.style.display = 'none';
     const prevBtn = prevCtx.filterBtnId ? $id(prevCtx.filterBtnId) : null;
-    if (prevBtn) { prevBtn.classList.remove(prevCtx.filterBtnActiveClass || 'is-selected'); prevBtn.setAttribute('aria-pressed', 'false'); }
+    const prevActiveClass = prevCtx.filterBtnActiveClass || null;
+    if (prevBtn) { if (prevActiveClass) prevBtn.classList.remove(prevActiveClass); prevBtn.setAttribute('aria-pressed', 'false'); }
     const prevBadge = prevCtx.badgeId ? $id(prevCtx.badgeId) : null;
     if (prevBadge) { prevBadge.hidden = true; prevBadge.textContent = ''; }
     activeContext = contextKey; activeFilterGroups = CONTEXTS[contextKey].groups;
@@ -23703,9 +23700,12 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                                 <input class="ds-input__control" type="search" placeholder="Search tickets…" aria-label="Search tickets">
                               </div>
                             </div>
-                            <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" id="table-page-filter-btn" type="button" aria-pressed="false" aria-label="Filter tickets" onclick="dsPreviewFilter.open('table-page')">
-                              <span class="ds-icon ds-icon--filled">filter_alt</span>
-                            </button>
+                            <div class="ds-badge-indicator__host">
+                              <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" id="table-page-filter-btn" type="button" aria-pressed="false" aria-label="Filter tickets" onclick="dsPreviewFilter.open('table-page')">
+                                <span class="ds-icon">filter_alt</span>
+                              </button>
+                              <div class="ds-badge-indicator" id="table-page-filter-badge" hidden aria-hidden="true"></div>
+                            </div>
                             <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Column settings">
                               <span class="ds-icon ds-icon--filled">settings</span>
                             </button>
