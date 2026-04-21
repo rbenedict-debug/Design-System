@@ -11075,24 +11075,22 @@ mark.search-match {
   background: transparent;
   border-radius: 0;
   box-shadow: none;
-  overflow: visible;
-  flex: none;
-  min-height: unset;
-  padding: 0 var(--spacing-lg, 16px) var(--spacing-lg, 16px) 0;
-}
-.ds-page-content--dashboard {
+  overflow-x: clip;
   overflow-y: auto;
-  gap: 0;
+  flex: 1 1 0;
+  min-height: 0;
+  padding: 0 var(--spacing-lg, 16px) var(--spacing-lg, 16px) 0;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
-.ds-page-content--dashboard:hover {
+.ds-page-content__main--dashboard:hover {
   scrollbar-color: var(--color-surface-scroll) transparent;
 }
+.ds-page-content--dashboard {
+  overflow: hidden;
+  gap: 0;
+}
 .ds-page-content__dashboard-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
   background: var(--color-surface-default, #f3f4f5);
   display: flex;
   flex-direction: column;
@@ -23222,8 +23220,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             <h2 class="section-title">Dashboard Page</h2>
             <span class="section-source">CSS pattern · layout/page-layout/ · see .claude/specs/specs-layout.md §Page Layouts, specs-dashboard.md</span>
           </div>
-          <p class="section-desc">Three companion classes work together: <code>ds-page-content--dashboard</code> on <code>ds-page-content</code> makes it the scroll container; <code>ds-page-content__dashboard-header</code> wraps the heading + toolbar and stays sticky; <code>ds-page-content__main--dashboard</code> is the tile canvas with no card shell — tiles float directly on the page floor. Never use plain <code>__main</code> on a dashboard page and never put the toolbar inside <code>__main--dashboard</code>.</p>
-          <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px);">
+          <p class="section-desc">Three companion classes work together: <code>ds-page-content--dashboard</code> clips overflow on <code>ds-page-content</code>; <code>ds-page-content__dashboard-header</code> wraps the heading + toolbar as a static block above the scroller; <code>ds-page-content__main--dashboard</code> is the tile canvas and the scroll container — tile box-shadows are never clipped because scrolling is owned here. Never use plain <code>__main</code> on a dashboard page and never put the toolbar inside <code>__main--dashboard</code>.</p>
+          <div class="component-demo" style="padding: 0; overflow: hidden; border-radius: var(--radius-md, 8px); height: 640px;">
             <div class="ds-page-layout">
               <!-- Nav sidebar -->
               <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">

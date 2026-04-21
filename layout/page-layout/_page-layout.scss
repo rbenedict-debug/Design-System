@@ -175,8 +175,11 @@
   // (no border-radius, no box-shadow) so ds-metric-card and ds-chart tiles
   // float directly on the page-floor background.
   //
-  // Scrolling is owned by the parent ds-page-content--dashboard, not this
-  // element — so tile box-shadows are never clipped by a scroll container.
+  // This element IS the scroll container — tile box-shadows scroll with the tiles
+  // so they are never clipped. overflow-x: clip trims left/right shadow bleed
+  // without creating an x-scroll container (valid since clip ≠ visible).
+  // ds-page-content--dashboard simply clips its flex column (overflow: hidden);
+  // ds-page-content__dashboard-header is a static block above the scroller.
   //
   // Usage (required companion classes):
   //   <main class="ds-page-content ds-page-content--dashboard">
@@ -192,47 +195,44 @@
     background: transparent;
     border-radius: 0;
     box-shadow: none;
-    overflow: visible;  // parent ds-page-content--dashboard is the scroll container
-    flex: none;         // natural height — tiles determine the scrollable length
-    min-height: unset;
-    // Right and bottom padding give tile box-shadows breathing room so they
-    // aren't clipped at the container edge. No left padding — tiles must align
-    // with the toolbar and heading (both start at the scroll container content edge).
+    // Tile canvas is its own scroll container — shadows are never clipped by a
+    // parent scroller and the header simply sits above without needing sticky.
+    overflow-x: clip;   // clip left/right shadows without creating an x scroll container
+    overflow-y: auto;   // tile area scrolls vertically
+    flex: 1 1 0;        // fill remaining height in ds-page-content flex column
+    min-height: 0;
+    // Right + bottom padding give tile box-shadows breathing room.
+    // No left padding — tiles align with toolbar and heading.
     padding: 0 var(--spacing-lg) var(--spacing-lg) 0;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    &:hover { scrollbar-color: var(--color-surface-scroll) transparent; }
   }
 }
 
-// ── Dashboard page: scroll container + sticky header ──────────────────────
+// ── Dashboard page: flex column wrapper + static header ───────────────────
 //
 // Add ds-page-content--dashboard to ds-page-content on dashboard pages.
-// This makes ds-page-content the scroll container, keeping tile shadows
-// unclipped (a scroll container always clips its children's box-shadows).
+// This clips the flex column (overflow: hidden) — scroll is owned by __main--dashboard.
 //
 // Wrap ds-page-content__heading + ds-dashboard-toolbar in
-// ds-page-content__dashboard-header so both stay pinned while tiles scroll.
+// ds-page-content__dashboard-header — it sits as a static block above the
+// scrolling tile canvas, no sticky positioning needed.
 
 .ds-page-content--dashboard {
-  overflow-y: auto;
-  gap: 0;  // gap replaced by padding-bottom on dashboard-header (see below)
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-  &:hover { scrollbar-color: var(--color-surface-scroll) transparent; }
+  overflow: hidden;  // not the scroll container — __main--dashboard scrolls instead
+  gap: 0;            // gap replaced by padding-bottom on dashboard-header (see below)
 }
 
-// Z-index stacking: dashboard sticky header sits above scrolling tile content.
-// z-index: 10 — same layer as other fixed/sticky page chrome (below dialogs/modals).
-// If adding new overlaying elements: dialogs/modals use 100+, tooltips 50+.
+// Dashboard header sits above __main--dashboard (the scroll container).
+// No sticky needed — it is a normal flex child above the scroller.
+// padding-bottom replaces the parent gap (gap: 0 on ds-page-content--dashboard).
 .ds-page-content__dashboard-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
   background: var(--color-surface-default);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
   flex-shrink: 0;
-  // padding-bottom replaces the parent gap AND extends the opaque background
-  // into the transition zone so tile shadows don't bleed through when scrolling.
   padding-bottom: var(--spacing-lg);
 }
 
