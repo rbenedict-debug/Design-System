@@ -17463,7 +17463,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
     assets:     { label: 'Assets Table',     groups: FILTER_GROUPS_ASSETS,          savedSetsKey: 'onflo-ds-preview-filter-sets-assets',      appliedBarId: 'ds-preview-filter-applied-bar-assets',    appliedCardsId: 'ds-preview-filter-applied-cards-assets',    badgeId: 'ds-preview-filter-badge-assets'   },
     service:    { label: 'Service Overview', groups: FILTER_GROUPS_SERVICE_OVERVIEW, savedSetsKey: 'onflo-ds-preview-filter-sets-service',     appliedBarId: 'ds-preview-filter-applied-bar-service',   appliedCardsId: 'ds-preview-filter-applied-cards-service',   badgeId: 'ds-preview-filter-badge-service'  },
     dashboard:  { label: 'Dashboard',        groups: FILTER_GROUPS_DASHBOARD,        savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard',   appliedBarId: 'ds-sim-dashboard-applied-bar',            appliedCardsId: 'ds-sim-dashboard-applied-cards',            filterBtnId: 'sim-filter-btn',     filterBtnActiveClass: 'is-active'    },
-    'table-sim': { label: 'Ticket Table',   groups: FILTER_GROUPS_TABLE_SIM,        savedSetsKey: 'onflo-ds-preview-filter-sets-table-sim',   appliedBarId: 'ag-sim-filter-bar',                       appliedCardsId: 'ag-sim-filter-bar-cards',                   filterBtnId: 'ag-sim-filter-btn',  filterBtnActiveClass: 'is-selected'  },
+    'table-sim':     { label: 'Ticket Table',          groups: FILTER_GROUPS_TABLE_SIM,   savedSetsKey: 'onflo-ds-preview-filter-sets-table-sim',      appliedBarId: 'ag-sim-filter-bar',               appliedCardsId: 'ag-sim-filter-bar-cards',               filterBtnId: 'ag-sim-filter-btn',          filterBtnActiveClass: 'is-selected' },
+    'dashboard-page': { label: 'Dashboard Page',         groups: FILTER_GROUPS_DASHBOARD,   savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard-page', appliedBarId: 'dashboard-page-applied-bar',      appliedCardsId: 'dashboard-page-applied-cards',          filterBtnId: 'dashboard-page-filter-btn',  filterBtnActiveClass: 'is-active'   },
+    'table-page':     { label: 'Table Page',             groups: FILTER_GROUPS_TABLE_SIM,   savedSetsKey: 'onflo-ds-preview-filter-sets-table-page',     appliedBarId: 'table-page-applied-bar',          appliedCardsId: 'table-page-applied-cards',              filterBtnId: 'table-page-filter-btn',      filterBtnActiveClass: 'is-selected' },
   };
 
   let activeContext      = 'assets';
@@ -18591,6 +18593,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
   document.addEventListener('DOMContentLoaded', function() {
     wireAppliedBar('ds-sim-dashboard-applied-cards');
     wireAppliedBar('ag-sim-filter-bar-cards');
+    wireAppliedBar('dashboard-page-applied-cards');
+    wireAppliedBar('table-page-applied-cards');
   });
 
   // Close on scrim click
@@ -23335,13 +23339,16 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
                             </div>
                           </div>
-                          <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter">
+                          <button class="ds-dashboard-toolbar__btn" id="dashboard-page-filter-btn" type="button" aria-label="Filter" onclick="dsPreviewFilter.open('dashboard-page')">
                             <span class="ds-icon" aria-hidden="true">filter_alt</span>
                           </button>
                           <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
                             <span class="ds-icon" aria-hidden="true">more_vert</span>
                           </button>
                         </div>
+                      </div>
+                      <div id="dashboard-page-applied-bar" class="filter-applied-bar" style="display:none; margin-top:8px;">
+                        <div class="filter-applied-bar__cards" id="dashboard-page-applied-cards" role="group" aria-label="Applied filters"></div>
                       </div>
                     </div>
                     <!-- Dashboard tile canvas — no card shell, tiles float on page floor -->
@@ -23686,7 +23693,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                                 <input class="ds-input__control" type="search" placeholder="Search tickets…" aria-label="Search tickets">
                               </div>
                             </div>
-                            <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Filter tickets">
+                            <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" id="table-page-filter-btn" type="button" aria-pressed="false" aria-label="Filter tickets" onclick="dsPreviewFilter.open('table-page')">
                               <span class="ds-icon ds-icon--filled">filter_alt</span>
                             </button>
                             <button class="ds-icon-button ds-icon-button-toggle ds-icon-button--outlined" type="button" aria-pressed="false" aria-label="Column settings">
@@ -23696,6 +23703,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <span class="ds-icon">download</span>
                             </button>
                           </div>
+                        </div>
+                        <div id="table-page-applied-bar" class="filter-applied-bar" style="display:none;">
+                          <div class="filter-applied-bar__cards" id="table-page-applied-cards" role="group" aria-label="Applied filters"></div>
                         </div>
 
                         <!-- Header row -->
