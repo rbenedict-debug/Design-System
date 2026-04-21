@@ -197,9 +197,10 @@
     box-shadow: none;
     // Tile canvas is its own scroll container — shadows are never clipped by a
     // parent scroller and the header simply sits above without needing sticky.
-    overflow-x: clip;   // clip left/right shadows without creating an x scroll container
-    overflow-y: auto;   // tile area scrolls vertically
-    flex: 1 1 0;        // fill remaining height in ds-page-content flex column
+    overflow-x: clip;          // no x scroll container — tiles clip at layout edge
+    overflow-y: auto;          // tile area scrolls vertically
+    overflow-clip-margin: var(--spacing-sm);  // 8px — lets box-shadows bleed past the clip edge
+    flex: 1 1 0;               // fill remaining height in ds-page-content flex column
     min-height: 0;
     // Right + bottom padding give tile box-shadows breathing room.
     // No left padding — tiles align with toolbar and heading.
