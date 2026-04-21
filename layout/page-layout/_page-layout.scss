@@ -204,8 +204,9 @@
     min-height: 0;
     // Left padding gives tile box-shadows room to render on the left edge (overflow-clip-margin
     // is not supported in Safari, so physical padding is the cross-browser solution).
+    // 12px > max shadow spread (8px) — guaranteed clearance in all browsers.
     // Right + bottom padding give tile box-shadows breathing room on other sides.
-    padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-sm);
+    padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
     // No scrollbar-width — lets macOS use native overlay scrollbars (no space reserved).
     // scrollbar-color controls the fade-in on hover without disabling native overlay mode.
     // Never define ::-webkit-scrollbar here — that disables native overlay behavior.
