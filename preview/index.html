@@ -10579,6 +10579,10 @@ mark.search-match {
 .filter-applied-bar__label {
   display: none;
 }
+#ds-sim-dashboard-applied-bar .ds-card-item,
+#dashboard-page-applied-bar .ds-card-item {
+  box-shadow: 0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);
+}
 
 .filter-applied-bar__cards {
   display: flex;
@@ -17462,9 +17466,9 @@ Source: <code>components/datepicker/_datepicker.scss</code>
   const CONTEXTS = {
     assets:     { label: 'Assets Table',     groups: FILTER_GROUPS_ASSETS,          savedSetsKey: 'onflo-ds-preview-filter-sets-assets',      appliedBarId: 'ds-preview-filter-applied-bar-assets',    appliedCardsId: 'ds-preview-filter-applied-cards-assets',    badgeId: 'ds-preview-filter-badge-assets'   },
     service:    { label: 'Service Overview', groups: FILTER_GROUPS_SERVICE_OVERVIEW, savedSetsKey: 'onflo-ds-preview-filter-sets-service',     appliedBarId: 'ds-preview-filter-applied-bar-service',   appliedCardsId: 'ds-preview-filter-applied-cards-service',   badgeId: 'ds-preview-filter-badge-service'  },
-    dashboard:  { label: 'Dashboard',        groups: FILTER_GROUPS_DASHBOARD,        savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard',   appliedBarId: 'ds-sim-dashboard-applied-bar',            appliedCardsId: 'ds-sim-dashboard-applied-cards',            filterBtnId: 'sim-filter-btn',     filterBtnActiveClass: 'is-active'    },
+    dashboard:  { label: 'Dashboard',        groups: FILTER_GROUPS_DASHBOARD,        savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard',   appliedBarId: 'ds-sim-dashboard-applied-bar',            appliedCardsId: 'ds-sim-dashboard-applied-cards',            filterBtnId: 'sim-filter-btn',          filterBtnActiveClass: 'is-active',   badgeId: 'sim-dashboard-filter-badge'    },
     'table-sim':     { label: 'Ticket Table',          groups: FILTER_GROUPS_TABLE_SIM,   savedSetsKey: 'onflo-ds-preview-filter-sets-table-sim',      appliedBarId: 'ag-sim-filter-bar',               appliedCardsId: 'ag-sim-filter-bar-cards',               filterBtnId: 'ag-sim-filter-btn',          filterBtnActiveClass: 'is-selected' },
-    'dashboard-page': { label: 'Dashboard Page',         groups: FILTER_GROUPS_DASHBOARD,   savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard-page', appliedBarId: 'dashboard-page-applied-bar',      appliedCardsId: 'dashboard-page-applied-cards',          filterBtnId: 'dashboard-page-filter-btn',  filterBtnActiveClass: 'is-active'   },
+    'dashboard-page': { label: 'Dashboard Page',         groups: FILTER_GROUPS_DASHBOARD,   savedSetsKey: 'onflo-ds-preview-filter-sets-dashboard-page', appliedBarId: 'dashboard-page-applied-bar',      appliedCardsId: 'dashboard-page-applied-cards',          filterBtnId: 'dashboard-page-filter-btn',  filterBtnActiveClass: 'is-active',  badgeId: 'dashboard-page-filter-badge' },
     'table-page':     { label: 'Table Page',             groups: FILTER_GROUPS_TABLE_SIM,   savedSetsKey: 'onflo-ds-preview-filter-sets-table-page',     appliedBarId: 'table-page-applied-bar',          appliedCardsId: 'table-page-applied-cards',              filterBtnId: 'table-page-filter-btn',      filterBtnActiveClass: 'is-selected' },
   };
 
@@ -19117,9 +19121,12 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                     <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
                   </div>
                 </div>
-                <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" id="sim-filter-btn" onclick="dsPreviewFilter.open('dashboard')">
-                  <span class="ds-icon" aria-hidden="true">filter_alt</span>
-                </button>
+                <div class="ds-badge-indicator__host">
+                  <button class="ds-dashboard-toolbar__btn" type="button" aria-label="Filter" id="sim-filter-btn" onclick="dsPreviewFilter.open('dashboard')">
+                    <span class="ds-icon" aria-hidden="true">filter_alt</span>
+                  </button>
+                  <div class="ds-badge-indicator" id="sim-dashboard-filter-badge" hidden aria-hidden="true"></div>
+                </div>
                 <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
                   <span class="ds-icon" aria-hidden="true">more_vert</span>
                 </button>
@@ -19127,7 +19134,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             </div>
 
             <!-- Dashboard filter applied bar -->
-            <div id="ds-sim-dashboard-applied-bar" class="filter-applied-bar" style="display:none; background:transparent; border-bottom:none; padding:0 0 var(--spacing-lg); box-shadow:0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
+            <div id="ds-sim-dashboard-applied-bar" class="filter-applied-bar" style="display:none; background:transparent; border-bottom:none; padding:0 0 var(--spacing-lg);">
               <div class="filter-applied-bar__cards" id="ds-sim-dashboard-applied-cards" role="group" aria-label="Applied filters"></div>
             </div>
 
@@ -23339,15 +23346,18 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                               <button class="ds-menu__item ds-menu__item--indent" role="menuitemradio" aria-checked="false" onclick="selectDashboardDate(this)">Custom range</button>
                             </div>
                           </div>
-                          <button class="ds-dashboard-toolbar__btn" id="dashboard-page-filter-btn" type="button" aria-label="Filter" onclick="dsPreviewFilter.open('dashboard-page')">
-                            <span class="ds-icon" aria-hidden="true">filter_alt</span>
-                          </button>
+                          <div class="ds-badge-indicator__host">
+                            <button class="ds-dashboard-toolbar__btn" id="dashboard-page-filter-btn" type="button" aria-label="Filter" onclick="dsPreviewFilter.open('dashboard-page')">
+                              <span class="ds-icon" aria-hidden="true">filter_alt</span>
+                            </button>
+                            <div class="ds-badge-indicator" id="dashboard-page-filter-badge" hidden aria-hidden="true"></div>
+                          </div>
                           <button class="ds-dashboard-toolbar__btn" type="button" aria-label="More options">
                             <span class="ds-icon" aria-hidden="true">more_vert</span>
                           </button>
                         </div>
                       </div>
-                      <div id="dashboard-page-applied-bar" class="filter-applied-bar" style="display:none; background:transparent; border-bottom:none; padding:0 0 var(--spacing-lg); box-shadow:0 1px 4px var(--shadow-elevation-1), 0 2px 8px var(--shadow-elevation-2);">
+                      <div id="dashboard-page-applied-bar" class="filter-applied-bar" style="display:none; background:transparent; border-bottom:none; padding:0 0 var(--spacing-lg);">
                         <div class="filter-applied-bar__cards" id="dashboard-page-applied-cards" role="group" aria-label="Applied filters"></div>
                       </div>
                     </div>
