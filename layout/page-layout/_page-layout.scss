@@ -175,11 +175,15 @@
   // (no border-radius, no box-shadow) so ds-metric-card and ds-chart tiles
   // float directly on the page-floor background.
   //
-  // This element IS the scroll container — tile box-shadows scroll with the tiles
-  // so they are never clipped. overflow-x: clip trims left/right shadow bleed
-  // without creating an x-scroll container (valid since clip ≠ visible).
-  // ds-page-content--dashboard simply clips its flex column (overflow: hidden);
-  // ds-page-content__dashboard-header is a static block above the scroller.
+  // Spacing strategy:
+  //   ds-page-content--dashboard zeroes out ds-page-content's padding-left so
+  //   the canvas can own all four sides of spacing uniformly. The body
+  //   (ds-page-layout__body) already provides 16px right and bottom padding;
+  //   negative margins on this element cancel that body padding so the canvas
+  //   self-manages a true uniform 16px on all sides. The 16px left padding is
+  //   also what gives tile box-shadows room to render — overflow-x: clip clips
+  //   at the padding-box edge, and 16px > 8px max shadow spread, so shadows
+  //   are inside the padding area and never clipped in any browser.
   //
   // Usage (required companion classes):
   //   <main class="ds-page-content ds-page-content--dashboard">
@@ -195,21 +199,19 @@
     background: transparent;
     border-radius: 0;
     box-shadow: none;
-    // Tile canvas is its own scroll container — shadows are never clipped by a
-    // parent scroller and the header simply sits above without needing sticky.
-    overflow-x: clip;          // no x scroll container — tiles clip at layout edge
-    overflow-y: auto;          // tile area scrolls vertically
-    overflow-clip-margin: var(--spacing-sm);  // 8px — lets box-shadows bleed past the clip edge (Chrome/Edge)
-    flex: 1 1 0;               // fill remaining height in ds-page-content flex column
+    overflow-x: clip;    // no x scrollbar; clip boundary is the padding edge
+    overflow-y: auto;    // tile area scrolls vertically
+    flex: 1 1 0;
     min-height: 0;
-    // Left padding gives tile box-shadows room to render on the left edge (overflow-clip-margin
-    // is not supported in Safari, so physical padding is the cross-browser solution).
-    // 12px > max shadow spread (8px) — guaranteed clearance in all browsers.
-    // Right + bottom padding give tile box-shadows breathing room on other sides.
-    padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
+    // Uniform 16px on all four sides.
+    // The body provides 16px right + bottom via its own padding; negative margins
+    // cancel that so we don't double-stack. Left is owned entirely by this element
+    // (ds-page-content--dashboard zeroes the parent's padding-left).
+    padding: var(--spacing-lg);
+    margin-right: calc(-1 * var(--spacing-lg));   // cancel body right padding
+    margin-bottom: calc(-1 * var(--spacing-lg));  // cancel body bottom padding
     // No scrollbar-width — lets macOS use native overlay scrollbars (no space reserved).
-    // scrollbar-color controls the fade-in on hover without disabling native overlay mode.
-    // Never define ::-webkit-scrollbar here — that disables native overlay behavior.
+    // Never define ::-webkit-scrollbar — that disables macOS native overlay mode.
     scrollbar-color: transparent transparent;
     &:hover { scrollbar-color: var(--color-surface-scroll) transparent; }
   }
@@ -218,19 +220,17 @@
 // ── Dashboard page: flex column wrapper + static header ───────────────────
 //
 // Add ds-page-content--dashboard to ds-page-content on dashboard pages.
-// This clips the flex column (overflow: hidden) — scroll is owned by __main--dashboard.
-//
-// Wrap ds-page-content__heading + ds-dashboard-toolbar in
-// ds-page-content__dashboard-header — it sits as a static block above the
-// scrolling tile canvas, no sticky positioning needed.
+// This zeros out ds-page-content's left padding so __main--dashboard owns
+// all four sides of spacing uniformly. The scroll container is __main--dashboard;
+// ds-page-content__dashboard-header is a static block above the scroller.
 
 .ds-page-content--dashboard {
-  overflow: hidden;  // not the scroll container — __main--dashboard scrolls instead
-  gap: 0;            // gap replaced by padding-bottom on dashboard-header (see below)
+  padding-left: 0;   // canvas owns left spacing — dashboard-header restores its own indent
+  gap: 0;            // gap replaced by padding-bottom on dashboard-header
 }
 
-// Dashboard header sits above __main--dashboard (the scroll container).
-// No sticky needed — it is a normal flex child above the scroller.
+// Dashboard header re-establishes the 16px left indent (removed from parent above)
+// so heading and toolbar align with the tile canvas left edge.
 // padding-bottom replaces the parent gap (gap: 0 on ds-page-content--dashboard).
 .ds-page-content__dashboard-header {
   background: var(--color-surface-default);
@@ -238,6 +238,7 @@
   flex-direction: column;
   gap: var(--spacing-lg);
   flex-shrink: 0;
+  padding-left: var(--spacing-lg);
   padding-bottom: var(--spacing-lg);
 }
 
