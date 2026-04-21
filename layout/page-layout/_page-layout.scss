@@ -204,10 +204,13 @@
     flex: 1 1 0;
     min-height: 0;
     // Uniform 16px on all four sides.
-    // The body provides 16px right + bottom via its own padding; negative margins
-    // cancel that so we don't double-stack. Left is owned entirely by this element
-    // (ds-page-content--dashboard zeroes the parent's padding-left).
+    // ds-page-content has padding-left: 16px — a negative left margin pulls the canvas
+    // back to the subnav edge so tiles start at 16px (inside) rather than 32px.
+    // Negative right/bottom margins cancel the body's own 16px padding on those sides
+    // to prevent double-stacking. The 16px padding keeps tile shadows inside the
+    // padding-box, so overflow-x: clip never clips them in any browser.
     padding: var(--spacing-lg);
+    margin-left: calc(-1 * var(--spacing-lg));    // pull canvas left to subnav edge
     margin-right: calc(-1 * var(--spacing-lg));   // cancel body right padding
     margin-bottom: calc(-1 * var(--spacing-lg));  // cancel body bottom padding
     // No scrollbar-width — lets macOS use native overlay scrollbars (no space reserved).
@@ -225,12 +228,11 @@
 // ds-page-content__dashboard-header is a static block above the scroller.
 
 .ds-page-content--dashboard {
-  padding-left: 0;   // canvas owns left spacing — dashboard-header restores its own indent
-  gap: 0;            // gap replaced by padding-bottom on dashboard-header
+  gap: 0;  // gap replaced by padding-bottom on dashboard-header
 }
 
-// Dashboard header re-establishes the 16px left indent (removed from parent above)
-// so heading and toolbar align with the tile canvas left edge.
+// Dashboard header sits above __main--dashboard (the scroll container).
+// No sticky needed — it is a normal flex child above the scroller.
 // padding-bottom replaces the parent gap (gap: 0 on ds-page-content--dashboard).
 .ds-page-content__dashboard-header {
   background: var(--color-surface-default);
@@ -238,7 +240,6 @@
   flex-direction: column;
   gap: var(--spacing-lg);
   flex-shrink: 0;
-  padding-left: var(--spacing-lg);
   padding-bottom: var(--spacing-lg);
 }
 
