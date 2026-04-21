@@ -209,7 +209,9 @@
     // Negative right/bottom margins cancel the body's own 16px padding on those sides
     // to prevent double-stacking. The 16px padding keeps tile shadows inside the
     // padding-box, so overflow-x: clip never clips them in any browser.
-    padding: var(--spacing-lg);
+    // Top is 0 — __dashboard-header's padding-bottom already provides 16px gap.
+    // Left/right/bottom are 16px for uniform spacing and shadow clearance.
+    padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
     margin-left: calc(-1 * var(--spacing-lg));    // pull canvas left to subnav edge
     margin-right: calc(-1 * var(--spacing-lg));   // cancel body right padding
     margin-bottom: calc(-1 * var(--spacing-lg));  // cancel body bottom padding
