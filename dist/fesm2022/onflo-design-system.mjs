@@ -2629,6 +2629,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "21.2.7", ngImpor
 const NAV_BUTTON_CONFIG = {
     tickets: { icon: 'inbox', filled: true, label: 'Tickets' },
     assets: { icon: 'desktop_mac', filled: false, label: 'Assets' },
+    users: { icon: 'group', filled: false, label: 'Users' },
     analytics: { icon: 'equalizer', filled: false, label: 'Analytics' },
     settings: { icon: 'settings', filled: true, label: 'Settings' },
     campaigns: { icon: 'campaign', filled: false, label: 'Campaign' },

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 type NavButtonType =
   | 'tickets'
   | 'assets'
+  | 'users'
   | 'analytics'
   | 'settings'
   | 'campaigns'
@@ -14,6 +15,7 @@ type NavButtonType =
 const NAV_BUTTON_CONFIG: Record<NavButtonType, { icon: string; filled: boolean; label: string }> = {
   tickets:   { icon: 'inbox',         filled: true,  label: 'Tickets'   },
   assets:    { icon: 'desktop_mac',   filled: false, label: 'Assets'    },
+  users:     { icon: 'group',         filled: false, label: 'Users'     },
   analytics: { icon: 'equalizer',     filled: false, label: 'Analytics' },
   settings:  { icon: 'settings',      filled: true,  label: 'Settings'  },
   campaigns: { icon: 'campaign',      filled: false, label: 'Campaign'  },

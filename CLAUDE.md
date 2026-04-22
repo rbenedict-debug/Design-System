@@ -207,7 +207,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-search` | Custom | No Material equivalent — internal building block for ds-table-toolbar |
 | `ds-ag-paginator` | Custom | AG Grid custom pagination panel — no Material equivalent |
 | `ds-hover-card` | Custom | No Material equivalent — cursor-following floating card |
-| `ds-nav-button` | Custom | No Material equivalent — navigation rail button primitive for nav-sidebar |
+| `ds-nav-button` | Custom | No Material equivalent — navigation rail button primitive for nav-sidebar; types: tickets, assets, **users**, analytics, settings, campaigns, home, requests, systems |
 | `ds-agent-status` | Custom | No Material equivalent — support agent online/offline toggle primitive for nav-sidebar |
 | `ds-nav-sidebar` | Custom | No Material equivalent — main left navigation sidebar composition (composes nav-button + agent-status) |
 | `ds-nav-tab` | Custom | No Material equivalent — browser-style document tab primitive for top-nav; `[more]="true"` collapses to 26px overflow indicator showing "..." |

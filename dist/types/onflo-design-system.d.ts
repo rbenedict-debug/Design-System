@@ -1350,7 +1350,7 @@ declare class DsModalComponent implements AfterContentInit {
     static ɵcmp: i0.ɵɵComponentDeclaration<DsModalComponent, "ds-modal", never, { "title": { "alias": "title"; "required": false; }; "subtitle": { "alias": "subtitle"; "required": false; }; "variant": { "alias": "variant"; "required": false; }; "size": { "alias": "size"; "required": false; }; }, { "dismissClick": "dismissClick"; }, ["_tabsRef", "_actionsRef"], ["[modal-tabs]", "*", "[modal-actions]"], true, never>;
 }
 
-type NavButtonType = 'tickets' | 'assets' | 'analytics' | 'settings' | 'campaigns' | 'home' | 'requests' | 'systems';
+type NavButtonType = 'tickets' | 'assets' | 'users' | 'analytics' | 'settings' | 'campaigns' | 'home' | 'requests' | 'systems';
 declare class NavButtonComponent {
     type: NavButtonType;
     selected: boolean;
