@@ -198,6 +198,13 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 | Paginator | `<ds-paginator>` | `DsPaginatorComponent` |
 
 ### Data / table
+
+> **STOP — AG Grid prerequisite check required.**
+> `ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-paginator`, and `ds-table-toolbar` are **AG Grid custom renderers**. They cannot be used without a real AG Grid instance.
+> Before writing any table code, check the project's `package.json` for `ag-grid-angular`.
+> - **Found** → proceed with the wiring pattern below.
+> - **Not found** → do NOT install AG Grid or write any AG Grid code. Tell the user that AG Grid is required and ask whether they want to add it. AG Grid Enterprise is a paid product — never add it without explicit confirmation.
+
 | Component | Selector | Import |
 |---|---|---|
 | Table header cell | `<ds-table-header-cell>` | `DsTableHeaderCellComponent` |
@@ -267,6 +274,8 @@ Full component class wiring and group configuration reference: `.claude/specs/sp
 Full composition rules: `.claude/specs/specs-compositions.md` → "Filtered Table Page"
 
 #### AG Grid wiring — always use this pattern
+
+> **Reminder**: Only reach this section if you have already confirmed `ag-grid-angular` is in `package.json`. If it is not, stop and ask the user — do not add AG Grid without explicit approval.
 
 Any time you create or modify an AG Grid table in a consuming project, ALWAYS use the pre-built exports from the design system. Do not set `headerComponent` or `cellRenderer` manually — use `DS_TABLE_DEFAULT_COL_DEF` which does this for you.
 
