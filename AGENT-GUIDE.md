@@ -501,6 +501,26 @@ The component manages `is-selected`, `aria-pressed`, and the filled icon interna
 <ds-nav-button type="users" class="is-selected" aria-pressed="true" />
 ```
 
+**Which nav components to import** — the shell skeleton uses the CSS class API for `ds-nav-sidebar`
+and `ds-top-nav` (native `<nav>` and `<header>` elements with class names). Only import Angular
+components for elements that use DS Angular selectors in the template:
+
+```typescript
+// Import these — used as Angular selectors (<ds-nav-button>, <ds-agent-status>, etc.)
+import {
+  NavButtonComponent,    // <ds-nav-button>
+  AgentStatusComponent,  // <ds-agent-status>
+  NavTabComponent,       // <ds-nav-tab>
+  NavExpandComponent,    // <ds-nav-expand>
+  SubnavButtonComponent, // <ds-subnav-button>
+  SubnavHeaderComponent, // <ds-subnav-header>
+} from '@onflo/design-system';
+
+// Do NOT import these — the shell uses CSS class API, not Angular selectors:
+// NavSidebarComponent  → <nav class="ds-nav-sidebar"> (no <ds-nav-sidebar> selector)
+// TopNavComponent      → <header class="ds-top-nav">   (no <ds-top-nav> selector)
+```
+
 **Inbox / Ticket View exception** — hidden title, no heading block visible:
 ```html
 <main class="ds-page-content" role="main">
