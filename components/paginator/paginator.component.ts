@@ -13,7 +13,7 @@
  * />
  */
 
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ElementRef, HostListener } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 export interface DsPageEvent {
@@ -37,6 +37,19 @@ export class DsPaginatorComponent {
   @Input() pageSizeOptions: number[] = [10, 25, 50, 100];
   @Input() showFirstLastButtons = true;
   @Output() pageChange = new EventEmitter<DsPageEvent>();
+
+  constructor(private el: ElementRef) {}
+
+  @HostListener('mousedown')
+  @HostListener('touchstart')
+  onPointerDown(): void {
+    this.el.nativeElement.setAttribute('data-mouse-focus', '');
+  }
+
+  @HostListener('focusout')
+  onFocusOut(): void {
+    this.el.nativeElement.removeAttribute('data-mouse-focus');
+  }
 
   onPage(event: PageEvent): void {
     this.pageChange.emit({ pageIndex: event.pageIndex, pageSize: event.pageSize, length: event.length });

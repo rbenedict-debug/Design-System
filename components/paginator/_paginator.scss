@@ -250,9 +250,11 @@
 
     .mat-mdc-select-arrow { color: var(--color-icon-subtle); }
 
-    // Focus ring on the form field wrapper (keyboard only)
-    .mat-mdc-text-field-wrapper:focus-within:not([data-mouse-focus]) {
-      box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
-    }
+  }
+
+  // Focus ring on the page-size select wrapper — keyboard only.
+  // data-mouse-focus is set on the ds-paginator host by HostListener, not on the Material wrapper.
+  &:not([data-mouse-focus]) .mat-mdc-paginator-page-size-select .mat-mdc-text-field-wrapper:focus-within {
+    box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
   }
 }

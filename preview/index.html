@@ -5738,7 +5738,7 @@
 .mat-mdc-paginator .mat-mdc-paginator-page-size-select .mat-mdc-select-arrow {
   color: var(--color-icon-subtle);
 }
-.mat-mdc-paginator .mat-mdc-paginator-page-size-select .mat-mdc-text-field-wrapper:focus-within:not([data-mouse-focus]) {
+.mat-mdc-paginator:not([data-mouse-focus]) .mat-mdc-paginator-page-size-select .mat-mdc-text-field-wrapper:focus-within {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 
@@ -10093,7 +10093,7 @@ mark.search-match {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
   background: var(--color-surface-page);
   border-top: 1px solid var(--color-border-subtle);
 }

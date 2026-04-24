@@ -1416,12 +1416,16 @@ interface DsPageEvent {
     length: number;
 }
 declare class DsPaginatorComponent {
+    private el;
     total: number;
     pageSize: number;
     pageIndex: number;
     pageSizeOptions: number[];
     showFirstLastButtons: boolean;
     pageChange: EventEmitter<DsPageEvent>;
+    constructor(el: ElementRef);
+    onPointerDown(): void;
+    onFocusOut(): void;
     onPage(event: PageEvent): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsPaginatorComponent, never>;
     static ɵcmp: i0.ɵɵComponentDeclaration<DsPaginatorComponent, "ds-paginator", never, { "total": { "alias": "total"; "required": false; }; "pageSize": { "alias": "pageSize"; "required": false; }; "pageIndex": { "alias": "pageIndex"; "required": false; }; "pageSizeOptions": { "alias": "pageSizeOptions"; "required": false; }; "showFirstLastButtons": { "alias": "showFirstLastButtons"; "required": false; }; }, { "pageChange": "pageChange"; }, never, never, true, never>;
