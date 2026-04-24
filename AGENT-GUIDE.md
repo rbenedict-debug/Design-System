@@ -183,18 +183,24 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 | Save bar | `<ds-save-bar>` | `DsSaveBarComponent` |
 
 ### Navigation
+
+> **Import name pattern:** Navigation and shell components export **without** the `Ds` prefix —
+> e.g. `NavSidebarComponent`, not `DsNavSidebarComponent`. This is intentional and differs from
+> form/display components (`DsButtonComponent`, `DsInputComponent`) which do use the prefix.
+> Always copy the Import column below exactly — do not add or remove the prefix.
+
 | Component | Selector | Import |
 |---|---|---|
 | Tabs | `<ds-tabs>` + `<ds-tab>` | `DsTabsComponent` |
-| Top nav bar | `<ds-top-nav>` | `DsTopNavComponent` |
-| Nav tab | `<ds-nav-tab>` | `DsNavTabComponent` |
-| Nav sidebar | `<ds-nav-sidebar>` | `DsNavSidebarComponent` |
-| Nav button | `<ds-nav-button>` | `DsNavButtonComponent` |
-| Nav expand | `<ds-nav-expand>` | `DsNavExpandComponent` |
-| Sub-nav button | `<ds-subnav-button>` | `DsSubnavButtonComponent` |
-| Sub-nav header | `<ds-subnav-header>` | `DsSubnavHeaderComponent` |
-| Sub-nav subheader | `<ds-subnav-subheader>` | `DsSubnavSubheaderComponent` |
-| Agent status | `<ds-agent-status>` | `DsAgentStatusComponent` |
+| Top nav bar | `<ds-top-nav>` | `TopNavComponent` |
+| Nav tab | `<ds-nav-tab>` | `NavTabComponent` |
+| Nav sidebar | `<ds-nav-sidebar>` | `NavSidebarComponent` |
+| Nav button | `<ds-nav-button>` | `NavButtonComponent` |
+| Nav expand | `<ds-nav-expand>` | `NavExpandComponent` |
+| Sub-nav button | `<ds-subnav-button>` | `SubnavButtonComponent` |
+| Sub-nav header | `<ds-subnav-header>` | `SubnavHeaderComponent` |
+| Sub-nav subheader | `<ds-subnav-subheader>` | `SubnavSubheaderComponent` |
+| Agent status | `<ds-agent-status>` | `AgentStatusComponent` |
 | Paginator | `<ds-paginator>` | `DsPaginatorComponent` |
 
 ### Data / table
@@ -310,6 +316,32 @@ suppressContextMenu: true,
 suppressHeaderContextMenu: true,
 ```
 
+**Column panel density — required bindings:**
+
+`ds-column-panel` contains a density toggle (Comfort / Compact). Wire it so the toggle actually
+updates the grid row heights. Without these bindings the toggle renders but has no effect:
+
+```typescript
+// Component class:
+density: 'comfort' | 'compact' = 'comfort';
+
+onDensityChange(value: 'comfort' | 'compact'): void {
+  this.density = value;
+  this.gridApi?.resetRowHeights();
+  // Re-fit columns after ~300ms (CSS transition completes)
+  setTimeout(() => this.gridApi?.sizeColumnsToFit(), 300);
+}
+```
+
+```html
+<!-- Template — always include [(density)] and (densityChange) -->
+<ds-column-panel
+  [api]="gridApi"
+  [(density)]="density"
+  (densityChange)="onDensityChange($event)"
+/>
+```
+
 **Column type shortcuts** (`type: 'dsCheckbox'` etc.):
 - `dsCheckbox` — 56px fixed checkbox column; pair with `rowSelection: 'multiple'`
 - `dsNumeric` — right-aligned + number filter; add `aggFunc: 'sum'` per-column for totals
@@ -350,25 +382,86 @@ These are CSS-only patterns — no Angular component. Import `dist/layout.css` i
 
 ### App shell (`ds-page-layout`) — HTML skeleton
 
+Use this exact structure on every page. The nav-sidebar, top-nav, subnav, and ds-nav-expand are
+**never simplified** — every page has all of them. Customize only the active nav button and the
+page content inside `ds-page-content__main`.
+
 ```html
 <div class="ds-page-layout">
 
-  <!-- Left: main nav rail -->
+  <!-- Left: main nav rail — exact structure required on every page -->
   <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
-    <!-- ds-nav-button items; ds-agent-status at bottom -->
+
+    <!-- Logo mark — always first -->
+    <div class="ds-nav-sidebar__logo">
+      <!-- Onflo logo SVG here -->
+    </div>
+
+    <!-- Nav buttons — set [selected]="true" on the active page's button only -->
+    <div class="ds-nav-sidebar__nav">
+      <ds-nav-button type="home"      aria-label="Home" />
+      <ds-nav-button type="tickets"   aria-label="Tickets" />
+      <ds-nav-button type="assets"    aria-label="Assets" />
+      <ds-nav-button type="users"     aria-label="Users" />
+      <ds-nav-button type="analytics" aria-label="Analytics" />
+      <ds-nav-button type="campaigns" aria-label="Campaigns" />
+      <ds-nav-button type="requests"  aria-label="Requests" />
+      <ds-nav-button type="systems"   aria-label="Systems" />
+      <ds-nav-button type="settings"  aria-label="Settings" />
+    </div>
+
+    <!-- Bottom slot — always both agent-status components -->
+    <div class="ds-nav-sidebar__bottom">
+      <ds-agent-status />
+      <ds-agent-status />
+    </div>
+
   </nav>
 
   <!-- Right column: top-nav stacked above body -->
   <div class="ds-page-layout__content">
 
+    <!-- Top nav — exact structure required on every page -->
     <header class="ds-top-nav" role="banner">
-      <!-- ds-nav-tab items, action icon buttons -->
+
+      <!-- Browser-style document tabs — always present (even if only one tab) -->
+      <div class="ds-top-nav__tabs">
+        <ds-nav-tab [active]="true">Page Name</ds-nav-tab>
+      </div>
+
+      <!-- Action buttons — always inside __actions, never direct children of <header> -->
+      <div class="ds-top-nav__actions">
+        <button class="ds-top-nav__action-btn ds-top-nav__action-btn--orange"
+                type="button" aria-label="Chatsy">
+          <span class="ds-icon">chat</span>
+        </button>
+        <div class="ds-top-nav__action-badge">
+          <button class="ds-top-nav__action-btn"
+                  type="button" aria-label="Notifications">
+            <span class="ds-icon">notifications</span>
+          </button>
+        </div>
+        <button class="ds-top-nav__action-btn ds-top-nav__action-btn--green"
+                type="button" aria-label="New">
+          <span class="ds-icon">add</span>
+        </button>
+        <button class="ds-top-nav__action-btn"
+                type="button" aria-label="Help">
+          <span class="ds-icon">help</span>
+        </button>
+        <button class="ds-top-nav__action-btn ds-top-nav__action-btn--navy"
+                type="button" aria-label="Profile">
+          <span class="ds-icon ds-icon--filled">account_circle</span>
+        </button>
+      </div>
+
     </header>
 
     <div class="ds-page-layout__body">
 
-      <!-- Optional collapsible sub-nav panel (CSS-only — no Angular component) -->
-      <nav class="ds-subnav" role="navigation" aria-label="Section navigation">
+      <!-- Collapsible sub-nav panel — always present; content varies by section -->
+      <nav class="ds-subnav" [class.is-collapsed]="!subNavOpen"
+           role="navigation" aria-label="Section navigation">
         <!-- ds-subnav-header / ds-subnav-button items -->
       </nav>
 
@@ -392,13 +485,20 @@ These are CSS-only patterns — no Angular component. Import `dist/layout.css` i
 
   </div><!-- /.ds-page-layout__content -->
 
-  <!-- Subnav expand/collapse toggle (absolutely positioned) -->
-  <button class="ds-nav-expand" type="button"
-          aria-label="Collapse sub navigation" aria-expanded="true">
-    <span class="ds-icon ds-icon--filled" aria-hidden="true">right_panel_open</span>
-  </button>
+  <!-- Subnav expand/collapse toggle — always present, wired to subNavOpen -->
+  <ds-nav-expand [open]="subNavOpen" (toggle)="onToggleSubnav()" />
 
 </div><!-- /.ds-page-layout -->
+```
+
+**Selected nav button** — use `[selected]="true"` on the `<ds-nav-button>` for the active page.
+The component manages `is-selected`, `aria-pressed`, and the filled icon internally:
+```html
+<!-- Correct — let the component manage state -->
+<ds-nav-button type="users" aria-label="Users" [selected]="true" />
+
+<!-- Wrong — host attributes don't reach the inner <button> -->
+<ds-nav-button type="users" class="is-selected" aria-pressed="true" />
 ```
 
 **Inbox / Ticket View exception** — hidden title, no heading block visible:
