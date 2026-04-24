@@ -35,8 +35,8 @@ When Rebecca says **"change the page content to X"**, **"build a table on this p
 
 - **Only modify the contents of `ds-page-content__main`** (or, on a split layout, the specified `ds-split-page__panel--left` or `ds-split-page__panel--right`).
 - **Never touch `ds-page-content__heading`** — the `<h1 class="ds-page-content__title">` and any `<ds-tabs>` inside it are structural and must be preserved exactly as-is. The heading sits ABOVE the content area and is NEVER placed inside `__main`.
-- **Never remove or replace the `<main class="ds-page-content">` shell** — it always wraps both `__heading` and `__main`.
-- If switching from a split layout to a regular layout (or vice versa), swap only the markup *inside* `__main` — the heading above it does not change.
+- **Never remove or replace the `<main class="ds-page-content">` shell** — it always wraps `__heading` and either `__main` (regular/table/dashboard pages) or `ds-split-page` directly (split-layout pages).
+- If switching from a split layout to a regular layout: remove `ds-split-page` and add `<div class="ds-page-content__main">` in its place. If switching from regular to split: remove `__main` and add `<div class="ds-split-page">` directly. The heading above never changes in either case.
 
 **Correct scope:**
 ```
@@ -299,7 +299,7 @@ onToggleSubnav() {
 
 ### Regular Page Content (`ds-page-content`)
 
-Every page uses this structure inside `<main class="ds-page-content">` — with or without a split layout. Both children are required: never omit or collapse `__heading` or `__main`.
+Regular pages (non-split, non-dashboard) use this structure. `__heading` is required on every page. `__main` is required on regular pages only — split pages replace it with `ds-split-page` directly; dashboard pages replace it with `ds-page-content__main--dashboard`.
 
 ```html
 <main class="ds-page-content" role="main">
@@ -321,7 +321,7 @@ Every page uses this structure inside `<main class="ds-page-content">` — with 
 </main>
 ```
 
-When switching a page from split layout to a regular layout: replace the `ds-split-page` markup inside `__main` with the page content directly. Keep `__heading` and `__main` intact — neither is part of the split page pattern; both are required on every page.
+When switching a page from split layout to a regular layout: remove the `ds-split-page` element (which is a direct child of `ds-page-content`) and replace it with `<div class="ds-page-content__main"><!-- page content --></div>`. Keep `__heading` intact — it is never modified when changing layout types.
 
 ---
 

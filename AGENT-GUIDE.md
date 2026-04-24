@@ -377,14 +377,15 @@ These are CSS-only patterns — no Angular component. Import `dist/layout.css` i
 1. **Every page MUST have a page title** — `<h1 class="ds-page-content__title">` inside `ds-page-content__heading`. This is required for ADA heading structure; screen readers use H1 to identify the page.
 2. **Exception: Inbox and Ticket View** — these pages have no visible title by design. They must still include a hidden H1 using `ds-sr-only` so screen reader users retain heading navigation.
 3. **Never write a raw `<h1>` outside of `ds-page-content__title`** — the token-based typography and layout are embedded in this class.
-4. **Never skip `ds-page-content__main`** — all page body content goes inside this card shell. Never add `background`, `border-radius`, or `box-shadow` yourself; `ds-page-content__main` provides them.
+4. **Regular pages require `ds-page-content__main`** — it provides the card shell (background, border-radius, shadow). Never add these yourself. Exception: split-layout pages use `ds-split-page` as a direct child of `ds-page-content` instead (the panels provide their own card shells); dashboard pages use `ds-page-content__main--dashboard`.
 5. **Tabs under the title** — when a page has section tabs, place `<ds-tabs>` inside `ds-page-content__heading` immediately after the `<h1>`. Never place tabs outside the heading block.
 
 ### App shell (`ds-page-layout`) — HTML skeleton
 
 Use this exact structure on every page. The nav-sidebar, top-nav, subnav, and ds-nav-expand are
-**never simplified** — every page has all of them. Customize only the active nav button and the
-page content inside `ds-page-content__main`.
+**never simplified** — every page has all of them. Customize the active nav button and the page
+content area (`ds-page-content__main` for regular pages; `ds-split-page` as a direct child for split
+pages; `ds-page-content__main--dashboard` for dashboards).
 
 ```html
 <div class="ds-page-layout">
@@ -566,7 +567,7 @@ onToggleSubnav() { this.subNavOpen = !this.subNavOpen; }
 
 ### Regular page content (`ds-page-content`)
 
-Every page — regardless of whether it has a split layout or not — requires this structure inside `<main>`. Both children are mandatory: never omit `__heading` or `__main`.
+Regular pages (non-split, non-dashboard) require both children inside `<main>`. `__heading` is mandatory on every page. `__main` is mandatory on regular pages only — split pages replace it with `ds-split-page` directly (outside `__main`); dashboard pages replace it with `ds-page-content__main--dashboard`.
 
 ```html
 <main class="ds-page-content" role="main">
@@ -585,31 +586,30 @@ Every page — regardless of whether it has a split layout or not — requires t
 </main>
 ```
 
-`ds-page-content__main` provides the card background, border-radius, and shadow — never add these yourself. When switching a page from split layout back to a regular layout, replace the `ds-split-page` markup inside `__main` with the page content directly; keep `__heading` and `__main` intact.
+`ds-page-content__main` provides the card background, border-radius, and shadow — never add these yourself. When switching a page from split layout back to a regular layout: remove the `ds-split-page` element and replace it with `<div class="ds-page-content__main"><!-- page content --></div>`. Keep `__heading` intact — it never changes when switching layout types.
 
 ---
 
 ### Split page (`ds-split-page`)
 
-Two panels side by side inside `ds-page-content__main`. The page title (`ds-page-content__heading`) is a **sibling of `__main`, not inside it** — it sits above the panels and never moves.
+Two panels side by side. `ds-split-page` is a **direct child of `ds-page-content`** — placed as a sibling of `__heading`, **never wrapped in `ds-page-content__main`**. Each `ds-split-page__panel` already provides its own card shell (background, border-radius, box-shadow); wrapping in `__main` would create a double-card.
 
 **Always use this full structure when a page uses a split layout:**
 
 ```html
 <main class="ds-page-content" role="main">
 
-  <!-- Title stays OUTSIDE __main — fixed above the panels, never inside them -->
+  <!-- Title — fixed above the panels, never inside them -->
   <div class="ds-page-content__heading">
     <h1 class="ds-page-content__title">Page Title</h1>
     <!-- <ds-tabs> here if the page has section tabs -->
   </div>
 
-  <!-- Split page lives INSIDE __main -->
-  <div class="ds-page-content__main">
-    <div class="ds-split-page ds-split-page--7030">
-      <div class="ds-split-page__panel ds-split-page__panel--left"><!-- left content --></div>
-      <div class="ds-split-page__panel ds-split-page__panel--right"><!-- right content --></div>
-    </div>
+  <!-- Split panels are DIRECT children of ds-page-content — never wrap in ds-page-content__main.
+       Each ds-split-page__panel already provides its own card shell (bg + border-radius + box-shadow). -->
+  <div class="ds-split-page ds-split-page--7030">
+    <div class="ds-split-page__panel ds-split-page__panel--left"><!-- left content --></div>
+    <div class="ds-split-page__panel ds-split-page__panel--right"><!-- right content --></div>
   </div>
 
 </main>
@@ -618,16 +618,14 @@ Two panels side by side inside `ds-page-content__main`. The page title (`ds-page
 **Resizable variant** (add `CdkDragModule` on the handle for production):
 
 ```html
-<div class="ds-page-content__main">
-  <div class="ds-split-page ds-split-page--resizable">
-    <div class="ds-split-page__panel ds-split-page__panel--left"></div>
-    <div class="ds-split-page__handle" aria-hidden="true">
-      <div class="ds-split-page__handle-line"></div>
-      <span class="ds-icon" aria-hidden="true">drag_indicator</span>
-      <div class="ds-split-page__handle-line"></div>
-    </div>
-    <div class="ds-split-page__panel ds-split-page__panel--right"></div>
+<div class="ds-split-page ds-split-page--resizable">
+  <div class="ds-split-page__panel ds-split-page__panel--left"></div>
+  <div class="ds-split-page__handle" aria-hidden="true">
+    <div class="ds-split-page__handle-line"></div>
+    <span class="ds-icon" aria-hidden="true">drag_indicator</span>
+    <div class="ds-split-page__handle-line"></div>
   </div>
+  <div class="ds-split-page__panel ds-split-page__panel--right"></div>
 </div>
 ```
 
