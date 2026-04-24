@@ -988,6 +988,11 @@
     #ag-sim-grid .ag-header-row {
       border: none;
     }
+    /* Quartz gives ag-root-wrapper a default border-radius; zero it so the
+       border-top spans edge-to-edge — #ag-sim-container owns the rounding. */
+    #ag-sim-grid .ag-root-wrapper {
+      border-radius: 0;
+    }
     /* Bottom border owned by the AG Grid cell wrapper so it spans the full
        column width including any absolutely-positioned resize handle overlay */
     #ag-sim-grid .ag-header {
