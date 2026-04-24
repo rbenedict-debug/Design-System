@@ -57,16 +57,19 @@ gridOptions: GridOptions = {
 
 ### Template
 
+The toolbar, grid, and paginator must sit inside `ds-page-content__main--table` — this modifier sets the flex column container that gives the grid its explicit height. Without it the grid collapses.
+
 ```html
-<ds-table-toolbar [title]="'My Table'" />
-<ds-table-row-groups-bar [api]="gridApi" />
-<ag-grid-angular
-  class="ds-ag-grid ag-theme-quartz"
-  [gridOptions]="gridOptions"
-  (gridReady)="onGridReady($event)"
-  (gridSizeChanged)="onGridSizeChanged($event)"
-/>
-<ds-ag-paginator [api]="gridApi" />
+<div class="ds-page-content__main ds-page-content__main--table">
+  <ds-table-toolbar [title]="'My Table'" />
+  <ag-grid-angular
+    class="ds-ag-grid ag-theme-quartz"
+    [gridOptions]="gridOptions"
+    (gridReady)="onGridReady($event)"
+    (gridSizeChanged)="onGridSizeChanged($event)"
+  />
+  <ds-ag-paginator [api]="gridApi" />
+</div>
 ```
 
 ### Component class
@@ -78,16 +81,14 @@ import { AgGridAngular } from 'ag-grid-angular';
 import {
   onfloTheme,
   DS_TABLE_DEFAULT_COL_DEF,
-  DS_TABLE_DEFAULT_COL_GROUP_DEF,
   DS_TABLE_COLUMN_TYPES,
   DsTableToolbarComponent,
-  DsTableRowGroupsBarComponent,
   DsAgPaginatorComponent,
 } from '@onflo/design-system';
 
 @Component({
   standalone: true,
-  imports: [AgGridAngular, DsTableToolbarComponent, DsTableRowGroupsBarComponent, DsAgPaginatorComponent],
+  imports: [AgGridAngular, DsTableToolbarComponent, DsAgPaginatorComponent],
   templateUrl: './my-page.component.html',
 })
 export class MyPageComponent {
@@ -96,7 +97,6 @@ export class MyPageComponent {
   gridOptions = {
     theme: onfloTheme,
     defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
-    defaultColGroupDef: DS_TABLE_DEFAULT_COL_GROUP_DEF,
     columnTypes: DS_TABLE_COLUMN_TYPES,
     suppressPaginationPanel: true,
     suppressContextMenu: true,

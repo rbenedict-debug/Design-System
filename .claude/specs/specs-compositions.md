@@ -68,9 +68,7 @@ The correct pattern uses two purpose-built CSS classes:
 
 AG Grid requires a theme class on the grid element for its structural CSS to apply (viewport sizing, column borders, horizontal scrollbar, pinned column shadows). Without it the grid renders as a collapsed box with no visible structure.
 
-Add the theme class alongside `ds-ag-grid` on the same element:
-- **AG Grid v31+ (recommended):** `ag-theme-base` — structural CSS only, no built-in colours; our DS tokens handle all visual styling
-- **AG Grid v28–v30:** `ag-theme-alpine` — override colours and fonts via CSS variables
+Add the theme class alongside `ds-ag-grid` on the same element. The Onflo `onfloTheme` is built on the AG Grid Quartz base, so always use `ag-theme-quartz` — do not use `ag-theme-base` or `ag-theme-alpine`.
 
 ### Full composition
 
