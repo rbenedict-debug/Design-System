@@ -21881,7 +21881,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                     <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">view_column</span>
                     <span class="ds-column-panel__section-title">Column Labels</span>
                   </div>
-                  <button type="button" class="ds-column-panel__add-btn">
+                  <div class="ds-column-panel__pivot-col-list" id="ag-sim-pivot-cards"></div>
+                  <button type="button" class="ds-column-panel__add-btn" id="ag-sim-pivot-add-btn" aria-expanded="false">
                     <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
                     Add Column
                   </button>
@@ -21895,8 +21896,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">cell_merge</span>
                   <span class="ds-column-panel__section-title">Row Groups</span>
                 </div>
-                <div id="ag-sim-group-panel-chips" style="display:none;padding:0 var(--spacing-md) var(--spacing-sm);flex-wrap:wrap;gap:var(--spacing-xs);"></div>
-                <button type="button" class="ds-column-panel__add-btn" onclick="agSimAddRowGroup()">
+                <div class="ds-column-panel__pivot-col-list" id="ag-sim-group-cards"></div>
+                <button type="button" class="ds-column-panel__add-btn" id="ag-sim-group-add-btn" aria-expanded="false">
                   <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
                   Add Column
                 </button>
@@ -21909,8 +21910,8 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                   <span class="ds-icon ds-column-panel__section-icon" aria-hidden="true">functions</span>
                   <span class="ds-column-panel__section-title">Values</span>
                 </div>
-                <div id="ag-sim-values-panel-chips" style="display:none;padding:0 var(--spacing-md) var(--spacing-sm);flex-wrap:wrap;gap:var(--spacing-xs);"></div>
-                <button type="button" class="ds-column-panel__add-btn" onclick="agSimAddValue()">
+                <div class="ds-column-panel__pivot-col-list" id="ag-sim-values-cards"></div>
+                <button type="button" class="ds-column-panel__add-btn" id="ag-sim-values-add-btn" aria-expanded="false">
                   <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
                   Add Column
                 </button>
@@ -21985,6 +21986,15 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
         <!-- Toast feedback -->
         <div id="ag-sim-toast" style="display:none; margin-top:8px; font-size:12px; color:var(--color-text-secondary); font-style:italic;"></div>
+
+        <!-- Sim column picker overlay — position: fixed, shown/hidden via JS -->
+        <div id="sim-cp-overlay" class="ds-column-panel__picker-overlay" style="display:none;" role="dialog" aria-label="Add column">
+          <div class="ds-column-panel__picker-search">
+            <span class="ds-icon ds-icon--sm" aria-hidden="true">search</span>
+            <input type="text" id="sim-cp-search" placeholder="Search columns…" autocomplete="off" aria-label="Search columns" />
+          </div>
+          <div id="sim-cp-list" class="ds-column-panel__picker-list" role="list"></div>
+        </div>
 
         <script>
         (function() {
@@ -22744,127 +22754,295 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             if (bulkBtn) bulkBtn.style.display = count > 0 ? 'flex' : 'none';
           }
 
-          /* ── Row groups bar — show when first group is added ─────────────── */
-          var agSimGroupFields = [];
-          var GROUP_FIELD_LABELS = ['Status', 'Priority', 'Issue Type', 'Assigned To'];
-          window.agSimAddRowGroup = function() {
-            if (agSimGroupFields.length >= GROUP_FIELD_LABELS.length) return;
-            var label = GROUP_FIELD_LABELS[agSimGroupFields.length];
-            agSimGroupFields.push(label);
+          /* ── Sim column panel — picker overlay + card lists ─────────────── */
 
-            // Show the row groups bar
-            var bar = document.getElementById('ag-sim-groups-bar');
-            if (bar) bar.style.display = '';
+          var simGroupActive = new Set();
+          var simValueActive = new Set();
+          var simPivotActive = new Set();
 
-            // Add chip to bar
-            var chips = document.getElementById('ag-sim-group-chips');
-            if (chips) {
-              var chip = document.createElement('div');
-              chip.className = 'ds-chip';
-              chip.setAttribute('role', 'option');
-              chip.setAttribute('tabindex', '0');
-              chip.setAttribute('data-group-label', label);
-              chip.innerHTML = '<span class="ds-chip__label">' + label + '</span>'
-                + '<button type="button" class="ds-chip__remove" aria-label="Remove ' + label + ' group" onclick="agSimRemoveRowGroup(this,\'' + label + '\')">'
-                + '<span class="ds-icon ds-icon--sm">close</span></button>';
-              chips.appendChild(chip);
-            }
-
-            // Add chip to panel
-            var panelChips = document.getElementById('ag-sim-group-panel-chips');
-            if (panelChips) {
-              panelChips.style.display = 'flex';
-              var pc = document.createElement('div');
-              pc.className = 'ds-chip';
-              pc.setAttribute('role', 'option');
-              pc.setAttribute('tabindex', '0');
-              pc.setAttribute('data-group-label', label);
-              pc.innerHTML = '<span class="ds-chip__label">' + label + '</span>'
-                + '<button type="button" class="ds-chip__remove" aria-label="Remove ' + label + '" onclick="agSimRemoveRowGroup(this,\'' + label + '\')">'
-                + '<span class="ds-icon ds-icon--sm">close</span></button>';
-              panelChips.appendChild(pc);
-            }
+          var SIM_PICKER_COLS = {
+            rowGroup: [
+              { colId: 'customer',   label: 'Customer'    },
+              { colId: 'issueType',  label: 'Issue Type'  },
+              { colId: 'status',     label: 'Status'      },
+              { colId: 'priority',   label: 'Priority'    },
+              { colId: 'assignedTo', label: 'Assigned To' },
+            ],
+            value: [
+              { colId: 'responseTime', label: 'Response (h)' },
+              { colId: 'revenue',      label: 'Revenue'      },
+              { colId: 'satisfaction', label: 'Satisfaction' },
+            ],
+            pivot: [
+              { colId: 'status',     label: 'Status'      },
+              { colId: 'priority',   label: 'Priority'    },
+              { colId: 'issueType',  label: 'Issue Type'  },
+              { colId: 'assignedTo', label: 'Assigned To' },
+              { colId: 'customer',   label: 'Customer'    },
+            ],
           };
-          window.agSimRemoveRowGroup = function(removeBtn, label) {
-            agSimGroupFields = agSimGroupFields.filter(function(f) { return f !== label; });
-            // Remove chip from bar
+
+          var SIM_VALUE_STATS = {
+            responseTime: { label: 'Avg Response',  value: '18.4h'    },
+            revenue:      { label: 'Total Revenue', value: '$425,000' },
+            satisfaction: { label: 'Avg Sat.',      value: '3.8'      },
+          };
+
+          var simPickerOverlay      = null;
+          var simPickerSearchInput  = null;
+          var simPickerListEl       = null;
+          var simPickerActiveBtn    = null;
+          var simPickerActiveSection = null;
+
+          function simPickerInit() {
+            simPickerOverlay     = document.getElementById('sim-cp-overlay');
+            simPickerSearchInput = document.getElementById('sim-cp-search');
+            simPickerListEl      = document.getElementById('sim-cp-list');
+            if (!simPickerOverlay) return;
+
+            simPickerSearchInput.addEventListener('input', function() {
+              simPickerRender(simPickerSearchInput.value);
+            });
+            simPickerSearchInput.addEventListener('click', function(e) { e.stopPropagation(); });
+            simPickerOverlay.addEventListener('click', function(e) { e.stopPropagation(); });
+            document.addEventListener('click', function() { simPickerClose(); });
+            document.addEventListener('keydown', function(e) { if (e.key === 'Escape') simPickerClose(); });
+
+            var btnMap = {
+              'ag-sim-group-add-btn':  'rowGroup',
+              'ag-sim-values-add-btn': 'value',
+              'ag-sim-pivot-add-btn':  'pivot',
+            };
+            Object.keys(btnMap).forEach(function(id) {
+              var btn = document.getElementById(id);
+              if (!btn) return;
+              var sk = btnMap[id];
+              btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (simPickerActiveBtn === btn) { simPickerClose(); return; }
+                simPickerActiveBtn = btn;
+                simPickerActiveSection = sk;
+                simPickerSearchInput.value = '';
+                simPickerRender('');
+                simPickerPosition(btn);
+                simPickerOverlay.style.display = 'flex';
+                btn.setAttribute('aria-expanded', 'true');
+                setTimeout(function() { simPickerSearchInput.focus(); }, 0);
+              });
+            });
+
+            ['ag-sim-group-cards', 'ag-sim-values-cards', 'ag-sim-pivot-cards'].forEach(function(id) {
+              var list = document.getElementById(id);
+              if (list) simWirePivotListDrag(list);
+            });
+          }
+
+          function simPickerRender(filter) {
+            if (!simPickerActiveSection) return;
+            var activeSet = simPickerActiveSection === 'rowGroup' ? simGroupActive
+                          : simPickerActiveSection === 'value'    ? simValueActive
+                          : simPivotActive;
+            var cols = SIM_PICKER_COLS[simPickerActiveSection] || [];
+            var f = filter.trim().toLowerCase();
+            var visible = f ? cols.filter(function(c) { return c.label.toLowerCase().includes(f); }) : cols;
+            simPickerListEl.innerHTML = '';
+            if (!visible.length) {
+              var empty = document.createElement('span');
+              empty.className = 'ds-column-panel__picker-empty';
+              empty.textContent = 'No columns found';
+              simPickerListEl.appendChild(empty);
+              return;
+            }
+            visible.forEach(function(col) {
+              var isActive = activeSet.has(col.colId);
+              var btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'ds-column-panel__picker-option' + (isActive ? ' ds-column-panel__picker-option--active' : '');
+              btn.setAttribute('role', 'listitem');
+              btn.innerHTML =
+                '<span class="ds-icon ds-icon--sm' + (isActive ? ' ds-icon--filled' : '') + '" aria-hidden="true">' +
+                  (isActive ? 'check_box' : 'check_box_outline_blank') +
+                '</span><span>' + col.label + '</span>';
+              btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (isActive) {
+                  simPickerRemoveActive(simPickerActiveSection, col.colId, col.label);
+                } else {
+                  simPickerAddActive(simPickerActiveSection, col.colId, col.label);
+                }
+                simPickerRender(simPickerSearchInput.value);
+              });
+              simPickerListEl.appendChild(btn);
+            });
+          }
+
+          function simPickerPosition(btn) {
+            var rect = btn.getBoundingClientRect();
+            var overlayH = 296;
+            var spaceBelow = window.innerHeight - rect.bottom;
+            simPickerOverlay.style.left  = rect.left + 'px';
+            simPickerOverlay.style.width = '280px';
+            if (spaceBelow < overlayH + 8) {
+              simPickerOverlay.style.top    = '';
+              simPickerOverlay.style.bottom = (window.innerHeight - rect.top + 4) + 'px';
+            } else {
+              simPickerOverlay.style.bottom = '';
+              simPickerOverlay.style.top    = (rect.bottom + 4) + 'px';
+            }
+          }
+
+          function simPickerClose() {
+            if (!simPickerOverlay) return;
+            simPickerOverlay.style.display = 'none';
+            if (simPickerActiveBtn) simPickerActiveBtn.setAttribute('aria-expanded', 'false');
+            simPickerActiveBtn     = null;
+            simPickerActiveSection = null;
+          }
+
+          function simPickerAddActive(section, colId, label) {
+            var activeSet = section === 'rowGroup' ? simGroupActive : section === 'value' ? simValueActive : simPivotActive;
+            if (activeSet.has(colId)) return;
+            activeSet.add(colId);
+            simAddCard(section, colId, label);
+            if (section === 'rowGroup') simAddGroupChip(colId, label);
+            if (section === 'value')    simAddValueStat(colId, label);
+          }
+
+          function simPickerRemoveActive(section, colId, label) {
+            var activeSet = section === 'rowGroup' ? simGroupActive : section === 'value' ? simValueActive : simPivotActive;
+            activeSet.delete(colId);
+            simRemoveCard(section, colId);
+            if (section === 'rowGroup') simRemoveGroupChip(colId);
+            if (section === 'value')    simRemoveValueStat(colId);
+          }
+
+          function simAddCard(section, colId, label) {
+            var listId = section === 'rowGroup' ? 'ag-sim-group-cards' : section === 'value' ? 'ag-sim-values-cards' : 'ag-sim-pivot-cards';
+            var list = document.getElementById(listId);
+            if (!list) return;
+            var row = document.createElement('div');
+            row.className = 'ds-column-panel__pivot-col-row';
+            row.setAttribute('draggable', 'true');
+            row.setAttribute('data-col-id', colId);
+            row.innerHTML =
+              '<span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>' +
+              '<span class="ds-column-panel__col-name">' + label + '</span>' +
+              '<button type="button" class="ds-column-panel__pivot-remove" aria-label="Remove ' + label + '">' +
+                '<span class="ds-icon ds-icon--sm" aria-hidden="true">do_not_disturb_on</span>' +
+              '</button>';
+            row.querySelector('.ds-column-panel__pivot-remove').addEventListener('click', function() {
+              simPickerRemoveActive(section, colId, label);
+              if (simPickerActiveSection === section) simPickerRender(simPickerSearchInput ? simPickerSearchInput.value : '');
+            });
+            list.appendChild(row);
+          }
+
+          function simRemoveCard(section, colId) {
+            var listId = section === 'rowGroup' ? 'ag-sim-group-cards' : section === 'value' ? 'ag-sim-values-cards' : 'ag-sim-pivot-cards';
+            var list = document.getElementById(listId);
+            if (!list) return;
+            var row = list.querySelector('[data-col-id="' + colId + '"]');
+            if (row) row.remove();
+          }
+
+          function simAddGroupChip(colId, label) {
+            var bar   = document.getElementById('ag-sim-groups-bar');
             var chips = document.getElementById('ag-sim-group-chips');
-            if (chips) {
-              Array.from(chips.querySelectorAll('.ds-chip[data-group-label="' + label + '"]')).forEach(function(c) { c.remove(); });
-            }
-            // Remove chip from panel
-            var panelChips = document.getElementById('ag-sim-group-panel-chips');
-            if (panelChips) {
-              Array.from(panelChips.querySelectorAll('.ds-chip[data-group-label="' + label + '"]')).forEach(function(c) { c.remove(); });
-              if (!panelChips.querySelector('.ds-chip')) panelChips.style.display = 'none';
-            }
-            // Hide bar if no groups left
-            if (agSimGroupFields.length === 0) {
+            if (!bar || !chips) return;
+            bar.style.display = '';
+            var chip = document.createElement('div');
+            chip.className = 'ds-chip';
+            chip.setAttribute('role', 'option');
+            chip.setAttribute('tabindex', '0');
+            chip.setAttribute('data-col-id', colId);
+            chip.innerHTML = '<span class="ds-chip__label">' + label + '</span>'
+              + '<button type="button" class="ds-chip__remove" aria-label="Remove ' + label + ' group">'
+              + '<span class="ds-icon ds-icon--sm">close</span></button>';
+            chip.querySelector('.ds-chip__remove').addEventListener('click', function(e) {
+              e.stopPropagation();
+              simPickerRemoveActive('rowGroup', colId, label);
+              if (simPickerActiveSection === 'rowGroup') simPickerRender(simPickerSearchInput ? simPickerSearchInput.value : '');
+            });
+            chips.appendChild(chip);
+          }
+
+          function simRemoveGroupChip(colId) {
+            var chips = document.getElementById('ag-sim-group-chips');
+            if (!chips) return;
+            var chip = chips.querySelector('[data-col-id="' + colId + '"]');
+            if (chip) chip.remove();
+            if (!chips.querySelector('.ds-chip')) {
               var bar = document.getElementById('ag-sim-groups-bar');
               if (bar) bar.style.display = 'none';
             }
-          };
+          }
 
-          /* ── Status bar / Values — show when first value column is added ─── */
-          var agSimValueFields = [];
-          var VALUE_FIELD_LABELS = ['Revenue (Sum)', 'Response (Avg)', 'Satisfaction (Avg)'];
-          var VALUE_FIELD_DATA   = [
-            { label: 'Sum', value: '$425,000' },
-            { label: 'Average', value: '18.4h' },
-            { label: 'Average', value: '3.8' },
-          ];
-          window.agSimAddValue = function() {
-            if (agSimValueFields.length >= VALUE_FIELD_LABELS.length) return;
-            var idx = agSimValueFields.length;
-            var label = VALUE_FIELD_LABELS[idx];
-            agSimValueFields.push(label);
-
-            // Show the status bar
+          function simAddValueStat(colId, label) {
             var statusBar = document.getElementById('ag-sim-status-bar');
-            if (statusBar) statusBar.style.display = '';
+            if (!statusBar) return;
+            statusBar.style.display = '';
+            var agg = statusBar.querySelector('.ds-table-status-bar__aggregates');
+            if (!agg) return;
+            var stat = SIM_VALUE_STATS[colId];
+            var el = document.createElement('span');
+            el.className = 'ds-table-status-bar__stat';
+            el.setAttribute('data-col-id', colId);
+            el.innerHTML = '<span class="ds-table-status-bar__stat-label">' + (stat ? stat.label : label) + ':</span>'
+              + '<span class="ds-table-status-bar__stat-value">' + (stat ? stat.value : '—') + '</span>';
+            agg.appendChild(el);
+          }
 
-            // Add stat to aggregates section
-            var agg = statusBar ? statusBar.querySelector('.ds-table-status-bar__aggregates') : null;
+          function simRemoveValueStat(colId) {
+            var statusBar = document.getElementById('ag-sim-status-bar');
+            if (!statusBar) return;
+            var agg = statusBar.querySelector('.ds-table-status-bar__aggregates');
             if (agg) {
-              var stat = document.createElement('span');
-              stat.className = 'ds-table-status-bar__stat';
-              stat.setAttribute('data-value-label', label);
-              stat.innerHTML = '<span class="ds-table-status-bar__stat-label">' + VALUE_FIELD_DATA[idx].label + ':</span>'
-                + '<span class="ds-table-status-bar__stat-value">' + VALUE_FIELD_DATA[idx].value + '</span>';
-              agg.appendChild(stat);
+              var el = agg.querySelector('[data-col-id="' + colId + '"]');
+              if (el) el.remove();
+              if (!agg.querySelector('.ds-table-status-bar__stat') && simValueActive.size === 0) {
+                statusBar.style.display = 'none';
+              }
             }
+          }
 
-            // Add chip to panel
-            var panelChips = document.getElementById('ag-sim-values-panel-chips');
-            if (panelChips) {
-              panelChips.style.display = 'flex';
-              var pc = document.createElement('div');
-              pc.className = 'ds-chip';
-              pc.setAttribute('role', 'option');
-              pc.setAttribute('tabindex', '0');
-              pc.setAttribute('data-value-label', label);
-              pc.innerHTML = '<span class="ds-chip__label">' + label + '</span>'
-                + '<button type="button" class="ds-chip__remove" aria-label="Remove ' + label + '" onclick="agSimRemoveValue(this,\'' + label + '\')">'
-                + '<span class="ds-icon ds-icon--sm">close</span></button>';
-              panelChips.appendChild(pc);
-            }
-          };
-          window.agSimRemoveValue = function(removeBtn, label) {
-            agSimValueFields = agSimValueFields.filter(function(f) { return f !== label; });
-            // Remove stat from aggregates
-            var statusBar = document.getElementById('ag-sim-status-bar');
-            if (statusBar) {
-              var agg = statusBar.querySelector('.ds-table-status-bar__aggregates');
-              if (agg) Array.from(agg.querySelectorAll('[data-value-label="' + label + '"]')).forEach(function(e) { e.remove(); });
-              if (agSimValueFields.length === 0) statusBar.style.display = 'none';
-            }
-            // Remove chip from panel
-            var panelChips = document.getElementById('ag-sim-values-panel-chips');
-            if (panelChips) {
-              Array.from(panelChips.querySelectorAll('[data-value-label="' + label + '"]')).forEach(function(c) { c.remove(); });
-              if (!panelChips.querySelector('.ds-chip')) panelChips.style.display = 'none';
-            }
-          };
+          function simWirePivotListDrag(list) {
+            var dragIdx = -1;
+            list.addEventListener('dragstart', function(e) {
+              var row = e.target.closest('.ds-column-panel__pivot-col-row[draggable="true"]');
+              if (!row) return;
+              var rows = Array.from(list.querySelectorAll('.ds-column-panel__pivot-col-row[draggable="true"]'));
+              dragIdx = rows.indexOf(row);
+              e.dataTransfer.setData('text/plain', String(dragIdx));
+              e.dataTransfer.effectAllowed = 'move';
+            });
+            list.addEventListener('dragover', function(e) {
+              var row = e.target.closest('.ds-column-panel__pivot-col-row[draggable="true"]');
+              if (!row) return;
+              e.preventDefault();
+              list.querySelectorAll('.ds-column-panel__pivot-col-row').forEach(function(r) { r.style.outline = ''; r.style.outlineOffset = ''; });
+              row.style.outline = '2px solid var(--color-border-brand)';
+              row.style.outlineOffset = '-2px';
+            });
+            list.addEventListener('dragleave', function(e) {
+              if (!list.contains(e.relatedTarget)) {
+                list.querySelectorAll('.ds-column-panel__pivot-col-row').forEach(function(r) { r.style.outline = ''; r.style.outlineOffset = ''; });
+              }
+            });
+            list.addEventListener('drop', function(e) {
+              e.preventDefault();
+              list.querySelectorAll('.ds-column-panel__pivot-col-row').forEach(function(r) { r.style.outline = ''; r.style.outlineOffset = ''; });
+              var targetRow = e.target.closest('.ds-column-panel__pivot-col-row[draggable="true"]');
+              if (!targetRow) return;
+              var rows = Array.from(list.querySelectorAll('.ds-column-panel__pivot-col-row[draggable="true"]'));
+              var toIdx = rows.indexOf(targetRow);
+              if (dragIdx < 0 || dragIdx === toIdx) return;
+              var movedRow = rows[dragIdx];
+              list.insertBefore(movedRow, dragIdx < toIdx ? targetRow.nextSibling : targetRow);
+              dragIdx = -1;
+            });
+          }
+
+          simPickerInit();
 
           /* ── Column panel (ds-column-panel) ──────────────────────────────── */
           window.agSimToggleCols = function(btn) {
