@@ -253,13 +253,25 @@ These rules apply to every page in every Onflo application:
 
 #### Angular wiring
 
-- `ds-nav-sidebar`, `ds-top-nav`, `ds-nav-expand` are all Angular standalone components — import them in the host module/component.
-- `ds-subnav` is a **CSS-only** pattern — no Angular component. Manage `is-collapsed` on the element via host component state.
+- `ds-nav-sidebar` and `ds-top-nav` use the **CSS class API** — raw `<nav>` and `<header>` elements with class names. Do **not** import `NavSidebarComponent` or `TopNavComponent`; do **not** use `<ds-nav-sidebar>` or `<ds-top-nav>` as Angular selectors.
+- `ds-nav-expand` is used as an Angular selector (`<ds-nav-expand>`). Import `NavExpandComponent`.
+- `ds-subnav` is **CSS-only** — no Angular component. Manage `is-collapsed` on the element via host component state.
 - Toggle open/closed state: bind `(toggle)` output on `<ds-nav-expand>` to flip a boolean, apply `.is-collapsed` to `.ds-subnav`, and update `[open]` on `<ds-nav-expand>`.
-- The `ds-nav-expand` button is absolutely positioned at the right edge of the sub-nav; its `left` value shifts when the panel collapses — this is handled by the `.ds-page-layout .ds-nav-expand.is-collapsed` CSS rule in the preview.
+- Inner nav primitives (`<ds-nav-button>`, `<ds-agent-status>`, `<ds-nav-tab>`, `<ds-subnav-button>`, `<ds-subnav-header>`) ARE Angular selectors — import them individually.
 
 ```typescript
 // Host component (simplified)
+import {
+  NavExpandComponent,    // <ds-nav-expand>
+  NavButtonComponent,    // <ds-nav-button>
+  AgentStatusComponent,  // <ds-agent-status>
+  NavTabComponent,       // <ds-nav-tab>
+} from '@onflo/design-system';
+
+// Do NOT import:
+// NavSidebarComponent  → shell uses <nav class="ds-nav-sidebar"> (CSS class API)
+// TopNavComponent      → shell uses <header class="ds-top-nav"> (CSS class API)
+
 subNavOpen = true;
 
 onToggleSubnav() {
@@ -269,9 +281,29 @@ onToggleSubnav() {
 
 ```html
 <div class="ds-page-layout">
-  <ds-nav-sidebar />
+  <!-- CSS class API — not <ds-nav-sidebar> -->
+  <nav class="ds-nav-sidebar" role="navigation" aria-label="Main navigation">
+    <div class="ds-nav-sidebar__logo"><!-- logo --></div>
+    <div class="ds-nav-sidebar__nav">
+      <ds-nav-button type="home" aria-label="Home" />
+    </div>
+    <div class="ds-nav-sidebar__bottom">
+      <ds-agent-status />
+      <ds-agent-status />
+    </div>
+  </nav>
+
   <div class="ds-page-layout__content">
-    <ds-top-nav />
+    <!-- CSS class API — not <ds-top-nav> -->
+    <header class="ds-top-nav" role="banner">
+      <div class="ds-top-nav__tabs">
+        <ds-nav-tab label="Page" [active]="true" />
+      </div>
+      <div class="ds-top-nav__actions">
+        <!-- action buttons -->
+      </div>
+    </header>
+
     <div class="ds-page-layout__body">
       <nav class="ds-subnav" [class.is-collapsed]="!subNavOpen" role="navigation" aria-label="Section navigation">
         <!-- subnav items -->
@@ -281,6 +313,8 @@ onToggleSubnav() {
       </main>
     </div>
   </div>
+
+  <!-- Angular selector — NavExpandComponent IS imported -->
   <ds-nav-expand [open]="subNavOpen" (toggle)="onToggleSubnav()" />
 </div>
 ```

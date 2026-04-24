@@ -184,23 +184,26 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 
 ### Navigation
 
-> **Import name pattern:** Navigation and shell components export **without** the `Ds` prefix —
-> e.g. `NavSidebarComponent`, not `DsNavSidebarComponent`. This is intentional and differs from
+> **Import name pattern:** Navigation primitives export **without** the `Ds` prefix —
+> e.g. `NavButtonComponent`, not `DsNavButtonComponent`. This is intentional and differs from
 > form/display components (`DsButtonComponent`, `DsInputComponent`) which do use the prefix.
 > Always copy the Import column below exactly — do not add or remove the prefix.
+
+> **Shell components use the CSS class API — do not import as Angular components:**
+> `ds-nav-sidebar` → `<nav class="ds-nav-sidebar">` (not `<ds-nav-sidebar>`) — `NavSidebarComponent` is **never imported** in consuming projects.
+> `ds-top-nav` → `<header class="ds-top-nav">` (not `<ds-top-nav>`) — `TopNavComponent` is **never imported** in consuming projects.
+> Only the inner primitives in the table below are used as Angular selectors.
 
 | Component | Selector | Import |
 |---|---|---|
 | Tabs | `<ds-tabs>` + `<ds-tab>` | `DsTabsComponent` |
-| Top nav bar | `<ds-top-nav>` | `TopNavComponent` |
-| Nav tab | `<ds-nav-tab>` | `NavTabComponent` |
-| Nav sidebar | `<ds-nav-sidebar>` | `NavSidebarComponent` |
-| Nav button | `<ds-nav-button>` | `NavButtonComponent` |
-| Nav expand | `<ds-nav-expand>` | `NavExpandComponent` |
+| Nav tab (in top-nav) | `<ds-nav-tab>` | `NavTabComponent` |
+| Nav button (in sidebar) | `<ds-nav-button>` | `NavButtonComponent` |
+| Nav expand (subnav toggle) | `<ds-nav-expand>` | `NavExpandComponent` |
 | Sub-nav button | `<ds-subnav-button>` | `SubnavButtonComponent` |
 | Sub-nav header | `<ds-subnav-header>` | `SubnavHeaderComponent` |
-| Sub-nav subheader | `<ds-subnav-subheader>` | `SubnavSubheaderComponent` |
-| Agent status | `<ds-agent-status>` | `AgentStatusComponent` |
+| Sub-nav subheader *(settings only)* | `<ds-subnav-subheader>` | `SubnavSubheaderComponent` |
+| Agent status (in sidebar) | `<ds-agent-status>` | `AgentStatusComponent` |
 | Paginator | `<ds-paginator>` | `DsPaginatorComponent` |
 
 ### Data / table
