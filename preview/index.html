@@ -7258,13 +7258,105 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   display: none;
 }
 
-.ds-column-panel__picker {
-  border-radius: var(--radius-sm);
-  min-width: 0;
-  max-width: none;
-  width: calc(100% - var(--spacing-md) * 2);
-  margin: 0 var(--spacing-md) var(--spacing-xs);
+.ds-column-panel__picker-overlay {
+  position: fixed;
+  z-index: 1050;
+  width: 280px;
+  max-height: 296px;
+  background: var(--color-surface-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elevation-2);
+  border: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ds-column-panel__picker-search {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 0 var(--spacing-md);
+  height: 40px;
+  border-bottom: 1px solid var(--color-border-subtle);
   flex-shrink: 0;
+}
+.ds-column-panel__picker-search .ds-icon {
+  color: var(--color-icon-subtle);
+  flex-shrink: 0;
+}
+.ds-column-panel__picker-search input {
+  flex: 1 0 0;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--ref-typescale-body-medium-font);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typescale-body-medium-weight);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  color: var(--color-text-primary);
+}
+.ds-column-panel__picker-search input::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.ds-column-panel__picker-list {
+  overflow-y: auto;
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-column-panel__picker-option {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  height: 40px;
+  padding: 0 var(--spacing-md);
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.ds-column-panel__picker-option:focus {
+  outline: none;
+}
+.ds-column-panel__picker-option:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring);
+}
+.ds-column-panel__picker-option:hover {
+  background: var(--overlay-hovered);
+}
+.ds-column-panel__picker-option:active {
+  background: var(--overlay-pressed);
+}
+.ds-column-panel__picker-option .ds-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-border-input);
+}
+.ds-column-panel__picker-option span:not(.ds-icon) {
+  font-family: var(--ref-typescale-body-medium-font);
+  font-size: var(--ref-typescale-body-medium-size);
+  font-weight: var(--ref-typescale-body-medium-weight);
+  line-height: var(--ref-typescale-body-medium-line-height);
+  letter-spacing: var(--ref-typescale-body-medium-tracking);
+  color: var(--color-text-primary);
+  flex: 1 0 0;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ds-column-panel__picker-option--active .ds-icon {
+  color: var(--color-surface-brand-bold);
 }
 
 .ds-column-panel__picker-empty {
@@ -20982,13 +21074,254 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           </div>
 
         </div>
+
+        <!-- Shared picker overlay — position: fixed, shown/hidden via JS -->
+        <div id="cp-picker-overlay" class="ds-column-panel__picker-overlay" style="display:none;" role="dialog" aria-label="Add column">
+          <div class="ds-column-panel__picker-search">
+            <span class="ds-icon ds-icon--sm" aria-hidden="true">search</span>
+            <input type="text" id="cp-picker-search" placeholder="Search columns…" autocomplete="off" aria-label="Search columns" />
+          </div>
+          <div id="cp-picker-list" class="ds-column-panel__picker-list" role="list"></div>
+        </div>
+
       </section>
       <script>
-        /* Wire drag-to-reorder for the static column-panel preview demos.
-           These panels have no AG Grid behind them, so only DOM order is updated. */
         (function() {
           var section = document.getElementById('column-panel');
           if (!section) return;
+
+          // ── Mock column data per picker section ─────────────────────────────
+          var CP_MOCK = {
+            rowGroup: ['Customer', 'Department', 'Region', 'Priority', 'Status', 'Category'],
+            value:    ['Revenue', 'Count', 'Units', 'Cost', 'Margin', 'Amount'],
+            pivot:    ['Quarter', 'Year', 'Month', 'Region', 'Category', 'Division'],
+          };
+
+          var overlay    = document.getElementById('cp-picker-overlay');
+          var searchInput = document.getElementById('cp-picker-search');
+          var listEl      = document.getElementById('cp-picker-list');
+          var activeBtn   = null;
+          var activeSection = null;
+          // track which labels are active per demo panel (keyed by panel element)
+          var panelActiveMap = new WeakMap();
+
+          function getPanelActiveSet(panel, sectionKey) {
+            if (!panelActiveMap.has(panel)) panelActiveMap.set(panel, {});
+            var map = panelActiveMap.get(panel);
+            if (!map[sectionKey]) {
+              // seed from existing pivot-col-rows in this panel+section
+              map[sectionKey] = new Set();
+              var hd = getSectionHd(panel, sectionKey);
+              if (hd) {
+                var list = hd.nextElementSibling;
+                while (list && !list.classList.contains('ds-column-panel__pivot-col-list')) {
+                  list = list.nextElementSibling;
+                }
+                if (list) {
+                  list.querySelectorAll('.ds-column-panel__col-name').forEach(function(n) {
+                    map[sectionKey].add(n.textContent.trim());
+                  });
+                }
+              }
+            }
+            return map[sectionKey];
+          }
+
+          function getSectionForBtn(btn) {
+            // Walk previous siblings inside the panel to find the nearest section header
+            var panel = btn.closest('.ds-column-panel');
+            if (!panel) return null;
+            var el = btn.previousElementSibling;
+            while (el) {
+              if (el.classList.contains('ds-column-panel__section-hd')) {
+                var title = el.querySelector('.ds-column-panel__section-title');
+                if (title) {
+                  var t = title.textContent.trim();
+                  if (t === 'Row Groups')    return 'rowGroup';
+                  if (t === 'Values')        return 'value';
+                  if (t === 'Column Labels') return 'pivot';
+                }
+              }
+              // pivot-col-list sits between section header and add button — skip over it
+              el = el.previousElementSibling;
+            }
+            return null;
+          }
+
+          function getSectionHd(panel, sectionKey) {
+            var label = sectionKey === 'rowGroup' ? 'Row Groups' : sectionKey === 'value' ? 'Values' : 'Column Labels';
+            var found = null;
+            panel.querySelectorAll('.ds-column-panel__section-hd').forEach(function(hd) {
+              var t = hd.querySelector('.ds-column-panel__section-title');
+              if (t && t.textContent.trim() === label) found = hd;
+            });
+            return found;
+          }
+
+          function renderPickerOptions(panel, sectionKey, filter) {
+            var activeSet = getPanelActiveSet(panel, sectionKey);
+            var items = CP_MOCK[sectionKey] || [];
+            var f = filter ? filter.toLowerCase() : '';
+            listEl.innerHTML = '';
+            var visible = items.filter(function(label) { return !f || label.toLowerCase().includes(f); });
+            if (!visible.length) {
+              var empty = document.createElement('span');
+              empty.className = 'ds-column-panel__picker-empty';
+              empty.textContent = 'No columns found';
+              listEl.appendChild(empty);
+              return;
+            }
+            visible.forEach(function(label) {
+              var isActive = activeSet.has(label);
+              var btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'ds-column-panel__picker-option' + (isActive ? ' ds-column-panel__picker-option--active' : '');
+              btn.setAttribute('role', 'listitem');
+              btn.innerHTML =
+                '<span class="ds-icon ds-icon--sm' + (isActive ? ' ds-icon--filled' : '') + '" aria-hidden="true">' +
+                  (isActive ? 'check_box' : 'check_box_outline_blank') +
+                '</span><span>' + label + '</span>';
+              btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var panel2 = activeBtn ? activeBtn.closest('.ds-column-panel') : null;
+                if (!panel2) return;
+                var set = getPanelActiveSet(panel2, sectionKey);
+                if (set.has(label)) {
+                  set.delete(label);
+                  removeCardFromPanel(panel2, sectionKey, label);
+                } else {
+                  set.add(label);
+                  addCardToPanel(panel2, sectionKey, label);
+                }
+                renderPickerOptions(panel2, sectionKey, searchInput.value);
+              });
+              listEl.appendChild(btn);
+            });
+          }
+
+          function getOrCreateCardList(panel, sectionKey) {
+            var hd = getSectionHd(panel, sectionKey);
+            if (!hd) return null;
+            var addBtn = null;
+            var el = hd.nextElementSibling;
+            while (el) {
+              if (el.classList.contains('ds-column-panel__add-btn')) { addBtn = el; break; }
+              el = el.nextElementSibling;
+            }
+            // Check for existing pivot-col-list between hd and addBtn
+            var list = null;
+            el = hd.nextElementSibling;
+            while (el && el !== addBtn) {
+              if (el.classList.contains('ds-column-panel__pivot-col-list')) { list = el; break; }
+              el = el.nextElementSibling;
+            }
+            if (!list) {
+              list = document.createElement('div');
+              list.className = 'ds-column-panel__pivot-col-list';
+              hd.parentNode.insertBefore(list, addBtn);
+              wirePivotListDrag(list);
+            }
+            return list;
+          }
+
+          function addCardToPanel(panel, sectionKey, label) {
+            var list = getOrCreateCardList(panel, sectionKey);
+            if (!list) return;
+            var row = document.createElement('div');
+            row.className = 'ds-column-panel__pivot-col-row';
+            row.setAttribute('draggable', 'true');
+            row.innerHTML =
+              '<span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>' +
+              '<span class="ds-column-panel__col-name">' + label + '</span>' +
+              '<button type="button" class="ds-column-panel__pivot-remove" aria-label="Remove ' + label + '">' +
+                '<span class="ds-icon ds-icon--sm" aria-hidden="true">do_not_disturb_on</span>' +
+              '</button>';
+            row.querySelector('.ds-column-panel__pivot-remove').addEventListener('click', function() {
+              var set = getPanelActiveSet(panel, sectionKey);
+              set.delete(label);
+              row.remove();
+            });
+            list.appendChild(row);
+          }
+
+          function removeCardFromPanel(panel, sectionKey, label) {
+            var hd = getSectionHd(panel, sectionKey);
+            if (!hd) return;
+            var list = null;
+            var el = hd.nextElementSibling;
+            while (el) {
+              if (el.classList.contains('ds-column-panel__pivot-col-list')) { list = el; break; }
+              if (el.classList.contains('ds-column-panel__add-btn')) break;
+              el = el.nextElementSibling;
+            }
+            if (!list) return;
+            list.querySelectorAll('.ds-column-panel__col-name').forEach(function(n) {
+              if (n.textContent.trim() === label) n.closest('.ds-column-panel__pivot-col-row').remove();
+            });
+          }
+
+          function positionOverlay(btn) {
+            var rect = btn.getBoundingClientRect();
+            var overlayHeight = 296;
+            var spaceBelow = window.innerHeight - rect.bottom;
+            overlay.style.left = rect.left + 'px';
+            overlay.style.width = '280px';
+            if (spaceBelow < overlayHeight + 8) {
+              overlay.style.top    = '';
+              overlay.style.bottom = (window.innerHeight - rect.top + 4) + 'px';
+            } else {
+              overlay.style.bottom = '';
+              overlay.style.top    = (rect.bottom + 4) + 'px';
+            }
+          }
+
+          function openPicker(btn) {
+            var panel = btn.closest('.ds-column-panel');
+            var sk = getSectionForBtn(btn);
+            if (!panel || !sk) return;
+            if (activeBtn === btn) { closePicker(); return; }
+            activeBtn = btn;
+            activeSection = sk;
+            searchInput.value = '';
+            renderPickerOptions(panel, sk, '');
+            positionOverlay(btn);
+            overlay.style.display = 'flex';
+            btn.setAttribute('aria-expanded', 'true');
+            setTimeout(function() { searchInput.focus(); }, 0);
+          }
+
+          function closePicker() {
+            overlay.style.display = 'none';
+            if (activeBtn) activeBtn.setAttribute('aria-expanded', 'false');
+            activeBtn = null;
+            activeSection = null;
+          }
+
+          // ── Wire Add Column buttons ───────────────────────────────────────
+          section.querySelectorAll('.ds-column-panel__add-btn').forEach(function(btn) {
+            btn.setAttribute('aria-expanded', 'false');
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              openPicker(btn);
+            });
+          });
+
+          // ── Picker search ─────────────────────────────────────────────────
+          searchInput.addEventListener('input', function() {
+            if (!activeBtn || !activeSection) return;
+            var panel = activeBtn.closest('.ds-column-panel');
+            renderPickerOptions(panel, activeSection, searchInput.value);
+          });
+          searchInput.addEventListener('click', function(e) { e.stopPropagation(); });
+          overlay.addEventListener('click', function(e) { e.stopPropagation(); });
+
+          // ── Close on outside click / Escape ──────────────────────────────
+          document.addEventListener('click', closePicker);
+          document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closePicker();
+          });
+
+          // ── Column Visibility drag-to-reorder (existing) ─────────────────
           section.querySelectorAll('.ds-column-panel__col-list').forEach(function(list) {
             list.addEventListener('dragstart', function(e) {
               var row = e.target.closest('.ds-column-panel__col-row[draggable="true"]');
@@ -21000,43 +21333,106 @@ Source: <code>components/datepicker/_datepicker.scss</code>
               var row = e.target.closest('.ds-column-panel__col-row[draggable="true"]');
               if (!row) return;
               e.preventDefault();
-              list.querySelectorAll('.ds-column-panel__col-row').forEach(function(r) {
-                r.style.outline = '';
-                r.style.outlineOffset = '';
-              });
+              list.querySelectorAll('.ds-column-panel__col-row').forEach(function(r) { r.style.outline = ''; r.style.outlineOffset = ''; });
               row.style.outline = '2px solid var(--color-border-brand)';
               row.style.outlineOffset = '-2px';
             });
             list.addEventListener('dragleave', function(e) {
               if (!list.contains(e.relatedTarget)) {
-                list.querySelectorAll('.ds-column-panel__col-row').forEach(function(r) {
-                  r.style.outline = '';
-                  r.style.outlineOffset = '';
-                });
+                list.querySelectorAll('.ds-column-panel__col-row').forEach(function(r) { r.style.outline = ''; r.style.outlineOffset = ''; });
               }
             });
             list.addEventListener('drop', function(e) {
               e.preventDefault();
-              list.querySelectorAll('.ds-column-panel__col-row').forEach(function(r) {
-                r.style.outline = '';
-                r.style.outlineOffset = '';
-              });
+              list.querySelectorAll('.ds-column-panel__col-row').forEach(function(r) { r.style.outline = ''; r.style.outlineOffset = ''; });
               var targetRow = e.target.closest('.ds-column-panel__col-row[draggable="true"]');
               if (!targetRow) return;
-              var draggedColId = e.dataTransfer.getData('text/plain');
-              var targetColId  = targetRow.getAttribute('data-col-key');
-              if (!draggedColId || draggedColId === targetColId) return;
+              var draggedKey = e.dataTransfer.getData('text/plain');
+              var targetKey  = targetRow.getAttribute('data-col-key');
+              if (!draggedKey || draggedKey === targetKey) return;
               var rows = Array.from(list.querySelectorAll('.ds-column-panel__col-row[draggable="true"]'));
-              var fromIndex = rows.findIndex(function(r) { return r.getAttribute('data-col-key') === draggedColId; });
-              var toIndex   = rows.findIndex(function(r) { return r.getAttribute('data-col-key') === targetColId; });
-              if (fromIndex < 0 || toIndex < 0) return;
-              var movedRow = rows[fromIndex];
-              if (fromIndex < toIndex) {
-                list.insertBefore(movedRow, targetRow.nextSibling);
-              } else {
-                list.insertBefore(movedRow, targetRow);
+              var fromIdx = rows.findIndex(function(r) { return r.getAttribute('data-col-key') === draggedKey; });
+              var toIdx   = rows.findIndex(function(r) { return r.getAttribute('data-col-key') === targetKey; });
+              if (fromIdx < 0 || toIdx < 0) return;
+              var movedRow = rows[fromIdx];
+              list.insertBefore(movedRow, fromIdx < toIdx ? targetRow.nextSibling : targetRow);
+            });
+          });
+
+          // ── Pivot card list drag-to-reorder ──────────────────────────────
+          function wirePivotListDrag(list) {
+            var dragIdx = -1;
+            list.addEventListener('dragstart', function(e) {
+              var row = e.target.closest('.ds-column-panel__pivot-col-row[draggable="true"]');
+              if (!row) return;
+              var rows = Array.from(list.querySelectorAll('.ds-column-panel__pivot-col-row[draggable="true"]'));
+              dragIdx = rows.indexOf(row);
+              e.dataTransfer.setData('text/plain', String(dragIdx));
+              e.dataTransfer.effectAllowed = 'move';
+            });
+            list.addEventListener('dragover', function(e) {
+              var row = e.target.closest('.ds-column-panel__pivot-col-row[draggable="true"]');
+              if (!row) return;
+              e.preventDefault();
+              list.querySelectorAll('.ds-column-panel__pivot-col-row').forEach(function(r) { r.style.outline = ''; r.style.outlineOffset = ''; });
+              row.style.outline = '2px solid var(--color-border-brand)';
+              row.style.outlineOffset = '-2px';
+            });
+            list.addEventListener('dragleave', function(e) {
+              if (!list.contains(e.relatedTarget)) {
+                list.querySelectorAll('.ds-column-panel__pivot-col-row').forEach(function(r) { r.style.outline = ''; r.style.outlineOffset = ''; });
               }
             });
+            list.addEventListener('drop', function(e) {
+              e.preventDefault();
+              list.querySelectorAll('.ds-column-panel__pivot-col-row').forEach(function(r) { r.style.outline = ''; r.style.outlineOffset = ''; });
+              var targetRow = e.target.closest('.ds-column-panel__pivot-col-row[draggable="true"]');
+              if (!targetRow) return;
+              var fromIdx = dragIdx;
+              var rows = Array.from(list.querySelectorAll('.ds-column-panel__pivot-col-row[draggable="true"]'));
+              var toIdx = rows.indexOf(targetRow);
+              if (fromIdx < 0 || fromIdx === toIdx) return;
+              var movedRow = rows[fromIdx];
+              list.insertBefore(movedRow, fromIdx < toIdx ? targetRow.nextSibling : targetRow);
+              dragIdx = -1;
+            });
+          }
+
+          // Wire existing static pivot-col-lists and make rows draggable
+          section.querySelectorAll('.ds-column-panel__pivot-col-list').forEach(function(list) {
+            list.querySelectorAll('.ds-column-panel__pivot-col-row').forEach(function(row) {
+              row.setAttribute('draggable', 'true');
+              // Wire remove buttons for pre-seeded cards
+              var removeBtn = row.querySelector('.ds-column-panel__pivot-remove');
+              if (removeBtn) {
+                removeBtn.addEventListener('click', function() {
+                  var panel = row.closest('.ds-column-panel');
+                  var label = row.querySelector('.ds-column-panel__col-name').textContent.trim();
+                  var sk = null;
+                  // Find which section this list belongs to by scanning section headers
+                  var el = list.previousElementSibling;
+                  while (el) {
+                    if (el.classList.contains('ds-column-panel__section-hd')) {
+                      var t = el.querySelector('.ds-column-panel__section-title');
+                      if (t) {
+                        var txt = t.textContent.trim();
+                        if (txt === 'Row Groups') sk = 'rowGroup';
+                        else if (txt === 'Values') sk = 'value';
+                        else if (txt === 'Column Labels') sk = 'pivot';
+                      }
+                      break;
+                    }
+                    el = el.previousElementSibling;
+                  }
+                  if (sk && panel) {
+                    var set = getPanelActiveSet(panel, sk);
+                    set.delete(label);
+                  }
+                  row.remove();
+                });
+              }
+            });
+            wirePivotListDrag(list);
           });
         })();
       </script>

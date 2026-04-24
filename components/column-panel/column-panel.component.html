@@ -102,10 +102,14 @@
         <span class="ds-column-panel__section-title">Column Labels</span>
       </div>
 
-      <div class="ds-column-panel__pivot-col-list">
+      <div class="ds-column-panel__pivot-col-list" *ngIf="activePivotColumns.length > 0">
         <div
-          *ngFor="let col of activePivotColumns"
+          *ngFor="let col of activePivotColumns; let i = index"
           class="ds-column-panel__pivot-col-row"
+          draggable="true"
+          (dragstart)="onActiveItemDragStart($event, i, 'pivot')"
+          (dragover)="onActiveItemDragOver($event)"
+          (drop)="onActiveItemDrop($event, i, 'pivot')"
         >
           <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
           <span class="ds-column-panel__col-name">{{ col.label }}</span>
@@ -123,32 +127,12 @@
       <button
         type="button"
         class="ds-column-panel__add-btn"
-        [attr.aria-expanded]="showPivotMenu"
-        (click)="togglePivotMenu($event)"
+        [attr.aria-expanded]="activePickerSection === 'pivot'"
+        (click)="togglePicker('pivot', $event)"
       >
         <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
         Add Column
       </button>
-
-      <div
-        *ngIf="showPivotMenu"
-        class="ds-menu ds-column-panel__picker"
-        role="menu"
-        (click)="$event.stopPropagation()"
-      >
-        <ng-container *ngIf="pivotMenuOptions.length > 0; else noPivotCols">
-          <button
-            *ngFor="let opt of pivotMenuOptions"
-            type="button"
-            class="ds-menu__item"
-            role="menuitem"
-            (click)="selectPivotColumn(opt, $event)"
-          >{{ opt.label }}</button>
-        </ng-container>
-        <ng-template #noPivotCols>
-          <span class="ds-column-panel__picker-empty">All columns added</span>
-        </ng-template>
-      </div>
     </ng-container>
   </ng-container>
 
@@ -160,14 +144,15 @@
       <span class="ds-column-panel__section-title">Row Groups</span>
     </div>
 
-    <!-- Active row group rows -->
-    <div
-      *ngIf="activeRowGroups.length > 0"
-      class="ds-column-panel__pivot-col-list"
-    >
+    <!-- Active row group cards -->
+    <div class="ds-column-panel__pivot-col-list" *ngIf="activeRowGroups.length > 0">
       <div
-        *ngFor="let group of activeRowGroups"
+        *ngFor="let group of activeRowGroups; let i = index"
         class="ds-column-panel__pivot-col-row"
+        draggable="true"
+        (dragstart)="onActiveItemDragStart($event, i, 'rowGroup')"
+        (dragover)="onActiveItemDragOver($event)"
+        (drop)="onActiveItemDrop($event, i, 'rowGroup')"
       >
         <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
         <span class="ds-column-panel__col-name">{{ group.label }}</span>
@@ -182,36 +167,15 @@
       </div>
     </div>
 
-    <!-- Add Column button + inline picker -->
     <button
       type="button"
       class="ds-column-panel__add-btn"
-      [attr.aria-expanded]="showRowGroupMenu"
-      (click)="toggleRowGroupMenu($event)"
+      [attr.aria-expanded]="activePickerSection === 'rowGroup'"
+      (click)="togglePicker('rowGroup', $event)"
     >
       <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
       Add Column
     </button>
-
-    <div
-      *ngIf="showRowGroupMenu"
-      class="ds-menu ds-column-panel__picker"
-      role="menu"
-      (click)="$event.stopPropagation()"
-    >
-      <ng-container *ngIf="rowGroupMenuOptions.length > 0; else noRowGroupCols">
-        <button
-          *ngFor="let opt of rowGroupMenuOptions"
-          type="button"
-          class="ds-menu__item"
-          role="menuitem"
-          (click)="selectRowGroupColumn(opt, $event)"
-        >{{ opt.label }}</button>
-      </ng-container>
-      <ng-template #noRowGroupCols>
-        <span class="ds-column-panel__picker-empty">All columns grouped</span>
-      </ng-template>
-    </div>
   </ng-container>
 
   <!-- ── 5. Values (optional — hidden by suppressValues) ─────────────── -->
@@ -222,14 +186,15 @@
       <span class="ds-column-panel__section-title">Values</span>
     </div>
 
-    <!-- Active value rows -->
-    <div
-      *ngIf="activeValueColumns.length > 0"
-      class="ds-column-panel__pivot-col-list"
-    >
+    <!-- Active value cards -->
+    <div class="ds-column-panel__pivot-col-list" *ngIf="activeValueColumns.length > 0">
       <div
-        *ngFor="let val of activeValueColumns"
+        *ngFor="let val of activeValueColumns; let i = index"
         class="ds-column-panel__pivot-col-row"
+        draggable="true"
+        (dragstart)="onActiveItemDragStart($event, i, 'value')"
+        (dragover)="onActiveItemDragOver($event)"
+        (drop)="onActiveItemDrop($event, i, 'value')"
       >
         <span class="ds-icon ds-icon--sm ds-column-panel__col-drag" aria-hidden="true">drag_indicator</span>
         <span class="ds-column-panel__col-name">{{ val.label }}</span>
@@ -244,36 +209,65 @@
       </div>
     </div>
 
-    <!-- Add Column button + inline picker -->
     <button
       type="button"
       class="ds-column-panel__add-btn"
-      [attr.aria-expanded]="showValueMenu"
-      (click)="toggleValueMenu($event)"
+      [attr.aria-expanded]="activePickerSection === 'value'"
+      (click)="togglePicker('value', $event)"
     >
       <span class="ds-icon ds-icon--sm" aria-hidden="true">add_circle_outline</span>
       Add Column
     </button>
-
-    <div
-      *ngIf="showValueMenu"
-      class="ds-menu ds-column-panel__picker"
-      role="menu"
-      (click)="$event.stopPropagation()"
-    >
-      <ng-container *ngIf="valueMenuOptions.length > 0; else noValueCols">
-        <button
-          *ngFor="let opt of valueMenuOptions"
-          type="button"
-          class="ds-menu__item"
-          role="menuitem"
-          (click)="selectValueColumn(opt, $event)"
-        >{{ opt.label }}</button>
-      </ng-container>
-      <ng-template #noValueCols>
-        <span class="ds-column-panel__picker-empty">All columns added</span>
-      </ng-template>
-    </div>
   </ng-container>
 
+</div>
+
+<!-- ── Column picker overlay (position: fixed, shared across all three sections) ── -->
+<div
+  *ngIf="activePickerSection"
+  class="ds-column-panel__picker-overlay"
+  role="dialog"
+  aria-label="Add column"
+  [style.top]="pickerPos.top"
+  [style.bottom]="pickerPos.bottom"
+  [style.left]="pickerPos.left"
+  (click)="$event.stopPropagation()"
+>
+  <!-- Search input -->
+  <div class="ds-column-panel__picker-search">
+    <span class="ds-icon ds-icon--sm" aria-hidden="true">search</span>
+    <input
+      type="text"
+      placeholder="Search columns…"
+      autocomplete="off"
+      [value]="pickerSearchText"
+      (input)="onPickerSearchInput($event)"
+      (click)="$event.stopPropagation()"
+      aria-label="Search columns"
+    />
+  </div>
+
+  <!-- Options list -->
+  <div class="ds-column-panel__picker-list" role="list">
+    <ng-container *ngIf="currentPickerOptions.length > 0; else noPickerOptions">
+      <button
+        *ngFor="let opt of currentPickerOptions"
+        type="button"
+        class="ds-column-panel__picker-option"
+        [class.ds-column-panel__picker-option--active]="opt.active"
+        role="listitem"
+        (click)="selectPickerOption(opt, $event)"
+      >
+        <span
+          class="ds-icon ds-icon--sm"
+          [class.ds-icon--filled]="opt.active"
+          aria-hidden="true"
+        >{{ opt.active ? 'check_box' : 'check_box_outline_blank' }}</span>
+        <span>{{ opt.label }}</span>
+      </button>
+    </ng-container>
+    <ng-template #noPickerOptions>
+      <span class="ds-column-panel__picker-empty">No columns found</span>
+    </ng-template>
+  </div>
 </div>

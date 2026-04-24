@@ -8,9 +8,15 @@
  *   - Comfort/Compact density toggle
  *   - Column visibility toggle (checkbox per column, drag to reorder)
  *   - Pivot Mode toggle
- *   - Row Groups section — shows active groups as removable chips; "Add Column"
- *     opens an inline picker menu listing all groupable columns
- *   - Values (aggregation) section — "Add Column" opens same picker pattern
+ *   - Row Groups section — active items as draggable/removable cards; "Add Column"
+ *     opens a fixed-position overlay with search across all enableRowGroup columns
+ *   - Values (aggregation) section — same Add Column pattern
+ *   - Column Labels section (pivot mode) — same Add Column pattern
+ *
+ *   All three pickers show every eligible column (including already-active ones,
+ *   shown with a filled checkbox). Clicking an active column removes it; clicking
+ *   an inactive column adds it. Drag-to-reorder on active cards syncs back to the
+ *   AG Grid API (remove-all / re-add-in-order).
  *
  * AG Grid usage:
  *   gridOptions = {
@@ -37,7 +43,8 @@
  *   Column checkboxes use role="checkbox" + aria-checked.
  *   Density buttons use aria-pressed.
  *   Pivot toggle is a native <input type="checkbox">.
- *   Add Column buttons use aria-expanded to reflect menu state.
+ *   Add Column buttons use aria-expanded to reflect picker state.
+ *   Picker overlay: role="dialog" with aria-label; Escape closes it.
  */
 
 import {
@@ -159,10 +166,15 @@ export interface AgToolPanelParams {
   suppressValues?: boolean;
 }
 
-/** A column entry in the row-group or value picker menu. */
+/** A column entry in the row-group, value, or pivot picker. */
 export interface ColumnPickerOption {
   colId: string;
   label: string;
+}
+
+/** A picker option that also carries its active (already-added) state. */
+export interface ColumnPickerOptionWithState extends ColumnPickerOption {
+  active: boolean;
 }
 
 @Component({
@@ -187,23 +199,14 @@ export class DsColumnPanelComponent implements OnDestroy {
   /** Whether pivot mode is enabled. */
   @Input() pivotMode = false;
 
-  /** Active row group columns shown as chips in the Row Groups section. */
+  /** Active row group columns shown as draggable cards in the Row Groups section. */
   activeRowGroups: ColumnPickerOption[] = [];
 
-  /** Active value (aggregation) columns shown as chips in the Values section. */
+  /** Active value (aggregation) columns shown as draggable cards in the Values section. */
   activeValueColumns: ColumnPickerOption[] = [];
 
-  /** Whether the row-group column picker menu is open. */
-  showRowGroupMenu = false;
-
-  /** Whether the value column picker menu is open. */
-  showValueMenu = false;
-
-  /** Active pivot columns shown as list rows in the Column Labels section. */
+  /** Active pivot columns shown as draggable cards in the Column Labels section. */
   activePivotColumns: ColumnPickerOption[] = [];
-
-  /** Whether the pivot column picker menu is open. */
-  showPivotMenu = false;
 
   /** Whether the Pivot Mode row is hidden (set via suppressPivotMode toolPanelParam). */
   suppressPivotMode = false;
@@ -213,6 +216,22 @@ export class DsColumnPanelComponent implements OnDestroy {
 
   /** Whether the Values section is hidden (set via suppressValues toolPanelParam). */
   suppressValues = false;
+
+  // ── Picker overlay state ──────────────────────────────────────────────────
+
+  /** Which section's picker is currently open, or null if closed. */
+  activePickerSection: 'rowGroup' | 'value' | 'pivot' | null = null;
+
+  /** Current search text inside the open picker. */
+  pickerSearchText = '';
+
+  /** Position of the picker overlay (set when opening). */
+  pickerPos: { top?: string; bottom?: string; left: string } = { left: '0' };
+
+  // ── Drag state for active-item card reordering ────────────────────────────
+
+  /** Which list is currently being dragged within. */
+  private _activeDragSource: 'rowGroup' | 'value' | 'pivot' | null = null;
 
   // ── Outputs ───────────────────────────────────────────────────────────────
 
@@ -287,14 +306,20 @@ export class DsColumnPanelComponent implements OnDestroy {
     this._api?.removeEventListener('columnValueChanged',   this._groupChanged);
   }
 
-  // ── Outside-click: close open menus ──────────────────────────────────────
+  // ── Outside-click + Escape: close picker ─────────────────────────────────
 
   @HostListener('document:click')
   onDocumentClick(): void {
-    if (this.showRowGroupMenu || this.showValueMenu || this.showPivotMenu) {
-      this.showRowGroupMenu = false;
-      this.showValueMenu    = false;
-      this.showPivotMenu    = false;
+    if (this.activePickerSection !== null) {
+      this.activePickerSection = null;
+      this.cdr.markForCheck();
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.activePickerSection !== null) {
+      this.activePickerSection = null;
       this.cdr.markForCheck();
     }
   }
@@ -339,115 +364,133 @@ export class DsColumnPanelComponent implements OnDestroy {
     this.cdr.markForCheck();
   }
 
-  // ── Column picker options (excludes already-active columns + system cols) ─
+  // ── Picker overlay ────────────────────────────────────────────────────────
 
-  get rowGroupMenuOptions(): ColumnPickerOption[] {
-    const activeIds = new Set(this.activeRowGroups.map(g => g.colId));
-    if (!this._api) { return []; }
-    return this._api.getAllGridColumns()
-      .filter(col => {
-        const def = col.getColDef();
-        return def.enableRowGroup === true
-          && def.lockVisible !== true
-          && !activeIds.has(col.getColId());
-      })
-      .map(col => ({
-        colId: col.getColId(),
-        label: col.getColDef().headerName ?? col.getColId(),
-      }));
+  /**
+   * Options for the currently-open picker. Includes ALL eligible columns for the
+   * active section (regardless of column visibility state), with `active: true` for
+   * columns already in the list. Filtered by pickerSearchText.
+   */
+  get currentPickerOptions(): ColumnPickerOptionWithState[] {
+    if (!this._api || !this.activePickerSection) { return []; }
+
+    const text = this.pickerSearchText.trim().toLowerCase();
+    let list: ColumnPickerOptionWithState[];
+
+    if (this.activePickerSection === 'rowGroup') {
+      const activeIds = new Set(this.activeRowGroups.map(g => g.colId));
+      list = this._api.getAllGridColumns()
+        .filter(col => col.getColDef().enableRowGroup === true && col.getColDef().lockVisible !== true)
+        .map(col => ({
+          colId:  col.getColId(),
+          label:  col.getColDef().headerName ?? col.getColId(),
+          active: activeIds.has(col.getColId()),
+        }));
+    } else if (this.activePickerSection === 'value') {
+      const activeIds = new Set(this.activeValueColumns.map(v => v.colId));
+      list = this._api.getAllGridColumns()
+        .filter(col => col.getColDef().enableValue === true && col.getColDef().lockVisible !== true)
+        .map(col => ({
+          colId:  col.getColId(),
+          label:  col.getColDef().headerName ?? col.getColId(),
+          active: activeIds.has(col.getColId()),
+        }));
+    } else {
+      const activeIds = new Set(this.activePivotColumns.map(p => p.colId));
+      list = this._api.getAllGridColumns()
+        .filter(col => col.getColDef().enablePivot === true && col.getColDef().lockVisible !== true)
+        .map(col => ({
+          colId:  col.getColId(),
+          label:  col.getColDef().headerName ?? col.getColId(),
+          active: activeIds.has(col.getColId()),
+        }));
+    }
+
+    if (text) {
+      list = list.filter(o => o.label.toLowerCase().includes(text));
+    }
+
+    return list;
   }
 
-  get valueMenuOptions(): ColumnPickerOption[] {
-    const activeIds = new Set(this.activeValueColumns.map(v => v.colId));
-    if (!this._api) { return []; }
-    return this._api.getAllGridColumns()
-      .filter(col => {
-        const def = col.getColDef();
-        return def.enableValue === true
-          && def.lockVisible !== true
-          && !activeIds.has(col.getColId());
-      })
-      .map(col => ({
-        colId: col.getColId(),
-        label: col.getColDef().headerName ?? col.getColId(),
-      }));
-  }
-
-  get pivotMenuOptions(): ColumnPickerOption[] {
-    const activeIds = new Set(this.activePivotColumns.map(p => p.colId));
-    if (!this._api) { return []; }
-    return this._api.getAllGridColumns()
-      .filter(col => {
-        const def = col.getColDef();
-        return def.enablePivot === true
-          && def.lockVisible !== true
-          && !activeIds.has(col.getColId());
-      })
-      .map(col => ({
-        colId: col.getColId(),
-        label: col.getColDef().headerName ?? col.getColId(),
-      }));
-  }
-
-  // ── User actions ──────────────────────────────────────────────────────────
-
-  toggleColVisibility(): void {
-    this.colVisibilityExpanded = !this.colVisibilityExpanded;
-    this._onStateUpdated?.();
-  }
-
-  onDensityChange(value: TableDensity): void {
-    this.density = value;
-    this.densityChange.emit(value);
-    this._onStateUpdated?.();
-  }
-
-  toggleColumnVisibility(col: ColumnPanelItem): void {
-    if (col.system) { return; }
-    const newVisible = !col.visible;
-    col.visible = newVisible;
-    this._api?.setColumnVisible(col.colId, newVisible);
-    this.columnVisibilityChange.emit({ colId: col.colId, visible: newVisible });
-  }
-
-  togglePivotMode(): void {
-    this.pivotMode = !this.pivotMode;
-    this._api?.setPivotMode(this.pivotMode);
-    this.pivotModeChange.emit(this.pivotMode);
-  }
-
-  // ── Row Groups picker ─────────────────────────────────────────────────────
-
-  toggleRowGroupMenu(event: Event): void {
+  togglePicker(section: 'rowGroup' | 'value' | 'pivot', event: Event): void {
     event.stopPropagation();
-    this.showRowGroupMenu = !this.showRowGroupMenu;
-    this.showValueMenu    = false;
+    const btn = event.currentTarget as HTMLElement;
+
+    if (this.activePickerSection === section) {
+      this.activePickerSection = null;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    this.activePickerSection = section;
+    this.pickerSearchText = '';
+    this._positionPicker(btn);
+    this.cdr.markForCheck();
   }
 
-  selectRowGroupColumn(col: ColumnPickerOption, event: Event): void {
-    event.stopPropagation();
-    this._api?.addRowGroupColumn(col.colId);
-    this.showRowGroupMenu = false;
-    this._syncGroups();
+  onPickerSearchInput(event: Event): void {
+    this.pickerSearchText = (event.target as HTMLInputElement).value;
+    this.cdr.markForCheck();
   }
+
+  /**
+   * Toggle a column in/out of the active section. Already-active columns are
+   * removed; inactive columns are added. The picker stays open for multi-select.
+   */
+  selectPickerOption(opt: ColumnPickerOptionWithState, event: Event): void {
+    event.stopPropagation();
+
+    if (this.activePickerSection === 'rowGroup') {
+      if (opt.active) {
+        this._api?.removeRowGroupColumn(opt.colId);
+      } else {
+        this._api?.addRowGroupColumn(opt.colId);
+      }
+      this._syncGroups();
+    } else if (this.activePickerSection === 'value') {
+      if (opt.active) {
+        this._api?.removeValueColumn(opt.colId);
+      } else {
+        this._api?.addValueColumn(opt.colId);
+      }
+      this._syncGroups();
+    } else if (this.activePickerSection === 'pivot') {
+      if (opt.active) {
+        this._api?.removePivotColumn(opt.colId);
+      } else {
+        this._api?.addPivotColumn(opt.colId);
+      }
+      this._syncPivot();
+    }
+  }
+
+  private _positionPicker(btn: HTMLElement): void {
+    const rect = btn.getBoundingClientRect();
+    const overlayHeight = 296; // search row (40px) + up to 6 options (40px each) + border
+    const spaceBelow = window.innerHeight - rect.bottom;
+
+    if (spaceBelow < overlayHeight + 8) {
+      // Not enough room below — open upward
+      this.pickerPos = {
+        bottom: `${window.innerHeight - rect.top + 4}px`,
+        left:   `${rect.left}px`,
+        top:    undefined,
+      };
+    } else {
+      // Enough room below — open downward
+      this.pickerPos = {
+        top:    `${rect.bottom + 4}px`,
+        left:   `${rect.left}px`,
+        bottom: undefined,
+      };
+    }
+  }
+
+  // ── Remove active items ───────────────────────────────────────────────────
 
   removeRowGroupColumn(colId: string): void {
     this._api?.removeRowGroupColumn(colId);
-    this._syncGroups();
-  }
-
-  // ── Values picker ─────────────────────────────────────────────────────────
-
-  toggleValueMenu(event: Event): void {
-    event.stopPropagation();
-    this.showValueMenu    = !this.showValueMenu;
-    this.showRowGroupMenu = false;
-  }
-
-  selectValueColumn(col: ColumnPickerOption, event: Event): void {
-    event.stopPropagation();
-    this._api?.addValueColumn(col.colId);
-    this.showValueMenu = false;
     this._syncGroups();
   }
 
@@ -456,28 +499,12 @@ export class DsColumnPanelComponent implements OnDestroy {
     this._syncGroups();
   }
 
-  // ── Pivot column labels picker ────────────────────────────────────────────
-
-  togglePivotMenu(event: Event): void {
-    event.stopPropagation();
-    this.showPivotMenu    = !this.showPivotMenu;
-    this.showRowGroupMenu = false;
-    this.showValueMenu    = false;
-  }
-
-  selectPivotColumn(col: ColumnPickerOption, event: Event): void {
-    event.stopPropagation();
-    this._api?.addPivotColumn(col.colId);
-    this.showPivotMenu = false;
-    this._syncPivot();
-  }
-
   removePivotColumn(colId: string): void {
     this._api?.removePivotColumn(colId);
     this._syncPivot();
   }
 
-  // ── Drag-to-reorder ───────────────────────────────────────────────────────
+  // ── Drag-to-reorder: Column Visibility list ───────────────────────────────
 
   onDragStart(event: DragEvent, index: number): void {
     event.dataTransfer?.setData('text/plain', String(index));
@@ -519,6 +546,92 @@ export class DsColumnPanelComponent implements OnDestroy {
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
+  }
+
+  // ── Drag-to-reorder: active card lists (row groups / values / pivot) ──────
+
+  onActiveItemDragStart(event: DragEvent, index: number, source: 'rowGroup' | 'value' | 'pivot'): void {
+    this._activeDragSource = source;
+    event.dataTransfer?.setData('text/plain', String(index));
+  }
+
+  onActiveItemDragOver(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  onActiveItemDrop(event: DragEvent, toIndex: number, source: 'rowGroup' | 'value' | 'pivot'): void {
+    event.preventDefault();
+    if (this._activeDragSource !== source) { return; }
+    this._activeDragSource = null;
+
+    const fromIndex = +(event.dataTransfer?.getData('text/plain') ?? '-1');
+    if (fromIndex < 0 || fromIndex === toIndex) { return; }
+
+    if (source === 'rowGroup') {
+      this._reorder(this.activeRowGroups, fromIndex, toIndex);
+      this._syncRowGroupsToGrid();
+    } else if (source === 'value') {
+      this._reorder(this.activeValueColumns, fromIndex, toIndex);
+      this._syncValueColumnsToGrid();
+    } else {
+      this._reorder(this.activePivotColumns, fromIndex, toIndex);
+      this._syncPivotColumnsToGrid();
+    }
+
+    this.cdr.markForCheck();
+  }
+
+  private _reorder(list: ColumnPickerOption[], from: number, to: number): void {
+    const moved = list.splice(from, 1)[0];
+    list.splice(to, 0, moved);
+  }
+
+  private _syncRowGroupsToGrid(): void {
+    if (!this._api) { return; }
+    const ids = this.activeRowGroups.map(g => g.colId);
+    ids.forEach(id => this._api!.removeRowGroupColumn(id));
+    ids.forEach(id => this._api!.addRowGroupColumn(id));
+  }
+
+  private _syncValueColumnsToGrid(): void {
+    if (!this._api) { return; }
+    const ids = this.activeValueColumns.map(v => v.colId);
+    ids.forEach(id => this._api!.removeValueColumn(id));
+    ids.forEach(id => this._api!.addValueColumn(id));
+  }
+
+  private _syncPivotColumnsToGrid(): void {
+    if (!this._api) { return; }
+    const ids = this.activePivotColumns.map(p => p.colId);
+    ids.forEach(id => this._api!.removePivotColumn(id));
+    ids.forEach(id => this._api!.addPivotColumn(id));
+  }
+
+  // ── Column Visibility section ─────────────────────────────────────────────
+
+  toggleColVisibility(): void {
+    this.colVisibilityExpanded = !this.colVisibilityExpanded;
+    this._onStateUpdated?.();
+  }
+
+  onDensityChange(value: TableDensity): void {
+    this.density = value;
+    this.densityChange.emit(value);
+    this._onStateUpdated?.();
+  }
+
+  toggleColumnVisibility(col: ColumnPanelItem): void {
+    if (col.system) { return; }
+    const newVisible = !col.visible;
+    col.visible = newVisible;
+    this._api?.setColumnVisible(col.colId, newVisible);
+    this.columnVisibilityChange.emit({ colId: col.colId, visible: newVisible });
+  }
+
+  togglePivotMode(): void {
+    this.pivotMode = !this.pivotMode;
+    this._api?.setPivotMode(this.pivotMode);
+    this.pivotModeChange.emit(this.pivotMode);
   }
 
   // ── Icon helpers ──────────────────────────────────────────────────────────

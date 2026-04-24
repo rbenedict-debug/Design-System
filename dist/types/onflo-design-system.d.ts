@@ -1833,9 +1833,15 @@ declare class SubnavSubheaderComponent {
  *   - Comfort/Compact density toggle
  *   - Column visibility toggle (checkbox per column, drag to reorder)
  *   - Pivot Mode toggle
- *   - Row Groups section — shows active groups as removable chips; "Add Column"
- *     opens an inline picker menu listing all groupable columns
- *   - Values (aggregation) section — "Add Column" opens same picker pattern
+ *   - Row Groups section — active items as draggable/removable cards; "Add Column"
+ *     opens a fixed-position overlay with search across all enableRowGroup columns
+ *   - Values (aggregation) section — same Add Column pattern
+ *   - Column Labels section (pivot mode) — same Add Column pattern
+ *
+ *   All three pickers show every eligible column (including already-active ones,
+ *   shown with a filled checkbox). Clicking an active column removes it; clicking
+ *   an inactive column adds it. Drag-to-reorder on active cards syncs back to the
+ *   AG Grid API (remove-all / re-add-in-order).
  *
  * AG Grid usage:
  *   gridOptions = {
@@ -1862,7 +1868,8 @@ declare class SubnavSubheaderComponent {
  *   Column checkboxes use role="checkbox" + aria-checked.
  *   Density buttons use aria-pressed.
  *   Pivot toggle is a native <input type="checkbox">.
- *   Add Column buttons use aria-expanded to reflect menu state.
+ *   Add Column buttons use aria-expanded to reflect picker state.
+ *   Picker overlay: role="dialog" with aria-label; Escape closes it.
  */
 
 type TableDensity = 'comfort' | 'compact';
@@ -1965,10 +1972,14 @@ interface AgToolPanelParams {
     /** Hide the Values (aggregation) section. Default: false (shown). */
     suppressValues?: boolean;
 }
-/** A column entry in the row-group or value picker menu. */
+/** A column entry in the row-group, value, or pivot picker. */
 interface ColumnPickerOption {
     colId: string;
     label: string;
+}
+/** A picker option that also carries its active (already-added) state. */
+interface ColumnPickerOptionWithState extends ColumnPickerOption {
+    active: boolean;
 }
 declare class DsColumnPanelComponent implements OnDestroy {
     private readonly cdr;
@@ -1980,24 +1991,30 @@ declare class DsColumnPanelComponent implements OnDestroy {
     density: TableDensity;
     /** Whether pivot mode is enabled. */
     pivotMode: boolean;
-    /** Active row group columns shown as chips in the Row Groups section. */
+    /** Active row group columns shown as draggable cards in the Row Groups section. */
     activeRowGroups: ColumnPickerOption[];
-    /** Active value (aggregation) columns shown as chips in the Values section. */
+    /** Active value (aggregation) columns shown as draggable cards in the Values section. */
     activeValueColumns: ColumnPickerOption[];
-    /** Whether the row-group column picker menu is open. */
-    showRowGroupMenu: boolean;
-    /** Whether the value column picker menu is open. */
-    showValueMenu: boolean;
-    /** Active pivot columns shown as list rows in the Column Labels section. */
+    /** Active pivot columns shown as draggable cards in the Column Labels section. */
     activePivotColumns: ColumnPickerOption[];
-    /** Whether the pivot column picker menu is open. */
-    showPivotMenu: boolean;
     /** Whether the Pivot Mode row is hidden (set via suppressPivotMode toolPanelParam). */
     suppressPivotMode: boolean;
     /** Whether the Row Groups section is hidden (set via suppressRowGroups toolPanelParam). */
     suppressRowGroups: boolean;
     /** Whether the Values section is hidden (set via suppressValues toolPanelParam). */
     suppressValues: boolean;
+    /** Which section's picker is currently open, or null if closed. */
+    activePickerSection: 'rowGroup' | 'value' | 'pivot' | null;
+    /** Current search text inside the open picker. */
+    pickerSearchText: string;
+    /** Position of the picker overlay (set when opening). */
+    pickerPos: {
+        top?: string;
+        bottom?: string;
+        left: string;
+    };
+    /** Which list is currently being dragged within. */
+    private _activeDragSource;
     densityChange: EventEmitter<TableDensity>;
     columnVisibilityChange: EventEmitter<ColumnVisibilityChange>;
     pivotModeChange: EventEmitter<boolean>;
@@ -2017,28 +2034,41 @@ declare class DsColumnPanelComponent implements OnDestroy {
     refresh(): void;
     ngOnDestroy(): void;
     onDocumentClick(): void;
+    onEscape(): void;
     private _syncColumns;
     private _syncPivot;
     private _syncGroups;
-    get rowGroupMenuOptions(): ColumnPickerOption[];
-    get valueMenuOptions(): ColumnPickerOption[];
-    get pivotMenuOptions(): ColumnPickerOption[];
-    toggleColVisibility(): void;
-    onDensityChange(value: TableDensity): void;
-    toggleColumnVisibility(col: ColumnPanelItem): void;
-    togglePivotMode(): void;
-    toggleRowGroupMenu(event: Event): void;
-    selectRowGroupColumn(col: ColumnPickerOption, event: Event): void;
+    /**
+     * Options for the currently-open picker. Includes ALL eligible columns for the
+     * active section (regardless of column visibility state), with `active: true` for
+     * columns already in the list. Filtered by pickerSearchText.
+     */
+    get currentPickerOptions(): ColumnPickerOptionWithState[];
+    togglePicker(section: 'rowGroup' | 'value' | 'pivot', event: Event): void;
+    onPickerSearchInput(event: Event): void;
+    /**
+     * Toggle a column in/out of the active section. Already-active columns are
+     * removed; inactive columns are added. The picker stays open for multi-select.
+     */
+    selectPickerOption(opt: ColumnPickerOptionWithState, event: Event): void;
+    private _positionPicker;
     removeRowGroupColumn(colId: string): void;
-    toggleValueMenu(event: Event): void;
-    selectValueColumn(col: ColumnPickerOption, event: Event): void;
     removeValueColumn(colId: string): void;
-    togglePivotMenu(event: Event): void;
-    selectPivotColumn(col: ColumnPickerOption, event: Event): void;
     removePivotColumn(colId: string): void;
     onDragStart(event: DragEvent, index: number): void;
     onDrop(event: DragEvent, toIndex: number): void;
     onDragOver(event: DragEvent): void;
+    onActiveItemDragStart(event: DragEvent, index: number, source: 'rowGroup' | 'value' | 'pivot'): void;
+    onActiveItemDragOver(event: DragEvent): void;
+    onActiveItemDrop(event: DragEvent, toIndex: number, source: 'rowGroup' | 'value' | 'pivot'): void;
+    private _reorder;
+    private _syncRowGroupsToGrid;
+    private _syncValueColumnsToGrid;
+    private _syncPivotColumnsToGrid;
+    toggleColVisibility(): void;
+    onDensityChange(value: TableDensity): void;
+    toggleColumnVisibility(col: ColumnPanelItem): void;
+    togglePivotMode(): void;
     checkboxIcon(col: ColumnPanelItem): string;
     checkboxClass(col: ColumnPanelItem): string;
     static ɵfac: i0.ɵɵFactoryDeclaration<DsColumnPanelComponent, never>;
@@ -3925,4 +3955,4 @@ declare class DsFilterBarComponent {
 }
 
 export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDashboardToolbarComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsFilterBarComponent, DsFilterComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, EMPTY_FILTER_SELECTION, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, getActiveFilterCount, onfloChartTheme, onfloTheme };
-export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsChartType, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, FilterCostRangeSelection, FilterDateRangeSelection, FilterGroup, FilterNumericRangeSelection, FilterOption, FilterSelection, FilterTier, SavedFilterSet, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };
+export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnPickerOptionWithState, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsChartType, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, FilterCostRangeSelection, FilterDateRangeSelection, FilterGroup, FilterNumericRangeSelection, FilterOption, FilterSelection, FilterTier, SavedFilterSet, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };
