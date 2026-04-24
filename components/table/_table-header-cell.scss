@@ -1,7 +1,7 @@
 // Onflo Design System — Table Header Cell
 // Figma: primitive/table-header-cell
 // AG Grid custom header renderer — used inside component/table-header-row
-// Height defaults to 56px; set --ds-table-header-height on the grid host to change density.
+// Height is always 56px — fixed by design token, never changes with density.
 
 $cell-height: 56px;
 $resize-handle-width: 16px;
@@ -12,7 +12,7 @@ $checkbox-only-width: 56px;
 .ds-table-header-cell {
   display: flex;
   align-items: center;
-  height: var(--ds-table-header-height, #{$cell-height});
+  height: $cell-height;
   width: 100%;
   background: var(--color-surface-subtle);
   border-bottom: 1px solid var(--color-border-secondary);

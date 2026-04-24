@@ -23,18 +23,15 @@
  *   };
  *
  * Density variants:
- *   The default density is 56px (standard). To switch density, set
- *   --ag-row-height and --ag-header-height on the grid's host element.
- *   These CSS custom properties override the withParams() defaults:
+ *   Header height is fixed at 56px — it never changes with density.
+ *   Only row height changes. Default (comfortable) is 56px; compact is 42px.
  *
- *   Comfortable (68px):
- *     .your-grid-host { --ag-row-height: 68px; --ag-header-height: 68px; }
+ *   Compact (42px rows):
+ *     .your-grid-host { --ag-row-height: 42px; }
  *
- *   Compact (42px):
- *     .your-grid-host { --ag-row-height: 42px; --ag-header-height: 42px; }
- *
- *   Note: also update ds-table-header-cell and ds-table-row-cell host heights
- *   to match — those components manage their own cell height independently.
+ *   Never set --ag-header-height — header is always 56px.
+ *   Note: also update the ds-table-row-cell host height via
+ *   --ds-table-row-height — that component manages its own height independently.
  */
 
 import { iconSetMaterial, themeQuartz } from 'ag-grid-community';
@@ -47,8 +44,8 @@ export const onfloTheme: Theme = themeQuartz
     // ── Sizing — must be set here for AG Grid's virtual row height ──────────
     // AG Grid uses these values for DOM virtualisation (row count in viewport,
     // scroll height, row positioning). Setting height only in CSS is not enough.
-    rowHeight: 56,        // standard density; tokens: --color-table-cell-height-standard-height
-    headerHeight: 56,     // matches ds-table-header-cell $cell-height
+    rowHeight: 56,        // comfortable density (default); compact = 42px
+    headerHeight: 56,     // fixed — never changes with density
     iconSize: 20,         // matches ds-icon--sm (20px / opsz 20)
     spacing: 8,           // matches --spacing-sm — base unit for AG Grid internal spacing
 

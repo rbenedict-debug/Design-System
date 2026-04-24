@@ -92,12 +92,12 @@
   --ag-side-button-selected-background-color: var(--color-surface-default);
   --ag-side-button-selected-underline-color: var(--color-border-brand);
 
-  // ── Cell and header height — dynamic density support ─────────────────────
-  // ds-table-row-cell and ds-table-header-cell have height: 56px in their own
-  // SCSS (the static default). Inside AG Grid, they must fill the AG Grid cell
-  // height dynamically so that density changes (compact 42px / comfort 68px)
-  // take effect. The Angular host elements also need height: 100% so the inner
-  // template div's 100% resolves correctly.
+  // ── Cell and header height ────────────────────────────────────────────────
+  // Header height is fixed at 56px — it never changes with density.
+  // Row height defaults to 56px (comfortable) and switches to 42px (compact).
+  // Both custom renderers must fill 100% of their AG Grid cell container so
+  // that density changes take effect. The Angular host elements also need
+  // height: 100% so the inner template div's 100% resolves correctly.
   //
   // Vanilla JS (preview): the renderer's div is directly inside .ag-cell.
   // Angular: the host <ds-table-row-cell> is inside .ag-cell; the template div

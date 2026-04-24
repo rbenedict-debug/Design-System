@@ -218,7 +218,7 @@ Onflo = visual layer (tokens, spacing, interaction states). Angular Material = b
 | `ds-subnav-header` | Custom | No Material equivalent — top-level collapsible section header (32px row); 12px `[icon]` (defaults to `language`) + `[text]` label + expand arrow; Label Small typography; `--color-icon-subtle` default / `--color-icon-brand` expanded; children indented 8px (no vertical line); `[text]`, `[icon]`, `[expanded]`, `[(expanded)]`, `[disabled]`; children projected via `ng-content` |
 | `ds-save-bar` | Custom | No Material equivalent — unsaved-changes bar; variants: `default` (blue border, info dot) / `error` (red border, error dot); outputs: `(cancelClick)`, `(saveProgressClick)`, `(saveAndExitClick)`; ADA: `role="status"` (default) / `role="alert"` (error) |
 | `ds-modal` | `MatDialogModule` (optional) | Full-featured modal — sticky header, scrollable body, optional tabs slot (`[modal-tabs]`), optional actions footer (`[modal-actions]`); variants: `close` (×) / `collapse` (minimize); sizes: `fixed` (500px) / `full` (fills backdrop); `(dismissClick)` output; panelClass: `'ds-modal-overlay'` when using MatDialog |
-| `onfloTheme` | n/a — AG Grid theme object | Pre-configured AG Grid theme. Consumers set `theme: onfloTheme` in gridOptions. Built on Quartz + `iconSetMaterial`. Static sizing params (rowHeight/headerHeight 56px, iconSize 20, spacing 8) set via `withParams()`; color/font/border tokens applied via CSS custom properties in `_table-ag-theme.scss`. AG Grid's native borders disabled — custom renderers own all border rendering. |
+| `onfloTheme` | n/a — AG Grid theme object | Pre-configured AG Grid theme. Consumers set `theme: onfloTheme` in gridOptions. Built on Quartz + `iconSetMaterial`. Static sizing params (headerHeight 56px fixed, rowHeight 56px comfortable default, iconSize 20, spacing 8) set via `withParams()`; color/font/border tokens applied via CSS custom properties in `_table-ag-theme.scss`. AG Grid's native borders disabled — custom renderers own all border rendering. |
 | `ds-table-header-cell` | Custom | No Material equivalent — AG Grid custom header renderer |
 | `ds-table-header-group-cell` | Custom | No Material equivalent — AG Grid custom group header renderer; wire via `DS_TABLE_DEFAULT_COL_GROUP_DEF` as `defaultColGroupDef`; shows expand/collapse chevron when group `isExpandable()`; same height/background/label style as `ds-table-header-cell` |
 | `ds-table-row-cell` | Custom | No Material equivalent — AG Grid custom cell renderer |
@@ -282,13 +282,13 @@ Targets `.ag-root-wrapper`. Contains all **token-referencing values** that must 
 - `--ag-row-hover-color: transparent` and `--ag-selected-row-background-color: transparent` — intentionally transparent because `_table-row-cell.scss` handles those via `.ag-row-hover` / `.ag-row-selected` class hooks on `ds-table-row-cell` directly. Applying both would double the semi-transparent overlay.
 
 ### Density switching
-Row height defaults to 56px (standard). To switch density at runtime, set CSS custom properties on the grid's host element **and** update `ds-table-header-cell` / `ds-table-row-cell` host heights to match:
+Header height is always **56px** — it never changes with density. Only row height changes.
+Row height defaults to 56px (comfortable). To switch to compact at runtime, set `--ag-row-height` on the grid's host element:
 ```scss
-// Comfortable (68px):
-.my-grid-host { --ag-row-height: 68px; --ag-header-height: 68px; }
-// Compact (42px):
-.my-grid-host { --ag-row-height: 42px; --ag-header-height: 42px; }
+// Compact (42px rows — header stays 56px):
+.my-grid-host { --ag-row-height: 42px; }
 ```
+Never set `--ag-header-height` — the header height is fixed by the design token.
 
 ### What the theme covers vs. what custom renderers cover
 

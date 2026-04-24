@@ -646,11 +646,13 @@ Without `getRowId`, AG Grid generates internal IDs based on row index. These res
 
 ### Row Height and Density
 
-Row height is controlled by the `rowHeight` grid option. Tie it to the Onflo density toggle via a component property:
+Row height is controlled by the `rowHeight` grid option. **Header height is always 56px and never changes with density** — only row height changes.
+
+Tie row height to the Onflo density toggle via a component property:
 
 ```typescript
 readonly ROW_HEIGHT_COMFORT = 56;
-readonly ROW_HEIGHT_COMPACT = 40;
+readonly ROW_HEIGHT_COMPACT = 42;
 
 density: TableDensity = 'comfort';
 
@@ -1388,8 +1390,8 @@ Recommended approach for very large datasets: use **pagination** (`pagination: t
 
 1. `ds-table-toolbar` (74px) — always present
 2. `ds-table-row-groups-bar` (56px) — present when row grouping is available
-3. AG Grid header row with `ds-table-header-cell` (56px)
-4. AG Grid data rows with `ds-table-row-cell` (56px each)
+3. AG Grid header row with `ds-table-header-cell` (56px — fixed, never changes)
+4. AG Grid data rows with `ds-table-row-cell` (56px comfortable / 42px compact)
 5. Horizontal scrollbar (styled via `.ag-hscroll`)
 6. `ds-table-status-bar` (56px) — present when aggregate values should be shown
 7. `ds-ag-paginator` (56px)
