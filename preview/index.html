@@ -9697,6 +9697,8 @@ mark.search-match {
   --color-text-error: var(--color-text-error-on-dark);
   --color-icon-error: var(--color-icon-error-on-dark);
   --color-border-error: var(--color-border-error-on-dark);
+  --color-surface-input: var(--overlay-inverse-hovered);
+  --color-border-input: var(--color-border-subtle-on-dark);
 }
 
 .filter-modal__selected-header {
@@ -21054,6 +21056,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           var overlay    = document.getElementById('cp-picker-overlay');
           var searchInput = document.getElementById('cp-picker-search');
           var listEl      = document.getElementById('cp-picker-list');
+          if (overlay) document.body.appendChild(overlay);
           var activeBtn   = null;
           var activeSection = null;
           // track which labels are active per demo panel (keyed by panel element)
@@ -22745,6 +22748,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             simPickerSearchInput = document.getElementById('sim-cp-search');
             simPickerListEl      = document.getElementById('sim-cp-list');
             if (!simPickerOverlay) return;
+            document.body.appendChild(simPickerOverlay);
 
             simPickerSearchInput.addEventListener('input', function() {
               simPickerRender(simPickerSearchInput.value);
