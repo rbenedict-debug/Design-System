@@ -248,23 +248,15 @@
   </div>
 
   <!-- Options list -->
-  <div class="ds-column-panel__picker-list" role="list">
+  <div class="ds-column-panel__picker-list">
     <ng-container *ngIf="currentPickerOptions.length > 0; else noPickerOptions">
       <button
         *ngFor="let opt of currentPickerOptions"
         type="button"
-        class="ds-column-panel__picker-option"
-        [class.ds-column-panel__picker-option--active]="opt.active"
-        role="listitem"
+        class="ds-menu__item"
+        role="menuitem"
         (click)="selectPickerOption(opt, $event)"
-      >
-        <span
-          class="ds-icon ds-icon--sm"
-          [class.ds-icon--filled]="opt.active"
-          aria-hidden="true"
-        >{{ opt.active ? 'check_box' : 'check_box_outline_blank' }}</span>
-        <span>{{ opt.label }}</span>
-      </button>
+      >{{ opt.label }}</button>
     </ng-container>
     <ng-template #noPickerOptions>
       <span class="ds-column-panel__picker-empty">No columns found</span>

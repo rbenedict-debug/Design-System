@@ -1977,10 +1977,6 @@ interface ColumnPickerOption {
     colId: string;
     label: string;
 }
-/** A picker option that also carries its active (already-added) state. */
-interface ColumnPickerOptionWithState extends ColumnPickerOption {
-    active: boolean;
-}
 declare class DsColumnPanelComponent implements OnDestroy {
     private readonly cdr;
     /** Column list — auto-populated when [api] is bound, otherwise set manually. */
@@ -2039,18 +2035,16 @@ declare class DsColumnPanelComponent implements OnDestroy {
     private _syncPivot;
     private _syncGroups;
     /**
-     * Options for the currently-open picker. Includes ALL eligible columns for the
-     * active section (regardless of column visibility state), with `active: true` for
-     * columns already in the list. Filtered by pickerSearchText.
+     * Options for the currently-open picker. Shows only columns that are NOT yet in
+     * the active list for this section (already-active columns become cards with a
+     * remove button — the picker is an adder only). Filtered by pickerSearchText.
+     * Includes all eligible columns regardless of their column-visibility state.
      */
-    get currentPickerOptions(): ColumnPickerOptionWithState[];
+    get currentPickerOptions(): ColumnPickerOption[];
     togglePicker(section: 'rowGroup' | 'value' | 'pivot', event: Event): void;
     onPickerSearchInput(event: Event): void;
-    /**
-     * Toggle a column in/out of the active section. Already-active columns are
-     * removed; inactive columns are added. The picker stays open for multi-select.
-     */
-    selectPickerOption(opt: ColumnPickerOptionWithState, event: Event): void;
+    /** Add the selected column to the active section. Picker stays open for multi-add. */
+    selectPickerOption(opt: ColumnPickerOption, event: Event): void;
     private _positionPicker;
     removeRowGroupColumn(colId: string): void;
     removeValueColumn(colId: string): void;
@@ -3955,4 +3949,4 @@ declare class DsFilterBarComponent {
 }
 
 export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDashboardToolbarComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsFilterBarComponent, DsFilterComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, EMPTY_FILTER_SELECTION, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, getActiveFilterCount, onfloChartTheme, onfloTheme };
-export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnPickerOptionWithState, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsChartType, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, FilterCostRangeSelection, FilterDateRangeSelection, FilterGroup, FilterNumericRangeSelection, FilterOption, FilterSelection, FilterTier, SavedFilterSet, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };
+export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsChartType, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, FilterCostRangeSelection, FilterDateRangeSelection, FilterGroup, FilterNumericRangeSelection, FilterOption, FilterSelection, FilterTier, SavedFilterSet, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };

@@ -7262,7 +7262,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   position: fixed;
   z-index: 1050;
   width: 280px;
-  max-height: 296px;
+  max-height: 320px;
   background: var(--color-surface-default);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-elevation-2);
@@ -7304,59 +7304,13 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 .ds-column-panel__picker-list {
   overflow-y: auto;
   flex: 1 0 0;
-  display: flex;
-  flex-direction: column;
+  padding: var(--spacing-xs) 0;
 }
-
-.ds-column-panel__picker-option {
-  appearance: none;
-  -webkit-appearance: none;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  height: 40px;
-  padding: 0 var(--spacing-md);
+.ds-column-panel__picker-list .ds-menu {
   background: transparent;
-  border: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.ds-column-panel__picker-option:focus {
-  outline: none;
-}
-.ds-column-panel__picker-option:focus-visible {
-  box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring);
-}
-.ds-column-panel__picker-option:hover {
-  background: var(--overlay-hovered);
-}
-.ds-column-panel__picker-option:active {
-  background: var(--overlay-pressed);
-}
-.ds-column-panel__picker-option .ds-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  color: var(--color-border-input);
-}
-.ds-column-panel__picker-option span:not(.ds-icon) {
-  font-family: var(--ref-typescale-body-medium-font);
-  font-size: var(--ref-typescale-body-medium-size);
-  font-weight: var(--ref-typescale-body-medium-weight);
-  line-height: var(--ref-typescale-body-medium-line-height);
-  letter-spacing: var(--ref-typescale-body-medium-tracking);
-  color: var(--color-text-primary);
-  flex: 1 0 0;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.ds-column-panel__picker-option--active .ds-icon {
-  color: var(--color-surface-brand-bold);
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
 }
 
 .ds-column-panel__picker-empty {
@@ -21163,36 +21117,28 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             var items = CP_MOCK[sectionKey] || [];
             var f = filter ? filter.toLowerCase() : '';
             listEl.innerHTML = '';
-            var visible = items.filter(function(label) { return !f || label.toLowerCase().includes(f); });
+            // Exclude already-active columns — they live as cards in the panel.
+            var available = items.filter(function(label) { return !activeSet.has(label); });
+            var visible = f ? available.filter(function(label) { return label.toLowerCase().includes(f); }) : available;
             if (!visible.length) {
               var empty = document.createElement('span');
               empty.className = 'ds-column-panel__picker-empty';
-              empty.textContent = 'No columns found';
+              empty.textContent = available.length ? 'No columns found' : 'All columns added';
               listEl.appendChild(empty);
               return;
             }
             visible.forEach(function(label) {
-              var isActive = activeSet.has(label);
               var btn = document.createElement('button');
               btn.type = 'button';
-              btn.className = 'ds-column-panel__picker-option' + (isActive ? ' ds-column-panel__picker-option--active' : '');
-              btn.setAttribute('role', 'listitem');
-              btn.innerHTML =
-                '<span class="ds-icon ds-icon--sm' + (isActive ? ' ds-icon--filled' : '') + '" aria-hidden="true">' +
-                  (isActive ? 'check_box' : 'check_box_outline_blank') +
-                '</span><span>' + label + '</span>';
+              btn.className = 'ds-menu__item';
+              btn.setAttribute('role', 'menuitem');
+              btn.textContent = label;
               btn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 var panel2 = activeBtn ? activeBtn.closest('.ds-column-panel') : null;
                 if (!panel2) return;
-                var set = getPanelActiveSet(panel2, sectionKey);
-                if (set.has(label)) {
-                  set.delete(label);
-                  removeCardFromPanel(panel2, sectionKey, label);
-                } else {
-                  set.add(label);
-                  addCardToPanel(panel2, sectionKey, label);
-                }
+                getPanelActiveSet(panel2, sectionKey).add(label);
+                addCardToPanel(panel2, sectionKey, label);
                 renderPickerOptions(panel2, sectionKey, searchInput.value);
               });
               listEl.appendChild(btn);
@@ -21262,7 +21208,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
           function positionOverlay(btn) {
             var rect = btn.getBoundingClientRect();
-            var overlayHeight = 296;
+            var overlayHeight = 320;
             var spaceBelow = window.innerHeight - rect.bottom;
             overlay.style.left = rect.left + 'px';
             overlay.style.width = '280px';
@@ -22844,32 +22790,26 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                           : simPivotActive;
             var cols = SIM_PICKER_COLS[simPickerActiveSection] || [];
             var f = filter.trim().toLowerCase();
-            var visible = f ? cols.filter(function(c) { return c.label.toLowerCase().includes(f); }) : cols;
+            // Exclude already-active columns — they're shown as removable cards.
+            var available = cols.filter(function(c) { return !activeSet.has(c.colId); });
+            var visible = f ? available.filter(function(c) { return c.label.toLowerCase().includes(f); }) : available;
             simPickerListEl.innerHTML = '';
             if (!visible.length) {
               var empty = document.createElement('span');
               empty.className = 'ds-column-panel__picker-empty';
-              empty.textContent = 'No columns found';
+              empty.textContent = available.length ? 'No columns found' : 'All columns added';
               simPickerListEl.appendChild(empty);
               return;
             }
             visible.forEach(function(col) {
-              var isActive = activeSet.has(col.colId);
               var btn = document.createElement('button');
               btn.type = 'button';
-              btn.className = 'ds-column-panel__picker-option' + (isActive ? ' ds-column-panel__picker-option--active' : '');
-              btn.setAttribute('role', 'listitem');
-              btn.innerHTML =
-                '<span class="ds-icon ds-icon--sm' + (isActive ? ' ds-icon--filled' : '') + '" aria-hidden="true">' +
-                  (isActive ? 'check_box' : 'check_box_outline_blank') +
-                '</span><span>' + col.label + '</span>';
+              btn.className = 'ds-menu__item';
+              btn.setAttribute('role', 'menuitem');
+              btn.textContent = col.label;
               btn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                if (isActive) {
-                  simPickerRemoveActive(simPickerActiveSection, col.colId, col.label);
-                } else {
-                  simPickerAddActive(simPickerActiveSection, col.colId, col.label);
-                }
+                simPickerAddActive(simPickerActiveSection, col.colId, col.label);
                 simPickerRender(simPickerSearchInput.value);
               });
               simPickerListEl.appendChild(btn);
@@ -22878,7 +22818,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
 
           function simPickerPosition(btn) {
             var rect = btn.getBoundingClientRect();
-            var overlayH = 296;
+            var overlayH = 320;
             var spaceBelow = window.innerHeight - rect.bottom;
             simPickerOverlay.style.left  = rect.left + 'px';
             simPickerOverlay.style.width = '280px';

@@ -439,7 +439,7 @@ button.ds-column-panel__section-hd[aria-expanded="false"] + .ds-column-panel__co
   position: fixed;
   z-index: 1050;
   width: 280px;
-  max-height: 296px; // search row (40px) + up to 6 option rows (40px each) + 2px border
+  max-height: 320px; // search row (41px) + up to 7 ds-menu__item rows (38px each) + padding
   background: var(--color-surface-default);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-elevation-2);
@@ -479,57 +479,20 @@ button.ds-column-panel__section-hd[aria-expanded="false"] + .ds-column-panel__co
   }
 }
 
+// Items in the list use ds-menu__item class directly — no custom option style needed.
+// The overlay already owns background/shadow/border-radius; ds-menu__item handles
+// each row's typography, padding, hover, focus, and active states.
 .ds-column-panel__picker-list {
   overflow-y: auto;
   flex: 1 0 0;
-  display: flex;
-  flex-direction: column;
-}
+  padding: var(--spacing-xs) 0;
 
-.ds-column-panel__picker-option {
-  appearance: none;
-  -webkit-appearance: none;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  height: 40px;
-  padding: 0 var(--spacing-md);
-  background: transparent;
-  border: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  flex-shrink: 0;
-
-  &:focus         { outline: none; }
-  &:focus-visible { box-shadow: inset 0 0 0 2px var(--color-border-ada-focus-ring); }
-  &:hover         { background: var(--overlay-hovered); }
-  &:active        { background: var(--overlay-pressed); }
-
-  .ds-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    color: var(--color-border-input); // unchecked state
-  }
-
-  span:not(.ds-icon) {
-    font-family: var(--ref-typescale-body-medium-font);
-    font-size: var(--ref-typescale-body-medium-size);
-    font-weight: var(--ref-typescale-body-medium-weight);
-    line-height: var(--ref-typescale-body-medium-line-height);
-    letter-spacing: var(--ref-typescale-body-medium-tracking);
-    color: var(--color-text-primary);
-    flex: 1 0 0;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &--active .ds-icon {
-    color: var(--color-surface-brand-bold); // checked state
+  // Suppress ds-menu container shadow when a .ds-menu wrapper is used inside.
+  .ds-menu {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
   }
 }
 

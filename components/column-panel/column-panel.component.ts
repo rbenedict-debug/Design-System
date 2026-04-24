@@ -172,10 +172,6 @@ export interface ColumnPickerOption {
   label: string;
 }
 
-/** A picker option that also carries its active (already-added) state. */
-export interface ColumnPickerOptionWithState extends ColumnPickerOption {
-  active: boolean;
-}
 
 @Component({
   selector: 'ds-column-panel',
@@ -367,43 +363,38 @@ export class DsColumnPanelComponent implements OnDestroy {
   // ── Picker overlay ────────────────────────────────────────────────────────
 
   /**
-   * Options for the currently-open picker. Includes ALL eligible columns for the
-   * active section (regardless of column visibility state), with `active: true` for
-   * columns already in the list. Filtered by pickerSearchText.
+   * Options for the currently-open picker. Shows only columns that are NOT yet in
+   * the active list for this section (already-active columns become cards with a
+   * remove button — the picker is an adder only). Filtered by pickerSearchText.
+   * Includes all eligible columns regardless of their column-visibility state.
    */
-  get currentPickerOptions(): ColumnPickerOptionWithState[] {
+  get currentPickerOptions(): ColumnPickerOption[] {
     if (!this._api || !this.activePickerSection) { return []; }
 
     const text = this.pickerSearchText.trim().toLowerCase();
-    let list: ColumnPickerOptionWithState[];
+    let list: ColumnPickerOption[];
 
     if (this.activePickerSection === 'rowGroup') {
       const activeIds = new Set(this.activeRowGroups.map(g => g.colId));
       list = this._api.getAllGridColumns()
-        .filter(col => col.getColDef().enableRowGroup === true && col.getColDef().lockVisible !== true)
-        .map(col => ({
-          colId:  col.getColId(),
-          label:  col.getColDef().headerName ?? col.getColId(),
-          active: activeIds.has(col.getColId()),
-        }));
+        .filter(col => col.getColDef().enableRowGroup === true
+                    && col.getColDef().lockVisible !== true
+                    && !activeIds.has(col.getColId()))
+        .map(col => ({ colId: col.getColId(), label: col.getColDef().headerName ?? col.getColId() }));
     } else if (this.activePickerSection === 'value') {
       const activeIds = new Set(this.activeValueColumns.map(v => v.colId));
       list = this._api.getAllGridColumns()
-        .filter(col => col.getColDef().enableValue === true && col.getColDef().lockVisible !== true)
-        .map(col => ({
-          colId:  col.getColId(),
-          label:  col.getColDef().headerName ?? col.getColId(),
-          active: activeIds.has(col.getColId()),
-        }));
+        .filter(col => col.getColDef().enableValue === true
+                    && col.getColDef().lockVisible !== true
+                    && !activeIds.has(col.getColId()))
+        .map(col => ({ colId: col.getColId(), label: col.getColDef().headerName ?? col.getColId() }));
     } else {
       const activeIds = new Set(this.activePivotColumns.map(p => p.colId));
       list = this._api.getAllGridColumns()
-        .filter(col => col.getColDef().enablePivot === true && col.getColDef().lockVisible !== true)
-        .map(col => ({
-          colId:  col.getColId(),
-          label:  col.getColDef().headerName ?? col.getColId(),
-          active: activeIds.has(col.getColId()),
-        }));
+        .filter(col => col.getColDef().enablePivot === true
+                    && col.getColDef().lockVisible !== true
+                    && !activeIds.has(col.getColId()))
+        .map(col => ({ colId: col.getColId(), label: col.getColDef().headerName ?? col.getColId() }));
     }
 
     if (text) {
@@ -434,40 +425,25 @@ export class DsColumnPanelComponent implements OnDestroy {
     this.cdr.markForCheck();
   }
 
-  /**
-   * Toggle a column in/out of the active section. Already-active columns are
-   * removed; inactive columns are added. The picker stays open for multi-select.
-   */
-  selectPickerOption(opt: ColumnPickerOptionWithState, event: Event): void {
+  /** Add the selected column to the active section. Picker stays open for multi-add. */
+  selectPickerOption(opt: ColumnPickerOption, event: Event): void {
     event.stopPropagation();
 
     if (this.activePickerSection === 'rowGroup') {
-      if (opt.active) {
-        this._api?.removeRowGroupColumn(opt.colId);
-      } else {
-        this._api?.addRowGroupColumn(opt.colId);
-      }
+      this._api?.addRowGroupColumn(opt.colId);
       this._syncGroups();
     } else if (this.activePickerSection === 'value') {
-      if (opt.active) {
-        this._api?.removeValueColumn(opt.colId);
-      } else {
-        this._api?.addValueColumn(opt.colId);
-      }
+      this._api?.addValueColumn(opt.colId);
       this._syncGroups();
     } else if (this.activePickerSection === 'pivot') {
-      if (opt.active) {
-        this._api?.removePivotColumn(opt.colId);
-      } else {
-        this._api?.addPivotColumn(opt.colId);
-      }
+      this._api?.addPivotColumn(opt.colId);
       this._syncPivot();
     }
   }
 
   private _positionPicker(btn: HTMLElement): void {
     const rect = btn.getBoundingClientRect();
-    const overlayHeight = 296; // search row (40px) + up to 6 options (40px each) + border
+    const overlayHeight = 320; // search row (41px) + up to 7 menu items (38px each) + padding
     const spaceBelow = window.innerHeight - rect.bottom;
 
     if (spaceBelow < overlayHeight + 8) {
