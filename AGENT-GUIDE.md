@@ -199,11 +199,25 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 
 ### Data / table
 
-> **STOP — AG Grid prerequisite check required.**
-> `ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-paginator`, and `ds-table-toolbar` are **AG Grid custom renderers**. They cannot be used without a real AG Grid instance.
-> Before writing any table code, check the project's `package.json` for `ag-grid-angular`.
-> - **Found** → proceed with the wiring pattern below.
-> - **Not found** → do NOT install AG Grid or write any AG Grid code. Tell the user that AG Grid is required and ask whether they want to add it. AG Grid Enterprise is a paid product — never add it without explicit confirmation.
+> **AG Grid prerequisite check — do this before writing any table code.**
+> `ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-paginator`, and `ds-table-toolbar` are AG Grid custom renderers. They require a real AG Grid instance.
+>
+> **Step 1 — Check `package.json` for `ag-grid-angular`.**
+> - **Found** → proceed to the wiring pattern below.
+> - **Not found** → install Community (free) edition before writing any table code:
+>   ```bash
+>   npm install ag-grid-community ag-grid-angular
+>   ```
+>   Then add AG Grid's structural CSS to the `styles` array in `angular.json`:
+>   ```json
+>   "styles": [
+>     "node_modules/ag-grid-community/styles/ag-grid.css",
+>     "node_modules/ag-grid-community/styles/ag-theme-quartz.css"
+>   ]
+>   ```
+>   **Never install `ag-grid-enterprise`** — it is a paid product. Only install it if the user explicitly asks for it.
+>
+> **Step 2 — Confirm the AG Grid CSS is in `angular.json`.** Even if `ag-grid-angular` is already in `package.json`, the styles entries may be missing. Without them the grid renders with no visible structure. If they are absent, add them before writing table code.
 
 | Component | Selector | Import |
 |---|---|---|
@@ -275,7 +289,7 @@ Full composition rules: `.claude/specs/specs-compositions.md` → "Filtered Tabl
 
 #### AG Grid wiring — always use this pattern
 
-> **Reminder**: Only reach this section if you have already confirmed `ag-grid-angular` is in `package.json`. If it is not, stop and ask the user — do not add AG Grid without explicit approval.
+> **Reminder**: Only reach this section after completing the prerequisite check above — packages installed, AG Grid CSS confirmed in `angular.json`.
 
 Any time you create or modify an AG Grid table in a consuming project, ALWAYS use the pre-built exports from the design system. Do not set `headerComponent` or `cellRenderer` manually — use `DS_TABLE_DEFAULT_COL_DEF` which does this for you.
 

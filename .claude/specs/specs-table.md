@@ -8,7 +8,9 @@ Table Header Cell, Table Row Cell, Table Status Bar, Table Row Groups Bar, AG Gr
 
 ## Angular Integration — Canonical Wiring Pattern
 
-This is the complete, correct way to wire the Onflo table system into an Angular component using AG Grid Enterprise. Claude Code agents in consuming projects MUST use this pattern as-is.
+This is the complete, correct way to wire the Onflo table system into an Angular component. Claude Code agents in consuming projects MUST use this pattern as-is.
+
+**Community vs Enterprise**: The core table (headers, rows, pagination, toolbar, filters) works with `ag-grid-community` (free). Enterprise (`ag-grid-enterprise`) is only needed for row grouping (`groupDisplayType`, `DsTableGroupRowCellComponent`) and column grouping (`defaultColGroupDef`). Never install Enterprise unless the user explicitly asks for one of those features.
 
 ### Imports
 
