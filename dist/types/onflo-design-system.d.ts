@@ -3862,6 +3862,8 @@ declare class DsFilterComponent implements OnChanges {
     private _persistSavedSets;
     toggleSavedSetsPanel(): void;
     setSaveNameDraft(name: string): void;
+    onSaveInputPointerDown(wrapper: HTMLDivElement): void;
+    onSaveInputFocusOut(wrapper: HTMLDivElement): void;
     saveCurrentSet(): void;
     updateCurrentSet(): void;
     loadSavedSet(set: SavedFilterSet): void;

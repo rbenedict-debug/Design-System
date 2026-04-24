@@ -484,7 +484,8 @@ button.ds-column-panel__section-hd[aria-expanded="false"] + .ds-column-panel__co
 // each row's typography, padding, hover, focus, and active states.
 .ds-column-panel__picker-list {
   overflow-y: auto;
-  flex: 1 0 0;
+  flex: 1 1 auto;
+  min-height: 0;
   padding: var(--spacing-xs) 0;
 
   // Suppress ds-menu container shadow when a .ds-menu wrapper is used inside.
