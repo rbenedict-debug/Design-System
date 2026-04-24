@@ -279,23 +279,26 @@ individually elevated element. The visual language matches `ds-metric-card`:
 
 ### Anatomy
 
+> **`__identity` is optional.** In the canonical page layout the page title lives in `ds-page-content__heading` — omit `__identity` and render only `__controls`. Only include `__identity` (with `__title` + optional `__subtitle`) when the toolbar is the sole source of the page title (e.g. a standalone embedded widget). Having both `ds-page-content__title` and `__identity` on the same page produces two `<h1>` elements — ADA violation.
+
 | Element | Class | Role |
 |---|---|---|
 | Host | `ds-dashboard-toolbar` | Flex column, `align-items: flex-start`, 8px gap |
-| Top row | `__identity` | Full-width flex row, `justify-content: space-between`, `align-items: baseline` — title left, subtitle right |
+| Top row (optional) | `__identity` | Full-width flex row, `justify-content: space-between`, `align-items: baseline` — title left, subtitle right. **Omit when page title is in `ds-page-content__heading`.** |
 | Title | `__title` | `h1`, 20px/600, `--color-text-primary` |
 | Subtitle | `__subtitle` | `p`, 12px/400, `--color-text-secondary` |
 | Bottom row | `__controls` | Flex row of floating controls, `gap: 8px`, left-aligned below identity |
 | Quick filter | `__date-select` | Input-style period selector with `calendar_today` leading icon and `arrow_drop_down` trailing icon |
 | Icon button | `__btn` | 42×42px floating square, elevated, `filter_alt` / `more_vert` |
-| Active state | `__btn.is-active` | Filter button when filter panel is open — brand blue fill |
+| Active state | `__btn.is-active` | Filter button when filter panel is open or active filters exist — brand blue fill |
 
 ### Inputs / Outputs (Angular)
 
 | Input | Type | Notes |
 |---|---|---|
-| `[title]` | `string` | Page title (required) |
-| `[subtitle]` | `string` | Optional supporting text — date, status, last-updated |
+| `[title]` | `string` | Toolbar title — renders `__identity` block. **Omit when the page title is in `ds-page-content__heading`** (canonical page layout). Use only when the toolbar is the sole title source. |
+| `[subtitle]` | `string` | Optional supporting text — date, status, last-updated. Rendered inside `__identity`; only relevant when `[title]` is also provided. |
+| `[filterActive]` | `boolean` | `true` when filter panel is open or active filters exist — applies brand blue fill to the `filter_alt` button and switches icon to filled variant. Bind `[filterActive]="filterOpen"`. |
 
 | Output | Notes |
 |---|---|
@@ -345,11 +348,12 @@ Content slot: `[toolbar-filters]` — project quick-filter controls (e.g. `__dat
 ```
 
 ### Angular component
+
+**Canonical page-shell usage** (page title is in `ds-page-content__heading` — omit `[title]` and `[subtitle]`):
 ```html
 <ds-dashboard-toolbar
-  title="Support Dashboard"
-  subtitle="April 15, 2026 · Last updated 2 min ago"
-  (filterClick)="openFilter()"
+  [filterActive]="filterOpen"
+  (filterClick)="filterOpen = true"
   (moreClick)="openMoreMenu()">
 
   <div toolbar-filters class="ds-dashboard-toolbar__date-select">
@@ -363,6 +367,17 @@ Content slot: `[toolbar-filters]` — project quick-filter controls (e.g. `__dat
     <span class="ds-icon ds-icon--sm" aria-hidden="true">arrow_drop_down</span>
   </div>
 
+</ds-dashboard-toolbar>
+```
+
+**Standalone usage** (no `ds-page-content__heading` — toolbar IS the title source):
+```html
+<ds-dashboard-toolbar
+  title="Support Dashboard"
+  subtitle="April 15, 2026 · Last updated 2 min ago"
+  [filterActive]="filterOpen"
+  (filterClick)="filterOpen = true"
+  (moreClick)="openMoreMenu()">
 </ds-dashboard-toolbar>
 ```
 

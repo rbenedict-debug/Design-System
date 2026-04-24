@@ -351,6 +351,57 @@ onDensityChange(value: 'comfort' | 'compact'): void {
 
 Full integration pattern with template, component class, and all options is in `.claude/specs/specs-table.md` → "Angular Integration — Canonical Wiring Pattern".
 
+### Dashboard
+
+> **Highcharts prerequisite check — do this before writing any dashboard chart code.**
+> `ds-chart` wraps Highcharts. The library is NOT bundled — it is a peer dependency.
+>
+> **Step 1 — Check `package.json` for `highcharts`.**
+> - **Found** → proceed.
+> - **Not found** → install before writing any chart code:
+>   ```bash
+>   npm install highcharts
+>   ```
+>   **Never install `highcharts-angular`** — the DS ships its own wrapper; no extra dep is needed.
+>
+> **Step 2 — Never call `Highcharts.setOptions()` from app code.** `DsChartComponent` applies `onfloChartTheme` automatically on first render. Calling it again from the app will override the Onflo theme.
+
+| Component | Selector | Import |
+|---|---|---|
+| Chart (Highcharts wrapper) | `<ds-chart>` | `DsChartComponent` |
+| Metric card (KPI tile) | `<ds-metric-card>` | `DsMetricCardComponent` |
+| Dashboard toolbar | `<ds-dashboard-toolbar>` | `DsDashboardToolbarComponent` |
+
+**Dashboard page structure — three required classes (always together):**
+
+1. `ds-page-content--dashboard` on `<main>` — removes `gap` so the canvas uses negative margins correctly
+2. `ds-page-content__dashboard-header` wrapper around `__heading` + toolbar — keeps heading and toolbar stationary while the tile canvas scrolls
+3. `ds-page-content__main--dashboard` for the tile canvas — strips the card shell so metric cards and chart tiles float directly on the page surface
+
+Never use plain `ds-page-content__main` on a dashboard — it wraps the tiles in a card, creating a double-layer effect. Always use `--dashboard`.
+
+**`ds-dashboard-toolbar` in the page shell — omit `[title]` and `[subtitle]`:**
+
+In the canonical page layout, the page title lives in `ds-page-content__heading` (`<h1 class="ds-page-content__title">`). Do not also pass `[title]` to `<ds-dashboard-toolbar>` — that renders a second `<h1>` inside the toolbar (`__identity` block), breaking heading hierarchy. The toolbar only renders `__controls` in this context:
+
+```html
+<div class="ds-page-content__dashboard-header">
+  <div class="ds-page-content__heading ds-page-content__heading--row">
+    <h1 class="ds-page-content__title">Support Dashboard</h1>
+    <p class="ds-page-content__meta">April 20, 2026 · Last updated 2 min ago</p>
+  </div>
+  <!-- No [title] or [subtitle] — page heading provides those -->
+  <ds-dashboard-toolbar
+    [filterActive]="filterOpen"
+    (filterClick)="filterOpen = true">
+  </ds-dashboard-toolbar>
+</div>
+```
+
+Full specs: `.claude/specs/specs-dashboard.md`
+
+---
+
 ### Content
 | Component | Selector | Import |
 |---|---|---|
@@ -727,15 +778,17 @@ The design system themes Material components globally — do not apply your own 
 
 ## Composition patterns
 
-When building page sections that assemble multiple components together, consult
-`node_modules/@onflo/design-system/.claude/specs/specs-compositions.md` before writing code.
+When building page sections that assemble multiple components together, consult the relevant spec file before writing code.
 
-It covers:
+**`node_modules/@onflo/design-system/.claude/specs/specs-compositions.md`** covers:
 - **Component selection** — which component to use when options overlap (dialog vs modal vs snackbar; label vs tag vs chip vs badge; skeleton vs spinner)
 - **Data table page** — toolbar + AG Grid + paginator assembly rules
 - **Filtered table page** — toolbar + filter bar + filter modal + AG Grid full wiring
 - **Form / detail page** — field layout, error handling, save-bar placement
 - **Empty and loading states** — skeleton vs spinner, aria-busy wiring, empty state structure
+
+**`node_modules/@onflo/design-system/.claude/specs/specs-dashboard.md`** covers:
+- **Dashboard page** — `ds-metric-card` + `ds-chart` bento grid layout, `ds-dashboard-toolbar` placement, required page structure classes (`--dashboard`, `__dashboard-header`, `__main--dashboard`)
 
 ---
 
