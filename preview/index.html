@@ -21936,14 +21936,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
         <!-- Toast feedback -->
         <div id="ag-sim-toast" style="display:none; margin-top:8px; font-size:12px; color:var(--color-text-secondary); font-style:italic;"></div>
 
-        <!-- Sim column picker overlay — position: fixed, shown/hidden via JS -->
-        <div id="sim-cp-overlay" class="ds-column-panel__picker-overlay" style="display:none;" role="dialog" aria-label="Add column">
-          <div class="ds-column-panel__picker-search">
-            <span class="ds-icon ds-icon--sm" aria-hidden="true">search</span>
-            <input type="text" id="sim-cp-search" placeholder="Search columns…" autocomplete="off" aria-label="Search columns" />
-          </div>
-          <div id="sim-cp-list" class="ds-column-panel__picker-list" role="list"></div>
-        </div>
+        <!-- Sim column picker overlay — built dynamically in JS and appended to body -->
 
         <script>
         (function() {
@@ -22744,10 +22737,34 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           var simPickerActiveSection = null;
 
           function simPickerInit() {
-            simPickerOverlay     = document.getElementById('sim-cp-overlay');
-            simPickerSearchInput = document.getElementById('sim-cp-search');
-            simPickerListEl      = document.getElementById('sim-cp-list');
-            if (!simPickerOverlay) return;
+            // Build overlay from scratch and append to body so position:fixed
+            // is always viewport-relative regardless of any ancestor overflow/transform.
+            simPickerOverlay = document.createElement('div');
+            simPickerOverlay.className = 'ds-column-panel__picker-overlay';
+            simPickerOverlay.setAttribute('role', 'dialog');
+            simPickerOverlay.setAttribute('aria-label', 'Add column');
+            simPickerOverlay.style.display = 'none';
+
+            var searchRow = document.createElement('div');
+            searchRow.className = 'ds-column-panel__picker-search';
+            var searchIcon = document.createElement('span');
+            searchIcon.className = 'ds-icon ds-icon--sm';
+            searchIcon.setAttribute('aria-hidden', 'true');
+            searchIcon.textContent = 'search';
+            searchRow.appendChild(searchIcon);
+            simPickerSearchInput = document.createElement('input');
+            simPickerSearchInput.type = 'text';
+            simPickerSearchInput.placeholder = 'Search columns…';
+            simPickerSearchInput.autocomplete = 'off';
+            simPickerSearchInput.setAttribute('aria-label', 'Search columns');
+            searchRow.appendChild(simPickerSearchInput);
+            simPickerOverlay.appendChild(searchRow);
+
+            simPickerListEl = document.createElement('div');
+            simPickerListEl.className = 'ds-column-panel__picker-list';
+            simPickerListEl.setAttribute('role', 'list');
+            simPickerOverlay.appendChild(simPickerListEl);
+
             document.body.appendChild(simPickerOverlay);
 
             simPickerSearchInput.addEventListener('input', function() {
@@ -22794,7 +22811,6 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                           : simPivotActive;
             var cols = SIM_PICKER_COLS[simPickerActiveSection] || [];
             var f = filter.trim().toLowerCase();
-            // Exclude already-active columns — they're shown as removable cards.
             var available = cols.filter(function(c) { return !activeSet.has(c.colId); });
             var visible = f ? available.filter(function(c) { return c.label.toLowerCase().includes(f); }) : available;
             simPickerListEl.innerHTML = '';
@@ -22823,9 +22839,18 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           function simPickerPosition(btn) {
             var rect = btn.getBoundingClientRect();
             var overlayH = 320;
+            var overlayW = 280;
             var spaceBelow = window.innerHeight - rect.bottom;
-            simPickerOverlay.style.left  = rect.left + 'px';
-            simPickerOverlay.style.width = '280px';
+
+            simPickerOverlay.style.position = 'fixed';
+            simPickerOverlay.style.width = overlayW + 'px';
+            simPickerOverlay.style.right = '';
+
+            var left = rect.left;
+            if (left + overlayW > window.innerWidth - 8) { left = window.innerWidth - overlayW - 8; }
+            if (left < 8) left = 8;
+            simPickerOverlay.style.left = left + 'px';
+
             if (spaceBelow < overlayH + 8) {
               simPickerOverlay.style.top    = '';
               simPickerOverlay.style.bottom = (window.innerHeight - rect.top + 4) + 'px';
