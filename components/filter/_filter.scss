@@ -507,6 +507,9 @@ mark.search-match {
   --color-text-error:        var(--color-text-error-on-dark);
   --color-icon-error:        var(--color-icon-error-on-dark);
   --color-border-error:      var(--color-border-error-on-dark);
+  // ds-input overrides for dark navy surface
+  --color-surface-input:     var(--overlay-inverse-hovered);
+  --color-border-input:      var(--color-border-subtle-on-dark);
 }
 
 .filter-modal__selected-header {
@@ -875,7 +878,7 @@ mark.search-match {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
   background: var(--color-surface-page);
   border-top: 1px solid var(--color-border-subtle);
 }

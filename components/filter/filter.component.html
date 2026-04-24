@@ -619,13 +619,18 @@
                   <p class="filter-save-form__label">Save current filters</p>
                   <div class="filter-save-form__row">
                     <div class="filter-save-form__input-wrap">
-                      <div class="ds-input">
+                      <div class="ds-input"
+                           #saveInputWrap
+                           (mousedown)="onSaveInputPointerDown(saveInputWrap)"
+                           (touchstart)="onSaveInputPointerDown(saveInputWrap)"
+                           (focusout)="onSaveInputFocusOut(saveInputWrap)">
                         <div class="ds-input__field">
                           <input
                             class="ds-input__control"
                             type="text"
-                            placeholder="Set name…"
+                            placeholder="Name this filter set…"
                             maxlength="60"
+                            autocomplete="off"
                             [value]="_saveNameDraft()"
                             (input)="setSaveNameDraft($any($event.target).value)"
                             (keydown.enter)="saveCurrentSet()"
@@ -635,7 +640,7 @@
                       </div>
                     </div>
                     <button
-                      class="ds-button ds-button--filled ds-button--sm"
+                      class="ds-button ds-button--filled"
                       type="button"
                       [disabled]="!_saveNameDraft().trim()"
                       (click)="saveCurrentSet()"

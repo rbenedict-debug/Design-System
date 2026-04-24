@@ -520,6 +520,14 @@ export class DsFilterComponent implements OnChanges {
     this._saveNameDraft.set(name);
   }
 
+  onSaveInputPointerDown(wrapper: HTMLDivElement): void {
+    wrapper.setAttribute('data-mouse-focus', '');
+  }
+
+  onSaveInputFocusOut(wrapper: HTMLDivElement): void {
+    wrapper.removeAttribute('data-mouse-focus');
+  }
+
   saveCurrentSet(): void {
     const name = this._saveNameDraft().trim();
     if (!name) return;
