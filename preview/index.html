@@ -6316,7 +6316,7 @@
 .ds-table-header-cell {
   display: flex;
   align-items: center;
-  height: var(--ds-table-header-height, 56px);
+  height: 56px;
   width: 100%;
   background: var(--color-surface-subtle);
   border-bottom: 1px solid var(--color-border-secondary);
@@ -6491,7 +6491,7 @@
 .ds-table-row-cell {
   display: flex;
   align-items: center;
-  height: var(--ds-table-row-height, 56px);
+  height: var(--ds-table-row-height, 68px);
   width: 100%;
   padding: 0 var(--spacing-lg);
   border-bottom: 1px solid var(--color-border-secondary);
@@ -10718,15 +10718,12 @@ mark.search-match {
 
 <style>
 /* ── Page template density toggle ───────────────────────────────────────── */
-/* Sets --ds-table-row-height / --ds-table-header-height on the container;
-   the component SCSS var() fallback picks these up automatically.           */
+/* Only --ds-table-row-height changes. Header height is always 56px (fixed). */
 #table-sim-pt[data-density="comfort"] {
   --ds-table-row-height: 68px;
-  --ds-table-header-height: 68px;
 }
 #table-sim-pt[data-density="compact"] {
   --ds-table-row-height: 42px;
-  --ds-table-header-height: 42px;
 }
 /* Pinned right column needs a solid background so it occludes scrolled cells.
    Using surface-default matches the table's container background. */
@@ -21450,7 +21447,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
                 <!-- 1. Density -->
                 <div class="ds-column-panel__density">
                   <div class="ds-button-group" role="group" aria-label="Row density" style="width:100%;">
-                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon" id="ag-density-comfort" aria-pressed="false" style="flex:1 0 0;" onclick="agSimSetDensity('comfort',this)"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
+                    <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon is-selected" id="ag-density-comfort" aria-pressed="true" style="flex:1 0 0;" onclick="agSimSetDensity('comfort',this)"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_medium</span>Comfort</button>
                     <button type="button" class="ds-button ds-button--outlined ds-button--sm ds-button--leading-icon" id="ag-density-compact" aria-pressed="false" style="flex:1 0 0;" onclick="agSimSetDensity('compact',this)"><span class="ds-icon ds-icon--sm" aria-hidden="true">density_small</span>Compact</button>
                   </div>
                 </div>
@@ -21598,7 +21595,7 @@ Source: <code>components/datepicker/_datepicker.scss</code>
           }
 
           var agSimApi = null;
-          var agSimRowHeight = 56;
+          var agSimRowHeight = 68;
           var toastTimer;
 
           /* ── Toast ──────────────────────────────────────────────────────── */
@@ -22298,32 +22295,25 @@ Source: <code>components/datepicker/_datepicker.scss</code>
             showToast('Added ' + r.id);
           };
 
-          /* Density toggle — Comfort / Compact are independent toggles.
-             Pressing an already-selected button deselects it, returning to
-             standard density (56px). Neither selected = standard. */
+          /* Density toggle — one button is always selected (default: Comfort = 68px).
+             Header height is always 56px and never changes — only row height switches. */
           window.agSimSetDensity = function(density, btn) {
-            var wasSelected = btn.classList.contains('is-selected');
             ['ag-density-comfort', 'ag-density-compact'].forEach(function(id) {
               var b = document.getElementById(id);
               if (b) { b.classList.remove('is-selected'); b.setAttribute('aria-pressed', 'false'); }
             });
-            var h = 56; // default: standard
-            if (!wasSelected) {
-              btn.classList.add('is-selected');
-              btn.setAttribute('aria-pressed', 'true');
-              h = density === 'comfort' ? 68 : 42;
-            }
+            btn.classList.add('is-selected');
+            btn.setAttribute('aria-pressed', 'true');
+            var h = density === 'comfort' ? 68 : 42;
             var gridEl = document.getElementById('ag-sim-grid');
             if (gridEl) {
               gridEl.style.setProperty('--ag-row-height', h + 'px');
-              gridEl.style.setProperty('--ag-header-height', h + 'px');
               gridEl.style.setProperty('--ag-line-height', h + 'px');
               gridEl.style.setProperty('--ds-table-row-height', h + 'px');
-              gridEl.style.setProperty('--ds-table-header-height', h + 'px');
+              // Never set --ag-header-height or --ds-table-header-height — header is always 56px
             }
             if (agSimApi) {
               agSimRowHeight = h;
-              agSimApi.updateGridOptions({ headerHeight: h });
               agSimApi.resetRowHeights();
             }
           };

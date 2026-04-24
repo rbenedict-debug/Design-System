@@ -1,9 +1,9 @@
 // Onflo Design System — Table Row Cell
 // Figma: primitive/table-row-cell
 // AG Grid custom cell renderer — used inside component/table-row
-// Height defaults to 56px; set --ds-table-row-height on the grid host to change density.
+// Height defaults to 68px (comfortable); set --ds-table-row-height to 42px for compact. Header is always 56px.
 
-$cell-height: 56px;
+$cell-height: 68px;
 $cell-padding: var(--spacing-lg);
 $gripper-size: 32px;
 $checkbox-size: 42px;

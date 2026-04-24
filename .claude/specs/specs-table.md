@@ -651,7 +651,7 @@ Row height is controlled by the `rowHeight` grid option. **Header height is alwa
 Tie row height to the Onflo density toggle via a component property:
 
 ```typescript
-readonly ROW_HEIGHT_COMFORT = 56;
+readonly ROW_HEIGHT_COMFORT = 68;
 readonly ROW_HEIGHT_COMPACT = 42;
 
 density: TableDensity = 'comfort';

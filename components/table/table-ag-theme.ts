@@ -44,7 +44,7 @@ export const onfloTheme: Theme = themeQuartz
     // ── Sizing — must be set here for AG Grid's virtual row height ──────────
     // AG Grid uses these values for DOM virtualisation (row count in viewport,
     // scroll height, row positioning). Setting height only in CSS is not enough.
-    rowHeight: 56,        // comfortable density (default); compact = 42px
+    rowHeight: 68,        // comfortable density (default); compact = 42px
     headerHeight: 56,     // fixed — never changes with density
     iconSize: 20,         // matches ds-icon--sm (20px / opsz 20)
     spacing: 8,           // matches --spacing-sm — base unit for AG Grid internal spacing

@@ -283,7 +283,7 @@ Targets `.ag-root-wrapper`. Contains all **token-referencing values** that must 
 
 ### Density switching
 Header height is always **56px** — it never changes with density. Only row height changes.
-Row height defaults to 56px (comfortable). To switch to compact at runtime, set `--ag-row-height` on the grid's host element:
+Row height defaults to 68px (comfortable). To switch to compact at runtime, set `--ag-row-height` on the grid's host element:
 ```scss
 // Compact (42px rows — header stays 56px):
 .my-grid-host { --ag-row-height: 42px; }

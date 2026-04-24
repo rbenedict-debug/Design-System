@@ -2070,18 +2070,15 @@ declare class DsColumnPanelComponent implements OnDestroy {
  *   };
  *
  * Density variants:
- *   The default density is 56px (standard). To switch density, set
- *   --ag-row-height and --ag-header-height on the grid's host element.
- *   These CSS custom properties override the withParams() defaults:
+ *   Header height is fixed at 56px — it never changes with density.
+ *   Only row height changes. Default (comfortable) is 56px; compact is 42px.
  *
- *   Comfortable (68px):
- *     .your-grid-host { --ag-row-height: 68px; --ag-header-height: 68px; }
+ *   Compact (42px rows):
+ *     .your-grid-host { --ag-row-height: 42px; }
  *
- *   Compact (42px):
- *     .your-grid-host { --ag-row-height: 42px; --ag-header-height: 42px; }
- *
- *   Note: also update ds-table-header-cell and ds-table-row-cell host heights
- *   to match — those components manage their own cell height independently.
+ *   Never set --ag-header-height — header is always 56px.
+ *   Note: also update the ds-table-row-cell host height via
+ *   --ds-table-row-height — that component manages its own height independently.
  */
 
 declare const onfloTheme: Theme;
