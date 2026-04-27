@@ -145,7 +145,7 @@
     align-items: center;
     gap: var(--spacing-sm);
     width: 100%;
-    min-height: 48px;
+    min-height: 42px;
     padding: var(--spacing-md) var(--spacing-lg);
     font-family: var(--ref-typeface-brand);
     font-size: var(--ref-typescale-body-medium-size);
@@ -335,7 +335,7 @@
     line-height: var(--ref-typescale-body-medium-line-height);
     letter-spacing: var(--ref-typescale-body-medium-tracking);
     color: var(--color-text-primary);
-    min-height: 48px;
+    min-height: 42px;
     padding: var(--spacing-md) var(--spacing-lg);
 
     // Suppress Material state layers
