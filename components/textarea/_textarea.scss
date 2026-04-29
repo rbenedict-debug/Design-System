@@ -213,6 +213,7 @@
   // ── Field background and padding ─────────────────────────────────────────
 
   .mat-mdc-text-field-wrapper {
+    height: auto;
     background: var(--color-surface-input);
     padding: var(--spacing-sm) var(--spacing-md);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
