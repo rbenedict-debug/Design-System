@@ -68,11 +68,16 @@ The toolbar, grid, and paginator must sit inside `ds-page-content__main--table` 
   <ag-grid-angular
     class="ds-ag-grid ag-theme-quartz"
     [gridOptions]="gridOptions"
+    [rowData]="rowData"
     (gridReady)="onGridReady($event)"
     (gridSizeChanged)="onGridSizeChanged($event)"
   />
   <ds-ag-paginator [api]="gridApi" />
-  <ds-column-panel [api]="gridApi" [(density)]="density" />
+  <ds-column-panel
+    [api]="gridApi"
+    [(density)]="density"
+    (densityChange)="onDensityChange($event)"
+  />
 </div>
 ```
 
@@ -101,6 +106,8 @@ export class MyPageComponent {
   settingsActive = false;
   density: 'comfort' | 'compact' = 'comfort';
 
+  rowData: unknown[] = []; // replace with real data
+
   gridOptions = {
     theme: onfloTheme,
     defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
@@ -124,6 +131,12 @@ export class MyPageComponent {
 
   onGridSizeChanged(event: GridSizeChangedEvent): void {
     event.api.sizeColumnsToFit();
+  }
+
+  onDensityChange(value: 'comfort' | 'compact'): void {
+    this.density = value;
+    this.gridApi?.resetRowHeights();
+    setTimeout(() => this.gridApi?.sizeColumnsToFit(), 300);
   }
 }
 ```
