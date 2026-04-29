@@ -9,6 +9,7 @@
       "esm2022": "./dist/fesm2022/onflo-design-system.mjs",
       "default": "./dist/fesm2022/onflo-design-system.mjs"
     },
+    "./dist/onflo.css": "./dist/onflo.css",
     "./dist/components.css": "./dist/components.css",
     "./dist/layout.css": "./dist/layout.css",
     "./tokens/css/index.css": "./tokens/css/index.css",
@@ -40,7 +41,7 @@
   "scripts": {
     "generate-tokens": "node scripts/generate-tokens.js",
     "build-preview": "node scripts/build-preview.js",
-    "build": "ng-packagr -p ng-package.json && sass components/index.scss dist/components.css --load-path=components --style=compressed --no-source-map && sass layout/index.scss dist/layout.css --style=compressed --no-source-map",
+    "build": "ng-packagr -p ng-package.json && sass components/index.scss dist/components.css --load-path=components --style=compressed --no-source-map && sass layout/index.scss dist/layout.css --style=compressed --no-source-map && node scripts/build-bundle.js",
     "preview": "open preview/index.html"
   },
   "publishConfig": {

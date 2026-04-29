@@ -217,10 +217,12 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 >   ```bash
 >   npm install ag-grid-community@^33 ag-grid-angular@^33
 >   ```
->   Then add AG Grid's structural CSS to the `styles` array in `angular.json`:
+>   Then add AG Grid's structural CSS to the `styles` array in `angular.json` alongside the DS bundle:
 >   ```json
 >   "styles": [
->     "node_modules/ag-grid-community/styles/ag-grid.css"
+>     "node_modules/@onflo/design-system/dist/onflo.css",
+>     "node_modules/ag-grid-community/styles/ag-grid.css",
+>     "src/styles.scss"
 >   ]
 >   ```
 >   Do **not** add `ag-theme-quartz.css` — the DS uses the programmatic Theme API and that file is unused; loading it can conflict with the theme's own injected styles.
@@ -737,22 +739,18 @@ Minimum supported viewport: **1024px** (landscape tablet).
 
 ## CSS import in Angular projects
 
-Three stylesheets must be included — tokens first, then components, then layout (if using page layout patterns). All three are required for full-page applications.
+**Use the single bundle — one import, correct order guaranteed:**
 
-**In `angular.json` styles array:**
 ```json
 "styles": [
-  "node_modules/@onflo/design-system/tokens/css/index.css",
-  "node_modules/@onflo/design-system/dist/components.css",
-  "node_modules/@onflo/design-system/dist/layout.css",
+  "node_modules/@onflo/design-system/dist/onflo.css",
   "src/styles.scss"
 ]
 ```
 
-`tokens/css/index.css` — design tokens (CSS custom properties)
-`dist/components.css` — component CSS class API (`.ds-icon`, `.ds-button`, `ds-sr-only`, etc.)
-`dist/layout.css` — page layout patterns (`.ds-page-layout`, `.ds-split-page`)
-Order matters: tokens → components → layout → project styles.
+`dist/onflo.css` contains tokens, components, and layout bundled in the correct order (ref primitives → semantic tokens → components → layout). This is the recommended approach — do not split it into separate imports.
+
+> **Do not use the three-file approach** (`tokens/css/index.css` + `dist/components.css` + `dist/layout.css`) in new projects. If an existing project uses that pattern and components are rendering incorrectly (square inputs, wrong padding, no border-radius), the tokens entry is either missing or in the wrong position — switch to `dist/onflo.css` to resolve it.
 
 **SCSS tokens in component stylesheets:**
 ```scss

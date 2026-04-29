@@ -9,6 +9,7 @@
       "esm2022": "./dist/fesm2022/onflo-design-system.mjs",
       "default": "./fesm2022/onflo-design-system.mjs"
     },
+    "./dist/onflo.css": "./dist/onflo.css",
     "./dist/components.css": "./dist/components.css",
     "./dist/layout.css": "./dist/layout.css",
     "./tokens/css/index.css": "./tokens/css/index.css",
