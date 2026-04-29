@@ -21,6 +21,7 @@
   --ref-color-neutral-surface: #1C3D61;
   --ref-color-neutral-tooltip: #2D3638;
   --ref-color-neutral-scrim: rgba(0, 0, 0, 0.6);
+  --ref-color-surface-loading: rgba(28, 61, 97, 0.75);
   --ref-color-neutral-scroll: rgba(141, 164, 190, 0.3);
   --ref-color-neutral-border-subtle: #112236;
   --ref-color-accent-lightblue-default: #6DC4F5;
@@ -151,9 +152,15 @@
   --ref-overlay-yellow-dragged: rgba(255, 208, 77, 0.16);
   --ref-overlay-inverse-hover: rgba(255, 255, 255, 0.12);
   --ref-overlay-inverse-pressed: rgba(255, 255, 255, 0.18);
+  --ref-overlay-brand-hover: rgba(61, 155, 224, 0.12);
 
   /* ── table cell height ─────────────────────────────── */
   --ref-table-cell-height-comfort-height: 68px;
   --ref-table-cell-height-standard-height: 56px;
   --ref-table-cell-height-compact-height: 42px;
+
+  /* ── Layout ────────────────────────────────────────── */
+  --ref-layout-nav-sidebar-width: 80px;
+  --ref-layout-subnav-width: 195px;
+  --ref-layout-top-nav-height: 65px;
 }

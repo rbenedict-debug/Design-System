@@ -57,6 +57,7 @@ export * from './components/table/table-header-cell.component';
 export * from './components/table/table-header-group-cell.component';
 export * from './components/table/table-row-cell.component';
 export * from './components/table/table-status-bar.component';
+export * from './components/table/table-context-menu.component';
 export * from './components/table/table-row-groups-bar.component';
 export * from './components/table-toolbar/table-toolbar.component';
 export * from './components/tabs/tabs.component';

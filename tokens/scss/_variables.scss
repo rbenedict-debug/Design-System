@@ -23,6 +23,7 @@ $surface-nav-active: var(--color-surface-nav-active) !default;
 $surface-container: var(--color-surface-container) !default;
 $surface-overlay: var(--color-surface-overlay) !default;
 $surface-scrim: var(--color-surface-scrim) !default;
+$surface-loading: var(--color-surface-loading) !default;
 $surface-tooltip: var(--color-surface-tooltip) !default;
 $surface-scroll: var(--color-surface-scroll) !default;
 $surface-input: var(--color-surface-input) !default;
@@ -140,6 +141,7 @@ $overlay-accent-yellow-focused: var(--overlay-accent-yellow-focused) !default;
 $overlay-accent-yellow-dragged: var(--overlay-accent-yellow-dragged) !default;
 $overlay-inverse-hovered: var(--overlay-inverse-hovered) !default;
 $overlay-inverse-pressed: var(--overlay-inverse-pressed) !default;
+$overlay-brand-hover: var(--overlay-brand-hover) !default;
 
 // ── icon ────────────────────────────────────────────────
 $icon-default: var(--color-icon-default) !default;

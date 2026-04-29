@@ -142,6 +142,11 @@
       --ref-overlay-yellow-dragged: rgba(255, 191, 0, 0.16);
       --ref-overlay-inverse-hover: rgba(255, 255, 255, 0.12);
       --ref-overlay-inverse-pressed: rgba(255, 255, 255, 0.18);
+      --ref-overlay-brand-hover: rgba(11, 110, 180, 0.12);
+      --ref-color-surface-loading: rgba(255, 255, 255, 0.65);
+      --ref-layout-nav-sidebar-width: 80px;
+      --ref-layout-subnav-width: 195px;
+      --ref-layout-top-nav-height: 65px;
       --ref-spacing-none: 0px;
       --ref-spacing-xs: 4px;
       --ref-spacing-sm: 8px;
@@ -164,6 +169,7 @@
       --color-surface-container: var(--ref-color-primary-blue-bg-soft);
       --color-surface-overlay: var(--ref-color-neutral-surface);
       --color-surface-scrim: var(--ref-color-neutral-scrim);
+      --color-surface-loading: var(--ref-color-surface-loading);
       --color-surface-tooltip: var(--ref-color-neutral-tooltip);
       --color-surface-scroll: var(--ref-color-neutral-scroll);
       --color-surface-input: var(--ref-color-neutral-surface);
@@ -291,9 +297,13 @@
       --overlay-accent-yellow-dragged: var(--ref-overlay-yellow-dragged);
       --overlay-inverse-hovered: var(--ref-overlay-inverse-hover);
       --overlay-inverse-pressed: var(--ref-overlay-inverse-pressed);
+      --overlay-brand-hover: var(--ref-overlay-brand-hover);
       --color-table-cell-height-comfortable-height: var(--ref-table-cell-height-comfort-height);
       --color-table-cell-height-standard-height: var(--ref-table-cell-height-standard-height);
       --color-table-cell-height-compact-height: var(--ref-table-cell-height-compact-height);
+      --nav-sidebar-width: var(--ref-layout-nav-sidebar-width);
+      --subnav-width: var(--ref-layout-subnav-width);
+      --top-nav-height: var(--ref-layout-top-nav-height);
     }
 
     [data-theme="dark"] {
@@ -439,6 +449,16 @@
       --ref-overlay-inverse-pressed: rgba(255, 255, 255, 0.18);
       --overlay-inverse-hovered: rgba(255, 255, 255, 0.12);
       --overlay-inverse-pressed: rgba(255, 255, 255, 0.18);
+      --ref-overlay-brand-hover: rgba(61, 155, 224, 0.12);
+      --overlay-brand-hover: var(--ref-overlay-brand-hover);
+      --ref-color-surface-loading: rgba(28, 61, 97, 0.75);
+      --color-surface-loading: var(--ref-color-surface-loading);
+      --ref-layout-nav-sidebar-width: 80px;
+      --ref-layout-subnav-width: 195px;
+      --ref-layout-top-nav-height: 65px;
+      --nav-sidebar-width: var(--ref-layout-nav-sidebar-width);
+      --subnav-width: var(--ref-layout-subnav-width);
+      --top-nav-height: var(--ref-layout-top-nav-height);
       --ref-spacing-none: 0px;
       --ref-spacing-xs: 4px;
       --ref-spacing-sm: 8px;
@@ -3380,7 +3400,7 @@
   top: 100%;
   left: 0;
   right: 0;
-  margin-top: 4px;
+  margin-top: var(--spacing-xs);
   z-index: 1000;
   box-sizing: border-box;
 }
@@ -3398,7 +3418,7 @@
   top: auto;
   bottom: 100%;
   margin-top: 0;
-  margin-bottom: 4px;
+  margin-bottom: var(--spacing-xs);
 }
 
 .ds-select .mat-mdc-form-field {
@@ -5957,7 +5977,7 @@
   justify-content: center;
   gap: var(--spacing-xs);
   height: 42px;
-  padding: 0 16px;
+  padding: 0 var(--spacing-lg);
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
   font-family: var(--ref-typescale-label-medium-font);
@@ -5971,11 +5991,11 @@
 }
 .ds-label--sm {
   height: 32px;
-  padding: 0 12px;
+  padding: 0 var(--spacing-md);
 }
 .ds-label--xs {
   height: 24px;
-  padding: 0 10px;
+  padding: 0 var(--spacing-sm);
 }
 .ds-label--green {
   background: var(--color-surface-accent-green);
@@ -6338,8 +6358,7 @@
 }
 .ds-table-header-cell--dragging {
   background: var(--overlay-hovered);
-  outline: 2px solid var(--color-border-brand);
-  outline-offset: -2px;
+  box-shadow: inset 0 0 0 2px var(--color-border-brand);
   cursor: grabbing;
 }
 .ds-table-header-cell__resize-handle {
@@ -7405,7 +7424,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   gap: var(--spacing-xs);
   width: 64px;
   height: 52px;
-  padding: 4px 16px;
+  padding: var(--spacing-xs) var(--spacing-lg);
   box-sizing: border-box;
   border-radius: var(--radius-sm);
   overflow: hidden;
@@ -7946,7 +7965,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 .ds-top-nav__more-panel {
   position: absolute;
   top: 100%;
-  margin-top: 4px;
+  margin-top: var(--spacing-xs);
   z-index: 200;
   min-width: 220px;
   max-height: 320px;
@@ -8074,7 +8093,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   flex-shrink: 0;
   padding: 0;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--color-surface-page);
   box-shadow: 0 1px 8px 0 var(--shadow-elevation-3), 0 2px 3px 0 var(--shadow-elevation-3);
@@ -8973,7 +8992,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.65);
+  background: var(--color-surface-loading);
   border-radius: var(--radius-md);
   z-index: 2;
 }
@@ -8991,7 +9010,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   pointer-events: none;
 }
 .ds-chart .highcharts-tooltip-box {
-  filter: drop-shadow(0 2px 8px rgba(45, 54, 56, 0.1));
+  filter: drop-shadow(0 2px 8px var(--shadow-elevation-2));
 }
 .ds-chart .highcharts-button {
   display: none;
@@ -10454,19 +10473,17 @@ mark.search-match {
 .filter-cost-range__thumb::-webkit-slider-thumb:hover,
 .filter-numeric-range__thumb::-webkit-slider-thumb:hover {
   transform: scale(1.15);
-  box-shadow: 0 0 0 8px rgba(var(--ref-color-primary-blue-default-rgb, 25, 92, 178), 0.12), 0 1px 4px var(--shadow-elevation-2);
+  box-shadow: 0 0 0 8px var(--overlay-brand-hover), 0 1px 4px var(--shadow-elevation-2);
 }
 
 .filter-cost-range__thumb:focus-visible::-webkit-slider-thumb,
 .filter-numeric-range__thumb:focus-visible::-webkit-slider-thumb {
-  outline: 3px solid var(--color-border-ada-focus-ring);
-  outline-offset: 2px;
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 
 .filter-cost-range__thumb:focus-visible::-moz-range-thumb,
 .filter-numeric-range__thumb:focus-visible::-moz-range-thumb {
-  outline: 3px solid var(--color-border-ada-focus-ring);
-  outline-offset: 2px;
+  box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 
 .filter-cost-range__bounds,

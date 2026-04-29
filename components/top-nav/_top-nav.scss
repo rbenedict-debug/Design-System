@@ -90,7 +90,7 @@
   &__more-panel {
     position: absolute;
     top: 100%;
-    margin-top: 4px;
+    margin-top: var(--spacing-xs);
     z-index: 200;
     min-width: 220px; // wider than ds-menu default to accommodate tab label + close btn
     max-height: 320px;

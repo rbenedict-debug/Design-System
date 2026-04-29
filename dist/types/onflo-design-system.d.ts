@@ -2179,6 +2179,21 @@ declare const onfloTheme: Theme;
  *      aria-disabled on disabled items; focus moves to panel on open.
  */
 
+/** A single entry in a DsTableContextMenuComponent item list. */
+interface DsContextMenuItem {
+    /** Display label. Ignored when separator is true. */
+    label?: string;
+    /** Material Symbols Rounded icon name (sm, outlined by default). */
+    icon?: string;
+    /** Render a horizontal divider rule. All other fields are ignored. */
+    separator?: boolean;
+    /** Disable the item — greyed out, pointer-events none, aria-disabled set. */
+    disabled?: boolean;
+    /** Apply red destructive interaction styling (same as ds-menu__item--destructive). */
+    destructive?: boolean;
+    /** Called when the item is clicked (not called when disabled). */
+    action?: () => void;
+}
 /**
  * Emitted by DsTableHeaderCellComponent on right-click.
  * params.api exposes the AG Grid methods needed for the default header actions.
@@ -2227,6 +2242,69 @@ interface DsTableRowContextMenuEvent {
     params: {
         value: unknown;
     };
+}
+/**
+ * Builds the default right-click item list for a column header cell.
+ *
+ * Default actions:
+ *   Sort Ascending | Sort Descending | Clear Sort
+ *   ─────────────────────────────────────────────
+ *   Pin Left | Pin Right | Unpin
+ *   ─────────────────────────────────────────────
+ *   Auto Size Column | Reset Columns
+ *   ─────────────────────────────────────────────
+ *   Group by Column
+ *
+ * @param colId  The column ID from AgHeaderParams.column.getColId().
+ * @param api    The grid API from AgHeaderParams.api.
+ */
+declare function buildDefaultHeaderContextMenuItems(colId: string, api: DsTableHeaderContextMenuEvent['params']['api']): DsContextMenuItem[];
+/**
+ * Builds the default right-click item list for a data row cell.
+ *
+ * Default actions: Copy (copies the cell value string to the clipboard).
+ *
+ * @param value  The cell value from AgCellRendererParams.value.
+ */
+declare function buildDefaultRowContextMenuItems(value: unknown): DsContextMenuItem[];
+declare class DsTableContextMenuComponent implements OnChanges, AfterViewInit {
+    private cdr;
+    /** Items to display. Use DsContextMenuItem[] — build with the default builders or custom arrays. */
+    items: DsContextMenuItem[];
+    /** Horizontal cursor position (event.clientX) where the menu should open. */
+    x: number;
+    /** Vertical cursor position (event.clientY) where the menu should open. */
+    y: number;
+    /** Controls visibility. Bind to a boolean in your component; set false in (closed). */
+    visible: boolean;
+    /** Emitted when the menu requests to close — backdrop click, Escape, or item click. */
+    closed: EventEmitter<void>;
+    private panelRef?;
+    /** Final position after viewport boundary check — bound in the template. */
+    adjustedX: number;
+    adjustedY: number;
+    constructor(cdr: ChangeDetectorRef);
+    ngOnChanges(changes: SimpleChanges): void;
+    ngAfterViewInit(): void;
+    onEscape(): void;
+    close(): void;
+    onItemClick(item: DsContextMenuItem): void;
+    /**
+     * Full WCAG keyboard handling for role="menu":
+     *   Escape     — close
+     *   ArrowDown  — move focus to next item (wraps)
+     *   ArrowUp    — move focus to previous item (wraps)
+     *   Home       — move focus to first item
+     *   End        — move focus to last item
+     */
+    onPanelKeydown(event: KeyboardEvent): void;
+    private _getMenuItems;
+    private _moveFocus;
+    private _focusItem;
+    /** Flips the panel above/left when it would overflow the viewport. */
+    private adjustPosition;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DsTableContextMenuComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<DsTableContextMenuComponent, "ds-table-context-menu", never, { "items": { "alias": "items"; "required": false; }; "x": { "alias": "x"; "required": false; }; "y": { "alias": "y"; "required": false; }; "visible": { "alias": "visible"; "required": false; }; }, { "closed": "closed"; }, never, never, true, never>;
 }
 
 /**
@@ -3954,5 +4032,5 @@ declare class DsFilterBarComponent {
     static ɵcmp: i0.ɵɵComponentDeclaration<DsFilterBarComponent, "ds-filter-bar", never, { "selection": { "alias": "selection"; "required": false; }; "groups": { "alias": "groups"; "required": false; }; }, { "selectionChange": "selectionChange"; "filterClick": "filterClick"; }, never, never, true, never>;
 }
 
-export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDashboardToolbarComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsFilterBarComponent, DsFilterComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, EMPTY_FILTER_SELECTION, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, getActiveFilterCount, onfloChartTheme, onfloTheme };
-export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsChartType, DsColumnPanelState, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTooltipPosition, FilterCostRangeSelection, FilterDateRangeSelection, FilterGroup, FilterNumericRangeSelection, FilterOption, FilterSelection, FilterTier, SavedFilterSet, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };
+export { AgentStatusComponent, DS_TABLE_COLUMN_TYPES, DS_TABLE_DEFAULT_COL_DEF, DS_TABLE_DEFAULT_COL_GROUP_DEF, DsAccordionComponent, DsAccordionPanelComponent, DsAgPaginatorComponent, DsAlertComponent, DsAutocompleteComponent, DsAvatarComponent, DsBadgeComponent, DsButtonComponent, DsCardActionDirective, DsCardActionsDirective, DsCardComponent, DsCardItemComponent, DsCardLeadingDirective, DsCardTrailingDirective, DsChartComponent, DsCheckboxComponent, DsChipComponent, DsColumnPanelComponent, DsDashboardToolbarComponent, DsDateRangePickerComponent, DsDatepickerComponent, DsDialogComponent, DsDividerComponent, DsEmptyStateComponent, DsFilterBarComponent, DsFilterComponent, DsHoverCardComponent, DsIconButtonComponent, DsIconButtonToggleComponent, DsIconComponent, DsInputComponent, DsLabelComponent, DsLeadingDirective, DsListComponent, DsListItemComponent, DsMenuComponent, DsMetricCardComponent, DsModalActionsDirective, DsModalComponent, DsModalTabsDirective, DsPaginatorComponent, DsProgressComponent, DsRadioComponent, DsRadioGroupComponent, DsRichTextEditorComponent, DsSaveBarComponent, DsSearchComponent, DsSelectComponent, DsSkeletonComponent, DsSnackbarComponent, DsSpinnerComponent, DsTabComponent, DsTableContextMenuComponent, DsTableGroupExpansionStore, DsTableGroupRowCellComponent, DsTableHeaderCellComponent, DsTableHeaderGroupCellComponent, DsTableRowCellComponent, DsTableRowGroupsBarComponent, DsTableStatusBarComponent, DsTableToolbarComponent, DsTabsComponent, DsTagComponent, DsTextareaComponent, DsToggleComponent, DsTooltipDirective, DsTrailingDirective, EMPTY_FILTER_SELECTION, NavButtonComponent, NavExpandComponent, NavSidebarComponent, NavTabComponent, ONFLO_CHART_COLORS, SubnavButtonComponent, SubnavHeaderComponent, SubnavSubheaderComponent, TopNavComponent, buildDefaultHeaderContextMenuItems, buildDefaultRowContextMenuItems, getActiveFilterCount, onfloChartTheme, onfloTheme };
+export type { AgCellRendererParams, AgColumnPanelApi, AgGroupRowCellParams, AgHeaderGroupParams, AgHeaderParams, AgPaginationApi, AgPaginatorStatusPanelParams, AgPanelColumn, AgRowGroupsApi, AgStatusBarApi, AgStatusPanelParams, AgToolPanelParams, AgentStatusVariant, ColumnPanelItem, ColumnPickerOption, ColumnVisibilityChange, DsAlertSize, DsAlertVariant, DsAvatarSize, DsButtonSize, DsButtonVariant, DsChartType, DsColumnPanelState, DsContextMenuItem, DsDateRange, DsEmptyStateLayout, DsEmptyStateSize, DsGroupAggStat, DsGroupNode, DsHoverCardVariant, DsIconButtonSize, DsIconButtonToggleSize, DsIconButtonToggleVariant, DsIconButtonVariant, DsIconSize, DsInputType, DsModalSize, DsModalVariant, DsNavTabItem, DsPageEvent, DsSaveBarVariant, DsSelectOption, DsSnackbarData, DsSnackbarVariant, DsTableHeaderContextMenuEvent, DsTableRowContextMenuEvent, DsTooltipPosition, FilterCostRangeSelection, FilterDateRangeSelection, FilterGroup, FilterNumericRangeSelection, FilterOption, FilterSelection, FilterTier, SavedFilterSet, TableCellAlign, TableCellState, TableDensity, TableHeaderAlign, TableRowGroup, TableSortDirection };

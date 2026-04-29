@@ -17,6 +17,7 @@
   --color-surface-container: var(--ref-color-primary-blue-bg-soft);
   --color-surface-overlay: var(--ref-color-neutral-surface);
   --color-surface-scrim: var(--ref-color-neutral-scrim);
+  --color-surface-loading: var(--ref-color-surface-loading);
   --color-surface-tooltip: var(--ref-color-neutral-tooltip);
   --color-surface-scroll: var(--ref-color-neutral-scroll);
   --color-surface-input: var(--ref-color-neutral-surface);
@@ -134,6 +135,7 @@
   --overlay-accent-yellow-dragged: var(--ref-overlay-yellow-dragged);
   --overlay-inverse-hovered: var(--ref-overlay-inverse-hover);
   --overlay-inverse-pressed: var(--ref-overlay-inverse-pressed);
+  --overlay-brand-hover: var(--ref-overlay-brand-hover);
 
   /* ── icon ──────────────────────────────────────────── */
   --color-icon-default: var(--ref-color-neutral-text-default);
@@ -165,9 +167,9 @@
   --motion-duration-long: var(--ref-motion-duration-long);
 
   /* ── Layout ────────────────────────────────────────── */
-  --nav-sidebar-width: 80px;
-  --subnav-width: 195px;
-  --top-nav-height: 65px;
+  --nav-sidebar-width: var(--ref-layout-nav-sidebar-width);
+  --subnav-width: var(--ref-layout-subnav-width);
+  --top-nav-height: var(--ref-layout-top-nav-height);
 
   /* ── table cell height ─────────────────────────────── */
   --color-table-cell-height-comfortable-height: var(--ref-table-cell-height-comfort-height);

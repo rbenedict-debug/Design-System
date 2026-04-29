@@ -271,7 +271,7 @@ The table family uses a two-file approach to theme AG Grid:
 
 ### `components/table/table-ag-theme.ts` — programmatic params
 Exports `onfloTheme` (Quartz base + Material icon set). Contains only **static, non-tokenized values** that can be set at build time:
-- `rowHeight: 56`, `headerHeight: 56` — must be set here (not just CSS) for AG Grid's virtual DOM height calculation
+- `rowHeight: 68`, `headerHeight: 56` — must be set here (not just CSS) for AG Grid's virtual DOM height calculation
 - `iconSize: 20` — matches `ds-icon--sm`
 - `spacing: 8` — matches `--spacing-sm`
 - All native AG Grid borders disabled (`rowBorder: false` etc.) — custom renderers manage their own borders

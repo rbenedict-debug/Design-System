@@ -44,7 +44,7 @@
   gap: var(--spacing-xs);
   width: 64px;
   height: 52px;
-  padding: 4px 16px;
+  padding: var(--spacing-xs) var(--spacing-lg);
   box-sizing: border-box;
 
   // Shape — overflow hidden clips the ::after overlay to the rounded corners

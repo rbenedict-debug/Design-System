@@ -15,7 +15,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.65);
+    background: var(--color-surface-loading);
     border-radius: var(--radius-md);
     z-index: 2;
   }
@@ -38,7 +38,7 @@
 
   // Highcharts tooltip — subtle shadow matching ds-card elevated
   .highcharts-tooltip-box {
-    filter: drop-shadow(0 2px 8px rgba(45, 54, 56, 0.1));
+    filter: drop-shadow(0 2px 8px var(--shadow-elevation-2));
   }
 
   // Highcharts export/hamburger button — hidden by default for a clean embed

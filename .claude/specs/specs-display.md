@@ -51,7 +51,7 @@ Card, Card Item, Tabs, Badge, List, Label, Empty State
 
 ---
 
-### Badge (`ds-badge-indicator`)
+### Badge (`<ds-badge>` / `.ds-badge-indicator`)
 - **This component is the notification indicator only** — not a label, chip, or status tag
 - **Two sizes** (Figma: Large / Small):
   - **Large (count)**: `min-width: 20px; height: 20px` — coloured circle with white number. Label Small typography (12px), bold weight (600).
