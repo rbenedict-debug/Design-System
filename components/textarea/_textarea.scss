@@ -183,15 +183,26 @@
   --mdc-outlined-text-field-container-shape:                var(--radius-sm);
   --mat-form-field-outlined-container-shape:                var(--radius-sm);
   --mdc-outlined-text-field-outline-width:                  1px;
+  --mat-form-field-outlined-outline-width:                  1px;
+  --mat-form-field-outlined-focus-outline-width:            1px;
   --mdc-outlined-text-field-outline-color:                  var(--color-border-input);
+  --mat-form-field-outlined-outline-color:                  var(--color-border-input);
   --mdc-outlined-text-field-hover-outline-color:            var(--color-border-input-hover);
+  --mat-form-field-outlined-hover-outline-color:            var(--color-border-input-hover);
   --mdc-outlined-text-field-focus-outline-color:            var(--color-border-input-active);
+  --mat-form-field-outlined-focus-outline-color:            var(--color-border-input-active);
   --mdc-outlined-text-field-input-text-color:               var(--color-text-primary);
+  --mat-form-field-outlined-input-text-color:               var(--color-text-primary);
   --mdc-outlined-text-field-input-text-placeholder-color:   var(--color-text-placeholder);
+  --mat-form-field-outlined-input-text-placeholder-color:   var(--color-text-placeholder);
   --mdc-outlined-text-field-caret-color:                    var(--color-border-input-active);
+  --mat-form-field-outlined-caret-color:                    var(--color-border-input-active);
   --mdc-outlined-text-field-input-text-font:                var(--ref-typeface-brand);
+  --mat-form-field-container-text-font:                     var(--ref-typeface-brand);
   --mdc-outlined-text-field-input-text-size:                var(--ref-typescale-label-medium-size);
+  --mat-form-field-container-text-size:                     var(--ref-typescale-label-medium-size);
   --mdc-outlined-text-field-input-text-weight:              var(--ref-typeface-weight-regular);
+  --mat-form-field-container-text-weight:                   var(--ref-typeface-weight-regular);
 
   // ── Suppress floating label and subscript (both are external) ────────────
 
@@ -223,8 +234,11 @@
 
   &.is-error {
     --mdc-outlined-text-field-outline-color:       var(--color-border-input-error);
+    --mat-form-field-outlined-outline-color:       var(--color-border-input-error);
     --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+    --mat-form-field-outlined-hover-outline-color: var(--color-border-input-error);
     --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+    --mat-form-field-outlined-focus-outline-color: var(--color-border-input-error);
 
     &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
       box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
@@ -235,7 +249,9 @@
 
   &.is-disabled {
     --mdc-outlined-text-field-disabled-outline-color:     var(--color-border-subtle);
+    --mat-form-field-outlined-disabled-outline-color:     var(--color-border-subtle);
     --mdc-outlined-text-field-disabled-input-text-color:  var(--color-text-disabled);
+    --mat-form-field-outlined-disabled-input-text-color:  var(--color-text-disabled);
     --mdc-outlined-text-field-disabled-outline-opacity:   1;
 
     .mat-mdc-text-field-wrapper        { background: var(--color-surface-input-disabled); }
@@ -247,7 +263,9 @@
 
   &.is-readonly {
     --mdc-outlined-text-field-outline-color:       var(--color-border-subtle);
+    --mat-form-field-outlined-outline-color:       var(--color-border-subtle);
     --mdc-outlined-text-field-hover-outline-color: var(--color-border-subtle);
+    --mat-form-field-outlined-hover-outline-color: var(--color-border-subtle);
 
     .mat-mdc-text-field-wrapper { background: var(--color-surface-default); cursor: default; }
     .mdc-text-field__input      { cursor: default; color: var(--color-text-secondary); }
