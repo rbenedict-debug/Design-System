@@ -182,11 +182,15 @@ Never set `domLayout="autoHeight"` on a production table. If a page designer req
 
 ### AG Grid theme class
 
-AG Grid requires a theme class on the container for its structural CSS (viewport sizing, column lines, pinned column shadows, horizontal scrollbar). Without it the grid has no visible structure.
+The DS uses AG Grid's v31+ programmatic Theme API. With this approach the theme object injects its own CSS and applies the `ag-theme-quartz` class to the grid's root wrapper internally.
 
-Add the theme class to the same element as `ds-ag-grid`:
-- `ag-theme-quartz` — recommended for AG Grid v29–v30
-- `ag-theme-base` — recommended for AG Grid v31+ (structural only, no built-in colours)
+Add `ag-theme-quartz` to the same element as `ds-ag-grid` — it is harmless/redundant with the programmatic API, but it ensures AG Grid's own structural CSS selector scoping is correct for any rules that still rely on it:
+
+```html
+<ag-grid-angular class="ds-ag-grid ag-theme-quartz" ...>
+```
+
+Do **not** also load `ag-theme-quartz.css` in `angular.json` — that file is for the legacy CSS-variable approach and conflicts with the programmatic theme. Only `ag-grid.css` is needed.
 
 ```html
 <ag-grid-angular class="ds-ag-grid ag-theme-quartz" ...>

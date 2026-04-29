@@ -209,24 +209,25 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 ### Data / table
 
 > **AG Grid prerequisite check — do this before writing any table code.**
-> `ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-paginator`, and `ds-table-toolbar` are AG Grid custom renderers. They require a real AG Grid instance.
+> `ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-paginator`, and `ds-table-toolbar` are AG Grid custom renderers. They require a real AG Grid instance **v33 or later** — the DS uses the v31+ programmatic Theme API (`themeQuartz.withPart().withParams()`), which does not exist in older versions and will throw a runtime error.
 >
 > **Step 1 — Check `package.json` for `ag-grid-angular`.**
-> - **Found** → proceed to the wiring pattern below.
+> - **Found** → check the version. If it is below v33, upgrade: `npm install ag-grid-community@^33 ag-grid-angular@^33`. Then continue.
 > - **Not found** → install Community (free) edition before writing any table code:
 >   ```bash
->   npm install ag-grid-community ag-grid-angular
+>   npm install ag-grid-community@^33 ag-grid-angular@^33
 >   ```
 >   Then add AG Grid's structural CSS to the `styles` array in `angular.json`:
 >   ```json
 >   "styles": [
->     "node_modules/ag-grid-community/styles/ag-grid.css",
->     "node_modules/ag-grid-community/styles/ag-theme-quartz.css"
+>     "node_modules/ag-grid-community/styles/ag-grid.css"
 >   ]
 >   ```
+>   Do **not** add `ag-theme-quartz.css` — the DS uses the programmatic Theme API and that file is unused; loading it can conflict with the theme's own injected styles.
+>
 >   **Never install `ag-grid-enterprise`** — it is a paid product. Only install it if the user explicitly asks for it.
 >
-> **Step 2 — Confirm the AG Grid CSS is in `angular.json`.** Even if `ag-grid-angular` is already in `package.json`, the styles entries may be missing. Without them the grid renders with no visible structure. If they are absent, add them before writing table code.
+> **Step 2 — Confirm `ag-grid.css` is in `angular.json` styles.** Even if `ag-grid-angular` is already installed, this entry may be missing. Without it the grid has no visible structure. Add it if absent.
 
 | Component | Selector | Import |
 |---|---|---|
