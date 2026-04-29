@@ -264,7 +264,6 @@ Full filter system for table pages. Always use both components together — `ds-
 
   <ds-table-toolbar
     [(filterActive)]="filterOpen"
-    [filterBadgeCount]="filterCount"
     [(settingsActive)]="settingsActive"
   />
 
@@ -314,6 +313,8 @@ import {
 theme: onfloTheme,
 defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
 columnTypes: DS_TABLE_COLUMN_TYPES,
+pagination: true,
+paginationPageSize: 50,
 suppressPaginationPanel: true,
 suppressContextMenu: true,
 suppressHeaderContextMenu: true,

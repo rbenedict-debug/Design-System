@@ -60,8 +60,11 @@ gridOptions: GridOptions = {
 The toolbar, grid, and paginator must sit inside `ds-page-content__main--table` — this modifier sets the flex column container that gives the grid its explicit height. Without it the grid collapses.
 
 ```html
-<div class="ds-page-content__main ds-page-content__main--table">
-  <ds-table-toolbar [title]="'My Table'" />
+<div class="ds-page-content__main ds-page-content__main--table"
+     [attr.data-panel-open]="settingsActive || null">
+  <ds-table-toolbar
+    [(settingsActive)]="settingsActive"
+  />
   <ag-grid-angular
     class="ds-ag-grid ag-theme-quartz"
     [gridOptions]="gridOptions"
@@ -69,6 +72,7 @@ The toolbar, grid, and paginator must sit inside `ds-page-content__main--table` 
     (gridSizeChanged)="onGridSizeChanged($event)"
   />
   <ds-ag-paginator [api]="gridApi" />
+  <ds-column-panel [api]="gridApi" [(density)]="density" />
 </div>
 ```
 
@@ -84,20 +88,25 @@ import {
   DS_TABLE_COLUMN_TYPES,
   DsTableToolbarComponent,
   DsAgPaginatorComponent,
+  DsColumnPanelComponent,
 } from '@onflo/design-system';
 
 @Component({
   standalone: true,
-  imports: [AgGridAngular, DsTableToolbarComponent, DsAgPaginatorComponent],
+  imports: [AgGridAngular, DsTableToolbarComponent, DsAgPaginatorComponent, DsColumnPanelComponent],
   templateUrl: './my-page.component.html',
 })
 export class MyPageComponent {
   gridApi?: GridApi;
+  settingsActive = false;
+  density: 'comfort' | 'compact' = 'comfort';
 
   gridOptions = {
     theme: onfloTheme,
     defaultColDef: DS_TABLE_DEFAULT_COL_DEF,
     columnTypes: DS_TABLE_COLUMN_TYPES,
+    pagination: true,
+    paginationPageSize: 50,
     suppressPaginationPanel: true,
     suppressContextMenu: true,
     suppressHeaderContextMenu: true,
@@ -110,6 +119,7 @@ export class MyPageComponent {
 
   onGridReady(event: GridReadyEvent): void {
     this.gridApi = event.api;
+    setTimeout(() => this.gridApi?.sizeColumnsToFit(), 0);
   }
 
   onGridSizeChanged(event: GridSizeChangedEvent): void {
