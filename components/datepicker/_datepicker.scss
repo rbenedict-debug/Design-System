@@ -108,6 +108,18 @@
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
+  // Force vertical centering inside the 42px wrapper (see ds-input note).
+  .mat-mdc-form-field-flex {
+    align-items: center;
+    height: 100%;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: unset;
+  }
+
   // Active border on any focus
   &:focus-within .mat-mdc-text-field-wrapper { /* border handled by MDC token above */ }
 

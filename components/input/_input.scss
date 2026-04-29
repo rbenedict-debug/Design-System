@@ -267,6 +267,20 @@
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
+  // Force vertical centering inside the 42px wrapper.
+  // Material v21 adds padding-top/bottom to the infix via .mdc-text-field--no-label
+  // that can override the container-vertical-padding token; these explicit rules win.
+  .mat-mdc-form-field-flex {
+    align-items: center;
+    height: 100%;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: unset;
+  }
+
   // ── Focus ring — keyboard only (composite wrapper pattern) ───────────────
 
   &:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {

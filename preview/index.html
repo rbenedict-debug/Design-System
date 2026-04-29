@@ -2249,17 +2249,30 @@
   --mat-form-field-container-height: 42px;
   --mat-form-field-container-vertical-padding: 0px;
   --mdc-outlined-text-field-container-shape: var(--radius-sm);
+  --mat-form-field-outlined-container-shape: var(--radius-sm);
   --mdc-outlined-text-field-outline-width: 1px;
+  --mat-form-field-outlined-outline-width: 1px;
+  --mat-form-field-outlined-focus-outline-width: 1px;
   --mdc-outlined-text-field-outline-color: var(--color-border-input);
+  --mat-form-field-outlined-outline-color: var(--color-border-input);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-input-hover);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
+  --mat-form-field-outlined-focus-outline-color: var(--color-border-input-active);
   --mdc-outlined-text-field-input-text-color: var(--color-text-primary);
+  --mat-form-field-outlined-input-text-color: var(--color-text-primary);
   --mdc-outlined-text-field-input-text-placeholder-color: var(--color-text-placeholder);
+  --mat-form-field-outlined-input-text-placeholder-color: var(--color-text-placeholder);
   --mdc-outlined-text-field-caret-color: var(--color-border-input-active);
+  --mat-form-field-outlined-caret-color: var(--color-border-input-active);
   --mdc-outlined-text-field-input-text-font: var(--ref-typeface-brand);
+  --mat-form-field-container-text-font: var(--ref-typeface-brand);
   --mdc-outlined-text-field-input-text-size: var(--ref-typescale-label-medium-size);
+  --mat-form-field-container-text-size: var(--ref-typescale-label-medium-size);
   --mdc-outlined-text-field-input-text-weight: var(--ref-typeface-weight-regular);
+  --mat-form-field-container-text-weight: var(--ref-typeface-weight-regular);
   --mdc-outlined-text-field-input-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mat-form-field-container-text-line-height: var(--ref-typescale-label-medium-line-height);
 }
 .ds-input .mat-mdc-floating-label,
 .ds-input .mdc-floating-label {
@@ -2269,24 +2282,39 @@
   display: none;
 }
 .ds-input .mat-mdc-text-field-wrapper {
+  height: 42px;
   background: var(--color-surface-input);
   padding: 0 var(--spacing-md);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ds-input .mat-mdc-form-field-flex {
+  align-items: center;
+  height: 100%;
+}
+.ds-input .mat-mdc-form-field-infix {
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: unset;
 }
 .ds-input:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 .ds-input.is-error {
   --mdc-outlined-text-field-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-outline-color: var(--color-border-input-error);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-input-error);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-focus-outline-color: var(--color-border-input-error);
 }
 .ds-input.is-error:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 .ds-input.is-disabled {
   --mdc-outlined-text-field-disabled-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-disabled-outline-color: var(--color-border-subtle);
   --mdc-outlined-text-field-disabled-input-text-color: var(--color-text-disabled);
+  --mat-form-field-outlined-disabled-input-text-color: var(--color-text-disabled);
   --mdc-outlined-text-field-disabled-outline-opacity: 1;
 }
 .ds-input.is-disabled .mat-mdc-text-field-wrapper {
@@ -2303,7 +2331,9 @@
 }
 .ds-input.is-readonly {
   --mdc-outlined-text-field-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-outline-color: var(--color-border-subtle);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-subtle);
 }
 .ds-input.is-readonly .mat-mdc-text-field-wrapper {
   background: var(--color-surface-default);
@@ -3428,10 +3458,16 @@
   --mat-form-field-container-height: 42px;
   --mat-form-field-container-vertical-padding: 0px;
   --mdc-outlined-text-field-container-shape: var(--radius-sm);
+  --mat-form-field-outlined-container-shape: var(--radius-sm);
   --mdc-outlined-text-field-outline-width: 1px;
+  --mat-form-field-outlined-outline-width: 1px;
+  --mat-form-field-outlined-focus-outline-width: 1px;
   --mdc-outlined-text-field-outline-color: var(--color-border-input);
+  --mat-form-field-outlined-outline-color: var(--color-border-input);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-input-hover);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
+  --mat-form-field-outlined-focus-outline-color: var(--color-border-input-active);
   --mat-select-trigger-text-font: var(--ref-typeface-brand);
   --mat-select-trigger-text-size: var(--ref-typescale-label-medium-size);
   --mat-select-trigger-text-weight: var(--ref-typeface-weight-regular);
@@ -3451,10 +3487,20 @@
   display: none;
 }
 .ds-select .mat-mdc-text-field-wrapper {
+  height: 42px;
   background: var(--color-surface-input);
   padding: 0 var(--spacing-md);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   cursor: pointer;
+}
+.ds-select .mat-mdc-form-field-flex {
+  align-items: center;
+  height: 100%;
+}
+.ds-select .mat-mdc-form-field-infix {
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: unset;
 }
 .ds-select:focus-within:not(.is-error) .ds-select__arrow {
   color: var(--color-icon-brand);
@@ -3464,14 +3510,18 @@
 }
 .ds-select.is-error {
   --mdc-outlined-text-field-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-outline-color: var(--color-border-input-error);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-input-error);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-focus-outline-color: var(--color-border-input-error);
 }
 .ds-select.is-error:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 .ds-select.is-disabled {
   --mdc-outlined-text-field-disabled-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-disabled-outline-color: var(--color-border-subtle);
   --mdc-outlined-text-field-disabled-outline-opacity: 1;
 }
 .ds-select.is-disabled .mat-mdc-text-field-wrapper {
@@ -3672,17 +3722,30 @@
   --mat-form-field-container-height: 42px;
   --mat-form-field-container-vertical-padding: 0px;
   --mdc-outlined-text-field-container-shape: var(--radius-sm);
+  --mat-form-field-outlined-container-shape: var(--radius-sm);
   --mdc-outlined-text-field-outline-width: 1px;
+  --mat-form-field-outlined-outline-width: 1px;
+  --mat-form-field-outlined-focus-outline-width: 1px;
   --mdc-outlined-text-field-outline-color: var(--color-border-input);
+  --mat-form-field-outlined-outline-color: var(--color-border-input);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-input-hover);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
+  --mat-form-field-outlined-focus-outline-color: var(--color-border-input-active);
   --mdc-outlined-text-field-input-text-font: var(--ref-typeface-brand);
+  --mat-form-field-container-text-font: var(--ref-typeface-brand);
   --mdc-outlined-text-field-input-text-size: var(--ref-typescale-label-medium-size);
+  --mat-form-field-container-text-size: var(--ref-typescale-label-medium-size);
   --mdc-outlined-text-field-input-text-weight: var(--ref-typeface-weight-regular);
+  --mat-form-field-container-text-weight: var(--ref-typeface-weight-regular);
   --mdc-outlined-text-field-input-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mat-form-field-container-text-line-height: var(--ref-typescale-label-medium-line-height);
   --mdc-outlined-text-field-input-text-color: var(--color-text-primary);
+  --mat-form-field-outlined-input-text-color: var(--color-text-primary);
   --mdc-outlined-text-field-disabled-input-text-color: var(--color-text-disabled);
+  --mat-form-field-outlined-disabled-input-text-color: var(--color-text-disabled);
   --mdc-outlined-text-field-input-text-placeholder-color: var(--color-text-placeholder);
+  --mat-form-field-outlined-input-text-placeholder-color: var(--color-text-placeholder);
 }
 .ds-autocomplete .mat-mdc-floating-label,
 .ds-autocomplete .mdc-floating-label {
@@ -3692,9 +3755,19 @@
   display: none;
 }
 .ds-autocomplete .mat-mdc-text-field-wrapper {
+  height: 42px;
   background: var(--color-surface-input);
   padding: 0 var(--spacing-md);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ds-autocomplete .mat-mdc-form-field-flex {
+  align-items: center;
+  height: 100%;
+}
+.ds-autocomplete .mat-mdc-form-field-infix {
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: unset;
 }
 .ds-autocomplete:focus-within:not(.is-error) .ds-autocomplete__arrow {
   color: var(--color-icon-brand);
@@ -3704,14 +3777,18 @@
 }
 .ds-autocomplete.is-error {
   --mdc-outlined-text-field-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-outline-color: var(--color-border-input-error);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-input-error);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-focus-outline-color: var(--color-border-input-error);
 }
 .ds-autocomplete.is-error:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 .ds-autocomplete.is-disabled {
   --mdc-outlined-text-field-disabled-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-disabled-outline-color: var(--color-border-subtle);
   --mdc-outlined-text-field-disabled-outline-opacity: 1;
 }
 .ds-autocomplete.is-disabled .mat-mdc-text-field-wrapper {
@@ -3722,7 +3799,9 @@
 }
 .ds-autocomplete.is-readonly {
   --mdc-outlined-text-field-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-outline-color: var(--color-border-subtle);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-subtle);
 }
 .ds-autocomplete.is-readonly .mat-mdc-text-field-wrapper {
   background: var(--color-surface-default);
@@ -3921,16 +4000,28 @@
 }
 .ds-textarea {
   --mdc-outlined-text-field-container-shape: var(--radius-sm);
+  --mat-form-field-outlined-container-shape: var(--radius-sm);
   --mdc-outlined-text-field-outline-width: 1px;
+  --mat-form-field-outlined-outline-width: 1px;
+  --mat-form-field-outlined-focus-outline-width: 1px;
   --mdc-outlined-text-field-outline-color: var(--color-border-input);
+  --mat-form-field-outlined-outline-color: var(--color-border-input);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-input-hover);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
+  --mat-form-field-outlined-focus-outline-color: var(--color-border-input-active);
   --mdc-outlined-text-field-input-text-color: var(--color-text-primary);
+  --mat-form-field-outlined-input-text-color: var(--color-text-primary);
   --mdc-outlined-text-field-input-text-placeholder-color: var(--color-text-placeholder);
+  --mat-form-field-outlined-input-text-placeholder-color: var(--color-text-placeholder);
   --mdc-outlined-text-field-caret-color: var(--color-border-input-active);
+  --mat-form-field-outlined-caret-color: var(--color-border-input-active);
   --mdc-outlined-text-field-input-text-font: var(--ref-typeface-brand);
+  --mat-form-field-container-text-font: var(--ref-typeface-brand);
   --mdc-outlined-text-field-input-text-size: var(--ref-typescale-label-medium-size);
+  --mat-form-field-container-text-size: var(--ref-typescale-label-medium-size);
   --mdc-outlined-text-field-input-text-weight: var(--ref-typeface-weight-regular);
+  --mat-form-field-container-text-weight: var(--ref-typeface-weight-regular);
 }
 .ds-textarea .mat-mdc-floating-label,
 .ds-textarea .mdc-floating-label {
@@ -3940,6 +4031,7 @@
   display: none;
 }
 .ds-textarea .mat-mdc-text-field-wrapper {
+  height: auto;
   background: var(--color-surface-input);
   padding: var(--spacing-sm) var(--spacing-md);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -3953,15 +4045,20 @@
 }
 .ds-textarea.is-error {
   --mdc-outlined-text-field-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-outline-color: var(--color-border-input-error);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-input-error);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-focus-outline-color: var(--color-border-input-error);
 }
 .ds-textarea.is-error:focus-within:not([data-mouse-focus]) .mat-mdc-text-field-wrapper {
   box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring);
 }
 .ds-textarea.is-disabled {
   --mdc-outlined-text-field-disabled-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-disabled-outline-color: var(--color-border-subtle);
   --mdc-outlined-text-field-disabled-input-text-color: var(--color-text-disabled);
+  --mat-form-field-outlined-disabled-input-text-color: var(--color-text-disabled);
   --mdc-outlined-text-field-disabled-outline-opacity: 1;
 }
 .ds-textarea.is-disabled .mat-mdc-text-field-wrapper {
@@ -3975,7 +4072,9 @@
 }
 .ds-textarea.is-readonly {
   --mdc-outlined-text-field-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-outline-color: var(--color-border-subtle);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-subtle);
 }
 .ds-textarea.is-readonly .mat-mdc-text-field-wrapper {
   background: var(--color-surface-default);
@@ -8344,17 +8443,30 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
   --mat-form-field-container-height: 42px;
   --mat-form-field-container-vertical-padding: 0px;
   --mdc-outlined-text-field-container-shape: var(--radius-sm);
+  --mat-form-field-outlined-container-shape: var(--radius-sm);
   --mdc-outlined-text-field-outline-width: 1px;
+  --mat-form-field-outlined-outline-width: 1px;
+  --mat-form-field-outlined-focus-outline-width: 1px;
   --mdc-outlined-text-field-outline-color: var(--color-border-input);
+  --mat-form-field-outlined-outline-color: var(--color-border-input);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-hover);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-input-hover);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-active);
+  --mat-form-field-outlined-focus-outline-color: var(--color-border-input-active);
   --mdc-outlined-text-field-input-text-color: var(--color-text-primary);
+  --mat-form-field-outlined-input-text-color: var(--color-text-primary);
   --mdc-outlined-text-field-input-text-placeholder-color: var(--color-text-placeholder);
+  --mat-form-field-outlined-input-text-placeholder-color: var(--color-text-placeholder);
   --mdc-outlined-text-field-caret-color: var(--color-border-input-active);
+  --mat-form-field-outlined-caret-color: var(--color-border-input-active);
   --mdc-outlined-text-field-input-text-font: var(--ref-typeface-brand);
+  --mat-form-field-container-text-font: var(--ref-typeface-brand);
   --mdc-outlined-text-field-input-text-size: var(--ref-typescale-label-medium-size);
+  --mat-form-field-container-text-size: var(--ref-typescale-label-medium-size);
   --mdc-outlined-text-field-input-text-weight: var(--ref-typeface-weight-regular);
+  --mat-form-field-container-text-weight: var(--ref-typeface-weight-regular);
   --mdc-outlined-text-field-input-text-line-height: var(--ref-typescale-label-medium-line-height);
+  --mat-form-field-container-text-line-height: var(--ref-typescale-label-medium-line-height);
 }
 .ds-datepicker .mat-mdc-form-field,
 .ds-date-range-picker .mat-mdc-form-field {
@@ -8372,9 +8484,21 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 }
 .ds-datepicker .mat-mdc-text-field-wrapper,
 .ds-date-range-picker .mat-mdc-text-field-wrapper {
+  height: 42px;
   background: var(--color-surface-input);
   padding: 0 var(--spacing-md);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ds-datepicker .mat-mdc-form-field-flex,
+.ds-date-range-picker .mat-mdc-form-field-flex {
+  align-items: center;
+  height: 100%;
+}
+.ds-datepicker .mat-mdc-form-field-infix,
+.ds-date-range-picker .mat-mdc-form-field-infix {
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: unset;
 }
 .ds-datepicker:focus-within .mat-mdc-text-field-wrapper,
 .ds-date-range-picker:focus-within .mat-mdc-text-field-wrapper { /* border handled by MDC token above */ }
@@ -8433,8 +8557,11 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 .ds-datepicker.is-error,
 .ds-date-range-picker.is-error {
   --mdc-outlined-text-field-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-outline-color: var(--color-border-input-error);
   --mdc-outlined-text-field-hover-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-hover-outline-color: var(--color-border-input-error);
   --mdc-outlined-text-field-focus-outline-color: var(--color-border-input-error);
+  --mat-form-field-outlined-focus-outline-color: var(--color-border-input-error);
 }
 .ds-datepicker.is-error .ds-datepicker__helper,
 .ds-datepicker.is-error .ds-date-range-picker__helper,
@@ -8450,6 +8577,7 @@ button.ds-column-panel__section-hd[aria-expanded=false] + .ds-column-panel__col-
 .ds-date-range-picker.is-disabled {
   pointer-events: none;
   --mdc-outlined-text-field-disabled-outline-color: var(--color-border-subtle);
+  --mat-form-field-outlined-disabled-outline-color: var(--color-border-subtle);
   --mdc-outlined-text-field-disabled-outline-opacity: 1;
 }
 .ds-datepicker.is-disabled .mat-mdc-text-field-wrapper,

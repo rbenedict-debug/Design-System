@@ -285,6 +285,18 @@
     cursor: pointer;
   }
 
+  // Force vertical centering inside the 42px wrapper (see ds-input note).
+  .mat-mdc-form-field-flex {
+    align-items: center;
+    height: 100%;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: unset;
+  }
+
   // Arrow turns brand on focus (non-error)
   &:focus-within:not(.is-error) .ds-select__arrow {
     color: var(--color-icon-brand);
