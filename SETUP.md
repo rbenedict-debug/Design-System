@@ -87,17 +87,53 @@ npm install @onflo/design-system@latest
 
 ---
 
-## Step 4 — Wire up tokens in your Angular project
+## Step 4 — Wire up styles, fonts, and animations
 
-**In `angular.json`**, add the token CSS to the styles array:
+The design system ships a single bundled CSS file (`dist/onflo.css`) containing tokens,
+component styles, and layout patterns in the correct order. Consumers must also load
+an Angular Material prebuilt theme (so `mat-*` directives have their structural CSS)
+and the Google Fonts that the design system targets.
+
+### 4a — `angular.json` styles array
+
+Order matters. Material theme first, then Onflo (so Onflo's overrides win):
+
 ```json
 "styles": [
-  "node_modules/@onflo/design-system/tokens/css/index.css",
+  "node_modules/@angular/material/prebuilt-themes/azure-blue.css",
+  "node_modules/@onflo/design-system/dist/onflo.css",
   "src/styles.scss"
 ]
 ```
 
-**In `src/app/app.config.ts`**, ensure animations are provided:
+> Do **not** also import `tokens/css/index.css` or `dist/components.css` separately —
+> `dist/onflo.css` already contains them in the correct order. Splitting the imports
+> is the most common cause of broken styling (square inputs, missing radii, wrong padding).
+
+### 4b — Required fonts in `src/index.html`
+
+Add these inside `<head>`. Without them, every `ds-icon` renders as raw text
+("search", "close", etc.) and typography falls back to the OS default sans-serif —
+nothing will look like the preview.
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+  rel="stylesheet" />
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block"
+  rel="stylesheet" />
+```
+
+The brand typeface token is `"Proxima Nova", "DM Sans", system-ui, sans-serif`.
+Design-team projects don't need a Proxima Nova license — DM Sans (free, loaded above)
+matches what the preview uses. When Eng wires up the licensed Proxima Nova webfont
+in production, it takes precedence automatically.
+
+### 4c — Animations provider in `src/app/app.config.ts`
+
 ```typescript
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
@@ -108,6 +144,19 @@ export const appConfig: ApplicationConfig = {
   ]
 };
 ```
+
+### 4d — Verify
+
+After running `ng serve`, drop a button on a page and check it visually:
+
+```html
+<button class="ds-button ds-button--filled">Save</button>
+<span class="ds-icon">search</span>
+```
+
+If the button is blue with rounded corners and the icon renders as a magnifying glass
+(not the literal text "search"), setup is correct. If not, re-check the order of the
+`styles` array and that the font `<link>` tags are in `index.html`.
 
 ---
 
@@ -171,9 +220,19 @@ Make sure you added the public key (`.pub` file) to GitHub, not the private key.
 Check that `CLAUDE.md` contains the `@node_modules/@onflo/design-system/AGENT-GUIDE.md` line.
 Run `cat CLAUDE.md` to verify.
 
-**Design tokens aren't applying (everything looks unstyled):**
-Check that `angular.json` has the token CSS path in the styles array (Step 4).
-Restart your Angular dev server after changing `angular.json`.
+**Components look unstyled / square / no colors:**
+Your `angular.json` `styles` array is probably missing `dist/onflo.css` or the Material
+prebuilt theme, or has them in the wrong order. Re-read Step 4a — the order must be
+Material theme → `onflo.css` → your local styles. Restart `ng serve` after editing
+`angular.json` (the dev server does not pick up styles-array changes on its own).
+
+**Icons render as the literal text "search", "close", etc.:**
+The Material Symbols Rounded font isn't loaded. Add the `<link>` tags from Step 4b
+to `src/index.html` and hard-refresh the browser.
+
+**Text looks like Times / system serif instead of the preview:**
+The DM Sans `<link>` tag is missing from `src/index.html`. Add it (Step 4b) and
+hard-refresh. Designers don't need Proxima Nova — DM Sans is the documented fallback.
 
 **I need a component that doesn't exist:**
 Build what you need using design tokens for all visual values.
