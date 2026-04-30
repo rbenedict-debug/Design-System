@@ -39,14 +39,18 @@
     ".claude/specs/"
   ],
   "peerDependencies": {
-    "@angular/animations": ">=21.0.0",
-    "@angular/cdk": ">=21.0.0",
-    "@angular/common": ">=21.0.0",
-    "@angular/core": ">=21.0.0",
-    "@angular/forms": ">=21.0.0",
-    "@angular/material": ">=21.0.0",
-    "ag-grid-community": ">=33.0.0",
-    "highcharts": ">=11.0.0"
+    "@angular/animations": "^21.0.0",
+    "@angular/cdk": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/material": "^21.0.0",
+    "ag-grid-community": ">=33.0.0 <36.0.0",
+    "highcharts": "^11.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ag-grid-community": { "optional": true },
+    "highcharts": { "optional": true }
   },
   "scripts": {
     "generate-tokens": "node scripts/generate-tokens.js",
