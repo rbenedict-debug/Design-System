@@ -15,13 +15,60 @@ The single source of truth for UI foundations across all Onflo products — desi
 
 ---
 
+## Two paths: design and engineering
+
+The design system is consumed two different ways depending on who's working in the project:
+
+| Path | Who uses it | What they install | What they write |
+|---|---|---|---|
+| **Design** | Designers building visual mockups | `@onflo/design-system` only | CSS class API: `<button class="ds-button">` |
+| **Engineering** | Eng wiring reactive behavior in prod | adds `@angular/material`, `ag-grid-community`, `highcharts` | Angular component API: `<ds-button>` |
+
+Both paths use the same `dist/onflo.css` and the same Google Fonts. The difference
+is whether Angular Material, AG Grid, and Highcharts are also installed and wired.
+
+**Designers should follow Path A and stop.** Eng picks up Path B at handoff.
+Full step-by-step instructions are in [SETUP.md](./SETUP.md).
+
+---
+
 ## For Designers
 
-**View the token reference:** Open `preview/index.html` in any browser.
-No server needed — just open the file directly. It includes a light/dark mode toggle, all colour swatches (click any to copy the CSS var name), typography scale, spacing, radius, and shadows.
+**View the visual reference:** Open `preview/index.html` in any browser.
+No server needed — just open the file directly. It includes a light/dark mode toggle,
+all colour swatches (click any to copy the CSS var name), typography scale, spacing,
+radius, shadows, and every component in every variant.
 
-**Updating tokens from Figma:**
-When the token values change in Figma, export the three variable files and hand them to a developer to regenerate. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full workflow.
+**Quick start in your Angular project** (full guide in [SETUP.md](./SETUP.md) Part A):
+
+```bash
+# 1. Authenticate with GitHub Packages and install
+npm install @onflo/design-system
+
+# 2. In angular.json, add the bundle:
+#    "styles": [
+#      "node_modules/@onflo/design-system/dist/onflo.css",
+#      "src/styles.scss"
+#    ]
+
+# 3. In src/index.html, add the two Google Font links (DM Sans + Material Symbols)
+# 4. In src/app/app.config.ts, add provideAnimationsAsync()
+# 5. In your project's CLAUDE.md, add:
+#       Mode: design
+#       @node_modules/@onflo/design-system/AGENT-GUIDE.md
+```
+
+Then write HTML using the CSS class API — no Angular component imports needed:
+
+```html
+<button class="ds-button ds-button--filled">Save</button>
+<input class="ds-input" placeholder="Search..." />
+<span class="ds-icon">search</span>
+```
+
+You'll see peer-dependency warnings about `@angular/material`, `ag-grid-community`,
+and `highcharts` after `npm install` — **safe to ignore for design work.** Eng
+installs them at handoff.
 
 **Naming convention:**
 Every token you see in Figma Variables has a matching CSS custom property:
@@ -29,61 +76,45 @@ Every token you see in Figma Variables has a matching CSS custom property:
 - `text / primary` → `--color-text-primary`
 - `spacing / lg` → `--spacing-lg`
 
+**Updating tokens from Figma:**
+When the token values change in Figma, export the three variable files and hand them
+to a developer to regenerate. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the workflow.
+
 ---
 
-## For Developers
+## For Engineers
 
-### Quick start — new Angular project
-
-**Step 1.** Install the design system from GitHub Packages. Add the registry to your project's `.npmrc` (create it in the project root if it doesn't exist):
-
-```
-@onflo:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-Set `GITHUB_TOKEN` to a GitHub Personal Access Token with `read:packages` scope — see [SETUP.md](./SETUP.md) for how to generate and configure one. Then:
+When inheriting a design-team project, layer Material + AG Grid + Highcharts on top
+of the existing setup. Designer work stays valid — eng adds, doesn't replace.
+Full handoff steps in [SETUP.md](./SETUP.md) Part B. Short version:
 
 ```bash
-npm install @onflo/design-system
+npm install @angular/material @angular/cdk ag-grid-community highcharts
 ```
 
-**Step 2.** Add the token CSS to `angular.json`:
+Update `angular.json` to prepend a Material prebuilt theme:
 
 ```json
 "styles": [
-  "node_modules/@onflo/design-system/tokens/css/index.css",
+  "node_modules/@angular/material/prebuilt-themes/azure-blue.css",
+  "node_modules/@onflo/design-system/dist/onflo.css",
   "src/styles.scss"
 ]
 ```
 
-**Step 3.** Add `provideAnimationsAsync()` to your app config (required by Angular Material):
+Update the project's `CLAUDE.md` mode line to `Mode: engineering`. Then swap class
+API → Angular component API anywhere reactive behavior is needed:
 
 ```typescript
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-export const appConfig = { providers: [provideAnimationsAsync()] };
+import { DsButtonComponent, DsInputComponent, onfloTheme } from '@onflo/design-system';
 ```
 
-**Step 4.** Add the design system rules to your project's `CLAUDE.md`:
-
-```markdown
-# Design System
-@node_modules/@onflo/design-system/AGENT-GUIDE.md
+```html
+<ds-button variant="filled" (clicked)="save()">Save</ds-button>
 ```
 
-**Step 5.** Start using components:
-
-```typescript
-import { DsButtonComponent, DsInputComponent } from '@onflo/design-system';
-```
-
-**To get the latest version** when a new release is published:
-
-```bash
-npm install @onflo/design-system@latest
-```
-
-See [SETUP.md](./SETUP.md) for full setup instructions including GitHub token configuration.
+For tables, use AG Grid with `theme: onfloTheme`. For charts, use `<ds-chart>`.
+**Get the latest design system version:** `npm install @onflo/design-system@latest`.
 
 ---
 

@@ -385,7 +385,7 @@ Internal files that do **not** ship: `CLAUDE.md`, `DESIGN.md`, `docs/`, `scripts
 5. Add `@use '{name}/{name}'` to `components/index.scss`
 6. Add the component CSS inline to `preview/index.html` (second `<style>` block)
 7. Add sidebar nav link and demo section to `preview/index.html`
-8. Commit with message: `Add {Name} component (Step 2 — Nth component)`
+8. Commit with message: `Add {Name} component`
 
 > **Layout patterns** (app shell compositions, not UI components) go in `layout/` instead —
 > SCSS in `layout/{name}/_{name}.scss`, added to `layout/index.scss`, ships as `dist/layout.css`.

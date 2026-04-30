@@ -1,7 +1,17 @@
 {
   "name": "@onflo/design-system",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Onflo Design System — tokens, components, and patterns for Angular + .NET Core products",
+  "author": "Rebecca Benedict",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/onflo/design-system.git"
+  },
+  "homepage": "https://github.com/onflo/design-system#readme",
+  "bugs": {
+    "url": "https://github.com/onflo/design-system/issues"
+  },
   "main": "./dist/fesm2022/onflo-design-system.mjs",
   "exports": {
     ".": {

@@ -1,2 +1,9 @@
-# Nested package.json's are only needed for development.
+# Excluded from the published npm tarball.
+
+# Nested package.json files (ng-packagr generates one per secondary entry point)
+# are only needed for development. The root package.json is the source of truth.
 **/package.json
+
+# ng-packagr copies the source README.md into dist/ by default. Consumers should
+# only see the canonical root README.md — exclude the duplicate.
+README.md
