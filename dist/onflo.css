@@ -49,8 +49,8 @@
   --ref-color-accent-accordion-border: #E3ECF8;
 
   /* ── Typeface ──────────────────────────────────────── */
-  --ref-typeface-brand: "Proxima Nova";
-  --ref-typeface-plain: "Proxima Nova";
+  --ref-typeface-brand: "Proxima Nova", "DM Sans", system-ui, sans-serif;
+  --ref-typeface-plain: "Proxima Nova", "DM Sans", system-ui, sans-serif;
   --ref-typeface-weight-regular: 400;
   --ref-typeface-weight-medium: 500;
   --ref-typeface-weight-bold: 600;
@@ -222,8 +222,8 @@
   --ref-color-accent-accordion-border: #212324;
 
   /* ── Typeface ──────────────────────────────────────── */
-  --ref-typeface-brand: "Proxima Nova";
-  --ref-typeface-plain: "Proxima Nova";
+  --ref-typeface-brand: "Proxima Nova", "DM Sans", system-ui, sans-serif;
+  --ref-typeface-plain: "Proxima Nova", "DM Sans", system-ui, sans-serif;
   --ref-typeface-weight-regular: 400;
   --ref-typeface-weight-medium: 500;
   --ref-typeface-weight-bold: 600;

@@ -1,7 +1,17 @@
 {
   "name": "@onflo/design-system",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Onflo Design System — tokens, components, and patterns for Angular + .NET Core products",
+  "author": "Rebecca Benedict",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/onflo/design-system.git"
+  },
+  "homepage": "https://github.com/onflo/design-system#readme",
+  "bugs": {
+    "url": "https://github.com/onflo/design-system/issues"
+  },
   "main": "./dist/fesm2022/onflo-design-system.mjs",
   "exports": {
     ".": {
@@ -29,14 +39,18 @@
     ".claude/specs/"
   ],
   "peerDependencies": {
-    "@angular/animations": ">=21.0.0",
-    "@angular/cdk": ">=21.0.0",
-    "@angular/common": ">=21.0.0",
-    "@angular/core": ">=21.0.0",
-    "@angular/forms": ">=21.0.0",
-    "@angular/material": ">=21.0.0",
-    "ag-grid-community": ">=33.0.0",
-    "highcharts": ">=11.0.0"
+    "@angular/animations": "^21.0.0",
+    "@angular/cdk": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/material": "^21.0.0",
+    "ag-grid-community": ">=33.0.0 <36.0.0",
+    "highcharts": "^11.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ag-grid-community": { "optional": true },
+    "highcharts": { "optional": true }
   },
   "scripts": {
     "generate-tokens": "node scripts/generate-tokens.js",

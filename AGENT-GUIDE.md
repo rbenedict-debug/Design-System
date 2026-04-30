@@ -22,28 +22,76 @@ radius, shadow, interaction states — is expressed as a CSS design token.
 
 ---
 
+## CRITICAL: Mode — design vs engineering
+
+This design system has **two consumer surfaces**, and you must use the correct one
+for the current project. Read the project's `CLAUDE.md` for the `Mode:` line and
+follow it strictly. If no mode line is present, **default to `Mode: design`**.
+
+### `Mode: design` (default)
+
+The project is owned by a designer building visual mockups for handoff to eng.
+Angular Material, AG Grid, and Highcharts are **not installed**. Generating code
+that imports them will break the build.
+
+**You must:**
+- Use the **CSS class API only**: `<button class="ds-button ds-button--filled">`,
+  `<input class="ds-input">`, `<table class="ds-table">`, etc.
+- For tables, write **static HTML** with `<table class="ds-table">` markup populated
+  by `*ngFor` over component-local arrays. Do **not** use `ag-grid-angular` /
+  `<ag-grid-angular>` / `onfloTheme`.
+- For charts, write **inline SVG mockups** (the same approach `preview/index.html`
+  uses for chart previews). Do **not** import or call Highcharts.
+- Use `*ngFor`, `*ngIf`, `[(ngModel)]`, and template-local component state freely —
+  these are part of base Angular, not Material.
+
+**You must not:**
+- `import { Ds*Component } from '@onflo/design-system'` — these wrap Material and
+  pull it into the build
+- Use any `mat-*` directive (`mat-flat-button`, `mat-form-field`, `mat-select`, etc.)
+- Import any file from `@angular/material`, `ag-grid-community`, `ag-grid-angular`,
+  or `highcharts`
+
+If a designer asks for a feature that genuinely requires reactive logic (e.g. a real
+filterable AG Grid table, a live Highcharts chart with computed series), explain that
+this is an engineering-mode task, build the visual stand-in using the rules above,
+and flag the spot for eng with an HTML comment: `<!-- TODO eng: wire AG Grid here -->`.
+
+### `Mode: engineering`
+
+The project has been handed to eng. Angular Material, AG Grid, and Highcharts are
+installed; a Material prebuilt theme is loaded in `angular.json`.
+
+**You may:**
+- Use the Angular component API: `<ds-button>`, `<ds-input>`, `<ds-select>`, etc.
+- Import `Ds*Component` classes from `@onflo/design-system`
+- Use `onfloTheme` from `@onflo/design-system` for AG Grid
+- Use `<ds-chart>` for Highcharts charts
+
+The CSS class API still works in eng mode — use it for static markup with no behavior
+(layout containers, headings, dividers, decorative elements). Reserve the component
+API for places that need reactive behavior (form binding, click handlers, dynamic state).
+
+---
+
 ## Installation
 
-The package is distributed via GitHub Packages under the `@onflo` scope.
+The design system is git-installed from a public repo — there is no npm registry,
+no token, and no `.npmrc` to set up. To install or upgrade:
 
-**1. Add to your project's `.npmrc`** (create if it doesn't exist):
-```
-@onflo:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-`GITHUB_TOKEN` should be a GitHub Personal Access Token with `read:packages` scope,
-set as an environment variable or in your CI secrets.
-
-**2. Install:**
 ```bash
-npm install @onflo/design-system
+npm install github:rbenedict-debug/Design-System#vX.Y.Z
 ```
 
-**3. Add to your project's `CLAUDE.md`:**
-```
-@node_modules/@onflo/design-system/AGENT-GUIDE.md
-```
+The latest tag is at
+[github.com/rbenedict-debug/Design-System/tags](https://github.com/rbenedict-debug/Design-System/tags).
+**Always pin to a tag**, never to `#main` — pinning is what makes the project
+reproducible across reinstalls.
+
+Full project setup (`angular.json` styles array, font links, animations provider,
+`CLAUDE.md` mode line) is documented in `SETUP.md` at the design system repo root.
+**You do not need to repeat setup steps to the user** — direct them to `SETUP.md`
+if their project is missing files. Setup is per-project, one-time.
 
 ---
 
@@ -89,17 +137,23 @@ color: ds.$text-primary;
 Before writing any UI element from scratch, check the component list below.
 If a matching component exists, use it — do not recreate it.
 
-**How to import:**
-```typescript
-import { DsButtonComponent } from '@onflo/design-system';
-import { DsInputComponent } from '@onflo/design-system';
-// etc.
-```
-
-**Every component also has a CSS class API** (no Angular required):
+**Use the CSS class API** (works in both modes — required in `Mode: design`):
 ```html
 <button class="ds-button ds-button--filled">Label</button>
+<input class="ds-input" placeholder="Search…" />
+<span class="ds-icon">search</span>
 ```
+
+**Use the Angular component API** (eng mode only — pulls in Material):
+```typescript
+import { DsButtonComponent } from '@onflo/design-system';
+```
+```html
+<ds-button variant="filled" (clicked)="save()">Label</ds-button>
+```
+
+When in doubt, use the CSS class API. It works everywhere, requires no imports,
+and is the path the design team has standardized on.
 
 ### 3. When a component does not exist
 
@@ -207,6 +261,14 @@ BEM naming: `.ds-{component}`, `.ds-{component}__{element}`, `.ds-{component}--{
 | Paginator | `<ds-paginator>` | `DsPaginatorComponent` |
 
 ### Data / table
+
+> **`Mode: design` — DO NOT use AG Grid.** Build tables as static `<table class="ds-table">`
+> markup populated via `*ngFor` over a component-local array. The AG Grid renderers below
+> (`ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-paginator`, etc.) are eng-mode only —
+> they require AG Grid as a peer dep, which is not installed in design projects.
+> Place an HTML comment where the real grid will go: `<!-- TODO eng: replace with AG Grid + onfloTheme -->`.
+>
+> **`Mode: engineering` — proceed with the prerequisite check below.**
 
 > **AG Grid prerequisite check — do this before writing any table code.**
 > `ds-table-header-cell`, `ds-table-row-cell`, `ds-ag-paginator`, and `ds-table-toolbar` are AG Grid custom renderers. They require a real AG Grid instance **v33 or later** — the DS uses the v31+ programmatic Theme API (`themeQuartz.withPart().withParams()`), which does not exist in older versions and will throw a runtime error.
@@ -359,6 +421,15 @@ onDensityChange(value: 'comfort' | 'compact'): void {
 Full integration pattern with template, component class, and all options is in `.claude/specs/specs-table.md` → "Angular Integration — Canonical Wiring Pattern".
 
 ### Dashboard
+
+> **`Mode: design` — DO NOT use Highcharts.** Build chart visuals as **inline SVG mockups**
+> matching the Onflo chart theme (brand blue first series, `#E9E9E9` grid lines,
+> `#73737F` axis labels, DM Sans font). Reference `preview/index.html` Dashboard sim
+> for exact SVG patterns. `<ds-metric-card>` and `<ds-dashboard-toolbar>` work in design
+> mode (they don't depend on Highcharts) — only `<ds-chart>` is gated.
+> Place an HTML comment where the real chart will go: `<!-- TODO eng: replace with <ds-chart> -->`.
+>
+> **`Mode: engineering` — proceed with the prerequisite check below.**
 
 > **Highcharts prerequisite check — do this before writing any dashboard chart code.**
 > `ds-chart` wraps Highcharts. The library is NOT bundled — it is a peer dependency.
@@ -774,10 +845,30 @@ Add these to `src/index.html` inside `<head>`. Without the icon font every `ds-i
 
 ## Angular Material dependency
 
-This design system uses Angular Material as the behavioral foundation.
-Consuming projects must have Angular Material installed and `provideAnimations()` (or `provideAnimationsAsync()`) in their app config.
+Angular Material is the behavioral foundation of the Angular component API
+(`<ds-button>`, `<ds-input>`, etc.). It is **only required in `Mode: engineering`**.
 
-The design system themes Material components globally — do not apply your own Material theme. Import the design system tokens CSS before any other styles.
+**`Mode: design`:** Material is not installed. The CSS class API (`.ds-button`, `.ds-input`)
+does not depend on Material at all — it styles plain native elements directly.
+You can ignore the peer-dependency warnings shown by `npm install`.
+
+**`Mode: engineering`:** Material must be installed. The project's `angular.json`
+must include a Material prebuilt theme **before** `dist/onflo.css` so Onflo's
+overrides win:
+
+```json
+"styles": [
+  "node_modules/@angular/material/prebuilt-themes/azure-blue.css",
+  "node_modules/@onflo/design-system/dist/onflo.css",
+  "src/styles.scss"
+]
+```
+
+Do **not** apply a custom Material theme on top — Onflo's overrides handle the
+visual layer. The prebuilt theme is only there for Material's structural CSS.
+
+In both modes, `provideAnimationsAsync()` (or `provideAnimations()`) must be in
+`app.config.ts` providers — Onflo motion tokens drive the animations.
 
 ---
 

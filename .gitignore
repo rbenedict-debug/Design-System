@@ -6,6 +6,13 @@
 node_modules/
 *.tgz
 
+# ng-packagr regenerates these on every build but the root package.json /
+# README.md are the canonical ones — these duplicates would only ship to
+# consumers if accidentally committed. dist/.npmignore excludes them from
+# the published tarball; this entry keeps them out of git too.
+dist/README.md
+dist/package.json
+
 # macOS
 .DS_Store
 .DS_Store?

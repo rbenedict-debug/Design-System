@@ -99,7 +99,12 @@ function resolveAlias(str) {
   return `var(--ref-${match[1].split('.').map(kebab).join('-')})`;
 }
 
-function refCssValue(token) {
+// Brand typeface fallback stack — keeps design-team consumers visually correct
+// when the licensed Proxima Nova webfont isn't loaded. DM Sans is the documented
+// preview proxy and is loaded via Google Fonts in consuming projects.
+const TYPEFACE_FALLBACK = ', "DM Sans", system-ui, sans-serif';
+
+function refCssValue(token, parts = []) {
   const { $type: type, $value: val } = token;
   if (type === 'color') return cssColor(val);
   if (type === 'number') {
@@ -113,6 +118,12 @@ function refCssValue(token) {
     }
     const numeric = fontWeightValue(String(val));
     if (typeof numeric === 'number') return String(numeric);
+    // Typeface family tokens (e.g. typeface.brand, typeface.plain) get the
+    // fallback stack appended. Weight tokens (caught above) and other strings
+    // pass through unchanged.
+    if (parts[0] === 'typeface' && !parts.some(p => /weight/i.test(p))) {
+      return `"${val}"${TYPEFACE_FALLBACK}`;
+    }
     return `"${val}"`;
   }
   return String(val);
@@ -170,7 +181,7 @@ function buildRefCSS(selector, tokens) {
   const sections = {};
   walkTokens(tokens, [], (parts, token) => {
     const s = parts[0];
-    (sections[s] = sections[s] ?? []).push([refPathToVar(parts), refCssValue(token)]);
+    (sections[s] = sections[s] ?? []).push([refPathToVar(parts), refCssValue(token, parts)]);
   });
   const lines = [`${selector} {`];
   for (const key of [...REF_ORDER, ...Object.keys(sections)]) {
