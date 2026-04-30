@@ -102,9 +102,16 @@ if their project is missing files. Setup is per-project, one-time.
 **Never hardcode any visual value.** This includes:
 - Colors: no hex (`#0B6EB4`), no rgb/rgba, no named colors (`blue`)
 - Spacing: no raw `px` or `rem` values — use `--spacing-*`
-- Typography: no raw font sizes — use `--ref-typescale-*` or `@include ds.type-*` mixins
+- Typography: no raw font sizes — use `@include ds.type-*` SCSS mixins (see below)
 - Radius: no raw `border-radius` values — use `--radius-*`
 - Shadows: no raw `box-shadow` values — use `--shadow-elevation-*`
+
+> ⛔ **Never use `--ref-*` tokens.** Anything starting with `--ref-` is an internal primitive used
+> by the design system itself. Consuming projects must never reference them. If you can see a
+> `--ref-*` variable in browser DevTools or the token source files, that does **not** mean it is
+> available for your use — always go through the semantic tokens (`--color-*`, `--spacing-*`, etc.)
+> or the SCSS mixins for typography. Using `--ref-*` directly will break dark mode and future
+> theming changes without warning.
 
 **Always use:**
 ```scss
@@ -114,9 +121,10 @@ background: var(--color-surface-page);
 padding: var(--spacing-lg);
 border-radius: var(--radius-md);
 
-// SCSS variables (in .scss files, after @use)
-@use '@onflo/design-system/tokens/scss/variables' as ds;
-color: ds.$text-primary;
+// SCSS mixins for typography (in .scss files, after @use)
+@use '@onflo/design-system/tokens/scss' as ds;
+@include ds.type-body-medium;
+@include ds.type-title-h2;
 ```
 
 **Token reference — prefix meanings:**
@@ -130,7 +138,24 @@ color: ds.$text-primary;
 | `--spacing-*` | Padding, margin, gap (xs=4px, sm=8px, md=12px, lg=16px, xl=24px) |
 | `--radius-*` | Border radii (sm, md, lg, full) |
 | `--shadow-elevation-*` | Box shadows (1–3) |
-| `--ref-typescale-*` | Typography scale (never reference directly in components — use semantic tokens) |
+
+**Typography — SCSS mixins only:**
+```scss
+@use '@onflo/design-system/tokens/scss' as ds;
+
+// Available mixins:
+@include ds.type-display;
+@include ds.type-title-h1;
+@include ds.type-title-h2;
+@include ds.type-title-h3;
+@include ds.type-title-h4;
+@include ds.type-body-large;
+@include ds.type-body-medium;    // default body text
+@include ds.type-body-small;
+@include ds.type-label-large;
+@include ds.type-label-medium;
+@include ds.type-label-small;
+```
 
 ### 2. Always use existing components when they exist
 

@@ -2,6 +2,12 @@
  * Onflo Design System — Generated Tokens
  * ⚠️  Do not edit manually.
  * Regenerate: npm run generate-tokens
+ *
+ * 🚫 INTERNAL USE ONLY — DO NOT REFERENCE THESE TOKENS DIRECTLY.
+ * These are Tier 1 primitive tokens used exclusively by the design system itself.
+ * Consuming projects must only use the semantic tokens in design-tokens.css:
+ *   --color-*  --spacing-*  --radius-*  --shadow-elevation-*  --overlay-*
+ * For typography, use the SCSS mixins: @include ds.type-body-medium; etc.
  */
 
 [data-theme="dark"] {

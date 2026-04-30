@@ -85,7 +85,7 @@ preview/
 | `--spacing-*` | Spacing scale (xs=4, sm=8, md=12, lg=16, xl=24, page=48) |
 | `--radius-*` | Border radii (sm, md, lg, full) |
 | `--shadow-elevation-*` | Box shadows (1–3) |
-| `--ref-typescale-*` | Typography scale |
+| `--ref-typescale-*` | Typography scale — **internal only**; DS components use these inside SCSS mixins; never reference directly in component or consuming-project styles |
 
 ### Breakpoints — SCSS only
 
@@ -312,7 +312,7 @@ Never set `--ag-header-height` — the header height is fixed by the design toke
 - Never use `outline` or `border-color` for focus — always `box-shadow: 0 0 0 3px var(--color-border-ada-focus-ring)`
 - Never put content inside the `<!-- ONFLO-TOKENS:START/END -->` block except token CSS
 - Never use `:has()` to infer icon presence in buttons — icon vs. no-icon are separate Figma variants
-- Never reference `--ref-*` tokens directly in component styles — go through semantic `--color-*` / `--spacing-*` etc.
+- Never reference `--ref-*` tokens directly — in component styles, in consuming project SCSS, or in any context outside the design system's own token files. Always go through the semantic layer: `--color-*`, `--spacing-*`, `--radius-*`, `--shadow-elevation-*`, `--overlay-*`. For typography, always use the SCSS mixins (`@include ds.type-*`) — never `var(--ref-typescale-*)`.
 - Never apply `box-shadow` focus ring directly on `:focus-within` — always pair with `:not([data-mouse-focus])` guard or the ring will fire on mouse clicks
 - Never use `:focus` where `:focus-visible` is appropriate — `:focus-visible` is keyboard-only by design for simple elements
 - Never omit the `<h1 class="ds-page-content__title">` on any page — use `ds-sr-only` to hide it visually for pages with no visible title (inbox, ticket view); omitting it entirely breaks screen reader heading navigation
