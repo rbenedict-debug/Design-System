@@ -759,6 +759,19 @@ Minimum supported viewport: **1024px** (landscape tablet).
 
 ---
 
+## Required fonts
+
+Add these to `src/index.html` inside `<head>`. Without the icon font every `ds-icon` renders as raw text.
+
+```html
+<!-- Material Symbols Rounded — required for all icons -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet" />
+```
+
+---
+
 ## Angular Material dependency
 
 This design system uses Angular Material as the behavioral foundation.

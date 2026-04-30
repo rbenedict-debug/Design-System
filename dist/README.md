@@ -48,30 +48,45 @@ Set `GITHUB_TOKEN` to a GitHub Personal Access Token with `read:packages` scope 
 npm install @onflo/design-system
 ```
 
-**Step 2.** Add the token CSS to `angular.json`:
+**Step 2.** Add the required fonts to `src/index.html` (inside `<head>`):
+
+```html
+<!-- Icons — required for ds-icon and all icon-button components -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet" />
+```
+
+Without the Material Symbols Rounded font, every icon in the design system will render as plain text characters instead of icons.
+
+**Step 3.** Add the design system CSS bundle to `angular.json` styles:
 
 ```json
 "styles": [
-  "node_modules/@onflo/design-system/tokens/css/index.css",
+  "node_modules/@onflo/design-system/dist/onflo.css",
   "src/styles.scss"
 ]
 ```
 
-**Step 3.** Add `provideAnimationsAsync()` to your app config (required by Angular Material):
+`dist/onflo.css` bundles tokens, component styles, and layout in the correct cascade order. Do not use `tokens/css/index.css` alone — components will render completely unstyled without the component CSS.
+
+> **Do not load a Material prebuilt theme.** The design system replaces Angular Material's visual layer entirely. Loading `ag-theme-quartz.css` (if using AG Grid) will also conflict — skip it.
+
+**Step 4.** Add `provideAnimationsAsync()` to your app config (required by Angular Material):
 
 ```typescript
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 export const appConfig = { providers: [provideAnimationsAsync()] };
 ```
 
-**Step 4.** Add the design system rules to your project's `CLAUDE.md`:
+**Step 5.** Add the design system rules to your project's `CLAUDE.md`:
 
 ```markdown
 # Design System
 @node_modules/@onflo/design-system/AGENT-GUIDE.md
 ```
 
-**Step 5.** Start using components:
+**Step 6.** Start using components:
 
 ```typescript
 import { DsButtonComponent, DsInputComponent } from '@onflo/design-system';
