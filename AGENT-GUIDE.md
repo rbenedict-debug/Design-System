@@ -76,10 +76,22 @@ API for places that need reactive behavior (form binding, click handlers, dynami
 
 ## Installation
 
-Project setup (auth, npm install, `angular.json` styles, fonts, animations) is fully
-documented in `SETUP.md` at the design system repo root and in the package's bundled
-`SETUP.md`. **You do not need to repeat setup steps to the user** — direct them to
-`SETUP.md` if their project is missing files. Setup is per-project, one-time.
+The design system is git-installed from a public repo — there is no npm registry,
+no token, and no `.npmrc` to set up. To install or upgrade:
+
+```bash
+npm install github:rbenedict-debug/Design-System#vX.Y.Z
+```
+
+The latest tag is at
+[github.com/rbenedict-debug/Design-System/tags](https://github.com/rbenedict-debug/Design-System/tags).
+**Always pin to a tag**, never to `#main` — pinning is what makes the project
+reproducible across reinstalls.
+
+Full project setup (`angular.json` styles array, font links, animations provider,
+`CLAUDE.md` mode line) is documented in `SETUP.md` at the design system repo root.
+**You do not need to repeat setup steps to the user** — direct them to `SETUP.md`
+if their project is missing files. Setup is per-project, one-time.
 
 ---
 

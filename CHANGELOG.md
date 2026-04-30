@@ -7,6 +7,41 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.2.1] — 2026-04-30
 
+### Distribution model — git tags, no npm registry
+
+The design system is now distributed as a **public git repo with version tags**,
+not via GitHub Packages. Consumers install with:
+
+```bash
+npm install github:rbenedict-debug/Design-System#vX.Y.Z
+```
+
+There is no `@onflo` npm scope to authenticate against, no Personal Access Token
+to generate, no `.npmrc` to configure, no SSH key required. Setup time for
+designers drops from ~5 minutes to ~30 seconds.
+
+**Removed:**
+- `.github/workflows/publish.yml` — was attempting to `npm publish` to GitHub
+  Packages under the `@onflo` scope, which this repo doesn't own. Would have
+  generated failed-workflow notifications on every tag push.
+
+**Added:**
+- `.github/workflows/release.yml` — fires on tag push, extracts the matching
+  CHANGELOG section, and creates a GitHub Release with those notes as the body.
+  No npm publishing happens; the git tag is the release.
+
+**Documentation refreshed across the board:**
+- `SETUP.md` Part A: removed Step 1 (SSH key) and Step 2 (PAT + GitHub Packages
+  registry) entirely. New Step 1 is the single `npm install github:...#tag` line.
+  Steps renumbered.
+- `README.md`: install snippet rewritten; new "Cutting a release" section
+  describing the tag-and-push flow.
+- `AGENT-GUIDE.md` Installation section: rewritten to point at git install +
+  the tags page; emphasizes always pinning to a tag, never `#main`.
+- `CLAUDE.md` Cutting a Release section: rewritten for the git-tag flow;
+  includes a callout that `npm install github:...` ignores the `files` field
+  and clones the whole repo, so nothing sensitive should land in a tagged commit.
+
 ### Consumer setup — design vs engineering mode
 
 The biggest change in this release is documentation, not code. Consuming projects

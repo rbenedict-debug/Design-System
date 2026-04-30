@@ -42,8 +42,9 @@ radius, shadows, and every component in every variant.
 **Quick start in your Angular project** (full guide in [SETUP.md](./SETUP.md) Part A):
 
 ```bash
-# 1. Authenticate with GitHub Packages and install
-npm install @onflo/design-system
+# 1. Install directly from this public repo at a specific tag
+#    (find the latest tag at https://github.com/rbenedict-debug/Design-System/tags)
+npm install github:rbenedict-debug/Design-System#v0.2.1
 
 # 2. In angular.json, add the bundle:
 #    "styles": [
@@ -66,9 +67,9 @@ Then write HTML using the CSS class API — no Angular component imports needed:
 <span class="ds-icon">search</span>
 ```
 
-You'll see peer-dependency warnings about `@angular/material`, `ag-grid-community`,
-and `highcharts` after `npm install` — **safe to ignore for design work.** Eng
-installs them at handoff.
+You'll see one peer-dependency warning about `@angular/material` after install —
+**safe to ignore for design work.** AG Grid and Highcharts are marked optional
+and won't warn at all. Eng installs Material at handoff.
 
 **Naming convention:**
 Every token you see in Figma Variables has a matching CSS custom property:
@@ -114,7 +115,14 @@ import { DsButtonComponent, DsInputComponent, onfloTheme } from '@onflo/design-s
 ```
 
 For tables, use AG Grid with `theme: onfloTheme`. For charts, use `<ds-chart>`.
-**Get the latest design system version:** `npm install @onflo/design-system@latest`.
+
+**Bumping the design system version:** the package is git-installed (no npm
+registry), so `@latest` doesn't apply. Look up the latest tag at
+[github.com/rbenedict-debug/Design-System/tags](https://github.com/rbenedict-debug/Design-System/tags)
+and re-install:
+```bash
+npm install github:rbenedict-debug/Design-System#vX.Y.Z
+```
 
 ---
 
@@ -229,6 +237,38 @@ Changing `data-theme` on `<html>` updates the ref layer, which cascades to every
 | Token source | Figma Variables |
 | Token format | CSS custom properties + SCSS |
 | Theming | `[data-theme]` attribute on `<html>` |
+
+---
+
+## Cutting a release (maintainer only)
+
+The design system is distributed via git tags on this public repo — there is no
+npm registry. Consumers install with `npm install github:rbenedict-debug/Design-System#vX.Y.Z`.
+
+**Steps:**
+
+1. Make sure `dist/` is up to date by running `npm run build` and committing
+   the regenerated `dist/onflo.css` / `dist/components.css` / `dist/layout.css`.
+2. Bump `version` in `package.json` (semver: `patch` = fixes, `minor` = new
+   components, `major` = breaking).
+3. Add a section at the top of `CHANGELOG.md` describing the release.
+4. Commit:
+   ```bash
+   git add package.json CHANGELOG.md dist/
+   git commit -m "chore: release vX.Y.Z"
+   ```
+5. Tag and push:
+   ```bash
+   git tag vX.Y.Z
+   git push origin main --tags
+   ```
+
+The release workflow (`.github/workflows/release.yml`) fires on the tag push
+and creates a GitHub Release with the CHANGELOG section as the release notes —
+that's the URL designers can share to point at "the new version."
+
+> No npm publishing happens. The git tag is the release. Consumers reinstall
+> against the new tag with `npm install github:rbenedict-debug/Design-System#vX.Y.Z`.
 
 ---
 

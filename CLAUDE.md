@@ -340,39 +340,55 @@ Never set `--ag-header-height` — the header height is fixed by the design toke
 
 ## Cutting a Release
 
-The package publishes automatically to GitHub Packages when a version tag is pushed.
-GitHub Actions runs the build and `npm publish` — no manual steps needed.
+The design system is distributed via **git tags on this public repo** — there is
+no npm registry. Consumers install directly from GitHub:
+
+```bash
+npm install github:rbenedict-debug/Design-System#vX.Y.Z
+```
+
+The git tag itself is the release. There is no `npm publish` step. The release
+workflow (`.github/workflows/release.yml`) fires on tag push and creates a
+GitHub Release using the matching `## [X.Y.Z]` section of `CHANGELOG.md` as the
+release body. That GitHub Release URL is what designers can share to point at
+"the new version."
 
 **Steps:**
 
 ```bash
 # 1. Bump version in package.json (semver: patch = fixes, minor = new components, major = breaking)
-# Edit package.json "version" field manually
+#    Edit package.json "version" field manually.
 
-# 2. Verify the build compiles cleanly
+# 2. Add a "## [X.Y.Z] — YYYY-MM-DD" section at the top of CHANGELOG.md
+#    describing the release.
+
+# 3. Verify the build compiles cleanly and dist/ is up to date.
 npm run build
 
-# 3. Commit the version bump
-git add package.json
-git commit -m "chore: bump version to x.x.x"
+# 4. Commit (include regenerated dist/ files since dist/ is shipped to consumers)
+git add package.json CHANGELOG.md dist/
+git commit -m "chore: release vX.Y.Z"
 
-# 4. Tag and push — Actions publishes automatically
-git tag vx.x.x
+# 5. Tag and push
+git tag vX.Y.Z
 git push origin main --tags
 ```
 
-**What ships in the package** (`files` field in `package.json`):
+**What ships to consumers** (everything in the repo at the tagged commit, since
+git installs clone the whole tree). The `files` field in `package.json` is
+ignored by `npm install github:...` — it only matters for `npm publish`. So
+take care that nothing sensitive lands in a tagged commit.
+
+The directories that consumers actually use:
 - `dist/` — compiled components + CSS
 - `tokens/` — CSS and SCSS tokens
 - `AGENT-GUIDE.md` — loaded by consuming project CLAUDE.md files
 - `preview/index.html` — visual component reference
 - `.claude/specs/` — composition patterns referenced by `AGENT-GUIDE.md`
 
-Internal files that do **not** ship: `CLAUDE.md`, `DESIGN.md`, `docs/`, `scripts/`,
-`preview-rules.md`, `.claude/settings.local.json`, `ng-package.json`, `public-api.ts`, `tsconfig.json`.
-
-> **Note:** Publishing requires the repo to be under the `onflo` GitHub org.
-> The workflow is wired and ready — it will fire automatically once the repo is transferred.
+Other files (`CLAUDE.md`, `DESIGN.md`, `docs/`, `scripts/`, `ng-package.json`,
+`public-api.ts`, `tsconfig.json`) are part of the source tree and visible to
+consumers if they go looking, but are not referenced by anything they install.
 
 ---
 

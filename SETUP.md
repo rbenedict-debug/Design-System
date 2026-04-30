@@ -30,7 +30,7 @@ of "it doesn't look like the preview" pain — keep them separate.
 
 # Part A — Design-team setup
 
-One-time setup per machine. ~5 minutes.
+One-time setup per machine. ~30 seconds.
 
 ## Prerequisites
 
@@ -40,76 +40,39 @@ One-time setup per machine. ~5 minutes.
 - An Angular project (`ng new my-design-project --style=scss --routing=false` if you
   don't have one yet)
 
-## Step 1 — Add your SSH key to GitHub
+## Step 1 — Install the design system
 
-This is how your machine authenticates to access the private repository.
-You only do this once per machine.
-
-**Check if you already have an SSH key:**
-```bash
-ls ~/.ssh/id_ed25519.pub
-```
-If the file exists, skip to "Add key to GitHub" below.
-
-**Generate a new SSH key** (replace with your work email):
-```bash
-ssh-keygen -t ed25519 -C "your.name@onflo.com"
-```
-Press Enter three times to accept the defaults.
-
-**Add key to GitHub:**
-1. Copy your public key:
-   ```bash
-   cat ~/.ssh/id_ed25519.pub
-   ```
-2. Go to **GitHub → Settings → SSH and GPG keys → New SSH key**
-3. Paste the key, name it (e.g. "Work MacBook"), and save
-4. Test the connection:
-   ```bash
-   ssh -T git@github.com
-   ```
-   You should see: `Hi username! You've successfully authenticated`
-
-## Step 2 — Authenticate with GitHub Packages
-
-The design system is distributed via GitHub Packages under the `@onflo` scope.
-You need a GitHub Personal Access Token (PAT) with `read:packages` to install it.
-
-**Generate a token:**
-1. Go to **GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)**
-2. Click **Generate new token (classic)**
-3. Check `read:packages`, set an expiry, and generate
-4. Copy the token — you only see it once
-
-**Add it to your shell profile** (`~/.zshrc` or `~/.bash_profile`):
-```bash
-export GITHUB_TOKEN=ghp_your_token_here
-```
-Then reload: `source ~/.zshrc`
-
-**Add the registry to your Angular project's `.npmrc`** (create in project root):
-```
-@onflo:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-## Step 3 — Install the design system
+The design system is hosted as a public GitHub repository. There's no registry,
+no token, no `.npmrc`, no SSH key required — npm clones the repo directly at
+the tag you specify.
 
 In your Angular project's root directory:
 
 ```bash
-npm install @onflo/design-system
+npm install github:rbenedict-debug/Design-System#v0.2.1
 ```
 
-> You will see peer dependency warnings about `@angular/material`, `ag-grid-community`,
-> and `highcharts`. **These are safe to ignore for design-team work** — the CSS class API
-> doesn't use any of them. Eng will install them at handoff.
+Replace `v0.2.1` with the latest published tag. Find the latest tag at
+[github.com/rbenedict-debug/Design-System/tags](https://github.com/rbenedict-debug/Design-System/tags),
+or ask Claude: *"What's the latest design system tag?"*
 
-## Step 4 — Wire up styles, fonts, and animations
+The package will install at `node_modules/@onflo/design-system/` (the package
+name in code is `@onflo/design-system` regardless of where it was installed from).
+
+> You will see peer dependency warnings about `@angular/material` after install.
+> **Safe to ignore for design-team work** — the CSS class API doesn't use Material.
+> AG Grid and Highcharts are marked optional and will not warn at all.
+
+> **Why pin to a tag, not a branch?** Pointing at `#main` would silently update the
+> design system mid-mockup every time you run `npm install`. Pinning to a tag is
+> deterministic — your project looks the same today and three months from now,
+> until you intentionally bump.
+
+## Step 2 — Wire up styles, fonts, and animations
 
 Three small edits to your Angular project. None of them require any extra packages.
 
-### 4a — `angular.json` styles array
+### 2a — `angular.json` styles array
 
 ```json
 "styles": [
@@ -122,7 +85,7 @@ That's it — just the one bundle. `dist/onflo.css` contains tokens, components,
 layout patterns in the correct order. Do **not** also import `tokens/css/index.css`
 or `dist/components.css` separately — that's the most common cause of broken styling.
 
-### 4b — Required fonts in `src/index.html`
+### 2b — Required fonts in `src/index.html`
 
 Add these inside `<head>`. Without them, every icon renders as raw text
 ("search", "close", etc.) and typography falls back to the OS default sans-serif —
@@ -144,7 +107,7 @@ Designers don't need a Proxima Nova license — DM Sans (free, loaded above) is
 exactly what the preview uses. When Eng wires up the licensed Proxima Nova
 webfont in production, it takes precedence automatically.
 
-### 4c — Animations provider in `src/app/app.config.ts`
+### 2c — Animations provider in `src/app/app.config.ts`
 
 ```typescript
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -157,7 +120,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-## Step 5 — Add the design system rules to your project's CLAUDE.md
+## Step 3 — Add the design system rules to your project's CLAUDE.md
 
 Create or open `CLAUDE.md` in your project root and add this block at the top:
 
@@ -174,7 +137,7 @@ Do not import `Ds*Component` classes or use `mat-*` directives.
 The `Mode: design` line tells Claude to stay on the lightweight class-API path
 and skip code that would require Material / AG Grid / Highcharts.
 
-## Step 6 — Verify
+## Step 4 — Verify
 
 ```bash
 ng serve
@@ -192,7 +155,7 @@ glass (not the literal word "search"), setup is correct. **You're done with Part
 
 If something looks wrong, see Troubleshooting below.
 
-## Step 7 — Start building
+## Step 5 — Start building
 
 ```bash
 claude
@@ -216,10 +179,15 @@ claude
 The design system rules are loaded automatically.
 
 **Getting design system updates:**
+Look up the latest tag at
+[github.com/rbenedict-debug/Design-System/tags](https://github.com/rbenedict-debug/Design-System/tags),
+then:
 ```bash
-npm install @onflo/design-system@latest
+npm install github:rbenedict-debug/Design-System#vX.Y.Z
 ```
-Then restart Claude Code so it picks up the new component definitions.
+Replace `vX.Y.Z` with the new tag. Then restart Claude Code so it picks up the
+new component definitions. (`@latest` does not work for git-installed packages —
+you must specify the tag explicitly.)
 
 **Checking what components are available:**
 Ask Claude: *"What design system components are available for navigation?"*
@@ -229,14 +197,13 @@ Or open the visual reference at `node_modules/@onflo/design-system/preview/index
 
 ## Troubleshooting
 
-**`npm install` fails with 401 / permission error:**
-Your `GITHUB_TOKEN` is missing or doesn't have `read:packages` scope. Check that the
-env var is set (`echo $GITHUB_TOKEN`) and that your `.npmrc` is in the project root,
-not home directory. Redo Step 2.
+**`npm install` fails with "could not resolve" or "404 Not Found":**
+The tag you pinned doesn't exist. Check
+[github.com/rbenedict-debug/Design-System/tags](https://github.com/rbenedict-debug/Design-System/tags)
+for the actual tag names. Tag names start with `v` (e.g. `v0.2.1`, not `0.2.1`).
 
-**`ssh -T git@github.com` says permission denied:**
-Make sure you added the public key (`.pub` file) to GitHub, not the private key.
-Redo Step 1.
+**`npm install` warns about a missing `@angular/material` peer dependency:**
+Expected — Material is not installed in design mode. Safe to ignore.
 
 **Claude doesn't seem to know about the design system:**
 Check that `CLAUDE.md` contains the `@node_modules/@onflo/design-system/AGENT-GUIDE.md`
@@ -244,21 +211,21 @@ line. Run `cat CLAUDE.md` to verify.
 
 **Components look unstyled / square / no colors:**
 Your `angular.json` `styles` array is probably missing `dist/onflo.css` or has it in
-the wrong place. Re-read Step 4a. Restart `ng serve` after editing `angular.json` —
+the wrong place. Re-read Step 2a. Restart `ng serve` after editing `angular.json` —
 the dev server doesn't pick up styles-array changes on its own.
 
 **Icons render as the literal text "search", "close", etc.:**
-The Material Symbols Rounded font isn't loaded. Add the `<link>` tags from Step 4b
+The Material Symbols Rounded font isn't loaded. Add the `<link>` tags from Step 2b
 to `src/index.html` and hard-refresh the browser.
 
 **Text looks like Times / system serif instead of the preview:**
-The DM Sans `<link>` tag is missing from `src/index.html`. Add it (Step 4b) and
+The DM Sans `<link>` tag is missing from `src/index.html`. Add it (Step 2b) and
 hard-refresh.
 
 **Claude is generating `<ds-button>` or `import { DsButtonComponent }` and the build fails:**
 Your project `CLAUDE.md` is missing the `Mode: design` line. Without it, Claude
 defaults to the full Angular component API which needs Material installed. Add the
-line from Step 5 and restart Claude.
+line from Step 3 and restart Claude.
 
 **I need a component that doesn't exist:**
 Build what you need using design tokens for all visual values.
